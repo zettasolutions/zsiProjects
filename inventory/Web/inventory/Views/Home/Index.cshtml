@@ -1,0 +1,292 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Home.cshtml";
+}
+<style>
+    #loginform {
+        margin-top: -10px;
+        padding-right: 25px;
+    }
+
+        #loginform label {
+            color: #fff;
+        }
+</style>
+
+<div class="pageHeader">
+    
+    <div class="container">
+        <img src="/images/everyone_logo_reach4greatness.png" />
+    </div>
+
+
+
+</div>
+
+<div class="menu-horizontal">
+    <div class="container-full">
+        <ul>
+            <li class="menu-item navItem-0"><a href="about-us.html"><span>About Benchmarking</span></a></li>
+            <li class="menu-item navItem-1"><a href="mailto:jarenasa@lear.com?subject=Benchmarking System - Request for Access"><span>Contacts Us</span></a></li>
+        </ul>
+
+        <div id="loginform" class="pull-right">
+            <form id="frmLogin" action="@Url.Content("~/")account/validate" method="post"  >
+                <label>User Name </label><label id="pass">Password </label>
+                <br><input id="username" name="username" /> <input id="password" name="password" type="password" />
+
+                <button id="btnLogin" class="btn btn-primary btn-sm" type="submit"><span class="glyphicon glyphicon-triangle-right"></span> Login</button>
+                <br><input type="checkbox" id="isremember" name="isremember"><label>Stay sign in </label>
+                <label id="request"><a href="mailto:jarenasa@lear.com?subject=Benchmarking System - Request for Access">Request for access</a></label>
+				
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container page">
+
+
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="margin:auto">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="6"></li>
+
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="/images/slideone.png" alt="...">
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+            <div class="item">
+                <img src="/images/slidetwo.png" alt="...">
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+            <div class="item">
+                <img src="/images/slidethree.png" alt="...">
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+            <div class="item">
+                <img src="/images/slidefour.png" alt="...">
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+
+            <div class="item">
+                <img src="/images/slidefive.png" alt="...">
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+
+            <div class="item">
+                <img src="/images/slidesix.png" alt="...">
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+
+            <div class="item">
+                <img src="/images/slideseven.png" alt="...">
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div> <!-- Carousel -->
+    <div>
+        <div class="col-sm-5" style="padding-top:1px; padding-right:70px">
+            <h1 class="SortTagBm"><a href="http://phpet-web04:881/page/name/dashboard" style="color:#000;">DASHBOARD</a></h1>
+            <h1 class="SortTagBm">
+                <a href="http://phpet-web04:881/page/name/currentTearDown" style="color:#000;">
+                    TEARDOWN SCHEDULE
+                </a>
+            </h1>
+
+        </div>
+        <div class="col-sm-2 ">
+            <h1 class="SortTagBm">
+                <a href="http://phpet-web04:881/page/name/completedTeardown" style="color:#000;">
+                    COMPLETED
+                </a>
+            </h1>
+            <h1 class="SortTagBm">
+                <a href="http://phpet-web04:881/page/name/plannedTeardown" style="color:#000;">
+                    &nbsp;&nbsp;PLANNED
+                </a>
+            </h1>
+        </div>
+        <div class="col-sm-4 " style="padding-top:1px; padding-left:180px">
+
+            <h1 class="SortTagBm"><a href="report-archive.html" style="color:#000;">ARCHIVE</a></h1>
+            <h1 class="SortTagBm"><a href="faq.html" style="color:#000;">FAQ</a></h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 " style="height:530px">
+            <h1 class="SortingTag img-Item"><a href="pdf/BENCHMARKING HIGHLIGHTS.pdf"> Benchmarking highlights </a></h1>
+            <div class="ContentTeaser">
+                <img src="/images/pm.png" class="img-responsive">
+            </div>
+        </div>
+
+
+        <div class="col-sm-4 ">
+            <h1 class="SortingTag img-Item" style="padding-top: 15px"><a href="http://phpet-web04:881/page/name/vehicleReportFilter">Vehicle Report</a></h1>
+            <div class="ContentTeaser">
+                <img src="/images/cars.png" class="img-responsive">
+
+
+                <p style="text-align:justify">
+                    With the fast development of the technology nowadays, OEM’s are starting to incorporate the new trends on their designs.
+                    Through benchmarking, we will be able to identify and highlight those things in which, later on,
+                    are helpful on the projects and proposals that we will be working on.
+                </p>
+                <div id="demo" class="panel-collapse collapse">
+                    <p style="text-align:justify">
+                        Comparison is the process of identifying the differences of two or more vehicles,
+                        which is a faster way of determining the best practices they are applying on their vehicles.
+                        Through vehicle comparison, you will be able to generate a report, containing tabular data and graphical data,
+                        comparing at most 6 vehicles.
+                    </p>
+                </div>
+                <button id="example-one" type="button" data-text-swap="COLLAPSED" class="btn btn-info " data-toggle="collapse" data-target="#demo">READ MORE </button>
+
+            </div>
+        </div>
+
+        <div class="col-sm-4  ">
+
+            <h1 class="SortingTag img-Item" style="padding-top: 15px; padding-left:25px"><a href="http://phpet-web04:881/page/name/filtervehicleReports">Vehicle Analysis</a></h1>
+            <div class="ContentTeaser">
+                <img src="/images/analysis.png" class="img-responsive">
+
+                <p style="text-align:justify">
+                    This features the baseline design element of electrical wiring harnesses.
+                    A property has its attributes and is valued by percentage and then relate to a baseline design.
+                    An attribute can be a method and or a material of which contributes to the usage of a particular component.
+                </p>
+                <div id="demo1" class="panel-collapse collapse">
+                    <p style="text-align:justify">
+                        A component or an element in a design is a smaller or a self-contained part of a larger entity,
+                        an instance a connector has its terminals, seals, locking features, attached clips.
+                        A particular car can be declared as a baseline compared to its corresponding or equivalent competitive car.
+                        Customer specifications vary and in benchmarking these specifications are investigated and documented.
+                        Advance analysis will encourage to have interchangeable parts, new technology of wires,
+                        new vehicle protection systems, terminal and connector designs. <br /><br />
+                        Sedan, Small cars, and Trucks, and Luxury cars are the categories of the active benchmarked data.
+                        Further automotive classifications are foreseen.
+                        This makes Lear Benchmarking growth unprecedented and shall be a tool for business development.
+                    </p>
+                </div>
+                <button id="example-two" type="button" data-text-swap="COLLAPSED" class="btn btn-info" data-toggle="collapse" data-target="#demo1">READ MORE</button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+	    var msg = zsi.getUrlParamValue("access");
+		var _username = readCookie("username");
+		if(_username){
+			if (msg !== "invalid") {
+				$("#username").val(_username);
+				$("#password").val( readCookie("userpwd"));
+				$("#isremember").prop('checked',true);
+				$("#frmLogin").submit();
+			}
+			else
+				clearCookies();
+		}
+        if (msg === "invalid") {
+            alert("Invalid Access. Please try again.")
+        }
+		
+        $('.carousel').carousel({
+            interval: 6000
+        })		
+    });
+
+$("#frmLogin").submit(function () {
+
+    if ($("#username").val() === "") { alert("Please enter username."); return false; }
+    if ($("#password").val() === "") { alert("Please enter password."); return false; }
+	checkRememberSignin();
+});
+
+$("#btnTest").click(function () {
+	checkRememberSignin();
+});
+
+function clearCookies(){
+	createCookie("username","",0);
+	createCookie("userpwd","",0);
+	$("#isremember").prop('checked',false);
+}
+
+function checkRememberSignin(){
+	if ( $("#isremember").is(':checked') ){
+			createCookie("username",$("#username").val(),1);
+			createCookie("userpwd",$("#password").val(),1);
+	}
+	else clearCookies();
+}
+
+var button = $("#example-one");
+button.on("click", function () {
+
+    var x = $(this);
+    if (x.text() == x.data("text-swap")) {
+        x.text(x.data("text-original"));
+    } else {
+        x.data("text-original", x.text());
+        x.text(x.data("text-swap"));
+    }
+
+});
+
+var button = $("#example-two");
+button.on("click", function () {
+
+    var x = $(this);
+    if (x.text() == x.data("text-swap")) {
+        x.text(x.data("text-original"));
+    } else {
+        x.data("text-original", x.text());
+        x.text(x.data("text-swap"));
+    }
+
+});
+
+</script>
