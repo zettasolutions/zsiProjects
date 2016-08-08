@@ -13,12 +13,15 @@
     <link href="@Url.Content("~/")Content/bootstrap-theme.min.css" rel="stylesheet" />
     <link href="@Url.Content("~/")Content/site.css" rel="stylesheet" />    
     <link href="@Url.Content("~/")Content/zGrid.css" rel="stylesheet" />
-    
-       
     @Html.Raw(ViewBag.zsiLibJSLink)    
+    @{
+        string userId = "";
+        if (SessionHandler.CurrentUser != null){ userId = "var userId=" + SessionHandler.CurrentUser.userId + ";"; }
+    } 
     <script>
         var base_url = '@Url.Content("~/")';
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+        @userId
     </script>
 </head>
 <body>

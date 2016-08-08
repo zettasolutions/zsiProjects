@@ -1,4 +1,4 @@
-var  ud='undefined'
+  var  ud='undefined'
     ,zsi= {
          __getTableObject           : function(o){
             var arr = zsi.__tableObjectsHistory;
@@ -187,8 +187,11 @@ var  ud='undefined'
                 this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
                 return this;
             };
-            $.fn.checkValueExists   = function(pCode, pColName){
-               this.keyup(function(){
+            $.fn.checkValueExists   = function(o,isNotExistShow){
+                var self  =  this;
+                if(typeof self.tmr === ud) self.tmr = null;
+                if( typeof isNotExistShow === ud )  isNotExistShow=false;
+                this.keyup(function(){
                   var l_obj=this;
                   if($.trim(this.value)===""){
                      showPopup(l_obj,false);                  
@@ -198,11 +201,10 @@ var  ud='undefined'
                   if(zsi.timer) clearTimeout(zsi.timer);
                   zsi.timer = setTimeout(function(){              
                      $(l_obj).addClass("loadIconR" );
-                     
-                     $.getJSON(base_url + "sql/exec?p=checkValueExists @code='" + pCode + "',@colName='" +  pColName + "',@keyword='" +  l_value + "'"
+                     $.getJSON(base_url + "sql/exec?p=" + (typeof o.procedureName !== ud ? o.procedureName : "checkValueExists") +  " @code='" + o.code + "',@colName='" +  o.colName + "',@keyword='" +  l_value + "'"
                         , function(data) {
                               $(l_obj).removeClass("loadIconR" );
-                              if(data.rows[0].isExists.toUpperCase() ==="Y"){
+                              if(data.rows[0].isExists.toUpperCase() ===(isNotExistShow?"N":"Y")) {
                                  showPopup(l_obj,true);                  
                               }
                               else{
@@ -217,18 +219,18 @@ var  ud='undefined'
                
                function showPopup(o,isShow){
                   if(isShow){
-                     $(o.parentNode).addClass("has-error");
-                     $(o).popover({
-                             placement  : 'right'
-                            ,content    : 'Data already exist.'
-                     });
-            
-                     $(o).popover('show');         
+                    $(o).popover({
+                         placement   : 'right'
+                        ,content    :  (isNotExistShow ? "Data does not exist." : "Data already exist.")
+                    });
+                    $(o).popover('show');
+                    $(o).addClass("has-error");
                   }
                   else{
-                     $(o.parentNode).removeClass("has-error");
+                     $(o).removeClass("has-error");
                      $(o).popover('destroy');
                   }
+
                }
             };
             $.fn.clearGrid          = function(){
@@ -240,6 +242,37 @@ var  ud='undefined'
             };
             $.fn.clearSelect        = function() {
                 this.html("");
+            };
+            $.fn.createZoomCtrl     = function(){
+                this.zmVal  = 1;
+                var self = this;
+                var _onZoom = function(isIn){
+                    var inVal = 0.1;
+                    var getVal  =   function(){
+                        if(isIn)
+                            self.zmVal =  self.zmVal + inVal;
+                        else 
+                            self.zmVal =  self.zmVal - inVal;
+                        return self.zmVal;
+                    };
+                    self.css({transform : "scale(" + getVal() + ")"});
+                };
+                var $p = this.parent();
+                $p.append(
+                    "<div class=\"zoomCtrl\">"
+                        +"<button id=\"zoomIn\" type=\"button\" class=\"btn btn-default btn-sm\" >"
+                           +"<span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"> </span>"
+                        +"</button>"
+                        
+                        +"<button id=\"zoomOut\" type=\"button\" class=\"btn btn-default btn-sm\" >"
+                           +"<span class=\"glyphicon glyphicon-zoom-out\" aria-hidden=\"true\"></span>"
+                        +"</button>"
+                    +"</div>"
+                );
+                
+                var x =  $p.find("#zoomIn,#zoomOut").click( function(){
+                    if(this.id.toLowerCase() === "zoomin") _onZoom(true); else _onZoom(false);
+                });
             };
             $.fn.dataBind           = function(){
                 var a = arguments;
@@ -561,7 +594,6 @@ var  ud='undefined'
                 }
                 
             };
-
             $.fn.loadData2          = function(o){
                 this.arrowUp ="<span class=\"arrow-up\"></span>",
                 this.arrowDown ="<span class=\"arrow-down\"></span>",
@@ -869,7 +901,6 @@ var  ud='undefined'
                 this.arrows = this.arrowUp + this.arrowDown;   
                 this.clsPanelR = ".right";
                 this.clsPanelL = ".left";
-                
                 this.setPageCtrl = function(o,url,data,pTable){
                     var tr = data.returnValue;
                   
@@ -884,7 +915,7 @@ var  ud='undefined'
                      
                     $pageNo.change(function(){
                         __obj.pageParams = ",@pno=" + this.value ;
-                        if(__obj.params.url) __obj.params.url  = __obj.url + __obj.pageParams +  (typeof __obj.sortParams !== ud ? __obj.sortParams : "" );    
+                        if(__obj.params.url) __obj.params.url  = __obj.url +  __obj.pageParams +  (typeof __obj.sortParams !== ud   ?  __obj.sortParams : "" );    
                         __obj.dataBindGrid(__obj.params);
                     });
                 }
@@ -913,7 +944,7 @@ var  ud='undefined'
                     ,createColumnHeader = function(o){
                         if(o.headers.length===0) return;
                         o.headers.html(getdataRows(o.dataTable,o.startGroupId));
-                        o.headers.append("<div>&nbsp;</div");
+                        if(_isGroup) o.headers.append("<div>&nbsp;</div");
                         o.headers.find(".item .zSort a").click(function(){
                             var  $a = $(this)
                                 ,_colNo = $a.attr("sortColNo")
@@ -941,7 +972,7 @@ var  ud='undefined'
                                 _orderNo=0;
                             }
                             __obj.sortParams = ",@col_no=" + _colNo + ",@order_no=" + _orderNo;
-                            if(__obj.params.url) __obj.params.url  = __obj.url + __obj.sortParams +  (typeof __obj.pageParams !== ud ? __obj.pageParams : "" );
+                            if(__obj.params.url) __obj.params.url  = __obj.url +  __obj.sortParams +  (typeof __obj.pageParams !== ud ?  __obj.pageParams : "" );
                             
                             if(o.onSortClick) 
                                 o.onSortClick(_colNo,_orderNo);
@@ -949,7 +980,7 @@ var  ud='undefined'
                                 __obj.dataBindGrid(__obj.params);
                             
                         });
-                        o.headers.css("width",(o.width + 20 ) + "px");
+                        if(_isGroup || o.width > __o.width ) o.headers.css("width",(o.width + 20 ) + "px");
                         o.table.css("width",(o.width + 1 )  + "px");
                     }
                     ,trItem             = function(o){
@@ -1005,6 +1036,16 @@ var  ud='undefined'
                             //$(this).addClass("active");
                         });
                     }
+                    ,setScrollBars      = function(){
+                        _tableRight.parent().scroll(function() {
+                            var _left = _tableRight.offset().left;
+                            var _top = _tableRight.offset().top;
+                            var _headers = _tableRight.closest(".right").find(".zHeaders");
+                            var _tblLeft = $(this).closest(".right").prev().find("#table");
+                            _headers.offset({left:_left});
+                            _tblLeft.offset({top:_top});
+                        });                         
+                    }
                     ,getdataRows= function(d, id){
                         var  hasChild = function (d,id){
                             for(var x=0; x<d.length;x++ ){
@@ -1015,20 +1056,22 @@ var  ud='undefined'
                         var loadChild = function (d,id){
                             var h=""; 
                             for(var x=0; x<d.length;x++ ){
-                                if(typeof d[x].groupId === ud ||  d[x].groupId==id ) { 
+                                if(typeof d[x].groupId === ud ||  d[x].groupId==id ) {
                                     var _hasSort = (typeof d[x].sortColNo !== ud ? true:false);
                                     var _minusSortWidth  = ( _hasSort ? 15:0);
                                     var _style = "",_styleTitle="";
-                                    var _level = (typeof d[x].groupId !==ud ? "group" + d[x].groupId : "" );
+                                    var _level = (typeof d[x].groupId !==ud ? " group" + d[x].groupId : "" );
                                     var _class = (typeof d[x].class !==ud ? " " + d[x].class : "" );
-            
+                                    var _id = (typeof d[x].id !==ud ? "id=\"" + d[x].id + "\"" : "" );
+                                    var _titleId = (typeof d[x].id !==ud ? "id=\"title" + d[x].id + "\"" : "" );
+                                    var _groupItem = (_isGroup ? " groupItem" : "" );
                                     if(typeof d[x].width !==ud){
                                         _style = "style=\"width:" +  d[x].width  + "px;"  + d[x].style + "\"";
                                         _styleTitle = "style=\"width:" +  (d[x].width -  _minusSortWidth) + "px;"  + d[x].style + "\"";
                                     }
                                     
-                                    h+= "<div id=\"item" +  d[x].id + "\" class='item " + _level + _class + "' " + _style + ">";
-                                    h+= "<div id=\"title" +  d[x].id + "\"  class='title " + ( _hasSort ? "hasSort":"") + "' " + _styleTitle + " ><span class=\"text\">" + d[x].text +  "</span></div>"; 
+                                    h+= "<div " + _id + " class='item" + _groupItem + _level + _class + "' " + _style + ">";
+                                    h+= "<div " + _titleId + " class='title" + ( _hasSort ? " hasSort":"") + "' " + _styleTitle + " ><span class=\"text\">" + d[x].text +  "</span></div>"; 
                                     if(typeof d[x].groupId !== ud ) 
                                         h+= getdataRows(d,d[x].id) ;
                                     h+=getSortHeader(d[x].sortColNo);
@@ -1100,6 +1143,9 @@ var  ud='undefined'
                             + (typeof o.isPaging !==ud ?  (o.isPaging===true ? _footer :"") :"")
                     );
                     
+                    o.isAsync = (typeof o.isAsync !== ud ? o.isAsync : false);
+                    __obj.curPageNo = (o.isAsync ===true?1:0);
+                    
                     var _panelRight = this.find(__obj.clsPanelR);
                     var _panelLeft = this.find(__obj.clsPanelL);
                     
@@ -1163,12 +1209,12 @@ var  ud='undefined'
                 } 
                 
                 if(o.url || o.data){
-                    
-                    clearTables();
+                    if( (o.isAsync && __obj.curPageNo === 1) ||  ! o.isAsync ) clearTables();
                     var params ={
                        dataType: "json"
                       ,cache: false
                       ,success: function(data){
+                                    var _noOfPage   = (data.returnValue > 0 ? data.returnValue : 0);
                                     var _ch,i,_trs;
                                     num_rows = data.rows.length;
                                     
@@ -1177,36 +1223,49 @@ var  ud='undefined'
                                         trItem({data:this,panelType:"L",rowClass:_cls}); 
                                         trItem({data:this,panelType:"R",rowClass:_cls});
                                     });
-                                    setRowClickEvent();
+                                    
+                                    if(o.isAsync && __obj.curPageNo < _noOfPage ){
+                                            //fire onAsyncComplete
+                                            data.pageNo = __obj.curPageNo
+                                            if(o.onAsyncComplete) o.onAsyncComplete(data);
+                                            //loop page numbers
+                                             __obj.curPageNo++;
+                                            __obj.pageParams = ",@pno=" + __obj.curPageNo ;
+                                            if(__obj.params.url) __obj.params.url  = __obj.url + __obj.pageParams +  (typeof __obj.sortParams !== ud ?  __obj.sortParams : "" );    
+                                            setScrollBars();
+                                            __obj.dataBindGrid(__obj.params);
+                                    }
+                                    else{
+                                        //curPageNo=0;
+                                        
+                                        
+                                        if(typeof o.blankRowsLimit !==ud ){
+                                            for(var x=0; x < o.blankRowsLimit;x++){
+                                                var _cls = zsi.getOddEven();
+                                                trItem({data:null,panelType:"L",rowClass:_cls}); 
+                                                trItem({data:null,panelType:"R",rowClass:_cls});
+                                                setRowClickEvent();
+                                            }
+                                        } 
+                                        setRowClickEvent();                                  
+                                        setScrollBars();
+                                        __obj.find("#recordsNum").html(num_rows);
+                                        
+                                         if(typeof __obj.isPageInitiated === ud){
+                                            __obj.setPageCtrl(o,o.url,data,__obj);    
+                                            __obj.isPageInitiated=true;
+                                         }
 
-                                    if(typeof o.blankRowsLimit !==ud ){
-                                        for(var x=0; x < o.blankRowsLimit;x++){
-                                            var _cls = zsi.getOddEven();
-                                            trItem({data:null,panelType:"L",rowClass:_cls}); 
-                                            trItem({data:null,panelType:"R",rowClass:_cls});
-                                            setRowClickEvent();
+                                        //add tr click event.
+                                        __obj.addClickHighlight();
+                                        if(__obj.left) _tableRight.parent().scrollLeft(Math.abs(__obj.left ));
+                                        
+                                        if(o.isAsync && o.onAsyncComplete) {
+                                            data.pageNo = __obj.curPageNo
+                                            o.onAsyncComplete(data);
                                         }
-                                    }                                    
-
-                                    _tableRight.parent().scroll(function() {
-                                        var _left = _tableRight.offset().left;
-                                        var _top = _tableRight.offset().top;
-                                        var _headers = _tableRight.closest(".right").find(".zHeaders");
-                                        var _tblLeft = $(this).closest(".right").prev().find("#table");
-                                        _headers.offset({left:_left});
-                                        _tblLeft.offset({top:_top});
-                                    }); 
-                                    
-                                    //call onComplete callback.
-                                    if(o.onComplete) o.onComplete(data);
-                                    
-                                    __obj.find("#recordsNum").html(num_rows);
-
-                                    if(typeof __obj.pageParams === ud ) __obj.setPageCtrl(o,o.url,data,__obj);    
-
-                                    //add tr click event.
-                                    __obj.addClickHighlight();
-                                    if(__obj.left) _tableRight.parent().scrollLeft(Math.abs(__obj.left ));
+                                        if(o.onComplete) o.onComplete(data);
+                                    }
             
                             }          
                     };
@@ -1232,15 +1291,15 @@ var  ud='undefined'
                     $.ajax(params);
                 }
                 else if(typeof o.rows !== ud){
-                    if(typeof o.onRenders !==ud ){
-                        $.each(o.rows, function () {
-                            var _cls = zsi.getOddEven();
-                            trItem({data:this,panelType:"L",rowClass:_cls}); 
-                            trItem({data:this,panelType:"R",rowClass:_cls});                            
-                        });
-                        setRowClickEvent();
-                    }
-                    if(o.onComplete) o.onComplete(data);
+                    $.each(o.rows, function () {
+                        var _cls = zsi.getOddEven();
+                        trItem({data:this,panelType:"L",rowClass:_cls}); 
+                        trItem({data:this,panelType:"R",rowClass:_cls});                            
+                    });
+                    setRowClickEvent();
+                    setScrollBars();
+                    __obj.addClickHighlight();
+                    if(o.onComplete) o.onComplete();
                     __obj.addClickHighlight();        
                 }  
                 else{
@@ -1257,7 +1316,6 @@ var  ud='undefined'
                 }
                 
             };
-
             $.fn.loadMonths         = function(){
                 var _select  = this[0];
                 _select.add(new Option(" ", ""),null);
@@ -1433,6 +1491,29 @@ var  ud='undefined'
                 fire();
                 return this;
             };
+            $.fn.showPopup          = function(o){
+                var _popUpId = "#popup" ;
+                this.find(_popUpId).remove();
+                this.append('<div id="popup" class="zPopup overlay">'
+                                	+ '<div class="panel">'
+                                	+   '<div class="header">'
+                                    +		'<h2>'  + (o.title ? o.title :"")  + '</h2>'
+                                    +		'<a class="close" href="javascript:void(0);" id="close">&times;</a>'
+                                	+	'</div>'
+                                	+	'<div class="content"><div class="body">' + o.body + '</div></div>'
+                                	+ '</div>'
+                                    +'</div>');
+            
+                $p = this.find(_popUpId);
+                $p.css({
+                     "visibility"   : "visible"
+                    ,"opacity"      : 1
+                    ,"z-index"      : zsi.getHighestZindex() + 1
+                });           
+                $p.find("#close").click(function(e){
+                    $p.remove();
+                });
+            };
             $.fn.toJSON             = function(o) { //for multiple data only
                 if (typeof o === ud) o={};
                 var isExistOptionalItems = function (o, name) {
@@ -1493,7 +1574,7 @@ var  ud='undefined'
                 if(typeof o.procedure !==ud) json={procedure: o.procedure, rows: json}; 
                 return json;
             };
-            $.fn.toJSON2             = function(o) { //for multiple data only
+            $.fn.toJSON2            = function(o) { //for multiple data only
                 if (typeof o === ud) o={};
                 var isExistOptionalItems = function (o, name) {
                     if (typeof o.optionalItems !== ud) {
@@ -1760,7 +1841,8 @@ var  ud='undefined'
                             l_value="";
                             l_in_value=o.value;
                         }
-                    }
+                    }else if(t=="input") l_type=' type="text"';
+                    
                 }
                return '<' + l_tag + l_name + l_type + l_checked + l_class + l_value + l_selected_value + l_style +'>' + l_in_value + l_endTag;
             }    
@@ -2356,16 +2438,12 @@ var  ud='undefined'
         }
         ,tmr                        : null
         ,toDate                     : function(data) {
-          /*if(data===null) return '';
-          var pattern = /Date\(([^)]+)\)/;
-          var results = pattern.exec(data);
-          var dt = new Date(parseFloat(results[1]));
-          return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear();
-          */
+
           return data;
         }
         ,setValIfNull               : function(data,colName,defaultValue){
-            return (data ? data[colName]: (defaultValue? defaultValue:"" ) );   
+            var _d = (defaultValue ? defaultValue : "" );   
+            return (data ? (typeof data[colName]  !== ud ? data[colName] :  _d ) : _d);
         }
         ,ShowHideProgressWindow     : function (isShow){
             var pw = $(".progressWindow");
@@ -2427,4 +2505,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                           
+                                                           

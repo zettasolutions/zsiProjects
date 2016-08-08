@@ -7,3 +7,4 @@ inventory/Web/packages/*
 inventory/Web/.vs/*
 inventory/Web/inventory/zsiInventory.csproj.user
 inventory/Web/inventory/ace/*
+inventory/Web/inventory/Properties/PublishProfiles/*

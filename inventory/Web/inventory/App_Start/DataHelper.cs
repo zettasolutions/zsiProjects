@@ -54,6 +54,7 @@ namespace zsiInventory
                 +",\"rows\":" + message.rows
                 + ",\"errMsg\":\"" + message.errMsg + "\"}";
         }
+
         private static void serializeURLParameters(SqlCommand command, string sqlQuery)
         {
 
@@ -96,6 +97,7 @@ namespace zsiInventory
                     SqlCommand cmd = new SqlCommand(procedureName, conn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
+                    cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
                     tvparam.SqlDbType = SqlDbType.Structured;
                     SqlParameter retval = new SqlParameter();
                     retval.ParameterName = "@return_value";
@@ -143,6 +145,7 @@ namespace zsiInventory
                 cmd.Parameters.AddWithValue("@page_url", "db:" + procedure);
                 cmd.Parameters.AddWithValue("@error_msg", errMessage);
                 cmd.Parameters.AddWithValue("@error_type", type);
+                cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 conn.Close();
