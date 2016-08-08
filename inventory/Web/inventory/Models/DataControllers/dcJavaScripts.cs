@@ -29,6 +29,7 @@ namespace zsiInventory.Models
         public javascript_v GetInfo(string pageName)
         {
             this.SelectInfoParameters.Add("page_name", pageName);
+            this.SelectInfoParameters.Add("user_id", SessionHandler.CurrentUser.userId);
             return this.GetInfo();
         }
     }

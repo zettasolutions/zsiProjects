@@ -54,6 +54,7 @@ namespace zsiInventory.Controllers
             p.Add("pt_id", Converter.ToDBNullIfEmptyOrZero(fc["pt_id"]));
             p.Add("page_id", Converter.ToDBNullIfEmptyOrZero(fc["page_id"]));
             p.Add("pt_content", Converter.ToDBNullIfEmptyOrZero(fc["pt_content"]));
+            p.Add("user_id", Converter.ToDBNullIfEmptyOrZero(CurrentUser.userId));
             p.Add("new_id", System.Data.SqlDbType.Int, System.Data.ParameterDirection.Output);
             dc.Execute(SQLCommandType.Update);
             return Json(new { pt_id = p.GetItem("new_id").Value });

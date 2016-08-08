@@ -14,19 +14,12 @@ namespace zsiInventory.Controllers
     public class AccountController : baseController
     {
 
-        private user validateUser(string userName, string password) {
-            dcUser dc = new dcUser();
-            return dc.getUserInfo(userName,password);
-        }
-
-
         [HttpPost]
         public ActionResult validate()
         {
             string userName = Request["username"];
             string userPassword = Request["password"];
-
-            user _user = validateUser(userName, userPassword);
+            user _user = new dcUser().getUserInfo(userName, userPassword);
             if (_user.userId > 0){
                 Session["isAuthenticated"] = "Y";
                 HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
