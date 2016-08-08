@@ -24,10 +24,12 @@ namespace zsiInventory.Models
             this.Procedures.Add(new Procedure("dbo.page_data_sel"), SQLCommandType.SingleRecord);
 
         }
-        public PageData GetData(string pageName) {
+        public PageData GetData(string pageName,int userId) {
             if (pageName !=null)
             {
                 this.SelectInfoParameters.Add("page_name", pageName);
+                this.SelectInfoParameters.Add("user_id", userId);
+
                 return this.GetInfo();
             }
             else

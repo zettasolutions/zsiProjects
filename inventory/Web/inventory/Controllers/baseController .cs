@@ -84,8 +84,8 @@ namespace zsiInventory.Controllers
 
 
             dc = new dcPageData();
-            d = dc.GetData(pageName);
-            ViewBag.role = d.role;
+            d = dc.GetData(pageName,this.CurrentUser.userId );
+            ViewBag.role = (d.role != null ? d.role :"");
       
 
             if (d.page_id != 0)

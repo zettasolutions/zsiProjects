@@ -9,8 +9,16 @@ using System.Web.Security;
 
 namespace zsiInventory.Controllers
 {
+    using zsiInventory.Models;
+
     public class AccountController : baseController
     {
+
+        private user validateUser(string userName, string password) {
+            dcUser dc = new dcUser();
+            return dc.getUserInfo(userName,password);
+        }
+
 
         [HttpPost]
         public ActionResult validate()
@@ -18,18 +26,12 @@ namespace zsiInventory.Controllers
             string userName = Request["username"];
             string userPassword = Request["password"];
 
-
-            if (Membership.ValidateUser(userName, userPassword))
-            {
-
+            user _user = validateUser(userName, userPassword);
+            if (_user.userId > 0){
                 Session["isAuthenticated"] = "Y";
                 HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
-                SessionHandler.CurrentUser = new Models.user { username = userName, password = userPassword };
-                    DataHelper.toJSON(
-                        "dbo.users_pwd_upd @username='" + userName + "'"
-                      + ",@password='" + userPassword + "'"
-                      , false);
-                    return Redirect(Url.Content("~/") );
+                SessionHandler.CurrentUser = _user;
+                return Redirect(Url.Content("~/") );
 
             }
             else

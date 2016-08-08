@@ -19,7 +19,7 @@ namespace zsiInventory.Controllers
         // GET: Page
         public ActionResult Index()
         {
-            if (CurrentUser.username == null)
+            if (CurrentUser.userName == null)
                 return Redirect(Url.Content("~/"));
             else
             {
@@ -30,7 +30,8 @@ namespace zsiInventory.Controllers
 
         public ActionResult name(string param1)
         {
-            if (CurrentUser.username == null)
+            param1 = (param1 != null ? param1 : "");
+            if (CurrentUser.userName == null)
             {
                 return Redirect(Url.Content("~/"));
             }
@@ -47,7 +48,7 @@ namespace zsiInventory.Controllers
                     Session.Abandon();
                     return Redirect(Url.Content("~/"));
                 }
-                if (param1.ToLower() != devURL && param1.ToLower() != "signin")
+                  if (param1.ToLower() != devURL && param1.ToLower() != "signin")
                 {
                     if (getAuthNo() == 999)
                     {

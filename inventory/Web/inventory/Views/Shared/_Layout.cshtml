@@ -64,7 +64,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     @{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }
 					<li><a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> @SessionHandler.CurrentUser.username.ToUpper() (@role) </a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> @SessionHandler.CurrentUser.userName.ToUpper() (@role) </a></li>
                 </ul>
             </div>
         </div>

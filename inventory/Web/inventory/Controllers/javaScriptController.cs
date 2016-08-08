@@ -16,7 +16,7 @@ namespace zsiInventory.Controllers
 
         public ActionResult Index()
         {
-            if (CurrentUser.username == null)
+            if (CurrentUser.userName == null)
                 return Redirect(Url.Content("~/"));
             else
             {
@@ -27,7 +27,7 @@ namespace zsiInventory.Controllers
 
         public ActionResult source(string param1)
         {
-            if (CurrentUser.username == null)
+            if (CurrentUser.userName == null)
                 return Redirect(Url.Content("~/"));
             else
             {
@@ -45,7 +45,7 @@ namespace zsiInventory.Controllers
 
         public ActionResult name(string param1)
         {
-            if (CurrentUser.username == null)
+            if (CurrentUser.userName == null)
                 return Redirect(Url.Content("~/"));
             else
             {

@@ -148,7 +148,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\appProfile.cs" />
-    <Compile Include="Models\impersonate.cs" />
     <Compile Include="Models\message.cs" />
     <Compile Include="Models\PageData.cs" />
     <Compile Include="Models\select_option.cs" />
