@@ -46,11 +46,12 @@ namespace createCodeBackup
         {
             try
             {
+                string UserId = System.Configuration.ConfigurationManager.AppSettings["UserId"].ToString();
                 SqlConnection conn = new SqlConnection(settings.dbConnectionString);
-
                 SqlCommand command = new SqlCommand("dbo.javascripts_sel", conn);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter("@self_backup", 1));
+                command.Parameters.Add(new SqlParameter("@user_id", UserId));
                 conn.Open();
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 List<javascript> _list = new List<javascript>();

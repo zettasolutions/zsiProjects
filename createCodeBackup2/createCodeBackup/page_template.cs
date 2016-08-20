@@ -43,10 +43,12 @@ namespace createCodeBackup
         {
             try
             {
+                string UserId = System.Configuration.ConfigurationManager.AppSettings["UserId"].ToString();
                 SqlConnection conn = new SqlConnection(settings.dbConnectionString);
                 SqlCommand command = new SqlCommand("dbo.page_templates_sel", conn);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter("@self_backup",1));
+                command.Parameters.Add(new SqlParameter("@user_id", UserId));
                 conn.Open();
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 List<page_template> _list = new List<page_template>();
