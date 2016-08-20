@@ -1,0 +1,39 @@
+<div class="zPanel">
+    <div class="form-horizontal ">
+        <input type="hidden" name="p_store_loc_exp_id" id="p_store_loc_exp_id">
+        <div class="form-group  ">
+              
+            <label class=" col-xs-2 control-label">Store Franchise</label>
+            <div class=" col-xs-2"> 
+                <select name="store_id" id="store_id" class="form-control input-sm"></select>
+            </div>
+            
+            <div class="col-xs-1">
+               <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-folder-open"></span></button>
+            </div>
+           
+
+        </div> 
+    </div>
+
+
+    
+    
+    <div class="col-xs-12 ">
+            <div class="">
+                
+                <div id="grid" class="zGrid"></div>    
+               
+                <div class="buttonGroup">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                    	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+                    </button>
+                <!--<button type="button" class="btn btn-primary btn-sm" id="btnInactive">
+                    	<span class="glyphicon glyphicon-ban-circle"></span> Inactive
+                    </button>-->        
+                </div>                
+            </div>
+    </div>
+</div>
+
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
