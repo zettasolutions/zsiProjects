@@ -259,6 +259,7 @@ namespace zsiInventory
                 if (isProcedure){
                     serializeURLParameters(command, sql);
                     command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
                 }
 
                 StringBuilder allJSONs = new StringBuilder();
