@@ -71,7 +71,7 @@
 				, width:100 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a target="_blank" href="/page/name/' + svn(d,"page_name") + '"> view page</a>'; 
+					return '<a target="_blank" href="' + base_url +  'page/name/' + svn(d,"page_name") + '"> view page</a>'; 
 				}
 			
 			}  	 	 
@@ -79,7 +79,7 @@
 				, width:100 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a target="_blank" href="/pagetemplate/source/' + svn(d,"page_name") + '"> open source</a>'; 
+					return '<a target="_blank" href="' + base_url +  'pagetemplate/source/' + svn(d,"page_name") + '"> open source</a>'; 
 				}
 			
 			}  	 	 
@@ -87,7 +87,7 @@
 				, width:100 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a target="_blank" href="/javascript/source/' + svn(d,"page_name") + '"> open source</a>'; 
+					return '<a target="_blank" href="' + base_url +  'javascript/source/' + svn(d,"page_name") + '"> open source</a>'; 
 				}
 			
 			}  	 	 

@@ -97,18 +97,18 @@ namespace zsiInventory.Controllers
                     ViewBag.layoutPage = string.Format("~/Views/Shared/{0}.cshtml", (d.master_page_name == null ? defaultPage : d.master_page_name));
 
                     if (d.zsi_lib_rev_no != 0)
-                        ViewBag.zsiLibJSLink = string.Format("<script src='/javascript/name/zsiLib?rev={0}'></script>", d.zsi_lib_rev_no);
+                        ViewBag.zsiLibJSLink = string.Format("<script src='{0}javascript/name/zsiLib?rev={1}'></script>", Url.Content("~/"), d.zsi_lib_rev_no);
 
                     if (d.app_start_js_rev_no != 0)
-                        ViewBag.appStartLink = string.Format("<script src='/javascript/name/appstart?rev={0}'></script>", d.app_start_js_rev_no);
+                        ViewBag.appStartLink = string.Format("<script src='{0}javascript/name/appstart?rev={1}'></script>", Url.Content("~/"), d.app_start_js_rev_no);
 
                     if (d.page_js_rev_no != 0)
-                        ViewBag.pageJSLink = string.Format("<script src='/javascript/name/{0}?rev={1}'></script>", pageName, d.page_js_rev_no);
+                        ViewBag.pageJSLink = string.Format("<script src='{0}javascript/name/{1}?rev={2}'></script>", Url.Content("~/"), pageName, d.page_js_rev_no);
                 }
                 else if (pageName == "admin")
                 {
                     if (d.app_start_js_rev_no != 0)
-                        ViewBag.appStartLink = string.Format("<script src='/javascript/name/appstart?rev={0}'></script>", d.app_start_js_rev_no);
+                        ViewBag.appStartLink = string.Format("<script src='{0}javascript/name/appstart?rev={1}'></script>", Url.Content("~/"), d.app_start_js_rev_no);
 
                 }
                 else
