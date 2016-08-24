@@ -1,22 +1,31 @@
  var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-
+var store_id = null;
 
 zsi.ready(function(){
-     $("select[name='store_id']").dataBind("stores");
+  var $store =  $("select[name='store_id']")
+         $store.dataBind("stores");
+         $store.change(function(){
+        store_id = this.value;
+    });
+       
     
    /* $(".zPanel").css({
             height:$(window).height()-179
         });*/
      
-    displayRecords();
+   
   
 });
 
+function displayStores(id){
+     
+}
+
+
 $("#btnGo").click(function(){
-    console.log( $("#store_id").val())
-    $("#store_id").val();
- 
+  displayStores();
+   displayRecords();
 });
 
 $("#btnSave").click(function () {
@@ -36,7 +45,7 @@ $("#btnSave").click(function () {
  function displayRecords(){   
       var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
-	     url            : procURL + "supplies_sel" 
+	     url            : procURL + "supplies_sel @store_id=" + store_id
 	    ,width          : 1200
 	    ,height         : 506
 	    ,selectorType   : "checkbox"
@@ -73,4 +82,4 @@ $("#btnSave").click(function () {
     });    
 }
 
-             
+                
