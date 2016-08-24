@@ -8,9 +8,24 @@ var bs = zsi.bs.ctrl
             ,{text:"yesno",value:"yesno"}
             ,{text:"select",value:"select"}
             ,{text:"textarea",value:"textarea"}
-    ]    
+    ]
+    ,dataTypes = [
+             {text:"int"	        ,value:"int"            }				    	 
+            ,{text:"varchar"     	,value:"varchar"        }			 
+            ,{text:"char"           ,value:"char"	        }			 
+            ,{text:"nchar"			,value:"nchar"	        }
+            ,{text:"nvarchar"		,value:"nvarchar"       } 
+            ,{text:"bigint"			,value:"bigint"	        }
+            ,{text:"binary"			,value:"binary"	        }
+            ,{text:"datetime"		,value:"datetime"       } 
+            ,{text:"datetimeoffset"	,value:"datetimeoffset" }
+            ,{text:"decimal"		,value:"decimal"		} 
+    ]
+    
       
 ;
+
+
 
  
 $(document).ready(function(){
@@ -122,7 +137,7 @@ function displayColumns(){
         ]
         ,onComplete : function(){
             $("#grid2").find("select[name='type']").fillSelect({data: inputType});
-             $("#grid2").find("select[name='colDataType']").dataBind({ url : execURL + "select name as text,name as value from sys.types where is_user_defined=0"});
+             $("#grid2").find("select[name='colDataType']").fillSelect({data: dataTypes});
         }
         
         
@@ -157,4 +172,4 @@ $("#btnSave2").click(function () {
     });
      
 });                                 
-       
+        
