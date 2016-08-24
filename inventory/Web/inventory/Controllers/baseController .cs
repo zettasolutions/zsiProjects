@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
 using zsiInventory.Models;
 using zsi.Framework.Security.SecurityProvider;
-using Newtonsoft.Json;
-using System.Text;
-
 namespace zsiInventory.Controllers
 {
     public class baseController : Controller
@@ -33,26 +27,13 @@ namespace zsiInventory.Controllers
         }
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {
-            // TODO: change all my GET Json request into POST
-            /*return base.Json(data, contentType, contentEncoding,
-                JsonRequestBehavior.AllowGet);*/
             return new JsonNetResult(data, contentType, contentEncoding, JsonRequestBehavior.AllowGet);
-
         }
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (Session["zsi_login"] == null) Session["zsi_login"] = "N";
             string ControllerName = filterContext.Controller.GetType().Name.ToLower().Replace("controller", "");
             string ActionName = filterContext.ActionDescriptor.ActionName.ToLower();
-            /*
-            switch (ControllerName)
-            {
-                case "user": CheckActionLogOn(filterContext, ActionName, new string[] { "getuserinfo" }); break;
-                case "menus": break;
-                case "client": CheckActionLogOn(filterContext, ActionName, new string[] { "index", "clientlogo","upload" }); break;
-                default: CheckActionLogOn(filterContext, ActionName, new string[] { }); break;
-            }
-            */
             filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
             base.OnActionExecuting(filterContext);
         }
@@ -76,6 +57,13 @@ namespace zsiInventory.Controllers
             return Content(DataHelper.toJSON(sql, isProcedure), "application/json");
         }
 
+        private string replaceIncludedScripts(string content) {
+            return content
+                    .Replace("src=\"/", "src=\"" + Url.Content("~/"))
+                    .Replace("src='/", "src='" + Url.Content("~/"))
+            ;
+        }
+
         public void setPageLinks(string pageName)
         {
             string defaultPage = "_layout";
@@ -93,7 +81,7 @@ namespace zsiInventory.Controllers
                     ViewBag.masterPage = d.master_page_name;
                     ViewBag.pageName = pageName;
                     ViewBag.pageTitle = d.page_title;
-                    ViewBag.template = d.pt_content;
+                    ViewBag.template = replaceIncludedScripts(d.pt_content);
                     ViewBag.layoutPage = string.Format("~/Views/Shared/{0}.cshtml", (d.master_page_name == null ? defaultPage : d.master_page_name));
 
                     if (d.zsi_lib_rev_no != 0)
