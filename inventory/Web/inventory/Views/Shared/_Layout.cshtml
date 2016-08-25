@@ -16,7 +16,7 @@
     @Html.Raw(ViewBag.zsiLibJSLink)    
     @{
         string userId = "";
-        if (SessionHandler.CurrentUser != null){ userId = "var userId=" + SessionHandler.CurrentUser.userId + ";"; }
+        if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
     } 
     <script>
         var base_url = '@Url.Content("~/")';
@@ -67,7 +67,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     @{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }
 					<li><a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> @SessionHandler.CurrentUser.userName.ToUpper() (@role) </a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role) </a></li>
                 </ul>
             </div>
         </div>

@@ -114,10 +114,14 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="zsi.DataAccess">
-      <HintPath>..\..\..\zsiReferences\zsi.DataAccess.dll</HintPath>
+      <HintPath>..\zsiReferences\zsi.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="zsi.Framework">
-      <HintPath>..\..\..\zsiReferences\zsi.Framework.dll</HintPath>
+      <HintPath>..\zsiReferences\zsi.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="zsi.web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\zsiReferences\zsi.web.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -126,39 +130,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AppSettings.cs" />
-    <Compile Include="App_Start\DataHelper.cs" />
-    <Compile Include="App_Start\SessionHandler.cs" />
-    <Compile Include="App_Start\CollectionHelper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\fileController.cs" />
-    <Compile Include="Controllers\dataController.cs" />
-    <Compile Include="Controllers\sqlController.cs" />
-    <Compile Include="Controllers\JsonNetResult.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\baseController .cs" />
-    <Compile Include="Controllers\selectOptionController.cs" />
-    <Compile Include="Controllers\pageTemplateController.cs" />
-    <Compile Include="Controllers\javaScriptController.cs" />
-    <Compile Include="Controllers\pageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\appProfile.cs" />
-    <Compile Include="Models\message.cs" />
-    <Compile Include="Models\PageData.cs" />
-    <Compile Include="Models\select_option.cs" />
-    <Compile Include="Models\DataControllers\dcPages.cs" />
-    <Compile Include="Models\DataControllers\dcPageTemplates.cs" />
-    <Compile Include="Models\DataControllers\dcJavaScripts.cs" />
-    <Compile Include="Models\dbConnection.cs" />
-    <Compile Include="Models\javascript.cs" />
-    <Compile Include="Models\page.cs" />
-    <Compile Include="Models\page_template.cs" />
-    <Compile Include="Models\user.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

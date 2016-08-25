@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Web;
 using System.Web.Mvc;
-using zsiInventory.Models;
+using zsi.web.Models;
 using System.Data.OleDb;
 using System.Data;
 using System.Data.SqlClient;
@@ -13,7 +13,7 @@ namespace zsiInventory.Controllers
 {
 
 
-    public class fileController : baseController
+    public class fileController : zsi.web.Controllers.baseController
     {
         public fileController() {
            this.dc = new dcAppProfile();
