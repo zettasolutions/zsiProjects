@@ -1,8 +1,6 @@
 namespace zsi.web.Models
 {
     using System;
-    using System.Collections.Generic;
-    
     public  class page
     {
         public int? page_id { get; set; }

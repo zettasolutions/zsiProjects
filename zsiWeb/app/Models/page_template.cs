@@ -1,8 +1,6 @@
 namespace zsi.web.Models
 {
-    using System;
-    using System.Collections.Generic;
-    
+    using System;    
     public partial class page_template
     {
         public int? pt_id { get; set; }

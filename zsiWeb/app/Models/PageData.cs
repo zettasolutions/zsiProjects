@@ -4,9 +4,6 @@ using System.Data.SqlClient;
 
 namespace zsi.web.Models
 {
-    using System;
-    using System.Collections.Generic;
-
     public class PageData:page_template_v
     {
         public int page_js_rev_no { get; set; }
@@ -15,7 +12,6 @@ namespace zsi.web.Models
         public string master_page_name { get; set; }
         public string role { get; set; }
     }
-
     public class dcPageData : MasterDataController<PageData>
     {
         public override void InitDataController()

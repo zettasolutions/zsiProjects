@@ -1,9 +1,5 @@
 namespace zsi.web.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-
     public class option
     {
         public string text { get; set; }

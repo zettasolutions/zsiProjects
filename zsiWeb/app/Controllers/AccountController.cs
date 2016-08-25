@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Threading;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-
+﻿using System.Web.Mvc;
 namespace zsi.web.Controllers
 {
     using zsi.web.Models;
-
     public class AccountController : baseController
     {
-
         [HttpPost]
         public ActionResult validate()
         {

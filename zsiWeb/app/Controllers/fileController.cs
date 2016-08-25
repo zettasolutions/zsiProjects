@@ -2,17 +2,12 @@
 using System.Web;
 using System.Web.Mvc;
 using zsi.web.Models;
-using System.Data.OleDb;
 using System.Data;
 using System.Data.SqlClient;
 using System;
-using System.Text;
 using System.Collections.Generic;
-
 namespace zsi.web.Controllers
 {
-
-
     public class fileController : baseController
     {
         public fileController() {

@@ -1,8 +1,5 @@
 namespace zsi.web.Models
 {
-    using System;
-    using System.Collections.Generic;
-    
     public  class Message
     {   
         public bool isSuccess {get;set;}    

@@ -1,6 +1,5 @@
 namespace zsi.web.Models
 {
-    using System.Collections.Generic;
     using zsi.DataAccess;
     using zsi.DataAccess.Provider.SQLServer;
     using System.Data.SqlClient;

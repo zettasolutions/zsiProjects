@@ -1,8 +1,6 @@
 namespace zsi.web.Models
 {
-    using System;
-    using System.Collections.Generic;
-    
+    using System;   
     public partial class javascript
     {
         public int? js_id { get; set; }
