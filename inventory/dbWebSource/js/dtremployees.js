@@ -12,7 +12,7 @@ zsi.ready(function(){
 
 
  function displayRecords(){   
-     // var cb = bs({name:"cbFilter1",type:"checkbox"});
+      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : procURL + "dtr_employees_sel" 
 	    ,width          : 833
@@ -24,8 +24,8 @@ zsi.ready(function(){
     		   {text  : " "                                 , width : 25        , style : "text-align:left;"       
             		    , onRender      :  function(d){ 
                 		              return bs({name:"dtr_id"   ,value: svn (d,"dtr_id")    ,type:"hidden"})
-                		                  +  bs({name:"user_id"   ,value: svn (d,"user_id")    ,type:"hidden"});
-                		                  //+  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                		                  +  bs({name:"user_id"   ,value: svn (d,"user_id")    ,type:"hidden"})
+                		                  +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
                 }	 
             	,{ text:"Full Name"                       , width:400             , style:"text-align:left;"                    ,name:"full_name"}
@@ -74,4 +74,4 @@ function getWeekDay(dayNo) {
 
 
 
-           
+            
