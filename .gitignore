@@ -13,3 +13,7 @@ createCodeBackup/createCodeBackup/obj/*
 createCodeBackup2/createCodeBackup/bin/*
 createCodeBackup2/createCodeBackup/obj/*
 inventory/Web/inventory/createCodeBackup.exe.config
+*.user
+zsiWeb/packages/*
+zsiWeb/app/obj/*
+zsiWeb/app/bin/*
