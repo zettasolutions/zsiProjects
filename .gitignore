@@ -17,3 +17,6 @@ inventory/Web/inventory/createCodeBackup.exe.config
 zsiWeb/packages/*
 zsiWeb/app/obj/*
 zsiWeb/app/bin/*
+zsi.smagerUp/app/bin/*
+zsi.smagerUp/app/obj/*
+zsi.smagerUp/packages/*

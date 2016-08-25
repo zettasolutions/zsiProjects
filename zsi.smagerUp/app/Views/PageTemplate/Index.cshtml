@@ -1,0 +1,201 @@
+﻿
+@{
+    ViewBag.Title = "Page Template List";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<div class="pageTitle">@ViewBag.Title </div> 
+<div class="form-horizontal ">
+		<div class="form-group  ">
+			<div class="col-xs-12">
+				<label class=" col-xs-1 control-label">Content:</label>
+				<div class=" col-xs-2">
+					<input type="text" name="filter_content" id="filter_content" class="form-control input-sm ">
+				</div>
+
+				<button type="button" class="btn btn-primary btn-sm" id="btnSearch">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</div>
+		</div>
+</div>
+
+<form id="frm" method="post">
+	<div class="zPanel">
+    <table id="grid" class="fullWidth">
+        <thead>
+            <tr>
+                <th style="width: 25px"></th>
+                <th>Page Name</th>
+                <th>Create By</th>
+                <th>Created Date</th>
+                <th>Updated By</th>
+                <th>Updated Date</th>
+            </tr>
+        </thead>
+		 <tfoot><tr><td colspan="6">&nbsp;</td></tr></tfoot>
+    </table>
+	</div>
+
+</form>
+<div class="buttonGroup">
+
+    <button id="btnDelete" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-trash"></span> Delete
+    </button>
+    <button id="btnGenerateFiles" type="button" class="btn btn-primary btn-sm">Create Backup</button>
+</div>
+<script>
+    var defaultUrl = base_url + "sql/exec?p=page_templates_sel";
+ var editor =null;
+ var w1=null;
+
+
+
+
+$(window).bind('keydown', function(e) {
+    var isCtrlS = (e.ctrlKey && e.which == 83);
+    if(isCtrlS){
+        submit(false);
+        e.preventDefault();
+        return false;
+    }
+
+});
+
+$(document).ready(function(){
+    displayDataToGrid(defaultUrl);
+
+    $("#btnGenerateFiles").click(function(){
+
+        $.getJSON(controller_url + "selfBackup"
+            ,function(data){
+                if (data) {
+                    alert("Backup files has been created.")
+                }
+            }
+       );
+
+    });
+});
+
+
+function initAceEditor(){
+
+    ace.require("ace/ext/language_tools");
+    editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/html");
+    editor.setAutoScrollEditorIntoView(true);
+
+    editor.setOptions({
+           enableBasicAutocompletion: true,
+           enableSnippets: true,
+           enableLiveAutocompletion: false,
+           maxLines: 100,
+           fontSize: "10pt"
+    });
+
+}
+
+function createDhtmlxWindow(p){
+    if(typeof dhxWins === 'undefined') {
+        dhxWins = new dhtmlXWindows();
+        dhxWins.enableAutoViewport(false);
+    }
+    dhxWins.attachViewportTo(p.parent);
+    dhxWins.setImagePath(p.imgUrl);
+    if(typeof p.position === 'undefined') p.position = {x1:100,y1:50,x2:500,y2:1000};
+    w = dhxWins.createWindow(p.name, p.position.x1, p.position.y1, p.position.y2,p.position.x2);
+    w.setText(p.title);
+    if(typeof p.maximize !== 'undefined') { if (p.maximize==true) w.maximize(); }
+    if(typeof p.html !== 'undefined')  w.attachHTMLString(p.html);
+
+    return w;
+}
+
+function displayDataToGrid(url){
+    var page_id='';
+    if (page_id!='') return;
+    $("#grid").loadData({
+         url    : url
+        ,td_body: [
+            function(d){
+                return '<input id="cb" name="cb" class="" type="checkbox">'
+                + '<input id="pt_id" name="pt_id" value="' + d.pt_id + '" type="hidden">'
+            }
+            , function (d) { return '<a target="_blank" href="/pagetemplate/source/' + d.page_name + '">' + d.page_name  + '</a>'; }
+            ,function(d){ return   d.created_by; }
+            ,function(d){ return   d.created_date; }
+            ,function(d){ return   d.updated_by; }
+            ,function(d){ return   d.updated_date; }
+        ]
+
+    });
+}
+
+
+function getPageOptions() {
+    $("#page_id").dataBind(base_url + "page/getOptions");
+}
+
+function showWindow(onComplete){
+    $.get(controller_url + "form", function (html_data) {
+            w1=createDhtmlxWindow({
+                 name : "w1"
+                ,title: "New Item"
+                ,parent: document.body
+                ,imgUrl: base_url + "dhtmlx36/dhtmlxWindows/codebase/imgs/"
+                ,html : html_data
+                ,maximize:true
+            });
+            initAceEditor();
+            if(onComplete) onComplete();
+
+            //initiate window buttons.
+            $("#btnSubmit").click(function(){
+                submit(true);
+            });
+
+            $("#btnCloseWindow").click(function(){
+                w1.close();
+            });
+
+    });
+}
+
+
+$("#btnSearch").click(function(){
+    displayDataToGrid(base_url + "sql/exec?p=page_templates_sel @Html.Raw('@')pt_content=" + $("#filter_content").val());
+});
+
+
+function submit(IsHide){
+    $("#pt_content").val(editor.getSession().getValue());
+    var data = $("#frmWindow").serializeArray();
+    if(IsHide==true) w1.close();
+
+    $("#frmWindow").jsonSubmit({
+        url: controller_url + "update"
+        , onComplete: function (data) {
+            zsi.form.showAlert("alert");
+            displayDataToGrid(defaultUrl);
+        }
+    });
+
+}
+
+
+$("#btnDelete").click(function () {
+    zsi.form.deleteData({
+         code: "sys-0004"
+        ,onComplete: function (data) {
+            displayDataToGrid(defaultUrl);
+        }
+    });
+});
+
+
+</script>
+
+
