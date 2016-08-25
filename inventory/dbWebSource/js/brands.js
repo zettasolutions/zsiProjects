@@ -14,11 +14,9 @@ zsi.ready(function(){
 
 $("#btnSave").click(function () {
     $("#grid").jsonSubmit({
-              procedure  : "position_upd"
-              ,optionalItems : ["is_active"]
+              procedure  : "brands_upd"
              ,onComplete : function (data) {
-                  $("#grid").clearGrid();
-                  if(data.isSuccess===true) zsi.form.showAlert("alert");
+                $("#grid").clearGrid(); 
                   displayRecords();
              }
         });    
@@ -29,8 +27,8 @@ $("#btnSave").click(function () {
  function displayRecords(){   
       var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
-	     url            : execURL + "position_sel"
-	    ,width          : 800
+	     url            : execURL + "brands_sel"
+	    ,width          : 400
 	    ,height         : 506
 	    //,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -39,15 +37,22 @@ $("#btnSave").click(function () {
     	
     		   {text  : cb                                 , width : 25        , style : "text-align:left;"       
             		    , onRender      :  function(d){ 
-                		              return bs({name:"position_id"   ,value: svn (d,"position_id")    ,type:"hidden"})
+                		              return bs({name:"brand_id"   ,value: svn (d,"brand_id")    ,type:"hidden"})
                 		                 +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
                 }	 
-            	,{ text:"Position"                          , width:300       , style:"text-align:center;"        , type:"input"          ,name:"position_name"}
-            	,{ text:"Job Description"                   , width:300       , style:"text-align:center;"        , type:"input"          ,name:"job_description"}
-            	,{ text:"Active?"                           , width:100       , style:"text-align:center;"        , type:"yesno"          ,name:"is_active"}
+            	,{ text:"Brand Name"                           , width:365       , style:"text-align:center;"        , type:"input"          ,name:"brand_name"}
 	    ]
+	      ,onComplete: function(){
+                    $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+            }
     });    
 }
-
-           
+$("#btnDelete").click(function(){
+    zsi.form.deleteData({
+         code       : "ref-0008"
+        ,onComplete : function(data){
+                        displayRecords();
+                      }
+    });      
+});   

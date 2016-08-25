@@ -47,7 +47,7 @@ function displayRecords(){
         }  
     });    
 }
-/*
+
 $("#btnDelete").click(function(){
     zsi.form.deleteData({
          code       : "sys-0002"
@@ -55,10 +55,10 @@ $("#btnDelete").click(function(){
                         displayRecords();
                       }
     });      
-});*/
+});
     
     
     
     
     
-                                          
+                                           
