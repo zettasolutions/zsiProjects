@@ -1,13 +1,6 @@
 *.suo
 *.pdb
 *.db
-inventory/Web/inventory/bin/*
-inventory/Web/inventory/obj/*
-inventory/Web/packages/*
-inventory/Web/.vs/*
-inventory/Web/inventory/zsiInventory.csproj.user
-inventory/Web/inventory/ace/*
-inventory/Web/inventory/Properties/PublishProfiles/*
 createCodeBackup/createCodeBackup/bin/*
 createCodeBackup/createCodeBackup/obj/*
 createCodeBackup2/createCodeBackup/bin/*

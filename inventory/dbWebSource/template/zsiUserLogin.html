@@ -1,0 +1,39 @@
+<form id="frm" method="post" >
+    <div class="row" style="height:300px;padding-right:5px">
+        <div class="col-xs-12" style="background-color:#fff;height:inherit;padding-top:5px;"> 
+            <div class="form-horizontal" style="padding:5px">
+                <input type="hidden" name="project_id" id="project_id" >
+                <div class="col-xs-12 ">
+                    <div class="form-group  ">  
+                        <label class=" col-xs-2 control-label">User Name</label>
+                        <div class=" col-xs-3">
+                             <input type="text" name="user_name" id="user_name" class="form-control input-sm" >
+                        </div>  
+
+                    </div>  
+        
+                    <div class="form-group  ">  
+                        <label class=" col-xs-2 control-label">Password</label>
+                        <div class=" col-xs-3">
+                            <input type="password" name="user_pwd" id="user_pwd" class="form-control input-sm" >
+                        </div>  
+                        
+              
+                    </div>  
+        
+                    <div class="form-group  ">  
+                        <label class=" col-xs-2 control-label">&nbsp;</label>
+                        <div class=" col-xs-9" style="margin-top:10px;">
+                            <button type="submit" class="btn btn-primary btn-sm" id="btnSave"><span class="glyphicon glyphicon-user"></span> Login</button>
+                        </div>
+                    </div>                             
+                    
+                </div>
+            </div>
+        </div>    
+    </div>
+</form> 
+
+<script>
+    $("#frm").attr("action", base_url + "page/loginAdmin");
+</script>
