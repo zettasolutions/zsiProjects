@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="database\procedure.cs" />
+    <Compile Include="database\tableTypes.cs" />
     <Compile Include="database\view.cs" />
     <Compile Include="database\table.cs" />
     <Compile Include="file.cs" />

@@ -5,7 +5,8 @@
     using System.Data;
     using System.Data.SqlClient;
 
-    public class dcTable
+   
+    public class dcTableTypes
     {
 
 
@@ -15,7 +16,8 @@
             {
                 SqlConnection conn = new SqlConnection(settings.dbConnectionString);
 
-                SqlCommand command = new SqlCommand("SELECT TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_TYPE='BASE TABLE'", conn);
+                SqlCommand command = new SqlCommand("sp_table_types", conn);
+                command.CommandType = CommandType.StoredProcedure;
                 conn.Open();
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 List<fileModel> _list = new List<fileModel>();
@@ -40,10 +42,10 @@
         {
             try
             {
-                string result = "CREATE TABLE " + TableName + "(" ;
+                string result = "CREATE TYPE " + TableName + " AS TABLE(" ;
                 SqlConnection conn = new SqlConnection(settings.dbConnectionString);
 
-                SqlCommand command = new SqlCommand("sp_columns", conn);
+                SqlCommand command = new SqlCommand("sp_table_type_columns_100", conn);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter("@table_name", TableName));
                 conn.Open();

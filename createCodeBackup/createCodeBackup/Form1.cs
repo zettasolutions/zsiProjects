@@ -14,6 +14,7 @@ namespace createCodeBackup
 
         private void btnCreateBackup_Click(object sender, EventArgs e)
         {
+            btnCreateBackup.Enabled = false;
             dcJavaScript dc1 = new dcJavaScript();
             List<javascript> list1 = dc1.getMyFiles();
             foreach (javascript info in list1)
@@ -35,51 +36,89 @@ namespace createCodeBackup
             txtMsg.AppendText("\r\n" + list2.Count + " Template files created/affected.");
 
             MessageBox.Show("Backup files has been created.");
+
+            btnCreateBackup.Enabled = true;
         }
 
-        private void btnCreateDBBackup_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                dcTable dcView = new dcTable();
-                writeFiles(dcView.getList(), "tables", "Tables");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-
-/*
-            try {
-                dcProcedure dcProc = new dcProcedure();
-                writeFiles(dcProc.getList(), "procedures_functions", "Procedures and Functions");
-            }catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            try
-            {
-                dcView dcView = new dcView();
-                writeFiles(dcView.getList(), "views", "Views");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-*/
-
-        }
+   
 
         void writeFiles(List<fileModel> list,string subFolder, string Title) {
             foreach (fileModel info in list)
             {
                 settings.WriteFile(subFolder + "\\", info.fileName + ".sql", info.content);
             }
-            txtMsg.AppendText(list.Count + "  "  + Title + " files created/affected.");
+            txtMsg.AppendText(list.Count + "  "  + Title + " files created/affected." + "\r\n");
         }
 
+        private void btnDBCreateBackup_Click(object sender, EventArgs e)
+        {
+            btnDBCreateBackup.Enabled = false;
+            bool isBackupCreated = false;
+            if (chkTables.Checked)
+            {
 
+                try
+                {
+                    dcTable dcView = new dcTable();
+                    writeFiles(dcView.getList(), "tables", "Tables");
+                    isBackupCreated = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+
+            if (chkProc.Checked)
+            {
+                try
+                {
+                    dcProcedure dcProc = new dcProcedure();
+                    writeFiles(dcProc.getList(), "procedures_functions", "Procedures and Functions");
+                    isBackupCreated = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            if (chkViews.Checked)
+            {
+                try
+                {
+                    dcView dcView = new dcView();
+                    writeFiles(dcView.getList(), "views", "Views");
+                    isBackupCreated = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+
+            if (chkTableTypes.Checked)
+            {
+                try
+                {
+                    dcTableTypes dcTTypes= new dcTableTypes();
+                    writeFiles(dcTTypes.getList(), "table_types", "Table Types");
+                    isBackupCreated = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            if (isBackupCreated)
+                MessageBox.Show("Backup has been created.");
+            else
+                MessageBox.Show("Please select item(s) to create database script backup.");
+
+            btnDBCreateBackup.Enabled = true;
+        }
     }
 }
