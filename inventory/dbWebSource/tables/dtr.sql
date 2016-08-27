@@ -1,0 +1,5 @@
+CREATE TABLE dtr(
+dtr_id	INT IDENTITY(1,1)	NOT NULL
+,employee_id	INT	NOT NULL
+,time_in	DATETIME	NULL
+,time_out	DATETIME	NULL)
