@@ -37,5 +37,49 @@ namespace createCodeBackup
             MessageBox.Show("Backup files has been created.");
         }
 
+        private void btnCreateDBBackup_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dcTable dcView = new dcTable();
+                writeFiles(dcView.getList(), "tables", "Tables");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+/*
+            try {
+                dcProcedure dcProc = new dcProcedure();
+                writeFiles(dcProc.getList(), "procedures_functions", "Procedures and Functions");
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            try
+            {
+                dcView dcView = new dcView();
+                writeFiles(dcView.getList(), "views", "Views");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+*/
+
+        }
+
+        void writeFiles(List<fileModel> list,string subFolder, string Title) {
+            foreach (fileModel info in list)
+            {
+                settings.WriteFile(subFolder + "\\", info.fileName + ".sql", info.content);
+            }
+            txtMsg.AppendText(list.Count + "  "  + Title + " files created/affected.");
+        }
+
+
     }
 }
