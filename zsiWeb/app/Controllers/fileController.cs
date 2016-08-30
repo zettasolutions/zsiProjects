@@ -10,20 +10,21 @@ namespace zsi.web.Controllers
 {
     public class fileController : baseController
     {
-        public fileController() {
-           this.dc = new dcAppProfile();
-           this.app = dc.GetInfo();
+
+        public fileController()
+        {
+            this.dc = new dcAppProfile();
+            this.app = dc.GetInfo();
         }
 
         #region "Private Methods"
-        
-            private string tempPath {get { return "c:\\temp\\"; }}
-            private appProfile app { get; set; }
-            private dcAppProfile dc { get; set; }
+
+        private string tempPath { get { return "c:\\temp\\"; } }
+        private appProfile app { get; set; }
+        private dcAppProfile dc { get; set; }
 
         #endregion
 
- 
         public ActionResult viewImage(string fileName, string isThumbNail = "n")
         {
 
@@ -36,7 +37,7 @@ namespace zsi.web.Controllers
                 fullPath = "/images/no-image.jpg";
 
             return base.File(fullPath, "image/jpeg");
-          
+
         }
 
 
@@ -69,7 +70,7 @@ namespace zsi.web.Controllers
             }
 
             return Json(new { isSuccess = true, msg = "ok" });
-           
+
 
         }
 
@@ -102,14 +103,14 @@ namespace zsi.web.Controllers
             if (Directory.Exists(app.image_folder)) path = app.image_folder;
             var fullPath = Path.Combine(path, fileName);
 
-            return Content(System.IO.File.Exists(fullPath).ToString(),"text/plain",System.Text.Encoding.UTF8);
+            return Content(System.IO.File.Exists(fullPath).ToString(), "text/plain", System.Text.Encoding.UTF8);
 
         }
 
         public ActionResult generateExcelFile(string sql, string fileName)
         {
 
-            SqlConnection conn =  new SqlConnection(dbConnection.ConnectionString);
+            SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
             SqlCommand cmd = new SqlCommand(sql, conn);
             conn.Open();
             SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -138,7 +139,7 @@ namespace zsi.web.Controllers
                 Response.Write("\n");
             }
             Response.End();
-   
+
             return RedirectToAction("/");
 
 
@@ -146,7 +147,7 @@ namespace zsi.web.Controllers
 
         public ActionResult generateHTMLToExcel(string sql, string fileName)
         {
- 
+
             string html = "";
             SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
             SqlCommand cmd = new SqlCommand(sql, conn);
@@ -167,7 +168,7 @@ namespace zsi.web.Controllers
             Response.End();
             Response.Flush();
             return RedirectToAction("/");
-            
+
 
         }
 
@@ -182,10 +183,11 @@ namespace zsi.web.Controllers
                 var path = this.tempPath;
                 if (Directory.Exists(app.image_folder)) path = app.image_folder;
 
-                for(var x=0; x < files.Count; x++)
+                for (var x = 0; x < files.Count; x++)
                 {
                     string filename = path + files[x];
-                    if (System.IO.File.Exists(filename)) {  
+                    if (System.IO.File.Exists(filename))
+                    {
                         System.IO.File.Delete(filename);
                     }
                 }
@@ -197,8 +199,70 @@ namespace zsi.web.Controllers
             }
 
             return Json(new { isSuccess = true, msg = "ok" });
-          
 
+
+        }
+        [HttpPost]
+        public JsonResult createFolders(string path, List<string> folders)
+        {
+            try
+            {
+                if (path != "") { if (!path.EndsWith(@"\")) path = path + @"\"; }
+                for (int x = 0; x < folders.Count; x++)
+                {
+                    string _fullPath = this.app.network_group_folder + path + folders[x];
+                    if (!Directory.Exists(_fullPath)) Directory.CreateDirectory(_fullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+            return Json(new { isSuccess = true, msg = "ok" });
+        }
+
+
+        public JsonResult getFolders(string path)
+        {
+            string[] _folders;
+            try
+            {
+                _folders = Directory.GetDirectories(this.app.network_group_folder + path);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+
+            return Json(new { isSuccess = true, folders = _folders });
+        }
+
+        public JsonResult getImageFileNames(string subDir, string searchPattern)
+        {
+            List<string> _fileNames = new List<string>();
+            try
+            {
+                string[] _files;
+
+                if (searchPattern != null)
+                    _files = Directory.GetFiles(this.app.image_folder + subDir, searchPattern);
+                else
+                    _files = Directory.GetFiles(this.app.image_folder + subDir);
+
+                foreach (var f in _files)
+                {
+
+                    _fileNames.Add(Path.GetFileName(f));
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+
+            return Json(new { isSuccess = true, files = _fileNames.ToArray() });
         }
 
 
