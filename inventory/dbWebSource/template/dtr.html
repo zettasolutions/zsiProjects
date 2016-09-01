@@ -1,33 +1,42 @@
-<div class="row">
-    <div class="col-xs-12">
-        <div class="zPanel row">
-            <div class="row2">
+<style>
+    .time-frame {
+    width: 300px;
+    font-family: Arial;
+    font-size: 20px;
+    }
+    .legend{
+        font-size:20px;
+        font-family: Arial;
+        font-weight: solid;
+    }
+    #clock{
+        float:left;
+    }
+</style>
+    <div class="col-xs-12 zPanel" >
+            <div class="row1" >
+                
                 <fieldset>
-                <legend>ZSI EMPLOYEES TIME RECORDS</legend>
+                    
+                <div class="legend">ZSI EMPLOYEES TIME RECORDS </div>
+                
                     <div class="col-xs-1">
                         <div class="buttonGroup pull-right">
-                        <button type="button" class="btn btn-primary btn-sm" id="TimeIn">
-                        	<span class="glyphicon glyphicon-floppy-"></span> Time in
-                        </button>
+                            <button type="button" class="btn btn-primary btn-sm" id="TimeIn"><span class="glyphicon glyphicon-floppy-"></span> Time in</button>
                         </div>                
                     </div>
+                    
                     <div class="col-xs-6">
                         <div class="buttonGroup ">
-                            <button type="button" class="btn btn-primary btn-sm" id="timeOut">
-                                 <span class="glyphicon glyphicon-ban-"></span> Time out
-                            </button>        
+                            <button type="button" class="btn btn-primary btn-sm" id="timeOut"><span class="glyphicon glyphicon-ban-"></span> Time out</button>    
                         </div>                
                     </div>
+                    <div id="clock" class="time-frame"></div>
                 </fieldset>
-                    
-                    <div class="col-xs-12">
-                   
-                    <div id="grid" class="zGrid"></div>
-                   
-                    </div>  
-            </div>
-        </div>
+            </div>        
+            <div class="row2">
+                <div id="grid" class="zGrid"></div>
+            </div>  
     </div>
      
-</div>
 <script src="/Scripts/handlebars-v3.0.0.js"></script>
