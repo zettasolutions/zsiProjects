@@ -239,22 +239,25 @@ namespace zsi.web.Controllers
             return Json(new { isSuccess = true, folders = _folders });
         }
 
-        public JsonResult getFiles(string path, string root = "")
+        public JsonResult getFiles(string path, string root = "", string searchPattern = "")
         {
             IEnumerable<string> _files;
             try
             {
                 var _dir = (root == "" ? AppSettings.BaseDirectory : root);
-                _files = Directory.GetFiles(_dir + path).Select(f => Path.GetFileName(f));
 
+
+                if (searchPattern != "")
+                    _files = Directory.GetFiles(_dir + path, searchPattern).Select(f => Path.GetFileName(f));
+                else
+                    _files = Directory.GetFiles(_dir + path).Select(f => Path.GetFileName(f));
             }
             catch (Exception ex)
             {
 
                 return Json(new { isSuccess = false, errMsg = ex.Message });
             }
-
-            return Json(new { isSuccess = true, files = _files});
+            return Json(new { isSuccess = true, files = _files });
         }
 
         public JsonResult readFile(string fileName, string root = "")
