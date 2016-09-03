@@ -6,6 +6,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace zsi.web.Controllers
 {
     public class fileController : baseController
@@ -222,19 +224,77 @@ namespace zsi.web.Controllers
         }
 
 
-        public JsonResult getFolders(string path)
+        public JsonResult getFolders(string path, string root = "")
         {
-            string[] _folders;
+            IEnumerable<string> _folders;
             try
             {
-                _folders = Directory.GetDirectories(this.app.network_group_folder + path);
+                var _dir = (root == "" ? AppSettings.BaseDirectory : root);
+                _folders = Directory.GetDirectories(_dir + path).Select(f => Path.GetFileName(f));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+            return Json(new { isSuccess = true, folders = _folders });
+        }
+
+        public JsonResult getFiles(string path, string root = "")
+        {
+            IEnumerable<string> _files;
+            try
+            {
+                var _dir = (root == "" ? AppSettings.BaseDirectory : root);
+                _files = Directory.GetFiles(_dir + path).Select(f => Path.GetFileName(f));
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+
+            return Json(new { isSuccess = true, files = _files});
+        }
+
+        public JsonResult readFile(string fileName, string root = "")
+        {
+            string _content = "";
+            try
+            {
+                var _dir = (root == "" ? AppSettings.BaseDirectory : root);
+                using (StreamReader sr = System.IO.File.OpenText(_dir + fileName))
+                {
+                    string s = "";
+                    while ((s = sr.ReadLine()) != null)
+                    {
+                        _content += s;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+
+            return Json(new { isSuccess = true, content = _content });
+        }
+
+        public JsonResult saveFile(string fileName, string content, string root = "")
+        {
+            try
+            {
+                var _dir = (root == "" ? AppSettings.BaseDirectory : root);
+                System.IO.File.WriteAllText(_dir + fileName, content);
             }
             catch (Exception ex)
             {
                 return Json(new { isSuccess = false, errMsg = ex.Message });
             }
 
-            return Json(new { isSuccess = true, folders = _folders });
+            return Json(new { isSuccess = true, msg = "File has been saved." });
         }
 
         public JsonResult getImageFileNames(string subDir, string searchPattern)
