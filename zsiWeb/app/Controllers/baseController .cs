@@ -61,6 +61,8 @@ namespace zsi.web.Controllers
             return content
                     .Replace("src=\"/", "src=\"" + Url.Content("~/"))
                     .Replace("src='/", "src='" + Url.Content("~/"))
+                    .Replace("href=\"/", "href=\"" + Url.Content("~/"))
+                    .Replace("href='/", "href='" + Url.Content("~/"))
             ;
         }
 
