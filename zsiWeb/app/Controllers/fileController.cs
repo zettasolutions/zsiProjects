@@ -260,37 +260,34 @@ namespace zsi.web.Controllers
             return Json(new { isSuccess = true, files = _files });
         }
 
-        public JsonResult readFile(string fileName, string root = "")
+        public ContentResult readFile(string fileName, string root = "")
         {
             string _content = "";
             try
             {
                 var _dir = (root == "" ? AppSettings.BaseDirectory : root);
-                using (StreamReader sr = System.IO.File.OpenText(_dir + fileName))
+                using (StreamReader sr = new StreamReader(_dir + fileName))
                 {
-                    string s = "";
-                    while ((s = sr.ReadLine()) != null)
-                    {
-                        _content += s;
-                    }
+                    _content = sr.ReadToEnd();
                 }
-
             }
             catch (Exception ex)
             {
-
-                return Json(new { isSuccess = false, errMsg = ex.Message });
+                return Content("error:" + ex.Message);
             }
-
-            return Json(new { isSuccess = true, content = _content });
+            return Content(_content);
         }
 
+        [HttpPost]
         public JsonResult saveFile(string fileName, string content, string root = "")
         {
             try
             {
                 var _dir = (root == "" ? AppSettings.BaseDirectory : root);
-                System.IO.File.WriteAllText(_dir + fileName, content);
+                using (StreamWriter sw = new StreamWriter(_dir + fileName))
+                {
+                    sw.WriteLine(HttpUtility.HtmlDecode(content));
+                }
             }
             catch (Exception ex)
             {
@@ -299,6 +296,7 @@ namespace zsi.web.Controllers
 
             return Json(new { isSuccess = true, msg = "File has been saved." });
         }
+
 
         public JsonResult getImageFileNames(string subDir, string searchPattern)
         {
