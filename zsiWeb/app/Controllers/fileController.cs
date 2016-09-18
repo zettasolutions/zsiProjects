@@ -333,6 +333,26 @@ namespace zsi.web.Controllers
             return Json(new { isSuccess = true, msg = "ok" });
         }
 
+        [HttpPost]
+        public JsonResult UploadFile(HttpPostedFileBase file, string root = "")
+        {
+            try
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    var _dir = (root == "" ? AppSettings.BaseDirectory : (!root.Contains(":") ? AppSettings.BaseDirectory + root : root));
+                    var fileName = Path.GetFileName(file.FileName);
+                    var fullPath = _dir + fileName;
+                    file.SaveAs(fullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+            return Json(new { isSuccess = true, msg = "ok" });
+        }
+
         public JsonResult getImageFileNames(string subDir, string searchPattern)
         {
             List<string> _fileNames = new List<string>();
