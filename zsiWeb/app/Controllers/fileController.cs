@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO.Compression;
 
 namespace zsi.web.Controllers
 {
@@ -41,8 +42,6 @@ namespace zsi.web.Controllers
             return base.File(fullPath, "image/jpeg");
 
         }
-
-
 
         [HttpPost]
         public JsonResult UploadImage(HttpPostedFileBase file, string prefixKey)
@@ -87,7 +86,6 @@ namespace zsi.web.Controllers
             return File(fullPath, contentType);
         }
 
-
         public FileResult loadTmpFile(string subDir, string fileName)
         {
             var _path = "";
@@ -96,7 +94,6 @@ namespace zsi.web.Controllers
             string contentType = MimeMapping.GetMimeMapping(fileName);
             return File(fullPath, contentType);
         }
-
 
         public ContentResult checkFile(string fileName)
         {
@@ -174,20 +171,15 @@ namespace zsi.web.Controllers
 
         }
 
-
         [HttpPost]
-        public JsonResult deleteFiles(List<string> files)
+        public JsonResult deleteFiles(List<string> files, string root = "")
         {
-
             try
             {
-
-                var path = this.tempPath;
-                if (Directory.Exists(app.image_folder)) path = app.image_folder;
-
+                var _dir = (root == "" ? AppSettings.BaseDirectory : root);
                 for (var x = 0; x < files.Count; x++)
                 {
-                    string filename = path + files[x];
+                    string filename = _dir + files[x];
                     if (System.IO.File.Exists(filename))
                     {
                         System.IO.File.Delete(filename);
@@ -202,11 +194,12 @@ namespace zsi.web.Controllers
 
             return Json(new { isSuccess = true, msg = "ok" });
 
-
         }
+
         [HttpPost]
         public JsonResult createFolders(string path, List<string> folders)
         {
+
             try
             {
                 if (path != "") { if (!path.EndsWith(@"\")) path = path + @"\"; }
@@ -215,14 +208,17 @@ namespace zsi.web.Controllers
                     string _fullPath = this.app.network_group_folder + path + folders[x];
                     if (!Directory.Exists(_fullPath)) Directory.CreateDirectory(_fullPath);
                 }
+
             }
             catch (Exception ex)
             {
+
                 return Json(new { isSuccess = false, errMsg = ex.Message });
             }
-            return Json(new { isSuccess = true, msg = "ok" });
-        }
 
+            return Json(new { isSuccess = true, msg = "ok" });
+
+        }
 
         public JsonResult getFolders(string path, string root = "")
         {
@@ -245,8 +241,6 @@ namespace zsi.web.Controllers
             try
             {
                 var _dir = (root == "" ? AppSettings.BaseDirectory : root);
-
-
                 if (searchPattern != "")
                     _files = Directory.GetFiles(_dir + path, searchPattern).Select(f => Path.GetFileName(f));
                 else
@@ -254,7 +248,6 @@ namespace zsi.web.Controllers
             }
             catch (Exception ex)
             {
-
                 return Json(new { isSuccess = false, errMsg = ex.Message });
             }
             return Json(new { isSuccess = true, files = _files });
@@ -293,10 +286,52 @@ namespace zsi.web.Controllers
             {
                 return Json(new { isSuccess = false, errMsg = ex.Message });
             }
-
             return Json(new { isSuccess = true, msg = "File has been saved." });
         }
 
+        public FileResult downLoadFile(string fileName, string root = "")
+        {
+            var _dir = (root == "" ? AppSettings.BaseDirectory : root);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(_dir + fileName);
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
+
+        public JsonResult deleteFile(string fileName, string root = "")
+        {
+            try
+            {
+                var _dir = (root == "" ? AppSettings.BaseDirectory : root);
+                string filename = _dir + fileName;
+                if (System.IO.File.Exists(filename))
+                {
+                    System.IO.File.Delete(filename);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+
+            return Json(new { isSuccess = true, msg = "ok" });
+        }
+
+        public JsonResult extractFile(string fileName, string root = "")
+        {
+            try
+            {
+                var _dir = (root == "" ? AppSettings.BaseDirectory : root);
+                string filename = _dir + fileName;
+                System.IO.FileInfo _fileInfo = new FileInfo(filename);
+                string filedirectory = _fileInfo.Directory.FullName;
+                ZipFile.ExtractToDirectory(filename, filedirectory);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+            return Json(new { isSuccess = true, msg = "ok" });
+        }
 
         public JsonResult getImageFileNames(string subDir, string searchPattern)
         {
@@ -325,8 +360,6 @@ namespace zsi.web.Controllers
 
             return Json(new { isSuccess = true, files = _fileNames.ToArray() });
         }
-
-
 
     }
 }
