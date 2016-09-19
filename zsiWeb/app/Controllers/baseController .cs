@@ -3,6 +3,8 @@ using System.Web;
 using System.Web.Mvc;
 using zsi.web.Models;
 using zsi.Framework.Security.SecurityProvider;
+using System.IO.Compression;
+
 namespace zsi.web.Controllers
 {
     public class baseController : Controller
@@ -35,6 +37,24 @@ namespace zsi.web.Controllers
             string ControllerName = filterContext.Controller.GetType().Name.ToLower().Replace("controller", "");
             string ActionName = filterContext.ActionDescriptor.ActionName.ToLower();
             filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+
+            var encodingsAccepted = filterContext.HttpContext.Request.Headers["Accept-Encoding"];
+            if (string.IsNullOrEmpty(encodingsAccepted)) return;
+
+            encodingsAccepted = encodingsAccepted.ToLowerInvariant();
+            var response = filterContext.HttpContext.Response;
+
+            if (encodingsAccepted.Contains("deflate"))
+            {
+                response.AppendHeader("Content-encoding", "deflate");
+                response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+            }
+            else if (encodingsAccepted.Contains("gzip"))
+            {
+                response.AppendHeader("Content-encoding", "gzip");
+                response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
+            }
+
             base.OnActionExecuting(filterContext);
         }
         private void CheckActionLogOn(ActionExecutingContext filterContext, string CurrentActionName, string[] ExceptionedActions)
