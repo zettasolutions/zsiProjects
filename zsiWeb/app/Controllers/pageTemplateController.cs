@@ -13,32 +13,35 @@ namespace zsi.web.Controllers
 
         public ActionResult Index()
         {
-            if (CurrentUser.userName == null)
-                return Redirect(Url.Content("~/"));
-            else
+            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
             {
                 setPageLinks("admin");
                 return View();
+            }
+            else
+            {
+                setRequestedURL();
+                return Redirect(Url.Content("~/"));
             }
 
         }
 
         public ActionResult source(string param1)
         {
-            if (CurrentUser.userName == null)
-                return Redirect(Url.Content("~/"));
-            else
+            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
             {
-
                 page_template_v d = new dcPageTemplate().GetInfo(param1);
                 ViewBag.ptId = d.pt_id; ;
                 ViewBag.pageId = d.page_id;
                 ViewBag.pageTitle = d.page_title;
                 ViewBag.ptContent = d.pt_content;
                 return View();
-
             }
-
+            else
+            {
+                setRequestedURL();
+                return Redirect(Url.Content("~/"));
+            }
         }
 
 

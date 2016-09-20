@@ -9,20 +9,25 @@ namespace zsi.web.Controllers
         // GET: Page
         public ActionResult Index()
         {
-            if (CurrentUser.userName == null)
-                return Redirect(Url.Content("~/"));
-            else
+            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
             {
                 setPageLinks("admin");
                 return View();
+            }
+            else
+            {
+                setRequestedURL();
+                return Redirect(Url.Content("~/"));
             }
         }
 
         public ActionResult name(string param1)
         {
+            param1 = param1.ToLower();
             param1 = (param1 != null ? param1 : "");
             if (CurrentUser.userName == null)
             {
+                setRequestedURL();
                 return Redirect(Url.Content("~/"));
             }
             else
@@ -38,7 +43,7 @@ namespace zsi.web.Controllers
                     Session.Abandon();
                     return Redirect(Url.Content("~/"));
                 }
-                  if (param1.ToLower() != devURL && param1.ToLower() != "signin")
+                  if (param1 != devURL && param1 != "signin")
                 {
                     if (getAuthNo() == 999)
                     {
@@ -46,6 +51,11 @@ namespace zsi.web.Controllers
                             return Redirect(Url.Content("~/") + "page/name/" + devURL);
                     }
                 }
+                if ((param1 == "selectoption" || param1 == "masterpages" || param1 == "table" || param1 == "filemanager" || param1 == "tablelayout" || param1 == "errors" || param1 == "appprofile")
+                     && (Session["zsi_login"] == null || (Session["zsi_login"].ToString() == "N"))
+                )
+                    return Redirect(Url.Content("~/"));
+
                 setPageLinks(param1);
                 return View();
             }
@@ -56,7 +66,7 @@ namespace zsi.web.Controllers
         {
 
             string key = "authNo";
-            if (Session[key] == null) Session[key] = DataHelper.getDbValue("select dbo.getAuthNo()");
+            if (Session[key] == null) Session[key] = DataHelper.getDbValue("select dbo.getAuthNo(" + this.CurrentUser.userId + ")");
             return Convert.ToInt32("0" + Session[key]);
 
         }
@@ -75,8 +85,8 @@ namespace zsi.web.Controllers
                 Session["zsi_login"] = "Y";
                 Response.Cookies["zsi_login"].Value = "Y";
                 Response.Cookies["zsi_login"].Expires = DateTime.Now.AddDays(1);
-
-                return Redirect(Url.Content("~/") +  "page/name/" + info.default_page);
+ 
+                return Redirect(gePriorityURL(Url.Content("~/") + "page/name/" + info.default_page));
 
             }
             else {

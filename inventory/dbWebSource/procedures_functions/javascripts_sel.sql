@@ -3,7 +3,7 @@ CREATE procedure [dbo].[javascripts_sel]
 	,@page_name varchar(50) =null
 	,@js_content varchar(50) =null
 	,@self_backup int=null
-	,@user_id int
+	,@user_id int = null
 
 as
 begin
@@ -34,6 +34,7 @@ begin
   EXEC (@stmt);
 
 END
+
 
 
 

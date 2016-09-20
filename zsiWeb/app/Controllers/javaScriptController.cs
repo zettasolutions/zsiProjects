@@ -12,12 +12,15 @@ namespace zsi.web.Controllers
 
         public ActionResult Index()
         {
-            if (CurrentUser.userName == null)
-                return Redirect(Url.Content("~/"));
-            else
+            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
             {
                 setPageLinks("admin");
                 return View();
+            }
+            else
+            {
+                setRequestedURL();
+                return Redirect(Url.Content("~/"));
             }
         }
 

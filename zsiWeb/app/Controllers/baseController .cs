@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using zsi.web.Models;
 using zsi.Framework.Security.SecurityProvider;
 using System.IO.Compression;
+using System.Linq;
 
 namespace zsi.web.Controllers
 {
@@ -39,22 +40,25 @@ namespace zsi.web.Controllers
             filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
 
             var encodingsAccepted = filterContext.HttpContext.Request.Headers["Accept-Encoding"];
-            if (string.IsNullOrEmpty(encodingsAccepted)) return;
-
-            encodingsAccepted = encodingsAccepted.ToLowerInvariant();
-            var response = filterContext.HttpContext.Response;
-
-            if (encodingsAccepted.Contains("deflate"))
+            if (!string.IsNullOrEmpty(encodingsAccepted))
             {
-                response.AppendHeader("Content-encoding", "deflate");
-                response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+                string[] notIncludedInCompression = { "generateexcelfile", "generatehtmltoexcel", "loadfile" };
+                if (!notIncludedInCompression.Contains(ActionName.ToLower()))
+                {
+                    encodingsAccepted = encodingsAccepted.ToLowerInvariant();
+                    var response = filterContext.HttpContext.Response;
+                    if (encodingsAccepted.Contains("deflate"))
+                    {
+                        response.AppendHeader("Content-encoding", "deflate");
+                        response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+                    }
+                    else if (encodingsAccepted.Contains("gzip"))
+                    {
+                        response.AppendHeader("Content-encoding", "gzip");
+                        response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
+                    }
+                }
             }
-            else if (encodingsAccepted.Contains("gzip"))
-            {
-                response.AppendHeader("Content-encoding", "gzip");
-                response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
-            }
-
             base.OnActionExecuting(filterContext);
         }
         private void CheckActionLogOn(ActionExecutingContext filterContext, string CurrentActionName, string[] ExceptionedActions)
@@ -129,6 +133,26 @@ namespace zsi.web.Controllers
 
                 }
             
+        }
+
+        public void setRequestedURL()
+        {
+            Session["requestedURL"] = Request.Url.AbsoluteUri;
+        }
+
+        public string gePriorityURL(string currentPage)
+        {
+
+            var _sName = "requestedURL";
+            string _url = currentPage;
+
+            if (Session["isAuthenticated"] == null) Session["isAuthenticated"] = "N";
+            if (Session["isAuthenticated"].ToString() == "Y"  &&  Session[_sName] != null )
+            {
+                _url = Session[_sName].ToString();
+                Session[_sName] = null;
+            }
+            return _url;
         }
 
     }

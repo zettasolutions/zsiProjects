@@ -6,7 +6,10 @@ namespace zsi.web.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
+                return View();
+            else
+                return Redirect(Url.Content("~/"));
         }
 
         public ContentResult Exec()

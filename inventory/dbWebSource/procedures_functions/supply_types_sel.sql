@@ -2,7 +2,8 @@
 CREATE PROCEDURE [dbo].[supply_types_sel]
 (
     @supply_type_id  INT = null
-   ,@supply_type  varchar(100) = null
+   ,@supply_type  varchar(100) = null,
+   @user_id  int = null
 )
 AS
 BEGIN

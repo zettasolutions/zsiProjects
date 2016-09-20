@@ -14,12 +14,10 @@ namespace zsi.web.Controllers
                 Session["isAuthenticated"] = "Y";
                 HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
                 SessionHandler.CurrentUser = _user;
-                return Redirect(Url.Content("~/") );
-
+                return Redirect(gePriorityURL(Url.Content("~/")));
             }
             else
             {
-
                 return Redirect(Url.Content("~/") + "?access=invalid" );
             }
         }
