@@ -1,9 +1,9 @@
-﻿.zGrid{
+.zGrid{
     border: 1pt solid #d6d8d8;
 }
 
 .zGrid .zHeaders{
-	background-color: #ed1806;
+	background-image: linear-gradient(to bottom, #6E706E 0px, #3b483c 100%);
 	color: #fff;
 	font-weight: bold;
 	overflow: hidden;
@@ -249,4 +249,6 @@
     line-height:10px
 }
 /*end of sort*/
+
+
 

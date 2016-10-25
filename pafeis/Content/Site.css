@@ -1,4 +1,4 @@
-﻿body{
+body{
     font-family: Verdana,Arial,"Verdana","Helvetica",Sans-serif;
     margin-left:1px; 
     margin-right:1px;  
@@ -11,7 +11,7 @@ a{
   text-decoration:none;
 }	
 a:hover{
-	color:#f11716;
+	color:#FF9800;
 	text-decoration:none;
 }
 
@@ -27,8 +27,8 @@ a:hover{
     white-space: normal;
 }
 .pageHeader {
-    background-color: #ED1806;
-    height: 76px;
+      background-color: #3b483c;
+    height: 44px;
 }
 .container {
     width: 939px !important;
@@ -76,11 +76,11 @@ ul.nav li.zParentHighLight a,ul.nav li.zChildHighLight a{
 }
 
 ul.nav li.zParentHighLight{
-	background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);
+	background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);
 }
 
 ul.nav li.zChildHighLight{
-	background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);
+	background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);
 }
 
 /*zPanel Table*/
@@ -88,7 +88,7 @@ div.zPanel table .align-l{ text-align:left;}
 div.zPanel table .align-r{ text-align:right;}
 div.zPanel table .align-c{ text-align:center;}
 div.zPanel table tr.total td {
-    background-image:linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);    
+    background-image:linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);    
     padding-bottom: 4px;
     padding-top: 4px;
     color:#fff;
@@ -96,8 +96,8 @@ div.zPanel table tr.total td {
 }    
 div.zPanel table tr th{
     vertical-align: inherit;
-    background-color:#F11716;    
-    background-image:linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);    
+    background-color:#FF9800;    
+    background-image:linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);    
     padding-bottom: 4px;
     padding-top: 4px;
     color: #fff;
@@ -123,7 +123,7 @@ div.zPanel {
 }
 
 div.zPanel .headerTitle{
-	background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);    
+	background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);    
 	color: #fff;
 	padding: 3px 10px;  
 	border: 1pt solid #a8acad;
@@ -240,7 +240,7 @@ table.zTableReport tr.total td {
 }    
 table.zTableReport tr th{
     vertical-align: inherit;
-    background-color:#F11716;    
+    background-color:#FF9800;    
     background-image:linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);	
     padding-bottom: 4px;
     padding-top: 4px;
@@ -796,3 +796,6 @@ ul.imgFrame li.imgItem .text { text-align:center; }
 
 
 /*end of Report*/
+
+
+

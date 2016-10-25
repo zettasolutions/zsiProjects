@@ -1,64 +1,95 @@
-
+<link href="https://fonts.googleapis.com/css?family=Black+Ops+One" rel="stylesheet">
 @{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_Home.cshtml";
 }
 <style>
 
+    body{
+       background-color:#4D6237;
+       background-image: url("/pafeis/images/sk2.jpg");
+    }
     #loginform {
         margin-top: -10px;
         padding-right: 25px;
     }
 
-        #loginform label {
-            color: #fff;
-        }
+    #loginform label {
+        color: #fff;
+    }
 	.login-panel h1, .login-panel h2 { 
-    text-align: center;}
-		.login-form {
-    background-color: #eeeeee;
-    border: 1pt solid #3071a8;
-    min-height: 127px;
-    padding-top: 19px;
-}
+    text-align: center;
+    font-family: 'Black Ops One', cursive;
+    font-size: 36px;
+	text-shadow: 2px 2px 5px #333;
+	}
+	
+	.login-form {
+        background-color: #fff;
+        /*border: 1pt solid #92bc6d;*/
+        min-height: 127px;
+        opacity: 0.75;
+        padding: 35px 35px 15px;
+    }
 
 .container {
-    width: 939px !important;
-    margin-top: 250px;
+   /* width: 939px !important;*/
+    margin-top: 65px;
+}
+.form-group .control-label {
+    text-align: left;
+    color:#333;
+    
+}
+.ftrlogin {
+    font-size: 10px;
 }
 
 </style>
 
 <div class="pageHeader">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-2 pull-left">
-                    <a href="@Url.Content("~/")" class="navbar-brand">
-                        <img style="float: left; position: relative; z-index: 100;width: 173px;margin-left: 532px;margin-top: 104px;" 
-                        src="@Url.Content("~/")images/loginAirforce.png" style="float: left;  position: relative; z-index: 100; " >
-                    </a>
-                </div>
-                
-            </div>
+    <div class="container-fluid">
+        <div class="row">
+            <!--<div class="col-md-12">
+                <a href="@Url.Content("~/")">
+                    <img src="@Url.Content("~/")images/loginAirforce.png" style="z-index: 100;width: 173px;"/>
+                </a>
+            </div>-->
         </div>
+    </div>
 </div>
 <div class="container page">
-	<div class="login-panel col-md-12">
-		<h1>PAFEIS  </h1>
-		<h2></h2>
-		<form id="frmLogin" method="post" action="@Url.Content("~/")account/validate" class="login-form col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">  
-			<div class="form-horizontal">
-				<div class="form-group  ">  <label class=" col-xs-4 control-label">Login Name</label>
-					<div class=" col-xs-7"><input type="text" name="username" id="username" class="form-control input-sm "></div>
-				</div>
-				<div class="form-group  ">  <label class=" col-xs-4 control-label">Password</label>
-					<div class=" col-xs-7"><input type="password" name="password" id="password" class="form-control input-sm "></div>
-				</div> 
-				<div class="buttonGroup col-xs-offset-4">
-					<button type="submit" class="btn btn-primary btn-sm" id="btnLogIn">Log In</button>    
-				</div>            
-			</div>        
-		</form>        
+	<div class="login-panel col-md-12 col-md-12">
+	    <div style="text-align: center;">
+            <img src="@Url.Content("~/")images/logo-sm.png" style="z-index: 100;"/>
+	    </div>
+	    <div>
+	        <h1 class="pafText">ELECTRONIC <br>  INVENTORY SYSTEM</h1>
+	    </div>
+	    <div>
+    		<form id="frmLogin" method="post" action="@Url.Content("~/")account/validate" 
+    		      class="login-form col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">  
+    			<div class="form-horizontal">
+    				<div class="form-group  "> 
+    					<div class=" col-xs-12">
+    					     <label class=" col-xs-12 control-label">Login Name</label>
+    					    <input type="text" name="username" id="username" class="form-control input-sm "></div>
+    				</div>
+    				<div class="form-group  ">  
+    					<div class=" col-xs-12">
+    					    <label class=" col-xs-12 control-label">Password</label>
+    					    <input type="password" name="password" id="password" class="form-control input-sm "></div>
+    				    <div class="buttonGroup pull-right">
+    				    	<button type="submit" class="btn btn-primary btn-sm" id="btnLogIn">Log In</button>    
+    				    </div>
+    				</div> 
+    				           
+    			</div>        
+    		</form> 
+    		<div class="ftrlogin">
+    		    <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">Powered By ZettaSolutions, Inc.</div>
+            </div>		
+		</div>
 	</div>			
 </div>
 
@@ -135,6 +166,7 @@ button.on("click", function () {
     }
 
 });
+
 function createCookie(name,value,days) {
     var expires;
     if (days) {
@@ -145,7 +177,36 @@ function createCookie(name,value,days) {
     else expires = "";
     document.cookie = name+"="+value+expires+"; path=/";
 }
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

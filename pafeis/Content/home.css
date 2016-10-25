@@ -1,4 +1,4 @@
-﻿body{
+body{
 	font-family: Arial,Helvetica,sans-serif !important;
     font-size: 12px !important;
 }
@@ -55,10 +55,10 @@
 	width:600px;
 }
 
-.pageHeader{
-	background-color:#ED1806;
-	 height: 76px;
- }
+/*.pageHeader{
+	  background-color: #3b483c;
+    height: 44px;
+ }*/
  
  .menu-horizontal {
 	background-color:#000;
@@ -525,10 +525,8 @@ table.zTableReport > tfoot > tr > td {
 }
     
 .page {
-	background: #fff;
-	min-height:700px;
 	padding-bottom:10px;
-
+	color:#fff;
 }
 .footer {
 	padding-top:5px;
@@ -595,7 +593,7 @@ border-color:#333333;
 }
 
 .container {
-  width: 939px !important;
+  /*width: 939px !important;*/
 }
 
 .container-full{
@@ -680,13 +678,14 @@ a.itemRemove:hover{
 }
 
 .buttonGroup {
-  margin-top:5px;
-  margin-right:20px;
-  padding-left: 6px;
-  margin-bottom: 5px;
+     margin-top: 10px;
+    /* margin-right: 20px; */
+    padding-left: 144px;
+    margin-bottom: 5px;
 }
 .buttonGroup button {
-  margin-right:5px;
+    margin-right: 4px;
+    margin-top: 10px;
 }
 
 .pageholder{
@@ -1013,3 +1012,9 @@ td #delete-row span{
 .btnlink ul li > a:hover, .btnlink ul li > a:active{
 	color: #000;
 }
+
+
+
+
+
+
