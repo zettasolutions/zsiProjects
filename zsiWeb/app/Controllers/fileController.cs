@@ -52,7 +52,7 @@ namespace zsi.web.Controllers
                 var path = this.tempPath;
                 var fullPath = path;
                 var fileNameOrg = "";
-
+                if (app.image_folder.Contains("~")) app.image_folder = app.image_folder.Replace("~", AppSettings.BaseDirectory);
                 if (file != null && file.ContentLength > 0)
                 {
                     if (Directory.Exists(app.image_folder)) path = app.image_folder;
