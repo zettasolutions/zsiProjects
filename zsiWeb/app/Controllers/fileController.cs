@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO.Compression;
 
+using System.Data.OleDb;
+
 namespace zsi.web.Controllers
 {
     public class fileController : baseController
@@ -18,16 +20,85 @@ namespace zsi.web.Controllers
         {
             this.dc = new dcAppProfile();
             this.app = dc.GetInfo();
+            this.tempPath = AppSettings.BaseDirectory + @"\temp\";
+            if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
         }
 
         #region "Private Methods"
-
-        private string tempPath { get { return "c:\\temp\\"; } }
+        private string excelConnectionString;
+        private string tempPath { get; set; }
         private appProfile app { get; set; }
         private dcAppProfile dc { get; set; }
 
+        private void MigrateExcelFile(string fileName, string excel_column_range, string tempTable)
+        {
+            string virtualColumns = "null as user_id";
+            OleDbCommand command = default(OleDbCommand);
+            OleDbDataReader rdr = default(OleDbDataReader);
+            OleDbConnection conn = default(OleDbConnection);
+            try
+            {
+                conn = new OleDbConnection(string.Format(excelConnectionString, fileName));
+                conn.Open();
+                if (virtualColumns != "") virtualColumns += ",";
+                command = conn.CreateCommand();
+                command.CommandText = string.Format("Select {0} * From [{1}]", virtualColumns, excel_column_range);
+                command.CommandType = CommandType.Text;
+                rdr = command.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    SqlBulkCopy sqlBulk = new SqlBulkCopy(dbConnection.ConnectionString);
+                    sqlBulk.DestinationTableName = tempTable;
+                    sqlBulk.WriteToServer(rdr);
+                    rdr.Close();
+                }
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                if (conn.State == ConnectionState.Open) conn.Close();
+                throw ex;
+            };
+
+
+        }
+
         #endregion
 
+        [HttpPost]
+        public JsonResult templateUpload(HttpPostedFileBase file, string tmpData)
+        {
+            string tmpTable = tmpData.Split(',')[0];
+            string colRange = tmpData.Split(',')[1];
+            try
+            {
+                dcAppProfile dc = new dcAppProfile();
+                appProfile ap = dc.GetInfo();
+                excelConnectionString = ap.excel_conn_str;
+                var fullPath = tempPath;
+                if (file != null && file.ContentLength > 0)
+                {
+                    ap.excel_folder = app.excel_folder.Replace("~", AppSettings.BaseDirectory);
+                    //if (Directory.Exists(ap.excel_folder)) tempPath = ap.excel_folder;
+                    if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
+
+                    var fileName = Path.GetFileName(file.FileName);
+                    fullPath = Path.Combine(tempPath, fileName);
+                    file.SaveAs(fullPath);
+                    DataHelper.execute("temp_data_del @table_name='" + tmpTable + "',@userid='" + this.CurrentUser.userId, false);
+                    MigrateExcelFile(fullPath, colRange, tmpTable);
+                    DataHelper.execute("temp_data_upd @table_name='" + tmpTable + "',@userid='" + this.CurrentUser.userId, false);
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+
+            return Json(new { isSuccess = true, msg = "ok" });
+        }
         public ActionResult viewImage(string fileName, string isThumbNail = "n")
         {
 
