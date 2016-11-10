@@ -15,3 +15,6 @@ zsi.smagerUp/app/obj/*
 zsi.smagerUp/packages/*
 inventory/createCodeBackup.exe.config
 pafeis/createCodeBackup.exe.config
+zsi.smagerUp/.vs/config/applicationhost.config
+zsiWeb/.vs/config/applicationhost.config
+zsi.smagerUp/app/ace/*
