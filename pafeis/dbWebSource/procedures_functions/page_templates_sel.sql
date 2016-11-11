@@ -9,7 +9,7 @@ BEGIN
 
   IF NOT @self_backup IS NULL
 	BEGIN 	
-		select a.*,b.page_name,b.page_title from dbo.page_templates a left join dbo.pages b on a.page_id=b.page_id
+		select a.*,b.page_name,b.page_title from dbo.page_templates a inner join dbo.pages b on a.page_id=b.page_id
 		WHERE a.updated_by= @user_id and not b.page_name like '%test%' 
 		
 			OR (a.created_by= @user_id and a.updated_by is null and not b.page_name like '%test%')
@@ -36,4 +36,6 @@ END
  
 
  
+
+
 

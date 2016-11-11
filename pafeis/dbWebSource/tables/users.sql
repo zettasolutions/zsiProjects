@@ -23,4 +23,5 @@ user_id	INT IDENTITY(1,1)	NOT NULL
 ,rank_id	INT	NULL
 ,is_contact	CHAR(1)	NULL
 ,civil_status	CHAR(1)	NULL
-,is_employee	CHAR(1)	NULL)
+,is_employee	CHAR(1)	NULL
+,position_id	INT	NULL)

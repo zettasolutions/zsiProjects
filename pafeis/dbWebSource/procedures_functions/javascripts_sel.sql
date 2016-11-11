@@ -9,7 +9,7 @@ as
 begin
   DECLARE @stmt AS VARCHAR(1000);
  
-  SET @stmt = 'select a.*,b.page_name from dbo.javascripts a left join dbo.pages b on a.page_id=b.page_id where 1=1 ';
+  SET @stmt = 'select a.*,b.page_name from dbo.javascripts a inner join dbo.pages b on a.page_id=b.page_id where 1=1 ';
   
   IF ISNULL(@js_id,0) <> 0
      SET @stmt = @stmt + ' AND a.js_id = ' +  CAST(@js_id AS VARCHAR);
@@ -34,6 +34,7 @@ begin
   EXEC (@stmt);
 
 END
+
 
 
 
