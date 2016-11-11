@@ -1,0 +1,93 @@
+<script src='/javascript/name/zsiSearch'></script>
+<style>
+    #tabPanel > div{
+        
+        display:none;
+    } 
+    
+    #tabPanel > div.active{
+        
+        display:block;
+    }
+    
+    .tabPane{
+        background-color: #fff;
+        min-height: 500px;
+        padding: 10px 5px;
+        margin-bottom:10px;
+        overflow: auto;
+    }
+
+    #grid{
+        width: 100%;
+    }
+    
+    .zGrid .item .title {
+        height: 22px;
+        line-height: 19px;
+    }
+    .zGrid .zHeaders .zSort {
+        
+    }
+    
+    .tablePanel {
+        overflow-y:auto;
+    }
+   
+
+</style>
+<ul class="nav nav-tabs">
+  <li ><a href="#new" data-toggle="tab" id="new-tab">New</a></li>
+  <li ><a href="#releaseTeam" data-toggle="tab" id="team-tab">Release Field</a></li>
+</ul>
+
+<div id="tabPanel" class="tab-pages">
+    <div id="tabNew" class="tabPane">
+        <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+            <form method="post" id="frm">
+                    <div class="row" style="padding-right:5px">
+                        <div class="col-xs-6" style="background-color:#fff;height:inherit;padding-top:5px;"> 
+                            <div class="form-horizontal" style="padding:5px">
+                                <input type="hidden" name="project_id" id="project_id" >
+                                    <div class="form-group  ">  
+                                        <label class=" col-xs-1 control-label">Issuance</label>
+                                        <div class=" col-xs-3">
+                                             <input type="hidden" name="issuance_id" id="issuance_id" >
+                                             <input type="text" name="issuance_no" id="issuance_no" class="form-control input-sm" >
+                                        </div>  
+                                        <label class=" col-xs-1 control-label">Authority</label>
+                                        <div class=" col-xs-3">
+                                           <select type="text" name="authority_id" id="authority_id" class="form-control input-sm" ></select>
+                                         </div>
+                                        <label class=" col-xs-2 control-label">Issued To</label>
+                                        <div class=" col-xs-2">
+                                             <select type="text" name="issued_to_id" id="issued_to_id" class="form-control input-sm"  ></select>
+                                        </div>
+                               </div>
+                            </div>
+                        </div>    
+                    </div>
+
+                    <div id="grid" class="zGrid"></div>
+
+                    
+
+                        <div class="buttonGroup" style="padding-top:100px">
+                                <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                                	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+                                </button>
+                        </div>
+
+            </form> 
+        </div>
+    </div>
+    <div id="tabReleaseField" class="tabPane">
+        <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+            <form method="post" id="frm">
+            </form> 
+        </div>
+    </div>
+</div>
+
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
+<script src="/Scripts/colResizable-1.5.min.js"></script>
