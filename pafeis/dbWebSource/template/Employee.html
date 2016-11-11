@@ -1,0 +1,83 @@
+<script src='/javascript/name/zsiSearch'></script>
+<style>
+    #grid thead tr, #grid thead th{
+    	-ms-transition: 0.1s;
+    	background-clip: padding-box;
+    	z-index: 50;
+    }
+
+    #user-box{
+        top:230px;
+        background-color: #fff;
+        height: 250px;
+        width: 250px;
+        left: 460px;
+        position: absolute;
+        display:none;
+        webkit-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        -moz-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        border: 2px solid #fff;
+        border-radius: 10px;
+        overflow:hidden;
+    }
+  #user-box img{
+      margin-left: -106px;
+  }
+    
+    #grid{
+    width: 100%;
+}
+
+.zGrid .item .title {
+    height: 22px;
+    line-height: 19px;
+}
+
+div.zRows{
+    min-height:400px;
+}
+
+</style>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">  
+        <div class="row zForm">
+            <div class="form-horizontal">   
+                <div class="col-xs-12 col-sm-12">
+                    <div class="form-group  ">
+                        <!--<label class=" col-xs-2 control-label">Search Username</label>-->
+                        <div class=" col-xs-2"> 
+                            <input name="logon_id_filter" id="logon_id_filter" type="hidden" class="form-control input-sm">
+                            <input name="logon_name_filter" id="logon_name_filter" placeholder="Search Id No." class="form-control input-sm">
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>    
+
+    <form method="post" id="frm">
+        <div class="zPanel">
+            
+               <div id="grid" class="zGrid"></div> 
+            
+             
+            <div class="buttonGroup">
+                <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
+                	<span class="glyphicon glyphicon-trash"></span> Delete
+                </button>    
+                <button type="button" class="btn btn-primary btn-sm" id="btnNactive">
+                	<span class="glyphicon glyphicon-user"></span> Inactive
+                </button>    
+            </div>
+        
+        </div>
+    </form>
+</div>
+<div id="user-box">
+    <img src="/file/viewImage?fileName=no-image.jpg&amp;isThumbNail=y" id="userImage" >
+</div>
+
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
