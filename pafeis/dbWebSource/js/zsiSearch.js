@@ -16,9 +16,7 @@ zsi.search =  function(info){
 
    zsi.search.data=null;      
    zsi.search.timer;   
-
-   zsi.search.OnLoadComplete = info.onLoadComplete;
-   zsi.search.OnRequestFailed = info.onRequestFailed;
+   
    zsi.search._currentObject=null;
    zsi.search._gridHistory=[];
 
@@ -145,7 +143,7 @@ zsi.search =  function(info){
                               searchGrid.clearGrid();
                               zsi.search.data=data;
 
-                              if(zsi.search.OnLoadComplete) zsi.search.OnLoadComplete(data,_value); 
+                              if(info.onLoadComplete) info.onLoadComplete(_input,data); 
                               if(data.rows.length>0) {
                                   zsi.search.Panel.show(true);        
                               }
@@ -167,7 +165,7 @@ zsi.search =  function(info){
                            }                        
                         
                         ).fail(function() {
-                            if(zsi.search.OnRequestFailed) zsi.search.OnRequestFailed(); 
+                            if(info.onRequestFailed) info.onRequestFailed(); 
                         }).always(function(){
                            $(_input).removeClass("loadIconR" );
                            
