@@ -109,7 +109,7 @@ function displayRecords(){
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : execURL + "item_categories_sel"
-	    ,width          : $(document).width() - 35
+	    ,width          : 550
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -210,4 +210,4 @@ $("#btnDelete").click(function(){
     });       
 });
     
-                                             
+                                              
