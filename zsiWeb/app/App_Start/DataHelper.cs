@@ -86,7 +86,18 @@ namespace zsi.web
         }
         #endregion
 
+        public static Message dataTableUpdate(string procedureName, DataTable dt, string parentId)
+        {
+            return _dataTableUpdate(procedureName, dt, parentId);
+
+        }
         public static Message dataTableUpdate(string procedureName, DataTable dt)
+        {
+            return _dataTableUpdate(procedureName, dt, "");
+        }
+
+
+        private static Message _dataTableUpdate(string procedureName,DataTable dt,string parentId)
         {
             Message m = new Message();
             try
@@ -98,6 +109,7 @@ namespace zsi.web
                     cmd.CommandType = CommandType.StoredProcedure;
                     SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
                     cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
+                    if(parentId!="") cmd.Parameters.AddWithValue("@parent_id", parentId);
                     tvparam.SqlDbType = SqlDbType.Structured;
                     SqlParameter retval = new SqlParameter();
                     retval.ParameterName = "@return_value";
@@ -339,7 +351,8 @@ namespace zsi.web
             string jsonString = new StreamReader(request.InputStream).ReadToEnd();
             JObject json = JObject.Parse(jsonString);
             DataTable dt = JsonConvert.DeserializeObject<DataTable>(json["rows"].ToString());
-            return dataTableUpdate(json["procedure"].ToString(), dt);
+            string parentId = (json["parentId"] ==null ? "" :  json["parentId"].ToString());
+            return dataTableUpdate(json["procedure"].ToString(), dt, parentId);
         }
 
         public static string GetJSONData(HttpRequestBase request)
