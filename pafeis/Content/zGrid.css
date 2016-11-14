@@ -1,7 +1,9 @@
 .zGrid{
     border: 1pt solid #d6d8d8;
 }
-
+.zCell a{
+    text-decoration:underline;
+}
 .zGrid .zHeaders{
 	background-image: linear-gradient(to bottom, #6E706E 0px, #3b483c 100%);
 	color: #fff;
@@ -249,6 +251,7 @@
     line-height:10px
 }
 /*end of sort*/
+
 
 
 
