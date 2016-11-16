@@ -1,3 +1,4 @@
+
 CREATE PROCEDURE [dbo].[page_templates_upd](
         @pt_id		INT =null                      
        ,@page_id	INT	= NULL   
@@ -9,7 +10,7 @@ CREATE PROCEDURE [dbo].[page_templates_upd](
 AS 
 BEGIN
 SET NOCOUNT ON 
-	if ISNULL(@page_id,0)=0  return;
+	if ISNULL(@page_id,0)=0  OR ISNULL(@user_id,0)=0  return;
 	declare @l_pt_id INT;
 
 	IF ISNULL(@pt_id,0) = 0

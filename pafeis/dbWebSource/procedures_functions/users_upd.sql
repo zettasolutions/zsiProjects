@@ -1,5 +1,6 @@
 
 
+
 CREATE PROCEDURE [dbo].[users_upd]
 (
     @tt     users_tt READONLY
@@ -12,13 +13,17 @@ DECLARE @updated_count INT;
 -- Update Process
    UPDATE a 
        SET role_id = b.role_id
+	      ,logon = iif(isnull(b.role_id,0)=0,null,b.logon)
+		  ,password = iif(isnull(b.role_id,0)=0,null,b.password)
           ,updated_by   = @user_id
           ,updated_date = GETDATE()
        FROM dbo.users a INNER JOIN @tt b
         ON a.user_id = b.user_id 
        AND 
          (
-          isnull(a.role_id,0)  <> isnull(b.role_id,0)   
+          isnull(a.role_id,0)  <> isnull(b.role_id,0) 
+		  OR isnull(a.logon,'')  <> isnull(b.logon,'')   
+		  OR isnull(a.password,'')  <> isnull(b.password,'')
          )
 SET @updated_count = @@ROWCOUNT;
 
@@ -27,3 +32,4 @@ RETURN @updated_count;
 
 
 
+ 

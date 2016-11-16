@@ -1,3 +1,4 @@
+
 -- ===================================================================================================
 -- Author:		Rogelio T. Novo Jr.
 -- Create date: November 7, 2016 7:06PM
@@ -21,16 +22,18 @@ BEGIN
 		,part_no  			    = b.part_no
 		,national_stock_no		= b.national_stock_no
 		,item_name				= b.item_name
+		,critical_level         = b.critical_level
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.item_codes a INNER JOIN @tt b
     ON a.item_code_id = b.item_code_id
     WHERE (
-			isnull(a.item_type_id,0)			<> isnull(b.item_type_id,0)  
+			isnull(a.item_type_id,0)		<> isnull(b.item_type_id,0)  
 		OR	isnull(a.part_no,'')			<> isnull(b.part_no,'')  
 		OR	isnull(a.national_stock_no,'')	<> isnull(b.national_stock_no,'') 
 		OR	isnull(a.item_name,'')			<> isnull(b.item_name,'') 
+		OR	isnull(a.critical_level,0)		<> isnull(b.critical_level,0) 
 		OR	isnull(a.is_active,'')			<> isnull(b.is_active,'')  
 	)
 	   
@@ -40,6 +43,7 @@ BEGIN
 		,part_no
 		,national_stock_no
 		,item_name
+		,critical_level
 		,is_active
         ,created_by
         ,created_date
@@ -49,9 +53,11 @@ BEGIN
 	   ,part_no	
 	   ,national_stock_no
 	   ,item_name
+	   ,critical_level
 	   ,is_active
        ,@user_id
        ,GETDATE()
     FROM @tt
     WHERE item_code_id IS NULL;
 END
+

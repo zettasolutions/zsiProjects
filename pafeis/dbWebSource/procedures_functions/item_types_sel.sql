@@ -1,16 +1,27 @@
+
 CREATE PROCEDURE [dbo].[item_types_sel]
 (
     @item_cat_id  INT = null
+   ,@is_active CHAR(1) = 'Y'
+   ,@col_no   int = 1
+   ,@order_no int = 0
 )
 AS
 BEGIN
-
 SET NOCOUNT ON
+  DECLARE @stmt NVARCHAR(MAX)
+  SET @stmt = 'SELECT * FROM dbo.item_types_v WHERE is_active=''' + @is_active + '''';
 
-  IF @item_cat_id IS NOT NULL  
-	 SELECT * FROM dbo.item_types_v WHERE item_cat_id = @item_cat_id; 
+
+  IF ISNULL(@item_cat_id,0) <> 0
+     SET @stmt = @stmt + ' AND item_cat_id=' + cast(@item_cat_id AS VARCHAR(20))
+
+  SET @stmt = @stmt + ' ORDER BY ' + cast(@col_no AS VARCHAR(20))
+  IF @order_no = 0
+     SET @stmt = @stmt + ' ASC '
   ELSE
-     SELECT * FROM dbo.item_types_v
-	 ORDER BY item_type_name; 
-	
+     SET @stmt = @stmt + ' DESC '
+
+  EXEC(@stmt);
+
 END

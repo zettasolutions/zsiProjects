@@ -1,3 +1,4 @@
+
 CREATE PROCEDURE [dbo].[javascripts_upd](
         @js_id		INT =null                      
        ,@page_id	INT	= NULL   
@@ -10,7 +11,7 @@ AS
 BEGIN
 SET NOCOUNT ON 
 
-if ISNULL(@page_id,0)=0 return;
+if ISNULL(@page_id,0)=0 OR ISNULL(@user_id,0)=0 return;
 declare @rev_no INT =0 
 declare @l_js_id INT;
 

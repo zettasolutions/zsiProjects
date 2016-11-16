@@ -15,7 +15,3 @@ BEGIN
 	print @stmt;
 	exec(@stmt);
  END;
-
-
- 
-

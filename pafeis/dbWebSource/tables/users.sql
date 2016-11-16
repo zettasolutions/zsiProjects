@@ -17,8 +17,7 @@ user_id	INT IDENTITY(1,1)	NOT NULL
 ,id_no	NVARCHAR(20)	NULL
 ,name_suffix	NVARCHAR(20)	NULL
 ,gender	CHAR(1)	NULL
-,wing_id	INT	NULL
-,squadron_id	INT	NULL
+,organization_id	INT	NULL
 ,email_add	NVARCHAR(600)	NULL
 ,rank_id	INT	NULL
 ,is_contact	CHAR(1)	NULL

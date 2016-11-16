@@ -18,8 +18,7 @@ BEGIN
 			,contact_nos	=	b.contact_nos
 			,email_add		=	b.email_add
 			,gender			=	b.gender
-			,wing_id		=	b.wing_id
-			,squadron_id	=	b.squadron_id
+			,organization_id=	b.organization_id
 			,rank_id		=	b.rank_id
 			,position_id	=	b.position_id
 			,is_active      =   b.is_active
@@ -38,8 +37,7 @@ BEGIN
 			OR	isnull(a.contact_nos,'')	 <> isnull(b.contact_nos,'')  		    
 			OR	isnull(a.email_add,'')	     <> isnull(b.email_add	,'')   
 			OR	isnull(a.gender,'')			 <> isnull(b.gender,'')  		    
-			OR	isnull(a.wing_id,0)			 <> isnull(b.wing_id,0)   
-			OR	isnull(a.squadron_id,0)		 <> isnull(b.squadron_id,0)   
+			OR	isnull(a.organization_id,0)	 <> isnull(b.organization_id,0)    
 		    OR	isnull(a.rank_id,0)		     <> isnull(b.rank_id,0)   
 			OR	isnull(a.position_id,0)		 <> isnull(b.position_id,0)
 			OR	isnull(a.is_active,'')		 <> isnull(b.is_active,'')      
@@ -57,8 +55,7 @@ BEGIN
 		,contact_nos
 		,email_add	
 		,gender			
-		,wing_id		
-		,squadron_id	
+		,organization_id		
 		,rank_id	
 		,position_id	
 		,is_active
@@ -75,8 +72,7 @@ BEGIN
 		,contact_nos
 		,email_add	
 		,gender			
-		,wing_id		
-		,squadron_id	
+		,organization_id		
 		,rank_id	
 		,position_id	
 		,is_active
@@ -88,3 +84,4 @@ BEGIN
 	AND last_name IS NOT NULL
 	AND first_name IS NOT NULL;
 END
+
