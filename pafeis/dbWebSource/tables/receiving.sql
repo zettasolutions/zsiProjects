@@ -12,9 +12,9 @@ receiving_id	INT IDENTITY(1,1)	NOT NULL
 ,stock_transfer_no	INT	NULL
 ,received_by	INT	NULL
 ,received_date	DATETIME	NULL
-,status_id	NTEXT(2147483646)	NULL
 ,status_remarks	NTEXT(2147483646)	NULL
 ,created_by	INT	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
-,updated_date	DATETIME	NULL)
+,updated_date	DATETIME	NULL
+,status_id	INT	NULL)

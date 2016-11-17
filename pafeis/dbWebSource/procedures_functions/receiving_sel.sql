@@ -1,19 +1,8 @@
 
-
--- ===================================================================================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: November 10, 2016 7:58 PM
--- Description:	Issuance select stored procedure.
--- ===================================================================================================
--- Update by	| Date		| Description
--- ===================================================================================================
--- Add your name, date, and description of your changes here. Thanks
--- ===================================================================================================
-
 CREATE PROCEDURE [dbo].[receiving_sel]
 (
-    @receiving_id  INT = null
-   ,@status_id    INT = NULL
+    @receiving_id INT = null
+   ,@user_id      INT 
    ,@col_no       INT = 1
    ,@order_no     INT = 0
 )
@@ -22,14 +11,18 @@ BEGIN
 
 SET NOCOUNT ON
 DECLARE @stmt VARCHAR(MAX)
+DECLARE @role_id INT
+DECLARE @organization_id INT
 
-  SET @stmt =  'SELECT * FROM dbo.receiving_v WHERE 1=1 '
+  SELECT @role_id=role_id, @organization_id=organization_id FROM users where user_id=@user_id;
+  
+
+  SET @stmt =  'SELECT * FROM dbo.receiving_v WHERE role_id = '+ cast(@role_id as varchar(20)) + 
+               ' AND organization_id = ' + cast(@organization_id as varchar(20))
+
   
   IF @receiving_id IS NOT NULL  
 	 SET @stmt = @stmt + ' AND receiving_id = ' + CAST(@receiving_id AS VARCHAR(20)); 
-
-  IF @status_id IS NOT NULL
-     SET @stmt = @stmt + ' AND status_id = ' + CAST(@status_id AS VARCHAR(20)); 
 
   SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
   
@@ -37,9 +30,12 @@ DECLARE @stmt VARCHAR(MAX)
      SET @stmt = @stmt + ' ASC';
   ELSE
      SET @stmt = @stmt + ' DESC';
-   
+  
+  exec(@stmt);
 	
 END
+
+
 
 
 

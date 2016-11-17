@@ -8,4 +8,5 @@ item_type_id	INT IDENTITY(1,1)	NOT NULL
 ,created_by	INT	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
-,updated_date	DATETIME	NULL)
+,updated_date	DATETIME	NULL
+,unit_of_measure_id	INT	NULL)

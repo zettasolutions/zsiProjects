@@ -1,4 +1,5 @@
 
+
 -- ===================================================================================================
 -- Author:		Rogelio T. Novo Jr.
 -- Create date: November 7, 2016 7:06PM
@@ -60,4 +61,5 @@ BEGIN
     FROM @tt
     WHERE item_code_id IS NULL;
 END
+
 

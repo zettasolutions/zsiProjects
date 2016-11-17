@@ -7,4 +7,5 @@ receiving_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,created_by	INT	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
-,updated_date	DATETIME	NULL)
+,updated_date	DATETIME	NULL
+,remarks	NTEXT(2147483646)	NULL)
