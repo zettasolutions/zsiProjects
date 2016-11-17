@@ -1635,6 +1635,7 @@ var  ud='undefined'
                 });
                 json=_finalData;
                 if(typeof o.procedure !==ud) json={procedure: o.procedure, rows: json}; 
+                if(typeof o.parentId !==ud) json.parentId= o.parentId
                 return json;
             };            
         }            
@@ -2512,4 +2513,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                
+                                                                 
