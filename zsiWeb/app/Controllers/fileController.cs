@@ -20,7 +20,7 @@ namespace zsi.web.Controllers
         {
             this.dc = new dcAppProfile();
             this.app = dc.GetInfo();
-            this.tempPath = AppSettings.BaseDirectory + @"\temp\";
+            this.tempPath = AppSettings.BaseDirectory + @"temp\";
             if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
         }
 
@@ -32,7 +32,7 @@ namespace zsi.web.Controllers
 
         private void MigrateExcelFile(string fileName, string excel_column_range, string tempTable)
         {
-            string virtualColumns = "null as user_id";
+            string virtualColumns = this.CurrentUser.userId + " as user_id";
             OleDbCommand command = default(OleDbCommand);
             OleDbDataReader rdr = default(OleDbDataReader);
             OleDbConnection conn = default(OleDbConnection);
@@ -79,15 +79,13 @@ namespace zsi.web.Controllers
                 if (file != null && file.ContentLength > 0)
                 {
                     ap.excel_folder = app.excel_folder.Replace("~", AppSettings.BaseDirectory);
-                    //if (Directory.Exists(ap.excel_folder)) tempPath = ap.excel_folder;
-                    if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
-
+                    if (Directory.Exists(ap.excel_folder)) tempPath = ap.excel_folder;
                     var fileName = Path.GetFileName(file.FileName);
                     fullPath = Path.Combine(tempPath, fileName);
                     file.SaveAs(fullPath);
-                    DataHelper.execute("temp_data_del @table_name='" + tmpTable + "',@userid='" + this.CurrentUser.userId, false);
+                    DataHelper.execute("temp_data_del @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
                     MigrateExcelFile(fullPath, colRange, tmpTable);
-                    DataHelper.execute("temp_data_upd @table_name='" + tmpTable + "',@userid='" + this.CurrentUser.userId, false);
+                    DataHelper.execute("temp_data_upd @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
 
                 }
             }
