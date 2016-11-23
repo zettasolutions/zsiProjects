@@ -1,10 +1,11 @@
 CREATE TYPE issuances_tt AS TABLE(
 issuance_id	INT	NULL
 ,issuance_no	NVARCHAR(100)	NULL
-,authority_id	INT	NULL
-,issued_to_id	INT	NULL
+,organization_id	INT	NULL
 ,issued_by	INT	NULL
 ,issued_date	DATETIME	NULL
 ,issuance_directive_id	INT	NULL
-,page_process_action_id	INT	NULL
-,remarks	NVARCHAR(0)	NULL)
+,aircraft_id	INT	NULL
+,status_id	INT	NULL
+,status_remarks	NVARCHAR(0)	NULL
+,authority_ref	NVARCHAR(2000)	NULL)

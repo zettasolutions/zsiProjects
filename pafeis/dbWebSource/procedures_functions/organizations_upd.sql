@@ -15,6 +15,7 @@ BEGIN
 		,organization_pid		= b.organization_pid
 		,organization_type_id	= b.organization_type_id
 		,organization_head_id	= b.organization_head_id
+		,organization_address   = b.organization_address
 		,is_active		        = b.is_active
         ,updated_by		        = @user_id
         ,updated_date	        = GETDATE()
@@ -26,6 +27,7 @@ BEGIN
 		OR	isnull(a.organization_pid,0)	<> isnull(b.organization_pid,0) 
 		OR	isnull(a.organization_type_id,0)<> isnull(b.organization_type_id,0) 
 		OR	isnull(a.organization_head_id,0)<> isnull(b.organization_head_id,0) 
+		OR	isnull(a.organization_address,'')	<> isnull(b.organization_address,'') 
 		OR	isnull(a.is_active,'')	<> isnull(b.is_active,'')  
 	)
 	   
@@ -36,6 +38,7 @@ BEGIN
 		,organization_pid
 		,organization_type_id
 		,organization_head_id
+		,organization_address
 		,is_active
         ,created_by
         ,created_date
@@ -46,6 +49,7 @@ BEGIN
 	   ,organization_pid
 	   ,organization_type_id
 	   ,organization_head_id
+	   ,organization_address
 	   ,is_active
        ,@user_id
        ,GETDATE()
@@ -54,6 +58,7 @@ BEGIN
 	  AND organization_code IS NOT NULL
 	  AND organization_type_id IS NOT NULL;
 END
+
 
 
 

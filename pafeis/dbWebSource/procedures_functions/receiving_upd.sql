@@ -11,17 +11,15 @@ BEGIN
     UPDATE a 
     SET 
 		 receiving_no		        = b.receiving_no
-	    ,invoice_no                 = b.invoice_no     
-     	,invoice_date				= b.invoice_date	
-	    ,dr_no						= b.dr_no			
-	    ,dr_date					= b.dr_date		
+	    ,doc_no						= b.doc_no			
+	    ,doc_date					= b.doc_date		
 	    ,dealer_id					= b.dealer_id		
 	    ,receiving_organization_id	= b.receiving_organization_id
-		,authority_id				= b.authority_id
 		,transfer_organization_id	= b.transfer_organization_id
-		,stock_transfer_no          = b.stock_transfer_no
+		,aircraft_id                = b.aircraft_id
 		,received_by				= b.received_by
 		,received_date				= b.received_date
+		,status_id                  = b.status_id
 		,status_remarks				= b.status_remarks
 		,updated_by					= @user_id
         ,updated_date				= GETDATE()
@@ -30,58 +28,55 @@ BEGIN
     WHERE (
 			
 			isnull(a.receiving_no,0)	    <> isnull(b.receiving_no,0)  
-		OR	isnull(a.invoice_no,'')			<> isnull(b.invoice_no,'') 
-		OR	isnull(a.invoice_date,'')		<> isnull(b.invoice_date,'') 
-		OR	isnull(a.dr_no,0)				<> isnull(b.dr_no,0) 
-		OR	isnull(a.dr_date,'')			<> isnull(b.dr_date,'') 
+		OR	isnull(a.doc_no,0)				<> isnull(b.doc_no,0) 
+		OR	isnull(a.doc_date,'')			<> isnull(b.doc_date,'') 
 		OR	isnull(a.dealer_id,0)			<> isnull(b.dealer_id,0) 
 		OR	isnull(a.receiving_organization_id,0)	<> isnull(b.receiving_organization_id,0) 
-		OR	isnull(a.authority_id,0)		<> isnull(b.authority_id,0) 
 		OR	isnull(a.transfer_organization_id,0)	<> isnull(b.transfer_organization_id,0) 
-		OR	isnull(a.stock_transfer_no,0)	<> isnull(b.stock_transfer_no,0) 
+		OR	isnull(a.aircraft_id,0)	        <> isnull(b.aircraft_id,0) 
 		OR	isnull(a.received_by,'')		<> isnull(b.received_by,'') 
 		OR	isnull(a.received_date,0)		<> isnull(b.received_date,0) 
+		OR	isnull(a.status_id,0)		    <> isnull(b.status_id,0) 
 		OR	isnull(a.status_remarks,'')		<> isnull(b.status_remarks,'') 
 	)
 	   
 -- Insert Process
+DECLARE @receiving_id INT;
+SET @receiving_id = null;
+
     INSERT INTO dbo.receiving (    
 		 receiving_no
-		,invoice_no     
-		,invoice_date	
-		,dr_no			
-		,dr_date		
+		,doc_no			
+		,doc_date		
 		,dealer_id		
 		,receiving_organization_id
-		,authority_id
 		,transfer_organization_id
-		,stock_transfer_no
+		,aircraft_id
 		,received_by
 		,received_date
+		,status_id
 		,status_remarks
 		,created_by
 		,created_date
         )
     SELECT 
          receiving_no
-		,invoice_no     
-		,invoice_date	
-		,dr_no			
-		,dr_date		
+		,doc_no			
+		,doc_date		
 		,dealer_id	
 		,receiving_organization_id
-		,authority_id
 		,transfer_organization_id
-		,stock_transfer_no
+		,aircraft_id
 		,received_by
 		,received_date
+		,status_id
 		,status_remarks
 	   ,@user_id
 	   ,GETDATE()
     FROM @tt
     WHERE receiving_id IS NULL
-	 AND authority_id IS NOT NULL;
+	and doc_no IS NOT NULL
 
-	RETURN @@identity;
+	RETURN (SELECT doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY);
 END
 

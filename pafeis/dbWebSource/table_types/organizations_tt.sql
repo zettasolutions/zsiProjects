@@ -5,4 +5,5 @@ organization_id	INT	NULL
 ,organization_name	NVARCHAR(100)	NULL
 ,organization_pid	INT	NULL
 ,organization_head_id	INT	NULL
+,organization_address	NVARCHAR(1000)	NULL
 ,is_active	CHAR(1)	NULL)

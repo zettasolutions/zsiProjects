@@ -17,8 +17,8 @@ DECLARE @organization_id INT
   SELECT @role_id=role_id, @organization_id=organization_id FROM users where user_id=@user_id;
   
 
-  SET @stmt =  'SELECT * FROM dbo.receiving_v WHERE role_id = '+ cast(@role_id as varchar(20)) + 
-               ' AND organization_id = ' + cast(@organization_id as varchar(20))
+  SET @stmt =  'SELECT * FROM dbo.receiving_v WHERE role_id = '+ cast(@role_id as varchar(20)) 
+ -- + ' AND organization_id = ' + cast(@organization_id as varchar(20))
 
   
   IF @receiving_id IS NOT NULL  

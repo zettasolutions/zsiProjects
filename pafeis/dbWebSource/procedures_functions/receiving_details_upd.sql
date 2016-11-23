@@ -49,6 +49,5 @@ BEGIN
        ,GETDATE()
     FROM @tt
     WHERE receiving_detail_id IS NULL
-	  AND item_id IS NOT NULL;
 END
 
