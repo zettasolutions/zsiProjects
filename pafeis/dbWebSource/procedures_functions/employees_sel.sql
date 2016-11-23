@@ -17,7 +17,7 @@ BEGIN
 	IF @organization_id <> '' 
 		SET @stmt = @stmt + ' AND organization_id='+ CAST(@organization_id AS VARCHAR(20));
 
-
+		print(@stmt);
    exec (@stmt);
 end
 
