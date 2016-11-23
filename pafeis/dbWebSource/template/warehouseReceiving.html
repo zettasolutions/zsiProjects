@@ -1,0 +1,92 @@
+<link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src='/javascript/name/zsiSearch'></script>
+<style>
+    .modal-body { overflow: unset;  }
+    .modal-lg {   width: 90% !important;
+    }
+    #tabPanel > div{
+        
+        display:none;
+    } 
+    
+    #tabPanel > div.active{
+        
+        display:block;
+    }
+    
+    .tabPane{
+        background-color: #fff;
+        min-height: 500px;
+        padding: 10px 5px;
+        margin-bottom:10px;
+        overflow: auto;
+    }
+
+    #grid{
+        width: 100%;
+    }
+    
+    .zGrid .item .title {
+        height: 22px;
+        line-height: 19px;
+    }
+    .zGrid .zHeaders .zSort {
+        
+    }
+    
+    .tablePanel {
+        overflow-y:auto;
+    }
+   
+</style>
+
+<ul class="nav nav-tabs">
+  <li ><a href="#supplierd" data-toggle="tab" id="supplier-tab">Supplier Delivery</a></li>
+  <li ><a href="#transferTeam" data-toggle="tab" id="team-tab">Transfer Delivery</a></li>
+  <li ><a href="#returnd" data-toggle="tab" id="retun-tab">Return Delivery</a></li>
+</ul>
+
+<div id="tabPanel" class="tab-pages">
+    <div id="tabSupplierDelivery" class="tabPane">
+        <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+            <div id="suppDelivery" class="zGrid"></div> 
+            <div class="buttonGroup">
+                <button type="button" class="btn btn-primary btn-sm" id="wrBtnNew">
+                	<span class="glyphicon glyphicon-floppy-disk"></span> New
+                </button>
+                <!--<button type="button" class="btn btn-primary btn-sm" id="wrBtnDelete">
+                	<span class="glyphicon glyphicon-trash"></span> Delete
+                </button>-->
+            </div>
+        </div>
+    </div>        
+    <div id="tabTransferDelivery" class="tabPane">
+        <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+            <div id="transDelivery" class="zGrid"></div> 
+            <div class="buttonGroup">
+                <button type="button" class="btn btn-primary btn-sm" id="wrBtnNew">
+                	<span class="glyphicon glyphicon-floppy-disk"></span> New
+                </button>
+                <!--<button type="button" class="btn btn-primary btn-sm" id="wrBtnDelete">
+                	<span class="glyphicon glyphicon-trash"></span> Delete
+                </button>-->
+            </div>
+        </div>
+    </div>        
+    <div id="tabReturnDelivery"   class="tabPane">
+        <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+            <div id="retDelivery" class="zGrid"></div> 
+            <div class="buttonGroup">
+                <button type="button" class="btn btn-primary btn-sm" id="wrBtnNew">
+                	<span class="glyphicon glyphicon-floppy-disk"></span> New
+                </button>
+                <!--<button type="button" class="btn btn-primary btn-sm" id="wrBtnDelete">
+                	<span class="glyphicon glyphicon-trash"></span> Delete
+                </button>-->
+            </div>
+        </div>
+    </div>        
+</div>
+
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
+<script type="text/javascript" src="/scripts/bootstrap-datepicker.min.js"></script> 
