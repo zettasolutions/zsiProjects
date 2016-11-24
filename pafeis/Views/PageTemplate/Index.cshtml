@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "Page Template List";
     Layout = "~/Views/Shared/_Admin.cshtml";
@@ -46,7 +46,7 @@
     <button id="btnGenerateFiles" type="button" class="btn btn-primary btn-sm">Create Backup</button>
 </div>
 <script>
-    var defaultUrl = base_url + "sql/exec?p=page_templates_sel";
+    var defaultUrl = base_url + "sql/proc?p=page_templates_sel";
  var editor =null;
  var w1=null;
 
@@ -124,7 +124,7 @@ function displayDataToGrid(url){
                 return '<input id="cb" name="cb" class="" type="checkbox">'
                 + '<input id="pt_id" name="pt_id" value="' + d.pt_id + '" type="hidden">'
             }
-            , function (d) { return '<a target="_blank" href="/pagetemplate/source/' + d.page_name + '">' + d.page_name  + '</a>'; }
+            , function (d) { return '<a target="_blank" href="./pagetemplate/source/' + d.page_name + '">' + d.page_name  + '</a>'; }
             ,function(d){ return   d.created_by; }
             ,function(d){ return   d.created_date; }
             ,function(d){ return   d.updated_by; }
@@ -197,5 +197,6 @@ $("#btnDelete").click(function () {
 
 
 </script>
+
 
 
