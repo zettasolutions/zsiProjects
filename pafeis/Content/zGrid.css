@@ -107,6 +107,7 @@
     height: inherit;
     line-height: 18pt;
     min-width: 25px;
+	position: relative;
  }
  
  
