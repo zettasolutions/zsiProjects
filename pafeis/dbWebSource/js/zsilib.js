@@ -1100,6 +1100,15 @@ var  ud='undefined'
                     ,isFreezeItem       = function(o){
                         return  ( ((typeof o.isFreeze === ud) ||  o.isFreeze ===false) ? false:true ); 
                     }
+                    ,createBlankRows =  function(o){
+                        if(typeof o.blankRowsLimit !==ud ){
+                            for(var x=0; x < o.blankRowsLimit;x++){
+                                var _cls = zsi.getOddEven();
+                                trItem({data:null,panelType:"L",rowClass:_cls}); 
+                                trItem({data:null,panelType:"R",rowClass:_cls});
+                            }
+                        } 
+                    }
                 ;
             
                 $.each(o.dataRows,function(){
@@ -1238,16 +1247,7 @@ var  ud='undefined'
                                     }
                                     else{
                                         //curPageNo=0;
-                                        
-                                        
-                                        if(typeof o.blankRowsLimit !==ud ){
-                                            for(var x=0; x < o.blankRowsLimit;x++){
-                                                var _cls = zsi.getOddEven();
-                                                trItem({data:null,panelType:"L",rowClass:_cls}); 
-                                                trItem({data:null,panelType:"R",rowClass:_cls});
-                                                setRowClickEvent();
-                                            }
-                                        } 
+                                        createBlankRows(o);
                                         setRowClickEvent();                                  
                                         setScrollBars();
                                         __obj.find("#recordsNum").html(num_rows);
@@ -1297,6 +1297,8 @@ var  ud='undefined'
                         trItem({data:this,panelType:"L",rowClass:_cls}); 
                         trItem({data:this,panelType:"R",rowClass:_cls});                            
                     });
+                    
+                    createBlankRows(o);
                     setRowClickEvent();
                     setScrollBars();
                     __obj.addClickHighlight();
@@ -2513,4 +2515,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                 
+                                                                   
