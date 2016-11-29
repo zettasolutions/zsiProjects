@@ -1,0 +1,128 @@
+<script src='/javascript/name/zsiSearch'></script>
+<link href="/content/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
+<!--<link rel="stylesheet" type="text/css" media="screen" href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">-->
+<style>
+    #tabPanel > div{
+        
+        display:none;
+    } 
+    
+    #tabPanel > div.active{
+        
+        display:block;
+    }
+    
+    .tabPane{
+        background-color: #fff;
+        min-height: 500px;
+        padding: 10px 5px;
+        margin-bottom:10px;
+        overflow: auto;
+    }
+
+    #grid{
+        width: 100%;
+    }
+    
+    .zGrid .item .title {
+        height: 22px;
+        line-height: 19px;
+    }
+    .zGrid .zHeaders .zSort {
+        
+    }
+    
+    .tablePanel {
+        overflow-y:auto;
+    }
+   
+
+</style>
+
+<div class="col-xs-12  "> 
+            <div id="frmFlightOperation" class="row zForm">
+                <div class="col-xs-12" style="background-color:#fff;height:inherit;padding-top:5px;"> 
+                    <div class="form-horizontal" style="padding:5px">
+                            <div class="form-group  ">  
+                                <label class=" col-xs-1 control-label">Operaion Code</label>
+                                <div class=" col-xs-3">
+                                     <input type="hidden" name="flight_operation_id" id="flight_operation_id" >
+                                     <input type="text" name="flight_operation_code" id="flight_operation_code" class="form-control input-sm" >
+                                </div>  
+                                <label class=" col-xs-1 control-label">Operation Name</label>
+                                <div class=" col-xs-3">
+                                   <input type="text" name="flight_operation_name" id="flight_operation_name" class="form-control input-sm" >
+                                 </div>
+                                <label class=" col-xs-1 control-label">Operation Type</label>
+                                <div class=" col-xs-3">
+                                     <select type="text" name="flight_operation_type_id" id="flight_operation_type_id" class="form-control input-sm"  ></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group  ">  
+                                <label class=" col-xs-1 control-label">Flight Schedule</label>
+                                <div class=" col-xs-3">
+                                     <input type="text" name="flight_schedule_date" id="flight_schedule_dated" class="form-control input-sm" >
+                                </div>  
+                                <label class=" col-xs-1 control-label">Unit</label>
+                                <div class=" col-xs-3">
+                                   <select type="text" name="unit_id" id="unit_id" class="form-control input-sm" ></select>
+                                 </div>
+                                <label class=" col-xs-1 control-label">Aircraft</label>
+                                <div class=" col-xs-3">
+                                     <select type="text" name="aircraft_id" id="aircraft_id" class="form-control input-sm"  ></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group  ">  
+                                <label class=" col-xs-1 control-label">Pilot</label>
+                                <div class=" col-xs-3">
+                                     <select type="text" name="pilot_id" id="pilot_id" class="form-control input-sm" ></select>
+                                </div>  
+                                <label class=" col-xs-1 control-label">Co Pilot</label>
+                                <div class=" col-xs-3">
+                                    <select type="text" name="co_pilot_id" id="co_pilot_id" class= "form-control input-sm" > </select>
+                                </div>
+   
+                                <label class=" col-xs-1 control-label">Origin</label>
+                                <div class=" col-xs-3">
+                                     <input type="text" name="origin" id="origin" class="form-control input-sm" >
+                                </div>  
+   
+                         </div>
+                            
+                            <div class="form-group  ">  
+                                 <label class=" col-xs-1 control-label">Destination</label>
+                                <div class=" col-xs-3">
+                                   <input type="text" name="destination" id="destination" class="form-control input-sm" >
+                                 </div>
+
+                                <label class=" col-xs-1 control-label">Status</label>
+                                <div class=" col-xs-3">
+                                     <select type="text" name="status_id" id="status_id" class="form-control input-sm"  ></select>
+                                </div>
+
+                            </div>
+                    </div>
+                </div>    
+            </div>
+<form id="frm">
+    <div class="zPanel">
+        <H4>Flight Time Details</H4>
+        <div id="grid" class="zGrid" style="margin-top:10px"></div>
+
+        <div class="buttonGroup" >
+                <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+                </button>
+        </div>
+    </div>
+</form>
+
+</div>
+
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
+<script type="text/javascript" src="/scripts/bootstrap-datepicker.min.js"></script> 
+<script type="text/javascript" src="/scripts/moment.js"></script> 
+<script type="text/javascript" src="/scripts/bootstrap-datetimepicker.min.js"></script> 
