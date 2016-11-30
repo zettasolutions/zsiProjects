@@ -1,0 +1,47 @@
+<style>
+
+    .zDdlBtn {
+        background-color: #fff;
+        border-left: 1pt solid #d6d8d8;
+        float: right;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 17px;
+        color:#000;
+        padding-right: 3px;
+    }
+    .zDdlBtn > .caret {
+        margin-left: 4px;
+    }
+    
+    .zDDList{
+        background-color: #333333;
+        color: #fff;
+        font-size: 9pt;
+        left: 0;
+        position: absolute;
+        z-index: 1000;
+        top:100px;
+        display:none;
+        
+    }
+
+</style>
+<div class="col-xs-12  "> 
+        <div class="zPanel">
+            <div id="grid" class="zGrid">   
+            </div>    
+        
+            <div class="buttonGroup">
+                <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
+                	<span class="glyphicon glyphicon-trash"></span> Delete
+                </button>    
+            </div>
+        </div>
+</div>
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
+

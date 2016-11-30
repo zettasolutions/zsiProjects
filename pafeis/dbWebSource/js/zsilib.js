@@ -302,6 +302,77 @@ var  ud='undefined'
                });
                return this;
             };
+
+            $.fn.dataBind2 = function(){
+                var _curHid,_curSpan;
+                var _ctrlId= this.attr("name") + "_ddl";
+                var _jCtrlId = "#" + _ctrlId;
+                $("body").append('<select id="' + _ctrlId + '" class="zDDList" size="15" ></select>');
+                var a = arguments;
+                var p=a[0];
+                //dropdownlist
+                if(typeof a[0] ==="string"){
+                     p={}; p.url = zsi.config.baseURL + "selectoption/code/" + a[0]; 
+                    if(typeof a[1] !==ud) p.onComplete = a[1];
+                }
+                var obj=this;
+                $.getJSON(p.url, function( _data ) {
+                    var _params ={
+                           data             : _data.rows
+                          ,selectedValue    : p.selectedValue
+                          ,isRequired       : p.required
+                          , onComplete      : p.onComplete
+                    };
+                    if(typeof p.text !== ud && typeof p.value !== ud ){
+                        _params.text  = p.text;
+                        _params.value = p.value;
+                    }
+                    $(_jCtrlId).fillSelect(_params);
+                    //if(p.isUniqueOptions===true)  obj.setUniqueOptions();
+                    
+                });
+                this.parent().find(".zDdlBtn").click(function(){
+                    var _p = $(this).parent();
+                    _curHid =  _p.find(":hidden");
+                    _curSpan = _p.find("#text");
+                    _select =   $(_jCtrlId);
+                    _select.val(_curHid.val())
+                    .css({
+                        display:"block"
+                        ,top:_p.offset().top + _p.innerHeight()
+                        ,left:_p.offset().left
+                    }).focus();
+            
+                    var _option = _select.find('[value="' + _curHid.val() + '"]');
+                    if(_option.length > 0){
+                        var _optionTop = _option.offset().top;
+                        var _selectTop = _select.offset().top;
+                        _select.scrollTop(_select.scrollTop() + (_optionTop - _selectTop));
+                    }
+                    else _select.scrollTop(0); 
+                });  
+            
+                $(_jCtrlId).click(function(){
+                    var _self = $(this);
+                    _curHid.val( _self.val() );
+                    _curSpan.html( _self.find("option:selected").text() );
+                    _self.css({display:"none"});
+                }).keyup(function(e){
+                	var k = (e.keyCode ? e.keyCode : e.which);
+                	if(k == '13'){
+                	     $(this).css({display:"none"});
+                	}
+                });
+                
+                this.closest(".zGrid").on('wheel mouseup', function(e){
+                    var _e = $(".zDDList");
+                    if (!_e.is(e.target) && _e.has(e.target).length === 0) {
+                        _e.hide();
+                    }
+                });  
+               return this;
+            }; 
+
             $.fn.deleteData         = function(o){
                 var ids = "";
                 var cb = this.find("input[name='cb']:checked");
@@ -1000,7 +1071,20 @@ var  ud='undefined'
                                 if(_info.onRender)
                                     _content = _info.onRender(o.data);
                                 else{
-    		                        _content = (typeof _info.type === ud ? "<span class='text'>" + svn(o.data,_info.name)  + "</span>" : bs({name:_info.name,type:_info.type,value: svn(o.data,_info.name,_info.defaultValue)}) ) ;
+                                    if(typeof _info.type === ud)
+    		                            _content = "<span class='text'>" + svn(o.data,_info.name)  + "</span>";
+    		                        else{ 
+    		                            
+    		                            if(_info.textValue!==ud){
+                                            _content = bs({    name      : _info.name  
+                                                                ,type      : _info.type  
+                                                                ,value     : svn(o.data ,_info.name ,_info.defaultValue ) 
+                                                                ,textValue : svn(o.data  ,_info.textValue) 
+                                                        });
+    		                            }
+    		                            else  _content = bs({name:_info.name  ,type:_info.type  ,value: svn(o.data  ,_info.name  ,_info.defaultValue )});
+    		                        }
+    		                         
     		                        if(x===0 || x ===__o.selectorIndex ){
     		                          if(typeof __o.selectorType !==ud) 
     		                                _content += (o.data !==null ? bs({name: (__o.selectorType ==="checkbox" ? "cb" :  (__o.selectorType==="radio" ? "rad" : "ctrl" )  ),type:__o.selectorType}) : "" );
@@ -1828,6 +1912,11 @@ var  ud='undefined'
                     
                     if(t=='yesno') return yesno(o);
                     
+                    if(t=='ddl') {
+                        return "<input type='hidden' " + l_name + " " + l_value +  "><span id='text'>" + o.textValue + "</span> <div class='zDdlBtn' ><span class='caret'></span></div>";
+                    }
+
+                    
                     l_type=' type="' + o.type + '"';
             
                     if(t=="hidden") l_class='';
@@ -2515,4 +2604,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                   
+                                                                     
