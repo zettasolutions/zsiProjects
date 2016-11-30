@@ -24,13 +24,14 @@ function displayRecords(){
             }	 
         		,{text  : "Menu Name"   , name  : "pmenu_id"    , type : "select"  , width : 180   , style : "text-align:left;" }
         		,{text  : "Parent Menu" , name  : "menu_name"   , type : "input"   , width : 180   , style : "text-align:left;" }
-        		,{text  : "Page Name"   , name  : "page_id"     , type : "ddl"     , width : 180   , style : "text-align:left;"  ,textValue:"page_name" }
+        		,{text  : "Page Name"   , name  : "page_id"     , type : "ddl"     , width : 180   , style : "text-align:left;"  ,displayText:"page_name" }
 
 	    ]
 	     ,onComplete: function(){
 	         $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
              $("select[name='pmenu_id']").dataBind("menus");
              $("[name='page_id']").dataBind2( "pages");
+            
         }  
     });    
 }

@@ -1075,11 +1075,11 @@ var  ud='undefined'
     		                            _content = "<span class='text'>" + svn(o.data,_info.name)  + "</span>";
     		                        else{ 
     		                            
-    		                            if(_info.textValue!==ud){
+    		                            if(_info.displayText!==ud){
                                             _content = bs({    name      : _info.name  
                                                                 ,type      : _info.type  
                                                                 ,value     : svn(o.data ,_info.name ,_info.defaultValue ) 
-                                                                ,textValue : svn(o.data  ,_info.textValue) 
+                                                                ,displayText : svn(o.data  ,_info.displayText) 
                                                         });
     		                            }
     		                            else  _content = bs({name:_info.name  ,type:_info.type  ,value: svn(o.data  ,_info.name  ,_info.defaultValue )});
@@ -1913,7 +1913,7 @@ var  ud='undefined'
                     if(t=='yesno') return yesno(o);
                     
                     if(t=='ddl') {
-                        return "<input type='hidden' " + l_name + " " + l_value +  "><span id='text'>" + o.textValue + "</span> <div class='zDdlBtn' ><span class='caret'></span></div>";
+                        return "<input type='hidden' " + l_name + " " + l_value +  "><span id='text'>" + o.displayText + "</span> <div class='zDdlBtn' ><span class='caret'></span></div>";
                     }
 
                     
