@@ -6,6 +6,7 @@ issuance_id	INT	NULL
 ,issued_date	DATETIME	NULL
 ,issuance_directive_id	INT	NULL
 ,aircraft_id	INT	NULL
+,transfer_organization_id	INT	NULL
+,authority_ref	NVARCHAR(2000)	NULL
 ,status_id	INT	NULL
-,status_remarks	NVARCHAR(0)	NULL
-,authority_ref	NVARCHAR(2000)	NULL)
+,status_remarks	NVARCHAR(0)	NULL)

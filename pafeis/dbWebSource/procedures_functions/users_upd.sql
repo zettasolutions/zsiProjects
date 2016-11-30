@@ -13,8 +13,8 @@ DECLARE @updated_count INT;
 -- Update Process
    UPDATE a 
        SET role_id = b.role_id
-	      ,logon = iif(isnull(b.role_id,0)=0,null,b.logon)
-		  ,password = iif(isnull(b.role_id,0)=0,null,b.password)
+	      ,logon = iif(isnull(b.role_id,0)=0,null,iif(isnull(b.logon,'')='',dbo.createUserLogon(b.user_id),b.logon))
+		  ,password = iif(isnull(b.role_id,0)=0,null,iif(isnull(b.password,'')='',dbo.createUserLogon(b.user_id),b.password))
           ,updated_by   = @user_id
           ,updated_date = GETDATE()
        FROM dbo.users a INNER JOIN @tt b

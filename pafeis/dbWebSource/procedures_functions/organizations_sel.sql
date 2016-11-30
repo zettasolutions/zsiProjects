@@ -10,6 +10,7 @@ CREATE PROCEDURE [dbo].[organizations_sel]
 )
 AS
 BEGIN
+  SET NOCOUNT ON
   DECLARE @stmt NVARCHAR(MAX)
   DECLARE @tt AS TABLE (
     level_no int
@@ -24,7 +25,7 @@ BEGIN
    WHILE @ctr < @rec 
    BEGIN	
 		SELECT TOP 1 @clevel_no = level_no FROM @tt WHERE level_no > @clevel_no
-		SET @stmt = @stmt + ',dbo.countSubOrganizations(organization_id,' + cast(@clevel_no as varchar(20)) + ') as subOrganization' + cast(@clevel_no as varchar(20))
+		SET @stmt = @stmt + ',IIF(ISNULL(organization_id,0)=0,'''',''<a href=''''javascript:void(0);'''' onclick=''''myFunction(' + cast(@clevel_no as varchar(20)) + ',' + '"' + ''' + organization_name + ''' + '"' +','' + cast(organization_id as varchar(20)) + '');''''>'' + cast(dbo.countSubOrganizations(organization_id,' + cast(@clevel_no as varchar(20)) + ')as varchar(20)) + ''</a>'') as subOrganization' + cast(@clevel_no as varchar(20))
         SET @ctr = @ctr + 1
    END	
     
@@ -40,7 +41,7 @@ BEGIN
   ELSE
      SET @stmt = @stmt + ' DESC '
 
-  print @stmt;
+  --print @stmt;
   EXEC(@stmt);
 END
 

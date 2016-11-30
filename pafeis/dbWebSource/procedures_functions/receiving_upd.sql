@@ -7,6 +7,18 @@ CREATE PROCEDURE [dbo].[receiving_upd]
 AS
 
 BEGIN
+   SET NOCOUNT ON
+   DECLARE @id INT;
+   DECLARE @statusId INT;
+   DECLARE @proc_tt AS TABLE (
+     id int IDENTITY
+	,proc_name varchar(50)
+   )
+   DECLARE @data_count INT;
+   DECLARE @ctr int=0;
+   DECLARE @procName VARCHAR(50)
+   DECLARE @statusName VARCHAR(20)
+
 -- Update Process
     UPDATE a 
     SET 
@@ -14,7 +26,6 @@ BEGIN
 	    ,doc_no						= b.doc_no			
 	    ,doc_date					= b.doc_date		
 	    ,dealer_id					= b.dealer_id		
-	    ,receiving_organization_id	= b.receiving_organization_id
 		,transfer_organization_id	= b.transfer_organization_id
 		,aircraft_id                = b.aircraft_id
 		,received_by				= b.received_by
@@ -31,7 +42,6 @@ BEGIN
 		OR	isnull(a.doc_no,0)				<> isnull(b.doc_no,0) 
 		OR	isnull(a.doc_date,'')			<> isnull(b.doc_date,'') 
 		OR	isnull(a.dealer_id,0)			<> isnull(b.dealer_id,0) 
-		OR	isnull(a.receiving_organization_id,0)	<> isnull(b.receiving_organization_id,0) 
 		OR	isnull(a.transfer_organization_id,0)	<> isnull(b.transfer_organization_id,0) 
 		OR	isnull(a.aircraft_id,0)	        <> isnull(b.aircraft_id,0) 
 		OR	isnull(a.received_by,'')		<> isnull(b.received_by,'') 
@@ -64,7 +74,7 @@ SET @receiving_id = null;
 		,doc_no			
 		,doc_date		
 		,dealer_id	
-		,receiving_organization_id
+		,dbo.getUserOrganizationId(@user_Id)
 		,transfer_organization_id
 		,aircraft_id
 		,received_by
@@ -77,6 +87,24 @@ SET @receiving_id = null;
     WHERE receiving_id IS NULL
 	and doc_no IS NOT NULL
 
-	RETURN (SELECT doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY);
+
+	SELECT @id = receiving_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
+	IF ISNULL(@id,0) = 0
+		SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
+
+	EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
+
+	RETURN @id
+
+	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@statusId 
+	SELECT @data_count =COUNT(*) FROM @proc_tt 
+	WHILE @ctr < @data_count 
+	BEGIN
+	  SELECT TOP 1 @procName =proc_name FROM @proc_tt WHERE id> @ctr;
+	  EXEC @procName @id
+	  SET @ctr = @ctr + 1
+	END
+
+
 END
 
