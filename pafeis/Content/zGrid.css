@@ -199,6 +199,35 @@
     z-index: 1;
 }
 
+/*dropdown list */
+.zDdlBtn {
+	background-color: #fff;
+	border-left: 1pt solid #d6d8d8;
+	float: right;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 17px;
+	color:#000;
+	padding-right: 3px;
+}
+.zDdlBtn > .caret {
+	margin-left: 4px;
+}
+
+.zDDList{
+	background-color: #333333;
+	color: #fff;
+	font-size: 9pt;
+	left: 0;
+	position: absolute;
+	z-index: 1000;
+	top:100px;
+	display:none;
+	
+}
+/*end of dropdown list */
+
 
 /*sort */
 .zHeaders .item > .title.hasSort {
