@@ -103,7 +103,7 @@ var contextModalUpdate = {
                         +'    <div class="form-group  "> ' 
                         +'        <label class=" col-xs-2 control-label">Operaion Code</label>'
                         +'        <div class=" col-xs-4">'
-                        +'             <input type="hidden" name="flight_operation_id" id="flight_operation_id" class="form-control input-sm">'
+                        +'             <input type="hidden" name="flight_operation_id" id="flight_operation_id" >'
                         +'             <input type="text" name="flight_operation_code" id="flight_operation_code" class="form-control input-sm" >'
                         +'        </div> ' 
                         +'        <label class=" col-xs-2 control-label">Operation Name</label>'
@@ -175,23 +175,18 @@ function getTemplate(){
     });    
 }
 
-function initDatePicker(){
-    $('input[id*=date]').datepicker();
-}
-
 $("#btnNew").click(function () {
     $("#modalNew .modal-title").text("New Flight Operation");
     $('#modalNew').modal({ show: true, keyboard: false, backdrop: 'static' });
     displayListBoxes();
-    initDatePicker();
 
+    zsi.initDatePicker();
 });
 
 function submitItemNew(){    
          $("#frm_modalNew").jsonSubmit({
              procedure : "flight_operation_upd"
             ,optionalItems : ["flight_operation_id","flight_operation_type_id","unit_id","aircraft_id","pilot_id","co_pilot_id","status_id"]
-          //  ,notInclude : "#pproperty_name"
             ,onComplete: function (data) {
              if(data.isSuccess===true) zsi.form.showAlert("alert");
                 $("#grid").trigger("refresh");
@@ -204,29 +199,27 @@ function submitUpdate(){
          $("#frm_modalUpdate").jsonSubmit({
              procedure : "flight_operation_upd"
             ,optionalItems : ["flight_operation_id","flight_operation_type_id","unit_id","aircraft_id","pilot_id","co_pilot_id","status_id"]
-          //  ,notInclude : "#pproperty_name"
             ,onComplete: function (data) {
              if(data.isSuccess===true) zsi.form.showAlert("alert");
                 $("#grid").trigger("refresh");
                 $('#modalUpdate').modal('hide');
-                $("input [type='text']").val("");
-                $("input [type='select']").val("");
-                //displayRecords();
+                clearForm();
             }
         });
 }
 
 
-function showModalUpdateOperation(index) {
+function showModalUpdateOperation(index,id) {
    var _info = dataFlightOperations[index];
   
-    $("#modalNew .modal-title").text("Flight Operation for » " + _info.flight_operation_code);
+    $("#modalUpdate .modal-title").text("Flight Operation for » " + _info.flight_operation_code);
  
-    $("#modalNew").modal({ show: true, keyboard: false, backdrop: 'static' });
-    displayFlightOperation(_info);
+    $("#modalUpdate").modal({ show: true, keyboard: false, backdrop: 'static' });
+    $("#modalUpdate #flight_operation_id").val(id);
     displayListBoxes();
-    initDatePicker();
- 
+    displayFlightOperation(_info);
+  
+    zsi.initDatePicker();
 }
 
 
@@ -239,23 +232,22 @@ function displayListBoxes(){
     $("select[name='status_id']").dataBind( "status");   
 }
 
-function displayFlightOperation(d){ 
-    $("#flight_operation_id").val( d.flight_operation_id );
-    console.log($("[name='flight_operation_id'").lenght);
+function displayFlightOperation(d){
+ 
+    $("#modalUpdate #flight_operation_id").val( d.flight_operation_id );
+    $("#modalUpdate #flight_operation_code").val(  d.flight_operation_code );
+    $("#modalUpdate #flight_operation_name").val(  d.flight_operation_name );
+    $("#modalUpdate #flight_schedule_date").val(  d.flight_schedule_date.toDateFormat() ); 
+    $("#modalUpdate #origin").val(  d.origin );
+    $("#modalUpdate #destination").val(  d.destination );  
     
-    $("#flight_operation_code").val(  d.flight_operation_code );
-    $("#flight_operation_name").val(  d.flight_operation_name );
-    $("#flight_schedule_date").val(  d.flight_schedule_date.toDateFormat() );    
-    $("#origin").val(  d.origin );
-    $("#destination").val(  d.destination );  
     
-    
-    $("#flight_operation_type_id").attr("selectedvalue",   d.flight_operation_type_id );
-    $("#unit_id").attr("selectedvalue",  d.unit_id );
-    $("#aircraft_id").attr("selectedvalue",   d.aircraft_id );
-    $("#pilot_id").attr("selectedvalue",  d.pilot_id );
-    $("#co_pilot_id").attr("selectedvalue",   d.co_pilot_id );
-    $("#status_id").attr("selectedvalue",   d.status_id );
+    $("#modalUpdate #flight_operation_type_id").attr("selectedvalue",   d.flight_operation_type_id );
+    $("#modalUpdate #unit_id").attr("selectedvalue",  d.unit_id );
+    $("#modalUpdate #aircraft_id").attr("selectedvalue",   d.aircraft_id );
+    $("#modalUpdate #pilot_id").attr("selectedvalue",  d.pilot_id );
+    $("#modalUpdate #co_pilot_id").attr("selectedvalue",   d.co_pilot_id );
+    $("#modalUpdate #status_id").attr("selectedvalue",   d.status_id );
 }
 
 function clearForm(){ 
@@ -286,15 +278,10 @@ function displayRecords(){
                 ,{text  : "Code"                    , type  : "input"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ 
         		        dataFlightOperationsIndex++;
-        		        return "<a href='javascript:showModalUpdateOperation(\"" + dataFlightOperationsIndex + "\");'>" 
+        		        return "<a href='javascript:showModalUpdateOperation(\"" + dataFlightOperationsIndex + "\",\"" +  svn(d,"flight_operation_id") + "\");'>" 
         		        + svn(d,"flight_operation_code") + " </a>";
         		    }
         		}
-                /*
-        		,{text  : "Code"                    , type  : "label"     , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"flight_operation_code")}
-        		}
-        		*/
         	    ,{text  : "Name"                    , type  : "label"     , width : 300       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"flight_operation_name")}
         	    }
@@ -344,4 +331,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                
+                                                   
