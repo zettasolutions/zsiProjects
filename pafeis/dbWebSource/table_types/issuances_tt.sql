@@ -1,7 +1,7 @@
 CREATE TYPE issuances_tt AS TABLE(
 issuance_id	INT	NULL
-,issuance_no	NVARCHAR(100)	NULL
 ,organization_id	INT	NULL
+,issuance_no	NVARCHAR(100)	NULL
 ,issued_by	INT	NULL
 ,issued_date	DATETIME	NULL
 ,issuance_directive_id	INT	NULL

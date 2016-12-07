@@ -22,8 +22,8 @@ BEGIN
 
 -- Update Process
     UPDATE a 
-    SET  issuance_no		= b.issuance_no		
-		,organization_id	= b.organization_id		
+    SET  organization_id	= b.organization_id		
+		,issuance_no		= b.issuance_no		
 		,issued_by		    = b.issued_by
 		,issued_date        = b.issued_date
 		,issuance_directive_id = b.issuance_directive_id
@@ -37,8 +37,8 @@ BEGIN
     FROM dbo.issuances a INNER JOIN @tt b
     ON a.issuance_id = b.issuance_id
     WHERE (
-			isnull(a.issuance_no,'')			<> isnull(b.issuance_no,'')  
-		OR	isnull(a.organization_id,0)			<> isnull(b.organization_id,0)  		
+		isnull(a.organization_id,0)				<> isnull(b.organization_id,0)  		
+		OR  isnull(a.issuance_no,'')			<> isnull(b.issuance_no,'')  
 		OR	isnull(a.issued_by,0)				<> isnull(b.issued_by,0) 
 		OR	isnull(a.issued_date,'')			<> isnull(b.issued_date,'') 
 		OR	isnull(a.issuance_directive_id,0)	<> isnull(b.issuance_directive_id,0) 
@@ -50,9 +50,12 @@ BEGIN
 	)
 	   
 -- Insert Process
+DECLARE @issuance_id INT;
+SET @issuance_id = null;
+
     INSERT INTO dbo.issuances (
-         issuance_no 
-		,organization_id		
+		organization_id		
+		,issuance_no 
 		,issued_by
 		,issued_date
 		,issuance_directive_id
@@ -65,8 +68,8 @@ BEGIN
 		,created_date
         )
     SELECT 
-        issuance_no 
-	   ,organization_id		
+	    dbo.getUserOrganizationId(@user_Id)	
+	   ,issuance_no 
 	   ,issued_by
 	   ,issued_date
 	   ,issuance_directive_id
@@ -79,16 +82,18 @@ BEGIN
 	   ,GETDATE()
     FROM @tt
     WHERE issuance_id IS NULL
-	  AND organization_id IS NOT NULL;
+	AND issuance_no IS NOT NULL
+	AND (aircraft_id IS NOT NULL OR transfer_organization_id IS NOT NULL);
 
 
 	SELECT @id = issuance_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
 	IF ISNULL(@id,0) = 0
+	BEGIN
 		SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
+		RETURN @id
+	END;
 
 	EXEC dbo.doc_routing_process_upd 66,@id,@statusId,@user_id;
-
-	RETURN @id
 
 	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@statusId 
 	SELECT @data_count =COUNT(*) FROM @proc_tt 

@@ -9,11 +9,13 @@ BEGIN
 SET NOCOUNT ON
 DECLARE @stmt NVARCHAR(MAX)
 
-  SET @stmt = 'SELECT * FROM dbo.flight_time WHERE is_active = ''' + @is_active + ''''
+  SET @stmt = 'SELECT * FROM dbo.flight_time_v '
 
-  IF @flight_time_id IS NOT NULL  
-	 SELECT * FROM dbo.flight_time WHERE flight_time_id = @flight_time_id; 
-  ELSE
-     SELECT * FROM dbo.flight_time
+  IF ISNULL(@flight_time_id,'') <>''
+  BEGIN
+      SET @stmt = @stmt + ' WHERE flight_time_id = ' + CAST(@flight_time_id AS VARCHAR(20)); 
+  END
+
+  EXEC(@stmt);
 	
 END

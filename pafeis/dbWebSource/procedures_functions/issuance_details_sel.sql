@@ -1,27 +1,27 @@
 
--- ===================================================================================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: November 10, 2016 8:18 PM
--- Description:	Issuance details select stored procedure.
--- ===================================================================================================
--- Update by	| Date		| Description
--- ===================================================================================================
--- Add your name, date, and description of your changes here. Thanks
--- ===================================================================================================
-
 CREATE PROCEDURE [dbo].[issuance_details_sel]
 (
-    @issuance_detail_id  INT = null
+    @issuance_id INT = null
+   ,@user_id      INT 
+   ,@col_no       INT = 1
+   ,@order_no     INT = 0
 )
 AS
 BEGIN
+	SET NOCOUNT ON;
+	DECLARE @stmt VARCHAR(MAX);
+	DECLARE @role_id INT;
+	--DECLARE @organization_id INT;
+	
+	SET @stmt =  'SELECT *, dbo.getItemCodeName(item_id) item_search FROM dbo.issuance_details_v WHERE issuance_id = ' + CAST(@issuance_id AS VARCHAR(20)); 
 
-SET NOCOUNT ON
-
-  IF @issuance_detail_id IS NOT NULL  
-	 SELECT * FROM dbo.issuance_details WHERE issuance_detail_id = @issuance_detail_id; 
-  ELSE
-     SELECT * FROM dbo.issuance_details
+	SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
+  
+	IF @order_no = 0
+		SET @stmt = @stmt + ' ASC';
+	ELSE
+		SET @stmt = @stmt + ' DESC';
+  
+	EXEC(@stmt);
 	
 END
-

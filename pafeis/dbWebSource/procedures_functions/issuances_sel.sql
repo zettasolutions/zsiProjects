@@ -20,15 +20,15 @@ DECLARE @organization_id INT
   SET @stmt =  'SELECT * FROM dbo.issuances_v '
   
   IF @issuance_id IS NOT NULL  
-	 SET @stmt = @stmt + ' AND issuance_id = ' + CAST(@issuance_id AS VARCHAR(20)); 
+	 SET @stmt = @stmt + ' WHERE issuance_id = ' + CAST(@issuance_id AS VARCHAR(20)); 
   ELSE
      SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
                + ' AND organization_id = ' + cast(@organization_id as varchar(20))
 
-  IF @tab_name='AIRCAFT ISSUANCE'
+  IF @tab_name='AIRCRAFT'
      SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
 
-  IF @tab_name='TRANSFER ISSUANCE'
+  IF @tab_name='TRANSFER'
      SET @stmt = @stmt + ' AND ISNULL(transfer_organization_id,0) <> 0 '
 
    SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
@@ -39,7 +39,7 @@ DECLARE @organization_id INT
   ELSE
      SET @stmt = @stmt + ' DESC';
    
-	
+  EXEC(@stmt);	
 END
 
 

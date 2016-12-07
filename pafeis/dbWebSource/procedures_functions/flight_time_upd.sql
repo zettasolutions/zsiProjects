@@ -12,17 +12,20 @@ BEGIN
     SET  flight_operation_id	= b.flight_operation_id
 		,flight_take_off_time	= b.flight_take_off_time
 		,flight_landing_time	= b.flight_landing_time
-		,is_engine_off			= b.is_engine_off
 		,no_hours				= DATEDIFF(MINUTE,b.flight_take_off_time,b.flight_landing_time) / 60
+		,is_engine_off			= b.is_engine_off
+		,remarks				= b.remarks
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.flight_time a INNER JOIN @tt b
     ON a.flight_time_id = b.flight_time_id
     WHERE (
-			isnull(a.flight_operation_id,'')		<> isnull(b.flight_operation_id,'')  
+			isnull(a.flight_operation_id,0)			<> isnull(b.flight_operation_id,0)  
 		OR	isnull(a.flight_take_off_time,'')		<> isnull(b.flight_take_off_time,'')  
-		OR	isnull(a.flight_landing_time,'')		<> isnull(b.flight_landing_time,0)  
+		OR	isnull(a.flight_landing_time,'')		<> isnull(b.flight_landing_time,'')  
+		OR	isnull(a.no_hours,0)					<> isnull(b.no_hours,0)  
 		OR	isnull(a.is_engine_off,'')				<> isnull(b.is_engine_off,'')  
+		OR	isnull(a.remarks,'')					<> isnull(b.remarks,'')
 	)
 	   
 -- Insert Process
@@ -30,8 +33,9 @@ BEGIN
          flight_operation_id
 		,flight_take_off_time
 		,flight_landing_time
-		,is_engine_off
 		,no_hours
+		,is_engine_off
+		,remarks
         ,created_by
         ,created_date
         )
@@ -39,8 +43,9 @@ BEGIN
          flight_operation_id
 		,flight_take_off_time
 		,flight_landing_time
-		,is_engine_off
 		,DATEDIFF(MINUTE,flight_take_off_time,flight_landing_time) / 60
+		,is_engine_off
+		,remarks
 		,@user_id
        ,GETDATE()
     FROM @tt

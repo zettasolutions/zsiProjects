@@ -10,4 +10,7 @@ receiving_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
 ,remarks	NTEXT(2147483646)	NULL
-,item_class_id	INT	NULL)
+,item_class_id	INT	NULL
+,time_since_new	DATETIME	NULL
+,time_before_overhaul	DATETIME	NULL
+,time_since_overhaul	DATETIME	NULL)

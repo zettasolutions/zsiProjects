@@ -1,7 +1,7 @@
 CREATE TABLE issuances(
 issuance_id	INT IDENTITY(1,1)	NOT NULL
 ,issuance_no	NVARCHAR(100)	NULL
-,organization_id	INT	NOT NULL
+,organization_id	INT	NULL
 ,issued_by	INT	NULL
 ,issued_date	DATETIME	NULL
 ,issuance_directive_id	INT	NULL

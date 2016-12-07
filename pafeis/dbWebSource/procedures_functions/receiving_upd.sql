@@ -85,16 +85,19 @@ SET @receiving_id = null;
 	   ,GETDATE()
     FROM @tt
     WHERE receiving_id IS NULL
-	and doc_no IS NOT NULL
+	AND doc_no IS NOT NULL
+	--AND (dealer_id IS NOT NULL OR aircraft_id IS NOT NULL OR transfer_organization_id IS NOT NULL)
 
 
 	SELECT @id = receiving_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
 	IF ISNULL(@id,0) = 0
-		SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
+	BEGIN
+	   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
+	   RETURN @id
+	END;
 
 	EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
-
-	RETURN @id
+	
 
 	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@statusId 
 	SELECT @data_count =COUNT(*) FROM @proc_tt 

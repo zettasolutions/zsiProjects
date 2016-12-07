@@ -9,7 +9,7 @@ AS
 BEGIN
 	DECLARE @stmt		VARCHAR(4000);
 
-	SET @stmt = 'SELECT * FROM dbo.users_v WHERE id_no IS NOT NULL AND is_active  = ''' + @is_active   + '''';
+	SET @stmt = 'SELECT * FROM dbo.users_v WHERE is_active  = ''' + @is_active   + '''';
 
 	IF @user_id <> '' 
 		SET @stmt = @stmt + ' AND user_id='+ CAST(@user_id AS VARCHAR(50));

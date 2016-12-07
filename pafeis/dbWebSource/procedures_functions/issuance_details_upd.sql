@@ -22,7 +22,6 @@ BEGIN
     UPDATE a 
     SET  issuance_id			= b.issuance_id
 		,item_id				= b.item_id
-		,aircraft_id			= b.aircraft_id
 		,unit_of_measure_id		= b.unit_of_measure_id
 		,quantity				= b.quantity
 		,remarks	            = b.remarks
@@ -33,7 +32,6 @@ BEGIN
     WHERE (
 			isnull(a.issuance_id,0)				<> isnull(b.issuance_id,0)  
 		OR	isnull(a.item_id,0)					<> isnull(b.item_id,0)  
-		OR	isnull(a.aircraft_id,0)				<> isnull(b.aircraft_id,0)  
 		OR	isnull(a.unit_of_measure_id,0)		<> isnull(b.unit_of_measure_id,0)  
 		OR	isnull(a.quantity,0)				<> isnull(b.quantity,0)  
 		OR	isnull(a.remarks,'')				<> isnull(b.remarks,'')  
@@ -43,7 +41,6 @@ BEGIN
     INSERT INTO dbo.issuance_details (
          issuance_id 
 		,item_id
-		,aircraft_id
 		,unit_of_measure_id
 		,quantity
 		,remarks
@@ -53,7 +50,6 @@ BEGIN
     SELECT 
         issuance_id 
 	   ,item_id
-	   ,aircraft_id
 	   ,unit_of_measure_id	
 	   ,quantity
 	   ,remarks
