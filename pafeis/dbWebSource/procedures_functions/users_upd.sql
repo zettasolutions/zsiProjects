@@ -1,5 +1,4 @@
-
-CREATE PROCEDURE [dbo].[users_upd]
+create PROCEDURE [dbo].[users_upd]
 (
     @tt     users_tt READONLY
    ,@user_id int
@@ -12,7 +11,7 @@ DECLARE @updated_count INT;
    UPDATE a 
        SET role_id = b.role_id
 	      ,logon = dbo.createUserLogon(b.user_id)
-		  ,password = dbo.createUserLogon(b.user_id)
+		  ,password = b.password
           ,updated_by   = @user_id
           ,updated_date = GETDATE()
        FROM dbo.users a INNER JOIN @tt b
