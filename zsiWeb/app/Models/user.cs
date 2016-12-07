@@ -9,6 +9,7 @@ namespace zsi.web.Models
         public int roleId { get; set; }
         public string isAdmin { get; set; }
         public string userFullName { get; set; }
+        public string password { get; set; }
 
         public SqlDataReader SqlDataReader
         {
@@ -35,6 +36,10 @@ namespace zsi.web.Models
                 {
                     this.userFullName = (string)reader["userFullName"];
                 }
+                if (reader["password"] != DBNull.Value)
+                {
+                    this.password = (string)reader["password"];
+                }
             }
         }
     }
@@ -45,6 +50,54 @@ namespace zsi.web.Models
         public dcUser(SqlDataReader reader)
         {
             this.SqlDataReader = reader;
+        }
+        public user getUserInfo(string userName)
+        {
+            try
+            {
+                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlCommand command = new SqlCommand("users_sel", dbConn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@logon", userName);
+                dbConn.Open();
+                SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                user _info = new user();
+                while (reader.Read())
+                {
+                    _info.SqlDataReader = reader;
+                }
+                reader.Close();
+                dbConn.Close();
+                return _info;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void changePassword(string newPassword)
+        {
+            try
+            {
+                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlCommand command = new SqlCommand("dbo.users_change_pwd_upd", dbConn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
+                command.Parameters.AddWithValue("@password", newPassword);
+                dbConn.Open();
+                SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                user _info = new user();
+                while (reader.Read())
+                {
+                    _info.SqlDataReader = reader;
+                }
+                reader.Close();
+                dbConn.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         public user getUserInfo(string userName, string password)
         {
@@ -71,6 +124,7 @@ namespace zsi.web.Models
                 throw ex;
             }
         }
+
 
     }
 }

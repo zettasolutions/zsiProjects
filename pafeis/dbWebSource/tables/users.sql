@@ -4,7 +4,7 @@ user_id	INT IDENTITY(1,1)	NOT NULL
 ,last_name	NVARCHAR(200)	NULL
 ,first_name	NVARCHAR(200)	NULL
 ,middle_name	NVARCHAR(200)	NULL
-,password	NVARCHAR(100)	NULL
+,password	NVARCHAR(400)	NULL
 ,role_id	INT	NULL
 ,is_active	VARCHAR(1)	NULL
 ,is_admin	VARCHAR(1)	NULL
@@ -23,4 +23,5 @@ user_id	INT IDENTITY(1,1)	NOT NULL
 ,is_contact	CHAR(1)	NULL
 ,civil_status	CHAR(1)	NULL
 ,is_employee	CHAR(1)	NULL
-,position_id	INT	NULL)
+,position_id	INT	NULL
+,is_zsi	CHAR(1)	NULL)

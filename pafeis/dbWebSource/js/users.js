@@ -70,21 +70,6 @@ $("#btnSave").click(function () {
      
 });
 
-$("#btnNactive").click(function () {
-    
-    //$('#modalWindow').modal("show");
-     $(".modal-title").text("Inactive Users");
-    $('#modalWindow').modal({ show: true, keyboard: false, backdrop: 'static' });
-    
-    if (modalWindow===0) {
-        modalWindow=1;
-        $("#modalWindow").on("hide.bs.modal", function () {
-                if (confirm("You are about to close this window. Continue?")) return true;
-                return false;
-        });
-    }    
-    displayInactiveUsers();
-});
 function clearGrid(){
     $("#" + tblName).clearGrid();
     }
@@ -182,37 +167,71 @@ function displayInactiveUsers(){
 
 function displayRecords(user_id){   
     var rownum=0;
-    var cb = bs({name:"cbFilter1",type:"checkbox"});
     $("#grid").dataBind({
-	     url   : procURL + "users_sel @filter_user_id=" + user_id
-        ,width          : $(document).width() - 40
-	    ,height         : 619
+	     url   : procURL + "users2_sel @filter_user_id=" + user_id
+        ,width          : '990'
+	    ,height         : '400'
 	    ,selectorType   : "checkbox"
-        ,blankRowsLimit :2
+        ,blankRowsLimit :5
         ,isPaging : true
         ,dataRows       :[
-     		 { text: cb                 , width:25      , style:"text-align:left;"        
-     		     ,onRender : function(d){
-                                return     bs({name:"user_id",type:"hidden",value: svn(d,"user_id")})
-                                        +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
-                            }             
-     		 }
-    		,{ text:"User"          , width:120     , style:"text-align:center;"      ,type:"select"      ,name:"user_id"    }	 
-    		,{ text:"Role"          , width:90      , style:"text-align:left;"        ,type:"select"      ,name:"role_id"    }	 	 
+     		 { text:"User"          , width:270     , style:"text-align:center;"      ,type:"select"     ,name:"user_id"    }	 
+    		,{ text:"Role"          , width:150     , style:"text-align:left;"        ,type:"select"     ,name:"role_id"    }
+    		,{ text:"Logon"          , width:100     , style:"text-align:left;"
+    		    ,onRender: function(d){
+    		        return "<input type='hidden' name='password' value='" + svn(d, "password") + "'>" + svn(d, "logon");
+    		    }
+    		}
+    		,{ text:"Rank"          , width:130     , style:"text-align:left;"
+    		    ,onRender: function(d){
+    		        return svn(d, "rankDesc");
+    		    }
+    		}
+    		,{ text:"Position"      , width:150     , style:"text-align:left;"
+    		    ,onRender: function(d){
+    		        return svn(d, "position");
+    		    }
+    		}
+    		,{ text:"Organization"  , width:150     , style:"text-align:left;"
+    		    ,onRender: function(d){
+    		        return svn(d, "organizationName");
+    		    }
+    		}
 	    ]
 
-         ,onComplete: function(){
-            $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+        ,onComplete: function(){
+           
+            $("select[name='user_id']").dataBind({
+                  url: base_url + "selectoption/code/notUsers"
+                , isUniqueOptions:true
+                , onComplete: function(){
+                    $("select[name='user_id']").setUniqueOptions();
+                }
+            });  
             
-             $("select[name='plant_id']").dataBind( "plants");
-                 $("select[name='role_id']").dataBind({
-                     url:  getOptionsURL("roles")
-                     ,onComplete:function(){
-                       $("select[name='role_id']").change();
-                     }
-                 });
-                 markUserMandatory();
-                 $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
+             $("select[name='user_id']").change(function(){
+                var o = $(this);
+                var selVal =o.attr("selectedvalue");
+                var zRow = o.parent().parent();
+               
+                if(typeof selVal==ud){
+                    $.get(execURL + "select dbo.createUserLogon(" + o.val() + ") as username",function(data){
+                        $.get(base_url + "account/getnewpassword?pwd=" +   data.rows[0].username,function(data){
+                            zRow.find("[name='password']").val(data);
+                        });
+                   });
+                }
+             });
+
+            $("select[name='plant_id']").dataBind( "plants");
+            $("select[name='role_id']").dataBind({
+                url:  getOptionsURL("roles")
+                ,onComplete:function(){
+                    $("select[name='role_id']").change();
+                }
+            });
+            markUserMandatory();
+            $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
      
         }
         /*
@@ -323,13 +342,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-$("#btnDelete").click(function(){
-    zsi.form.deleteData({
-         code       : "adm-0002"
-        ,onComplete : function(data){
-                        displayRecords("");
-                      }
-    });   
-
-}); 
-     
+                 
