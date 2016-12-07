@@ -303,11 +303,11 @@ var  ud='undefined'
                return this;
             };
 
-            $.fn.dataBind2 = function(){
+            $.fn.dataBind2          = function(){
                 var _curHid,_curSpan;
                 var _ctrlId= this.attr("name") + "_ddl";
                 var _jCtrlId = "#" + _ctrlId;
-                $("body").append('<select id="' + _ctrlId + '" class="zDDList" size="15" ></select>');
+                 $("body").append('<select id="' + _ctrlId + '" class="zDDList" size="15" ></select>');
                 var a = arguments;
                 var p=a[0];
                 //dropdownlist
@@ -316,43 +316,58 @@ var  ud='undefined'
                     if(typeof a[1] !==ud) p.onComplete = a[1];
                 }
                 var obj=this;
-                $.getJSON(p.url, function( _data ) {
-                    var _params ={
-                           data             : _data.rows
-                          ,selectedValue    : p.selectedValue
-                          ,isRequired       : p.required
-                          , onComplete      : p.onComplete
-                    };
-                    if(typeof p.text !== ud && typeof p.value !== ud ){
-                        _params.text  = p.text;
-                        _params.value = p.value;
-                    }
-                    $(_jCtrlId).fillSelect(_params);
-                    //if(p.isUniqueOptions===true)  obj.setUniqueOptions();
-                    
-                });
+                if(typeof p.url !==ud){
+                    $.getJSON(p.url, function( _data ) {
+                        var _params ={
+                               data             : _data.rows
+                              ,selectedValue    : p.selectedValue
+                              ,isRequired       : p.required
+                              , onComplete      : p.onComplete
+                        };
+                        if(typeof p.text !== ud && typeof p.value !== ud ){
+                            _params.text  = p.text;
+                            _params.value = p.value;
+                        }
+                        
+                        var _size = 15;
+                        if(_data.rows.length <  _size + 1 )  _size = _data.rows.length + 1;
+                        $(_jCtrlId).attr({size : _size }).fillSelect(_params);
+                        //if(p.isUniqueOptions===true)  obj.setUniqueOptions();
+                        
+                    });
+                }
+                
                 this.parent().find(".zDdlBtn").click(function(){
                     var _p = $(this).parent();
                     _curHid =  _p.find(":hidden");
                     _curSpan = _p.find("#text");
                     _select =   $(_jCtrlId);
                     _select.val(_curHid.val())
-                    .css({
-                        display:"block"
-                        ,top:_p.offset().top + _p.innerHeight()
-                        ,left:_p.offset().left
-                    }).focus();
-            
-                    var _option = _select.find('[value="' + _curHid.val() + '"]');
-                    if(_option.length > 0){
-                        var _optionTop = _option.offset().top;
-                        var _selectTop = _select.offset().top;
-                        _select.scrollTop(_select.scrollTop() + (_optionTop - _selectTop));
+                    
+                    if(typeof p.onClick !==ud ) p.onClick($(this.parentNode),_curHid,_select);
+
+                    if(_select.find("option").length > 0){ 
+                        
+                        _select.css({
+                            display:"block"
+                            ,top:_p.offset().top + _p.innerHeight()
+                            ,left:_p.offset().left
+                        }).focus();
+                        
+                        if(_select.outerWidth() < _p.outerWidth() ) _select.css({width:_p.outerWidth()});
+
+                        var _option = _select.find('[value="' + _curHid.val() + '"]');
+                        if(_option.length > 0){
+                            var _optionTop = _option.offset().top;
+                            var _selectTop = _select.offset().top;
+                            _select.scrollTop(_select.scrollTop() + (_optionTop - _selectTop));
+                        }
+                        else _select.scrollTop(0);
                     }
-                    else _select.scrollTop(0); 
+
                 });  
-            
-                $(_jCtrlId).click(function(){
+                
+                 $(_jCtrlId).click(function(){
                     var _self = $(this);
                     _curHid.val( _self.val() );
                     _curSpan.html( _self.find("option:selected").text() );
@@ -362,8 +377,8 @@ var  ud='undefined'
                 	if(k == '13'){
                 	     $(this).css({display:"none"});
                 	}
-                });
-                
+                });                
+        
                 this.closest(".zGrid").on('wheel mouseup', function(e){
                     var _e = $(".zDDList");
                     if (!_e.is(e.target) && _e.has(e.target).length === 0) {
@@ -2604,4 +2619,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                     
+                                                                       
