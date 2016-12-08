@@ -13,6 +13,7 @@ SET NOCOUNT ON
 			 ,action_desc	    = b.action_desc
 			 ,status_id		    = b.status_id			
 			 ,next_process_id	= b.next_process_id
+			 ,is_end_process    = b.is_end_process
 			 ,updated_by	    = @user_id	
 			 ,updated_date	    = GETDATE()
 		FROM dbo.page_process_actions a INNER JOIN @tt b on 
@@ -22,6 +23,7 @@ SET NOCOUNT ON
 		   OR  ISNULL(a.action_desc,'') = ISNULL(b.action_desc,'')
 		   OR  ISNULL(a.status_id,0) = ISNULL(b.status_id,0)
 		   OR  ISNULL(a.next_process_id,0) = ISNULL(b.next_process_id,0)
+		   OR  ISNULL(a.is_end_process,'') = ISNULL(b.is_end_process,'')
           )
 -- INSERT
  INSERT INTO dbo.page_process_actions (
@@ -29,7 +31,8 @@ SET NOCOUNT ON
 		,seq_no		
  		,action_desc	
  		,status_id
-		,next_process_id		
+		,next_process_id	
+		,is_end_process	
 		,created_by
 		,created_date)
  SELECT page_process_id	
@@ -37,6 +40,7 @@ SET NOCOUNT ON
  		,action_desc	
  		,status_id		
 		,next_process_id
+		,is_end_process
 		,@user_id
 		,GETDATE()	
 	FROM @tt

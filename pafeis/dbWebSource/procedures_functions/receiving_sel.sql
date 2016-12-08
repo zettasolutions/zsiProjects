@@ -42,6 +42,7 @@ DECLARE @organization_id INT
   ELSE
      SET @stmt = @stmt + ' DESC';
   
+  print @stmt;
   exec(@stmt);
 	
 END

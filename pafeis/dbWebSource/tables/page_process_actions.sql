@@ -8,4 +8,5 @@ page_process_action_id	INT IDENTITY(1,1)	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
-,next_process_id	INT	NULL)
+,next_process_id	INT	NULL
+,is_end_process	CHAR(1)	NULL)

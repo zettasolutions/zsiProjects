@@ -104,7 +104,7 @@ SET @receiving_id = null;
 	WHILE @ctr < @data_count 
 	BEGIN
 	  SELECT TOP 1 @procName =proc_name FROM @proc_tt WHERE id> @ctr;
-	  EXEC @procName @id
+	  EXEC @procName @id,@user_id
 	  SET @ctr = @ctr + 1
 	END
 
