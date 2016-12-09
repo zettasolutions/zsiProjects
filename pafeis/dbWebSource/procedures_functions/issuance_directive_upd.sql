@@ -1,13 +1,3 @@
--- ===================================================================================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: November 10, 2016 6:10 PM
--- Description:	Issuance directive insert and update records.
--- ===================================================================================================
--- Updated by	| Date		| Description
--- ===================================================================================================
--- Add your name, date, and description of your changes here. Thanks
--- ===================================================================================================
-
 CREATE PROCEDURE [dbo].[issuance_directive_upd]
 (
     @tt    issuance_directive_tt READONLY
@@ -16,6 +6,7 @@ CREATE PROCEDURE [dbo].[issuance_directive_upd]
 AS
 
 BEGIN
+ DECLARE @returnId INT;
 -- Update Process
     UPDATE a 
     SET  issuance_directive_no		= b.issuance_directive_no
@@ -59,6 +50,13 @@ BEGIN
        ,GETDATE()
     FROM @tt
     WHERE issuance_directive_id IS NULL;
+	
+	SELECT @returnId=issuance_directive_id from @tt
+	IF @returnId IS NULL
+		SET @returnId = @@IDENTITY
+
+	RETURN @returnId
+
 END
 
 
