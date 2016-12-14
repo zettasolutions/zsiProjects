@@ -73,7 +73,7 @@ $("#btnNew").click(function () {
     $('#ctxMW').modal({ show: true, keyboard: false, backdrop: 'static' });
     clearForm();
     displayListBoxes();
-    $("#issuance_directive_no").val("");
+    //$("#issuance_directive_no").val("");
     displayIssuanceDirectiveDetails(0);
 });
 
@@ -144,7 +144,8 @@ function displayIssuanceDirective(d){
 }
 
 function clearForm(){ 
-    $("input [type='text']").val("");
+    $("#issuance_directive_no").val("");
+    $("#attached_filename").val("");
     $("input [type='select']").attr("selectedvalue", "" ).val("");
     dataIssuanceIndex=-1;
 }
@@ -239,4 +240,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                       
+                                                        
