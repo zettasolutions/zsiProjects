@@ -18,7 +18,7 @@ var contextFlightTime = {
                 , title : "New"
                 , footer: '<div class="pull-left"><button type="button" onclick="submitFlightTimeData();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button></div>' 
                         
-                , body  : '<div id="frm_modalFlightTime" class="form-horizontal" style="padding:5px">'
+                , body  : '<div id="frm_modalFlightTime" class="form-horizontal" style="padding:5px; height:300px">'
                         
                         +'<div class="col-xs-12" style="padding:5px">'
                         
@@ -92,7 +92,6 @@ $("#btnNew").click(function () {
     $("#flight_time_id").val("");
     clearForm();
     fixTextAreaEvent();
-    //zsi.initDatePicker();
 
 });
 
@@ -205,4 +204,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                     
+                                                      
