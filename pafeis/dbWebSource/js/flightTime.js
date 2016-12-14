@@ -70,7 +70,6 @@ function getTemplate(){
 }
 
 function fixTextAreaEvent(){
-    console.log("fixText");
     var insertAt=function(value, index, string) { 
         return value.substr(0, index) + string + value.substr(index);
     };
@@ -206,4 +205,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                    
+                                                     
