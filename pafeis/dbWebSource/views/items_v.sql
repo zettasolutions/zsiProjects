@@ -7,3 +7,4 @@ SELECT        dbo.items.item_id, dbo.items.item_code_id, dbo.item_codes.item_nam
 FROM            dbo.items INNER JOIN
                          dbo.aircraft_info ON dbo.items.aircraft_info_id = dbo.aircraft_info.aircraft_info_id INNER JOIN
                          dbo.item_codes ON dbo.items.item_code_id = dbo.item_codes.item_code_id
+

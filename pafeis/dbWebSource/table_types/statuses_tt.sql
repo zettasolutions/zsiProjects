@@ -5,4 +5,5 @@ status_id	INT	NULL
 ,status_color	VARCHAR(20)	NULL
 ,is_item	CHAR(1)	NULL
 ,is_aircraft	CHAR(1)	NULL
+,is_process	CHAR(1)	NULL
 ,is_active	CHAR(1)	NULL)

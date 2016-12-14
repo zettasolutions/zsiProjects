@@ -1,5 +1,6 @@
 
-CREATE PROCEDURE [dbo].[statuses_upd]
+
+create PROCEDURE [dbo].[statuses_upd]
 (
     @tt    statuses_tt READONLY
    ,@user_id int
@@ -14,6 +15,7 @@ BEGIN
 		,status_color  			= b.status_color
 		,is_item        		= b.is_item
 		,is_aircraft		    = b.is_aircraft
+		,is_process				= b.is_process
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
@@ -25,6 +27,7 @@ BEGIN
 		OR	isnull(a.status_color,'')		<> isnull(b.status_color,'')   
 		OR	isnull(a.is_item,'')	        <> isnull(b.is_item,'')   
 		OR	isnull(a.is_aircraft,'')		<> isnull(b.is_aircraft,'')  
+		OR	isnull(a.is_process,'')			<> isnull(b.is_process,'')  
 		OR	isnull(a.is_active,'')			<> isnull(b.is_active,'')  
 	)
 	   
@@ -35,6 +38,7 @@ BEGIN
 		,status_color
 		,is_item
 		,is_aircraft
+		,is_process
 		,is_active
         ,created_by
         ,created_date
@@ -45,6 +49,7 @@ BEGIN
 	   ,status_color
 	   ,is_item
 	   ,is_aircraft
+	   ,is_process
 	   ,is_active
        ,@user_id
        ,GETDATE()

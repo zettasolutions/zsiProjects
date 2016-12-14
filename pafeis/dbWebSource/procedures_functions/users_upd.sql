@@ -1,4 +1,4 @@
-create PROCEDURE [dbo].[users_upd]
+CREATE PROCEDURE [dbo].[users_upd]
 (
     @tt     users_tt READONLY
    ,@user_id int
@@ -18,7 +18,8 @@ DECLARE @updated_count INT;
         ON a.user_id = b.user_id 
        AND 
          (
-          isnull(a.role_id,0)  <> isnull(b.role_id,0) 
+              isnull(a.role_id,0)  <> isnull(b.role_id,0) 
+		   OR isnull(a.password,'')  <> isnull(b.password,'') 
          )
 SET @updated_count = @@ROWCOUNT;
 

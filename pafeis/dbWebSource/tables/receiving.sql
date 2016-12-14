@@ -14,4 +14,5 @@ receiving_id	INT IDENTITY(1,1)	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
-,status_id	INT	NULL)
+,status_id	INT	NULL
+,ris_id	INT	NULL)

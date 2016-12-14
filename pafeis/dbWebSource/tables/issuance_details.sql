@@ -1,7 +1,8 @@
 CREATE TABLE issuance_details(
 issuance_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,issuance_id	INT	NOT NULL
-,item_id	INT	NOT NULL
+,item_code_id	INT	NOT NULL
+,item_id	INT	NULL
 ,aircraft_id	INT	NULL
 ,unit_of_measure_id	INT	NOT NULL
 ,quantity	DECIMAL(20)	NOT NULL

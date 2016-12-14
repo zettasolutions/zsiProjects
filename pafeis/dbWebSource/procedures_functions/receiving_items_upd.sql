@@ -1,4 +1,4 @@
-CREATE PROCEDURE receiving_items_upd (
+CREATE PROCEDURE [dbo].[receiving_items_upd] (
   @receiving_id INT
  ,@user_id      INT
 )
@@ -42,10 +42,13 @@ WHILE @count < @rec_count
 					 ,@quantity						=	quantity					
 					 ,@receiving_organization_id	=	receiving_organization_id	
 		FROM @tt WHERE id > @count;
-		IF ISNULL(@serial_no,'') <> ''
-		   INSERT INTO dbo.items (item_code_id, serial_no, created_by, created_date)
-		          VALUES (@item_id, @serial_no, @user_id, GETDATE());
-        
+		IF (SELECT COUNT(*) FROM dbo.items WHERE serial_no = @serial_no) = 0
+		   INSERT INTO dbo.items (item_code_id, serial_no, organization_id, created_by, created_date)
+		          VALUES (@item_id, @serial_no, @receiving_organization_id, @user_id, GETDATE());
+        ELSE
+		   UPDATE dbo.items SET organization_id = @receiving_organization_id WHERE serial_no = @serial_no;    
+	
+
         UPDATE dbo.items_inv 
 		   SET stock_qty = stock_qty + @quantity
 		 WHERE item_code_id = @item_id;
