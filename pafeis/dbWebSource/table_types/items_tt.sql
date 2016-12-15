@@ -8,7 +8,8 @@ item_id	INT	NULL
 ,time_since_new	DATETIME	NULL
 ,time_before_overhaul	DATETIME	NULL
 ,time_since_overhaul	DATETIME	NULL
-,remaining_time	DATETIME	NULL
+,remaining_time_hr	INT	NULL
+,remaining_time_min	INT	NULL
 ,date_delivered	DATETIME	NULL
 ,aircraft_info_id	INT	NULL
 ,date_issued	DATETIME	NULL

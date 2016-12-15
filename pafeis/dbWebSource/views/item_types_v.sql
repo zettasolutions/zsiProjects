@@ -1,5 +1,7 @@
 CREATE VIEW dbo.item_types_v
 AS
-SELECT        item_type_id, item_cat_id, monitoring_type_id, item_type_code, item_type_name, is_active, created_by, created_date, updated_by, updated_date, unit_of_measure_id, dbo.countItemCodes(item_type_id) 
-                         AS countItemCodes
-FROM            dbo.item_types
+SELECT        dbo.item_types.item_type_id, dbo.item_types.item_cat_id, dbo.item_types.monitoring_type_id, dbo.item_types.item_type_code, dbo.item_types.item_type_name, dbo.item_types.is_active, 
+                         dbo.item_types.created_by, dbo.item_types.created_date, dbo.item_types.updated_by, dbo.item_types.updated_date, dbo.item_types.unit_of_measure_id, dbo.countItemCodes(dbo.item_types.item_type_id) 
+                         AS countItemCodes, dbo.item_categories.item_cat_code
+FROM            dbo.item_types INNER JOIN
+                         dbo.item_categories ON dbo.item_types.item_cat_id = dbo.item_categories.item_cat_id

@@ -43,8 +43,8 @@ WHILE @count < @rec_count
 					 ,@receiving_organization_id	=	receiving_organization_id	
 		FROM @tt WHERE id > @count;
 		IF (SELECT COUNT(*) FROM dbo.items WHERE serial_no = @serial_no) = 0
-		   INSERT INTO dbo.items (item_code_id, serial_no, organization_id, created_by, created_date)
-		          VALUES (@item_id, @serial_no, @receiving_organization_id, @user_id, GETDATE());
+		   INSERT INTO dbo.items (item_code_id, serial_no, organization_id, status_id, created_by, created_date)
+		          VALUES (@item_id, @serial_no, @receiving_organization_id, 23, @user_id, GETDATE());
         ELSE
 		   UPDATE dbo.items SET organization_id = @receiving_organization_id WHERE serial_no = @serial_no;    
 	

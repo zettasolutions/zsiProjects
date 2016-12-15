@@ -1,5 +1,4 @@
 
-
 CREATE PROCEDURE [dbo].[item_categories_upd]
 (
     @tt    item_categories_tt READONLY
@@ -13,6 +12,7 @@ BEGIN
     SET  item_cat_code		    = b.item_cat_code
 		,item_cat_name			= b.item_cat_name
 		,is_active				= b.is_active
+		,seq_no                 = b.seq_no
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.item_categories a INNER JOIN @tt b
@@ -21,6 +21,7 @@ BEGIN
 			isnull(a.item_cat_code,'')		<> isnull(b.item_cat_code,'')  
 		OR	isnull(a.item_cat_name,'')		<> isnull(b.item_cat_name,'')  
 		OR	isnull(a.is_active,'')			<> isnull(b.is_active,'')  
+		OR	isnull(a.seq_no,0)			    <> isnull(b.seq_no,0) 
 	)
 	   
 -- Insert Process
@@ -28,6 +29,7 @@ BEGIN
          item_cat_code 
 		,item_cat_name
 		,is_active
+		,seq_no
         ,created_by
         ,created_date
         )
@@ -35,9 +37,11 @@ BEGIN
         item_cat_code 
 	   ,item_cat_name	
 	   ,is_active
+	   ,seq_no
        ,@user_id
        ,GETDATE()
     FROM @tt
     WHERE item_cat_id IS NULL;
 END
+
 

@@ -26,13 +26,19 @@ DECLARE @organization_id INT
      SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
                + ' AND receiving_organization_id = ' + cast(@organization_id as varchar(20))
 
-  IF @tab_name='SUPPLIER DELIVERY'
+  IF @tab_name='NEW'
      SET @stmt = @stmt + ' AND ISNULL(dealer_id,0) <> 0'
 
-  IF @tab_name='TRANSFER DELIVERY'
+  IF @tab_name='TRANSFER'
      SET @stmt = @stmt + ' AND ISNULL(transfer_organization_id,0) <> 0 '
 
-  IF @tab_name='RETURN DELIVERY'
+  IF @tab_name='AIRCRAFT'
+     SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
+
+  IF @tab_name='REPAIR'
+     SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
+
+  IF @tab_name='OVERHAUL'
      SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
 
    SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
