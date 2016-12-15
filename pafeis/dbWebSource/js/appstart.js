@@ -13,17 +13,29 @@ zsi.initDatePicker  = function(){
    });
    
    if(inputDate.length > 0){
-      inputDate.datepicker({
-          format: 'mm/dd/yyyy'
-          ,autoclose:true
-          ,daysOfWeekDisabled: [0,6]
-      }).on('show', function(e){
-          var l_dp     = $('.datepicker');
-           l_dp.css("z-index",zsi.getHighestZindex() + 1);
-      });
+       if(inputDate.datepicker){
+          inputDate.datepicker({
+              format: 'mm/dd/yyyy'
+              ,autoclose:true
+              //,daysOfWeekDisabled: [0,6]
+          }).on('show', function(e){
+              var l_dp     = $('.datepicker');
+               l_dp.css("z-index",zsi.getHighestZindex() + 1);
+          });
+       }
    }
+   
+   //for datetime picker
+   var $dtPicker = $('.zDateTimePicker');
+   if( $dtPicker.length > 0) $dtPicker.datetimepicker({ format: "m/d/Y H:i"});
 };   
-        
+
+$.fn.dateTimePicker=function(o){
+    if(typeof o ===ud) o = {}; 
+    if(typeof o.format !==ud)  o.format ="m/d/Y H:i";
+    return  this.datetimepicker(o);
+};
+ 
 zsi.init({
       baseURL : base_url
      ,errorUpdateURL    :  base_url + "sql/logerror"
@@ -59,7 +71,7 @@ function isLocalStorageSupport(){
 
 function loadMenu(){
     if (readCookie("zsi_login")!=="Y"){
-        $.getJSON(base_url + "sql/exec?p=user_menus_sel", function(data){
+        $.getJSON(procURL + "user_menus_sel", function(data){
             if(data.rows.length>0) saveLocalStorageAndDisplay(data);
         }); 
     }
@@ -250,4 +262,4 @@ function readCookie(name) {
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
-                       
+                          
