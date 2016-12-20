@@ -98,7 +98,7 @@ $("#btnNew").click(function () {
 function submitFlightTimeData(){    
          $("#frm_modalFlightTime").jsonSubmit({
              procedure : "flight_time_upd"
-            ,optionalItems : ["flight_time_id","flight_operation_id","is_engine_off"]
+            ,optionalItems : ["flight_time_id","is_engine_off"]
             ,onComplete: function (data) {
              if(data.isSuccess===true) zsi.form.showAlert("alert");
                 $("#grid").trigger("refresh");
@@ -125,8 +125,8 @@ function showModalUpdateFlightTime(index) {
 function displayFlightTime(d){
  
     $("#modalFlightTime #flight_time_id").val( d.flight_time_id );
-    $("#modalFlightTime #flight_take_off_time").val(  d.flight_take_off_time ).datetimepicker();
-    $("#modalFlightTime #flight_landing_time").val(  d.flight_landing_time ).datetimepicker();
+    $("#modalFlightTime #flight_take_off_time").val(  d.flight_take_off_time );
+    $("#modalFlightTime #flight_landing_time").val(  d.flight_landing_time );
     $("#modalFlightTime #no_hours").val(  d.no_hours); 
     $("#modalFlightTime #is_engine_off").val(  d.is_engine_off );
     $("#modalFlightTime #remarks").val(  d.remarks );
@@ -135,12 +135,9 @@ function displayFlightTime(d){
 }
 
 function clearForm(){ 
-    
-    $("#flight_take_off_time").val("");
-    $("#flight_landing_time").val("");
-    $("#remarks").val("");
-    $("#no_hours").val("");
-    $("input [type='select']").attr("selectedvalue", "" ).val("");
+    $("input[type=text]").val("");
+    $("textarea[type=text]").val("");
+    $("select[type='text']").attr("selectedvalue", "" ).val("");
     dataFlightTimeIndex=-1;
 }
 
@@ -204,4 +201,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                      
+                                                         
