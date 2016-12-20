@@ -73,7 +73,7 @@ $("#btnNew").click(function () {
     $('#ctxMW').modal({ show: true, keyboard: false, backdrop: 'static' });
     clearForm();
     displayListBoxes();
-    //$("#issuance_directive_no").val("");
+    $("#issuance_directive_id").val("");
     displayIssuanceDirectiveDetails(0);
 });
 
@@ -144,9 +144,8 @@ function displayIssuanceDirective(d){
 }
 
 function clearForm(){ 
-    $("#issuance_directive_no").val("");
-    $("#attached_filename").val("");
-    $("input [type='select']").attr("selectedvalue", "" ).val("");
+    $('input[type=text]').val('');
+    $('select[type="text"]').attr('selectedvalue','').val('');    
     dataIssuanceIndex=-1;
 }
 function displayRecords(){
@@ -155,7 +154,7 @@ function displayRecords(){
      
      $("#grid").dataBind({
 	     url            : execURL + "issuance_directive_sel"
-	    ,width          : $(document).width() -55
+	    ,width          : $(document).width() -35
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -175,10 +174,10 @@ function displayRecords(){
         		        + svn(d,"issuance_directive_no") + " </a>";
         		    }
         		}
-        	    ,{text  : "Issued From"                    , type  : "label"     , width : 300       , style : "text-align:left;"
+        	    ,{text  : "Issued From"                    , type  : "label"     , width : 250       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"issued_directive_from_id")}
         	    }
-        		,{text  : "Issued To"                    , type  : "label"     , width : 200        , style : "text-align:left;"
+        		,{text  : "Issued To"                    , type  : "label"     , width : 250        , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"issued_directive_to_id")}
         		}
         		,{text  : "Upload Reference"         , type  : "label"     , width : 150       , style : "text-align:left;"
@@ -187,7 +186,7 @@ function displayRecords(){
         		,{text  : "Process"                         , width : 200       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"process_id")}  
         		}
-        		,{text  : "Action"         , type  : "label"     , width : 150       , style : "text-align:left;"
+        		,{text  : "Action"         , type  : "label"     , width : 190       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"action_id")}
         		}
 	    ]  
@@ -240,4 +239,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                        
+                                                            
