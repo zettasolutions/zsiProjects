@@ -167,26 +167,26 @@ function displayRecords(){
                                                       
                             }
                 }	 
-                ,{text  : "Issuance No."                    , type  : "input"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Issuance No."            , type  : "input"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ 
         		        dataIssuanceIndex++;
         		        return "<a href='javascript:showModalEditIssuance(\"" + dataIssuanceIndex + "\");'>" 
         		        + svn(d,"issuance_directive_no") + " </a>";
         		    }
         		}
-        	    ,{text  : "Issued From"                    , type  : "label"     , width : 250       , style : "text-align:left;"
+        	    ,{text  : "Issued From"             , type  : "label"     , width : 250       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"issued_directive_from_id")}
         	    }
-        		,{text  : "Issued To"                    , type  : "label"     , width : 250        , style : "text-align:left;"
+        		,{text  : "Issued To"               , type  : "label"     , width : 250        , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"issued_directive_to_id")}
         		}
-        		,{text  : "Upload Reference"         , type  : "label"     , width : 150       , style : "text-align:left;"
+        		,{text  : "Upload Reference"        , type  : "label"     , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"attached_filename")}
         		}
-        		,{text  : "Process"                         , width : 200       , style : "text-align:left;"
+        		,{text  : "Process"                 , type  : "label"                , width : 200       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"process_id")}  
         		}
-        		,{text  : "Action"         , type  : "label"     , width : 190       , style : "text-align:left;"
+        		,{text  : "Action"                  , type  : "label"     , width : 190       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"action_id")}
         		}
 	    ]  
@@ -239,4 +239,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                            
+                                                             
