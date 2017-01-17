@@ -89,7 +89,6 @@ $("#btnNew").click(function () {
     $("#modalFlightTime .modal-title").text("New Flight Time");
     $('#modalFlightTime').modal({ show: true, keyboard: false, backdrop: 'static' });
     $("select[name='flight_operation_id']").dataBind( "flight_operation");  
-    $("#flight_time_id").val("");
     clearForm();
     fixTextAreaEvent();
 
@@ -135,7 +134,7 @@ function displayFlightTime(d){
 }
 
 function clearForm(){ 
-    $("input[type=text]").val("");
+    $('input[type=text], input[type=hidden]').val('');
     $("textarea[type=text]").val("");
     $("select[type='text']").attr("selectedvalue", "" ).val("");
     dataFlightTimeIndex=-1;
@@ -168,19 +167,19 @@ function displayRecords(){
         		        + svn(d,"flight_operation_name") + " </a>";
         		    }
         		}
-        	    ,{text  : "Take Off Time"           , type  : "label"     , width : 150       , style : "text-align:left;"
+        	    ,{text  : "Take Off Time"           , type  : "label"     , width : 200       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"flight_take_off_time")}
         	    }
-        		,{text  : "Landing Time"            , type  : "label"     , width : 150        , style : "text-align:left;"
+        		,{text  : "Landing Time"            , type  : "label"     , width : 200        , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"flight_landing_time")}
         		}
         		,{text  : "No. of Hours"             , type  : "label"     , width : 100       , style : "text-align:center;"
         		    ,onRender : function(d){ return svn(d,"no_hours")}
         		}
-            	,{text  : "Engine off?"             , type  : "label"     , width : 100       , style : "text-align:left;"
+            	,{text  : "Engine off?"             , type  : "label"     , width : 100       , style : "text-align:center;"
         		    ,onRender : function(d){ return svn(d,"is_engine_off")}
         		}
-            	,{text  : "Remarks"                 , type  : "label"     , width : 500       , style : "text-align:left;"
+            	,{text  : "Remarks"                 , type  : "label"     , width : 680       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"remarks")}
         	    }
 	    ]  
@@ -201,4 +200,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                         
+                                                           

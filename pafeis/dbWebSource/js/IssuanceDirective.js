@@ -71,10 +71,12 @@ function getTemplate(){
 $("#btnNew").click(function () {
     $("#ctxMW .modal-title").text("New Issuance Directive");
     $('#ctxMW').modal({ show: true, keyboard: false, backdrop: 'static' });
+    
     clearForm();
     displayListBoxes();
-    $("#issuance_directive_id").val("");
+    
     displayIssuanceDirectiveDetails(0);
+
 });
 
 function submitData(){    
@@ -144,7 +146,7 @@ function displayIssuanceDirective(d){
 }
 
 function clearForm(){ 
-    $('input[type=text]').val('');
+    $('input[type=text], input[type=hidden]').val('');
     $('select[type="text"]').attr('selectedvalue','').val('');    
     dataIssuanceIndex=-1;
 }
@@ -154,7 +156,7 @@ function displayRecords(){
      
      $("#grid").dataBind({
 	     url            : execURL + "issuance_directive_sel"
-	    ,width          : $(document).width() -35
+	    ,width          : $(document).width() -180
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -183,10 +185,10 @@ function displayRecords(){
         		,{text  : "Upload Reference"        , type  : "label"     , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"attached_filename")}
         		}
-        		,{text  : "Process"                 , type  : "label"                , width : 200       , style : "text-align:left;"
+        		,{text  : "Process"                 , type  : "label"                , width : 250       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"process_id")}  
         		}
-        		,{text  : "Action"                  , type  : "label"     , width : 190       , style : "text-align:left;"
+        		,{text  : "Action"                  , type  : "label"     , width : 250       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"action_id")}
         		}
 	    ]  
@@ -239,4 +241,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                             
+                                                                 

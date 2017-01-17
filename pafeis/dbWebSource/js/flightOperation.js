@@ -101,8 +101,7 @@ $("#btnNew").click(function () {
     $("#modalFlightOperation .modal-title").text("New Flight Operation");
     $('#modalFlightOperation').modal({ show: true, keyboard: false, backdrop: 'static' });
     displayListBoxes();
-    //$("#flight_operation_code").val("");
-
+    clearForm();
     zsi.initDatePicker();
 });
 
@@ -137,8 +136,8 @@ function displayListBoxes(){
     $("select[name='flight_operation_type_id']").dataBind( "flight_operation_type");    
     $("select[name='unit_id']").dataBind( "squadron");
     $("select[name='aircraft_id']").dataBind( "aircraft_info");
-    $("select[name='pilot_id']").dataBind( "users");
-    $("select[name='co_pilot_id']").dataBind( "users");
+    $("select[name='pilot_id']").dataBind( "employees_fullnames_v");
+    $("select[name='co_pilot_id']").dataBind( "employees_fullnames_v");
     $("select[name='status_id']").dataBind( "status");   
 }
 
@@ -164,12 +163,8 @@ function displayFlightOperation(d){
 
 function clearForm(){ 
     
-    $("#flight_operation_code").val("");
-    $("#flight_operation_name").val("");
-    $("#flight_schedule_date").val("");
-    $("#origin").val("");
-    $("#destination").val("");
-    $("input [type='select']").attr("selectedvalue", "" ).val("");
+    $('input[type=text], input[type=hidden]').val('');
+    $("select[type='text']").attr("selectedvalue", "" ).val("");
     dataFlightOperationsIndex=-1;
 }
 function displayRecords(){
@@ -198,35 +193,35 @@ function displayRecords(){
         		        + svn(d,"flight_operation_code") + " </a>";
         		    }
         		}
-        	    ,{text  : "Name"                    , type  : "label"     , width : 300       , style : "text-align:left;"
+        	    ,{text  : "Flight Operation Title"                    , type  : "label"     , width : 300       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"flight_operation_name")}
         	    }
-        		,{text  : "Type"                    , type  : "label"     , width : 200        , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"flight_operation_type_id")}
+        		,{text  : "Type"                    , type  : "label"     , width : 150        , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"operation_type_name")}
         		}
         		,{text  : "Flight Schedule"         , type  : "label"     , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"flight_schedule_date")}
         		}
             	,{text  : "Unit"                    , type  : "label"     , width : 300       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"unit_id")}
+        		    ,onRender : function(d){ return svn(d,"unit_name")}
         		}
-            	,{text  : "Aircraft"                , type  : "label"     , width : 150       , style : "text-align:left;"
-        	        ,onRender : function(d){ return svn(d,"aircraft_id")}
+            	,{text  : "Aircraft Name"                , type  : "label"     , width : 150       , style : "text-align:left;"
+        	        ,onRender : function(d){ return svn(d,"aircraft_name")}
         	    }
-                ,{text  : "Pilot"                   , type  : "label"     , width : 150        , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"pilot_id")}
+                ,{text  : "Pilot"                   , type  : "label"     , width : 200        , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"pilot")}
         		}
-        		,{text  : "Co Pilot"               , type  : "label"     , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"co_pilot_id")}
+        		,{text  : "Co Pilot"               , type  : "label"     , width : 200       , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"co_pilot")}
         		}
-        		,{text  : "Take Off Time"          , type  : "label"     , width : 100       , style : "text-align:left;"
+        		,{text  : "Flight Origin"          , type  : "label"     , width : 200      , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"origin")}
         		}
-        	    ,{text  : "Destination"            , type  : "label"     , width : 300       , style : "text-align:left;"
+        	    ,{text  : "Flight Destination"            , type  : "label"     , width : 200       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"destination")}
         	    }
         		,{text  : "Status"                 , type  : "label"     , width : 100        , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"status_id")}
+        		    ,onRender : function(d){ return svn(d,"status_name")}
         		}
   
 	    ]  
@@ -247,4 +242,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                    
+                                                        
