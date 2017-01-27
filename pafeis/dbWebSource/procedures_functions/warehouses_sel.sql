@@ -10,7 +10,7 @@
 
 CREATE PROCEDURE [dbo].[warehouses_sel]
 (
-    @wing_id	INT = null
+    @squadron_id	INT = null
    ,@is_active  CHAR(1) = 'Y'
    ,@col_no     INT=1
    ,@order_no   INT=0
@@ -21,10 +21,10 @@ BEGIN
 SET NOCOUNT ON
 DECLARE @stmt NVARCHAR(MAX)
 
-  SET @stmt = 'SELECT * FROM dbo.warehouses WHERE is_active = ''' + @is_active + ''''
+  SET @stmt = 'SELECT * FROM dbo.warehouses_v WHERE is_active = ''' + @is_active + ''''
  
-  IF ISNULL(@wing_id,'') <> '' 	 
-	 SET @stmt = @stmt + ' and wing_id = ' + cast(@wing_id as varchar(20)); 
+  IF ISNULL(@squadron_id,'') <> '' 	 
+	 SET @stmt = @stmt + ' and squadron_id = ' + cast(@squadron_id as varchar(20)); 
  
   SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no as varchar(20)) 
   

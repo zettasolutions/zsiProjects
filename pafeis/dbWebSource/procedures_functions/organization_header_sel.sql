@@ -19,7 +19,7 @@ DECLARE @tt AS TABLE (
 
 
 
-  SET @stmt = 'SELECT '''' organization_id, '''' organization_type_id, '''' organization_pid, '''' level_no, organization_type_code + '' CODE'' organization_code, organization_type_code +'' NAME'' organization_name, 
+  SET @stmt = 'SELECT '''' organization_id,  organization_type_id, '''' organization_pid, level_no, organization_type_code + '' CODE'' organization_code, organization_type_code +'' NAME'' organization_name, 
          organization_type_code + '' COMMANDER'' organization_head_id, organization_type_code + '' LOCATION'' organization_address ' 
 
   INSERT INTO @tt SELECT level_no, organization_type_name FROM organization_types WHERE level_no > @level_no order by level_no

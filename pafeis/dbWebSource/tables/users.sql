@@ -19,9 +19,11 @@ user_id	INT IDENTITY(1,1)	NOT NULL
 ,gender	CHAR(1)	NULL
 ,organization_id	INT	NULL
 ,email_add	NVARCHAR(600)	NULL
+,squadron_id	INT	NULL
 ,rank_id	INT	NULL
 ,is_contact	CHAR(1)	NULL
 ,civil_status	CHAR(1)	NULL
 ,is_employee	CHAR(1)	NULL
 ,position_id	INT	NULL
-,is_zsi	CHAR(1)	NULL)
+,is_zsi	CHAR(1)	NULL
+,warehouse_id	INT	NULL)

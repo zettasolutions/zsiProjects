@@ -18,18 +18,18 @@ BEGIN
   DECLARE @ctr int = 0
   DECLARE @rec int = 0
   DECLARE @clevel_no int = @level_no
-  SET @stmt = 'SELECT organization_id, organization_type_id, organization_pid, level_no, organization_code, organization_name, organization_head_id, organization_address  ' 
+  SET @stmt = 'SELECT organization_id, organization_type_id, organization_pid, level_no, organization_code, organization_name, organization_head_id, organization_address ' 
   
   INSERT INTO @tt SELECT level_no FROM organization_types WHERE level_no > @level_no order by level_no
   SELECT @rec = COUNT(*) FROM @tt 
    WHILE @ctr < @rec 
    BEGIN	
 		SELECT TOP 1 @clevel_no = level_no FROM @tt WHERE level_no > @clevel_no
-		SET @stmt = @stmt + ',IIF(ISNULL(organization_id,0)=0,'''',''<a href=''''javascript:void(0);'''' onclick=''''myFunction(' + cast(@clevel_no as varchar(20)) + ',' + '"' + ''' + organization_name + ''' + '"' +','' + cast(organization_id as varchar(20)) + '');''''>'' + cast(dbo.countSubOrganizations(organization_id,' + cast(@clevel_no as varchar(20)) + ')as varchar(20)) + ''</a>'') as subOrganization' + cast(@clevel_no as varchar(20))
+		SET @stmt = @stmt + ', IIF(ISNULL(organization_id,0)=0,'''',''<a href=''''javascript:void(0);'''' onclick=''''myFunction(' + cast(@clevel_no as varchar(20)) + ',' + '"' + ''' + organization_name + ''' + '"' +','' + cast(organization_id as varchar(20)) + '');''''>'' + cast(dbo.countSubOrganizations(organization_id,' + cast(@clevel_no as varchar(20)) + ')as varchar(20)) + ''</a>'') as subOrganization' + cast(@clevel_no as varchar(20))
         SET @ctr = @ctr + 1
    END	
     
-  SET @stmt = @stmt + ',is_active FROM dbo.organizations_v WHERE level_no = ' + cast(@level_no as varchar(20)) + ' AND is_active=''' + @is_active + '''';
+  SET @stmt = @stmt + ', organization_group_id,squadron_type_id , dbo.countWarehouses(organization_id) as warehouseCount, is_active FROM dbo.organizations_v WHERE level_no = ' + cast(@level_no as varchar(20)) + ' AND is_active=''' + @is_active + '''';
 
 
   IF ISNULL(@organization_id,0) <> 0
@@ -41,7 +41,7 @@ BEGIN
   ELSE
      SET @stmt = @stmt + ' DESC '
 
-  --print @stmt;
+  print @stmt;
   EXEC(@stmt);
 END
 

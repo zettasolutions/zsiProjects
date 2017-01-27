@@ -1,6 +1,6 @@
 CREATE TABLE items(
 item_id	INT IDENTITY(1,1)	NOT NULL
-,item_code_id	INT	NOT NULL
+,item_inv_id	INT	NOT NULL
 ,serial_no	NVARCHAR(40)	NULL
 ,manufacturer_id	INT	NULL
 ,dealer_id	INT	NULL
@@ -19,4 +19,6 @@ item_id	INT IDENTITY(1,1)	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
 ,item_class_id	INT	NULL
-,organization_id	INT	NULL)
+,no_repairs	INT	NULL
+,no_overhauls	INT	NULL
+,bin_id	INT	NULL)

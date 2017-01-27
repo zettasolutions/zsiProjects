@@ -62,10 +62,12 @@ SET @receiving_id = null;
 		,receiving_organization_id
 		,transfer_organization_id
 		,aircraft_id
+		,warehouse_id
 		,received_by
 		,received_date
 		,status_id
 		,status_remarks
+		,receiving_type
 		,created_by
 		,created_date
         )
@@ -77,10 +79,12 @@ SET @receiving_id = null;
 		,dbo.getUserOrganizationId(@user_Id)
 		,transfer_organization_id
 		,aircraft_id
+		,dbo.getUserWarehouseId(@user_id)
 		,received_by
 		,received_date
 		,status_id
 		,status_remarks
+		,receiving_type
 	   ,@user_id
 	   ,GETDATE()
     FROM @tt
@@ -110,4 +114,5 @@ SET @receiving_id = null;
 
 
 END
+
 

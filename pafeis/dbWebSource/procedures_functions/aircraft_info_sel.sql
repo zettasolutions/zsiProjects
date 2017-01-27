@@ -15,9 +15,9 @@ BEGIN
 SET NOCOUNT ON
 
   IF @aircraft_info_id IS NOT NULL  
-	 SELECT * FROM dbo.aircraft_info WHERE aircraft_info_id = @aircraft_info_id; 
+	 SELECT * FROM dbo.aircraft_info_v WHERE aircraft_info_id = @aircraft_info_id; 
   ELSE
-     SELECT * FROM dbo.aircraft_info
+     SELECT * FROM dbo.aircraft_info_v
 	 ORDER BY aircraft_name; 
 	
 END

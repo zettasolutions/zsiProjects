@@ -11,4 +11,5 @@ user_id	INT	NULL
 ,position	INT	NULL
 ,organization	INT	NULL
 ,rank	INT	NULL
-,email_add	NVARCHAR(600)	NULL)
+,email_add	NVARCHAR(600)	NULL
+,id	INT IDENTITY(1,1)	NOT NULL)

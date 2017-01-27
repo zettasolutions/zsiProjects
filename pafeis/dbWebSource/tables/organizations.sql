@@ -10,4 +10,6 @@ organization_id	INT IDENTITY(1,1)	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
-,organization_address	NVARCHAR(1000)	NULL)
+,organization_address	NVARCHAR(1000)	NULL
+,organization_group_id	INT	NULL
+,squadron_type_id	INT	NULL)

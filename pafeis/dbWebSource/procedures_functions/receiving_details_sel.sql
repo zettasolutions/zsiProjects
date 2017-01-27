@@ -13,14 +13,15 @@ BEGIN
 	DECLARE @role_id INT;
 	DECLARE @organization_id INT;
 
---	SELECT @role_id = role_id, @organization_id = organization_id FROM users WHERE user_id = @user_id;
+	SELECT @role_id = role_id, @organization_id = organization_id FROM users WHERE user_id = @user_id;
 	
-	SET @stmt =  'SELECT *, dbo.getItemCodeName(item_id) item_search FROM dbo.receiving_details_v WHERE receiving_id = ' + CAST(@receiving_id AS VARCHAR(20)); 
---	+ ' AND receiving_organization_id = ' + CAST(@organization_id AS VARCHAR(20))
-/*  
+	SET @stmt =  'SELECT * FROM dbo.receiving_details_v ' 
+	           + ' WHERE receiving_id = ' + CAST(@receiving_id AS VARCHAR(20))
+	           + ' AND receiving_organization_id = ' + CAST(@organization_id AS VARCHAR(20))
+  
 	IF @receiving_id IS NOT NULL  
 		SET @stmt = @stmt + ' AND receiving_id = ' + CAST(@receiving_id AS VARCHAR(20)); 
-*/
+
 	SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
   
 	IF @order_no = 0

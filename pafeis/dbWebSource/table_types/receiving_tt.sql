@@ -9,4 +9,5 @@ receiving_id	INT	NULL
 ,dealer_id	INT	NULL
 ,transfer_organization_id	INT	NULL
 ,aircraft_id	INT	NULL
-,status_remarks	NVARCHAR(0)	NULL)
+,status_remarks	NVARCHAR(0)	NULL
+,receiving_type	NVARCHAR(40)	NULL)

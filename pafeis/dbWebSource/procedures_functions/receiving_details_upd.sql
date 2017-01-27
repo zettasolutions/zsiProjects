@@ -1,4 +1,4 @@
-
+/****** Object:  StoredProcedure [dbo].[receiving_details_upd]    Script Date: 12/19/2016 11:59:40 AM ******/
 CREATE PROCEDURE [dbo].[receiving_details_upd]
 (
     @tt    receiving_details_tt READONLY
@@ -9,7 +9,7 @@ AS
 BEGIN
 -- Update Process
     UPDATE a 
-    SET  item_id				= b.item_id
+    SET  item_code_id			= b.item_code_id
 		,serial_no				= b.serial_no
 		,unit_of_measure_id		= b.unit_of_measure_id
 		,quantity				= b.quantity
@@ -20,7 +20,7 @@ BEGIN
     FROM dbo.receiving_details a INNER JOIN @tt b
     ON a.receiving_detail_id = b.receiving_detail_id
     WHERE (
-		isnull(a.item_id,0)				<> isnull(b.item_id,0)  
+		isnull(a.item_code_id,0)			<> isnull(b.item_code_id,0)  
 		OR	isnull(a.serial_no,0)		    <> isnull(b.serial_no,0)  
 		OR	isnull(a.unit_of_measure_id,0)	<> isnull(b.unit_of_measure_id,0)  
 		OR	isnull(a.quantity,0)			<> isnull(b.quantity,0)  
@@ -31,7 +31,7 @@ BEGIN
 -- Insert Process
     INSERT INTO dbo.receiving_details (
          receiving_id 
-		,item_id
+		,item_code_id
 		,serial_no
 		,unit_of_measure_id
 		,quantity
@@ -42,7 +42,7 @@ BEGIN
         )
     SELECT 
         receiving_id 
-	   ,item_id
+	   ,item_code_id
 	   ,serial_no
 	   ,unit_of_measure_id	
 	   ,quantity
@@ -53,7 +53,7 @@ BEGIN
     FROM @tt
     WHERE receiving_detail_id IS NULL
 	  AND receiving_id IS NOT NULL
-	  AND item_id IS NOT NULL
+	  AND item_code_id IS NOT NULL
 END
 
 

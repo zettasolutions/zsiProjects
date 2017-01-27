@@ -15,4 +15,6 @@ receiving_id	INT IDENTITY(1,1)	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
 ,status_id	INT	NULL
-,ris_id	INT	NULL)
+,ris_id	INT	NULL
+,receiving_type	VARCHAR(20)	NULL
+,warehouse_id	INT	NULL)

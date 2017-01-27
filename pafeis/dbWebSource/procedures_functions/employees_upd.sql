@@ -1,4 +1,3 @@
-
 CREATE PROCEDURE [dbo].[employees_upd]
 (
     @tt    employees_tt READONLY
@@ -19,6 +18,7 @@ BEGIN
 			,email_add		=	b.email_add
 			,gender			=	b.gender
 			,organization_id=	b.organization_id
+			,warehouse_id   =   b.warehouse_id
 			,rank_id		=	b.rank_id
 			,position_id	=	b.position_id
 			,is_active      =   b.is_active
@@ -27,7 +27,9 @@ BEGIN
             ,updated_date   =	GETDATE()
 		FROM dbo.users a INNER JOIN @tt b
         ON a.user_id = b.user_id 
-		WHERE (
+		WHERE isnull(b.is_edited,'N')='Y'
+/*		
+		(
 				isnull(a.id_no,'')		     <> isnull(b.id_no,'')   
 		    OR	isnull(a.last_name,'')		 <> isnull(b.last_name,'')   
 			OR	isnull(a.first_name,'')		 <> isnull(b.first_name,'')  		    
@@ -37,12 +39,13 @@ BEGIN
 			OR	isnull(a.contact_nos,'')	 <> isnull(b.contact_nos,'')  		    
 			OR	isnull(a.email_add,'')	     <> isnull(b.email_add	,'')   
 			OR	isnull(a.gender,'')			 <> isnull(b.gender,'')  		    
-			OR	isnull(a.organization_id,0)	 <> isnull(b.organization_id,0)    
+			OR	isnull(a.organization_id,0)	 <> isnull(b.organization_id,0)  
+			
 		    OR	isnull(a.rank_id,0)		     <> isnull(b.rank_id,0)   
 			OR	isnull(a.position_id,0)		 <> isnull(b.position_id,0)
 			OR	isnull(a.is_active,'')		 <> isnull(b.is_active,'')      
 			  )
-
+*/
 -- Insert Process
 
     INSERT INTO users(
@@ -55,7 +58,7 @@ BEGIN
 		,contact_nos
 		,email_add	
 		,gender			
-		,organization_id		
+		,organization_id				
 		,rank_id	
 		,position_id	
 		,is_active
@@ -72,7 +75,7 @@ BEGIN
 		,contact_nos
 		,email_add	
 		,gender			
-		,organization_id		
+		,organization_id				
 		,rank_id	
 		,position_id	
 		,is_active
@@ -84,4 +87,6 @@ BEGIN
 	AND last_name IS NOT NULL
 	AND first_name IS NOT NULL;
 END
+
+
 

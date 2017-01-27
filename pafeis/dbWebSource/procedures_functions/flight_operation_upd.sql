@@ -16,7 +16,7 @@ BEGIN
 -- Update Process
     UPDATE a 
     SET  flight_operation_code		= b.flight_operation_code
-		,flight_operation_name		= b.flight_operation_code
+		,flight_operation_name		= b.flight_operation_name
 		,flight_operation_type_id	= b.flight_operation_type_id
 		,flight_schedule_date		= b.flight_schedule_date
 		,unit_id					= b. unit_id

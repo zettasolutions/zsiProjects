@@ -1,4 +1,5 @@
 
+
 CREATE PROCEDURE [dbo].[item_categories_upd]
 (
     @tt    item_categories_tt READONLY
@@ -11,18 +12,14 @@ BEGIN
     UPDATE a 
     SET  item_cat_code		    = b.item_cat_code
 		,item_cat_name			= b.item_cat_name
+		,parent_item_cat_id     = b.parent_item_cat_id
 		,is_active				= b.is_active
 		,seq_no                 = b.seq_no
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.item_categories a INNER JOIN @tt b
     ON a.item_cat_id = b.item_cat_id
-    WHERE (
-			isnull(a.item_cat_code,'')		<> isnull(b.item_cat_code,'')  
-		OR	isnull(a.item_cat_name,'')		<> isnull(b.item_cat_name,'')  
-		OR	isnull(a.is_active,'')			<> isnull(b.is_active,'')  
-		OR	isnull(a.seq_no,0)			    <> isnull(b.seq_no,0) 
-	)
+    WHERE isnull(b.is_edited,'N') = 'Y'
 	   
 -- Insert Process
     INSERT INTO dbo.item_categories (
@@ -41,7 +38,9 @@ BEGIN
        ,@user_id
        ,GETDATE()
     FROM @tt
-    WHERE item_cat_id IS NULL;
+    WHERE item_cat_id IS NULL
+	  AND item_cat_name IS NOT NULL;
 END
+
 
 

@@ -10,7 +10,6 @@ employee_id	INT IDENTITY(1,1)	NOT NULL
 ,email	VARCHAR(50)	NULL
 ,gender	CHAR(1)	NULL
 ,wing_id	INT	NULL
-,squadron_id	INT	NULL
 ,rank_id	INT	NULL
 ,is_active	CHAR(1)	NULL
 ,created_by	INT	NULL
