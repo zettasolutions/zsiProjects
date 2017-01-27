@@ -23,14 +23,7 @@ function excelFileUpload(){
         //Ajax events
         success: completeHandler = function(data) {
             if(data.isSuccess){
-                
-                $.get(execURL + "temp_to_deliverable_data_ins "
-                    ,function(data){
-                        if(data.isSuccess){
-                            alert("File uploaded.");
-                        }
-                    }
-                );
+                 alert("Data has been successfully uploaded.");
             }
             else
                 alert(data.errMsg);
@@ -45,4 +38,4 @@ function excelFileUpload(){
         contentType: false,
         processData: false
     }, 'json');        
-}      
+}       
