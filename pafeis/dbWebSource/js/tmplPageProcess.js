@@ -1,24 +1,3 @@
-var bs = zsi.bs.ctrl;
-var svn =  zsi.setValIfNull;
-var g_page_id;
-var modalProcessAction = "modalWindowProcessAction";
-
-zsi.ready(function(){
-    getTemplate();
-});
-
-var contextModalProcessAction = { id : modalProcessAction
-    , sizeAttr: "pageProcessActionWidth"
-};
-        
-function getTemplate(callback){
-    $.get(base_url + "templates/bsDialogBox.txt",function(d){
-        var template = Handlebars.compile(d); 
-        $("body").append(template(contextModalProcessAction));
-        if(callback) callback();
-    });    
-}  
-
 function initPageProcessTemplate(page_id){
     g_page_id = page_id;
     displayPageProcessRecords(page_id);
@@ -85,17 +64,13 @@ $("#ppBtnDelete").click(function(){
 });
 
 function showModalPageProcessAction(id, title, page_id){
+    $("body").append(tmplDialog(contextModalProcessAction));
     page_process_id = id;
     var m = $("#" + modalProcessAction);
     $("#" + modalProcessAction + " .modal-title").text("Process Action for » " + title);
     m.modal("show");
-
-    $.get(base_url + 'page/name/tmplPageProcessAction'
-        , function(data){
-            m.find('.modal-body').html(data);
-            initPageProcessActionTemplate(page_process_id, page_id);
-       }
-    );  
+    m.find('.modal-body').html(tmplPageProcessAction);
+    initPageProcessActionTemplate(page_process_id, page_id);
 } 
 
 function markMandatory(){
@@ -110,4 +85,4 @@ function markMandatory(){
              {"titles" :["Last Name","First Name"]}
       ]
    });
-} 
+}        

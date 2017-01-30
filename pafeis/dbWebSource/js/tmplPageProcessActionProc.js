@@ -1,11 +1,3 @@
-  var bs = zsi.bs.ctrl;
-var svn =  zsi.setValIfNull;
-var g_page_id;
-
-zsi.ready(function(){
-    
-});
-
 function initPageProcessActionProcTemplate(page_id){
     g_page_id = page_id;
     displayPageProcessActionProcRecords(page_id);
@@ -22,7 +14,6 @@ $("#ppapBtnSave").click(function () {
             }
     });
 });
-
     
 function displayPageProcessActionProcRecords(id){
      var cb = bs({name:"cbFilter4",type:"checkbox"});
@@ -46,7 +37,7 @@ function displayPageProcessActionProcRecords(id){
         		,{text  : "Procedure Name"          , name  : "proc_name"           , type  : "input"       , width : 200       , style : "text-align:left;"}
         		,{text  : "Class Container"         , name  : "class_container"     , type  : "select"      , width : 200       , style : "text-align:left;"
         		    , onRender : function(d){ 
-                        var list_select = '';
+                        var list_selected = '';
                         var header_selected = '';
                         var detail_selected = '';
                         if (d !== null) {
@@ -54,12 +45,15 @@ function displayPageProcessActionProcRecords(id){
                             header_selected = (d.class_container.trim() == "header") ? 'selected' : '';
                             detail_selected = (d.class_container.trim() == "detail") ? 'selected' : '';
                         }
+                    
                         return "<select id='class_container' class='form-control' name='class_container'>" +
                                 "<option></option>" +
-                                "<option value='list' " + list_selected + ">List</option>" +
+                                "<option value='list' " + list_selected  + ">List</option>" +
                                 "<option value='header' " + header_selected + ">Header</option>" +
                                 "<option value='detail' " + detail_selected + ">Detail</option>" +
                             "</select>";
+                        
+                        
                     }
         		}
 	    ]   
@@ -78,4 +72,6 @@ $("#ppapBtnDelete").click(function(){
                       }
     });       
 });
-     
+
+
+              

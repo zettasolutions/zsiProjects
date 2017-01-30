@@ -1,22 +1,40 @@
-var bs = zsi.bs.ctrl;
-var svn =  zsi.setValIfNull;
-var modalProcess = "modalWindowProcess";
+var bs                          = zsi.bs.ctrl
+    ,svn                        = zsi.setValIfNull
+    ,modalProcess               = "modalWindowProcess"
+    ,tmplPageProcess            = ""
+    ,tmplPageProcessAction      = ""
+    ,tmplPageProcessActionProc  = ""
+    ,tmplDialog                 = ""
+    ,g_page_id                  
+    ,modalProcessAction         = "modalWindowProcessAction"
+    ,contextModalProcessAction  = {  id         : modalProcessAction
+                                    ,sizeAttr   : "pageProcessActionWidth"
+                                  }
+
+    ,g_page_process_id
+    ,modalProcessActionProc     = "modalWindowProcessActionProc"
+    ,contextModalProcessActionProc = {  id          : modalProcessActionProc
+                                        , sizeAttr  : "pageProcessActionProcWidth"
+                                     }
+;
 
 zsi.ready(function(){
+    getTemplates();
     displayRecords();
-    getTemplate();
  });
 
 var contextModalProcess = { id : modalProcess
     , sizeAttr: "pageProcessWidth"
 };
         
-function getTemplate(callback){
+function getTemplates(){
     $.get(base_url + "templates/bsDialogBox.txt",function(d){
-        var template = Handlebars.compile(d); 
-        $("body").append(template(contextModalProcess));
-        if(callback) callback();
+        tmplDialog = Handlebars.compile(d); 
+        $("body").append(tmplDialog(contextModalProcess));
     });    
+    $.get(base_url + 'page/name/tmplPageProcess', function(d){tmplPageProcess=d;});  
+    $.get(base_url + 'page/name/tmplPageProcessAction', function(d){ tmplPageProcessAction =d; });
+    $.get(base_url + 'page/name/tmplPageProcessActionProc', function(d){ tmplPageProcessActionProc=d;});  
 }  
 
 function showModalPageProcess(id, title){
@@ -24,13 +42,8 @@ function showModalPageProcess(id, title){
     var m = $("#" + modalProcess);
     $("#" + modalProcess + " .modal-title").text("Process for » " + title);
     m.modal("show");
-
-    $.get(base_url + 'page/name/tmplPageProcess'
-        , function(data){
-            m.find('.modal-body').html(data);
-            initPageProcessTemplate(page_id);
-       }
-    );  
+    m.find('.modal-body').html(tmplPageProcess);
+    initPageProcessTemplate(page_id);
 }
         
 $("#btnSave").click(function () {
@@ -94,6 +107,4 @@ $("#btnDelete").click(function(){
                       }
     });      
 });
-
-
-       
+ 
