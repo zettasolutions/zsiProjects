@@ -5,6 +5,14 @@ var item_cat_id = zsi.getUrlParamValue("item_cat_id");
 zsi.ready(function(){
     displayTabs();
     wHeight = $(window).height();
+
+        $.get(procURL + "user_info_sel", function(d) {
+        if (d.rows !== null && d.rows.length > 0) {
+            g_organization_id = d.rows[0].organization_id;
+            g_organization_name = d.rows[0].organizationName;
+            $(".pageTitle").append(' for ' + g_organization_name);
+        }
+    });
 });
  
 function displayTabs(cbFunc){
@@ -38,16 +46,17 @@ function displayItems(id){
     var counter = 0;
     $("#tabGrid" + id).dataBind({
 	     url            : procURL + "items_inv_sel @item_cat_id=" + id
-	    ,width          : $(document).width() - 35
+	    ,width          : $(document).width() - 180
 	    ,height         : $(document).height() - 250
-	    ,blankRowsLimit: 5
-        ,isPaging : false
         ,dataRows : [
-        		 {text  : "Part No."                    , type  : "label"       , width : 100       , style : "text-align:left;"
-        		    ,onRender : function(d){ return bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
-        		                                    + svn(d,"part_no"); }
+        		 {text  : "Item Code"                   , type  : "label"       , width : 100       , style : "text-align:left;"
+        		    ,onRender : function(d){ return   bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
+        		                                    + svn(d,"item_code"); }
         		}
-        		,{text  : "National Stock No."           , type  : "label"       , width : 120      , style : "text-align:left;"
+        		,{text  : "Part No."                    , type  : "label"       , width : 100       , style : "text-align:left;"
+        		    ,onRender : function(d){ return  svn(d,"part_no"); }
+        		}
+        		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
         		}
         		,{text  : "Item Name"                   , type  : "label"       , width : 300       , style : "text-align:left;"
@@ -56,17 +65,8 @@ function displayItems(id){
         		,{text  : "Reorder Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"reorder_level"); }
         		}
-        		,{text  : "Organization"                , type  : "label"       , width : 300       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"organization_id"); }
-        		}
         		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"stock_qty"); }
-        		}
-        		,{text  : "Active?"                     , type  : "label"       , width : 75        , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"is_active"); }
-        		}
-        		,{text  : "Item Code"                   , type  : "label"       , width : 100       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"item_code"); }
         		}
         		,{text  : "Item Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_type_name"); }
@@ -75,4 +75,4 @@ function displayItems(id){
 
 	    ]   
     });    
-}  
+}     

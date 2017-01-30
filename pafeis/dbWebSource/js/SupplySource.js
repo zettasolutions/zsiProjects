@@ -37,13 +37,13 @@ function displayRecords(){
                                                       +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
             }	 
-        		,{text  : "Name"                , name  : "supply_source_name"          , type  : "input"         , width : 200       , style : "text-align:left;"}
-        		,{text  : "Address"             , name  : "full_address"                , type  : "input"         , width : 200       , style : "text-align:left;"}
-        		,{text  : "Contact No."         , name  : "contact_no"                  , type  : "input"         , width : 200       , style : "text-align:left;"}
-        		,{text  : "Email"               , name  : "email_address"               , type  : "input"         , width : 200       , style : "text-align:left;"}        		
+        		,{text  : "Supplier Name"       , name  : "supply_source_name"          , type  : "input"         , width : 250       , style : "text-align:left;"}
+        		,{text  : "Address"             , name  : "full_address"                , type  : "input"         , width : 240       , style : "text-align:left;"}
+        		,{text  : "Contact No."         , name  : "contact_no"                  , type  : "input"         , width : 180       , style : "text-align:left;"}
+        		,{text  : "Email Address"       , name  : "email_address"               , type  : "input"         , width : 200       , style : "text-align:left;"}        		
         		,{text  : "Contact Person"      , name  : "contact_person"              , type  : "input"         , width : 200       , style : "text-align:left;"}        		
-        		,{text  :"Local?"               , name  : "is_local"                    , type  : "yesno"         , width:55          , style : "text-align:left;"   ,defaultValue:"Y"                 }
-        		,{text  :"Active?"              , name  : "is_active"                   , type  : "yesno"         , width:55          , style : "text-align:left;"   ,defaultValue:"Y"                 }
+        		,{text  :"Local?"               , name  : "is_local"                    , type  : "yesno"         , width:65          , style : "text-align:left;"   ,defaultValue:"Y"                 }
+        		,{text  :"Active?"              , name  : "is_active"                   , type  : "yesno"         , width:65          , style : "text-align:left;"   ,defaultValue:"Y"                 }
 	    ] 
     	     ,onComplete: function(){
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
@@ -54,11 +54,11 @@ function displayRecords(){
 
 $("#btnDelete").click(function(){
     zsi.form.deleteData({
-         code       : "ref-0004"
+         code       : "ref-0018"
         ,onComplete : function(data){
                         displayRecords();
                       }
     });       
 });
     
-                                        
+                                           

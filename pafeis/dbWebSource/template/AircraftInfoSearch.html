@@ -1,0 +1,29 @@
+<script src='/javascript/name/zsiSearch'></script>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 zForm">  
+    <div class="row ">
+        <div class="form-horizontal">   
+            <div class="col-xs-12 col-sm-12">
+                <div class="form-group ">
+                    <div class=" col-xs-2">
+                        <input name="aircraft_info_id_filter" id="aircraft_info_id_filter" type="hidden" class="form-control input-sm">
+                        <input name="aircraft_filter" id="aircraft_filter" placeholder="Search" class="form-control input-sm">
+                    </div>
+                     <div class="col-xs-1">
+                        <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </div>    
+
+    <form method="post" id="frm">
+        <div id="grid" class="zGrid"></div> 
+        <!--<div class="buttonGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+            </button>
+        </div>-->
+    </form>
+</div>
+<script src="/Scripts/handlebars-v3.0.0.js"></script>

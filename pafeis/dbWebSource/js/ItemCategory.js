@@ -146,6 +146,7 @@ function submitInactiveItemCodes(){
           $("#frm_modalWindowInactiveItemCodes").jsonSubmit({
              procedure      : "item_codes_upd"
             ,optionalItems  : ["item_type_id","is_active"]
+            ,notIncluded  : ["#item_code"]
             ,onComplete     : function (data) {
                if(data.isSuccess===true) zsi.form.showAlert("alert");
                  displayRecordsItemCodes(item_type_id);
@@ -235,29 +236,44 @@ function deleteItemCodes(){
 function displayRecords(){
      $("#grid").dataBind({
 	     url            : execURL + "item_categories_sel"
-	    ,width          : 530
+	    ,width          : $(document).width() - 450
 	    ,height         : $(document).height() - 250
         ,blankRowsLimit:5
         ,isPaging : false
         ,dataRows : [
-        		 {text  : "Code"                , name  : "item_cat_code"                                     , width : 65        , style : "text-align:left;"
+        		 {text  : "Seq #"                , name  : "item_cat_code"                                     , width : 65        , style : "text-align:left;"
         		    , onRender      :  function(d){ 
-                		                    return     bs({name:"item_cat_id",type:"hidden",value: svn (d,"item_cat_id")})
-                		                           +   bs({name:"item_cat_code",value: svn (d,"item_cat_code")});
+                		                    return      bs({name:"item_cat_id",type:"hidden",value: svn (d,"item_cat_id")})
+                		                            +   bs({name:"is_edited",type:"hidden"})
+                		                            +   bs({name:"seq_no",value: svn (d,"seq_no")});
+                            }        		    
+        		},
+        		{text  : "Code"                , name  : "item_cat_code"                                     , width : 80        , style : "text-align:left;"
+        		    , onRender      :  function(d){ 
+                		                    return  bs({name:"item_cat_code",value: svn (d,"item_cat_code")});
                             }        		    
         		}
-        		,{text  : "Name"                , name  : "item_cat_name"          , type  : "input"         , width : 300       , style : "text-align:left;"}
-        		,{text  : "Active?"             , name  : "is_active"              , type  : "yesno"         , width : 55        , style : "text-align:left;"   ,defaultValue:"Y"}
-        		,{text  : "Item Types"          , width : 80                       , style : "text-align:center;"      
+        		,{text  : "Name"                , name  : "item_cat_name"           , type  : "input"         , width : 300       , style : "text-align:left;"}
+        		,{text  : "Parent Item"         , name  : "parent_item_cat_id"      , type  : "select"        , width : 200       , style : "text-align:left;"}
+        		,{text  : "Active?"             , name  : "is_active"               , type  : "yesno"         , width : 60        , style : "text-align:left;"   ,defaultValue:"Y"}
+        		,{text  : "Item Types"          , width : 100                       , style : "text-align:center;"      
                     ,onRender  :  
                         function(d){return "<a href='javascript:manageItemTypes(" + svn(d,"item_cat_id") + ",\"" +  svn(d,"item_cat_name")  + "\");'>" + svn(d,"countItemTypes") + "</a>"; 
                     }
                 }
 
 	    ] 
+	    ,onComplete: function(){
+               $("select[name='parent_item_cat_id']").dataBind( "item_category");
+               setEditedRow();
+        }  
     });    
 }
-
+function setEditedRow(){
+    $("input, select").on("change keyup paste", function(){
+        $(this).closest(".zRow").find("#is_edited").val("Y");
+    });  
+}
 function displayInactiveItemCategory(){
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#" + tblInactiveICat).dataBind({
@@ -303,7 +319,7 @@ function displayRecordsItemTypes(id){
         		}
         		,{text  : "Type Code"        , name  : "item_type_code"         , type  : "input"         , width : 85        , style : "text-align:left;"}
         		,{text  : "Type Name"        , name  : "item_type_name"         , type  : "input"         , width : 400       , style : "text-align:left;"}
-        		,{text  : "Unit of Measure" , name  : "unit_of_measure_id"      , type  : "select"        , width : 150       , style : "text-align:left;"}
+        		,{text  : "Unit of Measure"  , name  : "unit_of_measure_id"      , type  : "select"        , width : 150       , style : "text-align:left;"}
         		,{text  : "Is Active?"                                          , type  : "yesno"         , width : 75        , style : "text-align:center;"  ,defaultValue:"Y"}
         		,{text  : "Item Codes"                                                                    , width : 80        , style : "text-align:center;"      
                     ,onRender  :  
@@ -360,13 +376,15 @@ function displayRecordsItemCodes(id){
         ,dataRows       : [
             
 	 
-        		{text  : "Part No."            , name  : "part_no"                                         , width : 400       , style : "text-align:left;"
+        		{text  : "Item Code"            , width : 200       , style : "text-align:left;"
         		    , onRender      :  function(d){ 
                 		                    return     bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
                 		                            +  bs({name:"item_type_id",type:"hidden",value: id})
-                		                            +  bs({name:"part_no",value: svn (d,"part_no")}); 
+                		                            +  svn(d, "item_code"); 
         		    }
+        		    
         		}
+        		,{text  : "Part No."            , name  : "part_no"              , type  : "input"         , width : 200       , style : "text-align:left;"}
         		,{text  : "National Stock No."  , name  : "national_stock_no"     , type  : "input"         , width : 150      , style : "text-align:left;"}
         		,{text  : "Item Name"           , name  : "item_name"             , type  : "input"         , width : 400      , style : "text-align:left;"}
         		,{text  : "Critical Level"      , name  : "critical_level"        , type  : "input"         , width : 100      , style : "text-align:left;"}
@@ -394,11 +412,12 @@ function displayInactiveItemCodes(){
                                                     +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
             }	 
-        		,{text  : "Part No."            , name  : "part_no"               , type  : "input"         , width : 400       , style : "text-align:left;"}
-        		,{text  : "National Stock No."  , name  : "national_stock_no"     , type  : "input"         , width : 150       , style : "text-align:left;"}
-        		,{text  : "Item Category"           , name  : "item_name"             , type  : "input"         , width : 400      , style : "text-align:left;"}
-        		,{text  : "Critical Level"      , name  : "critical_level"        , type  : "input"         , width : 100      , style : "text-align:left;"}
-        		,{text  : "Is Active?"          , width : 100                     , type  : "yesno"         , style : "text-align:center;"  }
+                
+        		,{text  : "Part No."                , name  : "part_no"               , type  : "input"         , width : 400       , style : "text-align:left;"}
+        		,{text  : "National Stock No."      , name  : "national_stock_no"     , type  : "input"         , width : 150       , style : "text-align:left;"}
+        		,{text  : "Item Category"           , name  : "item_name"         , type  : "input"         , width : 400      , style : "text-align:left;"}
+        		,{text  : "Critical Level"          , name  : "critical_level"        , type  : "input"         , width : 100      , style : "text-align:left;"}
+        		,{text  : "Is Active?"              , width : 100                     , type  : "yesno"         , style : "text-align:center;"  }
 	    ] 
     	     ,onComplete: function(){
                 $("#cbFilter3").setCheckEvent("#" + tblInactiveIC + " input[name='cb']");
@@ -408,4 +427,4 @@ function displayInactiveItemCodes(){
 
 
     
-                                                    
+                                                            

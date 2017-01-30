@@ -1,0 +1,63 @@
+<style>
+    #grid{
+    width: 100%;
+}
+.zGrid .item .title {
+}
+.zGrid .zHeaders .zSort {
+}
+.zRows {
+    height: 100%;
+  
+}
+</style>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">  
+        <div class="row zForm">
+            <div class="form-horizontal">   
+               <input type="hidden" name="p_supply_is_id" id="p_supply_is_id">
+                <div class="col-xs-11 ">
+            <div class="form-group  ">  
+                <label class=" col-xs-1 control-label">Send To</label>
+                <div class=" col-xs-3">
+                     <select name="p_store_loc_id" id="p_store_loc_id" class="form-control input-sm" ></select>
+                </div>  
+                
+                <label class=" col-xs-1 control-label">Date</label>
+                <div class=" col-xs-2">
+                    <input type="text"  value="07/31/2015"  name="p_is_date" id="p_is_date" class="form-control input-sm " placeholder="mm/dd/yyyy">
+                </div>
+                
+                <label class=" col-xs-1 control-label">IS#</label>
+                <div class=" col-xs-2">
+                    <input type="text" name="p_is_no" id="p_is_no" class="form-control input-sm ">
+                </div>  
+                
+                <label class=" col-xs-1 control-label">Posted</label>
+                <div class="col-xs-1">
+                    <select name="p_posted" id="p_posted" class="form-control input-sm" >
+                        <option value="0">No</option><option value="1">Yes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1 ">
+            <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-folder-open"></span></button>
+        </div>
+    </div>
+</div>    
+<div class="col-xs-12">    
+    <form method="post" id="frm">
+    <div class="zPanel">
+            <div id="grid" class="zGrid"></div>    
+        <div class="buttonGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+            </button>
+            
+        </div>
+    </div>
+    </form>
+</div>
+</div>
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
+

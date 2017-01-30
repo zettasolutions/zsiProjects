@@ -1,58 +1,69 @@
 var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
 
-//var header = [];
-var orgPIds = [];
-var levelNo = null;
-var orgPId = null;
-var modalId = "";
-var tableId   = "";
+var levelNo;
+var levelNoMain = null;
+var levelNoModal = null;
+var g_organization_id = null;
+var g_warehouse_id = null;
+var orgPid;
+var orgArr  = [];
 
-var contextWing = { 
-      id: "modalWing"
-    , title: "Wing List"
-    , sizeAttr: "modal-lg"
+var context = { 
+      id: "modalDynamic"
+    , title: "Dynamic Modal"
+    , sizeAttr: "fullWidth"
     , footer: '<div class="pull-left"><button type="button" onclick="submitOrgType(this);" class="btn btn-primary">'
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="manageInactiveOrgType(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
             + '</span>&nbsp;Inactive</button>'
-    , body: '<div id="tblWing" class="zGrid"></div>'
+    , body: '<div id="gridModal" class="zGrid"></div>'
 };
-
-var contextGroup = { 
-      id: "modalGroup"
-    , title: "Group List"
-    , sizeAttr: "modal-lg"
-    , footer: '<div class="pull-left"><button type="button" onclick="submitOrgType(this);" class="btn btn-primary">'
+var contextOrgBins = { 
+      id: "modalBins"
+    , title: "OrgBins Modal"
+    , sizeAttr: "modal-xs"
+    , footer: '<div class="pull-left"><button type="button" onclick="submitOrgBins(this);" class="btn btn-primary">'
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
-            + '<button type="button" onclick="manageInactiveOrgType(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
+            + '<button type="button" onclick="manageInactiveOrgBins(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
             + '</span>&nbsp;Inactive</button>'
-    , body: '<div id="tblGroup" class="zGrid"></div>'
+    , body: '<div id="gridOrgBinsModal" class="zGrid"></div>'
 };
-
-var contextSquadron = { 
-      id: "modalSquadron"
-    , title: "Squadron List"
-    , sizeAttr: "modal-lg"
-    , footer: '<div class="pull-left"><button type="button" onclick="submitOrgType(this);" class="btn btn-primary">'
+var contextLocations = { 
+      id: "modalLocations"
+    , title: "Location Modal"
+    , sizeAttr: "modal-xs"
+    , footer: '<div class="pull-left"><button type="button" onclick="submitLocations(this);" class="btn btn-primary">'
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
-            + '<button type="button" onclick="manageInactiveOrgType(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
+            + '<button type="button" onclick="manageInactiveLocations(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
             + '</span>&nbsp;Inactive</button>'
-    , body: '<div id="tblSquadron" class="zGrid"></div>'
+    , body: '<div id="gridLocations" class="zGrid"></div>'
+            + '<h4 id="gridOrgBinsTitle"></h4>'
+            + '<div id="gridOrgBinsModal" class="zGrid"></div>'
+};
+var contextInactiveLocations = { 
+      id: "modalInactiveLocations"
+    , title: "Inactive Location Modal"
+    , sizeAttr: "modal-xs"
+    , footer: '<div class="pull-left"><button type="button" onclick="submitInactiveLocations(this);" class="btn btn-primary">'
+            + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
+    , body: '<div id="gridInactiveLocations" class="zGrid"></div>'
 };
 
 zsi.ready(function(){
-    displayRecords();
+    displayRecords(function(){
+        levelNoMain = levelNo;
+    });
     getTemplate();
 });
 
 $("#btnSave").click(function () {
    $("#grid").jsonSubmit({
           procedure: "organizations_upd"
-        , optionalItems: ["is_active","organization_type_id"] 
+        , optionalItems: ["is_active","organization_id","organization_pid","organization_type_id"] 
         , onComplete: function (data) {
-            $("#grid").clearGrid();
             if(data.isSuccess===true) zsi.form.showAlert("alert");
+            $("#grid").clearGrid();
             displayRecords();
         }
     });
@@ -69,250 +80,12 @@ $("#btnDelete").click(function(){
 
 function getTemplate(){
     $.get(base_url + "templates/bsDialogBox.txt",function(d){
-        var template = Handlebars.compile(d);     
-   
-        $("body").append(template(contextWing));
-        $("body").append(template(contextGroup));
-        $("body").append(template(contextSquadron));
+        var template = Handlebars.compile(d);
+        $("body").append(template(context));
+        $("body").append(template(contextLocations));
+        $("body").append(template(contextInactiveLocations));
+        $("body").append(template(contextOrgBins));
     });    
-}
-
-function displayRecords(){
-    levelNo = null;
-    
-    getOrgHeaders(function(data){
-        var headers = data;
-        var _keyHeaders = Object.keys(data).map(function(key) {
-             return data[key];
-        }); 
-        $.get(execURL + "organizations_sel", function(d){
-            var _rows = d.rows;
-            var _dataRows = [];
-            var cb        = bs({name:"cbFilter1",type:"checkbox"});
-             var _keyHeaders2 = Object.keys(_rows[0]);
-            _dataRows.push({    
-                    text  : cb                                                           
-                    , width : 25        
-                    , style : "text-align:left;"       
-        		    , onRender  :  function(d){
-                        return  bs({name:"organization_id",type:"hidden",value: svn (d,"organization_id")})
-                              + bs({name:"organization_type_id",type:"hidden",value: d.organization_type_id}) 
-                              + bs({name:"organization_pid",type:"hidden",value: d.organization_pid})
-                              + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
-                    }
-                });    
-                
-             _dataRows.push({    
-                    text  : _keyHeaders[4]       
-                    , name : "organization_code"
-                    , width : 100        
-                    , style : "text-align:left;"       
-                });    
-                
-             _dataRows.push({    
-                    text  : _keyHeaders[5]       
-                    , name : "organization_name"
-                    , width : 100        
-                    , style : "text-align:left;"       
-                });    
-            
-            console.log("count");
-            console.log(_keyHeaders.length);
-            for(var i=8; i < _keyHeaders.length -1 ; i++){
-
-                //console.log(_keyHeaders2[i]);
-               
-               //var _fn = new Function('d',  
-                //    'return  "<a href=\'javascript:manageOrgType(" + d.level_no + "," + d.organization_id + "," + d.organization_name + ");\'>" +  d.' +  _keyHeaders2[i] + ' + "</a>";' 
-                //);
-
-                 _dataRows.push({    
-                          text  :  _keyHeaders[i] 
-                        , width : 150        
-                        , style : "text-align:left;"
-                        , name :   _keyHeaders2[i] 
-                        , type: "input"
-                    }
-                );
-            
-            }
-             _dataRows.push({    
-                  text  : "ACTIVE?"                       
-        		, name  : "is_active"                   
-        		, type  : "yesno"             
-        		, width : 60          
-        		, style : "text-align:center;"
-        		, defaultValue:"Y"
-    		});
-
-
-         $("#grid").dataBind({
-        	     rows           : _rows
-        	    ,width          : $(document).width() - 35
-        	    ,height         : $(document).height() - 250
-        	    ,selectorType   : "checkbox"
-                ,blankRowsLimit : 5
-                ,isPaging : false
-                ,dataRows : _dataRows
-                ,onComplete: function(){
-                  //  $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                   // $("select[name='organization_head_id']").dataBind("employees");
-                }  
-            });
-            
-            
-
-
-            
-        });
-        
-        /*var header = Object.keys(data).map(function(key) {
-            return data[key];
-        });
-
-        var cb        = bs({name:"cbFilter1",type:"checkbox"});
-        var _dataRows = [
-            {    text  : cb                                                           
-                , width : 25        
-                , style : "text-align:left;"       
-    		    , onRender  :  function(d){
-                    return  bs({name:"organization_id",type:"hidden",value: svn (d,"organization_id")})
-                          + bs({name:"organization_type_id",type:"hidden",value: header.organization_type_id}) 
-                          + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
-                }
-            }
-            ,{    text  : header[0]                   
-    		    , name  : "organization_code"               
-    		    , type  : "input"           
-    		    , width : 150       
-    		    , style : "text-align:left;"
-    		}
-    		,{    text  : header[1]              
-        		, name  : "organization_name"            
-        		, type  : "input"          
-        		, width : 200       
-        		, style : "text-align:left;"
-    		}
-    		,{    text  : header[2]
-        		, width : 200       
-        		, style : "text-align:left;"
-        		, onRender : function(d){
-        		    return  bs({name:"organization_pid",type:"hidden",value: svn (d,"organization_pid")})
-        		          + bs({name:"organization_head_id",type:"select",value: svn (d,"organization_head_id")});
-        		}
-    		}
-        ];
-        
-        $.get(execURL + "organizations_sel", function(d){
-            var _rows = d.rows;
-            var content = Object.keys(_rows[0]);
-
-            content.splice(0, 2); //Remove organization_id & organization_type_id from content[]
-            content.splice(3, 1); //Remove level_no from content[]
-            
-            for(var i=0; i < header.length; i++){
-                if(i > 2 && i != header.length - 1){
-                    var _text = header[i].split("_");
-                    var levelNum = _text[1];
-                    
-                    _dataRows.push({    
-                          text  : _text[0]           
-            		    , type  : "text"           
-            		    , width : 150       
-            		    , style : "text-align:left;"
-                		, onRender :  function(d){
-                            console.log(levelNum);
-                		    return "<a href='javascript:manageOrgType("+ levelNum +","+ svn(d,"organization_id") +",\""+ svn(d,"organization_name") +"\")'>"+ (d ? svn(d, "subOrganization'"+ levelNum +"'") : "") +"</a>"; 
-                		}
-            		 });
-                }
-            }
-            
-            _dataRows.push({    
-                  text  : "ACTIVE?"                       
-        		, name  : "is_active"                   
-        		, type  : "yesno"             
-        		, width : 60          
-        		, style : "text-align:center;"
-        		, defaultValue:"Y"
-    		});
-    		
-            $("#grid").dataBind({
-        	     rows           : _rows
-        	    ,width          : $(document).width() - 35
-        	    ,height         : $(document).height() - 250
-        	    ,selectorType   : "checkbox"
-                ,blankRowsLimit : 5
-                ,isPaging : false
-                ,dataRows : _dataRows
-                ,onComplete: function(){
-                    $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                    $("select[name='organization_head_id']").dataBind("employees");
-                }  
-            });
-        });
-        
-        var dynamicCol = header.subOrgCount.split("_");
-        var cb = bs({name:"cbFilter1",type:"checkbox"});
-        
-        $("#grid").dataBind({
-    	     url            : execURL + "organizations_sel"
-    	    ,width          : $(document).width() - 35
-    	    ,height         : $(document).height() - 250
-    	    ,selectorType   : "checkbox"
-            ,blankRowsLimit:5
-            ,isPaging : false
-            ,dataRows : [
-                 {    text  : cb                                                           
-                    , width : 25        
-                    , style : "text-align:left;"       
-        		    , onRender  :  function(d){
-                        return  bs({name:"organization_id",type:"hidden",value: svn (d,"organization_id")})
-                              + bs({name:"organization_type_id",type:"hidden",value: header.organization_type_id}) 
-                              + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
-                    }
-                 }	 
-        		,{    text  : header.code                    
-        		    , name  : "organization_code"               
-        		    , type  : "input"           
-        		    , width : 150       
-        		    , style : "text-align:left;"
-        		 }
-        		,{    text  : header.name              
-            		, name  : "organization_name"            
-            		, type  : "input"          
-            		, width : 200       
-            		, style : "text-align:left;"
-        		}
-        		,{    text  : header.commander_name       
-            		, width : 200       
-            		, style : "text-align:left;"
-            		, onRender : function(d){
-            		    return  bs({name:"organization_pid",type:"hidden",value: svn (d,"organization_pid")})
-            		          + bs({name:"organization_head_id",type:"select",value: svn (d,"organization_head_id")});
-            		}
-        		}
-        		,{    text  : "dynamicCol[0]"
-            		, width : 80                                    
-            		, style : "text-align:center;"
-        		    , onRender : function(d){
-        		        return "<a href='javascript:manageOrgType("+ dynamicCol[1] +","+ svn(d,"organization_id") +",\""+ svn(d,"organization_name") +"\")'>"+ (d ? svn(d,"countSubOrganizations") : "") + "</a>"; 
-                    }
-                }
-        		,{    text  : header.active                       
-            		, name  : "is_active"                   
-            		, type  : "yesno"             
-            		, width : 60          
-            		, style : "text-align:center;"
-            		, defaultValue:"Y"
-        		}
-    	    ]
-            ,onComplete: function(){
-                $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                $("select[name='organization_head_id']").dataBind("employees");
-            }  
-        });*/
-    });
 }
 
 function getOrgHeaders(callBack){
@@ -322,135 +95,420 @@ function getOrgHeaders(callBack){
     });
 }
 
-function manageOrgType(levelid, orgId, orgName){
-    orgPId = orgId;
-    levelNo = levelid;
+function displayRecords(callBack){
+    setGridLayout({
+        gridID   : "grid"
+        ,params  : ""
+        ,isModal : 0
+    });
     
-    if(levelNo == 2){
-        modalId = "modalWing";
-        tableId = "tblWing";
-    }
-    else if(levelNo == 3){
-        modalId = "modalGroup";
-        tableId = "tblGroup";
-    }
-    else if(levelNo == 4){
-        modalId = "modalSquadron";
-        tableId = "tblSquadron";
-    }
-    
-    displayOrgType();
-    
-    $("#"+ modalId).attr("pid", orgPId);
-    $("#"+ modalId).attr("level_id", levelNo);
-    $("#"+ modalId + " .modal-title").text(orgName);
-    $("#"+ modalId).modal({ show: true, keyboard: false, backdrop: 'static' });
-    //$('#modalWindowIDdetails').setCloseModalConfirm();
+    if(callBack) callBack();
 }
 
-function displayOrgType(callBack){
-    getOrgHeaders(function(){
-        console.log(header);
-        /*var dynamicCol = header.subOrgCount.split("_");
-        var cb = bs({name:"cbFilter1",type:"checkbox"});
-    
-        $("#"+ tableId).dataBind({
-    	     url            : execURL + "organizations_sel @organization_id=" + orgPId + ",@level_no=" + levelNo
-    	    ,width          : $(document).width() - 255
-    	    ,height         : $(document).height() - 250
-    	    ,selectorType   : "checkbox"
-            ,blankRowsLimit:5
-            ,isPaging : false
-            ,dataRows : [
-                 {    text  : cb                                                           
+function setGridLayout(o){
+    getOrgHeaders(function(data){
+        var _keyHeaders = Object.keys(data).map(function(key) {
+             return data[key];
+        });
+        var _levelNo = data.level_no;
+        var orgTypeId = data.organization_type_id;
+        
+        if(levelNoMain===null) levelNoMain = _levelNo;
+            
+        $.get(execURL + "organizations_sel "+ o.params
+        , function(d){
+      
+            var _rows = d.rows;
+            var cb    = bs({name:"cbFilter",type:"checkbox"});
+            var _keyHeaders2 = (_rows.length > 0 ? Object.keys(_rows[0]) : null);
+            var _dataRows = [
+                {    
+                    text  : cb                                                           
                     , width : 25        
                     , style : "text-align:left;"       
         		    , onRender  :  function(d){
                         return  bs({name:"organization_id",type:"hidden",value: svn (d,"organization_id")})
-                              + bs({name:"organization_type_id",type:"hidden",value: header.organization_type_id}) 
+                              + bs({name:"is_edited",type:"hidden"})
+                              + bs({name:"organization_type_id",type:"hidden",value: orgTypeId})
                               + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
-                 }	 
-        		,{    text  : header.code                    
-        		    , name  : "organization_code"               
-        		    , type  : "input"           
-        		    , width : 150       
-        		    , style : "text-align:left;"
-        		 }
-        		,{    text  : header.name              
-            		, name  : "organization_name"            
-            		, type  : "input"          
-            		, width : 200       
-            		, style : "text-align:left;"
-        		}
-        		,{    text  : header.commander_name       
-            		, width : 200       
-            		, style : "text-align:left;"
-            		, onRender : function(d){
-            		    return  bs({name:"organization_pid",type:"hidden",value: orgPId})
+                }
+                ,{    
+                    text  : _keyHeaders[4]       
+                    , name : "organization_code"
+                    , type : "input"
+                    , width : 150        
+                    , style : "text-align:left;"       
+                }
+                ,{    
+                    text  : _keyHeaders[5]       
+                    , name : "organization_name"
+                    , type : "input"
+                    , width : 210        
+                    , style : "text-align:left;"       
+                }
+                ,{    
+                    text  : _keyHeaders[6]
+                    , width : 200        
+                    , style : "text-align:left;"
+                    , onRender : function(d){
+            		    return  bs({name:"organization_pid",type:"hidden",value: orgPid})
             		          + bs({name:"organization_head_id",type:"select",value: svn (d,"organization_head_id")});
             		}
-        		}
-        		,{    text  : dynamicCol[0]
-            		, width : 110                   
-            		, class : (levelNo==4 ? "hide" : "")
-            		, style : "text-align:center;"      
-        		    , onRender : function(d){
-        		        return "<a href='javascript:manageOrgType("+ dynamicCol[1] +","+ svn(d,"organization_id") +",\""+ svn(d,"organization_name") +"\")'>"+ (d ? svn(d,"countSubOrganizations") : "") + "</a>"; 
+                }
+                ,{    
+                    text  : _keyHeaders[7]       
+                    //, name : "organization_address"
+                    //, type : "input"
+                    , width : 200        
+                    , style : "text-align:left;"
+                    ,onRender : function(d){
+            		    return  bs({name:"organization_address",type:"input",value: svn (d,"organization_address")})
+            		          + (_levelNo!==2 ? bs({name:"organization_group_id",type:"hidden", value: svn (d,"organization_group_id")}) : "")
+            		          + (_levelNo!==5 ? bs({name:"squadron_type_id",type:"hidden", value: svn (d,"squadron_type_id")}) : "");
                     }
                 }
-        		,{    text  : header.active                       
-            		, name  : "is_active"                   
-            		, type  : "yesno"             
-            		, width : 60          
-            		, style : "text-align:center;"
-            		, defaultValue:"Y"
-        		}
-    	    ]
-            ,onComplete: function(){
-                $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                $("select[name='organization_head_id']").dataBind("employees");
-                
-                if(callBack) callBack();
-            }  
-        });*/
-    });
-}
+            ]; 
+            
+            var keyHeaderCount = _keyHeaders.length -1;
 
-
-function submitOrgType(o){
-    getParams(o, function(){
-        $("#frm_"+ modalId).jsonSubmit({
-              procedure: "organizations_upd"
-            , optionalItems: ["is_active","organization_type_id","organization_pid"] 
-            , onComplete: function (data) {
-                $("#"+ tableId).clearGrid();
-                if(data.isSuccess===true) zsi.form.showAlert("alert");
-                
-                displayOrgType(function(){
-                    if(levelNo==2){
-                        displayRecords();
-                    }else{
-                        var prevModal = $("#"+ modalId).prev();
-                        orgPId  = prevModal.attr("pid");
-                        levelNo = prevModal.attr("level_id");
-                        tableId = prevModal.find(".zGrid").attr("id");
-                        
-                        displayOrgType();
-                    }
-                });
+            if(_levelNo === 1){
+               keyHeaderCount -= 2;
             }
+            else if(_levelNo === 2){
+                keyHeaderCount -= 1;
+                
+                _dataRows.push({    
+                      text  : "ORGANIZATION GROUP"            
+            		, width : 210          
+            		, style : "text-align:center;"
+                    ,onRender : function(d){
+            		    return  bs({name:"organization_group_id",type:"select",value: svn (d,"organization_group_id")})
+            		           + (_levelNo!==5 ? bs({name:"squadron_type_id",type:"hidden",value: svn (d,"squadron_type_id")}) : "");
+                    }
+        		});
+            }
+            else if(_levelNo === 5){
+                _dataRows.push({    
+                      text  : "SQUADRON TYPE"            
+            		, width : 190          
+            		, style : "text-align:center;"
+                    ,onRender : function(d){
+            		    return  bs({name:"squadron_type_id",type:"select",value: svn (d,"squadron_type_id")});
+                    }
+        		});
+            }
+            
+            for(var i=8; i < keyHeaderCount ; i++){
+                var _fn = (_keyHeaders2 !== null ? new Function('d', 'return  svn(d,"' +  _keyHeaders2[i] + '")') : "");
+                var _text = _keyHeaders[i].split("_")[0];
+                _dataRows.push({    
+                          text  : _text
+                        , width : 130        
+                        , style : "text-align:center;"
+                        , type: "text"
+                        , onRender : _fn
+                    }
+                );
+            }
+    		
+            _dataRows.push({    
+                  text  : "ACTIVE?"                       
+        		, name  : "is_active"                   
+        		, type  : "yesno"             
+        		, width : 60          
+        		, style : "text-align:center;"
+        		, defaultValue:"Y"
+    		});
+    		
+    		if(_levelNo === 5){
+                _dataRows.push({    
+                      text  : "LOCATIONS"            
+            		, width : 80          
+            		, style : "text-align:center;"
+                    ,onRender : function(d){
+            		    return  "<a href='javascript:void(0);' onclick='manageLocations("+ svn (d,"organization_id") +",\""+ svn (d,"organization_name")  +"\");'>"+ svn (d,"warehouseCount") +"</a>";
+                    }
+        		});
+            }
+
+            $("#"+ o.gridID).dataBind({
+        	     rows           : _rows
+        	    ,width          : $(document).width() - (o.isModal ? 45 : 35)
+        	    ,height         : $(document).height() - 250
+        	    ,selectorType   : "checkbox"
+                ,blankRowsLimit : (_levelNo > 1 ? 5 : 1)
+                ,isPaging : false
+                ,dataRows : _dataRows
+                ,onComplete: function(){
+                    $("#cbFilter").setCheckEvent("#grid input[name='cb']");
+                    $("select[name='organization_head_id']").dataBind("employees_fullnames_v");
+                    
+                    if(_levelNo === 2){
+                        $("select[name='organization_group_id']").dataBind({
+                            url : execURL + "orgranization_groups_sel"
+                            ,text: "organization_group_name"
+                            ,value: "organization_group_id"
+                        });
+                    }
+                    
+                    if(_levelNo === 5){
+                        $("select[name='squadron_type_id']").dataBind({
+                            url : execURL + "squadron_types_sel"
+                            ,text: "squadron_type"
+                            ,value: "squadron_type_id"
+                        });
+                    }
+                    
+                    if(o.isModal){
+                        $("#modalDynamic").on('hide.bs.modal', function(e){
+                            orgArr = [];
+                        });
+                    }
+                    
+                    $("input, select").on("keyup change", function(){
+                        var $zRow = $(this).closest(".zRow");
+                        $zRow.find("#is_edited").val("Y");
+                    });
+                }  
+            });
         });
     });
 }
 
-function getParams(o, callBack){
-    var modal = $(o).closest(".modal");
-    orgPId  = modal.attr("pid");
-    levelNo = modal.attr("level_id");
-    modalId = modal.attr("id");
-    tableId = modal.find(".zGrid").attr("id");
+function myFunction(levelid, orgName, orgId){
+    var backBtn = "";
+    orgPid = orgId;
+    levelNo = levelid;
+    levelNoModal = levelid;
+    displayOrgType(function(){
+        if(orgArr.length > 0){
+            backBtn = "<a href='javascript:void(0);' class='btn-lg' onclick='backFunction("+ orgArr[0].level_no +",\""+ orgArr[0].org_name +"\","+ orgArr[0].org_pid +");'><span class='glyphicon glyphicon-circle-arrow-left'></span></a>";
+        }
+        
+        var title = "";
+        if(levelNo===1){
+            title = "Head Quarter";
+        }else if(levelNo===2){
+            title = "Command";
+        }else if(levelNo===3){
+            title = "Wing";
+        }else if(levelNo===4){
+            title = "Group";
+        }else if(levelNo===5){
+            title = "Squadron";
+        }
+    
+        $("#modalDynamic .modal-title").html(backBtn + orgName +" » "+ title);
+        $("#modalDynamic .modal-body").css("overflow","hidden");
+        $("#modalDynamic").modal({ show: true, keyboard: false, backdrop: 'static' });
+        
+        orgArr.push({
+             org_pid  : orgId 
+            ,level_no : levelid
+            ,org_name : orgName
+        }); 
+    });
+}
+
+function displayOrgType(callBack){
+    levelNo = levelNoModal;
+    setGridLayout({
+        gridID   : "gridModal"
+        ,params  : "@organization_id=" + orgPid + ",@level_no=" + levelNoModal
+        ,isModal : 1
+    });
     
     if(callBack) callBack();
 }
-      
+
+function backFunction(levelid, orgName, orgId){
+    var secToLastItem = orgArr[orgArr.length - 2];
+    orgArr.pop();
+    orgArr.pop();
+    
+    myFunction(secToLastItem.level_no, secToLastItem.org_name, secToLastItem.org_pid);
+}
+
+function submitOrgType(o){
+    $("#frm_modalDynamic").jsonSubmit({
+          procedure: "organizations_upd"
+        , optionalItems: ["is_active","organization_id","organization_type_id","organization_pid"] 
+        , onComplete: function (data) {
+            $("#tblDynamic").clearGrid();
+            if(data.isSuccess===true) zsi.form.showAlert("alert");
+
+            displayOrgType(function(){
+                levelNo = levelNoMain;
+                displayRecords(); 
+            });
+        }
+    });
+}
+
+function manageLocations(id, name){
+    g_organization_id = id;
+    g_warehouse_id = null;
+    $("#modalLocations .modal-title").html(name +" » Locations");
+    $("#modalLocations .modal-body").css("overflow","hidden");
+    $("#modalLocations").modal({ show: true, keyboard: false, backdrop: 'static' });
+    $("#gridOrgBinsTitle, #gridOrgBinsModal").empty();
+    
+    displayLocations(g_organization_id);
+}
+
+function displayLocations(id){
+    $("#gridLocations").dataBind({
+         url   : execURL + "warehouses_sel @squadron_id=" + id +",@is_active='Y'"
+         ,width          : $(document).width() - 800
+	    ,height         : "200"
+        ,blankRowsLimit : 5
+        ,dataRows       :[
+    		 { text: "Code"             , width:160       , style:"text-align:left;" 
+    		    ,onRender : function(d){ 
+                    return  bs({name:"warehouse_id",type:"hidden",value: svn(d,"warehouse_id")})  
+                            + bs({name:"is_edited",type:"hidden"}) 
+                            + bs({name:"squadron_id",type:"hidden",value: id})
+                            + bs({name:"warehouse_code",type:"input",value: svn(d,"warehouse_code")});
+                }
+    		 }	 
+    		 ,{ text: "Location"        , width:240       , style:"text-align:left;" 
+		        ,onRender : function(d){ 
+                    return bs({name:"warehouse_location",type:"input",value:svn (d,"warehouse_location")});
+                }
+    		 }	 
+    		,{ text:"Active?"       , width:80  , style:"text-align:left;"    ,type:"yesno"  ,name:"is_active"  ,defaultValue:"Y" }
+    		,{    
+                  text  : "Bins"         
+        		, width : 80          
+        		, style : "text-align:center;"
+                ,onRender : function(d){ return "<a href='javascript:manageItemBins("+ svn(d,"warehouse_id") +",\""+  svn(d,"warehouse_location") +"\");'>" + svn(d,"countWarehouseBins") + "</a>"; }
+    		}
+ 	    ]
+        ,onComplete: function(){
+            $("#gridLocations input").on("keyup", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });
+        }
+    });   
+}
+
+function submitLocations(){
+    $("#gridLocations").jsonSubmit({
+          procedure: "warehouses_upd"
+        , optionalItems: ["warehouse_id","squadron_id","is_active"] 
+        , onComplete: function (data) {
+            if(data.isSuccess===true) zsi.form.showAlert("alert");
+            
+            displayLocations(g_organization_id);
+            displayOrgType(); 
+            
+            if(g_warehouse_id) submitOrgBins();
+        }
+    });
+}
+
+function manageInactiveLocations(){
+    $("#modalInactiveLocations .modal-title").html("Inactive Locations");
+    $("#modalInactiveLocations .modal-body").css("overflow","hidden");
+    $("#modalInactiveLocations").modal({ show: true, keyboard: false, backdrop: 'static' });
+    
+    displayInactiveLocations();
+}
+
+function displayInactiveLocations(){
+    $("#gridInactiveLocations").dataBind({
+         url   : execURL + "warehouses_sel @is_active='N'"
+         ,width          : $(document).width() - 800
+	    ,height         : $(document).height() - 250
+        ,blankRowsLimit : 0
+        ,dataRows       :[
+    		 { text: "Code"             , width:240       , style:"text-align:left;" 
+    		    ,onRender : function(d){ 
+                    return  bs({name:"warehouse_id",type:"hidden",value: svn(d,"warehouse_id")})  
+                            + bs({name:"is_edited",type:"hidden"}) 
+                            + bs({name:"squadron_id",type:"hidden",value: svn(d,"squadron_id")})
+                            + bs({name:"warehouse_code",type:"input",value: svn(d,"warehouse_code")});
+                }
+    		 }	 
+    		 ,{ text: "Location"        , width:240       , style:"text-align:left;" 
+		        ,onRender : function(d){ 
+                    return bs({name:"warehouse_location",type:"input",value:svn (d,"warehouse_location")});
+                }
+    		 }	 
+    		,{ text:"Active?"       , width:80  , style:"text-align:left;"    ,type:"yesno"  ,name:"is_active"  ,defaultValue:"Y" }	 	 
+ 	    ]
+        ,onComplete: function(){
+            $("#gridInactiveLocations input").on("keyup", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });
+        }
+    });   
+}
+
+function submitInactiveLocations(){
+    $("#frm_modalInactiveLocations").jsonSubmit({
+          procedure: "warehouses_upd"
+        , onComplete: function (data) {
+            if(data.isSuccess===true) zsi.form.showAlert("alert");
+            
+            displayInactiveLocations();
+            displayLocations(g_organization_id);
+        }
+    });
+}
+
+function manageItemBins(id, location){
+    g_warehouse_id =id;
+    displayOrgBins(g_warehouse_id);
+    $("#gridOrgBinsTitle").text(location +" » Bins");
+    /*$("#modalBins .modal-title").text(location +" » Bins");
+    $("#modalBins").modal("show");
+    if (modalBins===0) {
+        modalBins=1;
+        $("#modalBins").on("hide.bs.modal", function () {
+                if (confirm("You are about to close this window. Continue?")) return true;
+                return false;
+        });
+    }    */
+}
+function displayOrgBins(id){   
+     $("#gridOrgBinsModal").dataBind({
+         url   : execURL + "warehouse_bins_sel @warehouse_id=" + id
+         ,width          : $(document).width() - 800
+	    ,height         : "200"
+        ,blankRowsLimit : 5
+        ,dataRows       :[
+    		 { text: "Code"     , width:465 , style:"text-align:left;" 
+		        ,onRender : function(d){ 
+                    return  bs({name:"bin_id",type:"hidden",value:svn (d,"bin_id")})  
+                            + bs({name:"is_edited",type:"hidden"}) 
+                            + bs({name:"warehouse_id",type:"hidden",value: id})
+                            + bs({name:"bin_code",type:"input",value: svn(d,"bin_code")});
+                }   
+    		 }	 
+    		,{ text:"Active?"   , width:80  , style:"text-align:left;"  ,type:"yesno"   ,name:"is_active"    ,defaultValue:"Y" }	 	 
+ 	    ]
+ 	    ,onComplete: function(){
+ 	        $("#gridOrgBinsModal input, #gridOrgBinsModal select").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });
+ 	    }
+    });    
+}
+
+function submitOrgBins(){
+    $("#gridOrgBinsModal").jsonSubmit({
+          procedure: "warehouse_bins_upd"
+        , optionalItems: ["bin_id","warehouse_id","is_active"] 
+        , onComplete: function (data) {
+            if(data.isSuccess===true) zsi.form.showAlert("alert");
+            
+            displayLocations(g_organization_id);
+            displayOrgBins(g_warehouse_id);
+        }
+    });
+} 

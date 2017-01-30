@@ -1,13 +1,6 @@
  var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-
-
 zsi.ready(function(){
-  
-   /* $(".zPanel").css({
-            height:$(window).height()-179
-        });*/
-     
     displayRecords();
   
 });
@@ -24,13 +17,11 @@ $("#btnSave").click(function () {
         });    
 });
 
-
-
  function displayRecords(){   
       var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : execURL + "positions_sel"
-	    ,width          : 800
+	    ,width          : 700
 	    ,height         : 400
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -43,9 +34,9 @@ $("#btnSave").click(function () {
                 		                 +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
                 }	 
-            	,{ text:"Code"                              , width:300       , style:"text-align:center;"        , type:"input"          ,name:"position_code"}
-            	,{ text:"Position"                          , width:300       , style:"text-align:center;"        , type:"input"          ,name:"position"}
-            	,{ text:"Active?"                           , width:100       , style:"text-align:center;"        , type:"yesno"          ,name:"is_active" ,defaultValue : "Y" }
+            	,{ text:"Code"                              , width:250      , style:"text-align:center;"        , type:"input"          ,name:"position_code"}
+            	,{ text:"Position"                          , width:310      , style:"text-align:center;"        , type:"input"          ,name:"position"}
+            	,{ text:"Active?"                           , width:75       , style:"text-align:center;"        , type:"yesno"          ,name:"is_active" ,defaultValue : "Y" }
 	    ]
 	     ,onComplete: function(){
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
@@ -53,4 +44,4 @@ $("#btnSave").click(function () {
            
         }  
     });    
-} 
+}    

@@ -1,0 +1,53 @@
+<style>
+    #grid{
+    width: 100%;
+}
+.zGrid .item .title {
+}
+.zGrid .zHeaders .zSort {
+}
+.zRows {
+    height: 100%;
+  
+}
+</style>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">  
+        <div class="row zForm">
+            <div class="form-horizontal">   
+                <div class="col-xs-12 col-sm-12">
+                    <div class="form-group  ">
+                        <label class=" col-xs-2 control-label">Area</label>
+                        <div class=" col-xs-2"> 
+                            <input name="logon_id_filter" id="logon_id_filter" type="hidden" class="form-control input-sm">
+                            <input name="logon_name_filter" id="logon_name_filter" placeholder="Enter Area Name" class="form-control input-sm">
+                        </div>
+                         <label class=" col-xs-2 control-label">Store</label>
+                        <div class=" col-xs-2"> 
+                            <input name="logon_id_filter" id="logon_id_filter" type="hidden" class="form-control input-sm">
+                            <input name="logon_name_filter" id="logon_name_filter" placeholder="Enter Store Name" class="form-control input-sm">
+                        </div>
+                        <div class="col-xs-1">
+               <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-folder-open"></span></button>
+            </div>
+                    </div>
+                </div>    
+            </div>
+        </div>    
+<div class="col-xs-12">    
+    <form method="post" id="frm">
+    <div class="zPanel">
+            <div id="grid" class="zGrid"></div>    
+        <div class="buttonGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnInactive">
+            	<span class="glyphicon glyphicon-ban-circle"></span> Inactive
+            </button>
+        </div>
+    </div>
+    </form>
+</div>
+</div>
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
+

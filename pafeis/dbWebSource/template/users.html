@@ -35,13 +35,13 @@
 }
 
 div.zRows{
-    min-height:450px;
+    /*min-height:450px;*/
 }
 
 </style>
 
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">  
-        <div class="row zForm">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 zForm">  
+        <div class="row " style="display:none">
             <div class="form-horizontal">   
                 <div class="col-xs-12 col-sm-12">
                     <div class="form-group  ">
@@ -56,24 +56,12 @@ div.zRows{
         </div>    
 
     <form method="post" id="frm">
-        <div class="zPanel">
-            
-               <div id="grid" class="zGrid"></div> 
-            
-             
+            <div id="grid" class="zGrid"></div> 
             <div class="buttonGroup">
                 <button type="button" class="btn btn-primary btn-sm" id="btnSave">
                 	<span class="glyphicon glyphicon-floppy-disk"></span> Save
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
-                	<span class="glyphicon glyphicon-trash"></span> Delete
-                </button>    
-                <button type="button" class="btn btn-primary btn-sm" id="btnNactive">
-                	<span class="glyphicon glyphicon-user"></span> Inactive
-                </button>    
             </div>
-        
-        </div>
     </form>
 </div>
 <div id="user-box">
