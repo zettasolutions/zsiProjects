@@ -100,9 +100,6 @@ SET @receiving_id = null;
 	   RETURN @id
 	END;
 
-	EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
-	
-
 	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@statusId 
 	SELECT @data_count =COUNT(*) FROM @proc_tt 
 	WHILE @ctr < @data_count 
@@ -112,7 +109,7 @@ SET @receiving_id = null;
 	  SET @ctr = @ctr + 1
 	END
 
-
+	EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
 END
 
 

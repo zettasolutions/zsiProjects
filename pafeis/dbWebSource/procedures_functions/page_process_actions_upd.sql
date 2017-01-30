@@ -18,6 +18,9 @@ SET NOCOUNT ON
 			 ,updated_date	    = GETDATE()
 		FROM dbo.page_process_actions a INNER JOIN @tt b on 
 		    a.page_process_action_id = b.page_process_action_id 
+		WHERE ISNULl(b.is_edited,'N')='Y'
+/*
+			
 	     AND ( ISNULL(a.page_process_id,0) = ISNULL(b.page_process_id,0)
 		   OR  ISNULL(a.seq_no,0) = ISNULL(b.seq_no,0)
 		   OR  ISNULL(a.action_desc,'') = ISNULL(b.action_desc,'')
@@ -25,6 +28,7 @@ SET NOCOUNT ON
 		   OR  ISNULL(a.next_process_id,0) = ISNULL(b.next_process_id,0)
 		   OR  ISNULL(a.is_end_process,'') = ISNULL(b.is_end_process,'')
           )
+*/
 -- INSERT
  INSERT INTO dbo.page_process_actions (
 		page_process_id	

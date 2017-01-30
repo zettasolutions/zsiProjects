@@ -26,7 +26,7 @@ DECLARE @organization_id INT
      SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
                + ' AND receiving_organization_id = ' + cast(@organization_id as varchar(20))
 
-  IF @tab_name='NEW'
+  IF @tab_name='SUPPLIER'
      SET @stmt = @stmt + ' AND ISNULL(dealer_id,0) <> 0'
 
   IF @tab_name='TRANSFER'
@@ -48,7 +48,7 @@ DECLARE @organization_id INT
   ELSE
      SET @stmt = @stmt + ' DESC';
   
-  print @stmt;
+  --print @stmt;
   exec(@stmt);
 	
 END

@@ -46,8 +46,8 @@ WHILE @count < @rec_count
 
    	    IF (SELECT COUNT(*) FROM dbo.items_inv WHERE item_code_id = @item_code_id AND organization_id=@receiving_organization_id) = 0
 			BEGIN
-				INSERT INTO dbo.items_inv (item_code_id, organization_id, stock_qty, created_by, created_date)
-					   VALUES (@item_code_id, @receiving_organization_id, @quantity, @user_id, GETDATE())
+				INSERT INTO dbo.items_inv (item_code_id, organization_id, warehouse_id, stock_qty, created_by, created_date)
+					   VALUES (@item_code_id, @receiving_organization_id, dbo.getUserWarehouseId(@user_id), @quantity, @user_id, GETDATE())
 				SET @item_inv_id = @@IDENTITY 
 			END
 		ELSE

@@ -14,12 +14,16 @@ BEGIN
 		,unit_of_measure_id		= b.unit_of_measure_id
 		,quantity				= b.quantity
 		,item_class_id			= b.item_class_id
+		,time_since_new         = b.time_since_new
+		,time_since_overhaul    = b.time_since_overhaul
 		,remarks	            = b.remarks
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.receiving_details a INNER JOIN @tt b
     ON a.receiving_detail_id = b.receiving_detail_id
-    WHERE (
+    WHERE ISNULL(b.is_edited,'N')='Y'
+	/*
+	(
 		isnull(a.item_code_id,0)			<> isnull(b.item_code_id,0)  
 		OR	isnull(a.serial_no,0)		    <> isnull(b.serial_no,0)  
 		OR	isnull(a.unit_of_measure_id,0)	<> isnull(b.unit_of_measure_id,0)  
@@ -27,7 +31,7 @@ BEGIN
 		OR	isnull(a.item_class_id,0)		<> isnull(b.item_class_id,0)  
 		OR	isnull(a.remarks,'')			<> isnull(b.remarks,'')  
 	)
-	   
+	*/   
 -- Insert Process
     INSERT INTO dbo.receiving_details (
          receiving_id 
@@ -36,6 +40,8 @@ BEGIN
 		,unit_of_measure_id
 		,quantity
 		,item_class_id
+		,time_since_new
+		,time_since_overhaul
 		,remarks
 		,created_by
         ,created_date
@@ -47,6 +53,8 @@ BEGIN
 	   ,unit_of_measure_id	
 	   ,quantity
 	   ,item_class_id
+	   ,time_since_new
+	   ,time_since_overhaul
 	   ,remarks
 	   ,@user_id
        ,GETDATE()
