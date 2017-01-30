@@ -168,7 +168,7 @@ function showModalUploadEmployeeImage(UserId, title){
     $.get(base_url + 'page/name/tmplImageUpload'
         ,function(data){
             m.find('.modal-body').html(data);
-            $("#frm_" + modalImageEmployee).find("#prefixKey").val("employee.");
+            $("#frm_" + modalImageEmployee).find("#prefixKey").val("user.");
            initChangeEvent();
         }
     ); 
@@ -279,4 +279,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                         
+}                          

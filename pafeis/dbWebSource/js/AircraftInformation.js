@@ -86,7 +86,7 @@ function displayRecords(){
     	     ,onComplete: function(){
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
                 $("select[name='aircraft_type_id']").dataBind( "aircraft_type");
-                $("select[name='squadron_id']").dataBind( "squadron");
+                $("select[name='squadron_id']").dataBind( "squadronTypes");
                 $("select[name='aircraft_source_id']").dataBind( "supply_source");
                 $("select[name='aircraft_dealer_id']").dataBind( "dealer");
                 $("select[name='status_id']").dataBind( "status");
@@ -119,4 +119,4 @@ $("#btnDelete").click(function(){
     });       
 });
     
-                                           
+                                            
