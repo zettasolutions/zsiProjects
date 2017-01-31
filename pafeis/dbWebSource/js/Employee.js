@@ -51,7 +51,7 @@ function displayRecords(){
                     , onRender      :  function(d) {
                         return     bs({name:"user_id",type:"hidden",value: svn (d,"user_id")})
                                  + bs({name:"is_edited",type:"hidden"}) 
-                                 +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                                 + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
                 }
                 
@@ -279,4 +279,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                          
+}                           

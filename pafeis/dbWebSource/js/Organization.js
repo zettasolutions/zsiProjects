@@ -1,6 +1,5 @@
 var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-
 var levelNo;
 var levelNoMain = null;
 var levelNoModal = null;
@@ -511,4 +510,4 @@ function submitOrgBins(){
             displayOrgBins(g_warehouse_id);
         }
     });
-} 
+}  
