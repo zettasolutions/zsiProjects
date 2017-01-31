@@ -425,6 +425,7 @@ function buildIssuanceDetails(callback) {
             //setSearch();
             setSearchMulti();
             setMandatoryEntries();
+            if(callback) callback();
         }  
     });
 }
@@ -770,4 +771,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-         
+          

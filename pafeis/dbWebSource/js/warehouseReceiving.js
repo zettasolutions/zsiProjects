@@ -3,6 +3,7 @@ var svn =  zsi.setValIfNull;
 var g_receiving_id;
 var cls =".right .zHeaders .item";
 var queDataProcedures;
+var g_recieving_id = null;
 var g_organization_id;
 var g_organization_name = "";
 var g_location_name = "";
@@ -52,7 +53,9 @@ zsi.ready(function(){
             g_organization_id = d.rows[0].organization_id;
             g_organization_name = d.rows[0].organizationName;
             g_location_name = d.rows[0].warehouse_location;
-            $(".pageTitle").append(' for ' + g_organization_name +" » "+ g_location_name);
+            
+            var pageTitle = (g_location_name ? " » "+ g_location_name: "");
+            $(".pageTitle").append(' for ' + g_organization_name + pageTitle);
         }
     });
     
@@ -418,7 +421,6 @@ function buildReceiving(tbl_obj) {
 function buildReceivingHeader(tbl_obj) {
     var $table = $(tbl_obj);
     $table.html('');
-    console.log(g_today_date);
     var html = '<div class="form-horizontal" style="padding:5px">' +
         '<input type="hidden" name="receiving_id" id="receiving_id" class="form-control input-sm" >' +
         '<input type="hidden" name="receiving_no" id="receiving_no" class="form-control input-sm" >' +
@@ -484,7 +486,7 @@ function fixTextAreaEvent(){
 function buildReceivingDetails(callback) {
     $("#tblModalReceivingDetails").dataBind({
         url: procURL + "receiving_details_sel"
-       // ,width:  $(document).width() - 230
+        ,width:  $(document).width() - 200
         ,height: 200
         ,blankRowsLimit: 10
         ,isPaging: false
@@ -492,6 +494,7 @@ function buildReceivingDetails(callback) {
             {text   : " "   , width: 26, style : "text-align:left;", 
                 onRender:  function(d){ 
                     return     bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
+                        +  bs({name:"is_edited",type:"hidden"})
                         +  bs({name:"receiving_id",type:"hidden", value: svn (d,"receiving_id")})
                         + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
                 }
@@ -510,11 +513,17 @@ function buildReceivingDetails(callback) {
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 475       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='item_class_id']").dataBind("item_class");
+            $("select, input").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });
             //setSearch();
             setSearchMulti();
             if (callback) callback();
@@ -603,7 +612,8 @@ function Save(page_process_action_id) {
             procedure: "receiving_upd"
             , onComplete: function (data) {
                 if (data.isSuccess === true) { 
-                    //$("#tblModalReceivingDetails input[name='receiving_id']").val(data.returnValue);
+                    var _receiving_id = (data.returnValue===0 ? g_recieving_id : data.returnValue);
+                    $("#tblModalReceivingDetails input[name='receiving_id']").val(_receiving_id);
                     //Saving of details.
                     SaveDetails(page_process_action_id);
                 } else {
@@ -648,6 +658,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
     var title = '';
     var label = '';
     var html = '';
+    g_recieving_id = receiving_id;
     if (delivery_type == DeliveryType.Supplier) {
         title = "Supplier Delivery for ";
         label = 'Dealer';
@@ -689,10 +700,10 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
                 $("#dealer_id").val(d.rows[0].dealer_id);
                 $("#status_remarks").val(d.rows[0].status_remarks);
        
-                buildReceivingDetails(function() {
+               // buildReceivingDetails(function() {
                     loadReceivingDetails(receiving_id);
                     buildReceivingButtons();        
-                });         
+                //});         
             }
         });
     });
@@ -702,7 +713,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
 function loadReceivingDetails(receiving_id) {
     $("#tblModalReceivingDetails").dataBind({
         url: procURL + "receiving_details_sel @receiving_id=" + receiving_id
-        ,width:  $(document).width() - 190
+        ,width:  $(document).width() - 200
         ,height: 200
         ,blankRowsLimit: 10
         ,isPaging: false
@@ -710,6 +721,7 @@ function loadReceivingDetails(receiving_id) {
             {text   : " "   , width: 26, style : "text-align:left;", 
                 onRender:  function(d){
                     return     bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
+                        +  bs({name:"is_edited",type:"hidden"})
                         +  bs({name:"receiving_id",type:"hidden", value: receiving_id })
                         + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
                 }
@@ -723,11 +735,18 @@ function loadReceivingDetails(receiving_id) {
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='item_class_id']").dataBind("item_class");
+            
+            $("select, input").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });
             //setSearch();
             setSearchMulti();
             setMandatoryEntries();
@@ -837,4 +856,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-          
+              
