@@ -736,8 +736,8 @@ function setSearchMulti(){
 function setSearchSerial(id, row){
     row.find("#serial_no").dataBind({ 
          url : execURL + "dd_warehouse_items_sel @user_id="+ g_user_id +",@item_code_id="+ id
-        ,text: "organization_group_name"
-        ,value: "organization_group_id"
+        ,text: "serial_no"
+        ,value: "item_id"
     });
     
     /*var param ="aircraft_info_id=null";
