@@ -1,10 +1,12 @@
 var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-var g_receiving_id;
 var cls =".right .zHeaders .item";
 var queDataProcedures;
-var g_organization_id;
-var g_organization_name;
+var g_user_id = null;
+var g_recieving_id = null;
+var g_organization_id = null;
+var g_organization_name = "";
+var g_location_name = "";
 var g_tab_name = "AIRCRAFT";
 
 const IssuanceType = {
@@ -43,9 +45,12 @@ zsi.ready(function(){
     
     $.get(procURL + "user_info_sel", function(d) {
         if (d.rows !== null && d.rows.length > 0) {
+            g_user_id = d.rows[0].user_id;
             g_organization_id = d.rows[0].organization_id;
             g_organization_name = d.rows[0].organizationName;
-            $(".pageTitle").append(' for ' + g_organization_name);
+            g_location_name = d.rows[0].warehouse_location;
+            g_location_name = (g_location_name? " » " + g_location_name:"");
+            $(".pageTitle").append(' for ' + g_organization_name + g_location_name);
             
         }
     });
@@ -449,7 +454,7 @@ function buildIssuanceButtons() {
 
 // Add a click event for the aircraft issuance button.
 $("#aircraftBtnNew").click(function () {
-    $("#modalIssuance .modal-title").text("New Aircraft Issuance for " + g_organization_name);
+    $("#modalIssuance .modal-title").text("New Aircraft Issuance for " + g_organization_name + g_location_name);
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuance($("#tblModalIssuanceHeader"));
     $(".show-hide-label").html('Aircraft');            
@@ -461,7 +466,7 @@ $("#aircraftBtnNew").click(function () {
 
 // Add a click event for the transfer issuance button.
 $("#transferBtnNew").click(function () {
-    $("#modalIssuance .modal-title").text("New Transfer Issuance for " + g_organization_name);
+    $("#modalIssuance .modal-title").text("New Transfer Issuance for " + g_organization_name + g_location_name);
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuance($("#tblModalIssuanceHeader"));
     $(".show-hide-label").html('Transfer To');            
@@ -473,7 +478,7 @@ $("#transferBtnNew").click(function () {
 
 // Add a click event for the repair issuance button.
 $("#repairBtnNew").click(function () {
-    $("#modalIssuance .modal-title").text("New Repair Issuance for " + g_organization_name);
+    $("#modalIssuance .modal-title").text("New Repair Issuance for " + g_organization_name + g_location_name);
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuance($("#tblModalIssuanceHeader"));
     $(".show-hide-label").html('Transfer To');            
@@ -485,7 +490,7 @@ $("#repairBtnNew").click(function () {
 
 // Add a click event for the overhaul issuance button.
 $("#overhaulBtnNew").click(function () {
-    $("#modalIssuance .modal-title").text("New Overhaul Issuance for " + g_organization_name);
+    $("#modalIssuance .modal-title").text("New Overhaul Issuance for " + g_organization_name + g_location_name);
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuance($("#tblModalIssuanceHeader"));
     $(".show-hide-label").html('Transfer To');            
@@ -729,7 +734,11 @@ function setSearchMulti(){
 }
 
 function setSearchSerial(id, row){
-    row.find("#serial_no").dataBind("good_items, 'item_code_id="+ id +"'");
+    row.find("#serial_no").dataBind({ 
+         url : execURL + "dd_warehouse_items_sel @user_id="+ g_user_id +",@item_code_id="+ id
+        ,text: "organization_group_name"
+        ,value: "organization_group_id"
+    });
     
     /*var param ="aircraft_info_id=null";
     
@@ -771,4 +780,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-          
+           

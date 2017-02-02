@@ -1,10 +1,9 @@
 var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-var g_receiving_id;
 var cls =".right .zHeaders .item";
 var queDataProcedures;
 var g_recieving_id = null;
-var g_organization_id;
+var g_organization_id = null;
 var g_organization_name = "";
 var g_location_name = "";
 var g_tab_name = "SUPPLIER";
@@ -53,9 +52,8 @@ zsi.ready(function(){
             g_organization_id = d.rows[0].organization_id;
             g_organization_name = d.rows[0].organizationName;
             g_location_name = d.rows[0].warehouse_location;
-            
-            var pageTitle = (g_location_name ? " » "+ g_location_name: "");
-            $(".pageTitle").append(' for ' + g_organization_name + pageTitle);
+            g_location_name = (g_location_name? " » " + g_location_name:"");
+            $(".pageTitle").append(' for ' + g_organization_name + g_location_name);
         }
     });
     
@@ -550,7 +548,7 @@ function buildReceivingButtons() {
 
 // Add a click event for the supplier delivery button.
 $("#sdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Supplier for " + g_organization_name +" » "+ g_location_name);
+    $("#modalReceiving .modal-title").text("Items from Supplier for " + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
     $(".show-hide-label").html('Dealer');            
@@ -563,7 +561,7 @@ $("#sdBtnNew").click(function () {
 });
 // Add a click event for the transfer delivery button.
 $("#tdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Repair for " + g_organization_name +" » "+ g_location_name);
+    $("#modalReceiving .modal-title").text("Items from Repair for " + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
     $(".show-hide-label").html('Organization');            
@@ -577,7 +575,7 @@ $("#tdBtnNew").click(function () {
 
 // Add a click event for the return delivery button.
 $("#rdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Aircraft for " + g_organization_name +" » "+ g_location_name);
+    $("#modalReceiving .modal-title").text("Items from Aircraft for " + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
     $(".show-hide-label").html('Aircraft');            
@@ -591,7 +589,7 @@ $("#rdBtnNew").click(function () {
 
 // Add a click event for the overhaul delivery button.
 $("#odBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Overhaul for " + g_organization_name +" » "+ g_location_name);
+    $("#modalReceiving .modal-title").text("Items from Overhaul for " + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
     $(".show-hide-label").html('Dealer');            
@@ -680,7 +678,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
             '<input type="hidden" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm">' +
             '<select type="text" name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></select>';
     }
-    $("#modalReceiving .modal-title").text(title + g_organization_name +" » "+ g_location_name);
+    $("#modalReceiving .modal-title").text(title + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceivingHeader($("#tblModalReceivingHeader"));
     $(".show-hide-label").html(label);
@@ -856,4 +854,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-              
+               
