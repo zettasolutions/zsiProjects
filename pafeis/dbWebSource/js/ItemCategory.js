@@ -5,6 +5,11 @@ var  bs = zsi.bs.ctrl
     ,tblInactiveICat = "tblInactiveItemCategory"
     ,tblInactiveIT = "tblInactiveItemTypes"
     ,tblInactiveIC = "tblInactiveItemCodes"
+    ,item_cat_id = null
+    ,ITid = null
+    ,catName = ""
+    ,item_type_id = null
+    ,item_title = ""
 ;
 
 
@@ -15,13 +20,16 @@ zsi.ready(function(){
 });
 
       var contextItemTypes = { id:"modalWindowItemTypes"
-                        , title: "Item Types"
+                        , title: "Types"
                         , sizeAttr: "fullWidth"
-                        , footer: '<div class="pull-left"><button type="button" onclick="submitItemsTypes();" class="btn btn-primary">'
-                        + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
-                                + '<button type="button" onclick="showInactiveItemTypes();" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
-                                + '</span>&nbsp;Inactive</button>'
-
+                        , footer: '<div class="pull-left" id="btnItemTypes">'
+                                    +'<button type="button" onclick="submitItemsTypes();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
+                                    +'<button type="button" onclick="showInactiveItemTypes();" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Inactive</button>'
+                                  +'</div>'
+                                  +'<div class="pull-left hide" id="btnItemCodes">'
+                                    +'<button type="button" onclick="submitItemsCodes();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
+                                    +'<button type="button" onclick="showInactiveItemCodes();" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Inactive</button>'
+                                  +'</div>'
                         , body:            
                         '<div id="' + tblIT + '" class="zGrid"></div>'
                              
@@ -112,7 +120,7 @@ function submitItemsTypes(){
             ,onComplete     : function (data) {
                if(data.isSuccess===true) zsi.form.showAlert("alert");
                $("#grid").trigger("refresh");
-               displayRecordsItemTypes(item_cat_id);
+               displayRecordsItemTypes(item_cat_id, ITid, catName);
                 
             }
         });
@@ -131,7 +139,8 @@ function submitInactiveItemTypes(){
 }
 
 function submitItemsCodes(){
-          $("#frm_modalWindowItemCodes").jsonSubmit({
+         // $("#frm_modalWindowItemCodes").jsonSubmit({
+         $("#frm_modalWindowItemTypes").jsonSubmit({
              procedure      : "item_codes_upd"
             ,optionalItems  : ["item_type_id","is_active"]
             ,onComplete     : function (data) {
@@ -155,22 +164,46 @@ function submitInactiveItemCodes(){
         });
 }
 
-function manageItemTypes(id,title){
+function manageItemTypes(id,title, ITid){
         item_cat_id=id;
-        displayRecordsItemTypes(id);
-        $("#frm_modalWindowItemTypes .modal-title").text("Item Types for » " + title);
-        $('#modalWindowItemTypes').modal({ show: true, keyboard: false, backdrop: 'static' });
-        $('#modalWindowItemTypes');//.setCloseModalConfirm();
-        $("#modalWindowItemTypes .modal-body").css("height","450px");
+        ITid = ITid;
+        catName="";
+        $.get(execURL + "item_categories_sel @item_cat_id="+ ITid
+            ,function(data){
+ 
+             if (data.rows!==null)  {
+                
+                catName = data.rows[0].item_cat_name;
+                 
+             }
+            
+            displayRecordsItemTypes(id,ITid,catName);
+            $("#btnItemTypes").removeClass("hide");
+            $("#btnItemCodes").addClass("hide");
+            $("#modalWindowItemTypes .modal-title").text("Types for » " + title);
+            $('#modalWindowItemTypes').modal({ show: true, keyboard: false, backdrop: 'static' });
+            $('#modalWindowItemTypes');//.setCloseModalConfirm();
+            $("#modalWindowItemTypes .modal-body").css("height","450px");
+    });
+        
 }
     
 function manageItemCodes(id,title){
         item_type_id=id;
+        item_title = title;
+        var backBtn = "<a href='javascript:void(0);' class='btn-lg' onclick='manageItemTypes("+ item_cat_id +",\""+ catName +"\","+ ITid +");'><span class='glyphicon glyphicon-circle-arrow-left'></span></a>";
+        
         displayRecordsItemCodes(id);
-        $("#frm_modalWindowItemCodes .modal-title").text("Item Codes for » " + title);
+        $("#btnItemTypes").addClass("hide");
+        $("#btnItemCodes").removeClass("hide");
+        $("#modalWindowItemTypes .modal-title").html(backBtn + " Types for » " + title);
+        $('#modalWindowItemTypes').modal({ show: true, keyboard: false, backdrop: 'static' });
+        $('#modalWindowItemTypes');//.setCloseModalConfirm();
+        $("#modalWindowItemTypes .modal-body").css("height","450px");
+        /*$("#frm_modalWindowItemCodes .modal-title").text("Item Codes for » " + title);
         $('#modalWindowItemCodes').modal({ show: true, keyboard: false, backdrop: 'static' });
         $('#modalWindowItemCodes');//.setCloseModalConfirm();
-        $("#modalWindowItemCodes .modal-body").css("height","450px");
+        $("#modalWindowItemCodes .modal-body").css("height","450px");*/
 }
 
 $("#btnInactive").click(function(){
@@ -256,9 +289,12 @@ function displayRecords(){
         		,{text  : "Name"                , name  : "item_cat_name"           , type  : "input"         , width : 300       , style : "text-align:left;"}
         		,{text  : "Parent Item"         , name  : "parent_item_cat_id"      , type  : "select"        , width : 200       , style : "text-align:left;"}
         		,{text  : "Active?"             , name  : "is_active"               , type  : "yesno"         , width : 60        , style : "text-align:left;"   ,defaultValue:"Y"}
+        		
         		,{text  : "Item Types"          , width : 100                       , style : "text-align:center;"      
                     ,onRender  :  
-                        function(d){return "<a href='javascript:manageItemTypes(" + svn(d,"item_cat_id") + ",\"" +  svn(d,"item_cat_name")  + "\");'>" + svn(d,"countItemTypes") + "</a>"; 
+                        function(d){
+                            var catId = (svn(d,"parent_item_cat_id")? svn(d,"parent_item_cat_id"):0);
+                            return "<a href='javascript:manageItemTypes(" + svn(d,"item_cat_id") + ",\"" +  svn(d,"item_cat_name")  + "\"," + catId + ");'>" + svn(d,"countItemTypes") + "</a>"; 
                     }
                 }
 
@@ -300,11 +336,74 @@ function displayInactiveItemCategory(){
         }  
     });   
 }
+function displayRecordsItemTypes(id, ITid, name){
+    var _dataRows =  [
+ 
+        		 {text  : "Monitoring Type"                , name  : "monitoring_type_id"                 , width : 150        , style : "text-align:left;"
+        		    , onRender      :  function(d){ 
+                		                    return    bs({name:"item_type_id",type:"hidden",value: svn (d,"item_type_id")})
+                		                           +  bs({name:"is_edited",type:"hidden"})
+                		                           +  bs({name:"item_cat_id",type:"hidden",value: id})
+                		                           +  bs({name:"monitoring_type_id",type:"select",value: svn (d,"monitoring_type_id")});
+                            }        		    
+        		}
+        		,{text  : "Type Code"           , name  : "item_type_code"              , type  : "input"           , width : 85        , style : "text-align:left;"}
+        		,{text  : "Type Name"                                                   , type  : "input"           , width : 400       , style : "text-align:left;"
+        		    , onRender      : function(d){
+        		                            return  bs({name:"item_type_name",type:"input",value: svn (d,"item_type_name")})
+        		                                +   (ITid===0 ? bs({name:"parent_item_type_id",type:"hidden",value: svn (d,"parent_item_type_id")}) : "");
+        		        
+        		    }  
+        		}];
+        		
+        		if(ITid!==0){
+        		    	_dataRows.push({
+        		    	    text  : name     , name  : "parent_item_type_id"      , type  : "select"         , width : 200       , style : "text-align:left;"
+        		    
+        		        });
+        		}
+        		
+        		
+        		_dataRows.push({text  : "Unit of Measure"     , name  : "unit_of_measure_id"      , type  : "select"          , width : 200       , style : "text-align:left;"
+        		    
+        		}
+        		,{text  : "Is Active?"          , name  : "is_active"               , type  : "yesno"           , width : 75        , style : "text-align:center;"  ,defaultValue:"Y"}
+        		,{text  : "Item Codes"                                                                          , width : 80        , style : "text-align:center;"      
+                    ,onRender  :  
+                        function(d){return "<a href='javascript:manageItemCodes(" + svn(d,"item_type_id") + ",\"" +  svn(d,"item_type_name")  + "\");'>" + svn(d,"countItemCodes") + "</a>"; 
+                    }
+                }
 
-function displayRecordsItemTypes(id){
+	    ) ;
+    
      $("#" + tblIT).dataBind({
 	     url            : execURL + "item_types_sel @item_cat_id=" + id
-	    ,width          : 950
+	    ,width          : 1225
+	    ,height         : 400
+        ,blankRowsLimit : 5
+        ,dataRows       : _dataRows
+        
+    	     ,onComplete: function(){
+                $("select[name='monitoring_type_id']").dataBind( "monitoring_type");
+             
+               	if(ITid!==0){
+                $("select[name='parent_item_type_id']").dataBind({
+                            url : execURL + "dd_item_types_sel @item_cat_id=" + ITid 
+                            ,text: "item_type_name"
+                            ,value: "item_type_id"
+                        });
+               	}
+                $("select[name='unit_of_measure_id']").dataBind( "unit_of_measure");
+                setEditedRow();
+        }  
+    });    
+}    
+
+
+function displayRecordsItemTypes2(id){
+     $("#" + tblIT).dataBind({
+	     url            : execURL + "item_types_sel @item_cat_id=" + id
+	    ,width          : 1225
 	    ,height         : 400
         ,blankRowsLimit : 5
         ,dataRows       : [
@@ -313,15 +412,17 @@ function displayRecordsItemTypes(id){
         		 {text  : "Monitoring Type"                , name  : "monitoring_type_id"                 , width : 150        , style : "text-align:left;"
         		    , onRender      :  function(d){ 
                 		                    return    bs({name:"item_type_id",type:"hidden",value: svn (d,"item_type_id")})
+                		                           +  bs({name:"is_edited",type:"hidden"})
                 		                           +  bs({name:"item_cat_id",type:"hidden",value: id})
                 		                           +  bs({name:"monitoring_type_id",type:"select",value: svn (d,"monitoring_type_id")});
                             }        		    
         		}
-        		,{text  : "Type Code"        , name  : "item_type_code"         , type  : "input"         , width : 85        , style : "text-align:left;"}
-        		,{text  : "Type Name"        , name  : "item_type_name"         , type  : "input"         , width : 400       , style : "text-align:left;"}
-        		,{text  : "Unit of Measure"  , name  : "unit_of_measure_id"      , type  : "select"        , width : 150       , style : "text-align:left;"}
-        		,{text  : "Is Active?"                                          , type  : "yesno"         , width : 75        , style : "text-align:center;"  ,defaultValue:"Y"}
-        		,{text  : "Item Codes"                                                                    , width : 80        , style : "text-align:center;"      
+        		,{text  : "Type Code"           , name  : "item_type_code"          , type  : "input"           , width : 85        , style : "text-align:left;"}
+        		,{text  : "Type Name"           , name  : "item_type_name"          , type  : "input"           , width : 400       , style : "text-align:left;"}
+        		,{text  : "Parent Item Type"    , name  : "parent_item_type_id"     , type  : "select"          , width : 200       , style : "text-align:left;"}
+        		,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"      , type  : "select"          , width : 200       , style : "text-align:left;"}
+        		,{text  : "Is Active?"          , name  : "is_active"               , type  : "yesno"           , width : 75        , style : "text-align:center;"  ,defaultValue:"Y"}
+        		,{text  : "Item Codes"                                                                          , width : 80        , style : "text-align:center;"      
                     ,onRender  :  
                         function(d){return "<a href='javascript:manageItemCodes(" + svn(d,"item_type_id") + ",\"" +  svn(d,"item_type_name")  + "\");'>" + svn(d,"countItemCodes") + "</a>"; 
                     }
@@ -330,7 +431,9 @@ function displayRecordsItemTypes(id){
 	    ] 
     	     ,onComplete: function(){
                 $("select[name='monitoring_type_id']").dataBind( "monitoring_type");
+                $("select[name='parent_item_type_id']").dataBind( "item_type");
                 $("select[name='unit_of_measure_id']").dataBind( "unit_of_measure");
+                setEditedRow();
         }  
     });    
 }    
@@ -356,7 +459,7 @@ function displayInactiveItemTypes(){
         		,{text  : "Type Code"        , name  : "item_type_code"         , type  : "input"         , width : 85        , style : "text-align:left;"}
         		,{text  : "Type Name"        , name  : "item_type_name"         , type  : "input"         , width : 400       , style : "text-align:left;"}
         		,{text  : "Unit of Measure " , name  : "unit_of_measure_id"     , type  : "select"        , width : 150       , style : "text-align:left;"}
-        		,{text  : "Is Active?"                                          , type  : "yesno"         , width : 75        , style : "text-align:center;" }
+        		,{text  : "Is Active?"       , name  : "is_active"     , type  : "yesno"         , width : 75        , style : "text-align:center;" }
 
 	    ] 
     	     ,onComplete: function(){
@@ -367,7 +470,8 @@ function displayInactiveItemTypes(){
 }    
 
 function displayRecordsItemCodes(id){
-     $("#" + tblIC).dataBind({
+     //$("#" + tblIC).dataBind({
+     $("#" + tblIT).dataBind({
 	     url            : execURL + "item_codes_sel @item_type_id=" + id
 	    ,width          : 1275
 	    ,height         : 400
@@ -384,12 +488,13 @@ function displayRecordsItemCodes(id){
         		    }
         		    
         		}
-        		,{text  : "Part No."            , name  : "part_no"              , type  : "input"         , width : 200       , style : "text-align:left;"}
-        		,{text  : "National Stock No."  , name  : "national_stock_no"     , type  : "input"         , width : 150      , style : "text-align:left;"}
-        		,{text  : "Item Name"           , name  : "item_name"             , type  : "input"         , width : 400      , style : "text-align:left;"}
-        		,{text  : "Critical Level"      , name  : "critical_level"        , type  : "input"         , width : 100      , style : "text-align:left;"}
-        		,{text  : "Reorder Level"       , name  : "reorder_level"         , type  : "input"         , width : 100      , style : "text-align:left;"}
-        		,{text  : "Is Active?"                                            , type  : "yesno"         , width : 100      , style : "text-align:center;"  ,defaultValue:"Y"}
+        		,{text  : "Part No."            , name  : "part_no"                 , type  : "input"         , width : 200       , style : "text-align:left;"}
+        		,{text  : "National Stock No."  , name  : "national_stock_no"       , type  : "input"         , width : 150      , style : "text-align:left;"}
+        		,{text  : "Item Name"           , name  : "item_name"               , type  : "input"         , width : 400      , style : "text-align:left;"}
+        		,{text  : "Critical Level"      , name  : "critical_level"          , type  : "input"         , width : 100      , style : "text-align:left;"}
+        		,{text  : "Reorder Level"       , name  : "reorder_level"           , type  : "input"         , width : 100      , style : "text-align:left;"}
+        		,{text  : "Is Active?"          , name  : "is_active"               , type  : "yesno"         , width : 100      , style : "text-align:center;"  ,defaultValue:"Y"}
+        	
 	    ] 
 
     });    
@@ -427,4 +532,4 @@ function displayInactiveItemCodes(){
 
 
     
-                                                            
+                                                                    
