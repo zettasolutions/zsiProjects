@@ -9,6 +9,7 @@ var bs = zsi.bs.ctrl
     ,g_location_name = ""
     ,g_tab_name = "AIRCRAFT"
     ,warehouse_id = null
+    ,g_today_date = new Date()
 ;
     const IssuanceType = {
     Aircraft: 'Aircraft',
@@ -348,7 +349,7 @@ function buildIssuanceHeader(tbl_obj) {
         '<div class="form-group  "> ' +
         '<label class=" col-xs-2 control-label">Issued Date</label>' +
             '<div class=" col-xs-3">' +
-                '<input type="text" name="issued_date" id="issued_date" class="form-control input-sm" >' +
+                '<input type="text" name="issued_date" id="issued_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'" >' +
             '</div>' +
             '<label class=" col-xs-2 control-label">Issuance Directive</label>' +
             '<div class=" col-xs-3">' +
