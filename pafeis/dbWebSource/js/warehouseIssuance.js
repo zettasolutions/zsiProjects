@@ -105,27 +105,12 @@ function initDatePicker(){
 function initSelectOptions(callbackFunc){
     $("#tblModalIssuanceHeader #issued_by").dataBind({
         url: base_url +  "selectoption/code/employees_fullnames_v"
-        /*
+        
         , onComplete : function(){
-            $("#tblModalIssuanceHeader #aircraft_id").dataBind({
-                url: base_url +  "selectoption/code/aircraft_info"
-                , onComplete : function(){
-                    $("#tblModalIssuanceHeader #issuance_directive_id").dataBind({
-                        url: base_url +  "selectoption/code/issuance_directive"
-                        
-                        , onComplete : function(){
-                            $("#tblModalIssuanceHeader #transfer_warehouse_id").dataBind({
-                                url: procURL + "dd_transfer_warehouses_sel"
-                                , text: "organization_warehouse"
-                                , value: "warehouse_id"
-                            });  
-                        }
-                       
-                    });
-                }
+            $("#tblModalIssuanceHeader #issuance_directive_id").dataBind({
+                url: base_url +  "selectoption/code/issuance_directive"
             });
         } 
-        */
     });
 }
 
@@ -412,27 +397,37 @@ function buildIssuanceDetails(callback) {
             {text   : " "   , width: 26, style : "text-align:left;", 
                 onRender:  function(d){ 
                     return bs({name:"issuance_detail_id",type:"hidden", value: svn (d,"issuance_detail_id")})
-                        + bs({name:"is_edited",type:"hidden"}) 
+                        +  bs({name:"is_edited",type:"hidden"}) 
                         +  bs({name:"issuance_id",type:"hidden", value: svn (d,"issuance_id")})
-                        +  bs({name:"item_id",type:"hidden", value: svn (d,"item_id")})
-                        +  bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")})
+                        +  bs({name:"serial_no",type:"hidden", value: svn (d,"serial_no")});
                 }
             }    
             ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , type  : "label"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "label"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
-	         $("select, input").on("keyup change", function(){
+	        $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
                 $zRow.find("#is_edited").val("Y");
             });            
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
-            //setSearch();
+
+            $("[name='quantity']").keyup(function(){
+                var $zRow = $(this).closest(".zRow");
+                var stock_qty = $zRow.find("label[name='stock_qty']").text();
+                if(parseInt(this.value) > stock_qty){
+                    alert("Please enter quantity less than or equal to stock qty.");
+                    this.value = "";
+                } 
+            });            
+            
             setSearchMulti();
             setMandatoryEntries();
             if(callback) callback();
@@ -476,6 +471,7 @@ $("#aircraftBtnNew").click(function () {
         $zGrid.find("#is_edited").val("Y");
     });    
     buildIssuanceDetails();
+    zsi.initDatePicker();
 });
 
 // Add a click event for the transfer issuance button.
@@ -486,15 +482,15 @@ $("#transferBtnNew").click(function () {
     , text: "organization_warehouse"
     , value: "warehouse_id"
     , required :true
-    /*
+    
     , onComplete: function(){
-        warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
+    //    warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
         $("select[name='dd_warehouse_transfer_filter']").change(function(){
             $("#transfer_warehouse_id").val(this.value);
             setSearchMulti();
         });
     }
-    */
+    
     });
 
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -509,8 +505,8 @@ $("#transferBtnNew").click(function () {
         $zGrid.find("#is_edited").val("Y");
     });
     buildIssuanceDetails();
+    zsi.initDatePicker();
 });
-
 
 // Add a click event for the repair issuance button.
 $("#repairBtnNew").click(function () {
@@ -520,15 +516,15 @@ $("#repairBtnNew").click(function () {
     , text: "organization_warehouse"
     , value: "warehouse_id"
     , required :true
-    /*
+    
     , onComplete: function(){
-        warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
+        //warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
         $("select[name='dd_warehouse_transfer_filter']").change(function(){
             $("#transfer_warehouse_id").val(this.value);
             setSearchMulti();
         });
     }
-    */
+    
     });
 
     $("select[name='dd_warehouse_transfer_filter']").change(function(){
@@ -547,6 +543,7 @@ $("#repairBtnNew").click(function () {
         $zGrid.find("#is_edited").val("Y");
     });    
     buildIssuanceDetails();
+    zsi.initDatePicker();
 });
 
 // Add a click event for the overhaul issuance button.
@@ -557,15 +554,15 @@ $("#overhaulBtnNew").click(function () {
     , text: "organization_warehouse"
     , value: "warehouse_id"
     , required :true
-    /*
+    
     , onComplete: function(){
-        warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
+      //  warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
         $("select[name='dd_warehouse_transfer_filter']").change(function(){
             $("#transfer_warehouse_id").val(this.value);
             setSearchMulti();
         });
     }
-    */
+    
     });
 
     $("select[name='dd_warehouse_transfer_filter']").change(function(){
@@ -584,6 +581,7 @@ $("#overhaulBtnNew").click(function () {
         $zGrid.find("#is_edited").val("Y");
     });    
     buildIssuanceDetails();
+    zsi.initDatePicker();
     
 });
 
@@ -710,54 +708,47 @@ function loadIssuanceDetails(issuance_id) {
             {text   : " "   , width: 26, style : "text-align:left;", 
                 onRender:  function(d){ 
                     return bs({name:"issuance_detail_id",type:"hidden", value: svn (d,"issuance_detail_id")})
+                        +  bs({name:"is_edited",type:"hidden"}) 
                         +  bs({name:"issuance_id",type:"hidden", value: svn (d,"issuance_id")})
-                        +  bs({name:"item_id",type:"hidden", value: svn (d,"item_id")})
-                        +  bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")})
+                        +  bs({name:"serial_no",type:"hidden", value: svn (d,"serial_no")});
                 }
             }
-            //,{text  : "Part No./Nat'l Stock No./Description"          , name  : "item_search"                , type  : "input"       , width : 250       , style : "text-align:left;"}
             ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "label"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
+	        $("select, input").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });            
+             $("[name='quantity']").keyup(function(){
+                var $zRow = $(this).closest(".zRow");
+                var stock_qty = $zRow.find("label[name='stock_qty']").text();
+                if(parseInt(this.value) > stock_qty){
+                    alert("Please enter quantity less than or equal to stock qty.");
+                    this.value = "";
+                } 
+            });            
+
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
-            //setSearch();
             setSearchMulti();
             setMandatoryEntries();
         }  
     });
 }
 
-// Set the auto-complete search for the grid details.
-/*function setSearch(){
-    new zsi.search({
-        tableCode: "adm-0003"
-        , colNames: ["item_description"] 
-        , displayNames: ["item_description"]  
-        , searchColumn:"item_description"
-        , input: "input[name = item_search]"
-        , url: execURL + "searchData"
-        , onSelectedItem: function(currentObject, data, i){ 
-            $(currentObject).prev().val(data.item_code_id);
-            currentObject.value = data.item_description;
-        }
-       , onChange: function(text){
-          if(text === ""){ 
-          }
-       }
-    });        
-}*/
-   
 function setSearchMulti(){
     var _tableCode = "ref-0027";
         new zsi.search({
         tableCode: _tableCode
-        , colNames: ["part_no","item_code_id","item_name","national_stock_no"] 
+        , colNames: ["part_no","item_inv_id","item_name","national_stock_no","unit_of_measure","stock_qty"] 
         , displayNames: ["Part No."]
         , searchColumn:"part_no"
         , condition: "'warehouse_id=" + g_warehouse_id + "'"
@@ -768,18 +759,19 @@ function setSearchMulti(){
             
             var $zRow = $(currentObject).closest(".zRow");
             
-            $zRow.find("#item_id").val(data.item_id);
-            $zRow.find("#item_code_id").val(data.item_code_id);
+            $zRow.find("#serial_no").val(data.serial_no);
+            $zRow.find("#item_inv_id").val(data.item_inv_id);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
             $zRow.find("#item_name").val(data.item_name);
-            
-            setSearchSerial(data.item_code_id, $zRow);
+            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
+            $zRow.find("#stock_qty").text(data.stock_qty);
+            setSearchSerial(data.item_inv_id, $zRow);
         }
     });
-    
+
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["national_stock_no","item_code_id","item_name","part_no"] 
+        , colNames: ["national_stock_no","item_inv_id","item_name","part_no","unit_of_measure","stock_qty"] 
         , displayNames: ["Nat'l Stock No."]
         , searchColumn:"national_stock_no"
         , input: "input[name=national_stock_no]"
@@ -789,18 +781,20 @@ function setSearchMulti(){
             
             var $zRow = $(currentObject).closest(".zRow");
             
-            $zRow.find("#item_id").val(data.item_id);
-            $zRow.find("#item_code_id").val(data.item_code_id);
+            $zRow.find("#serial_no").val(data.serial_no);
+            $zRow.find("#item_inv_id").val(data.item_inv_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#item_name").val(data.item_name);
-            
-            setSearchSerial(data.item_code_id, $zRow);
+            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
+            $zRow.find("#stock_qty").text(data.stock_qty);
+           
+            setSearchSerial(data.item_inv_id, $zRow);
         }
     });
     
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["item_name","item_code_id","part_no","national_stock_no"] 
+        , colNames: ["item_name","item_inv_id","part_no","national_stock_no","unit_of_measure","stock_qty"] 
         , displayNames: ["Description"]
         , searchColumn:"item_name"
         , input: "input[name=item_name]"
@@ -810,47 +804,36 @@ function setSearchMulti(){
             
             var $zRow = $(currentObject).closest(".zRow");
             
-            $zRow.find("#item_id").val(data.item_id);
-            $zRow.find("#item_code_id").val(data.item_code_id);
+            $zRow.find("#serial_no").val(data.serial_no);
+            $zRow.find("#item_inv_id").val(data.item_inv_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
+            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
+            $zRow.find("#stock_qty").text(data.stock_qty);
             
-            setSearchSerial(data.item_code_id, $zRow);
+            setSearchSerial(data.item_inv_id, $zRow);
         }
     });
 }
 
 function setSearchSerial(id, row){
-    row.find("#serial_no").dataBind({ 
-         url : execURL + "dd_warehouse_items_sel @user_id="+ g_user_id +",@item_code_id="+ id
+    var $serial_no = row.find("select[id='serial_no']");
+    
+    $serial_no.dataBind({ 
+         url : execURL + "dd_warehouse_items_sel @item_inv_id="+ id
         ,text: "serial_no"
-        ,value: "item_id"
+        ,value: "serial_no"
     });
     
-    /*var param ="aircraft_info_id=null";
+    $serial_no.change(function(){
+       if(this.value != ""){
+           row.find("label[name='unit_of_measure']").text("EACH");
+           row.find("label[name='stock_qty']").text(1);
+           row.find("input[name='quantity']").val(1);
+       } 
+    });
     
-    if(id) param += " AND item_code_id="+ id;
-    
-    new zsi.search({
-        tableCode: "ref-0022"
-        , colNames: ["serial_no","item_id","item_code_id","item_name","part_no","national_stock_no"] 
-        , displayNames: ["Serial No."]
-        , searchColumn:"serial_no"
-        , input: "input[name=serial_no]"
-        , url: execURL + "searchData"
-        , condition :"'"+ param +"'"
-        , onSelectedItem: function(currentObject, data, i){ 
-            currentObject.value = data.serial_no;
-            
-            var $zRow = $(currentObject).closest(".zRow");
-            
-            $zRow.find("#item_id").val(data.item_id);
-            $zRow.find("#item_code_id").val(data.item_code_id);
-            $zRow.find("#search_part_no").val(data.part_no);
-            $zRow.find("#search_ns_no").val(data.national_stock_no);
-            $zRow.find("#search_description").val(data.item_name);
-        }
-    });*/
+ 
 }
 
 // Set the mandatory fields.
@@ -867,4 +850,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                    
+                      
