@@ -36,7 +36,7 @@ zsi.ready(function(){
     
     getTemplate();
     setCurrentTab();
-    displayNew(g_tab_name);
+    displaySupplier(g_tab_name);
     
     $(window).keydown(function(event){
         if(event.target.tagName != 'TEXTAREA') {
@@ -58,7 +58,7 @@ zsi.ready(function(){
     });
     
     $("#supplier-tab").click(function () {
-        displayNew($(this).html());    
+        displaySupplier($(this).html());    
     });
     $("#transfer-tab").click(function () {
         displayTransfer($(this).html());    
@@ -187,7 +187,7 @@ $("ul.nav-tabs >li").click(function(){
 });
 
 // Display the grid for the supplier delivery.
-function displayNew(tab_name){
+function displaySupplier(tab_name){
     var counter = 0;
     $("#supplier").dataBind({
          url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
@@ -420,8 +420,9 @@ function buildReceivingHeader(tbl_obj) {
     var $table = $(tbl_obj);
     $table.html('');
     var html = '<div class="form-horizontal" style="padding:5px">' +
-        '<input type="hidden" name="receiving_id" id="receiving_id" class="form-control input-sm" >' +
-        '<input type="hidden" name="receiving_no" id="receiving_no" class="form-control input-sm" >' +
+        '<input type="hidden" name="receiving_id" id="receiving_id">' +
+        '<input type="hidden" name="is_edited" id="is_edited">' +
+        '<input type="hidden" name="receiving_no" id="receiving_no">' +
         '<div class="form-group  ">' +
             '<label class=" col-xs-1 control-label">Doc No.</label>' +
             '<div class=" col-xs-3">' +
@@ -520,7 +521,11 @@ function buildReceivingDetails(callback) {
             $("select[name='item_class_id']").dataBind("item_class");
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
+                if($zRow.length){
+                    $zRow.find("#is_edited").val("Y");
+                }
+                else
+                    $("#tblModalReceivingHeader").find("#is_edited").val("Y");
             });
             //setSearch();
             setSearchMulti();
@@ -553,9 +558,9 @@ $("#sdBtnNew").click(function () {
     buildReceiving($("#tblModalReceivingHeader"));
     $(".show-hide-label").html('Dealer');            
     $(".show-hide").html('');            
-    var html = '<select type="text" name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
-                '<input type="hidden" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">';
+    var html = '<select name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     $(".show-hide").append(html);
     $("select[name='dealer_id']").dataBind("dealer");
 });
@@ -564,13 +569,14 @@ $("#tdBtnNew").click(function () {
     $("#modalReceiving .modal-title").text("Items from Repair for " + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-    $(".show-hide-label").html('Organization');            
+    //$(".show-hide-label").html('Organization');  
+    $(".show-hide-label").html(''); 
     $(".show-hide").html('');            
     var html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-                '<select type="text" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm" ></select>' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">';
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     $(".show-hide").append(html);
-    $("select[name='transfer_organization_id']").dataBind("organization");
+    //$("select[name='transfer_organization_id']").dataBind("organization");
 });
 
 // Add a click event for the return delivery button.
@@ -581,8 +587,8 @@ $("#rdBtnNew").click(function () {
     $(".show-hide-label").html('Aircraft');            
     $(".show-hide").html('');            
     var html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-                '<input type="hidden" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm">' +
-                '<select type="text" name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></select>';
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<select name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></select>';
     $(".show-hide").append(html);
     $("select[name='aircraft_id']").dataBind("aircraft_info");
 });
@@ -595,8 +601,8 @@ $("#odBtnNew").click(function () {
     $(".show-hide-label").html('Dealer');            
     $(".show-hide").html('');            
     var html = '<select type="text" name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
-                '<input type="hidden" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">';
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     $(".show-hide").append(html);
     $("select[name='dealer_id']").dataBind("dealer");
 });
@@ -633,11 +639,27 @@ function SaveDetails(page_process_action_id) {
                 zsi.form.showAlert("alert");
                 setStatusName(page_process_action_id);
                 clearEntries();
-                $("#modalReceiving").modal('toggle');
+                
             } else {
                 console.log(data.errMsg);
             }
-            displayNew(g_tab_name);    
+            $("#modalReceiving").modal('toggle');
+            
+            if(g_tab_name==="SUPPLIER"){
+                 displaySupplier(g_tab_name);   
+            }
+            else if(g_tab_name==="AIRCRAFT"){
+                 displayAircraft(g_tab_name);   
+            }
+            else if(g_tab_name==="TRANSFER"){
+                 displayTransfer(g_tab_name);   
+            }
+            else if(g_tab_name==="REPAIR"){
+                 displayRepair(g_tab_name);   
+            }
+            else if(g_tab_name==="OVERHAUL"){
+                 displayOverhaul(g_tab_name);   
+            } 
         }
     });
 }
@@ -660,23 +682,24 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
     if (delivery_type == DeliveryType.Supplier) {
         title = "Supplier Delivery for ";
         label = 'Dealer';
-        html = '<select type="text" name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
-            '<input type="hidden" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm">' +
-            '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">';
+        html = '<select name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
     if (delivery_type == DeliveryType.Transfer) {
         title = "Tranfer Delivery for ";
         label = 'Organization';
         html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-            '<select type="text" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm" ></select>' +
-            '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">';
+            //'<select type="text" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm" ></select>' +
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
     if (delivery_type == DeliveryType.Return) {
         title = "Return Delivery for ";
         label = 'Aircraft';
         html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-            '<input type="hidden" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm">' +
-            '<select type="text" name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></select>';
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<select name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></select>';
     }
     $("#modalReceiving .modal-title").text(title + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -692,7 +715,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
                 $("#doc_no").val(d.rows[0].doc_no);
                 $("#doc_date").val(d.rows[0].doc_date);
                 $("#status_name").html(d.rows[0].status_name);
-                $("#receiving_organization_id").val(d.rows[0].receiving_organization_id);
+                $("#issuance_warehouse_id").val(d.rows[0].issuance_warehouse_id);
                 $("#received_by").val(d.rows[0].received_by);
                 $("#received_date").val(d.rows[0].received_date);
                 $("#dealer_id").val(d.rows[0].dealer_id);
@@ -743,7 +766,11 @@ function loadReceivingDetails(receiving_id) {
             
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
+                if($zRow.length){
+                    $zRow.find("#is_edited").val("Y");
+                }
+                else
+                    $("#tblModalReceivingHeader").find("#is_edited").val("Y");
             });
             //setSearch();
             setSearchMulti();
@@ -854,4 +881,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-               
+                   
