@@ -1,9 +1,10 @@
 var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
 var item_cat_id = zsi.getUrlParamValue("item_cat_id");
+var g_warehouse_id = null;
 
 zsi.ready(function(){
-    displayTabs();
+    //displayTabs();
     wHeight = $(window).height();
 /*
         $.get(procURL + "user_info_sel", function(d) {
@@ -30,13 +31,16 @@ zsi.ready(function(){
                 , value: "warehouse_id"
                 , required :true
                 , onComplete: function(){
+                    
                     g_warehouse_id = $("select[name='dd_warehouses'] option:selected" ).val();
+                    
                     $("select[name='dd_warehouses']").change (function(){
                        if(this.value){
                             g_warehouse_id = this.value;
                             displayTabs(); 
                        }
                     });
+                    displayTabs();
                 }
             });  
         }
@@ -71,9 +75,10 @@ function displayTabs(cbFunc){
 } 
 
 function displayItems(id){
+    console.log(g_warehouse_id);
     var counter = 0;
     $("#tabGrid" + id).dataBind({
-	     url            : procURL + "items_inv_sel @item_cat_id=" + id
+	     url            : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id
 	    ,width          : $(document).width() - 180
 	    ,height         : $(document).height() - 250
         ,dataRows : [
@@ -103,4 +108,4 @@ function displayItems(id){
 
 	    ]   
     });    
-}           
+}             
