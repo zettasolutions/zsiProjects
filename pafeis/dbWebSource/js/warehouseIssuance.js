@@ -411,8 +411,8 @@ function buildIssuanceDetails(callback) {
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "input"       , width : 100       , style : "text-align:left;"}
+            ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , type  : "label"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "label"       , width : 100       , style : "text-align:left;" }
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
         ]
@@ -424,7 +424,7 @@ function buildIssuanceDetails(callback) {
 
             $("[name='quantity']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
-                var stock_qty = $zRow.find("input[name='stock_qty']").val();
+                var stock_qty = $zRow.find('#stock_qty').text();
                 if(parseInt(this.value) > stock_qty){
                     alert("Please enter quantity less than or equal to stock qty.");
                     this.value = "";
@@ -487,6 +487,9 @@ $("#transferBtnNew").click(function () {
     , value: "warehouse_id"
     , required :true
     , onComplete: function(){
+        $transferWID = $("select[name='dd_warehouse_transfer_filter']").val();
+        $("#transfer_warehouse_id").val($transferWID);
+       
         $("select[name='dd_warehouse_transfer_filter']").change(function(){
             $("#transfer_warehouse_id").val(this.value);
             setSearchMulti();
@@ -592,6 +595,7 @@ function Save(page_process_action_id) {
     }
     var result = confirm("Entries will be saved. Continue?");
     if (result) {
+        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
         $("#status_id").val(page_process_action_id);
         $("#tblModalIssuanceHeader").jsonSubmit({
             procedure: "issuances_upd"
@@ -793,8 +797,12 @@ function loadIssuanceDetails(issuance_id) {
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "input"       , width : 100       , style : "text-align:left;"}
+            ,{text  : "Unit of Measure"                                          , type  : "input"       , width : 150       , style : "text-align:left;"
+                ,onRender: function(d){ return svn(d,"unit_of_measure")}
+            }
+            ,{text  : "Stock Qty."                                               , type  : "input"       , width : 100       , style : "text-align:left;"
+                ,onRender: function(d){ return svn(d,"stock_qty")}
+            }
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
         ]
@@ -842,8 +850,8 @@ function setSearchMulti(){
             $zRow.find("#item_inv_id").val(data.item_inv_id);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
             $zRow.find("#item_name").val(data.item_name);
-            $zRow.find("#unit_of_measure").val(data.unit_of_measure);
-            $zRow.find("#stock_qty").val(data.stock_qty);
+            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
+            $zRow.find("#stock_qty").text(data.stock_qty);
             setSearchSerial(data.item_inv_id, $zRow);
         }
     });
@@ -864,8 +872,8 @@ function setSearchMulti(){
             $zRow.find("#item_inv_id").val(data.item_inv_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#item_name").val(data.item_name);
-            $zRow.find("#unit_of_measure").val(data.unit_of_measure);
-            $zRow.find("#stock_qty").val(data.stock_qty);
+            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
+            $zRow.find("#stock_qty").text(data.stock_qty);
            
             setSearchSerial(data.item_inv_id, $zRow);
         }
@@ -887,8 +895,8 @@ function setSearchMulti(){
             $zRow.find("#item_inv_id").val(data.item_inv_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
-            $zRow.find("#unit_of_measure").val(data.unit_of_measure);
-            $zRow.find("#stock_qty").val(data.stock_qty);
+            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
+            $zRow.find("#stock_qty").text(data.stock_qty);
             
             setSearchSerial(data.item_inv_id, $zRow);
         }
@@ -906,8 +914,8 @@ function setSearchSerial(id, row){
     
     $serial_no.change(function(){
        if(this.value != ""){
-           row.find("input[name='unit_of_measure']").val("EACH");
-           row.find("input[name='stock_qty']").val(1);
+           row.find("input[name='unit_of_measure']").text("EACH");
+           row.find("input[name='stock_qty']").text(1);
            row.find("input[name='quantity']").val(1);
        } 
     });
@@ -929,4 +937,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                            
+                             
