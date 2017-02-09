@@ -587,7 +587,7 @@ $("#overhaulBtnNew").click(function () {
 
 // Save the new issuance entry.
 function Save(page_process_action_id) {
-    if( zsi.form.checkMandatory()!==true) {
+   if( zsi.form.checkMandatory()!==true) {
         return false;
     }
     var result = confirm("Entries will be saved. Continue?");
@@ -598,9 +598,8 @@ function Save(page_process_action_id) {
             , notInclude: "#issuance_type"
             , onComplete: function (data) {
                 if (data.isSuccess === true) {
-                    var _issuance_id = (data.returnValue===0 ? g_issuance_id : data.returnValue);
+                    var _issuance_id = (data.returnValue==0 ? g_issuance_id : data.returnValue);
                     $("#tblModalIssuanceDetails input[name='issuance_id']").val(_issuance_id);
-                    //$("#tblModalIssuanceDetails #issuance_id").val(data.returnValue);
                     //Saving of details.
                     SaveDetails(page_process_action_id);
                 } else {
@@ -622,11 +621,9 @@ function SaveDetails(page_process_action_id) {
                 zsi.form.showAlert("alert");
                 setStatusName(page_process_action_id);
                 clearEntries();
-                
             } else {
                 console.log(data.errMsg);
             }
-            
             $("#modalIssuance").modal('hide');
             if(g_tab_name==="AIRCRAFT"){
                  displayAircraft(g_tab_name);   
@@ -790,8 +787,7 @@ function loadIssuanceDetails(issuance_id) {
                         +  bs({name:"is_edited",type:"hidden"}) 
                         +  bs({name:"issuance_id",type:"hidden", value: issuance_id})
                         +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
-                       // +  bs({name:"serial_no",type:"hidden", value: svn (d,"serial_no")});
-                }
+               }
             }    
             ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
@@ -805,8 +801,12 @@ function loadIssuanceDetails(issuance_id) {
         ,onComplete: function(){
 	        $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });            
+                if($zRow.length){
+                    $zRow.find("#is_edited").val("Y");
+                }
+                else
+                    $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
+            });
             
             $("[name='quantity']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
@@ -929,4 +929,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                          
+                            
