@@ -8,7 +8,7 @@ var g_organization_name = "";
 var g_location_name = "";
 var g_tab_name = "SUPPLIER";
 var g_today_date = new Date(); 
-
+var g_warehouse_id = null;
 const DeliveryType = {
     Supplier: 'Supplier',
     Transfer: 'Transfer',
@@ -53,6 +53,7 @@ zsi.ready(function(){
             g_organization_name = d.rows[0].organizationName;
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
+            g_warehouse_id =  d.rows[0].warehouse_id;
             $(".pageTitle").append(' for ' + g_organization_name + g_location_name);
         }
     });
@@ -144,7 +145,11 @@ function initSelectOptions(callbackFunc){
                         url: base_url +  "selectoption/code/organization"
                         , onComplete : function(){
                             $("select[name='received_by']").dataBind({
-                                url: base_url +  "selectoption/code/employees_fullnames_v"
+                               // url: base_url +  "selectoption/code/employees_fullnames_v"
+                                url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
+                               , text: "userFullName"
+                               , value: "user_id"
+                                
                                 , onComplete : function(){
                                     $("select[name='aircraft_id']").dataBind({
                                         url: base_url +  "selectoption/code/aircraft_info"
@@ -252,7 +257,7 @@ function displayTransfer(tab_name){
                 }
                 ,{text  : "Transfer From"      , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ 
-                                    return svn(d,"transfer_organization_name") 
+                                    return svn(d,"issuance_warehouse") 
                                          + bs({name:"aircraft_name",type:"hidden",value: svn (d,"aircraft_name")});
                     }
                 }
@@ -611,12 +616,13 @@ $("#odBtnNew").click(function () {
 function Save(page_process_action_id) {
     var result = confirm("Entries will be saved. Continue?");
     if (result) {
+        $("#tblModalReceivingHeader").find("#is_edited").val("Y");
         $("#status_id").val(page_process_action_id);
         $("#tblModalReceivingHeader").jsonSubmit({
             procedure: "receiving_upd"
             , onComplete: function (data) {
                 if (data.isSuccess === true) { 
-                    var _receiving_id = (data.returnValue===0 ? g_recieving_id : data.returnValue);
+                    var _receiving_id = (data.returnValue==0 ? g_recieving_id : data.returnValue);
                     $("#tblModalReceivingDetails input[name='receiving_id']").val(_receiving_id);
                     //Saving of details.
                     SaveDetails(page_process_action_id);
@@ -881,4 +887,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                   
+                         
