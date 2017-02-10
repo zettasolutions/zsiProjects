@@ -197,7 +197,9 @@ function displaySupplier(tab_name){
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Supplier + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
+                        + svn(d,"receiving_id") + "\",\"" 
+                        +  svn(d,"doc_no")  + "\",\"" 
+                        + svn(d,"dealer_id") + "\");'>" 
                         + svn(d,"doc_no") + " </a>";
                     }
                 }
@@ -237,7 +239,10 @@ function displayTransfer(tab_name){
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Transfer + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
+                        + svn(d,"receiving_id") + "\",\""
+                        + svn(d,"doc_no")  + "\",\""
+                        + svn(d,"issuance_warehouse")  + "\",\""
+                        + svn(d,"warehouse_id")  + "\");'>" 
                         + svn(d,"doc_no") + " </a>";
                     }
                 }
@@ -443,7 +448,7 @@ function buildReceivingHeader(tbl_obj) {
             '</div>' +
             '<label class=" col-xs-1 control-label">Received Date</label>' +
             '<div class=" col-xs-3">' +
-                '<input type="text" name="received_date" id="received_date" class="form-control input-sm" >' +
+                '<input type="text" name="received_date" id="received_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
             '</div>' +
             '<label class=" col-xs-1 control-label show-hide-label">&nbsp;</label>' +
             '<div class=" col-xs-3 show-hide">' +
@@ -550,7 +555,7 @@ function buildReceivingButtons() {
 
 // Add a click event for the supplier delivery button.
 $("#sdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").html("Items Delivered to " + g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
+    $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
         $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
   
     $("select[name='dealer_filter']").change(function(){
@@ -572,6 +577,7 @@ $("#sdBtnNew").click(function () {
   //  $("select[name='dealer_id']").dataBind("dealer");
 });
 // Add a click event for the transfer delivery button.
+/*
 $("#tdBtnNew").click(function () {
     $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + ' from <label name="dealer_filter" id="dealer_filter"></label>');
 
@@ -587,10 +593,10 @@ $("#tdBtnNew").click(function () {
     $(".show-hide").append(html);
     //$("select[name='transfer_organization_id']").dataBind("organization");
 });
-
+*/
 // Add a click event for the return delivery button.
 $("#rdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").html("Items Delivered from " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+    $("#modalReceiving .modal-title").html('Items Delivered from' + ' » ' +  g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
         $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
 
     $("select[name='aircraft_filter']").change(function(){
@@ -695,14 +701,10 @@ function setStatusName(page_process_action_id) {
 
 // Show the modal window for updating.
 function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id) {
-    var title = '';
-    var label = '';
     var html = '';
     g_recieving_id = receiving_id;
     if (delivery_type == DeliveryType.Supplier) {
-        //title = "Supplier Delivery for ";
-       // label = 'Dealer';
-        $("#modalReceiving .modal-title").html("Items Delivered to " + g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
+        $("#modalReceiving .modal-title").html('Items Delivered to ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
         $("select[name='dealer_filter']").attr("selectedvalue", id);
         $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
         $("select[name='dealer_filter']").change(function(){
@@ -714,21 +716,17 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id) {
                 '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
     if (delivery_type == DeliveryType.Transfer) {
-       // title = "Tranfer Delivery for ";
-       // label = 'Organization';
-        $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + ' from <label name="dealer_filter" id="dealer_filter"></label>');
-        $warehouseID = $("select[name='dealer_filter']").val();
-        $("#issuance_warehouse_id").val($warehouseID);
+        $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + " from " +  id);
+       
+        $("#issuance_warehouse_id").val(id);
  
-        html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-            //'<select type="text" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm" ></select>' +
+        html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
-    if (delivery_type == DeliveryType.Return) {
-       // title = "Return Delivery for ";
-       // label = 'Aircraft';
+    if (delivery_type == DeliveryType.Aircraft) {
     $("#modalReceiving .modal-title").html("Items Delivered from " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+        $("select[name='aircraft_filter']").attr("selectedvalue", id);
         $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
 
     $("select[name='aircraft_filter']").change(function(){
@@ -739,10 +737,9 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id) {
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >';
     }
-    $("#modalReceiving .modal-title").text(title + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceivingHeader($("#tblModalReceivingHeader"));
-    $(".show-hide-label").html(label);
+   // $(".show-hide-label").html(label);
     $(".show-hide").html('');
     $(".show-hide").append(html);
     $("select, input").on("keyup change", function(){
@@ -793,8 +790,6 @@ function loadReceivingDetails(receiving_id) {
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : (g_tab_name==="SUPPLIER" ? "input" : "select"), width : 150       , style : "text-align:left;"}
-            //,{text  : "Part No./Nat'l Stock No./Description"          , name  : "item_search"                , type  : "input"       , width : 250       , style : "text-align:left;"}
-            //,{text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
@@ -923,4 +918,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                          
+                               
