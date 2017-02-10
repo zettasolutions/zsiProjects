@@ -135,10 +135,7 @@ function initDatePicker(){
 
 // Initialize the data for the select options.
 function initSelectOptions(callbackFunc){
-    $("select[name='dealer_id']").dataBind({
-        url: base_url + "selectoption/code/dealer"
-        , onComplete : function(){
-            $("select[name='receiving_organization_id']").dataBind({
+          $("select[name='receiving_organization_id']").dataBind({
                 url: base_url +  "selectoption/code/organization"
                 , onComplete : function(){
                     $("select[name='transfer_organization_id']").dataBind({
@@ -150,21 +147,16 @@ function initSelectOptions(callbackFunc){
                                , text: "userFullName"
                                , value: "user_id"
                                 
-                                , onComplete : function(){
-                                    $("select[name='aircraft_id']").dataBind({
-                                        url: base_url +  "selectoption/code/aircraft_info"
-                                        , onComplete : function(){
-                                            if(callbackFunc) callbackFunc();
-                                        }
-                                    });
+                                , onComplete : function(){  
+                                    if(callbackFunc) callbackFunc(); 
                                 }
-                            });
+                          });
                         }
                     });
                 }
             });
-        }
-    });
+        //}
+     //});
 }
 
 // Set the current tab when the page loads.
@@ -558,26 +550,38 @@ function buildReceivingButtons() {
 
 // Add a click event for the supplier delivery button.
 $("#sdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Supplier for " + g_organization_name + g_location_name);
+    $("#modalReceiving .modal-title").html("Items Delivered to " + g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
+        $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
+  
+    $("select[name='dealer_filter']").change(function(){
+        $("#dealer_id").val(this.value);
+    });
+    
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-    $(".show-hide-label").html('Dealer');            
+   // $(".show-hide-label").html('Dealer');            
+    $("select, input").on("keyup change", function(){
+        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
+    }); 
+
     $(".show-hide").html('');            
-    var html = '<select name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
+    var html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     $(".show-hide").append(html);
-    $("select[name='dealer_id']").dataBind("dealer");
+  //  $("select[name='dealer_id']").dataBind("dealer");
 });
 // Add a click event for the transfer delivery button.
 $("#tdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Repair for " + g_organization_name + g_location_name);
+    $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + ' from <label name="dealer_filter" id="dealer_filter"></label>');
+
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
     //$(".show-hide-label").html('Organization');  
+ 
     $(".show-hide-label").html(''); 
     $(".show-hide").html('');            
-    var html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
+    var html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     $(".show-hide").append(html);
@@ -586,16 +590,26 @@ $("#tdBtnNew").click(function () {
 
 // Add a click event for the return delivery button.
 $("#rdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Aircraft for " + g_organization_name + g_location_name);
+    $("#modalReceiving .modal-title").html("Items Delivered from " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+        $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
+
+    $("select[name='aircraft_filter']").change(function(){
+        $("#aircraft_id").val(this.value);
+    });
+
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-    $(".show-hide-label").html('Aircraft');            
+//    $(".show-hide-label").html('Aircraft');            
+    $("select, input").on("keyup change", function(){
+        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
+    }); 
+
     $(".show-hide").html('');            
-    var html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
+    var html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<select name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></select>';
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></input>';
     $(".show-hide").append(html);
-    $("select[name='aircraft_id']").dataBind("aircraft_info");
+   // $("select[name='aircraft_id']").dataBind("aircraft_info");
 });
 
 // Add a click event for the overhaul delivery button.
@@ -680,32 +694,50 @@ function setStatusName(page_process_action_id) {
 }
 
 // Show the modal window for updating.
-function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
+function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id) {
     var title = '';
     var label = '';
     var html = '';
     g_recieving_id = receiving_id;
     if (delivery_type == DeliveryType.Supplier) {
-        title = "Supplier Delivery for ";
-        label = 'Dealer';
-        html = '<select name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
+        //title = "Supplier Delivery for ";
+       // label = 'Dealer';
+        $("#modalReceiving .modal-title").html("Items Delivered to " + g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
+        $("select[name='dealer_filter']").attr("selectedvalue", id);
+        $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
+        $("select[name='dealer_filter']").change(function(){
+            $("#dealer_id").val(this.value);
+        });
+
+        html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
     if (delivery_type == DeliveryType.Transfer) {
-        title = "Tranfer Delivery for ";
-        label = 'Organization';
+       // title = "Tranfer Delivery for ";
+       // label = 'Organization';
+        $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + ' from <label name="dealer_filter" id="dealer_filter"></label>');
+        $warehouseID = $("select[name='dealer_filter']").val();
+        $("#issuance_warehouse_id").val($warehouseID);
+ 
         html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
             //'<select type="text" name="transfer_organization_id" id="transfer_organization_id" class="form-control input-sm" ></select>' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
     if (delivery_type == DeliveryType.Return) {
-        title = "Return Delivery for ";
-        label = 'Aircraft';
-        html = '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
+       // title = "Return Delivery for ";
+       // label = 'Aircraft';
+    $("#modalReceiving .modal-title").html("Items Delivered from " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+        $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
+
+    $("select[name='aircraft_filter']").change(function(){
+        $("#aircraft_id").val(this.value);
+    });
+
+        html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<select name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></select>';
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >';
     }
     $("#modalReceiving .modal-title").text(title + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -713,6 +745,10 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no) {
     $(".show-hide-label").html(label);
     $(".show-hide").html('');
     $(".show-hide").append(html);
+    $("select, input").on("keyup change", function(){
+        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
+    }); 
+
     $("#receiving_id").val(receiving_id);
     initDatePicker();
     initSelectOptions(function(){
@@ -887,4 +923,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                         
+                          
