@@ -1,19 +1,28 @@
-var bs = zsi.bs.ctrl;
-var svn =  zsi.setValIfNull;
-var item_cat_id = zsi.getUrlParamValue("item_cat_id");
-var g_warehouse_id = null;
+var bs = zsi.bs.ctrl
+    ,svn =  zsi.setValIfNull
+    ,item_cat_id = zsi.getUrlParamValue("item_cat_id")
+    ,optionId = zsi.getUrlParamValue("option_id")
+    ,g_warehouse_id = null
+    ,option_id = (optionId ? optionId : null)
+;
+
+function setInputs(){
+    $optionId    = $("#option_id");
+}
 
 zsi.ready(function(){
-    //displayTabs();
     wHeight = $(window).height();
-/*
-        $.get(procURL + "user_info_sel", function(d) {
-        if (d.rows !== null && d.rows.length > 0) {
-            g_organization_id = d.rows[0].organization_id;
-            g_organization_name = d.rows[0].organizationName;
-            $(".pageTitle").append(' for ' + g_organization_name);
-        }
-    });*/
+    setInputs();
+    $optionId.fillSelect({
+        data : [
+             { text: "All", value: "A" }
+            ,{ text: "Critical", value: "C" }
+            ,{ text: "For Reorder", value: "R" }
+        ]
+        ,selectedValue : option_id
+        ,defauleValue  : "A"
+    });
+    $("#option_id").val("A");
     
     $.get(procURL + "user_info_sel", function(d) {
         if (d.rows !== null && d.rows.length > 0) {
@@ -45,8 +54,19 @@ zsi.ready(function(){
             });  
         }
     });
+    
 });
- 
+
+$("#btnGo").click(function(data){
+    getFilterValue();
+    displayTabs();
+
+});
+
+function getFilterValue(){
+    option_id   = ($optionId.val() ? $optionId.val(): null);
+}
+
 function displayTabs(cbFunc){
     $.get(execURL + "item_categories_sel", function(data){
         var _rows      = data.rows;
@@ -75,11 +95,10 @@ function displayTabs(cbFunc){
 } 
 
 function displayItems(id){
-    console.log(g_warehouse_id);
     var counter = 0;
     $("#tabGrid" + id).dataBind({
-	     url            : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id
-	    ,width          : $(document).width() - 180
+	     url            : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" +  option_id + "'"
+	    ,width          : $(document).width() 
 	    ,height         : $(document).height() - 250
         ,dataRows : [
         		 {text  : "Item Code"                   , type  : "label"       , width : 150       , style : "text-align:left;"
@@ -95,6 +114,10 @@ function displayItems(id){
         		,{text  : "Item Name"                   , type  : "label"       , width : 300       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_name"); }
         		}
+        		,{text  : "Critical Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"critical_level"); }
+        		}
+
         		,{text  : "Reorder Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"reorder_level"); }
         		}
@@ -108,4 +131,4 @@ function displayItems(id){
 
 	    ]   
     });    
-}             
+}                
