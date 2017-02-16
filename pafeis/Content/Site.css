@@ -11,7 +11,7 @@ a{
   text-decoration:none;
 }	
 a:hover{
-	color:#FF9800;
+	color:#508BD1;
 	text-decoration:underline;
 }
 
@@ -27,7 +27,7 @@ a:hover{
     white-space: normal;
 }
 .pageHeader {
-      background-color: #3b483c;
+      background-color: #1D64B6;
     height: 44px;
 }
 .container {
@@ -76,11 +76,11 @@ ul.nav li.zParentHighLight a,ul.nav li.zChildHighLight a{
 }
 
 ul.nav li.zParentHighLight{
-	background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);
+	background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
 }
 
 ul.nav li.zChildHighLight{
-	background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);
+	background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
 }
 
 /*zPanel Table*/
@@ -88,7 +88,7 @@ div.zPanel table .align-l{ text-align:left;}
 div.zPanel table .align-r{ text-align:right;}
 div.zPanel table .align-c{ text-align:center;}
 div.zPanel table tr.total td {
-    background-image:linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);    
+    background-image:linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);    
     padding-bottom: 4px;
     padding-top: 4px;
     color:#fff;
@@ -96,8 +96,8 @@ div.zPanel table tr.total td {
 }    
 div.zPanel table tr th{
     vertical-align: inherit;
-    background-color:#FF9800;    
-    background-image:linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);    
+    background-color:#508BD1;    
+    background-image:linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);    
     padding-bottom: 4px;
     padding-top: 4px;
     color: #fff;
@@ -123,7 +123,7 @@ div.zPanel {
 }
 
 div.zPanel .headerTitle{
-	background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);    
+	background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);    
 	color: #fff;
 	padding: 3px 10px;  
 	border: 1pt solid #a8acad;
@@ -240,7 +240,7 @@ table.zTableReport tr.total td {
 }    
 table.zTableReport tr th{
     vertical-align: inherit;
-    background-color:#FF9800;    
+    background-color:#508BD1;    
     background-image:linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);	
     padding-bottom: 4px;
     padding-top: 4px;
@@ -693,14 +693,14 @@ td #delete-row span{
 }
 
 .loadingImg{
-   background :url("/images/loading.gif") no-repeat;
+   background :url("/pafeis/images/loading.gif") no-repeat;
    width:30px;   
    height:19px;   
    float: left;
 }
 
 .loadIconR{
-   background-image: url("/images/loading.gif") ;
+   background-image: url("/pafeis/images/loading.gif") ;
    background-repeat: no-repeat;
    background-size: 17px 15px;
    background-position: right center;   
@@ -796,6 +796,8 @@ ul.imgFrame li.imgItem .text { text-align:center; }
 
 
 /*end of Report*/
+
+
 
 
 

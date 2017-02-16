@@ -3213,7 +3213,7 @@ tbody.collapse.in {
 .dropdown-menu > li > a:focus {
   text-decoration: none;
   color: #ffffff;
-  background-color: #FF9800;
+  background-color: #508BD1;
 }
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
@@ -3221,7 +3221,7 @@ tbody.collapse.in {
   color: #ffffff;
   text-decoration: none;
   outline: 0;
-  background-color: #FF9800;
+  background-color: #508BD1;
 }
 .dropdown-menu > .disabled > a,
 .dropdown-menu > .disabled > a:hover,
@@ -4151,7 +4151,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
   color: #ffffff;
-  background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);
+  background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
   
 }
 .navbar-default .navbar-nav > .active > a,
@@ -4194,7 +4194,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
     color: #ffffff;
     
-    background-image: linear-gradient(to bottom, #FF9800 0px, #CA1F14 100%);
+    background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
@@ -4364,7 +4364,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   padding: 4px 12px;
   line-height: 1.42857143;
   text-decoration: none;
-  color: #FF9800;
+  color: #508BD1;
   background-color: #ffffff;
   border: 1px solid #dddddd;
   margin-left: -1px;
@@ -4396,8 +4396,8 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > .active > span:focus {
   z-index: 2;
   color: #ffffff;
-  background-color: #FF9800;
-  border-color: #FF9800;
+  background-color: #508BD1;
+  border-color: #508BD1;
   cursor: default;
 }
 .pagination > .disabled > span,
@@ -4512,7 +4512,7 @@ a.label:focus {
   background-color: #5e5e5e;
 }
 .label-primary {
-  background-color: #FF9800;
+  background-color: #508BD1;
 }
 .label-primary[href]:hover,
 .label-primary[href]:focus {
@@ -4579,7 +4579,7 @@ a.badge:focus {
 }
 a.list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
-  color: #FF9800;
+  color: #508BD1;
   background-color: #ffffff;
 }
 .nav-pills > li > a > .badge {
@@ -4643,7 +4643,7 @@ a.list-group-item.active > .badge,
 a.thumbnail:hover,
 a.thumbnail:focus,
 a.thumbnail.active {
-  border-color: #FF9800;
+  border-color: #508BD1;
 }
 .thumbnail .caption {
   padding: 9px;
