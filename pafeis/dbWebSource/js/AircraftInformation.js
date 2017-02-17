@@ -46,10 +46,11 @@ function getTemplate(callback){
 $("#btnSave").click(function () {
    $("#grid").jsonSubmit({
           procedure: "aircraft_info_upd"
+        , optionalItems: ["squadron_id"]
         , onComplete: function (data) {
             $("#grid").clearGrid();
             if(data.isSuccess===true) zsi.form.showAlert("alert");
-            displayRecords();
+            displayRecords($("#dd_squadron").val());
         }
     });
 });
@@ -58,7 +59,7 @@ $("#btnDelete").click(function(){
     zsi.form.deleteData({
          code       : "sys-0008"
         ,onComplete : function(data){
-            displayRecords();
+            displayRecords($("#dd_squadron").val());
         }
     });       
 });
@@ -74,9 +75,10 @@ function displayRecords(squadron_id){
         ,isPaging : false
         ,dataRows : [
                  {text  : cb                                                           , width : 25        , style : "text-align:left;"       
-        		    , onRender      :  function(d){ 
+        		    , onRender: function(d){ 
                 		                    return     bs({name:"aircraft_info_id",type:"hidden",value: svn (d,"aircraft_info_id")})
-                                                      +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                		                            +  bs({name:"is_edited",type:"hidden"}) 
+                                                    +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
             }	 
         		,{text  : "Code"                        , name  : "aircraft_code"               , type : "input"         , width : 100       , style : "text-align:left;"}
@@ -89,20 +91,25 @@ function displayRecords(squadron_id){
         		,{text  : "Aircraft Time"               , name  : "aircraft_time"               , type : "input"          , width : 130       , style : "text-align:left;"}
         		,{text  : "Aircraft Source"             , name  : "aircraft_source_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
         		,{text  : "Aircraft Dealer"             , name  : "aircraft_dealer_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
+         		,{text  : "Item Class"                  , name  : "item_class_id"               , type : "select"         , width : 150       , style : "text-align:left;"}
         		,{text  : "Status"                      , name  : "status_id"                   , type : "select"         , width : 150       , style : "text-align:left;"}
         		,{text  : "# of Assembly"               , width : 100                           , style : "text-align:center;"      
-                    ,onRender  :  
+                    ,onRender:  
                         function(d){return "<a href='javascript:manageAssembly(" + svn(d,"aircraft_info_id") + ",\"" +  svn(d,"aircraft_name")  + "\");'>" + svn(d,"countItems") + "</a>"; 
                     }
                 }
 
 	    ]
     	     ,onComplete: function(){
+    	        $("select, input").on("keyup change", function(){
+                    var $zRow = $(this).closest(".zRow");
+                    $zRow.find("#is_edited").val("Y");
+                });            
+
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
                 $("select[name='aircraft_type_id']").dataBind({
                     url : optionsURL + "aircraft_type"
                     ,onComplete: function(){
-                        console.log($("#dd_squadron").val());
                          $("input[name='squadron_id']").val( $("#dd_squadron").val() );
                     }
                     
@@ -114,7 +121,8 @@ function displayRecords(squadron_id){
                 }); 
                 $("select[name='aircraft_source_id']").dataBind( "supply_source");
                 $("select[name='aircraft_dealer_id']").dataBind( "dealer");
-                $("select[name='status_id']").dataBind( "status");
+                $("select[name='item_class_id']").dataBind( "item_class");
+                $("select[name='status_id']").dataBind( "aircraftStatuses");
         }  
     });    
 }
@@ -316,4 +324,4 @@ function setSearch(code){
     });
 }
     
-     
+       
