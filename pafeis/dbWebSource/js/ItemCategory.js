@@ -269,7 +269,7 @@ function deleteItemCodes(){
 function displayRecords(){
      $("#grid").dataBind({
 	     url            : execURL + "item_categories_sel"
-	    ,width          : $(document).width() - 450
+	    ,width          : $(document).width() - 440
 	    ,height         : $(document).height() - 250
         ,blankRowsLimit:5
         ,isPaging : false
@@ -297,6 +297,7 @@ function displayRecords(){
                             return "<a href='javascript:manageItemTypes(" + svn(d,"item_cat_id") + ",\"" +  svn(d,"item_cat_name")  + "\"," + catId + ");'>" + svn(d,"countItemTypes") + "</a>"; 
                     }
                 }
+                	,{text  : "With Serial?"             , name  : "with_serial"     , type  : "yesno"         , width : 90        , style : "text-align:left;"   ,defaultValue:"Y"}
 
 	    ] 
 	    ,onComplete: function(){
@@ -532,4 +533,4 @@ function displayInactiveItemCodes(){
 
 
     
-                                                                    
+                                                                     

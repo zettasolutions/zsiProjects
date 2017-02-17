@@ -3,13 +3,21 @@ var bs          = zsi.bs.ctrl
    ,tblIssuanceDD ="tblModalIssuanceDirectiveDetails"
    ,dataIssuance
    ,dataIssuanceIndex =-1
+   ,g_warehouse_id = null
 ;
 
 
 
 zsi.ready(function(){
+    $.get(procURL + "user_info_sel", function(d) {
+        if (d.rows !== null && d.rows.length > 0) {
+            g_warehouse_id =  d.rows[0].warehouse_id;
+        }
+    });
     displayRecords();
     getTemplate();
+    
+    
 });
 
 var contextModalWindow = { 
@@ -128,6 +136,12 @@ function showModalEditIssuance(index) {
 function displayListBoxes(){
     $("select[name='issued_directive_from_id']").dataBind( "organization");
     $("select[name='issued_directive_to_id']").dataBind( "organization");
+  /*  $("select[name='issued_directive_to_id']").dataBind({
+                               // url: base_url +  "selectoption/code/employees_fullnames_v"
+                                url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
+                               , text: "userFullName"
+                               , value: "user_id"
+                                });*/
     $("select[name='process_id']").dataBind( "status");   
     $("select[name='action_id']").dataBind( "status");  
 }
@@ -156,7 +170,7 @@ function displayRecords(){
      
      $("#grid").dataBind({
 	     url            : execURL + "issuance_directive_sel"
-	    ,width          : $(document).width() -180
+	    ,width          : $(document).width() -50
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -169,7 +183,7 @@ function displayRecords(){
                                                       
                             }
                 }	 
-                ,{text  : "Issuance No."            , type  : "input"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Issuance No."            , type  : "input"       , width : 120       , style : "text-align:left;"
         		    ,onRender : function(d){ 
         		        dataIssuanceIndex++;
         		        return "<a href='javascript:showModalEditIssuance(\"" + dataIssuanceIndex + "\");'>" 
@@ -214,10 +228,10 @@ function displayIssuanceDirectiveDetails(issuance_directive_id){
                                                      + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
                 }	 
-        	    ,{text  : "Item"                , name  : "item_id"             , type  : "select"      , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Aircraft"            , name  : "aircraft_id"         , type  : "select"      , width : 250       , style : "text-align:left;"}
+        	    ,{text  : "Item"                , name  : "item_id"             , type  : "select"      , width : 200       , style : "text-align:left;"}
+        	    ,{text  : "Aircraft"            , name  : "aircraft_id"         , type  : "select"      , width : 300       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Qty"                 , name  : "quantity"            , type  : "input"       , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Qty"                 , name  : "quantity"            , type  : "input"       , width : 100       , style : "text-align:left;"}
 
 	    ]  
     	     ,onComplete: function(data){
@@ -241,4 +255,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                                 
+                                                                     

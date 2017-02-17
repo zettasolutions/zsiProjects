@@ -106,7 +106,7 @@ function displayRecords(){
                     $zRow.find("#is_edited").val("Y");
                 });
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                
+                /*
                 $("select[name='organization_id']").each(function(){
                     var $zRow = $(this).closest(".zRow");
                     if(this.hasAttribute("selectedvalue")) {
@@ -117,7 +117,7 @@ function displayRecords(){
                             , value: "warehouse_id"
                         });  
                     }
-                 });
+                 });*/
                  
                  $("select[name='organization_id']").dataBind({
                     url: procURL + "organizations_dd_sel "
@@ -137,7 +137,7 @@ function displayRecords(){
                             }
                         });
                     }
-                });  
+                }); 
                 
               
                 
@@ -279,4 +279,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                           
+}                            
