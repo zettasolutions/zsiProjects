@@ -6,8 +6,20 @@ var  bs = zsi.bs.ctrl
 ;
 
 zsi.ready(function(){
-    displayRecords();
     getTemplate();
+    $(".pageTitle").append(' for ' + ' » <select name="dd_squadron" id="dd_squadron"></select>');
+    $("#dd_squadron").dataBind({
+        url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
+        , text: "organization_name"
+        , value: "organization_id"
+        , required :true
+        , onComplete: function(){
+            displayRecords($("#dd_squadron").val() );
+            $("select[name='dd_squadron']").change (function(){
+                displayRecords(this.value);
+            });
+        }
+    });  
 });
 
 var contextComponents = { id:"modalWindowComponents"
@@ -51,10 +63,10 @@ $("#btnDelete").click(function(){
     });       
 });
     
-function displayRecords(){
+function displayRecords(squadron_id){
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
-	     url            : execURL + "aircraft_info_sel"
+	     url            : execURL + "aircraft_info_sel @squadron_id=" + squadron_id
 	    ,width          : $(document).width() -50
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
@@ -67,15 +79,18 @@ function displayRecords(){
                                                       +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
             }	 
-        		,{text  : "Code"                        , name  : "aircraft_code"               , type  : "input"         , width : 100       , style : "text-align:left;"}
-        		,{text  : "Name"                        , name  : "aircraft_name"               , type  : "input"         , width : 170       , style : "text-align:left;"}
-        		,{text  : "Type"                        , name  : "aircraft_type_id"            , type  : "select"        , width : 150       , style : "text-align:left;"}
-        		,{text  : "Squadron"                    , name  : "squadron_id"                 , type  : "select"        , width : 220       , style : "text-align:left;"}
+        		,{text  : "Code"                        , name  : "aircraft_code"               , type : "input"         , width : 100       , style : "text-align:left;"}
+        		,{text  : "Name"                        , name  : "aircraft_name"               , type : "input"         , width : 170       , style : "text-align:left;"}
+        		,{text  : "Type"                        , width : 150                           , style : "text-align:left;"
+        		    ,onRender: function(d){ return bs({ name: "aircraft_type_id" ,type: "select", value: svn(d,"aircraft_type_id")})
+        		                                    + bs({ name: "squadron_id" ,type: "hidden", value: svn(d,"squadron_id")});
+        		    }
+        		}
         		,{text  : "Aircraft Time"               , name  : "aircraft_time"               , type : "input"          , width : 130       , style : "text-align:left;"}
         		,{text  : "Aircraft Source"             , name  : "aircraft_source_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
         		,{text  : "Aircraft Dealer"             , name  : "aircraft_dealer_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
         		,{text  : "Status"                      , name  : "status_id"                   , type : "select"         , width : 150       , style : "text-align:left;"}
-        		,{text  : "# of Assembly"             , width : 100                           , style : "text-align:center;"      
+        		,{text  : "# of Assembly"               , width : 100                           , style : "text-align:center;"      
                     ,onRender  :  
                         function(d){return "<a href='javascript:manageAssembly(" + svn(d,"aircraft_info_id") + ",\"" +  svn(d,"aircraft_name")  + "\");'>" + svn(d,"countItems") + "</a>"; 
                     }
@@ -84,8 +99,19 @@ function displayRecords(){
 	    ]
     	     ,onComplete: function(){
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                $("select[name='aircraft_type_id']").dataBind( "aircraft_type");
-                $("select[name='squadron_id']").dataBind( "squadronTypes");
+                $("select[name='aircraft_type_id']").dataBind({
+                    url : optionsURL + "aircraft_type"
+                    ,onComplete: function(){
+                        console.log($("#dd_squadron").val());
+                         $("input[name='squadron_id']").val( $("#dd_squadron").val() );
+                    }
+                    
+                });
+               $("select[name='squadron_id']").dataBind({
+                    url: procURL + "organizations_dd_sel "
+                    , text: "organization_name"
+                    , value: "squadron_id"
+                }); 
                 $("select[name='aircraft_source_id']").dataBind( "supply_source");
                 $("select[name='aircraft_dealer_id']").dataBind( "dealer");
                 $("select[name='status_id']").dataBind( "status");
@@ -163,7 +189,6 @@ function submitAssembly(){
         , optionalItems  : ["aircraft_info_id","parent_item_id"]
         , notInclude  : "#part_no,#national_stock_no,#item_name"
         , onComplete: function (data) {
-            //$("#tblComponents").clearGrid();
             if(data.isSuccess===true) zsi.form.showAlert("alert");
             displayRecords();
         }
@@ -291,3 +316,4 @@ function setSearch(code){
     });
 }
     
+     
