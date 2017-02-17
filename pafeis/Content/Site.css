@@ -693,14 +693,14 @@ td #delete-row span{
 }
 
 .loadingImg{
-   background :url("/pafeis/images/loading.gif") no-repeat;
+   background :url("/images/loading.gif") no-repeat;
    width:30px;   
    height:19px;   
    float: left;
 }
 
 .loadIconR{
-   background-image: url("/pafeis/images/loading.gif") ;
+   background-image: url("/images/loading.gif") ;
    background-repeat: no-repeat;
    background-size: 17px 15px;
    background-position: right center;   
