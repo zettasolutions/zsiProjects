@@ -9,12 +9,14 @@ var bs = zsi.bs.ctrl
     ,g_location_name = ""
     ,g_tab_name = "AIRCRAFT"
     ,warehouse_id = null
+    ,g_warehouse_id = null
+    ,g_issuance_id = null
     ,g_today_date = new Date()
 ;
     const IssuanceType = {
     Aircraft: 'Aircraft',
     Transfer: 'Transfer',
-    Repair: 'Repair',
+    Disposal: 'Disposal',
     Overhaul: 'Overhaul'
 };
 
@@ -25,8 +27,8 @@ zsi.ready(function(){
     $("#transfer-tab").click(function() {
         g_tab_name = "TRANSFER";
     });
-    $("#repair-tab").click(function() {
-        g_tab_name = "REPAIR";
+    $("#disposal-tab").click(function() {
+        g_tab_name = "DISPOSAL";
     });
     $("#overhaul-tab").click(function() {
         g_tab_name = "OVERHAUL";
@@ -53,6 +55,7 @@ zsi.ready(function(){
             g_warehouse_id = d.rows[0].warehouse_id;
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
+            
             $(".pageTitle").append(' for ' + g_organization_name + g_location_name);
             
         }
@@ -65,8 +68,8 @@ zsi.ready(function(){
     $("#transfer-tab").click(function () {
         displayTransfer($(this).html());    
     });
-    $("#repair-tab").click(function () {
-        displayRepair($(this).html());    
+    $("#disposal-tab").click(function () {
+        displayDisposal($(this).html());    
     });
     $("#overhaul-tab").click(function () {
         displayOverhaul($(this).html());    
@@ -105,7 +108,11 @@ function initDatePicker(){
 // Initialize the values for the select options.
 function initSelectOptions(callbackFunc){
     $("#tblModalIssuanceHeader #issued_by").dataBind({
-        url: base_url +  "selectoption/code/employees_fullnames_v"
+                           // url: base_url +  "selectoption/code/employees_fullnames_v"
+                                url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
+                               , text: "userFullName"
+                               , value: "user_id"
+                                
         
         , onComplete : function(){
             $("#tblModalIssuanceHeader #issuance_directive_id").dataBind({
@@ -218,7 +225,7 @@ function displayTransfer(tab_name){
             ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
-            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 100       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"status_name"); }
             }
             ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 110       , style : "text-align:left;"
@@ -234,9 +241,9 @@ function displayTransfer(tab_name){
     });    
 }
 
-// Display the grid for the repair issuance.
-function displayRepair(tab_name){
-    $("#gridRepair").dataBind({
+// Display the grid for the disposal issuance.
+function displayDisposal(tab_name){
+    $("#gridDisposal").dataBind({
          url            : procURL + "issuances_sel @tab_name='" + tab_name + "'"
         ,width          : $(document).width() - 35
         ,height         : $(document).height() - 250
@@ -246,7 +253,7 @@ function displayRepair(tab_name){
             {text  : "Issuance No."             , name  : "issuance_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
                 ,onRender : function(d){ 
                     return "<a href='javascript:showModalUpdateIssuance(\""
-                    + IssuanceType.Repair + "\",\""
+                    + IssuanceType.Disposal + "\",\""
                     + svn(d,"issuance_id") + "\",\"" +  svn(d,"issuance_no")  + "\",\"" +  svn(d,"transfer_warehouse_id")  + "\");'>" 
                     + svn(d,"issuance_no") + " </a>";
                 }
@@ -368,7 +375,7 @@ function buildIssuanceHeader(tbl_obj) {
                 '<input type="text" name="authority_ref" id="authority_ref" class="form-control input-sm" >' +
             '</div>' +
 
-             '<label class=" col-xs-2 control-label">Status</label>' +
+            '<label class=" col-xs-2 control-label">Status</label>' +
             '<div class=" col-xs-3">' +
                 '<label class=" col-xs-2 control-label" name="status_name" id="status_name">&nbsp;</label>' +
                 '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
@@ -381,7 +388,12 @@ function buildIssuanceHeader(tbl_obj) {
                 '<textarea type="text" name="status_remarks" id="status_remarks" cols="62" rows="1"  class="form-control input-sm" ></textarea>' +
                 '<input type="hidden" name="issuance_type" id="issuance_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
             '</div>' +
-            
+            '<div class="hide" id="dealer_filter_div">'+
+                '<label class=" col-xs-2 control-label">Dealer</label>' +
+                '<div class=" col-xs-3">' +
+                     '<select name="dealer_filter" id="dealer_filter" class="form-control input-sm"></select>' +
+                '</div>' +
+            '</div>' +
         '</div>' +
 
         '</div>';
@@ -457,9 +469,9 @@ function buildIssuanceButtons() {
 
 // Add a click event for the aircraft issuance button.
 $("#aircraftBtnNew").click(function () {
+    $("#dealer_filter_div").addClass("hide");
     $("#modalIssuance .modal-title ").html("Issue Items from " + g_organization_name + g_location_name + ' to <select name="aircraft_filter" id="aircraft_filter"></select>');
     $("select[name='aircraft_filter']").dataBind({ url: base_url + "selectoption/code/aircraft_info"});
-
     $("select[name='aircraft_filter']").change(function(){
         $("#aircraft_id").val(this.value);
     });
@@ -471,7 +483,8 @@ $("#aircraftBtnNew").click(function () {
     }); 
     $(".show-hide").html('');            
     var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
-                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm">';
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm">' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
    
     //buildIssuanceDetails();
@@ -480,21 +493,22 @@ $("#aircraftBtnNew").click(function () {
 
 // Add a click event for the transfer issuance button.
 $("#transferBtnNew").click(function () {
+    $("#dealer_filter_div").addClass("hide");
     $("#modalIssuance .modal-title").html('Transfer Items from' + ' » ' + g_organization_name + g_location_name + ' to <select name="dd_warehouse_transfer_filter" id="dd_warehouse_transfer_filter"></select>');
     $("select[name='dd_warehouse_transfer_filter']").dataBind({
-    url: procURL + "dd_transfer_warehouses_sel"
-    , text: "organization_warehouse"
-    , value: "warehouse_id"
-    , required :true
-    , onComplete: function(){
-        $transferWID = $("select[name='dd_warehouse_transfer_filter']").val();
-        $("#transfer_warehouse_id").val($transferWID);
-       
-        $("select[name='dd_warehouse_transfer_filter']").change(function(){
-            $("#transfer_warehouse_id").val(this.value);
-            setSearchMulti();
-        });
-    }
+        url: procURL + "dd_transfer_warehouses_sel"
+        , text: "organization_warehouse"
+        , value: "warehouse_id"
+        , required :true
+        , onComplete: function(){
+            $transferWID = $("select[name='dd_warehouse_transfer_filter']").val();
+            $("#transfer_warehouse_id").val($transferWID);
+           
+            $("select[name='dd_warehouse_transfer_filter']").change(function(){
+                $("#transfer_warehouse_id").val(this.value);
+                setSearchMulti();
+            });
+        }
     });
 
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -504,7 +518,8 @@ $("#transferBtnNew").click(function () {
     }); 
     $(".show-hide").html('');            
     var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
-                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >';
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
     
     $("select, input").on("keyup change", function(){
@@ -515,21 +530,22 @@ $("#transferBtnNew").click(function () {
     zsi.initDatePicker();
 });
 
-// Add a click event for the repair issuance button.
-$("#repairBtnNew").click(function () {
-    $("#modalIssuance .modal-title").html("Repair Items from " + g_organization_name + g_location_name + ' to <select name="dd_warehouse_transfer_filter" id="dd_warehouse_transfer_filter"></select>');
+// Add a click event for the disposal issuance button.
+$("#disposalBtnNew").click(function () {
+    $("#dealer_filter_div").addClass("hide");
+    $("#modalIssuance .modal-title").html("Dispose Items from " + g_organization_name + g_location_name);
     $("select[name='dd_warehouse_transfer_filter']").dataBind({
-    url: procURL + "dd_transfer_warehouses_sel"
-    , text: "organization_warehouse"
-    , value: "warehouse_id"
-    , required :true
-    , onComplete: function(){
-        //warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
-        $("select[name='dd_warehouse_transfer_filter']").change(function(){
-            $("#transfer_warehouse_id").val(this.value);
-            setSearchMulti();
-        });
-    }
+        url: procURL + "dd_transfer_warehouses_sel"
+        , text: "organization_warehouse"
+        , value: "warehouse_id"
+        , required :true
+        , onComplete: function(){
+            //warehouse_id = $("select[name='dd_warehouse_transfer_filter'] option:selected" ).val();
+            $("select[name='dd_warehouse_transfer_filter']").change(function(){
+                $("#transfer_warehouse_id").val(this.value);
+                setSearchMulti();
+            });
+        }
     });
 
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -540,7 +556,8 @@ $("#repairBtnNew").click(function () {
     }); 
     $(".show-hide").html('');            
     var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
-               '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >';
+               '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
     $("select, input").on("keyup change", function(){
         var $zGrid  = $(this).closest(".zGrid ");
@@ -554,38 +571,41 @@ $("#repairBtnNew").click(function () {
 $("#overhaulBtnNew").click(function () {
     $("#modalIssuance .modal-title").html("Overhaul Items from " + g_organization_name + g_location_name + ' to <select name="dd_warehouse_transfer_filter" id="dd_warehouse_transfer_filter"></select>');
     $("select[name='dd_warehouse_transfer_filter']").dataBind({
-    url: procURL + "dd_transfer_warehouses_sel"
-    , text: "organization_warehouse"
-    , value: "warehouse_id"
-    , required :true
-    
-    , onComplete: function(){
-        $("select[name='dd_warehouse_transfer_filter']").change(function(){
-            $("#transfer_warehouse_id").val(this.value);
-            setSearchMulti();
-        });
-    $("select, input").on("keyup change", function(){
-        var $zGrid  = $(this).closest(".zGrid ");
-        $zGrid.find("#is_edited").val("Y");
-    });    
-
-    }
-    
+        url: procURL + "dd_transfer_warehouses_sel"
+        , text: "organization_warehouse"
+        , value: "warehouse_id"
+        , required :true
+        
+        , onComplete: function(){
+            $("select[name='dd_warehouse_transfer_filter']").change(function(){
+                $("#transfer_warehouse_id").val(this.value);
+                setSearchMulti();
+            });
+            $("select, input").on("keyup change", function(){
+                var $zGrid  = $(this).closest(".zGrid ");
+                $zGrid.find("#is_edited").val("Y");
+            });
+        }
     });
-
+    
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuance($("#tblModalIssuanceHeader"));
-    //$(".show-hide-label").html('Transfer To');            
+    //$(".show-hide-label").html('Dealer');            
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
     $(".show-hide").html('');            
     var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
-               '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >';
+               '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+               '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
-    buildIssuanceDetails();
+    //buildIssuanceDetails();
+    $("#dealer_filter_div").removeClass("hide");
+    $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
+    $("select[name='dealer_filter']").change(function(){
+        $("#dealer_id").val(this.value);
+    });
     zsi.initDatePicker();
-    
 });
 
 // Save the new issuance entry.
@@ -599,8 +619,9 @@ function Save(page_process_action_id) {
         $("#status_id").val(page_process_action_id);
         $("#tblModalIssuanceHeader").jsonSubmit({
             procedure: "issuances_upd"
-            , notInclude: "#issuance_type"
+            , notInclude: "#dealer_filter"
             , onComplete: function (data) {
+                console.log(data);
                 if (data.isSuccess === true) {
                     var _issuance_id = (data.returnValue==0 ? g_issuance_id : data.returnValue);
                     $("#tblModalIssuanceDetails input[name='issuance_id']").val(_issuance_id);
@@ -634,8 +655,8 @@ function SaveDetails(page_process_action_id) {
             }else if(g_tab_name==="TRANSFER"){
                  displayTransfer(g_tab_name);   
             }
-            else if(g_tab_name==="REPAIR"){
-                 displayRepair(g_tab_name);   
+            else if(g_tab_name==="DISPOSAL"){
+                 displayDisposal(g_tab_name);   
             }
             else if(g_tab_name==="OVERHAUL"){
                  displayOverhaul(g_tab_name);   
@@ -662,6 +683,7 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
     if (issuance_type == IssuanceType.Aircraft) {
        // title = "Issue Items from ";
         //label = 'Aircraft';
+        $("#dealer_filter_div").addClass("hide");
         $("#modalIssuance .modal-title").html('Issue Items from' + ' » ' + g_organization_name + g_location_name + ' to <select name="aircraft_filter" id="aircraft_filter"></select>');
         
         $("select[name='aircraft_filter']").attr("selectedvalue", id);
@@ -671,12 +693,13 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
         });
 
          html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
-                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm">';
-
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm">' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
     if (issuance_type == IssuanceType.Transfer) {
        // title = "Transfer Items from ";
        // label = 'Organization';
+       $("#dealer_filter_div").addClass("hide");
         $("#modalIssuance .modal-title").html('Transfer Items from' + ' » ' + g_organization_name + g_location_name + ' to <select name="dd_warehouse_transfer_filter" id="dd_warehouse_transfer_filter"></select>');
         
         $("select[name='dd_warehouse_transfer_filter']").attr("selectedvalue", id);
@@ -694,53 +717,55 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
         });
 
         html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
-                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >';
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
-    if (issuance_type == IssuanceType.Repair) {
+    if (issuance_type == IssuanceType.Disposal) {
         //title = "Update Issuance Tranfer for ";
       //  label = 'Organization';
-        $("#modalIssuance .modal-title").html("Repair Items from " + g_organization_name + g_location_name + ' to <select name="dd_warehouse_transfer_filter" id="dd_warehouse_transfer_filter"></select>');
+        $("#dealer_filter_div").addClass("hide");
+        $("#modalIssuance .modal-title").html("Dispose Items from " + g_organization_name + g_location_name);
         
-        $("select[name='dd_warehouse_transfer_filter']").attr("selectedvalue", id);
+        /*$("select[name='dd_warehouse_transfer_filter']").attr("selectedvalue", id);
         $("select[name='dd_warehouse_transfer_filter']").dataBind({
-        url: procURL + "dd_transfer_warehouses_sel"
-        , text: "organization_warehouse"
-        , value: "warehouse_id"
-        , required :true
-        , onComplete: function(){
-            $("select[name='dd_warehouse_transfer_filter']").change(function(){
-                $("#transfer_warehouse_id").val(this.value);
-                setSearchMulti();
-            });
-        }
-        });
-
+            url: procURL + "dd_transfer_warehouses_sel"
+            , text: "organization_warehouse"
+            , value: "warehouse_id"
+            , required :true
+            , onComplete: function(){
+                $("select[name='dd_warehouse_transfer_filter']").change(function(){
+                    $("#transfer_warehouse_id").val(this.value);
+                    setSearchMulti();
+                });
+            }
+        });*/
         html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
-                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >';
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
     if (issuance_type == IssuanceType.Overhaul) {
       //  title = "Update Issuance Tranfer for ";
       //  label = 'Organization';
+        
         $("#modalIssuance .modal-title").html("Overhaul Items from " + g_organization_name + g_location_name + ' to <select name="dd_warehouse_transfer_filter" id="dd_warehouse_transfer_filter"></select>');
         
         $("select[name='dd_warehouse_transfer_filter']").attr("selectedvalue", id);
         $("select[name='dd_warehouse_transfer_filter']").dataBind({
-        url: procURL + "dd_transfer_warehouses_sel"
-        , text: "organization_warehouse"
-        , value: "warehouse_id"
-        , required :true
-        
-        , onComplete: function(){
-            $("select[name='dd_warehouse_transfer_filter']").change(function(){
-                $("#transfer_warehouse_id").val(this.value);
-                setSearchMulti();
-            });
-        }
-        
+            url: procURL + "dd_transfer_warehouses_sel"
+            , text: "organization_warehouse"
+            , value: "warehouse_id"
+            , required :true
+            , onComplete: function(){
+                $("select[name='dd_warehouse_transfer_filter']").change(function(){
+                    $("#transfer_warehouse_id").val(this.value);
+                    setSearchMulti();
+                });
+            }
         });
 
         html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
-                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >';
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
 
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -748,6 +773,7 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
     //$(".show-hide-label").html(label);
     $(".show-hide").html('');
     $(".show-hide").append(html);
+    
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
@@ -766,6 +792,16 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
                 $("#tblModalIssuanceHeader #transfer_warehouse_id").val(d.rows[0].transfer_warehouse_id);
                 $("#tblModalIssuanceHeader #status_name").html(d.rows[0].status_name);
                 $("#tblModalIssuanceHeader #status_remarks").val(d.rows[0].status_remarks);
+                $("#tblModalIssuanceHeader #dealer_id").val(d.rows[0].dealer_id);
+                $("#tblModalIssuanceHeader #dealer_filter").val(d.rows[0].dealer_id);
+                
+                if (issuance_type == IssuanceType.Overhaul) {
+                    $("#dealer_filter_div").removeClass("hide");
+                    $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
+                    $("select[name='dealer_filter']").change(function(){
+                        $("#dealer_id").val(this.value);
+                    });
+                }
                 
                 //buildIssuanceDetails(function() {
                     loadIssuanceDetails(issuance_id);
@@ -814,6 +850,17 @@ function loadIssuanceDetails(issuance_id) {
                 }
                 else
                     $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
+            });
+            
+            $("input[name='item_inv_id']").each(function(){
+                if(this.value){
+                    var $row = $(this).closest(".zRow");
+                        $row.find("select[id='serial_no']").dataBind({ 
+                             url : execURL + "dd_warehouse_items_sel @item_inv_id="+ this.value
+                            ,text: "serial_no"
+                            ,value: "serial_no"
+                        });
+                } 
             });
             
             $("[name='quantity']").keyup(function(){
@@ -937,4 +984,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                             
+                                  

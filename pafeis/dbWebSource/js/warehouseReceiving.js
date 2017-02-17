@@ -13,8 +13,8 @@ const DeliveryType = {
     Supplier: 'Supplier',
     Transfer: 'Transfer',
     Aircraft: 'Aircraft',
-    Repair: 'Repair',
-    Overhaul: 'Overhaul',
+    //Repair: 'Repair',
+    //Overhaul: 'Overhaul',
 };
 
 zsi.ready(function(){
@@ -27,12 +27,12 @@ zsi.ready(function(){
     $("#aircraft-tab").click(function() {
         g_tab_name = "AIRCRAFT";
     });
-    $("#repair-tab").click(function() {
+    /*$("#repair-tab").click(function() {
         g_tab_name = "REPAIR";
     });
     $("#overhaul-tab").click(function() {
         g_tab_name = "OVERHAUL";
-    });
+    });*/
     
     getTemplate();
     setCurrentTab();
@@ -67,12 +67,12 @@ zsi.ready(function(){
     $("#aircraft-tab").click(function () {
         displayAircraft($(this).html());    
     });
-    $("#repair-tab").click(function () {
+    /*$("#repair-tab").click(function () {
         displayRepair($(this).html());    
     });
     $("#overhaul-tab").click(function () {
         displayOverhaul($(this).html());    
-    });
+    });*/
 });
 
 // Set the auto-complete search for the grid details.
@@ -318,7 +318,7 @@ function displayAircraft(tab_name){
     });    
 }
 
-function displayRepair(tab_name){
+/*function displayRepair(tab_name){
     var counter = 0;
     $("#repair").dataBind({
          url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
@@ -403,7 +403,7 @@ function displayOverhaul(tab_name){
         ]   
     });    
 }
-
+*/
 
 // Build the forms for the modal window for the receiving.
 function buildReceiving(tbl_obj) {
@@ -619,7 +619,7 @@ $("#rdBtnNew").click(function () {
 });
 
 // Add a click event for the overhaul delivery button.
-$("#odBtnNew").click(function () {
+/*$("#odBtnNew").click(function () {
     $("#modalReceiving .modal-title").text("Items from Overhaul for " + g_organization_name + g_location_name);
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
@@ -630,7 +630,7 @@ $("#odBtnNew").click(function () {
                 '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     $(".show-hide").append(html);
     $("select[name='dealer_id']").dataBind("dealer");
-});
+});*/
 
 // Save the new receiving entry.
 function Save(page_process_action_id) {
@@ -680,12 +680,12 @@ function SaveDetails(page_process_action_id) {
             else if(g_tab_name==="TRANSFER"){
                  displayTransfer(g_tab_name);   
             }
-            else if(g_tab_name==="REPAIR"){
+            /*else if(g_tab_name==="REPAIR"){
                  displayRepair(g_tab_name);   
             }
             else if(g_tab_name==="OVERHAUL"){
                  displayOverhaul(g_tab_name);   
-            } 
+            }*/
         }
     });
 }
@@ -827,14 +827,14 @@ function setSearchMulti(){
         selCode = "items_on_arcraft_serials";
         _tableCode = "ref-0023";
     }
-    else if(g_tab_name==="REPAIR"){
+    /*else if(g_tab_name==="REPAIR"){
         selCode = "items_on_repair_serials";
         _tableCode = "ref-0023";
     }
     else if(g_tab_name==="OVERHAUL"){
         selCode = "items_on_overhaul_serials";
         _tableCode = "ref-0023";
-    }
+    }*/
     
     new zsi.search({
         tableCode: _tableCode
@@ -918,4 +918,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                
+                                 
