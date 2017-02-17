@@ -26,7 +26,6 @@ BEGIN
 	    ,doc_no						= b.doc_no			
 	    ,doc_date					= b.doc_date		
 	    ,dealer_id					= b.dealer_id		
-		,transfer_organization_id	= b.transfer_organization_id
 		,aircraft_id                = b.aircraft_id
 		,received_by				= b.received_by
 		,received_date				= b.received_date
@@ -36,31 +35,14 @@ BEGIN
         ,updated_date				= GETDATE()
     FROM dbo.receiving a INNER JOIN @tt b
     ON a.receiving_id = b.receiving_id
-    WHERE (
-			
-			isnull(a.receiving_no,0)	    <> isnull(b.receiving_no,0)  
-		OR	isnull(a.doc_no,0)				<> isnull(b.doc_no,0) 
-		OR	isnull(a.doc_date,'')			<> isnull(b.doc_date,'') 
-		OR	isnull(a.dealer_id,0)			<> isnull(b.dealer_id,0) 
-		OR	isnull(a.transfer_organization_id,0)	<> isnull(b.transfer_organization_id,0) 
-		OR	isnull(a.aircraft_id,0)	        <> isnull(b.aircraft_id,0) 
-		OR	isnull(a.received_by,'')		<> isnull(b.received_by,'') 
-		OR	isnull(a.received_date,0)		<> isnull(b.received_date,0) 
-		OR	isnull(a.status_id,0)		    <> isnull(b.status_id,0) 
-		OR	isnull(a.status_remarks,'')		<> isnull(b.status_remarks,'') 
-	)
+    WHERE isnull(b.is_edited,'N')='Y'
 	   
 -- Insert Process
-DECLARE @receiving_id INT;
-SET @receiving_id = null;
 
     INSERT INTO dbo.receiving (    
-		 receiving_no
-		,doc_no			
+		doc_no			
 		,doc_date		
 		,dealer_id		
-		,receiving_organization_id
-		,transfer_organization_id
 		,aircraft_id
 		,warehouse_id
 		,received_by
@@ -72,12 +54,9 @@ SET @receiving_id = null;
 		,created_date
         )
     SELECT 
-         receiving_no
-		,doc_no			
+		doc_no			
 		,doc_date		
 		,dealer_id	
-		,dbo.getUserOrganizationId(@user_Id)
-		,transfer_organization_id
 		,aircraft_id
 		,dbo.getUserWarehouseId(@user_id)
 		,received_by
@@ -90,13 +69,14 @@ SET @receiving_id = null;
     FROM @tt
     WHERE receiving_id IS NULL
 	AND doc_no IS NOT NULL
-	--AND (dealer_id IS NOT NULL OR aircraft_id IS NOT NULL OR transfer_organization_id IS NOT NULL)
+	--AND (dealer_id IS NOT NULL OR aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL)
 
 
 	SELECT @id = receiving_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 	   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
+	   EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
 	   RETURN @id
 	END;
 

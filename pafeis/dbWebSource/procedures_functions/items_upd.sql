@@ -10,6 +10,7 @@ BEGIN
 -- Update Process
     UPDATE a 
     SET  item_code_id			= b.item_code_id
+	    ,parent_item_id         = b.parent_item_id
 		,serial_no				= b.serial_no
 		,manufacturer_id		= b.manufacturer_id
 		,dealer_id				= b.dealer_id
@@ -22,33 +23,17 @@ BEGIN
 		,date_delivered			= b.date_delivered		
 		,aircraft_info_id		= b.aircraft_info_id	
 		,date_issued			= b.date_issued		
-		,status_id				= b.status_id			
+		,status_id				= 23			
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.items a INNER JOIN @tt b
     ON a.item_id = b.item_id
-    WHERE (
-
-			   isnull(a.item_code_id,0)			<> isnull(b.item_code_id,0)						
-			OR isnull(a.serial_no,'')			<> isnull(b.serial_no,'')					
-			OR isnull(a.manufacturer_id,0)		<> isnull(b.manufacturer_id,0)			
-			OR isnull(a.dealer_id,0)			<> isnull(b.dealer_id,0)					
-			OR isnull(a.supply_source_id,0)		<> isnull(b.supply_source_id,0)			
-			OR isnull(a.time_since_new,0)		<> isnull(b.time_since_new,0)				
-			OR isnull(a.time_before_overhaul,0)	<> isnull(b.time_before_overhaul,0)		
-			OR isnull(a.time_since_overhaul	,0)	<> isnull(b.time_since_overhaul	,0)	
-			OR isnull(a.remaining_time_hr,0)	<> isnull(b.remaining_time_hr,0)		
-			OR isnull(a.remaining_time_min,0)	<> isnull(b.remaining_time_min,0)			
-			OR isnull(a.date_delivered,'')		<> isnull(b.date_delivered,'')				
-			OR isnull(a.aircraft_info_id,0)		<> isnull(b.aircraft_info_id,0)			
-			OR isnull(a.date_issued	,'')		<> isnull(b.date_issued	,'')			
-			OR isnull(a.status_id	,0)			<> isnull(b.status_id	,0)				
-
-	)
+    WHERE ISNULL(b.is_edited,'N')='Y';
 	   
 -- Insert Process
     INSERT INTO dbo.items (
 		 item_code_id
+		,parent_item_id
 		,serial_no
 		,manufacturer_id
 		,dealer_id
@@ -67,6 +52,7 @@ BEGIN
         )
     SELECT 
 		 item_code_id
+		,parent_item_id
 		,serial_no
 		,manufacturer_id
 		,dealer_id
@@ -79,7 +65,7 @@ BEGIN
 		,date_delivered
 		,aircraft_info_id
 		,date_issued
-		,status_id
+		,23
         ,@user_id
         ,GETDATE()
     FROM @tt

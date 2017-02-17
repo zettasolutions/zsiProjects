@@ -9,4 +9,5 @@ item_type_id	INT IDENTITY(1,1)	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
-,unit_of_measure_id	INT	NULL)
+,unit_of_measure_id	INT	NULL
+,parent_item_type_id	INT	NULL)

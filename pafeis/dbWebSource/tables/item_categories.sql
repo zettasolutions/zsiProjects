@@ -8,4 +8,5 @@ item_cat_id	INT IDENTITY(1,1)	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
 ,seq_no	INT	NULL
-,parent_item_cat_id	INT	NULL)
+,parent_item_cat_id	INT	NULL
+,with_serial	CHAR(1)	NULL)

@@ -4,8 +4,7 @@ receiving_id	INT IDENTITY(1,1)	NOT NULL
 ,doc_no	NVARCHAR(100)	NULL
 ,doc_date	DATETIME	NULL
 ,dealer_id	INT	NULL
-,receiving_organization_id	INT	NULL
-,transfer_organization_id	INT	NULL
+,issuance_warehouse_id	INT	NULL
 ,aircraft_id	INT	NULL
 ,received_by	INT	NULL
 ,received_date	DATETIME	NULL

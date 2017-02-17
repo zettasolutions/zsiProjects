@@ -1,5 +1,7 @@
 
 
+
+
 -- ===================================================================================================
 -- Author:		Rogelio T. Novo Jr.
 -- Create date: November 10, 2016 8:21 PM
@@ -20,28 +22,21 @@ AS
 BEGIN
 -- Update Process
     UPDATE a 
-    SET  issuance_id			= b.issuance_id
-		,item_id				= b.item_id
-		,unit_of_measure_id		= b.unit_of_measure_id
+    SET  item_inv_id            = b.item_inv_id
+		,serial_no				= b.serial_no
 		,quantity				= b.quantity
 		,remarks	            = b.remarks
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.issuance_details a INNER JOIN @tt b
     ON a.issuance_detail_id = b.issuance_detail_id
-    WHERE (
-			isnull(a.issuance_id,0)				<> isnull(b.issuance_id,0)  
-		OR	isnull(a.item_id,0)					<> isnull(b.item_id,0)  
-		OR	isnull(a.unit_of_measure_id,0)		<> isnull(b.unit_of_measure_id,0)  
-		OR	isnull(a.quantity,0)				<> isnull(b.quantity,0)  
-		OR	isnull(a.remarks,'')				<> isnull(b.remarks,'')  
-	)
-	   
+    WHERE ISNULL(b.is_edited,'N')='Y';
+
 -- Insert Process
     INSERT INTO dbo.issuance_details (
-         issuance_id 
-		,item_id
-		,unit_of_measure_id
+         issuance_id
+		,item_inv_id 
+		,serial_no
 		,quantity
 		,remarks
 		,created_by
@@ -49,14 +44,17 @@ BEGIN
         )
     SELECT 
         issuance_id 
-	   ,item_id
-	   ,unit_of_measure_id	
+	   ,item_inv_id
+	   ,serial_no
 	   ,quantity
 	   ,remarks
 	   ,@user_id
        ,GETDATE()
     FROM @tt
-    WHERE issuance_detail_id IS NULL
-	  AND item_id IS NOT NULL;
+    WHERE issuance_detail_id IS NULL 
+	  AND issuance_id IS NOT NULL
+	  AND item_inv_id IS NOT NULL;
 END
+
+
 

@@ -1,5 +1,5 @@
 
-CREATE PROCEDURE [dbo].[default_process_actions_sel]
+CREATE PROCEDURE [dbo].[current_process_actions_sel]
 (
    @page_id INT
   ,@doc_id  INT = NULL

@@ -14,17 +14,26 @@ CREATE PROCEDURE [dbo].[items_sel]
    ,@item_code_id  INT = null
    ,@aircraft_info_id INT = NULL
    ,@warehouse_id int = null
+   ,@item_cat_code char(1)=null
 )
 AS
 BEGIN
 SET NOCOUNT ON
 DECLARE @stmt NVARCHAR(MAX)
-SET @stmt = ' SELECT * FROM dbo.items_v WHERE 1=1 ';
+IF ISNULL(@aircraft_info_id,0) =0
+   SET @stmt = ' SELECT * FROM dbo.items_v WHERE 1=1 ';
+ELSE
+   SET @stmt = ' SELECT * FROM dbo.aircraft_items_v WHERE 1=1 ';
+
 IF ISNULL(@aircraft_info_id,0) <> 0
    SET @stmt = @stmt + ' AND aircraft_info_id = ' + cast(@aircraft_info_id as varchar(20)) 
 
 IF ISNULL(@warehouse_id,0) <> 0
-   SET @stmt = @stmt + ' AND ISNULL(aircraft_info_id,0)=0 AND warehouse_id = ' + cast(@warehouse_id as varchar(20)) 
+   SET @stmt = @stmt + ' AND warehouse_id = ' + cast(@warehouse_id as varchar(20)) 
+
+IF ISNULL(@item_cat_code,'') <> ''
+   SET @stmt = @stmt + ' AND item_cat_code = ''' + @item_cat_code + ''''
+
 
 IF ISNULL(@item_code_id,0) <> 0
    SET @stmt = @stmt + ' AND item_code_id = ' + cast(@item_code_id as varchar(20)) 

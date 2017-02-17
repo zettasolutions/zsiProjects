@@ -4,4 +4,4 @@ SELECT        user_id, logon, last_name, first_name, middle_name, password, role
                          first_name + N' ' + CASE WHEN middle_name IS NULL THEN '' ELSE middle_name END + ' ' + last_name AS userFullName, is_contact, dbo.getOrganizationName(organization_id) AS organizationName, 
                          dbo.getRankDesc(rank_id) AS rankDesc, dbo.getPositionDesc(position_id) AS position, position_id, is_employee, is_zsi, warehouse_id, dbo.getWarehouseLocation(warehouse_id) AS warehouse_location
 FROM            dbo.users
-WHERE        (is_employee = 'Y')
+WHERE        (is_employee = 'Y') AND (logon IS NOT NULL)

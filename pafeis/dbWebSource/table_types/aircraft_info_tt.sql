@@ -1,5 +1,6 @@
 CREATE TYPE aircraft_info_tt AS TABLE(
 aircraft_info_id	INT	NULL
+,is_edited	CHAR(1)	NULL
 ,aircraft_code	NVARCHAR(20)	NULL
 ,aircraft_name	NVARCHAR(600)	NULL
 ,aircraft_type_id	INT	NULL

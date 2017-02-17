@@ -10,7 +10,7 @@ DECLARE @updated_count INT;
 -- Update Process
    UPDATE a 
        SET role_id = b.role_id
-	      ,logon = dbo.createUserLogon(b.user_id)
+	      ,logon = lower(dbo.createUserLogon(b.user_id))
 		  ,password = b.password
           ,updated_by   = @user_id
           ,updated_date = GETDATE()

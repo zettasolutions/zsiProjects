@@ -22,16 +22,7 @@ BEGIN
     FROM dbo.receiving_details a INNER JOIN @tt b
     ON a.receiving_detail_id = b.receiving_detail_id
     WHERE ISNULL(b.is_edited,'N')='Y'
-	/*
-	(
-		isnull(a.item_code_id,0)			<> isnull(b.item_code_id,0)  
-		OR	isnull(a.serial_no,0)		    <> isnull(b.serial_no,0)  
-		OR	isnull(a.unit_of_measure_id,0)	<> isnull(b.unit_of_measure_id,0)  
-		OR	isnull(a.quantity,0)			<> isnull(b.quantity,0)  
-		OR	isnull(a.item_class_id,0)		<> isnull(b.item_class_id,0)  
-		OR	isnull(a.remarks,'')			<> isnull(b.remarks,'')  
-	)
-	*/   
+  
 -- Insert Process
     INSERT INTO dbo.receiving_details (
          receiving_id 

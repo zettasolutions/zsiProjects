@@ -25,11 +25,8 @@ DECLARE @organization_id INT
      SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
                + ' AND organization_id = ' + cast(@organization_id as varchar(20))
 
-  IF @tab_name='AIRCRAFT'
-     SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
-
-  IF @tab_name='TRANSFER'
-     SET @stmt = @stmt + ' AND ISNULL(transfer_organization_id,0) <> 0 '
+  IF ISNULL(@tab_name,'') <> ''
+     SET @stmt = @stmt + ' AND issuance_type=''' + @tab_name + ''''
 
    SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
 

@@ -1,24 +1,23 @@
 
-
--- =============================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: October 25, 2016 6:20 PM
--- Description:	Aircraft info select all or by id records.
--- =============================================
 CREATE PROCEDURE [dbo].[aircraft_info_sel]
 (
     @aircraft_info_id  INT = null
+   ,@squadron_id       INT = NULL
 )
 AS
 BEGIN
 
 SET NOCOUNT ON
+DECLARE @stmt NVARCHAR(MAX)
+SET @stmt = 'SELECT * FROM dbo.aircraft_info_v WHERE 1=1 '
 
-  IF @aircraft_info_id IS NOT NULL  
-	 SELECT * FROM dbo.aircraft_info_v WHERE aircraft_info_id = @aircraft_info_id; 
-  ELSE
-     SELECT * FROM dbo.aircraft_info_v
-	 ORDER BY aircraft_name; 
+IF ISNULL(@squadron_id,0) <> 0 
+   SET @stmt = @stmt + ' AND squadron_id = ' + cast(@squadron_id as varchar(20)) 
+
+IF ISNULL(@aircraft_info_id,0) <> 0  
+	 SET @stmt = @stmt + ' AND aircraft_info_id = ' + cast(@aircraft_info_id as varchar(20)) 
+  
+ SET @stmt = @stmt + ' ORDER BY aircraft_name '; 
 	
 END
 

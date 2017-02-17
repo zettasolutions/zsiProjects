@@ -13,5 +13,7 @@ issuance_id	INT IDENTITY(1,1)	NOT NULL
 ,status_id	INT	NULL
 ,status_remarks	NTEXT(2147483646)	NULL
 ,authority_ref	NVARCHAR(2000)	NULL
-,transfer_organization_id	INT	NULL
-,issuance_type	VARCHAR(20)	NULL)
+,transfer_warehouse_id	INT	NULL
+,issuance_type	VARCHAR(20)	NULL
+,warehouse_id	INT	NULL
+,dealer_id	INT	NULL)

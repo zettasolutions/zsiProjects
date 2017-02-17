@@ -15,7 +15,7 @@ DECLARE @stmt VARCHAR(MAX)
 DECLARE @role_id INT
 DECLARE @organization_id INT
 
-  SELECT @role_id=role_id, @organization_id=organization_id FROM users where user_id=@user_id;
+  SELECT @role_id=role_id FROM users where user_id=@user_id;
   
 
   SET @stmt =  'SELECT * FROM dbo.receiving_v '
@@ -24,13 +24,13 @@ DECLARE @organization_id INT
 	 SET @stmt = @stmt + ' WHERE receiving_id = ' + CAST(@receiving_id AS VARCHAR(20)); 
   ELSE
      SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
-               + ' AND receiving_organization_id = ' + cast(@organization_id as varchar(20))
+               + ' AND warehouse_id in (SELECT warehouse_id FROM dbo.user_warehouses(' + cast(@user_id as varchar(20)) + '))'
 
   IF @tab_name='SUPPLIER'
      SET @stmt = @stmt + ' AND ISNULL(dealer_id,0) <> 0'
 
   IF @tab_name='TRANSFER'
-     SET @stmt = @stmt + ' AND ISNULL(transfer_organization_id,0) <> 0 '
+     SET @stmt = @stmt + ' AND ISNULL(issuance_warehouse_id,0) <> 0 '
 
   IF @tab_name='AIRCRAFT'
      SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
@@ -48,7 +48,7 @@ DECLARE @organization_id INT
   ELSE
      SET @stmt = @stmt + ' DESC';
   
-  --print @stmt;
+  print @stmt;
   exec(@stmt);
 	
 END

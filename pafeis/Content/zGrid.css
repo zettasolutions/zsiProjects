@@ -51,7 +51,7 @@
 .zGrid .item {
     float: left;
     text-align: center; 
-    border-top: 1pt solid #d6d8d8;
+    /*border-top: 1pt solid #d6d8d8;*/
 	clear:right;
 }
 

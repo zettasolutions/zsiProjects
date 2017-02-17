@@ -13,7 +13,7 @@ BEGIN
 	DECLARE @role_id INT;
 	--DECLARE @organization_id INT;
 	
-	SET @stmt =  'SELECT *, dbo.getItemCodeName(item_id) item_search FROM dbo.issuance_details_v WHERE issuance_id = ' + CAST(@issuance_id AS VARCHAR(20)); 
+	SET @stmt =  'SELECT * FROM dbo.issuance_details_v WHERE issuance_id = ' + CAST(@issuance_id AS VARCHAR(20)); 
 
 	SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
   
@@ -25,3 +25,4 @@ BEGIN
 	EXEC(@stmt);
 	
 END
+

@@ -70,6 +70,7 @@ function isLocalStorageSupport(){
 }
 
 function loadMenu(){
+    console.log(readCookie("zsi_login"));
     if (readCookie("zsi_login")!=="Y"){
         $.getJSON(procURL + "user_menus_sel", function(data){
             if(data.rows.length>0) saveLocalStorageAndDisplay(data);
@@ -262,4 +263,4 @@ function readCookie(name) {
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
-                          
+                           
