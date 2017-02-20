@@ -7,8 +7,20 @@ var bs          = zsi.bs.ctrl
 
 
 zsi.ready(function(){
-    displayRecords();
     getTemplate();
+    $(".pageTitle").append(' for ' + ' » <select name="dd_squadron" id="dd_squadron"></select>');
+    $("#dd_squadron").dataBind({
+        url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
+        , text: "organization_name"
+        , value: "organization_id"
+        , required :true
+        , onComplete: function(){
+            displayRecords($("#dd_squadron").val());
+            $("select[name='dd_squadron']").change (function(){
+                displayRecords(this.value);
+            });
+        }
+    });  
 });
 
 var contextFlightOperation = { 
@@ -45,39 +57,34 @@ var contextFlightOperation = {
                         +'    </div>'
 
                         +'    <div class="form-group  ">  '
-                        +'        <label class=" col-xs-2 control-label">Unit</label>'
-                        +'        <div class=" col-xs-4">'
-                        +'           <select type="text" name="unit_id" id="unit_id" class="form-control input-sm" ></select>'
-                        +'         </div>'
                         +'        <label class=" col-xs-2 control-label">Aircraft</label>'
                         +'        <div class=" col-xs-4">'
-                        +'             <select type="text" name="aircraft_id" id="aircraft_id" class="form-control input-sm"  ></select>'
+                        +'           <input type="hidden" name="unit_id" id="unit_id" class="form-control input-sm" >'
+                        +'           <select type="text" name="aircraft_id" id="aircraft_id" class="form-control input-sm"  ></select>'
                         +'        </div>'
-                        +'    </div>'
-
-                        +'    <div class="form-group  "> ' 
                         +'        <label class=" col-xs-2 control-label">Pilot</label>'
                         +'        <div class=" col-xs-4">'
                         +'             <select type="text" name="pilot_id" id="pilot_id" class="form-control input-sm" ></select>'
                         +'        </div>  '
+
+                        +'    </div>'
+
+                        +'    <div class="form-group  "> ' 
                         +'        <label class=" col-xs-2 control-label">Co Pilot</label>'
                         +'        <div class=" col-xs-4">'
                         +'            <select type="text" name="co_pilot_id" id="co_pilot_id" class= "form-control input-sm" > </select>'
                         +'        </div>'
-                        +'    </div>'
-   
-                        +'    <div class="form-group  ">  '
                         +'        <label class=" col-xs-2 control-label">Origin</label>'
                         +'        <div class=" col-xs-4">'
                         +'             <input type="text" name="origin" id="origin" class="form-control input-sm" >'
                         +'        </div>  '
+                        +'    </div>'
+   
+                        +'    <div class="form-group  ">  '
                         +'         <label class=" col-xs-2 control-label">Destination</label>'
                         +'        <div class=" col-xs-4">'
                         +'           <input type="text" name="destination" id="destination" class="form-control input-sm" >'
                         +'         </div>'
-                        +'    </div>'
-
-                        +'    <div class="form-group  ">  '
                         +'        <label class=" col-xs-2 control-label">Status</label>'
                         +'        <div class=" col-xs-4">'
                         +'             <select type="text" name="status_id" id="status_id" class="form-control input-sm"  ></select>'
@@ -98,8 +105,21 @@ function getTemplate(){
 }
 
 $("#btnNew").click(function () {
-    $("#modalFlightOperation .modal-title").text("New Flight Operation");
+    $("#modalFlightOperation .modal-title").html("New Flight Operation" + ' for ' + ' » <select name="dd_unit" id="dd_unit"></select>');
+    $("#dd_unit").dataBind({
+        url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
+        , text: "organization_name"
+        , value: "organization_id"
+        , required :true
+        , onComplete: function(){
+            $("#unit_id").val($("#dd_unit").val());
+            $("select[name='dd_unit']").change (function(){
+                $("#unit_id").val($("#dd_unit").val());
+            });
+        }
+    }); 
     $('#modalFlightOperation').modal({ show: true, keyboard: false, backdrop: 'static' });
+
     displayListBoxes();
     clearForm();
     zsi.initDatePicker();
@@ -109,6 +129,7 @@ function submitFlightOperations(){
          $("#frm_modalFlightOperation").jsonSubmit({
              procedure : "flight_operation_upd"
             ,optionalItems : ["flight_operation_id"]
+            ,notInclude: "#dd_unit"
             ,onComplete: function (data) {
              if(data.isSuccess===true) zsi.form.showAlert("alert");
                 $("#grid").trigger("refresh");
@@ -121,8 +142,19 @@ function submitFlightOperations(){
 function showModalUpdateOperation(index) {
    var _info = dataFlightOperations[index];
   
-    $("#modalFlightOperation .modal-title").text("Flight Operation for » " + _info.flight_operation_code);
- 
+    $('#modalFlightOperation .modal-title').html('Flight Operation for ' + ' » <select name="dd_unit" id="dd_unit"></select>');
+     $("#dd_unit").dataBind({
+        url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
+        , text: "organization_name"
+        , value: "organization_id"
+        , required :true
+        , onComplete: function(){
+            $("#unit_id").val($("#dd_unit").val());
+            $("select[name='dd_unit']").change (function(){
+                $("#unit_id").val($("#dd_unit").val());
+            });
+        }
+    }); 
     $("#modalFlightOperation").modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#modalFlightOperation #flight_operation_id").val(_info.flight_operation_id);
     
@@ -131,10 +163,8 @@ function showModalUpdateOperation(index) {
     zsi.initDatePicker();
 }
 
-
 function displayListBoxes(){
     $("select[name='flight_operation_type_id']").dataBind( "flight_operation_type");    
-    $("select[name='unit_id']").dataBind( "squadron");
     $("select[name='aircraft_id']").dataBind( "aircraft_info");
     $("select[name='pilot_id']").dataBind( "employees_fullnames_v");
     $("select[name='co_pilot_id']").dataBind( "employees_fullnames_v");
@@ -167,12 +197,13 @@ function clearForm(){
     $("select[type='text']").attr("selectedvalue", "" ).val("");
     dataFlightOperationsIndex=-1;
 }
-function displayRecords(){
+
+function displayRecords(squadron_id){
     
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      
      $("#grid").dataBind({
-	     url            : execURL + "flight_operation_sel"
+	     url            : execURL + "flight_operation_sel @squadron_id=" + squadron_id
 	    ,width          : $(document).width() -55
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
@@ -232,14 +263,13 @@ function displayRecords(){
     });    
 }
     
-
 $("#btnDelete").click(function(){
     zsi.form.deleteData({
          code       : "ref-0013"
         ,onComplete : function(data){
-                        displayRecords();
+                        displayRecords($("#dd_squadron").val() );
                       }
     });       
 });
         
-                                                        
+                                                          
