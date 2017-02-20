@@ -3,6 +3,8 @@ var  bs = zsi.bs.ctrl
     ,tblCP = "tblComponents"
     ,aircraft_info_id = null
     ,aircraft_info_name = ""
+    ,parent_item_id = null
+    ,table_name = ""
 ;
 
 zsi.ready(function(){
@@ -24,7 +26,7 @@ zsi.ready(function(){
 
 var contextComponents = { id:"modalWindowComponents"
                 , title: "Components"
-                , sizeAttr: "modal-lg"
+                , sizeAttr: "modal-lg fullWidth"
                 , footer: '<div class="pull-left"><button type="button" onclick="submitAssembly();" class="btn btn-primary">'
                 + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
 
@@ -130,6 +132,7 @@ function displayRecords(squadron_id){
 function manageAssembly(id,title){
     aircraft_info_id=id;
     aircraft_info_name=title;
+    table_name = "ASSEMBLY";
     displayRecordsAssembly(id);
     $("#modalWindowComponents .modal-title").html("Assembly for » " + title);
     $('#modalWindowComponents').modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -140,8 +143,8 @@ function manageAssembly(id,title){
 function displayRecordsAssembly(id){
     $("#" + tblCP).dataBind({
 	     url            : execURL + "items_sel @aircraft_info_id=" + id + ",@item_cat_code='A'"
-	    ,width          : 850
-	    ,height         : 400
+	    ,width          : $(document).width() - 50
+	    ,height         : 395
         ,blankRowsLimit : 5
         ,dataRows       : [
         		 {text  : "Part No."                 , width : 100        , style : "text-align:left;"
@@ -176,7 +179,7 @@ function displayRecordsAssembly(id){
                                   +  bs({name:"aircraft_info_id",type:"hidden",value: id})
                                   +  bs({name:"date_issued",type:"hidden",value: svn (d,"date_issued")})
                                   +  bs({name:"status_id",type:"hidden",value: svn (d,"status_id")})
-                                  + "<a href='javascript:manageComponent(" + svn(d,"item_id") + ");'>" + svn(d,"countAircraftAC") + "</a>"; 
+                                  + "<a href='javascript:manageComponent(" + svn(d,"item_id") + ",\""+ svn(d,"item_name") +" / "+  svn(d,"serial_no") +"\");'>" + svn(d,"countAircraftAC") + "</a>"; 
                     }
         		}
  	    ] 
@@ -198,16 +201,23 @@ function submitAssembly(){
         , notInclude  : "#part_no,#national_stock_no,#item_name"
         , onComplete: function (data) {
             if(data.isSuccess===true) zsi.form.showAlert("alert");
-            displayRecords();
+            displayRecords($("#dd_squadron").val());
+            if(table_name==="ASSEMBLY"){
+                displayRecordsAssembly(aircraft_info_id);
+            }else if(table_name==="COMPONENT"){
+                displayRecordsComponents(parent_item_id);
+            }
         }
     });
 }
 
-function manageComponent(id){
+function manageComponent(id, title){
+    parent_item_id = id;
+    table_name = "COMPONENT";
     displayRecordsComponents(id);
     var backBtn = "<a title='Go Back' href='javascript:void(0);' class='btn-lg' onclick='manageAssembly("+ aircraft_info_id +",\""+ aircraft_info_name +"\");'><span class='glyphicon glyphicon-circle-arrow-left'></span></a>";
     
-    $("#modalWindowComponents .modal-title").html(backBtn + " Component for » " + aircraft_info_name);
+    $("#modalWindowComponents .modal-title").html(backBtn + " Component for » " + title);
     $('#modalWindowComponents').modal({ show: true, keyboard: false, backdrop: 'static' });
     $('#modalWindowComponents');//.setCloseModalConfirm();
     $("#modalWindowComponents .modal-body").css("height","450px");
@@ -215,9 +225,9 @@ function manageComponent(id){
 
 function displayRecordsComponents(id){
     $("#" + tblCP).dataBind({
-	     url            : execURL + "items_sel @item_id=" + id + ",@aircraft_info_id=" + aircraft_info_id + ",@item_cat_code='C'"
-	    ,width          : 850
-	    ,height         : 400
+	     url            : execURL + "items_sel @aircraft_info_id=" + aircraft_info_id + ",@parent_item_id=" + id
+	    ,width          : $(document).width() - 50
+	    ,height         : 395
         ,blankRowsLimit : 5
         ,dataRows       : [
         		 {text  : "Part No."                 , width : 100        , style : "text-align:left;"
@@ -324,4 +334,4 @@ function setSearch(code){
     });
 }
     
-       
+        
