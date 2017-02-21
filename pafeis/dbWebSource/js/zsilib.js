@@ -1090,14 +1090,16 @@ var  ud='undefined'
     		                            _content = "<span class='text'>" + svn(o.data,_info.name)  + "</span>";
     		                        else{ 
     		                            
-    		                            if(_info.displayText!==ud){
+    		                            if(typeof _info.displayText!==ud){
                                             _content = bs({    name      : _info.name  
                                                                 ,type      : _info.type  
                                                                 ,value     : svn(o.data ,_info.name ,_info.defaultValue ) 
                                                                 ,displayText : svn(o.data  ,_info.displayText) 
                                                         });
     		                            }
-    		                            else  _content = bs({name:_info.name  ,type:_info.type  ,value: svn(o.data  ,_info.name  ,_info.defaultValue )});
+    		                            else {
+    		                                _content = bs({name:_info.name  ,type:_info.type  ,value: svn(o.data  ,_info.name  ,_info.defaultValue )});
+    		                            }
     		                        }
     		                         
     		                        if(x===0 || x ===__o.selectorIndex ){
@@ -2619,4 +2621,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                        
+                                                                         
