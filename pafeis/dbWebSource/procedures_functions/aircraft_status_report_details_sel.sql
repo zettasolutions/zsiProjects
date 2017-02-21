@@ -19,7 +19,7 @@ SET NOCOUNT ON
 DECLARE @stmt NVARCHAR(MAX)
 
 
-SET @stmt = 'SELECT b.organization_code, a.aircraft_code, a.aircraft_name ' +  
+SET @stmt = 'SELECT b.organization_code, a.aircraft_code, a.aircraft_name, status_name ' +  
 			'FROM dbo.aircraft_info_v as a ' +
 			'INNER JOIN dbo.organizations as b ' +
 			'ON a.squadron_id = b.organization_id '

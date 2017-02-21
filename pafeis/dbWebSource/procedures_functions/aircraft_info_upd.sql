@@ -17,6 +17,7 @@ BEGIN
 		,aircraft_source_id		= b.aircraft_source_id
 		,aircraft_dealer_id		= b.aircraft_dealer_id
 		,status_id				= b.status_id
+		,item_class_id          = b.item_class_id
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.aircraft_info a INNER JOIN @tt b
@@ -33,6 +34,7 @@ BEGIN
 		,aircraft_source_id
 		,aircraft_dealer_id
 		,status_id
+		,item_class_id
         ,created_by
         ,created_date
         )
@@ -45,6 +47,7 @@ BEGIN
 	   ,aircraft_source_id
 	   ,aircraft_dealer_id
 	   ,status_id
+	   ,item_class_id
        ,@user_id
        ,GETDATE()
     FROM @tt

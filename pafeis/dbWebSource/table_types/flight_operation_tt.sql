@@ -10,4 +10,5 @@ flight_operation_id	INT	NULL
 ,co_pilot_id	INT	NULL
 ,origin	NVARCHAR(1000)	NULL
 ,destination	NVARCHAR(1000)	NULL
-,status_id	INT	NULL)
+,status_id	INT	NULL
+,no_cycles	INT	NULL)

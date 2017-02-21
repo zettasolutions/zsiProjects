@@ -1,6 +1,7 @@
 
 
 
+
 CREATE PROCEDURE [dbo].[critical_stockpile_report_sel]
 (
     @user_id int = NULL
@@ -33,4 +34,5 @@ BEGIN
 	--print @page_count;
 	RETURN @page_count;
 END;
+
 

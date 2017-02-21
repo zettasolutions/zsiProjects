@@ -1,6 +1,7 @@
+
 CREATE PROCEDURE [dbo].[flight_time_sel]
 (
-     @flight_time_id  INT = null
+     @flight_operation_id  INT = null
 	,@is_active  CHAR(1) = 'Y'
 )
 AS
@@ -11,9 +12,9 @@ DECLARE @stmt NVARCHAR(MAX)
 
   SET @stmt = 'SELECT * FROM dbo.flight_time_v '
 
-  IF ISNULL(@flight_time_id,'') <>''
+  IF ISNULL(@flight_operation_id,0) <>0
   BEGIN
-      SET @stmt = @stmt + ' WHERE flight_time_id = ' + CAST(@flight_time_id AS VARCHAR(20)); 
+      SET @stmt = @stmt + ' WHERE flight_operation_id = ' + CAST(@flight_operation_id AS VARCHAR(20)); 
   END
 
   EXEC(@stmt);

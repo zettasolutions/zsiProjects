@@ -1,5 +1,5 @@
 CREATE TABLE flight_time(
-flight_time_id	INT IDENTITY(1,1)	NOT NULL
+flight_operation_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,flight_operation_id	INT	NOT NULL
 ,flight_take_off_time	DATETIME	NOT NULL
 ,flight_landing_time	DATETIME	NOT NULL

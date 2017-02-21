@@ -8,4 +8,5 @@ aircraft_info_id	INT	NULL
 ,aircraft_time	DECIMAL(20)	NULL
 ,aircraft_source_id	INT	NULL
 ,aircraft_dealer_id	INT	NULL
+,item_class_id	INT	NULL
 ,status_id	INT	NULL)

@@ -18,7 +18,8 @@ IF ISNULL(@aircraft_info_id,0) <> 0
 	 SET @stmt = @stmt + ' AND aircraft_info_id = ' + cast(@aircraft_info_id as varchar(20)) 
   
  SET @stmt = @stmt + ' ORDER BY aircraft_name '; 
-	
+
+EXEC(@stmt);	
 END
 
 

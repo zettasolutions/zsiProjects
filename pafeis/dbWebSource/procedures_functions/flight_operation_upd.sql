@@ -1,4 +1,3 @@
-
 CREATE PROCEDURE [dbo].[flight_operation_upd]
 (
     @tt    flight_operation_tt READONLY
@@ -26,8 +25,10 @@ BEGIN
 		,origin						= b.origin
 		,destination				= b.destination
 		,status_id					= b.status_id
+		,no_cycles					= b.no_cycles
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
+		
     FROM dbo.flight_operation a INNER JOIN @tt b
     ON a.flight_operation_id = b.flight_operation_id
     WHERE (
@@ -41,7 +42,8 @@ BEGIN
 		OR	isnull(a.co_pilot_id,0)					<> isnull(b.co_pilot_id,0)  
 		OR	isnull(a.origin,'')						<> isnull(b.origin,'')  
 		OR	isnull(a.destination,'')				<> isnull(b.destination,'')  
-		OR	isnull(a.status_id,0)					<> isnull(b.status_id,0)   
+		OR	isnull(a.status_id,0)					<> isnull(b.status_id,0) 
+		OR	isnull(a.no_cycles,0)					<> isnull(b.no_cycles,0)  
 	)
 	   
 -- Insert Process
@@ -57,6 +59,7 @@ BEGIN
 		,origin
 		,destination
 		,status_id
+		,no_cycles
         ,created_by
         ,created_date
         )
@@ -72,6 +75,7 @@ BEGIN
 		,origin
 		,destination
 		,status_id
+		,no_cycles
        ,@user_id
        ,GETDATE()
     FROM @tt
@@ -85,6 +89,7 @@ END
 	--EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
 
 	RETURN @id
+
 
 
 

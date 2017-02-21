@@ -14,7 +14,10 @@ BEGIN
   DECLARE @count INT = 0;
   DECLARE @page_count INT = 1;
   
-  SET @stmt = 'SELECT dbo.getAircraftType(aircraft_type_id) as aircraft_type, COUNT(status_id) countStatus, status_name, aircraft_type_id FROM dbo.aircraft_info_v GROUP BY aircraft_type_id, status_name'; 
+  SET @stmt = 'SELECT dbo.getAircraftType(aircraft_type_id) as aircraft_type, ' +
+              'COUNT(status_id) countStatus, aircraft_type_id ' +
+			  'FROM dbo.aircraft_info_v GROUP BY aircraft_type_id'; 
+
   SET @order = ' ORDER BY ' + CAST(@col_no + 1 AS VARCHAR(1)) + ' ' + IIF(@order_no=0,'ASC','DESC');   
   SELECT @count = COUNT(*) FROM dbo.user_role_v; 
 

@@ -5,7 +5,7 @@ SELECT        dbo.items.item_id, dbo.items.serial_no, dbo.items.manufacturer_id,
                          dbo.items.time_since_overhaul, dbo.items.remaining_time_hr, dbo.items.remaining_time_min, dbo.items.date_delivered, dbo.items.aircraft_info_id, dbo.items.date_issued, dbo.items.status_id, 
                          dbo.items_inv_v.part_no, dbo.items_inv_v.national_stock_no, dbo.items_inv_v.item_name, dbo.items_inv_v.reorder_level, dbo.items_inv_v.organization_id, dbo.items_inv_v.stock_qty, 
                          dbo.items_inv_v.item_code, dbo.items_inv_v.item_cat_id, dbo.items_inv_v.item_type_name, dbo.items_inv_v.is_active, dbo.items_inv_v.item_code_id, dbo.items.no_repairs, dbo.items.no_overhauls, 
-                         dbo.items.item_inv_id, dbo.items_inv_v.warehouse_id
+                         dbo.items.item_inv_id, dbo.items_inv_v.warehouse_id, dbo.items.parent_item_id, ISNULL(dbo.items.aircraft_info_id, 0) AS Expr1
 FROM            dbo.items INNER JOIN
                          dbo.items_inv_v ON dbo.items.item_inv_id = dbo.items_inv_v.item_inv_id
-WHERE        (ISNULL(dbo.items.aircraft_info_id, 0) = 0) AND (dbo.items.status_id <> 15)
+WHERE        (dbo.items.status_id <> 15) AND (ISNULL(dbo.items.aircraft_info_id, 0) = 0)

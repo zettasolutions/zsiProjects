@@ -24,14 +24,14 @@ BEGIN
 	INNER JOIN dbo.organizations AS b ON a.organization_id = b.organization_id 
 	INNER JOIN dbo.item_codes AS c ON a.item_code_id = c.item_code_id 
 	WHERE (CAST(a.remaining_time_hr AS VARCHAR(100)) + ':' + CAST(a.remaining_time_min AS VARCHAR(100))) <= 100 
+	AND a.item_cat_id = 23
 	ORDER BY b.organization_code, c.part_no, a.item_code, a.item_name, c.national_stock_no, a.serial_no;
   
 	SELECT @count = COUNT(*) FROM #TempTable;
 	
-	SET @stmt = 'SELECT * FROM #TempTable ';
+	SET @stmt = 'SELECT * FROM #TempTable ORDER BY 4 ';
 
-	IF @count <> 0
-		SET @stmt = @stmt + 'OFFSET (' + CAST(@pno-1 AS VARCHAR(20)) +')*' + CAST(@rpp AS VARCHAR(20)) + ' ROWS FETCH NEXT ' + CAST(@rpp AS VARCHAR(20)) + ' ROWS ONLY '; 
+	SET @stmt = @stmt + 'OFFSET (' + CAST(@pno-1 AS VARCHAR(20)) +')*' + CAST(@rpp AS VARCHAR(20)) + ' ROWS FETCH NEXT ' + CAST(@rpp AS VARCHAR(20)) + ' ROWS ONLY '; 
 	
 	EXEC(@stmt);
 

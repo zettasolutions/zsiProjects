@@ -1,4 +1,3 @@
-
 CREATE PROCEDURE [dbo].[flight_time_upd]
 (
     @tt    flight_time_tt READONLY
@@ -18,7 +17,7 @@ BEGIN
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.flight_time a INNER JOIN @tt b
-    ON a.flight_time_id = b.flight_time_id
+    ON a.flight_operation_detail_id = b.flight_operation_detail_id
     WHERE (
 			isnull(a.flight_operation_id,0)			<> isnull(b.flight_operation_id,0)  
 		OR	isnull(a.flight_take_off_time,'')		<> isnull(b.flight_take_off_time,'')  
@@ -49,5 +48,6 @@ BEGIN
 		,@user_id
        ,GETDATE()
     FROM @tt
-    WHERE flight_time_id IS NULL;
+    WHERE flight_operation_detail_id IS NULL;
 END
+

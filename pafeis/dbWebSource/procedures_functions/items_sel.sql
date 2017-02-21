@@ -15,6 +15,7 @@ CREATE PROCEDURE [dbo].[items_sel]
    ,@aircraft_info_id INT = NULL
    ,@warehouse_id int = null
    ,@item_cat_code char(1)=null
+   ,@parent_item_id INT=NULL
 )
 AS
 BEGIN
@@ -40,6 +41,9 @@ IF ISNULL(@item_code_id,0) <> 0
 
 IF ISNULL(@item_id,0) <> 0
    SET @stmt = @stmt + ' AND item_id = ' + cast(@item_id as varchar(20)) 
+
+IF ISNULL(@parent_item_id,0) <> 0
+   SET @stmt = @stmt + ' AND parent_item_id = ' + cast(@parent_item_id as varchar(20)) 
 
 SET @stmt = @stmt + ' ORDER BY item_name, part_no, national_stock_no, serial_no'; 
 
