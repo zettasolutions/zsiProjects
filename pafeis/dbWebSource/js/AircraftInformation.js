@@ -29,7 +29,7 @@ var contextComponents = { id:"modalWindowComponents"
                 , sizeAttr: "modal-lg fullWidth"
                 , footer: '<div class="pull-left"><button type="button" onclick="submitAssembly();" class="btn btn-primary">'
                 + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
-
+                + '<button type="button" onclick="btnDeleteAssembly();" class="btn btn-primary"><span class="glyphicon glyphicon-trash"></span> Delete</button>'
                 , body:            
                 '<div id="' + tblCP + '" class="zGrid"></div>'
                      
@@ -59,13 +59,27 @@ $("#btnSave").click(function () {
 
 $("#btnDelete").click(function(){
     zsi.form.deleteData({
-         code       : "sys-0008"
+         code       : "ref-0028"
         ,onComplete : function(data){
             displayRecords($("#dd_squadron").val());
         }
     });       
 });
     
+function btnDeleteAssembly(){
+     $("#frm_modalWindowComponents").deleteData({
+        code       : "ref-0029"
+        ,onComplete : function(data){
+            displayRecords($("#dd_squadron").val());
+            if(table_name==="ASSEMBLY"){
+                displayRecordsAssembly(aircraft_info_id);
+            }else if(table_name==="COMPONENT"){
+                displayRecordsComponents(parent_item_id);
+            }      
+        }
+    });  
+}
+
 function displayRecords(squadron_id){
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
@@ -141,21 +155,23 @@ function manageAssembly(id,title){
 }
     
 function displayRecordsAssembly(id){
+    var cb = bs({name:"cbFilter2",type:"checkbox"});
     $("#" + tblCP).dataBind({
 	     url            : execURL + "items_sel @aircraft_info_id=" + id + ",@item_cat_code='A'"
 	    ,width          : $(document).width() - 50
 	    ,height         : 395
         ,blankRowsLimit : 5
         ,dataRows       : [
-        		 {text  : "Part No."                 , width : 100        , style : "text-align:left;"
+        		 {text  : cb        , width : 25        , style : "text-align:left;"  
         		     ,onRender  :  function(d){
-        		         return    bs({name:"part_no",type:"input",value: svn (d,"part_no")})
-        		                  + bs({name:"item_id",type:"hidden",value: svn (d,"item_id")})
+        		         return     bs({name:"item_id",type:"hidden",value: svn (d,"item_id")})
         		                  + bs({name:"is_edited",type:"hidden"})
         		                  + bs({name:"parent_item_id",type:"hidden",value: svn (d,"parent_item_id")})
-                                  + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")});
+                                  + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
+                                  + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
         		 }
+        		,{text  : "Part No."                 , name  : "part_no"                , type  : "input"         , width : 100       , style : "text-align:left;"}
         		,{text  : "National Stock No."       , name  : "national_stock_no"      , type  : "input"         , width : 160       , style : "text-align:left;"}
         		,{text  : "Item Name"                , name  : "item_name"              , type  : "input"         , width : 150       , style : "text-align:left;"}
         		,{text  : "Serial No."               , name  : "serial_no"              , type  : "input"         , width : 200       , style : "text-align:left;"}
@@ -171,7 +187,7 @@ function displayRecordsAssembly(id){
         		}
         		,{text  : "Remaining Time(Hours)"     , name  : "remaining_time_hr"      , type  : "input"         , width : 200       , style : "text-align:left;"}
         		,{text  : "Remaining Time(Minutes)"   , name  : "remaining_time_min"      , type  : "input"         , width : 200       , style : "text-align:left;"}
-        		,{text  : "# of Components"          , width : 120                 , style : "text-align:center;"
+        		,{text  : "# of Components"           , width : 150                 , style : "text-align:center;"
         		    ,onRender  :  
                         function(d){
                             
@@ -184,6 +200,7 @@ function displayRecordsAssembly(id){
         		}
  	    ] 
  	    ,onComplete: function(){
+ 	        $("#cbFilter2").setCheckEvent("#" + tblCP + " input[name='cb']");
  	        setSearch("A");
  	        $("select[name='manufacturer_id']").dataBind( "manufacturer");
  	        $("select, input").on("keyup change", function(){
@@ -224,21 +241,23 @@ function manageComponent(id, title){
 }
 
 function displayRecordsComponents(id){
+    var cb = bs({name:"cbFilter3",type:"checkbox"});
     $("#" + tblCP).dataBind({
 	     url            : execURL + "items_sel @aircraft_info_id=" + aircraft_info_id + ",@parent_item_id=" + id
 	    ,width          : $(document).width() - 50
 	    ,height         : 395
         ,blankRowsLimit : 5
         ,dataRows       : [
-        		 {text  : "Part No."                 , width : 100        , style : "text-align:left;"
+                 {text  : cb        , width : 25        , style : "text-align:left;"
         		     ,onRender  :  function(d){
-        		         return    bs({name:"part_no",type:"input",value: svn (d,"part_no")})
-        		                  + bs({name:"item_id",type:"hidden",value: svn (d,"item_id")})
+        		         return     bs({name:"item_id",type:"hidden",value: svn (d,"item_id")})
         		                  + bs({name:"is_edited",type:"hidden"})
         		                  + bs({name:"parent_item_id",type:"hidden",value: id})
-                                  + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")});
+                                  + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
+                                  + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
         		 }
+        		,{text  : "Part No."                 , name  : "part_no"                , type  : "input"         , width : 100        , style : "text-align:left;"}
         		,{text  : "National Stock No."       , name  : "national_stock_no"      , type  : "input"         , width : 160       , style : "text-align:left;"}
         		,{text  : "Item Name"                , name  : "item_name"              , type  : "input"         , width : 150       , style : "text-align:left;"}
         		,{text  : "Serial No."               , name  : "serial_no"              , type  : "input"         , width : 200       , style : "text-align:left;"}
@@ -265,6 +284,7 @@ function displayRecordsComponents(id){
         		}
  	    ]
  	    ,onComplete: function(){
+ 	        $("#cbFilter3").setCheckEvent("#" + tblCP + " input[name='cb']");
  	        setSearch("C");
  	        $("select[name='manufacturer_id']").dataBind( "manufacturer");
  	        $("select, input").on("keyup change", function(){
@@ -334,4 +354,4 @@ function setSearch(code){
     });
 }
     
-        
+         
