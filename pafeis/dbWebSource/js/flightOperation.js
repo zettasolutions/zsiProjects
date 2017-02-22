@@ -141,7 +141,6 @@ function submitFlightOperations(){
                 $tbl.jsonSubmit({
                      procedure : "flight_time_upd"
                     ,optionalItems : ["flight_operation_id","is_engine_off"]
-                    //,notInclude : "#flight_operation_name"
                      , notInclude: "#dealer_filter"
                     ,onComplete: function (data) {
                         if(data.isSuccess===true){  
@@ -308,20 +307,37 @@ function displayFlightDetails(flight_operation_id){
                                                       
                             }
                 }	                                     
-        	    ,{text  : "Take Off Time"          , name : "flight_take_off_time"     , type  : "input"     , width : 200     , style : "text-align:left;"}
-        	    
-        	    //,{text  : "Take Off Time"            , width : 200       , style : "text-align:left;"
-        	    //    ,onRender : function(d){ return "<input value='" + svn(d,"flight_take_off_time") + "'/>"}
-        	   // }
-        	    
-        	    
-        		,{text  : "Landing Time"           , name : "flight_landing_time"     , type  : "input"     , width : 200     , style : "text-align:left;"}
+        	    ,{text  : "Take Off Time"          , width : 200     , style : "text-align:left;"
+    			    , onRender      :  function(d){ 
+            		                    return     bs({name:"flight_take_off_time",type:"input"});
+                        }
+    			}
+        		,{text  : "Landing Time"           , width : 200     , style : "text-align:left;"
+    			    , onRender      :  function(d){ 
+            		                    return     bs({name:"flight_landing_time",type:"input"});
+                        }
+    			}
         		,{text  : "No. of Hours"           , name : "no_hours"     , type  : "input"     , width : 100     , style : "text-align:center;"}
             	,{text  : "Engine off?"            , name : "is_engine_off"     , type  : "yesno"     , width : 100     , style : "text-align:left;"}
             	,{text  : "Remarks"                , name : "remarks"     , type  : "input"     , width : 470     , style : "text-align:left;"}
 	    ]      
 	    ,onComplete: function(data){
                 $("#cbFilter2").setCheckEvent("#" + tblFD + " input[name='cb']");
+                $("input[name='flight_take_off_time']").dateTimePicker();
+                $("input[name='flight_landing_time']").dateTimePicker();
+                
+                $("input[name='flight_landing_time']").change( function(){
+                    var $zRow = $(this).closest(".zRow");
+                    var date1 = $zRow.find("#flight_take_off_time").val();
+                    var date2 = $zRow.find("#flight_landing_time").val();
+                    if( date1 !== "" && date2 !== "" ){
+                        var hours = Math.abs( Date.parse(date1) - Date.parse(date2)) / 36e5;
+                        $zRow.find("#no_hours").val(hours);
+                    }
+                    else
+                        $zRow.find("#no_hours").val("");
+                });
+                
         }  
     });    
 }
@@ -335,4 +351,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                                
+                                                                  
