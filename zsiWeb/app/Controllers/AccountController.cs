@@ -3,25 +3,34 @@ namespace zsi.web.Controllers
 {
     using zsi.web.Models;
     using zsi.Framework.Security;
+    using System;
+
     public class AccountController : baseController
     {
         [HttpPost]
         public ActionResult validate()
         {
-            Cryptography crypt = new Cryptography();
-            string userName = Request["username"];
-            string userPassword = Request["password"];
-            user _user = new dcUser().getUserInfo(userName);
-            if (crypt.Decrypt(_user.password) == userPassword)
+            try
             {
-                Session["isAuthenticated"] = "Y";
-                HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
-                SessionHandler.CurrentUser = _user;
-                return Redirect(gePriorityURL(Url.Content("~/")));
+                Cryptography crypt = new Cryptography();
+                string userName = Request["username"];
+                string userPassword = Request["password"];
+                user _user = new dcUser().getUserInfo(userName);
+                if (crypt.Decrypt(_user.password) == userPassword)
+                {
+                    Session["isAuthenticated"] = "Y";
+                    HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
+                    SessionHandler.CurrentUser = _user;
+                    return Redirect(gePriorityURL(Url.Content("~/")));
+                }
+                else
+                {
+                    return Redirect(Url.Content("~/") + "?access=invalid");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Redirect(Url.Content("~/") + "?access=invalid");
+                return Content(ex.Message);
             }
         }
 
