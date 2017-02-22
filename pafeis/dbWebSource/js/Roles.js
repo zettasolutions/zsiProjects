@@ -20,7 +20,7 @@ function getTemplate(){
                         , footer:  ' <div class="pull-left"><button type="button" onclick="submitItems();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button></div>'
                         , body: 
                         
-                        '<div><div id="' + tblName + '" class="zGrid"></div></div>'
+                        '<div id="' + tblName + '" class="zGrid"></div>'
                       };
         var html    = template(context);     
         $("body").append(html);
@@ -107,7 +107,7 @@ function displayRecords(){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
     $("#grid").dataBind({
          url   : procURL + "roles_sel"
-        ,width          : $(document).width() - 550
+        ,width          : $(document).width() - 650
 	    ,height         : $(document).height() - 250
         ,blankRowsLimit:5
         ,dataRows       :[
@@ -117,7 +117,7 @@ function displayRecords(){
                                         +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }             
     		 }	 
-    		,{ text:"Role Name"     , width:180 , style:"text-align:center;" ,type:"input"  ,name:"role_name"}	 
+    		,{ text:"Role Name"     , width:200 , style:"text-align:center;" ,type:"input"  ,name:"role_name"}	 
     		,{ text:"Export Excel?" , width:100 , style:"text-align:center;" ,type:"yesno"  ,name:"is_export_excel"  ,defaultValue:"Y"}	 
     		,{ text:"Export Pdf?"   , width:100 , style:"text-align:center;" ,type:"yesno"  ,name:"is_export_pdf"    ,defaultValue:"Y"}	 	 
     		,{ text:"Import Excel?" , width:100 , style:"text-align:center;" ,type:"yesno"  ,name:"is_import_excel"  ,defaultValue:"Y"}	 	 
@@ -134,23 +134,24 @@ function displayRecords(){
     });    
 }
 function displayRRolesMenu(id){   
-    var cb = bs({name:"cbFilter2",type:"checkbox",style:"margin-top: 2px;"});
+    var cb = bs({name:"cbFilter2",type:"checkbox"});
     $("#" + tblName).dataBind({
          url   : execURL + "role_menus_sel @role_id=" + id 
         ,width          : 560
 	    ,height         : 400
 	    
         ,dataRows       :[
-    		 { text: cb             , width:40  , style:"text-align:left;" 
+    		 { text: cb             , width:25  , style:"text-align:left;" 
     		     ,onRender : function(d){ 
                                 return  bs({name:"role_menu_id",type:"hidden",value:svn (d,"role_menu_id")})  
-                                        + bs({name:"role_id",type:"hidden",value: id }) 
+                                        + bs({name:"role_id",type:"hidden",value: svn (d,"role_id") }) 
                                         + bs({name:"menu_id",type:"hidden",value:svn (d,"menu_id")})
                                         + bs({name:"cb",type:"checkbox",checked :(d.role_id!==""?true:false)}) ;
+                                    //    +  (d !==null ? bs({name:"cb1",type:"checkbox"}) : "" );
                             }            
 
     		 }	 
-    		,{ text:"Menu Name"     , width:200 , style:"text-align:left;"  ,name:"menu_name"  }	 
+    		,{ text:"Menu Name"     , width:200 , style:"text-align:left;"    ,name:"menu_name"  }	 
     		,{ text:"Is New?"       , width:110 , style:"text-align:center;"  ,type:"yesno"  ,name:"is_new"     ,defaultValue:"Y" }	 
     		,{ text:"Write?"        , width:93  , style:"text-align:left;"    ,type:"yesno"  ,name:"is_write"   ,defaultValue:"Y" }	 	 
     		,{ text:"Delete?"       , width:92  , style:"text-align:left;"    ,type:"yesno"  ,name:"is_delete"  ,defaultValue:"Y" }	 	 
@@ -175,10 +176,10 @@ function setToNullIfChecked(id){
 function displayUsers(id){   
     $("#" + tblNameUser).dataBind({
          url   : procURL + "users_sel @role_id=" + id 
-        ,width          : 275
+        ,width          : 320
 	    ,height         : 400
         ,dataRows       :[
-    		 { text: "User Name"     , width:250  , style:"text-align:left, margin-left;" ,name:"logon" }
+    		 { text: "User Name"     , width:300  , style:"text-align:left, margin-left;" ,name:"logon" }
         ]
     });    
 }
@@ -193,4 +194,4 @@ $("#btnDelete").click(function(){
 });      
 
     
-                                                                          
+                                                                             

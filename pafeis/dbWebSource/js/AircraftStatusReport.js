@@ -44,7 +44,7 @@ function displayRecords(){
                             return "<a href='javascript:manageAircraftStatusReport(" + svn(d,"aircraft_type_id") +");'>" + svn(d,"countStatus") + "</a>"; 
                     }
         		}
-        		,{text  : "Status Name"            , name  : "status_name"              , width : 200       , style : "text-align:left;"}
+        	
 	    ]   
     	     ,onComplete: function(){
               
@@ -69,14 +69,15 @@ function manageAircraftStatusReport(id){
 function displayAircraftStatusReportDetails(id){   
     $("#" + tblName).dataBind({
          url   : execURL + "aircraft_status_report_details_sel @aircraft_type_id=" + id 
-        ,width          : 560
+        ,width          : 760
 	    ,height         : 400
 	    
         ,dataRows       :[
     		 	 
-    		 { text:"Organization Code"         , width:200 , style:"text-align:left;"          ,name:"organization_code"  }	 
-    		,{ text:"Aircraft Code"             , width:150 , style:"text-align:center;"        ,name:"aircraft_code"     }	 
-    		,{ text:"Aircraft Name"             , width:150  , style:"text-align:left;"         ,name:"aircraft_name"   }	 	 
+    		 { text:"Organization Code"         , width:200         , style:"text-align:left;"          ,name:"organization_code"  }	 
+    		,{ text:"Aircraft Code"             , width:150         , style:"text-align:center;"        ,name:"aircraft_code"     }	 
+    		,{ text:"Aircraft Name"             , width:150         , style:"text-align:left;"          ,name:"aircraft_name"   }
+    		,{text  : "Status Name"             , width:200         , style:"text-align:left;"          ,name:"status_name"}
     		
  	    ]
        ,onComplete : function(){
@@ -84,4 +85,4 @@ function displayAircraftStatusReportDetails(id){
         }
     });    
 }
- 
+  
