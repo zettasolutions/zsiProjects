@@ -12,7 +12,7 @@ DECLARE @stmt NVARCHAR(MAX)
 
   SET @stmt = 'SELECT * FROM dbo.flight_time_v '
 
-  IF ISNULL(@flight_operation_id,0) <>0
+ -- IF ISNULL(@flight_operation_id,0) <>0
   BEGIN
       SET @stmt = @stmt + ' WHERE flight_operation_id = ' + CAST(@flight_operation_id AS VARCHAR(20)); 
   END

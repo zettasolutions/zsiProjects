@@ -1,4 +1,5 @@
 
+
 CREATE PROCEDURE [dbo].[items_upd]
 (
     @tt    items_tt READONLY
@@ -18,8 +19,7 @@ BEGIN
 		,time_since_new			= b.time_since_new
 		,time_before_overhaul	= b.time_before_overhaul
 		,time_since_overhaul	= b.time_since_overhaul
-		,remaining_time_hr		= b.remaining_time_hr
-		,remaining_time_min		= b.remaining_time_min
+		,remaining_time		    = b.remaining_time
 		,date_delivered			= b.date_delivered		
 		,aircraft_info_id		= b.aircraft_info_id	
 		,date_issued			= b.date_issued		
@@ -41,8 +41,7 @@ BEGIN
 		,time_since_new
 		,time_before_overhaul
 		,time_since_overhaul
-		,remaining_time_hr
-		,remaining_time_min
+		,remaining_time
 		,date_delivered
 		,aircraft_info_id
 		,date_issued
@@ -60,8 +59,7 @@ BEGIN
 		,time_since_new
 		,time_before_overhaul
 		,time_since_overhaul
-		,remaining_time_hr
-		,remaining_time_min
+		,remaining_time
 		,date_delivered
 		,aircraft_info_id
 		,date_issued
@@ -75,6 +73,7 @@ END
 
 
  
+
 
 
 

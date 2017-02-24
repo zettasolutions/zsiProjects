@@ -71,7 +71,6 @@ BEGIN
 	AND doc_no IS NOT NULL
 	--AND (dealer_id IS NOT NULL OR aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL)
 
-
 	SELECT @id = receiving_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN

@@ -1,43 +1,45 @@
 
--- =============================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: November 24, 2016 11:39 PM
--- Description:	Flight operations select all or by id records.
--- =============================================
 CREATE PROCEDURE [dbo].[flight_operation_sel]
 (
     @flight_operation_id  INT = null
-   ,@squadron_id          INT = NULL
+   ,@squadron_id  INT = NULL
+   ,@user_id      INT = NULL
+   ,@col_no       INT = 1
+   ,@order_no     INT = 0
+
 )
 AS
 BEGIN
-
 SET NOCOUNT ON
+DECLARE @stmt VARCHAR(MAX)
+DECLARE @role_id INT
+DECLARE @organization_id INT
 
+--  SELECT @role_id=role_id, @organization_id=organization_id FROM users where user_id=@user_id;
+
+  SET @stmt =  'SELECT * FROM dbo.flight_operations_v '
+  
   IF @flight_operation_id IS NOT NULL  
-	 SELECT *, 
-	        dbo.sumFlightHours(flight_operation_id) total_flight_hours,
-			dbo.getFlightOperationType(flight_operation_type_id) operation_type_name,
-			dbo.getOrganizationName(unit_id) unit_name,
-			dbo.getAircraftName(aircraft_id) aircraft_name,
-			dbo.getUserFullName(pilot_id) pilot,
-			dbo.getUserFullName(co_pilot_id) co_pilot,
-			dbo.getStatus(status_id) status_name
-	 FROM dbo.flight_operation 
-	 WHERE flight_operation_id = @flight_operation_id; 
+	 SET @stmt = @stmt + ' WHERE flight_operation_id = ' + CAST(@flight_operation_id AS VARCHAR(20)); 
+
+  IF @squadron_id IS NOT NULL  
+	 SET @stmt = @stmt + ' WHERE squadron_id = ' + CAST(@squadron_id AS VARCHAR(20)); 
+/*
   ELSE
-     SELECT *,
-	        dbo.sumFlightHours(flight_operation_id) total_flight_hours,
-			dbo.getFlightOperationType(flight_operation_type_id) operation_type_name,
-			dbo.getOrganizationName(unit_id) unit_name,
-			dbo.getAircraftName(aircraft_id) aircraft_name,
-			dbo.getUserFullName(pilot_id) pilot,
-			dbo.getUserFullName(co_pilot_id) co_pilot,
-			dbo.getStatus(status_id) status_name
-	 FROM dbo.flight_operation
-	 WHERE unit_id = @squadron_id
-	 ORDER BY flight_schedule_date DESC; 
-	
+     SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
+               + ' AND squadron_id = ' + cast(@organization_id as varchar(20))
+*/
+
+  
+   SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
+
+  
+  IF @order_no = 0
+     SET @stmt = @stmt + ' ASC';
+  ELSE
+     SET @stmt = @stmt + ' DESC';
+   
+  EXEC(@stmt);	
 END
 
 

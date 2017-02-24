@@ -6,11 +6,10 @@ item_id	INT IDENTITY(1,1)	NOT NULL
 ,manufacturer_id	INT	NULL
 ,dealer_id	INT	NULL
 ,supply_source_id	INT	NULL
-,time_since_new	DATETIME	NULL
-,time_before_overhaul	DATETIME	NULL
-,time_since_overhaul	DATETIME	NULL
-,remaining_time_hr	INT	NULL
-,remaining_time_min	INT	NULL
+,time_since_new	DECIMAL(12)	NULL
+,time_before_overhaul	DECIMAL(12)	NULL
+,time_since_overhaul	DECIMAL(12)	NULL
+,remaining_time	DECIMAL(12)	NULL
 ,date_delivered	DATETIME	NULL
 ,aircraft_info_id	INT	NULL
 ,date_issued	DATETIME	NULL

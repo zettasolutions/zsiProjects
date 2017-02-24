@@ -1,3 +1,4 @@
+
 CREATE PROCEDURE [dbo].[flight_operation_upd]
 (
     @tt    flight_operation_tt READONLY
@@ -9,8 +10,14 @@ BEGIN
    SET NOCOUNT ON
    DECLARE @id INT;
    DECLARE @statusId INT;
+   DECLARE @proc_tt AS TABLE (
+     id int IDENTITY
+	,proc_name varchar(50)
+   )
+   DECLARE @data_count INT;
+   DECLARE @ctr int=0;
+   DECLARE @procName VARCHAR(50)
    DECLARE @statusName VARCHAR(20)
-
 
 -- Update Process
     UPDATE a 
@@ -31,20 +38,7 @@ BEGIN
 		
     FROM dbo.flight_operation a INNER JOIN @tt b
     ON a.flight_operation_id = b.flight_operation_id
-    WHERE (
-			isnull(a.flight_operation_code,'')		<> isnull(b.flight_operation_code,'')  
-		OR	isnull(a.flight_operation_name,'')		<> isnull(b.flight_operation_name,'')  
-		OR	isnull(a.flight_operation_type_id,0)	<> isnull(b.flight_operation_type_id,0)  
-		OR	isnull(a.flight_schedule_date,'')		<> isnull(b.flight_schedule_date,'')  
-		OR	isnull(a.unit_id,0)						<> isnull(b.unit_id,0)  
-		OR	isnull(a.aircraft_id,0)					<> isnull(b.aircraft_id,0)  
-		OR	isnull(a.pilot_id,0)					<> isnull(b.pilot_id,0)  
-		OR	isnull(a.co_pilot_id,0)					<> isnull(b.co_pilot_id,0)  
-		OR	isnull(a.origin,'')						<> isnull(b.origin,'')  
-		OR	isnull(a.destination,'')				<> isnull(b.destination,'')  
-		OR	isnull(a.status_id,0)					<> isnull(b.status_id,0) 
-		OR	isnull(a.no_cycles,0)					<> isnull(b.no_cycles,0)  
-	)
+    WHERE isnull(b.is_edited,'N')='Y'
 	   
 -- Insert Process
     INSERT INTO dbo.flight_operation(
@@ -84,11 +78,23 @@ END
 
 	SELECT @id = flight_operation_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
 	IF ISNULL(@id,0) = 0
-	   SET @id = @@IDENTITY
-    --SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
-	--EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
+	BEGIN
+	   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
+	   EXEC dbo.doc_routing_process_upd 82,@id,@statusId,@user_id;
+	   RETURN @id
+	END;
 
-	RETURN @id
+	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@statusId 
+	SELECT @data_count =COUNT(*) FROM @proc_tt 
+	WHILE @ctr < @data_count 
+	BEGIN
+	  SELECT TOP 1 @procName =proc_name FROM @proc_tt WHERE id> @ctr;
+	  EXEC @procName @id,@user_id
+	  SET @ctr = @ctr + 1
+	END
+
+	EXEC dbo.doc_routing_process_upd 82,@id,@statusId,@user_id;
+
 
 
 
