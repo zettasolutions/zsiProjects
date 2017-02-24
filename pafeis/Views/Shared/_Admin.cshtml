@@ -73,9 +73,18 @@
         <div class="navbar-collapse collapse" id="navbar-main">
             <div id="menuPanel"> </div>
             <ul class="nav navbar-nav navbar-right">
-                @{ string role = (ViewBag.role == null ? "(No Role)" : ViewBag.role); }
-				<li><a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-user"></span> @User.Identity.Name.Replace("CORPLEAR\\", "") @role </a></li>
+                <li class="">
+						<a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
+						<span class="glyphicon glyphicon-user"></span> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
+						<span class="caret"></span></a>
+
+						<ul class="dropdown-menu">
+						  <li class="dropdown">
+							<a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a>
+						  </li>
+						</ul>
+				  
+				</li>
             </ul>
         </div>
     </div>
