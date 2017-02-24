@@ -1800,15 +1800,21 @@ var  ud='undefined'
                 return (isNaN(m) ? "" :  m + '/' + d + '/' +  nd.getFullYear() );
             };              
             String.prototype.toDateFormat = function () {
-                var val="";
-                if(this.indexOf("-") >-1 ){
-                    aDate = this.substr(0,10).split("-");
-                    val = aDate[1] + "/" + aDate[2] + "/" + aDate[0];
-                }else{
-                    var _date = Date.parse(this);
-                    if(isNaN(_date)===false )  val = (new Date(_date).toShortDate()) + "";
+                var ts=Date.parse(this);
+                var r = "";
+                if(isNaN(ts)===false) r= new Date(this).toShortDate() + "";
+                return r;
+            }; 
+            //military date time format
+            String.prototype.toMDateTimeFormat = function () {
+                var ts=Date.parse(this);
+                var d =  new Date(this);
+                var r = "";
+                var digit = function(n){
+                    return n > 9 ? "" + n : "0" + n;
                 }
-                 return val;
+                if(isNaN(ts)===false) r= new Date(this).toShortDate() + " " + digit(d.getHours()) + ":" + digit(d.getMinutes()) + ":" + digit(d.getSeconds());
+                return r;
             }; 
             String.prototype.toMoney = function(){
                 var res = "";
@@ -2598,17 +2604,8 @@ var  ud='undefined'
         }
     }
     ,isValidDate = function(l_date){
-        var comp = l_date.split('/');
-        var m = parseInt(comp[0], 10);
-        var d = parseInt(comp[1], 10);
-        var y = parseInt(comp[2], 10);
-        var date = new Date(y,m-1,d);
-        if (date.getFullYear() == y && date.getMonth() + 1 == m && date.getDate() == d) {
-          return true;
-        }
-        else {
-          return false;
-        }
+        var ts=Date.parse(l_date);
+        return (isNaN(ts)===false);
     }
 ;  
 
@@ -2621,4 +2618,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                         
+                                                                           
