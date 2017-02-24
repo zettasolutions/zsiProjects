@@ -4,6 +4,7 @@ var bs = zsi.bs.ctrl
     ,optionId = zsi.getUrlParamValue("option_id")
     ,g_warehouse_id = null
     ,option_id = (optionId ? optionId : null)
+    ,pageName = location.pathname.split('/').pop()
 ;
 
 function setInputs(){
@@ -11,12 +12,13 @@ function setInputs(){
 }
 
 zsi.ready(function(){
+    $(".pageTitle").html('<select name="dd_dashboard" id="dd_dashboard"> </select>');
+    
     wHeight = $(window).height();
     setInputs();
     $optionId.fillSelect({
         data : [
              { text: "All", value: "A" }
-            ,{ text: "Critical", value: "C" }
             ,{ text: "For Reorder", value: "R" }
         ]
         ,selectedValue : option_id
@@ -34,6 +36,21 @@ zsi.ready(function(){
             g_location_name = (g_location_name? " » " + g_location_name:"");
            
             $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
+            $("#dd_dashboard").dataBind({
+                url: procURL + "dd_dashboard_sel"
+                , text: "page_title"
+                , value: "page_name"
+                , required :true
+                , onComplete: function(){
+                    $("#dd_dashboard").val(pageName);
+                    $("#dd_dashboard").change(function(){
+                        if(this.value){
+                            if(this.value.toUpperCase()!== pageName.toUpperCase())
+                                location.replace(base_url + "page/name/" + this.value);
+                        } 
+                    });
+                }
+            });
             $("select[name='dd_warehouses']").dataBind({
                 url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
                 , text: "warehouse"
@@ -114,11 +131,7 @@ function displayItems(id){
         		,{text  : "Item Name"                   , type  : "label"       , width : 300       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_name"); }
         		}
-        		,{text  : "Critical Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"critical_level"); }
-        		}
-
-        		,{text  : "Reorder Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
+           		,{text  : "Reorder Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"reorder_level"); }
         		}
         		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:left;"
@@ -131,4 +144,4 @@ function displayItems(id){
 
 	    ]   
     });    
-}                
+}                  

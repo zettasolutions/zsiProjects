@@ -2,10 +2,30 @@
     ,svn    = zsi.setValIfNull
     ,g_user_id = null
     ,g_squadron_id = null
-;
+    ,g_organization_name = ""
+    ,pageName = location.pathname.split('/').pop();
 
 zsi.ready(function(){
+    $(".pageTitle").html('<select name="dd_dashboard" id="dd_dashboard"> </select>');
+    
     getUserInfo(function(){
+        $(".pageTitle").append(' for » <select name="dd_squadron" id="dd_squadron"></select>');
+        $("#dd_dashboard").dataBind({
+            url: procURL + "dd_dashboard_sel"
+            , text: "page_title"
+            , value: "page_name"
+            , required :true
+            , onComplete: function(){
+                $("#dd_dashboard").val(pageName);
+                $("#dd_dashboard").change(function(){
+                    if(this.value){
+                        if(this.value.toUpperCase()!== pageName.toUpperCase())
+                            location.replace(base_url + "page/name/" + this.value);
+                    } 
+                });
+            }
+        });
+        
         $("#dd_squadron").dataBind({
             url: procURL + "dd_organizations_sel @squadron_type='aircraft'"
             , text: "organization_name"
@@ -36,6 +56,7 @@ function getUserInfo(callBack){
     $.get(procURL + "user_info_sel", function(d) {
         if (d.rows !== null && d.rows.length > 0) {
             g_user_id = d.rows[0].user_id;
+            g_organization_name = d.rows[0].organizationName;
         }
         if(callBack) callBack();
     });
@@ -61,7 +82,7 @@ function displayTabs(cbFunc){
         
         for(i=0; i < _rows.length; i++){
             d =_rows[i];
-            //displayItems(d.item_cat_id);
+            displayItems(d.aircraft_info_id);
         }
     });
 } 
@@ -69,8 +90,8 @@ function displayTabs(cbFunc){
 function displayItems(id){
     var counter = 0;
     $("#tabGrid" + id).dataBind({
-	     url            : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" +  option_id + "'"
-	    ,width          : $(document).width() 
+	     url            : execURL + "items_sel @aircraft_info_id=" + id
+	    ,width          : $(document).width() - 30
 	    ,height         : $(document).height() - 250
         ,dataRows : [
         		 {text  : "Item Code"                   , type  : "label"       , width : 150       , style : "text-align:left;"
@@ -83,20 +104,24 @@ function displayItems(id){
         		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
         		}
-        		,{text  : "Item Name"                   , type  : "label"       , width : 300       , style : "text-align:left;"
+        		,{text  : "Nomenclature"                   , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_name"); }
         		}
-           		,{text  : "Reorder Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"reorder_level"); }
-        		}
-        		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"stock_qty"); }
+           		,{text  : "Category"               , type  : "label"       , width : 150       , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"category"); }
         		}
         		,{text  : "Item Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_type_name"); }
         		}
-
-
+        		,{text  : "Remaining Time in Hours"   , type  : "label"       , width : 150       , style : "text-align:center;"
+        		    ,onRender : function(d){ return svn(d,"remaining_time_hr"); }
+        		}
+        		//,{text  : "<div id='colspan'>Minutes</div>"                   , type  : "label"       , width : 120       , style : "text-align:center;"
+        		//    ,onRender : function(d){ return svn(d,"remaining_time_min"); }
+        		//}
+                ,{text  : "Critical Level"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"critical_level"); }
+        		}
 	    ]   
     });    
-} 
+}    
