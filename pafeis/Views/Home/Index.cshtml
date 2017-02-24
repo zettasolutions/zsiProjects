@@ -95,9 +95,10 @@
 <script>
     $(document).ready(function () {
 	    var msg = zsi.getUrlParamValue("access");
-		var _username = readCookie("username");
+	    var _username = readCookie("username");
+	   
 		if(_username){
-			if (msg !== "invalid") {
+			if (msg !== "") {
 				$("#username").val(_username);
 				$("#password").val( readCookie("userpwd"));
 				$("#isremember").prop('checked',true);
@@ -106,8 +107,8 @@
 			else
 				clearCookies();
 		}
-        if (msg === "invalid") {
-            alert("Invalid Access. Please try again.")
+		else {
+		    if (msg) alert( unescape(msg) + " Please try again.")
         }
 		
         $('.carousel').carousel({

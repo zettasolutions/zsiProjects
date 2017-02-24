@@ -34,9 +34,10 @@
 <script>
     $(document).ready(function () {
 	    var msg = zsi.getUrlParamValue("access");
-		var _username = readCookie("username");
+	    var _username = readCookie("username");
+	   
 		if(_username){
-			if (msg !== "invalid") {
+			if (msg !== "") {
 				$("#username").val(_username);
 				$("#password").val( readCookie("userpwd"));
 				$("#isremember").prop('checked',true);
@@ -45,8 +46,8 @@
 			else
 				clearCookies();
 		}
-        if (msg === "invalid") {
-            alert("Invalid Access. Please try again.")
+		else {
+		    if (msg) alert( unescape(msg) + " Please try again.")
         }
 		
         $('.carousel').carousel({
@@ -113,5 +114,16 @@ function createCookie(name,value,days) {
     }
     else expires = "";
     document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
 }
 </script>

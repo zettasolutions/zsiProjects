@@ -16,7 +16,10 @@ namespace zsi.web.Controllers
                 string userName = Request["username"];
                 string userPassword = Request["password"];
                 user _user = new dcUser().getUserInfo(userName);
-                if (crypt.Decrypt(_user.password) == userPassword)
+                if (_user.userName == null){
+                    return Redirect(Url.Content("~/") + "?access=Username not exist.");
+                }
+                else if (crypt.Decrypt(_user.password) == userPassword)
                 {
                     Session["isAuthenticated"] = "Y";
                     HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
@@ -25,7 +28,7 @@ namespace zsi.web.Controllers
                 }
                 else
                 {
-                    return Redirect(Url.Content("~/") + "?access=invalid");
+                    return Redirect(Url.Content("~/") + "?access=Invalid Access.");
                 }
             }
             catch (Exception ex)
