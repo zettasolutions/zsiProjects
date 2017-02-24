@@ -73,7 +73,8 @@
         <div class="navbar-collapse collapse" id="navbar-main">
             <div id="menuPanel"> </div>
             <ul class="nav navbar-nav navbar-right">
-                <li class="">
+                @{ string role = (ViewBag.role == null ? "(No Role)" : ViewBag.role); }
+				<li class="">
 						<a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
 						<span class="glyphicon glyphicon-user"></span> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
 						<span class="caret"></span></a>
