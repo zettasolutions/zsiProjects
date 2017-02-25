@@ -1,3 +1,21 @@
+<style>
+    .form-control {
+    display: block;
+    width: 30%;
+    padding: 1px 5px;
+    font-size: 8.5pt;
+    line-height: 1.42857143;
+    color: #555555;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+
+</style>
+
 <form id="frm" method="post" >
     <div class="row" style="height:300px;padding-right:5px">
         <div class="col-xs-12" style="background-color:#fff;height:inherit;padding-top:5px;"> 
@@ -6,7 +24,7 @@
                 <div class="col-xs-12 ">
                     <div class="form-group  ">  
                         <label class="col-xs-4 col-sm-3 col-md-2 control-label">User Name</label>
-                        <div class="col-xs-5 ">
+                        <div class="col-xs-offset-3 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
                              <input type="text" name="user_name" id="user_name" class="form-control input-sm" >
                         </div>  
 
@@ -14,7 +32,7 @@
         
                     <div class="form-group  ">  
                         <label class="col-xs-4 col-sm-3 col-md-2 control-label">Password</label>
-                        <div class="col-xs-5">
+                        <div class="col-xs-offset-3 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
                             <input type="password" name="user_pwd" id="user_pwd" class="form-control input-sm" >
                         </div>  
                         
@@ -22,7 +40,7 @@
                     </div>  
         
                     <div class="form-group  ">  
-                        <div class="col-xs-offset-4 col-sm-offset-3 col-md-offset-3" style="margin-top:10px;">
+                        <div class="col-xs-offset-4 col-sm-offset-3 col-md-offset-2" style="margin-top:10px;">
                             <button type="submit" class="btn btn-primary btn-sm" id="btnSave"><span class="glyphicon glyphicon-user"></span> Login</button>
                         </div>
                     </div>                             
