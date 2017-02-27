@@ -10,8 +10,12 @@
 	font-weight: bold;
 	overflow: hidden;
 }
+.zHeaders .title .text{
+	padding-left: 4px;
+	width: 100%;
+}
 .zHeaders .title .text input[type="checkbox"], .zHeaders .title .text input[type="radio"]{
-    left: 5px;
+    left: -2px;
     position: relative;
     top: 1px;
 }
