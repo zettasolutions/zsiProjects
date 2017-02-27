@@ -367,7 +367,7 @@ var  ud='undefined'
 
                 });  
                 
-                 $(_jCtrlId).click(function(){
+                 $(_jCtrlId).unbind().click(function(){
                     var _self = $(this);
                     _curHid.val( _self.val() );
                     _curSpan.html( _self.find("option:selected").text() );
@@ -441,7 +441,8 @@ var  ud='undefined'
             };
             $.fn.fillSelect         = function(o){
                 var $ddl = this;
-                if(typeof o.isRequired ===ud)  o.isRequired=false;
+                if(typeof o.isRequired ===ud )  o.isRequired = false;
+                if(typeof o.required !==ud )  o.isRequired = o.required;
                 if(typeof o.selectedValue ===ud)  o.selectedValue="";
                 this.clearSelect();
                 
@@ -2618,4 +2619,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                           
+                                                                            
