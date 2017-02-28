@@ -63,8 +63,8 @@ WHILE @count < @rec_count
 			END;
 
 		IF (SELECT COUNT(*) FROM dbo.items WHERE serial_no = @serial_no) = 0
-		   INSERT INTO dbo.items (item_inv_id, serial_no,  status_id, created_by, created_date)
-		          VALUES (@item_inv_id, @serial_no,  23, @user_id, GETDATE());
+		   INSERT INTO dbo.items (item_code_id, item_inv_id, serial_no,  status_id, created_by, created_date)
+		          VALUES (@item_code_id,@item_inv_id, @serial_no,  23, @user_id, GETDATE());
 	    ELSE
 		   UPDATE items SET item_inv_id=@item_inv_id WHERE serial_no=@serial_no;
 

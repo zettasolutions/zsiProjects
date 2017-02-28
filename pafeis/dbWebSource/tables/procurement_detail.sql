@@ -1,9 +1,8 @@
 CREATE TABLE procurement_detail(
 procurement_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,procurement_id	INT	NOT NULL
-,item_sequence	INT	NOT NULL
-,item_code	NVARCHAR(100)	NOT NULL
-,item_id	INT	NOT NULL
+,item_no	INT	NOT NULL
+,item_code_id	INT	NOT NULL
 ,unit_of_measure_id	INT	NOT NULL
 ,quantity	INT	NOT NULL
 ,unit_price	DECIMAL(20)	NOT NULL

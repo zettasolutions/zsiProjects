@@ -1,4 +1,5 @@
 
+
 -- ===================================================================================================
 -- Author:		Rogelio T. Novo Jr.
 -- Create date: February 24, 2017 11:56 PM
@@ -19,15 +20,12 @@ AS
 BEGIN
 -- Update Process
     UPDATE a 
-    SET  item_sequence				= b.item_sequence
-		,item_code					= b.item_code
-		,item_id					= b.item_id
+    SET  item_no				    = b.item_no
+		,item_code_id				= b.item_code_id
 		,unit_of_measure_id	        = b.unit_of_measure_id
 		,quantity					= b.quantity
 		,unit_price					= b.unit_price
 		,amount						= b.amount
-		,total_delivered_quantity	= b.total_delivered_quantity
-		,balance_quantity			= b.balance_quantity
 		,updated_by					= @user_id
         ,updated_date				= GETDATE()
     FROM dbo.procurement_detail a INNER JOIN @tt b
@@ -36,9 +34,8 @@ BEGIN
 
 -- Insert Process
     INSERT INTO dbo.procurement_detail (
-		 item_sequence				
-		,item_code					
-		,item_id					
+		 item_no				
+		,item_code_id					
 		,unit_of_measure_id	        
 		,quantity					
 		,unit_price					
@@ -49,21 +46,24 @@ BEGIN
         ,created_date
         )
     SELECT 
-		 item_sequence				
-		,item_code					
-		,item_id					
+		 item_no				
+		,item_code_id					
 		,unit_of_measure_id	        
 		,quantity					
 		,unit_price					
 		,amount						
-		,total_delivered_quantity	
-		,balance_quantity	
+		,0	
+		,quantity	
 	    ,@user_id
         ,GETDATE()
     FROM @tt
     WHERE procurement_detail_id IS NULL 
-	  AND procurement_id IS NOT NULL;
+	  AND procurement_id IS NOT NULL
+	  AND item_code_id IS NOT NULL
+	  AND quantity > 0
+
 END
+
 
 
 

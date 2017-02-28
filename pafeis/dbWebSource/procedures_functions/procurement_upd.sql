@@ -1,6 +1,4 @@
 
-
-
 CREATE PROCEDURE [dbo].[procurement_upd]
 (
     @tt    procurement_tt READONLY
@@ -27,7 +25,7 @@ BEGIN
 		,procurement_code					= b.procurement_code
 		,procurement_name					= b.procurement_name
 		,supplier_id						= b.supplier_id
-		,supplier_promised_delivery_date	= b.supplier_promised_delivery_date
+		,promised_delivery_date				= b.promised_delivery_date
 		,status_id							= b.status_id
 		,updated_by							= @user_id
         ,updated_date						= GETDATE()
@@ -42,7 +40,7 @@ BEGIN
 		,procurement_code				
 		,procurement_name				
 		,supplier_id					
-		,supplier_promised_delivery_date
+		,promised_delivery_date
 		,status_id						
 		,created_by
 		,created_date
@@ -52,7 +50,7 @@ BEGIN
 		,procurement_code				
 		,procurement_name				
 		,supplier_id					
-		,supplier_promised_delivery_date
+		,promised_delivery_date
 		,status_id						
 	    ,@user_id
 	    ,GETDATE()
@@ -80,4 +78,5 @@ BEGIN
 	EXEC dbo.doc_routing_process_upd 1107,@id,@statusId,@user_id;
 
 END
+
 

@@ -23,7 +23,7 @@ BEGIN
 	ELSE
 		BEGIN
 			IF NOT @all IS NULL 
-				 SELECT *,@user_id as created_by_name,@user_id as updated_by_name 
+				 SELECT *,dbo.getLogonName(created_by) as created_by_name,dbo.getLogonName(updated_by) as updated_by_name 
 				 FROM error_logs 
 				 order by error_type, updated_date, created_date
 			ELSE
@@ -34,3 +34,4 @@ BEGIN
 END
 
  
+
