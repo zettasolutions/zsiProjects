@@ -1,0 +1,38 @@
+<style>
+    #grid{
+        width: 100%;
+    }
+    
+    .zGrid .item .title {
+        height: 22px;
+        line-height: 19px;
+    }
+    .zGrid .zHeaders .zSort {
+        
+    }
+    
+    .tablePanel {
+        overflow-y:auto;
+    }
+   
+
+</style>
+
+<script src='/javascript/name/zsiSearch'></script>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">    
+    <form method="post" id="frm">
+        <div class="zPanel">
+             <div class="form-horizontal">
+                <div class="form-group">
+                    <div class=" col-xs-2"> 
+                        <input name="issuanceReport_filter" id="issuanceReport_filter" placeholder="Search" class="form-control input-sm">
+                    </div>
+                     <div class="col-xs-1">
+                        <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                    </div>
+                </div>
+            </div>
+            <div id="grid" class="zGrid"></div>
+        </div>
+    </form>
+</div>
