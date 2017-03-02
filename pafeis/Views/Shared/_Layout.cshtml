@@ -38,7 +38,7 @@
         <div class="container-fluid">
             <div class="row">
 
-                <div class="col-xs-2 pull-left">
+                <div class="col-xs-1 pull-left">
                     <a href="@Url.Content("~/")" class="navbar-brand">
                         <img style="float: left; margin-top: -15px;; position: relative; z-index: 100;width: 69px;border: 1px solid #ff9800;border-radius: 40px;" 
                         src="@Url.Content("~/")images/headerAirforce.png" style="float: left; margin-top: -16px; position: relative; z-index: 100;" >
@@ -69,6 +69,9 @@
 						<span class="caret"></span></a>
 
 						<ul class="dropdown-menu">
+						  <li class="dropdown">
+							<a href="@Url.Content("~/")page/name/changepassword"><span class="glyphicon glyphicon-lock"></span> Change Password </a>
+						  </li>
 						  <li class="dropdown">
 							<a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a>
 						  </li>
