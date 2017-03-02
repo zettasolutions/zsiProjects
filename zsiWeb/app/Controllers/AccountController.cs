@@ -40,30 +40,49 @@ namespace zsi.web.Controllers
 
         public ActionResult changePassword()
         {
-            Cryptography crypt = new Cryptography();
-            string oldPassword = Request["old_password"];
-            string newPassword = crypt.Encrypt(Request["new_password"]);
-            user _user = new dcUser().getUserInfo(this.CurrentUser.userName);
-            if (crypt.Decrypt(_user.password) == oldPassword) 
+            try
             {
-                new dcUser().changePassword(newPassword);
-                return Redirect(gePriorityURL(Url.Content("~/")));
+                Cryptography crypt = new Cryptography();
+                string oldPassword = Request["old_password"];
+                string newPassword = crypt.Encrypt(Request["new_password"]);
+                user _user = new dcUser().getUserInfo(this.CurrentUser.userName);
+                if (crypt.Decrypt(_user.password) == oldPassword)
+                {
+                    new dcUser().changePassword(newPassword);
+                    return Redirect(gePriorityURL(Url.Content("~/")));
+                }
+                else
+                {
+                    return Redirect(Url.Content("~/") + "page/name/changepassword?msg=invalid");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Redirect(Url.Content("~/") + "page/name/changepassword?msg=invalid");
+                return Content(ex.Message);
             }
         }
 
-
         public ContentResult getNewPassword(string pwd)
         {
-            return Content( new Cryptography().Encrypt(pwd));
+            try {
+                return Content(new Cryptography().Encrypt(pwd));
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
         }
 
         public ContentResult dCrypt(string pwd)
         {
-            return Content(new Cryptography().Decrypt(pwd));
+            try
+            {
+                return Content(new Cryptography().Decrypt(pwd));
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
         }
     }
  
