@@ -9,12 +9,12 @@ var g_location_name = "";
 var g_tab_name = "SUPPLIER";
 var g_today_date = new Date(); 
 var g_warehouse_id = null;
+var g_item_code_id = null;
+var g_procurement_id = null;
 const DeliveryType = {
     Supplier: 'Supplier',
     Transfer: 'Transfer',
     Aircraft: 'Aircraft',
-    //Repair: 'Repair',
-    //Overhaul: 'Overhaul',
 };
 
 zsi.ready(function(){
@@ -27,12 +27,6 @@ zsi.ready(function(){
     $("#aircraft-tab").click(function() {
         g_tab_name = "AIRCRAFT";
     });
-    /*$("#repair-tab").click(function() {
-        g_tab_name = "REPAIR";
-    });
-    $("#overhaul-tab").click(function() {
-        g_tab_name = "OVERHAUL";
-    });*/
     
     getTemplate();
     setCurrentTab();
@@ -67,34 +61,7 @@ zsi.ready(function(){
     $("#aircraft-tab").click(function () {
         displayAircraft($(this).html());    
     });
-    /*$("#repair-tab").click(function () {
-        displayRepair($(this).html());    
-    });
-    $("#overhaul-tab").click(function () {
-        displayOverhaul($(this).html());    
-    });*/
 });
-
-// Set the auto-complete search for the grid details.
-/*function setSearch(){
-    new zsi.search({
-        tableCode: "adm-0003"
-        , colNames: ["item_description"] 
-        , displayNames: ["item_description"]  
-        , searchColumn:"item_description"
-        , input: "input[name = item_search]"
-        , url: execURL + "searchData"
-        , onSelectedItem: function(currentObject, data, i){ 
-            $(currentObject).prev().val(data.item_code_id);
-            currentObject.value = data.item_description;
-        }
-       , onChange: function(text){
-          if(text === ""){ 
-              
-          }
-       }
-    });        
-}*/
 
 // Create modal window for the receiving
 var contextModalNewReceiving = {
@@ -135,28 +102,26 @@ function initDatePicker(){
 
 // Initialize the data for the select options.
 function initSelectOptions(callbackFunc){
-          $("select[name='receiving_organization_id']").dataBind({
+    $("select[name='receiving_organization_id']").dataBind({
+        url: base_url +  "selectoption/code/organization"
+        , onComplete : function(){
+            $("select[name='transfer_organization_id']").dataBind({
                 url: base_url +  "selectoption/code/organization"
                 , onComplete : function(){
-                    $("select[name='transfer_organization_id']").dataBind({
-                        url: base_url +  "selectoption/code/organization"
-                        , onComplete : function(){
-                            $("select[name='received_by']").dataBind({
-                               // url: base_url +  "selectoption/code/employees_fullnames_v"
-                                url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
-                               , text: "userFullName"
-                               , value: "user_id"
-                                
-                                , onComplete : function(){  
-                                    if(callbackFunc) callbackFunc(); 
-                                }
-                          });
+                    $("select[name='received_by']").dataBind({
+                       // url: base_url +  "selectoption/code/employees_fullnames_v"
+                        url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
+                       , text: "userFullName"
+                       , value: "user_id"
+                        
+                        , onComplete : function(){  
+                            if(callbackFunc) callbackFunc(); 
                         }
-                    });
+                  });
                 }
             });
-        //}
-     //});
+        }
+    });
 }
 
 // Set the current tab when the page loads.
@@ -318,93 +283,6 @@ function displayAircraft(tab_name){
     });    
 }
 
-/*function displayRepair(tab_name){
-    var counter = 0;
-    $("#repair").dataBind({
-         url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
-        ,width          : $(document).width() - 35
-        ,height         : $(document).height() - 250
-        ,blankRowsLimit: 0
-        ,isPaging : false
-        ,dataRows : [
-                {text  : "Doc No."       , type  : "input"       , width : 100       , style : "text-align:left;"
-                    ,onRender : function(d){ 
-                        return "<a href='javascript:showModalUpdateReceiving(\""
-                        + DeliveryType.Repair + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
-                    }
-                }
-                ,{text  : "Doc Date"      , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ 
-                                    return svn(d,"doc_date") 
-                                         + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
-                    }
-                }
-                ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"aircraft_name"); }
-                }
-                
-                ,{text  : "Received By"    , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"received_by_name"); }
-                }
-                ,{text  : "Received Date"     , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"received_date"); }
-                }
-                ,{text  : "Status"             , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"status_name"); }
-                }
-                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"status_remarks"); }
-                }
-        ]   
-    });    
-}
-
-function displayOverhaul(tab_name){
-    var counter = 0;
-    $("#overhaul").dataBind({
-         url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
-        ,width          : $(document).width() - 35
-        ,height         : $(document).height() - 250
-        ,blankRowsLimit: 0
-        ,isPaging : false
-        ,dataRows : [
-                {text  : "Doc No."       , type  : "input"       , width : 100       , style : "text-align:left;"
-                    ,onRender : function(d){ 
-                        return "<a href='javascript:showModalUpdateReceiving(\""
-                        + DeliveryType.Overhaul + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
-                    }
-                }
-                ,{text  : "Doc Date"      , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ 
-                                    return svn(d,"doc_date") 
-                                         + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
-                    }
-                }
-                ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"aircraft_name"); }
-                }
-                
-                ,{text  : "Received By"    , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"received_by_name"); }
-                }
-                ,{text  : "Received Date"     , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"received_date"); }
-                }
-                ,{text  : "Status"             , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"status_name"); }
-                }
-                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"status_remarks"); }
-                }
-        ]   
-    });    
-}
-*/
-
 // Build the forms for the modal window for the receiving.
 function buildReceiving(tbl_obj) {
     buildReceivingHeader(tbl_obj);
@@ -434,8 +312,8 @@ function buildReceivingHeader(tbl_obj) {
             '<div class=" col-xs-3">' +
                 '<input type="text" name="doc_date" id="doc_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
             '</div>' +
-            '<label class=" col-xs-1 control-label">Status</label>' +
-            '<div class=" col-xs-3">' +
+            '<label class=" col-xs-2 control-label">Status</label>' +
+            '<div class=" col-xs-2">' +
                 '<label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' +
                 '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
             '</div>' +
@@ -449,9 +327,16 @@ function buildReceivingHeader(tbl_obj) {
             '<label class=" col-xs-1 control-label">Received Date</label>' +
             '<div class=" col-xs-3">' +
                 '<input type="text" name="received_date" id="received_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
+                '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
+                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+                '<input type="hidden" name="procurement_id" id="procurement_id" class="form-control input-sm">' +
             '</div>' +
-            '<label class=" col-xs-1 control-label show-hide-label">&nbsp;</label>' +
-            '<div class=" col-xs-3 show-hide">' +
+            '<div id="wrap-proc" class="hide">' +
+                '<label class="col-xs-2 control-label">Procurement</label>' +
+                '<div class=" col-xs-2">' +
+                    '<select name="procurement_filter" id="procurement_filter" class="form-control input-sm"></select>' +
+                '</div>' +
             '</div>' +
         '</div>' +
         
@@ -485,39 +370,72 @@ function fixTextAreaEvent(){
 }
 // Build the receiving details form.
 function buildReceivingDetails(callback) {
-    $("#tblModalReceivingDetails").dataBind({
-        url: procURL + "receiving_details_sel"
-        ,width:  $(document).width() - 200
-        ,height: 200
-        ,blankRowsLimit: 10
-        ,isPaging: false
-        ,dataRows: [
-            {text   : " "   , width: 26, style : "text-align:left;", 
+    var _dataRows = [];
+    if(g_tab_name==="SUPPLIER"){
+        _dataRows.push(
+            {text   : "Item No."   , width:120, style : "text-align:left;", 
                 onRender:  function(d){ 
-                    return     bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                        +  bs({name:"is_edited",type:"hidden"})
-                        +  bs({name:"receiving_id",type:"hidden", value: svn (d,"receiving_id")})
-                        + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
-                }
-            }    
-            /*,{text  : "Part No./Nat'l Stock No./Description"                , name  : "item_id"                  , type  : "input"      , width : 250       , style : "text-align:left;"
-                , onRender: function(d) {
-                    return "<input id='item_id' name='item_id' type='hidden'>"
-                    + "<input id='item_search' class='form-control input-sm' name='item_search' type='text'>";
+                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
+                            + bs({name:"is_edited",type:"hidden"})
+                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
+                            + bs({name:"receiving_id",type:"hidden", value: svn (d,"receiving_id")})
+                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
                 }
             }
-            ,{text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}*/
-            ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Serial No."          , name  : "serial_no"                , type  : (g_tab_name==="SUPPLIER" ? "input" : "select"), width : 150       , style : "text-align:left;"}
+        ); 
+    }else if(g_tab_name==="AIRCRAFT"){
+        _dataRows.push(
+            {text   : " "   , width:26, style : "text-align:left;", 
+                onRender:  function(d){ 
+                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
+                            + bs({name:"is_edited",type:"hidden"})
+                            + bs({name:"procurement_detail_id",type:"hidden"})
+                            + bs({name:"receiving_id",type:"hidden", value: svn (d,"receiving_id")})
+                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+                }
+            }
+        );
+    }
+   
+    _dataRows.push(
+        {text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+    );
+    
+    if(g_tab_name==="SUPPLIER"){
+        _dataRows.push(
+             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 475       , style : "text-align:left;"}
-        ]
+            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
+        );
+    }else if(g_tab_name==="AIRCRAFT"){
+        _dataRows.push(
+            {text  : "Serial No."           , width : 150                        , style : "text-align:left;",
+                onRender:  function(d){
+                    return    bs({name:"serial_no",type:"select", value: svn (d,"serial_no")})
+                            + bs({name:"unit_of_measure_id",type:"hidden"})
+                            + bs({name:"quantity",type:"hidden", value: 1 })
+                            + bs({name:"item_class_id",type:"hidden"})
+                            + bs({name:"time_since_new",type:"hidden"})
+                            + bs({name:"time_since_overhaul",type:"hidden"})
+                            + bs({name:"remarks",type:"hidden"});
+                }
+            }
+        );
+    }
+    
+    $("#tblModalReceivingDetails").dataBind({
+        url: procURL + "receiving_details_sel"
+        ,width:  $(document).width() - 208
+        ,height: 200
+        ,blankRowsLimit: 10
+        ,isPaging: false
+        ,dataRows: _dataRows
         ,onComplete: function(){
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='item_class_id']").dataBind("item_class");
@@ -529,6 +447,7 @@ function buildReceivingDetails(callback) {
                 else
                     $("#tblModalReceivingHeader").find("#is_edited").val("Y");
             });
+            
             //setSearch();
             setSearchMulti();
             if (callback) callback();
@@ -553,6 +472,45 @@ function buildReceivingButtons() {
     });
 }
 
+function setProcurementOptions(id, callBack){
+    if(id){
+        //$("#procurement_filter").attr("selectedvalue", id);
+        $("#procurement_filter").dataBind({
+            url: execURL + "dd_procurement_sel @dealer_id=" + id + ",@status_code='O'"
+            ,text: "procurement_code"
+            ,value: "procurement_id"
+            ,selectedValue: id
+            ,onComplete: function(){
+                $("#procurement_filter").change(function(){
+                    if(this.value){
+                        $("#procurement_id").val(this.value);
+                        $("select[name='procurement_detail_id']").dataBind({
+                            url: execURL + "procurement_detail_sel @procurement_id=" + this.value + ",@with_bal_qty='Y'"
+                            ,text: "item_code_id"
+                            ,value: "procurement_detail_id"
+                            ,onComplete: function(){
+                                $("select[name='procurement_detail_id']").change(function(){
+                                    g_item_code_id = null;
+                                    if(this.value){
+                                        g_item_code_id = this.value;
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        $("#procurement_id").val("");
+                        $("select[name='procurement_detail_id']").clearSelect();
+                    }
+                });
+            }
+        });
+    }else{
+        $("select[name='procurement_id']").clearSelect();
+    }
+    
+    if(callBack) callBack();
+}
+
 // Add a click event for the supplier delivery button.
 $("#sdBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
@@ -560,43 +518,22 @@ $("#sdBtnNew").click(function () {
   
     $("select[name='dealer_filter']").change(function(){
         $("#dealer_id").val(this.value);
+        setProcurementOptions(this.value);
     });
     
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-   // $(".show-hide-label").html('Dealer');            
+           
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
-
-    $(".show-hide").html('');            
-    var html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm" >' +
-                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
-    $(".show-hide").append(html);
-  //  $("select[name='dealer_id']").dataBind("dealer");
+    $("#wrap-proc").removeClass("hide");
+    
 });
-// Add a click event for the transfer delivery button.
-/*
-$("#tdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + ' from <label name="dealer_filter" id="dealer_filter"></label>');
 
-    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
-    buildReceiving($("#tblModalReceivingHeader"));
-    //$(".show-hide-label").html('Organization');  
- 
-    $(".show-hide-label").html(''); 
-    $(".show-hide").html('');            
-    var html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
-    $(".show-hide").append(html);
-    //$("select[name='transfer_organization_id']").dataBind("organization");
-});
-*/
 // Add a click event for the return delivery button.
 $("#rdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").html('Items Delivered from' + ' » ' +  g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+    $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
         $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
 
     $("select[name='aircraft_filter']").change(function(){
@@ -605,32 +542,11 @@ $("#rdBtnNew").click(function () {
 
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-//    $(".show-hide-label").html('Aircraft');            
+            
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    }); 
-
-    $(".show-hide").html('');            
-    var html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" ></input>';
-    $(".show-hide").append(html);
-   // $("select[name='aircraft_id']").dataBind("aircraft_info");
+    });
 });
-
-// Add a click event for the overhaul delivery button.
-/*$("#odBtnNew").click(function () {
-    $("#modalReceiving .modal-title").text("Items from Overhaul for " + g_organization_name + g_location_name);
-    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
-    buildReceiving($("#tblModalReceivingHeader"));
-    $(".show-hide-label").html('Dealer');            
-    $(".show-hide").html('');            
-    var html = '<select type="text" name="dealer_id" id="dealer_id" class="form-control input-sm" ></select>' +
-                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
-    $(".show-hide").append(html);
-    $("select[name='dealer_id']").dataBind("dealer");
-});*/
 
 // Save the new receiving entry.
 function Save(page_process_action_id) {
@@ -640,6 +556,7 @@ function Save(page_process_action_id) {
         $("#status_id").val(page_process_action_id);
         $("#tblModalReceivingHeader").jsonSubmit({
             procedure: "receiving_upd"
+            ,notInclude: "#procurement_filter"
             , onComplete: function (data) {
                 if (data.isSuccess === true) { 
                     var _receiving_id = (data.returnValue==0 ? g_recieving_id : data.returnValue);
@@ -680,12 +597,6 @@ function SaveDetails(page_process_action_id) {
             else if(g_tab_name==="TRANSFER"){
                  displayTransfer(g_tab_name);   
             }
-            /*else if(g_tab_name==="REPAIR"){
-                 displayRepair(g_tab_name);   
-            }
-            else if(g_tab_name==="OVERHAUL"){
-                 displayOverhaul(g_tab_name);   
-            }*/
         }
     });
 }
@@ -705,52 +616,45 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id) {
     g_recieving_id = receiving_id;
     if (delivery_type == DeliveryType.Supplier) {
         $("#modalReceiving .modal-title").html('Items Delivered to ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
+        
         $("select[name='dealer_filter']").attr("selectedvalue", id);
         $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
         $("select[name='dealer_filter']").change(function(){
             $("#dealer_id").val(this.value);
         });
-
-        html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm" >' +
-                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
     if (delivery_type == DeliveryType.Transfer) {
         $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + " from " +  id);
        
         $("#issuance_warehouse_id").val(id);
- 
-        html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id">';
     }
     if (delivery_type == DeliveryType.Aircraft) {
-    $("#modalReceiving .modal-title").html("Items Delivered from " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+        $("#modalReceiving .modal-title").html("Items Delivered from " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+        
         $("select[name='aircraft_filter']").attr("selectedvalue", id);
         $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
-
-    $("select[name='aircraft_filter']").change(function(){
-        $("#aircraft_id").val(this.value);
-    });
-
-        html =  '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
-                '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
-                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >';
+        $("select[name='aircraft_filter']").change(function(){
+            $("#aircraft_id").val(this.value);
+        });
     }
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceivingHeader($("#tblModalReceivingHeader"));
-   // $(".show-hide-label").html(label);
-    $(".show-hide").html('');
-    $(".show-hide").append(html);
+    
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
+    
+    if(delivery_type == DeliveryType.Supplier){
+        setProcurementOptions(id);
+        $("#wrap-proc").removeClass("hide");
+    }
 
     $("#receiving_id").val(receiving_id);
     initDatePicker();
     initSelectOptions(function(){
         $.get(procURL + "receiving_sel @receiving_id=" + receiving_id + "&@tab_name=" + g_tab_name, function(d) {
             if (d.rows !== null) {
+                g_procurement_id = d.rows[0].procurement_id;
                 $("#doc_no").val(d.rows[0].doc_no);
                 $("#doc_date").val(d.rows[0].doc_date);
                 $("#status_name").html(d.rows[0].status_name);
@@ -759,11 +663,11 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id) {
                 $("#received_date").val(d.rows[0].received_date);
                 $("#dealer_id").val(d.rows[0].dealer_id);
                 $("#status_remarks").val(d.rows[0].status_remarks);
-       
-               // buildReceivingDetails(function() {
-                    loadReceivingDetails(receiving_id);
-                    buildReceivingButtons();        
-                //});         
+                $("#procurement_id").val(d.rows[0].procurement_id);
+                $("#procurement_filter").val(d.rows[0].procurement_id);
+                
+                loadReceivingDetails(receiving_id);
+                buildReceivingButtons();    
             }
         });
     });
@@ -771,35 +675,88 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id) {
 
 // Load the values for the receiving details.
 function loadReceivingDetails(receiving_id) {
-    $("#tblModalReceivingDetails").dataBind({
-        url: procURL + "receiving_details_sel @receiving_id=" + receiving_id
-        ,width:  $(document).width() - 200
-        ,height: 200
-        ,blankRowsLimit: 10
-        ,isPaging: false
-        ,dataRows: [
-            {text   : " "   , width: 26, style : "text-align:left;", 
-                onRender:  function(d){
-                    return     bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                        +  bs({name:"is_edited",type:"hidden"})
-                        +  bs({name:"receiving_id",type:"hidden", value: receiving_id })
-                        + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+    var _dataRows = [];
+    if(g_tab_name==="SUPPLIER"){
+        _dataRows.push(
+            {text   : "Item No."   , width:70, style : "text-align:left;", 
+                onRender:  function(d){ 
+                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
+                            + bs({name:"is_edited",type:"hidden"})
+                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
+                            + bs({name:"receiving_id",type:"hidden", value: receiving_id})
+                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
                 }
             }
-            ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Serial No."          , name  : "serial_no"                , type  : (g_tab_name==="SUPPLIER" ? "input" : "select"), width : 150       , style : "text-align:left;"}
+        ); 
+    }else if(g_tab_name==="AIRCRAFT"){
+        _dataRows.push(
+            {text   : " "   , width:26, style : "text-align:left;", 
+                onRender:  function(d){ 
+                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
+                            + bs({name:"is_edited",type:"hidden"})
+                            + bs({name:"procurement_detail_id",type:"hidden"})
+                            + bs({name:"receiving_id",type:"hidden", value: receiving_id})
+                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+                }
+            }
+        );
+    }
+   
+    _dataRows.push(
+        {text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+    );
+        
+    if(g_tab_name==="SUPPLIER"){
+        _dataRows.push(
+             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
-        ]
+        );
+    }else if(g_tab_name==="AIRCRAFT"){
+        _dataRows.push(
+            {text  : "Serial No."           , width : 150                        , style : "text-align:left;",
+                onRender:  function(d){
+                    return    bs({name:"serial_no",type:"select", value: svn (d,"serial_no")})
+                            + bs({name:"unit_of_measure_id",type:"hidden"})
+                            + bs({name:"quantity",type:"hidden", value: 1 })
+                            + bs({name:"item_class_id",type:"hidden"})
+                            + bs({name:"time_since_new",type:"hidden"})
+                            + bs({name:"time_since_overhaul",type:"hidden"})
+                            + bs({name:"remarks",type:"hidden"});
+                }
+            }
+        );
+    }
+        
+    $("#tblModalReceivingDetails").dataBind({
+        url: procURL + "receiving_details_sel @receiving_id=" + receiving_id
+        ,width:  $(document).width() - 208
+        ,height: 200
+        ,blankRowsLimit: 10
+        ,isPaging: false
+        ,dataRows: _dataRows
         ,onComplete: function(){
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='item_class_id']").dataBind("item_class");
+            $("select[name='procurement_detail_id']").dataBind({
+                url: execURL + "procurement_detail_sel @procurement_id="+ g_procurement_id +",@with_bal_qty='Y'"
+                ,text: "item_code_id"
+                ,value: "procurement_detail_id"
+                ,onComplete: function(){
+                    $("select[name='procurement_detail_id']").change(function(){
+                        g_item_code_id = null;
+                        if(this.value){
+                            g_item_code_id = this.value;
+                        }
+                    });
+                }
+            });
             
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
@@ -826,15 +783,15 @@ function setSearchMulti(){
     else if(g_tab_name==="AIRCRAFT"){
         selCode = "items_on_arcraft_serials";
         _tableCode = "ref-0023";
+        
+        $("select[name='serial_no']").dataBind(selCode);
+        $("input[name='item_code_id']").each(function(){
+            if(this.value){
+                var $row = $(this).closest(".zRow");
+                    $row.find("#serial_no").dataBind(selCode +", 'item_code_id="+ this.value +"'");
+            } 
+        });
     }
-    /*else if(g_tab_name==="REPAIR"){
-        selCode = "items_on_repair_serials";
-        _tableCode = "ref-0023";
-    }
-    else if(g_tab_name==="OVERHAUL"){
-        selCode = "items_on_overhaul_serials";
-        _tableCode = "ref-0023";
-    }*/
     
     new zsi.search({
         tableCode: _tableCode
@@ -843,6 +800,7 @@ function setSearchMulti(){
         , searchColumn:"part_no"
         , input: "input[name=part_no]"
         , url: execURL + "searchData"
+        , condition :"'item_code_id="+ g_item_code_id +"'"
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.part_no;
             
@@ -864,6 +822,7 @@ function setSearchMulti(){
         , searchColumn:"national_stock_no"
         , input: "input[name=national_stock_no]"
         , url: execURL + "searchData"
+        , condition :"'item_code_id="+ g_item_code_id +"'"
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.national_stock_no;
             
@@ -885,6 +844,7 @@ function setSearchMulti(){
         , searchColumn:"item_name"
         , input: "input[name=item_name]"
         , url: execURL + "searchData"
+        , condition :"'item_code_id="+ g_item_code_id +"'"
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.item_name;
             
@@ -918,4 +878,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                 
+                                     

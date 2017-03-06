@@ -1,0 +1,38 @@
+<link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src='/javascript/name/zsiSearch'></script>
+<style>
+    #grid{
+        width: 100%;
+    }
+    .zGrid .item .title {
+        height: 40px;
+        line-height: 19px;
+    }
+    .zGrid .zHeaders .zSort {
+        
+    }
+    .tablePanel {
+        overflow-y:auto;
+    }
+    .modalGrid{
+        margin-top: 40px;
+    }
+</style>
+
+<div class="col-xs-12">    
+    <form method="post" id="frm">
+        <div class="zPanel">
+            <div id="grid" class="zGrid"></div>
+            <div class="buttonGroup">
+                <button type="button" class="btn btn-primary btn-sm" id="btnNew">
+                	<span class="glyphicon glyphicon-plus"></span> Add
+                </button>
+                <!--<button type="button" class="btn btn-primary btn-sm" id="btnDelete">
+                	<span class="glyphicon glyphicon-trash"></span> Delete
+                </button>    -->
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
+<script type="text/javascript" src="/scripts/bootstrap-datepicker.min.js"></script>
