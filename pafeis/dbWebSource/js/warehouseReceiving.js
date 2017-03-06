@@ -462,7 +462,7 @@ function buildReceivingButtons() {
         if (d.rows !== null) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.page_process_action_id + ');" class="btn btn-primary added-button">'
+                    + v.status_id + ');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             
@@ -493,6 +493,7 @@ function setProcurementOptions(id, callBack){
                                     g_item_code_id = null;
                                     if(this.value){
                                         g_item_code_id = this.value;
+                                        setSearchMulti();
                                     }
                                 });
                             }
@@ -753,6 +754,7 @@ function loadReceivingDetails(receiving_id) {
                         g_item_code_id = null;
                         if(this.value){
                             g_item_code_id = this.value;
+                            setSearchMulti();
                         }
                     });
                 }
@@ -878,4 +880,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                     
+                                      
