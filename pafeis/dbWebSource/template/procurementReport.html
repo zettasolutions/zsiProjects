@@ -1,0 +1,84 @@
+<link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src='/javascript/name/zsiSearch'></script>
+<style>
+    #zPanelId {
+        display:none;
+    }
+</style>
+<div class="zPanel">
+    <div style="min-height:20px;margin-top:10px">
+        <form method="post" id="frm">
+             <div class="form-horizontal">
+                <div class="form-group  ">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label class="col-xs-3 control-label">Procurement Code</label>
+                            <div class="col-xs-3" style="margin-bottom:3px">
+                                <input name="proc_code_id" id="proc_code_id" class="form-control input-sm" type="hidden"> 
+                                <input name="proc_code" id="proc_code" class="form-control input-sm"> 
+                            </div>
+                            <label class=" col-xs-3 control-label">Supplier</label>
+                            <div class="col-xs-3">
+                                <select name="supplier_id" id="supplier_id" class="form-control input-sm" > </select>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group  ">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label class=" col-xs-3 control-label" >From</label>
+                            <div class="col-xs-3" style="margin-bottom:3px">   
+                               <input name="date_from" id="date_from" class="form-control input-sm"> 
+                            </div>
+                            <label class=" col-xs-3 control-label" >To</label>
+                            <div class="col-xs-3" style="margin-bottom:3px">   
+                                <input name="date_to" id="date_to" class="form-control input-sm"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group  ">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label class=" col-xs-3 control-label">Report Type</label>
+                            <div class="col-xs-3" style="margin-bottom:3px">     
+                                <select name="report_type_id" id="report_type_id" class="form-control input-sm"> </select>
+                            </div>
+                            <label class=" col-xs-1 control-label"></label>
+                            <div class="col-xs-1" style="margin-left:-50px">
+                                <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </form>
+    </div>
+</div>
+            <div class="zPanel" id="zPanelId">
+                <div >
+                    <table id="grid" class="zTableTop fullWidth"> 
+                        <thead>	
+                            <tr>
+                                <th style="text-align:center;width:25px;"></th>
+                                <th >Procurement Date</th>
+                                <th >Procurement Code</th>
+                                <th >Procurement Name</th>
+                                <th >Supplier Name</th>
+                                <th >Promised Delivery Date</th>
+                                <th >Actual Delivery Date</th>
+                                <th >No. of Items</th>
+                                <th >Total Ordered Qty.</th>
+                                <th >Total Undelivered Qty.</th>
+                                <th >Total Amount</th>
+                                <th >Status</th>
+                            </tr>
+                         </thead>
+                         <tfoot><tr><td colspan="13">&nbsp;</td></tr></tfoot>                    
+                    </table>    
+                </div>
+            </div>
+
+<script src="/scripts/bootstrap-datepicker.min.js"></script> 
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
