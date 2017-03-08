@@ -4,6 +4,21 @@
     #zPanelId {
         display:none;
     }
+    
+    .zExtraRow{
+        margin-left:26px;
+        background-color:#c4defc;
+        display:none;
+        margin-top: 5px;
+        margin-bottom: 5px;
+}
+    }
+    
+    .zGrid a{
+        color:#3577C3;
+        margin-left:4px;
+    }
+    
 </style>
 <div class="zPanel">
     <div style="min-height:20px;margin-top:10px">
@@ -58,25 +73,7 @@
 </div>
             <div class="zPanel" id="zPanelId">
                 <div >
-                    <table id="grid" class="zTableTop fullWidth"> 
-                        <thead>	
-                            <tr>
-                                <th style="text-align:center;width:25px;"></th>
-                                <th >Procurement Date</th>
-                                <th >Procurement Code</th>
-                                <th >Procurement Name</th>
-                                <th >Supplier Name</th>
-                                <th >Promised Delivery Date</th>
-                                <th >Actual Delivery Date</th>
-                                <th >No. of Items</th>
-                                <th >Total Ordered Qty.</th>
-                                <th >Total Undelivered Qty.</th>
-                                <th >Total Amount</th>
-                                <th >Status</th>
-                            </tr>
-                         </thead>
-                         <tfoot><tr><td colspan="13">&nbsp;</td></tr></tfoot>                    
-                    </table>    
+                      <div id="grid" class="zGrid"></div>
                 </div>
             </div>
 

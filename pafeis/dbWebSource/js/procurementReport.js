@@ -1,10 +1,12 @@
-var bs          = zsi.bs.ctrl
-   ,svn         = zsi.setValIfNull
-   ,$rTypeId    = ""
+var  bs             = zsi.bs.ctrl
+    ,svn            = zsi.setValIfNull
+    ,$rTypeId    = ""
 ;
-
+ 
+	
+	
 zsi.ready(function(){
-
+    enableFilter();
     $("#supplier_id").dataBind( "supply_source");
         $ ("#report_type_id").dataBind({
                                url: execURL + "dd_procurement_report_type_sel"
@@ -21,18 +23,35 @@ zsi.ready(function(){
         });
      $("#proc_code_id").val("");
      $("input[name=proc_code]").on("keyup change", function(){
-         if(this.value=== "") $("#proc_code_id").val("");
-     });
+         clearform();
+         disableFilter();
+         if(this.value=== ""){ 
+             $("#proc_code_id").val("");
+             enableFilter();
+          }     });
     
     zsi.initDatePicker();
+    $('#proc_code').val('');
     clearform();
     setSearch();
 });
+	
+
+function disableFilter(){
+     $("#supplier_id").attr('disabled','disabled');
+     $("#date_from").attr('disabled','disabled');
+     $("#date_to").attr('disabled','disabled');
+}
+
+function enableFilter(){
+     $("#supplier_id").removeAttr('disabled');
+     $("#date_from").removeAttr('disabled');
+     $("#date_to").removeAttr('disabled');
+}
 
 function clearform(){
     $('#date_from').val('');
     $('#date_to').val('');
-    $('#proc_code').val('');
     $('select').val('');   
 }
 
@@ -52,142 +71,86 @@ function setSearch(){
 }
 
 $("#btnGo").click(function(){
-    dateFrom = $("#date_from").val();
-    dateTo = $("#date_to").val();
-    suppId = $("#supplier_id").val();
-    procCodeId = $("#proc_code_id").val();
-    rTypeId = $("#report_type_id").val();
-    
-    if(rTypeId == 1){
-        $("#zPanelId").css({display:"block"});
-        displayRecords();
-    }   
-    
-    if(rTypeId == 2){
-        $("#zPanelId").css({display:"block"});
-        displayRecords();
-    }  
-    
-    if(rTypeId == 3){
-        $("#zPanelId").css({display:"block"});
-        displayRecords();
+    if($("#report_type_id").val() === ""){ 
+        alert("Please select Report Type.");
+        return;
     }
-    if(rTypeId == 4){
-        $("#zPanelId").css({display:"block"});
-        displayRecords();
-    }     
-    if(rTypeId == 5){
-        $("#zPanelId").css({display:"block"});
-        displayRecords();
-    }     
-
+    $("#zPanelId").css({display:"block"});
+    displayRecords();
 });
 
 function displayRecords(){
-    $("#grid").loadData({
-        url: execURL + "procurement_summary_report_sel @date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
-                        + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
-                        + ",@supplier_id="+ (suppId ?  suppId : null) 
-                        + ",@search="+ (procCodeId ? "'" + procCodeId + "'" : null)
-                        + ",@report_type_id="+ (rTypeId ? "'" + rTypeId + "'" : null)
-        ,td_body: [ 
-             function(d){
-                 return "<a name='aSummary'  procurement_id='" + d.procurement_id + "' href='javascript:void(0);'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
-             }
-            ,function(d){ return d.procurement_date; }
-            ,function(d){ return d.procurement_code; }
-            ,function(d){ return d.procurement_name; }
-            ,function(d){ return d.supplier_name; }
-            ,function(d){ return d.promised_delivery_date; }
-            ,function(d){ return d.actual_delivery_date; }
-            ,function(d){ return d.no_items; }
-            ,function(d){ return d.total_ordered_qty; }
-            ,function(d){ return d.total_balance_qty; }
-            ,function(d){ return d.total_amount; }
-            ,function(d){ return d.status_name; }
-          ]
-        ,onComplete:function(){
-            var _id;
-            $("a[name='aSummary']").expandCollapse({
-                onInit  : function(obj){
-                    _id = $(obj).attr("procurement_id");
-                    return "<table id='data" + _id + "'></table>";
-                }
-               ,onAfterInit: function(){
-                    displayDetail(_id);
-                    
-                }
-          
-            });
-            addTREvent();
-
-        }      
-
-    });
-}
-
-function addTREvent(){
-    var $tr = $("#grid tbody tr");
+    var dateFrom    = $("#date_from").val();
+    var dateTo      = $("#date_to").val();
+    var suppId      = $("#supplier_id").val();
+    var procId      = $("#proc_code_id").val();
+    var rTypeId     = $("#report_type_id").val();
     
-    var event = $._data($tr.get(0), 'events' ); 
-    $tr.unbind("click");
-    $tr.click(function(){
-        if($(this).attr("class").indexOf("extraRow") === -1 ){
-           $tr.removeClass("active");
-           $(this).addClass("active"); 
-        }
+    $("#grid").dataBind({
+        
+         toggleMasterKey    : "procurement_id"
+        ,height             : 400 
+        ,width              : 1000
+        ,url                : execURL + "procurement_summary_report_sel @date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
+                                      + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
+                                      + ",@supplier_id="+ (suppId ?  suppId : null) 
+                                      + ",@procurement_id="+ (procId ?  procId : null)
+                                      + ",@report_type_id="+ (rTypeId ? rTypeId  : null)
+        ,dataRows : [
+                {text  : "&nbsp;"                                              , width : 25           , style : "text-align:left;"
+                     ,onRender : function(d){
+                          return "<a  href='javascript:void(0);' onclick='displayDetail(this,"+ d.procurement_id +");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
+                    }
+                 }
+        		,{text  : "Procurement Date"        , name  : "procurement_date"        , width : 180           , style : "text-align:left;"}
+        		,{text  : "Procurement Name"        , name  : "procurement_name"        , width : 350           , style : "text-align:left;"}
+        		,{text  : "Supplier Name"           , name  : "supplier_name"           , width : 150           , style : "text-align:left;"}
+        		,{text  : "promised_delivery_date"  , name  : "promised_delivery_date"  , width : 150           , style : "text-align:left;"}
+        		,{text  : "actual_delivery_date"    , name  : "actual_delivery_date"    , width : 150           , style : "text-align:left;"}
+        		,{text  : "no_items"                , name  : "no_items"                , width : 150           , style : "text-align:left;"}
+        		,{text  : "total_ordered_qty"       , name  : "total_ordered_qty"       , width : 150           , style : "text-align:left;"}
+        		,{text  : "total_balance_qty"       , name  : "total_balance_qty"       , width : 150           , style : "text-align:left;"}
+        		,{text  : "total_amount"            , name  : "total_amount"            , width : 150           , style : "text-align:left;"}
+        		,{text  : "status_name"             , name  : "status_name"             , width : 150           , style : "text-align:left;"}
+        		
+	    ]  
+
     });
 }
 
-function displayDetail(id){
-    var formatter = new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP',
-      minimumFractionDigits: 2,
+
+function displayDetail(o,id){
+    zsi.toggleExtraRow({
+         object     : o
+        ,parentId   : id
+        ,onLoad : function($grid){ 
+            
+            /*  
+            var formatter = new Intl.NumberFormat('en-PH', {
+              style: 'currency',
+              currency: 'PHP',
+              minimumFractionDigits: 2,
+            });
+            */
+            $grid.dataBindGrid({
+                 width              : 1000
+                ,url: execURL + "procurement_detail_sel @procurement_id="+ id
+                ,dataRows : [
+                		 {text  : "Item No."                , name  : "item_no"                     , width : 180           , style : "text-align:left;"}
+                		,{text  : "Part No."                , name  : "part_no"                     , width : 350           , style : "text-align:left;"}
+                		,{text  : "National Stock No."      , name  : "national_stock_no"           , width : 150           , style : "text-align:left;"}
+                		,{text  : "Item Description"        , name  : "item_description"            , width : 150           , style : "text-align:left;"}
+                		,{text  : "Unit of Measure"         , name  : "unit_of_measure_code"        , width : 150           , style : "text-align:left;"}
+                		,{text  : "Total Delivered Qty."    , name  : "total_delivered_quantity"    , width : 150           , style : "text-align:left;"}
+                		,{text  : "Balance Qty."            , name  : "balance_quantity"            , width : 150           , style : "text-align:left;"}
+                		,{text  : "Unit Price"              , name  : "unit_price"                  , width : 150           , style : "text-align:left;"}
+                		,{text  : "Amount"                  , name  : "amount"                      , width : 150           , style : "text-align:left;"}
+                	    ]          
+            });    
+
+        }
+    
     });
-    $("#data" + id).html("<thead>"
-     + "<tr>"
-         + "<th >Item No.</th>"
-         + "<th >Part No.</th>"
-         + "<th >National Stock No.</th>"
-         + "<th >Item Description</th>"
-         + "<th >Unit of Measure</th>"
-         + "<th >Total Ordered Qty.</th>"
-         + "<th >Total Undelivered Qty.</th>" 
-         + "<th >Unit Price</th>"
-         + "<th >Amount</th>"
-    +"</tr>"
-    + "</thead>"
-    + "<tfoot>"
-    + "<tr>"
-         + "<td ></td >"
-         + "<td ></td >"
-         + "<td ></td >"
-         + "<td ></td >"
-         + "<td ></td >"
-         + "<td ></td >"
-         + "<td ></td >"
-         + "<td >Total</td >"
-         + "<td ></td >"
-     + "</tr>"
-    + "</tfoot>");
+}
 
-
-    $("#data" + id).loadData({
-        
-        url: execURL + "procurement_detail_sel @procurement_id="+ id
-       ,td_body: [
-             function(d){ return d.item_no; }
-            ,function(d){ return d.part_no; }
-            ,function(d){ return d.national_stock_no; }
-            ,function(d){ return d.item_description; }
-            ,function(d){ return d.unit_of_measure_code; }
-            ,function(d){ return d.total_delivered_quantity; }
-            ,function(d){ return d.balance_quantity; }
-            ,function(d){ return formatter.format(d.unit_price); }
-            ,function(d){ return formatter.format(d.amount); }          
-        ]
-    });    
-} 
-
-                                                                             
+                                                                               
