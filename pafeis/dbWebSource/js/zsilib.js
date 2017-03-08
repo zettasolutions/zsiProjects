@@ -1,4 +1,5 @@
 var  ud='undefined'
+    ,isUD=function(o){return (typeof o === ud);}
     ,zsi= {
          __getTableObject           : function(o){
             var arr = zsi.__tableObjectsHistory;
@@ -1120,8 +1121,13 @@ var  ud='undefined'
                                 if( (typeof _info.groupId !== ud ?_info.groupId : 0)  > 0 || _info.onRender || _isGroup === false)
                                     r +="<div class=\"zCell" + _nd +  _class + "\"  " + _attr  + " style=\"width:" + (_dt[x].width ) +  "px;"  + _dt[x].style + "\" >" + _content + "</div>";
                             }
-                        r +="</div>";                           
-                
+                        r +="</div>";               
+
+                        if( o.panelType ==="R" && ! isUD(__o.toggleMasterKey) ){
+                            r +="<div id=\"childPanel" + svn(o.data,__o.toggleMasterKey) +   "\" class=\"zExtraRow\"><div class=\"zGrid\"></div></div>";                           
+                        }
+                        
+                        
                         _table.append(r);
 
                         var tr=$("div[rowObj]");tr.removeAttr("rowObj"); 
@@ -1143,7 +1149,7 @@ var  ud='undefined'
                         _tableRight.parent().scroll(function() {
                             var _left = _tableRight.offset().left;
                             var _top = _tableRight.offset().top;
-                            var _headers = _tableRight.closest(".right").find(".zHeaders");
+                            var _headers = $(_tableRight.closest(".right").find(".zHeaders")[0]);
                             var _tblLeft = $(this).closest(".right").prev().find("#table");
                             _headers.offset({left:_left});
                             _tblLeft.offset({top:_top});
@@ -1260,7 +1266,6 @@ var  ud='undefined'
                     
                     var _panelRight = this.find(__obj.clsPanelR);
                     var _panelLeft = this.find(__obj.clsPanelL);
-                    
                     var _top =  "top:" + ((o.columnHeight / 2)-8) + "px;";
                     
                     for(i=0; i <_styles.length;i++){
@@ -2564,6 +2569,28 @@ var  ud='undefined'
 
           return data;
         }
+        ,toggleExtraRow             : function(o){
+            var _cpId = "#childPanel";
+            var $span = $(o.object).find("span");
+            var $cp = $(_cpId + o.parentId);
+            var _Cls = "loaded";
+            $cp.toggle(500, function () {
+                var isVisible = $cp.is(":visible");
+                if( isVisible )
+                    $span.removeClass("glyphicon glyphicon-collapse-down").addClass("glyphicon glyphicon-collapse-up");
+                else
+                    $span.removeClass("glyphicon glyphicon-collapse-up").addClass("glyphicon glyphicon-collapse-down");
+            });
+        
+            var isLoaded = $cp.hasClass(_Cls);
+          
+            if(!isLoaded){
+                $cp.addClass(_Cls);
+                
+                if( ! isUD(o.onLoad) ) o.onLoad( $(_cpId + o.parentId + " .zGrid") );
+            }
+        
+        }
         ,setValIfNull               : function(data,colName,defaultValue){
             var _d = (typeof defaultValue !== ud ? defaultValue : "" );   
             return (data ? (typeof data[colName]  !== ud ? data[colName] :  _d ) : _d);
@@ -2619,4 +2646,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                            
+                                                                                
