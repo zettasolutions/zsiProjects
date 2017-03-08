@@ -1,4 +1,4 @@
-/****** Object:  StoredProcedure [dbo].[receiving_details_upd]    Script Date: 12/19/2016 11:59:40 AM ******/
+
 CREATE PROCEDURE [dbo].[receiving_details_upd]
 (
     @tt    receiving_details_tt READONLY
@@ -9,8 +9,10 @@ AS
 BEGIN
 -- Update Process
     UPDATE a 
-    SET  item_code_id			= b.item_code_id
+    SET  procurement_detail_id  = b.procurement_detail_id
+	    ,item_code_id			= b.item_code_id
 		,serial_no				= b.serial_no
+		,manufacturer_id        = b.manufacturer_id
 		,unit_of_measure_id		= b.unit_of_measure_id
 		,quantity				= b.quantity
 		,item_class_id			= b.item_class_id
@@ -26,8 +28,10 @@ BEGIN
 -- Insert Process
     INSERT INTO dbo.receiving_details (
          receiving_id 
-		,item_code_id
+	    ,procurement_detail_id		
+	    ,item_code_id
 		,serial_no
+		,manufacturer_id
 		,unit_of_measure_id
 		,quantity
 		,item_class_id
@@ -39,8 +43,10 @@ BEGIN
         )
     SELECT 
         receiving_id 
+	   ,procurement_detail_id
 	   ,item_code_id
 	   ,serial_no
+	   ,manufacturer_id
 	   ,unit_of_measure_id	
 	   ,quantity
 	   ,item_class_id
@@ -54,5 +60,6 @@ BEGIN
 	  AND receiving_id IS NOT NULL
 	  AND item_code_id IS NOT NULL
 END
+
 
 

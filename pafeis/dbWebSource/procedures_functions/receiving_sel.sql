@@ -27,19 +27,19 @@ DECLARE @organization_id INT
                + ' AND warehouse_id in (SELECT warehouse_id FROM dbo.user_warehouses(' + cast(@user_id as varchar(20)) + '))'
 
   IF @tab_name='SUPPLIER'
-     SET @stmt = @stmt + ' AND ISNULL(dealer_id,0) <> 0'
+     SET @stmt = @stmt + ' AND receiving_type=''SUPPLIER'''
+
+  IF @tab_name='DONATION'
+     SET @stmt = @stmt + ' AND receiving_type=''DONATION'''
 
   IF @tab_name='TRANSFER'
-     SET @stmt = @stmt + ' AND ISNULL(issuance_warehouse_id,0) <> 0 '
+     SET @stmt = @stmt + ' AND receiving_type=''TRANSFER'''
 
   IF @tab_name='AIRCRAFT'
-     SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
-
-  IF @tab_name='REPAIR'
-     SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
+     SET @stmt = @stmt + ' AND receiving_type=''AIRCRAFT'''
 
   IF @tab_name='OVERHAUL'
-     SET @stmt = @stmt + ' AND ISNULL(aircraft_id,0) <> 0'
+     SET @stmt = @stmt + ' AND report_type=''OVERHAUL'''
 
    SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
   
@@ -48,10 +48,12 @@ DECLARE @organization_id INT
   ELSE
      SET @stmt = @stmt + ' DESC';
   
-  print @stmt;
+  --print @stmt;
   exec(@stmt);
 	
 END
+
+SELECT * FROM receiving
 
 
 

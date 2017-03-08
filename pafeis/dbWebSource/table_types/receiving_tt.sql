@@ -10,5 +10,8 @@ receiving_id	INT	NULL
 ,dealer_id	INT	NULL
 ,issuance_warehouse_id	INT	NULL
 ,aircraft_id	INT	NULL
+,procurement_id	INT	NULL
+,donor	NVARCHAR(200)	NULL
+,supply_source_id	INT	NULL
 ,status_remarks	NVARCHAR(0)	NULL
 ,receiving_type	NVARCHAR(40)	NULL)

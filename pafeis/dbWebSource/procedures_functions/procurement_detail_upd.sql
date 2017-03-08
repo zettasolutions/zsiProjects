@@ -10,7 +10,7 @@
 -- Add your name, date, and description of your changes here. Thanks
 -- ===================================================================================================
 
-CREATE PROCEDURE [dbo].[procurement_detail_upd]
+create PROCEDURE [dbo].[procurement_detail_upd]
 (
     @tt    procurement_detail_tt READONLY
    ,@user_id int
@@ -25,8 +25,7 @@ BEGIN
 		,unit_of_measure_id	        = b.unit_of_measure_id
 		,quantity					= b.quantity
 		,unit_price					= b.unit_price
-		,amount						= b.amount
-		,updated_by					= @user_id
+		,amount						= a.unit_price * b.unit_price
         ,updated_date				= GETDATE()
     FROM dbo.procurement_detail a INNER JOIN @tt b
     ON a.procurement_detail_id = b.procurement_detail_id
@@ -34,7 +33,8 @@ BEGIN
 
 -- Insert Process
     INSERT INTO dbo.procurement_detail (
-		 item_no				
+	     procurement_id
+		,item_no				
 		,item_code_id					
 		,unit_of_measure_id	        
 		,quantity					
@@ -45,13 +45,14 @@ BEGIN
 		,created_by
         ,created_date
         )
-    SELECT 
-		 item_no				
+    SELECT
+	     procurement_id 
+		,item_no				
 		,item_code_id					
 		,unit_of_measure_id	        
 		,quantity					
 		,unit_price					
-		,amount						
+		,unit_price * quantity						
 		,0	
 		,quantity	
 	    ,@user_id

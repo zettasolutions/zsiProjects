@@ -38,7 +38,8 @@ BEGIN
     INSERT INTO dbo.procurement (
 		 procurement_date				
 		,procurement_code				
-		,procurement_name				
+		,procurement_name	
+		,organization_id			
 		,supplier_id					
 		,promised_delivery_date
 		,status_id						
@@ -48,7 +49,8 @@ BEGIN
     SELECT 
 		 procurement_date				
 		,procurement_code				
-		,procurement_name				
+		,procurement_name	
+		,dbo.getUserOrganizationId(@user_id)			
 		,supplier_id					
 		,promised_delivery_date
 		,status_id						
@@ -58,7 +60,7 @@ BEGIN
     WHERE isnull(procurement_id,0) = 0
 	AND procurement_code IS NOT NULL
 
-	SELECT @id = procurement_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
+	SELECT @id = procurement_id, @statusId=dbo.getPageProcessActionIdByStatusId(status_id,1107) FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 		SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;

@@ -1,4 +1,5 @@
 
+
 CREATE PROCEDURE [dbo].[receiving_upd]
 (
     @tt    receiving_tt READONLY
@@ -22,11 +23,13 @@ BEGIN
 -- Update Process
     UPDATE a 
     SET 
-		 receiving_no		        = b.receiving_no
+         procurement_id             = b.procurement_id
 	    ,doc_no						= b.doc_no			
 	    ,doc_date					= b.doc_date		
 	    ,dealer_id					= b.dealer_id		
 		,aircraft_id                = b.aircraft_id
+		,donor                      = b.donor
+		,supply_source_id           = b.supply_source_id
 		,received_by				= b.received_by
 		,received_date				= b.received_date
 		,status_id                  = b.status_id
@@ -44,12 +47,15 @@ BEGIN
 		,doc_date		
 		,dealer_id		
 		,aircraft_id
+		,donor
+		,supply_source_id
 		,warehouse_id
 		,received_by
 		,received_date
 		,status_id
 		,status_remarks
 		,receiving_type
+		,procurement_id
 		,created_by
 		,created_date
         )
@@ -58,12 +64,15 @@ BEGIN
 		,doc_date		
 		,dealer_id	
 		,aircraft_id
+		,donor
+		,supply_source_id
 		,dbo.getUserWarehouseId(@user_id)
 		,received_by
 		,received_date
 		,status_id
 		,status_remarks
 		,receiving_type
+		,procurement_id
 	   ,@user_id
 	   ,GETDATE()
     FROM @tt
@@ -71,7 +80,7 @@ BEGIN
 	AND doc_no IS NOT NULL
 	--AND (dealer_id IS NOT NULL OR aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL)
 
-	SELECT @id = receiving_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
+	SELECT @id = receiving_id, @statusId=dbo.getPageProcessActionIdByStatusId(status_id,70) FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 	   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
@@ -90,5 +99,7 @@ BEGIN
 
 	EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
 END
+
+
 
 

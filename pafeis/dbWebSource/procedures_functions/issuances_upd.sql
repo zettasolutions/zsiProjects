@@ -78,7 +78,7 @@ BEGIN
 
 --	AND (aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL OR dealer_id IS NOT NULL);
 
-	SELECT @id = issuance_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
+	SELECT @id = issuance_id,  @statusId=dbo.getPageProcessActionIdByStatusId(status_id,66) FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 		SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;

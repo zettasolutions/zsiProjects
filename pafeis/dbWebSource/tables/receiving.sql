@@ -17,4 +17,6 @@ receiving_id	INT IDENTITY(1,1)	NOT NULL
 ,ris_id	INT	NULL
 ,receiving_type	VARCHAR(20)	NULL
 ,warehouse_id	INT	NULL
-,procurement_id	INT	NULL)
+,procurement_id	INT	NULL
+,supply_source_id	INT	NULL
+,donor	NVARCHAR(200)	NULL)
