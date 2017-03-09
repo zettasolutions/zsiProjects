@@ -208,14 +208,14 @@ function displayDonation(tab_name){
         ,blankRowsLimit: 0
         ,isPaging : false
         ,dataRows : [
-                {text  : "Doc No."             , name  : "doc_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
+                 {text  : "Doc No."             , name  : "doc_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Donation+ "\",\""
                         + svn(d,"receiving_id") + "\",\"" 
                         + svn(d,"doc_no")  + "\",\""
-                        + svn(d,"donor")  + "\",\""
-                        + svn(d,"supply_source_id") + "\");'>"
+                        + svn(d,"supply_source_id")  + "\",\""
+                        + svn(d,"donor") + "\");'>"
                         + svn(d,"doc_no") + " </a>";
                     }
                 }
@@ -739,7 +739,7 @@ function setStatusName(page_process_action_id) {
 }
 
 // Show the modal window for updating.
-function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, donor, id) {
+function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor) {
     var html = '';
     g_recieving_id = receiving_id;
     if (delivery_type == DeliveryType.Supplier) {
@@ -753,8 +753,8 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, donor, id
 
   }
     if (delivery_type == DeliveryType.Donation) {
-    $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' » ' + donor);
-        //$("select[name='donor_filter']").attr("selectedvalue", id);
+    $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <input name="donor_filter" id="donor_filter">');
+        $("input[name='donor_filter']").val(donor);
         $("input[name='donor_filter']").focusout(function(){
            $("#donor").val(this.value);
         });         
@@ -1036,4 +1036,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                          
+                                           
