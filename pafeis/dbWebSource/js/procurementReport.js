@@ -1,6 +1,7 @@
-var  bs             = zsi.bs.ctrl
-    ,svn            = zsi.setValIfNull
-    ,$rTypeId    = ""
+var  bs         = zsi.bs.ctrl
+    ,svn        = zsi.setValIfNull
+    ,$rTypeId   = ""
+    ,amount     = Number(0)
 ;
  
 	
@@ -90,7 +91,7 @@ function displayRecords(){
         
          toggleMasterKey    : "procurement_id"
         ,height             : 400 
-        ,width              : 1000
+        ,width              : $(document).width() - 27
         ,url                : execURL + "procurement_summary_report_sel @date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
                                       + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
                                       + ",@supplier_id="+ (suppId ?  suppId : null) 
@@ -105,13 +106,15 @@ function displayRecords(){
         		,{text  : "Procurement Date"        , name  : "procurement_date"        , width : 180           , style : "text-align:left;"}
         		,{text  : "Procurement Name"        , name  : "procurement_name"        , width : 350           , style : "text-align:left;"}
         		,{text  : "Supplier Name"           , name  : "supplier_name"           , width : 150           , style : "text-align:left;"}
-        		,{text  : "promised_delivery_date"  , name  : "promised_delivery_date"  , width : 150           , style : "text-align:left;"}
-        		,{text  : "actual_delivery_date"    , name  : "actual_delivery_date"    , width : 150           , style : "text-align:left;"}
-        		,{text  : "no_items"                , name  : "no_items"                , width : 150           , style : "text-align:left;"}
-        		,{text  : "total_ordered_qty"       , name  : "total_ordered_qty"       , width : 150           , style : "text-align:left;"}
-        		,{text  : "total_balance_qty"       , name  : "total_balance_qty"       , width : 150           , style : "text-align:left;"}
-        		,{text  : "total_amount"            , name  : "total_amount"            , width : 150           , style : "text-align:left;"}
-        		,{text  : "status_name"             , name  : "status_name"             , width : 150           , style : "text-align:left;"}
+        		,{text  : "Promised Delivery Date"  , name  : "promised_delivery_date"  , width : 180           , style : "text-align:left;"}
+        		,{text  : "Actual Delivery Date"    , name  : "actual_delivery_date"    , width : 150           , style : "text-align:left;"}
+        		,{text  : "No. of items"            , name  : "no_items"                , width : 150           , style : "text-align:left;"}
+        		,{text  : "Ordered Qty."            , name  : "total_ordered_qty"       , width : 150           , style : "text-align:left;"}
+        		,{text  : "Balance Qty."            , name  : "total_balance_qty"       , width : 150           , style : "text-align:left;"}
+        		,{text  : "Total Amount"                                                , width : 150           , style : "text-align:left;"
+        		    ,onRender: function(d){ return svn(d,"total_amount").toLocaleString('en-PH', {minimumFractionDigits: 2})}
+        		}
+        		,{text  : "Status Name"             , name  : "status_name"             , width : 150           , style : "text-align:left;"}
         		
 	    ]  
 
@@ -120,22 +123,22 @@ function displayRecords(){
 
 
 function displayDetail(o,id){
+   
     zsi.toggleExtraRow({
          object     : o
         ,parentId   : id
         ,onLoad : function($grid){ 
             
-            /*  
-            var formatter = new Intl.NumberFormat('en-PH', {
-              style: 'currency',
-              currency: 'PHP',
-              minimumFractionDigits: 2,
+            var toCurrency = new Intl.NumberFormat('en-PH', {
+                style: 'currency', 
+                currency: 'PHP', 
+                minimumFractionDigits: 2,
             });
-            */
-            $grid.dataBindGrid({
-                 width              : 1000
-                ,url: execURL + "procurement_detail_sel @procurement_id="+ id
-                ,dataRows : [
+
+            var amt = 0;
+            $grid.dataBind({
+                 url        : execURL + "procurement_detail_sel @procurement_id="+ id
+                ,dataRows   : [
                 		 {text  : "Item No."                , name  : "item_no"                     , width : 180           , style : "text-align:left;"}
                 		,{text  : "Part No."                , name  : "part_no"                     , width : 350           , style : "text-align:left;"}
                 		,{text  : "National Stock No."      , name  : "national_stock_no"           , width : 150           , style : "text-align:left;"}
@@ -143,9 +146,23 @@ function displayDetail(o,id){
                 		,{text  : "Unit of Measure"         , name  : "unit_of_measure_code"        , width : 150           , style : "text-align:left;"}
                 		,{text  : "Total Delivered Qty."    , name  : "total_delivered_quantity"    , width : 150           , style : "text-align:left;"}
                 		,{text  : "Balance Qty."            , name  : "balance_quantity"            , width : 150           , style : "text-align:left;"}
-                		,{text  : "Unit Price"              , name  : "unit_price"                  , width : 150           , style : "text-align:left;"}
-                		,{text  : "Amount"                  , name  : "amount"                      , width : 150           , style : "text-align:left;"}
-                	    ]          
+                		,{text  : "Unit Price"              , name  : "unit_price"                  , width : 150           , style : "text-align:left;"
+                		    ,onRender: function(d){ return svn(d,"unit_price").toLocaleString('en-PH', {minimumFractionDigits: 2})}
+                		}
+                		,{text  : "Amount"                                     , width : 150           , style : "text-align:left;"
+                		    ,onRender: function(d){ amt += parseFloat(svn(d,"amount"));
+                		                            return svn(d,"amount").toLocaleString('en-US', {minimumFractionDigits: 2});
+                		    }
+                		}
+                	    ] 
+                ,onComplete: function(){
+                    var totalRow = "";
+                    totalRow += '<div class="zRow total">'; 
+                    totalRow +=    '<div class="zCell" style="width:1430px;text-align:right;padding-right:60px"><span class="text">Total&nbsp;</span></div>';
+                    totalRow +=    '<div class="zCell" style="width:150px;text-align:left;"><span class="text">' + toCurrency.format(amt) + '</span></div>';
+                    totalRow += '</div>'; 
+            		$grid.find(".right #table").append(totalRow);
+                }        
             });    
 
         }
@@ -153,4 +170,5 @@ function displayDetail(o,id){
     });
 }
 
-                                                                               
+
+                                                                                     
