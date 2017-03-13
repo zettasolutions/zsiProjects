@@ -3,6 +3,7 @@ var bs  = zsi.bs.ctrl
    ,g_procurement_id = null
    ,g_organization_id = null
    ,g_organization_name = ''
+   ,g_today_date = new Date()
 ;
 
 var contextModalWindow = { 
@@ -13,12 +14,12 @@ var contextModalWindow = {
     , body  : '<div id="tblProcurement" class="form-horizontal zGrid" style="padding:5px">'
             +'    <div class="form-group  "> ' 
             +'        <label class=" col-xs-2 control-label">Procurement Date</label>'
-            +'        <div class=" col-xs-2">'
+            +'        <div class=" col-xs-3">'
             +'             <input type="hidden" name="procurement_id" id="procurement_id" >'
-            +'             <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" >'
+            +'             <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
             +'        </div> ' 
-            +'        <label class=" col-xs-4 control-label">Procurement Code</label>'
-            +'        <div class=" col-xs-2">'
+            +'        <label class=" col-xs-2 control-label">Procurement Code</label>'
+            +'        <div class=" col-xs-3">'
             +'           <input type="text" name="procurement_code" id="procurement_code" class="form-control input-sm" >'
             +'         </div>'
             +'    </div>'
@@ -27,17 +28,17 @@ var contextModalWindow = {
             +'        <div class=" col-xs-3">'
             +'             <input type="text" name="procurement_name" id="procurement_name" class="form-control input-sm"  >'
             +'        </div>'
-            +'        <label class=" col-xs-3 control-label">Supplier</label>'
-            +'        <div class=" col-xs-2">'
+            +'        <label class=" col-xs-2 control-label">Supplier</label>'
+            +'        <div class=" col-xs-3">'
             +'             <select name="supplier_id" id="supplier_id" class="form-control input-sm" ></select>'
             +'        </div>'  
             +'    </div>'
             +'    <div class="form-group  ">  '
             +'        <label class=" col-xs-2 control-label">Promised Delivery Date</label>'
-            +'        <div class=" col-xs-2">'
-            +'           <input type="text" name="promised_delivery_date" id="promised_delivery_date" class="form-control input-sm" >'
+            +'        <div class=" col-xs-3">'
+            +'           <input type="text" name="promised_delivery_date" id="promised_delivery_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
             +'         </div>'
-            +'        <label class=" col-xs-4 control-label">Status</label>'
+            +'        <label class=" col-xs-2 control-label">Status</label>'
             +'        <div class=" col-xs-3">'
             +'           <label class="control-label" id="status_name">Open</label>'
             +'           <input type="hidden" name="status_id" id="status_id" class="form-control input-sm" >'
@@ -59,10 +60,12 @@ $("#btnNew").click(function () {
     g_procurement_id = null;
     $("#mdlProcurement .modal-title").text("New Procurement for " + g_organization_name);
     $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
-
     clearForm();
     loadSupplier();
+    $("#procurement_date").val( g_today_date.toShortDate());
+    $("#promised_delivery_date").val( g_today_date.toShortDate());
     displayProcurementDetails();
+    zsi.initDatePicker();
 });
 
 function getUserInfo(callBack){
@@ -83,6 +86,7 @@ function getTemplate(){
 }
 
 function loadSupplier(){
+    
     $("select[name='supplier_id']").dataBind({url: base_url + "selectoption/code/dealer"});
 
     var html = '';
@@ -90,9 +94,10 @@ function loadSupplier(){
         if (d.rows !== null) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.page_process_action_id + ');" class="btn btn-primary added-button">'
+                    + v.status_id + ');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
+
             $(".added-button").remove();
             $("#procurement-footer").html(html);
         }
@@ -128,13 +133,16 @@ function displayRecords(){
     		     ,onRender : function(d){ return svn(d,"procurement_date").toDateFormat()}
     		}
     		,{text  : "Supplier"        , type  : "label"       , width : 250       , style : "text-align:left;"
-    		    ,onRender : function(d){ return svn(d,"supplier_id")}
+    		    ,onRender : function(d){ return svn(d,"supplier_name")}
     		}
     		,{text  : "Promised Delivery Date"         , type  : "label"   , width : 200   , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"promised_delivery_date").toDateFormat()}
     		}
-    		,{text  : "Status"          , type  : "label"       , width : 250       , style : "text-align:left;"
-    		    ,onRender : function(d){ return  svn(d,"status_id")}  
+    		,{text  : "Total Amount"         , type  : "label"   , width : 100   , style : "text-align:right;"
+    		    ,onRender : function(d){ return svn(d,"total_amount").toLocaleString('en-PH', {minimumFractionDigits: 2})}
+    		}
+    		,{text  : "Status"          , type  : "label"       , width : 100       , style : "text-align:center;"
+    		    ,onRender : function(d){ return  svn(d,"status_name")}  
     		}
 	    ]  
         ,onComplete: function(data){
@@ -145,10 +153,13 @@ function displayRecords(){
 
 function showModalProcurement(id, title) {
     g_procurement_id = id;
-    $("#mdlProcurement .modal-title").text("Update Procurement » " + title + "for " + g_organization_name);
+    $("select[name='supplier_id']").attr("selectedvalue", id);
+    $("#mdlProcurement .modal-title").text("Update Procurement » " + title + " for " + g_organization_name);
     $("#mdlProcurement").modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#mdlProcurement #procurement_id").val(g_procurement_id);
-    
+    $("select, input").on("keyup change", function(){
+       $("#tblProcurement").find("#is_edited").val("Y");
+    });    
     clearForm();
     displayProcurement(function(){
         loadSupplier();
@@ -158,13 +169,15 @@ function showModalProcurement(id, title) {
 
 function displayProcurement(callBack){
     $.get(procURL + "procurement_sel @procurement_id=" + g_procurement_id, function(data){
+        
         if(data.rows.length > 0){
             var d = data.rows[0];
             var $tbl = $("#tblProcurement");
+            $tbl.find("#procurement_id").val(d.procurement_id);
             $tbl.find("#procurement_date").val(d.procurement_date.toDateFormat());
             $tbl.find("#procurement_code").val(d.procurement_code);
             $tbl.find("#procurement_name").val(d.procurement_name);
-            $tbl.find("#supplier_id").val(d.supplier_id);
+            $tbl.find("#supplier_id").attr("selectedvalue", d.supplier_id);
             $tbl.find("#promised_delivery_date").val(d.promised_delivery_date.toDateFormat());
             $tbl.find("#status_name").text(d.status_name);
         }
@@ -175,7 +188,7 @@ function displayProcurement(callBack){
 function displayProcurementDetails(){
      var cb = bs({name:"cbFilter2",type:"checkbox"});
      $("#tblProcurementDetails").dataBind({
-	     url            : procURL + "procurement_detail_sel " + (g_procurement_id ? "@procurement_id=" + g_procurement_id : "")
+	     url            : execURL + "procurement_detail_sel " + (g_procurement_id ? "@procurement_id=" + g_procurement_id : "")
 	    ,width          : $(document).width() -75
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
@@ -199,9 +212,10 @@ function displayProcurementDetails(){
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
     	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
-    	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:left;"}
-    	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:left;"}
-    	    ,{text  : "Amount"              , name  : "lbl_amount"          , type  : "label"       , width : 130       , style : "text-align:left;"}
+    	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:right;"}
+    	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:right;"}
+    	    ,{text  : "Amount"              , name  : "amount"              , type  : "input"       , width : 130       , style : "text-align:right;"}
+
 	    ]  
         ,onComplete: function(data){
             setMultipleSearch();
@@ -266,8 +280,8 @@ function Save(page_process_action_id){
                 ,notInclude: "#part_no,#national_stock_no,#item_name"
                 ,onComplete: function (data) {
                     if(data.isSuccess===true){  
-                        clearForm();
                         zsi.form.showAlert("alert");
+                        clearForm();
                         $("#grid").trigger("refresh");
                         $('#mdlProcurement').modal('hide');
                     }
@@ -280,6 +294,23 @@ function Save(page_process_action_id){
         else {
                 console.log(data.errMsg);
             }
+        }
+    });
+}
+
+
+function buildReceivingButtons() {
+    var html = '';
+    $.get(procURL + "current_process_actions_sel @page_id=70,@doc_id=" + $("#receiving_id").val(), function(d) {
+        if (d.rows !== null) {
+            $.each(d.rows, function(k, v) {
+                html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
+                    + v.status_id + ');" class="btn btn-primary added-button">'
+                    + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
+            });
+            
+            $(".added-button").remove();
+            $("#receiving-footer").append(html);
         }
     });
 }
@@ -348,4 +379,4 @@ function clearForm(){
         }
     });       
 });*/
-     
+        
