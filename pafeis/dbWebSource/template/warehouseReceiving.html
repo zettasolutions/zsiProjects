@@ -38,20 +38,21 @@
 </style>
 
 <ul class="nav nav-tabs">
-  <li ><a href="#supplierd" data-toggle="tab" id="supplier-tab">Supplier</a></li>
+  <li ><a href="#purchase" data-toggle="tab" id="purchase-tab">Purchase</a></li>
   <li ><a href="#donation" data-toggle="tab" id="donation-tab">Donation</a></li>  
   <li ><a href="#transferTeam" data-toggle="tab" id="transfer-tab">Transfer</a></li>
   <li ><a href="#returnd" data-toggle="tab" id="aircraft-tab">Aircraft</a></li>
+  <li ><a href="#repair" data-toggle="tab" id="repair-tab">Repair/Overhaul</a></li>
 </ul>
 
 <div id="tabPanel" class="tab-pages">
     <div id="tabNew" class="tabPane">
         <form method="post" id="frmSD">
             <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
-                <div id="supplier" class="zGrid"></div> 
+                <div id="purchase" class="zGrid"></div> 
                 <div class="buttonGroup">
-                    <button type="button" class="btn btn-primary btn-sm" id="sdBtnNew">
-                    	<span class="glyphicon glyphicon-floppy-disk"></span> New
+                    <button type="button" class="btn btn-primary btn-sm" id="pdBtnNew">
+                    	<span class="glyphicon glyphicon-floppy-disk"></span> Add
                     </button>
                 </div>
             </div>
@@ -63,7 +64,7 @@
                 <div id="donation" class="zGrid"></div> 
                 <div class="buttonGroup">
                     <button type="button" class="btn btn-primary btn-sm" id="ddBtnNew">
-                    	<span class="glyphicon glyphicon-floppy-disk"></span> New
+                    	<span class="glyphicon glyphicon-floppy-disk"></span> Add
                     </button>
                 </div>
             </div>
@@ -82,13 +83,25 @@
             <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
                 <div id="aircraft" class="zGrid"></div> 
                 <div class="buttonGroup">
-                    <button type="button" class="btn btn-primary btn-sm" id="rdBtnNew">
+                    <button type="button" class="btn btn-primary btn-sm" id="adBtnNew">
                     	<span class="glyphicon glyphicon-plus"></span> Add
                     </button>
                 </div>
             </div>
         </form>
     </div>
+    <div id="tabRepair"   class="tabPane">
+        <form method="post" id="frmRD">
+            <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+                <div id="repair" class="zGrid"></div> 
+                <div class="buttonGroup">
+                    <button type="button" class="btn btn-primary btn-sm" id="rdBtnNew">
+                    	<span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>    
 </div>
 
 <script src="/Scripts/handlebars-v3.0.0.js"></script>
