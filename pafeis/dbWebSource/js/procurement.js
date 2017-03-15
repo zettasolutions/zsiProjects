@@ -4,13 +4,12 @@ var bs  = zsi.bs.ctrl
    ,g_organization_id = null
    ,g_organization_name = ''
    ,g_today_date = new Date()
-   ,g_tab_name = "PURCHASE";
+   ,g_tab_name = "Purchase"
 ;
-const DeliveryType = {
-    Purchase: 'Purchase',
-    Repair  : 'Repair',
+const ProcType = {
+        Purchase: 'Purchase',
+        Repair  : 'Repair',
 };
-
 
 var contextModalWindow = { 
       id    : "mdlProcurement"
@@ -22,7 +21,8 @@ var contextModalWindow = {
             +'        <label class=" col-xs-2 control-label">Procurement Date</label>'
             +'        <div class=" col-xs-3">'
             +'             <input type="hidden" name="procurement_id" id="procurement_id" >'
-            +'             <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
+            +'             <input type="hidden" name="procurement_type" id="procurement_type" class="form-control input-sm" >'
+            +'             <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
             +'        </div> ' 
             +'        <label class=" col-xs-2 control-label">Procurement Code</label>'
             +'        <div class=" col-xs-3">'
@@ -34,15 +34,24 @@ var contextModalWindow = {
             +'        <div class=" col-xs-3">'
             +'             <input type="text" name="procurement_name" id="procurement_name" class="form-control input-sm"  >'
             +'        </div>'
-            +'        <label class=" col-xs-2 control-label">Supplier</label>'
-            +'        <div class=" col-xs-3">'
-            +'             <select name="supplier_id" id="supplier_id" class="form-control input-sm" ></select>'
-            +'        </div>'  
+            +'        <div class="hide" id="supplier_filter">'
+            +'           <label class=" col-xs-2 control-label">Supplier</label>'
+            +'           <div class=" col-xs-3">'
+            +'                <select name="supplier_id" id="supplier_id" class="form-control input-sm" ></select>'
+            +'           </div>' 
+            +'        </div>'
+            +'        <div class="hide" id="warehouse_filter">'
+            +'           <label class=" col-xs-2 control-label">Warehouse</label>'
+            +'           <div class=" col-xs-3">'
+            +'                <select name="dd_warehouse" id="dd_warehouse" class="form-control input-sm" ></select>'
+            +'           </div>'  
+            +'        </div>' 
             +'    </div>'
             +'    <div class="form-group  ">  '
             +'        <label class=" col-xs-2 control-label">Promised Delivery Date</label>'
             +'        <div class=" col-xs-3">'
             +'           <input type="text" name="promised_delivery_date" id="promised_delivery_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
+            +'           <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">' 
             +'         </div>'
             +'        <label class=" col-xs-2 control-label">Status</label>'
             +'        <div class=" col-xs-3">'
@@ -56,32 +65,34 @@ var contextModalWindow = {
 };
 
 zsi.ready(function(){
-    $("#purchase-tab").click(function(){
-        g_tab_name = "PURCHASE";
-    });
-    $("#repair-tab").click(function(){
-        g_tab_name = "REPAIR";
-    });   
     getTemplate();
     setCurrentTab();
     displayPurchase(g_tab_name);
     
     getUserInfo(function(){
-        //displayRecords(); 
-        $("#purchase-tab").click(function () {
+        $("#purchase-tab").click(function () { 
+            g_tab_name = $(this).html();
             displayPurchase($(this).html());    
         });
         $("#repair-tab").click(function () {
+            g_tab_name = $(this).html();
             displayRepair($(this).html());    
         });   
     });
 });
 
 $("#btnAddPurchase").click(function () {
+    clearForm(); 
+    $("#procurement_type").val(g_tab_name);
+
     g_procurement_id = null;
-    $("#mdlProcurement .modal-title").text("New Purchase for " + g_organization_name);
+    $("#mdlProcurement .modal-title").text("Purchase for " + g_organization_name);
     $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
-    clearForm();
+    $("#supplier_filter").removeClass("hide");
+    $("#warehouse_filter").addClass("hide");
+
+
+
     buildButtons();
     $("#procurement_date").val( g_today_date.toShortDate());
     $("#promised_delivery_date").val( g_today_date.toShortDate());
@@ -90,15 +101,33 @@ $("#btnAddPurchase").click(function () {
 });
 
 $("#btnAddRepair").click(function () {
-    g_procurement_id = null;
-    $("#mdlProcurement .modal-title").text("New Repair for " + g_organization_name);
-    $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
     clearForm();
+    $("#procurement_type").val(g_tab_name);
+    g_procurement_id = null;
+    $("#mdlProcurement .modal-title").text("Repair for " + g_organization_name);
+    $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
+    $("#warehouse_filter").removeClass("hide");
+    $("#supplier_filter").addClass("hide");
     buildButtons();
     $("#procurement_date").val( g_today_date.toShortDate());
     $("#promised_delivery_date").val( g_today_date.toShortDate());
     displayProcurementDetails();
     zsi.initDatePicker();
+    var $row = $(this).closest(".zRow");
+    $row.find("select[id='dd_warehouse']").dataBind({ 
+         url : procURL + "dd_warehouses_sel"
+        ,text: "warehouse"
+        ,value: "warehouse_id"
+    });
+    $("select[name='dd_warehouse']").change(function(){
+        if(this.value){
+            $("#warehouse_id").val(this.value);
+        }else{
+            $("#warehouse_id").val("");
+        }
+    
+        $("#warehouse_id").val(this.value);
+    });    
 });
 
 function getUserInfo(callBack){
@@ -161,12 +190,12 @@ function buildButtons(){
     });
 }
 
-function displayPurchase(){
+function displayPurchase(tab_name){
     var cb = bs({name:"cbFilter1",type:"checkbox"}); 
     $("#purchase").dataBind({
-	     url            : procURL + "procurement_sel"
+	     url            : procURL + "procurement_sel @tab_name='" + tab_name + "'"
 	    ,width          : $(document).width() -40
-	    ,height         : $(document).height() -450
+	    ,height         : $(document).height() -450 
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,isPaging       : false
@@ -180,7 +209,7 @@ function displayPurchase(){
             ,{text  : "Code"                   , width : 120       , style : "text-align:left;"
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
-    		            + DeliveryType.Purchase + "\",\"" 
+    		            + ProcType.Purchase + "\",\"" 
     		            + svn(d,"procurement_id") +"\",\"" 
     		            + svn(d,"procurement_name") + "\");'>" 
     		            + svn(d,"procurement_code") + " </a>";
@@ -211,10 +240,10 @@ function displayPurchase(){
     });    
 }
 
-function displayRepair(){
+function displayRepair(tab_name){
     var cb = bs({name:"cbFilter2",type:"checkbox"}); 
     $("#repair").dataBind({
-	     url            : procURL + "procurement_sel"
+	     url            : procURL + "procurement_sel @tab_name='" + tab_name + "'"
 	    ,width          : $(document).width() -40
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
@@ -230,7 +259,7 @@ function displayRepair(){
             ,{text  : "Code"                   , width : 120       , style : "text-align:left;"
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
-    		             + DeliveryType.Repair + "\",\"" 
+    		             + ProcType.Repair + "\",\"" 
     		             + svn(d,"procurement_id") +"\",\"" 
     		             + svn(d,"procurement_name") + "\");'>" 
     		             + svn(d,"procurement_code") + " </a>";
@@ -261,8 +290,18 @@ function displayRepair(){
     });    
 }
 
-function showModalProcurement(id, title) {
+function showModalProcurement(procurement_type, id, title) {
     g_procurement_id = id;
+    if (procurement_type == ProcType.Purchase){
+        $("#supplier_filter").removeClass("hide");
+        $("#warehouse_filter").addClass("hide");
+        $("#procurement_type").val(g_tab_name);
+    }
+    else{
+        $("#warehouse_filter").removeClass("hide");
+        $("#supplier_filter").addClass("hide");
+        $("#procurement_type").val(g_tab_name);
+    }
     $("select[name='supplier_id']").attr("selectedvalue", id);
     $("#mdlProcurement .modal-title").text("Update Procurement » " + title + " for " + g_organization_name);
     $("#mdlProcurement").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -270,7 +309,7 @@ function showModalProcurement(id, title) {
     $("select, input").on("keyup change", function(){
        $("#tblProcurement").find("#is_edited").val("Y");
     });    
-    clearForm();
+
     displayProcurement(function(){
         buildButtons();
         displayProcurementDetails();
@@ -278,8 +317,9 @@ function showModalProcurement(id, title) {
 }
 
 function displayProcurement(callBack){
-    $.get(procURL + "procurement_sel @procurement_id=" + g_procurement_id, function(data){
-        
+    $.get(procURL + "procurement_sel @procurement_id=" + g_procurement_id + "&@tab_name=" + g_tab_name, function(data){
+        console.log(data.rows.length);
+
         if(data.rows.length > 0){
             var d = data.rows[0];
             var $tbl = $("#tblProcurement");
@@ -288,6 +328,7 @@ function displayProcurement(callBack){
             $tbl.find("#procurement_code").val(d.procurement_code);
             $tbl.find("#procurement_name").val(d.procurement_name);
             $tbl.find("#supplier_id").attr("selectedvalue", d.supplier_id);
+            $tbl.find("#dd_warehouse").attr("selectedvalue", d.warehouse_id);
             $tbl.find("#promised_delivery_date").val(d.promised_delivery_date.toDateFormat());
             $tbl.find("#status_name").text(d.status_name);
         }
@@ -321,9 +362,9 @@ function displayProcurementDetails(){
     	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+    	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 130       , style : "text-align:right;"}
     	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
     	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:right;"}
-    	    ,{text  : "Ordered Qty"         , name  : "ordered_qty"         , type  : "input"       , width : 130       , style : "text-align:right;"}
     	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:right;"}
     	    ,{text  : "Amount"              , name  : "amount"              , type  : "input"       , width : 130       , style : "text-align:right;"}
 
@@ -341,7 +382,18 @@ function displayProcurementDetails(){
                 else
                     $("#tblProcurement").find("#is_edited").val("Y");
             });
-            
+             $("input[name='item_code_id']").each(function(){
+                if(this.value){
+                    var $row = $(this).closest(".zRow");
+                        $row.find("select[id='serial_no']").dataBind({ 
+                             url : execURL + "dd_warehouse_items_sel @item_code_id="+ this.value + ",@warehouse_id=" + this.value
+                            ,text: "serial_no"
+                            ,value: "serial_no"
+                        });
+                } 
+            });
+
+ 
             $("input[name='quantity']").keyup(function(){
                 var quantity  = $.trim(this.value);
                 var $zRow     = $(this).closest(".zRow");
@@ -349,11 +401,9 @@ function displayProcurementDetails(){
                 
                 if(unitPrice && quantity){
                     var amount = parseFloat(quantity) * parseFloat(unitPrice);
-                    $zRow.find("#lbl_amount").text(amount.toFixed(2));
-                    //$zRow.find("#amount").val(amount.toFixed(2));
+                    $zRow.find("#amount").text(amount.toFixed(2));
                 }else{
-                    $zRow.find("#lbl_amount").text("");
-                    //$zRow.find("#amount").val("");
+                    $zRow.find("#amount").text("");
                 }
             });
             
@@ -364,11 +414,9 @@ function displayProcurementDetails(){
 
                 if(unitPrice && quantity){
                     var amount = parseFloat(quantity) * parseFloat(unitPrice);
-                    $zRow.find("#lbl_amount").text(amount.toFixed(2));
-                    //$zRow.find("#amount").val(amount.toFixed(2));
+                    $zRow.find("#amount").text(amount.toFixed(2));
                 }else{
-                    $zRow.find("#lbl_amount").text("");
-                    //$zRow.find("#amount").val("");
+                    $zRow.find("#amount").text("");
                 }
             });
         }  
@@ -395,10 +443,18 @@ function Save(page_process_action_id){
                         clearForm();
                         $("#grid").trigger("refresh");
                         $('#mdlProcurement').modal('hide');
+                        if(g_tab_name==="PURCHASE"){
+                             displayPurchase(g_tab_name);   
+                        }
+                        if(g_tab_name==="REPAIR"){
+                             displayRepair(g_tab_name);   
+                        }
+
                     }
                     else {
                         console.log(data.errMsg);
                     }
+        
                 }
             });
         }
@@ -439,6 +495,7 @@ function setMultipleSearch(){
                 $zRow.find("#item_code_id").val(data.item_code_id);
                 $zRow.find("#national_stock_no").val(data.national_stock_no);
                 $zRow.find("#item_name").val(data.item_name);
+                setSearchSerial(data.item_code_id, $zRow);
         }
     });
     
@@ -455,6 +512,7 @@ function setMultipleSearch(){
                 $zRow.find("#item_code_id").val(data.item_code_id);
                 $zRow.find("#part_no").val(data.part_no);
                 $zRow.find("#item_name").val(data.item_name);
+                setSearchSerial(data.item_code_id, $zRow);
         }
     });
     
@@ -475,9 +533,30 @@ function setMultipleSearch(){
     });
 }
 
+function setSearchSerial(id, row){
+    var $serial_no = row.find("select[id='serial_no']");
+    
+    $serial_no.dataBind({ 
+         url : execURL + "dd_warehouse_items_sel @item_code_id="+ id + ",@warehouse_id=" + id
+        ,text: "serial_no"
+        ,value: "serial_no"
+    });
+    
+    $serial_no.change(function(){
+       if(this.value != ""){
+           row.find("input[name='unit_of_measure']").text("EACH");
+           row.find("input[name='stock_qty']").text(1);
+           row.find("input[name='quantity']").val(1);
+       } 
+    });
+    
+ 
+}
+
 function clearForm(){ 
     zsi.initDatePicker();
     $('input[type=text], input[type=hidden]').val('');
     $('select[type="text"]').attr('selectedvalue','').val('');    
 }
 
+   
