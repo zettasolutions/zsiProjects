@@ -398,8 +398,6 @@ function displayRepair(tab_name){
 
 // Build the forms for the modal window for the receiving.
 function buildReceiving(tbl_obj) {
-    //if(g_tab_name == "DONATION") buildReceivingHeaderDonation(tbl_obj);
-    //else buildReceivingHeader(tbl_obj);
     buildReceivingHeader(tbl_obj);
     initSelectOptions(function() {
         initDatePicker();
@@ -459,7 +457,8 @@ function buildReceivingHeader(tbl_obj) {
                 '<div class=" col-xs-2">' +
                     '<select name="tally_filter" id="tally_filter" class="form-control input-sm"></select>' +
                 '</div>' +
-            '</div>' +        '</div>' +
+            '</div>' +        
+        '</div>' +
         
         '<div class="form-group  ">' +
             '<div id="wrap-suppSource" class="hide">' +
@@ -486,62 +485,45 @@ function fixTextAreaEvent(){
         return value.substr(0, index) + string + value.substr(index);
     };
     
-    
-    $('TEXTAREA').keypress(function(e){
+    $('textarea').keypress(function(e){
         if (e.keyCode == 13) {
             var startPos = this.selectionStart;
             this.value  = insertAt(this.value,startPos,"\r\n");
             this.selectionEnd =startPos + 1;
         }
-    }) ;   
+    });
+    
+    //Set current date to Doc Date and Received Date
+    $("#doc_date").val(g_today_date.toShortDate());
+    $("#received_date").val(g_today_date.toShortDate());
+    
+    $("select, input").on("keyup change", function(){
+        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
+    });
 }
 // Build the receiving details form.
 function buildReceivingDetails(callback) {
     var _dataRows = [];
-    if(g_tab_name==="PURCHASE"){
-        _dataRows.push(
-            {text   : "Item No."   , width:120, style : "text-align:left;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
-                            + bs({name:"receiving_id",type:"hidden", value: svn (d,"receiving_id")})
-                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
-                }
-            }
-        ); 
-    }else if(g_tab_name==="DONATION" || g_tab_name==="AIRCRAFT"){
-        _dataRows.push(
-            {text   : " "   , width:25, style : "text-align:left;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"hidden"})
-                            + bs({name:"receiving_id",type:"hidden", value: svn (d,"receiving_id")})
-                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
-                }
-            }
-        );
-    }
+    var rowCount = 0;
     
     _dataRows.push(
-        {text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
+        {text   : " "                   , width:25,                         style : "text-align:center;", 
+                onRender:  function(d){ 
+                    rowCount++;
+                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn(d,"receiving_detail_id")})
+                            + bs({name:"is_edited",type:"hidden"})
+                            + bs({name:"procurement_detail_id",type:"hidden", value: svn(d,"procurement_detail_id")})
+                            + bs({name:"receiving_id",type:"hidden", value: svn(d,"receiving_id")})
+                            + bs({name:"item_code_id",type:"hidden", value: svn(d,"item_code_id")})
+                            + (d ? rowCount : "");
+                }
+        }
+        ,{text  : "Part No."           , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
         ,{text  : "Nat'l Stock No."    , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
         ,{text  : "Nomenclature"       , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
     );
     
-    if(g_tab_name==="DONATION" || g_tab_name==="PURCHASE" || g_tab_name==="REPAIR"){
-        _dataRows.push(
-             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"} 
-            ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
-            ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
-        );
-    }else if(g_tab_name==="AIRCRAFT"){
+    if(g_tab_name==="AIRCRAFT"){
         _dataRows.push(
             {text  : "Serial No."           , width : 150                        , style : "text-align:left;",
                 onRender:  function(d){
@@ -556,19 +538,19 @@ function buildReceivingDetails(callback) {
                 }
             }
         );
-    }else if(g_tab_name==="REPAIR"){
+    }else{
         _dataRows.push(
-            {text   : "Item No."   , width:120, style : "text-align:left;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
-                            + bs({name:"receiving_id",type:"hidden", value: svn (d,"receiving_id")})
-                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
-                }
-            }
-        ); 
+             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"} 
+            ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
+            ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
+        );
     }
+    
     $("#tblModalReceivingDetails").dataBind({
         url: procURL + "receiving_details_sel"
         ,width:  $(document).width() - 208
@@ -589,7 +571,16 @@ function buildReceivingDetails(callback) {
                     $("#tblModalReceivingHeader").find("#is_edited").val("Y");
             });
             
-            //setSearch();
+            $("[name='serial_no']").keyup(function(){
+                var $zRow = $(this).closest(".zRow");
+                var stock_qty = $zRow.find("input[name='quantity']").val();
+                console.log(this.value);
+                if(this.value){
+                    $zRow.find("#quantity").val(1);
+                }else{
+                    $zRow.find("#quantity").val('');
+                }
+            });            
             setSearchMulti();
             if (callback) callback();
         }  
@@ -613,38 +604,8 @@ function buildReceivingButtons() {
     });
 }
 
-function setProcurementDetailOptions(id, callBack){
-    $("select[name='procurement_detail_id']").dataBind({
-        url: execURL + "procurement_detail_sel @procurement_id=" + id + ",@with_bal_qty='Y'"
-        ,text: "item_code_id"
-        ,value: "procurement_detail_id"
-        ,onComplete: function(){
-            $("select[name='procurement_detail_id']").change(function(){
-                g_item_code_id = null;
-                //var $zRow = $(this).closest(".zRow");
-                if(this.value){
-                    g_item_code_id = this.value;
-                    /*$.get(execURL + "procurement_detail_sel @procurement_id=" + id + ",@with_bal_qty='Y'"
-                        , function(data){
-                            var d = data.rows;
-                            if(d.length > 0){
-                                
-                            }
-                    });*/
-                    
-                    setSearchMulti();
-                }else{
-                    
-                }
-            });
-            if(callBack) callBack();
-        }
-    });
-}
-
 function setProcurementOptions(id, callBack){
     if(id){
-        setProcurementDetailOptions(id);
         $("#procurement_filter").attr("selectedvalue", id);
         $("#procurement_filter").dataBind({
             url: execURL + "dd_procurement_sel @dealer_id=" + id + ",@status_code='O'"
@@ -653,13 +614,9 @@ function setProcurementOptions(id, callBack){
             ,selectedValue: id
             ,onComplete: function(){
                 $("#procurement_filter").change(function(){
-                    if(this.value){
-                        $("#procurement_id").val(this.value);
-                        setProcurementDetailOptions(this.value);
-                    }else{
-                        $("#procurement_id").val("");
-                        $("select[name='procurement_detail_id']").clearSelect();
-                    }
+                    g_procurement_id = (this.value ? this.value : null);
+                    $("#procurement_id").val(this.value);
+                    setSearchMulti();
                 });
             }
         });
@@ -673,88 +630,62 @@ function setProcurementOptions(id, callBack){
 // Add a click event for the purchase delivery button.
 $("#pdBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
-        $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
+    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     
+    $("select[name='dealer_filter']").dataBind("dealer");
     $("select[name='dealer_filter']").change(function(){
         $("#dealer_id").val(this.value);
-        $("#procurement_id").val(this.value);
         setProcurementOptions(this.value);
     });
-   
-    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-           
-    $("select, input").on("keyup change", function(){
-        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    }); 
-
+    clearEntries();
+    
     $("#wrap-proc").removeClass("hide");
     $("#wrap-suppSource").removeClass("hide");
-    clearEntries();
-    $("#doc_date").val(g_today_date.toShortDate());
-    $("#received_date").val(g_today_date.toShortDate());
-
 });
 
 // Add a click event for the donation delivery button.
 $("#ddBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <input name="donor_filter" id="donor_filter">');
+    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
+    
     $("input[name='donor_filter']").focusout(function(){
         $("#donor").val(this.value);
-    }); 
-    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
+    });
     buildReceiving($("#tblModalReceivingHeader"));
-           
-    $("select, input").on("keyup change", function(){
-        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    }); 
-    $("#wrap-proc").addClass("hide");
+    clearEntries();
+    
     $("#wrap-suppSource").removeClass("hide");
-    zsi.initDatePicker(); 
 });
 
-// Add a click event for the return delivery button.
+// Add a click event for the aircraft delivery button.
 $("#adBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
-        $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
-
+    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
+    
+    $("select[name='aircraft_filter']").dataBind("aircraft_info");
     $("select[name='aircraft_filter']").change(function(){
         $("#aircraft_id").val(this.value);
-        //setProcurementOptions(this.value);
     });
-
-    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-            
-    $("select, input").on("keyup change", function(){
-        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    });
-    $("#wrap-proc").addClass("hide");
-    $("#wrap-suppSource").removeClass("hide");
-    zsi.initDatePicker(); 
+    clearEntries();
 });
 
 // Add a click event for the repair delivery button.
 $("#rdBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
-        $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
-    /*
+    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
+    
+    $("select[name='dealer_filter']").dataBind("dealer");
     $("select[name='dealer_filter']").change(function(){
         $("#dealer_id").val(this.value);
-        setProcurementOptions(this.value);
     });
-    */
-    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceiving($("#tblModalReceivingHeader"));
-           
-    $("select, input").on("keyup change", function(){
-        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    }); 
+    clearEntries();
+
     $("#wrap-tally").removeClass("hide");
     $("#wrap-suppSource").removeClass("hide");
-    zsi.initDatePicker(); 
 });
-
 
 // Save the new receiving entry.
 function Save(page_process_action_id) {
@@ -870,18 +801,16 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
     
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceivingHeader($("#tblModalReceivingHeader"));
-    
     $("#receiving_id").val(receiving_id);
-    $("select, input").on("keyup change", function(){
-        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    }); 
-    
-    $("#wrap-proc").addClass("hide");
+
     if(delivery_type == DeliveryType.Purchase){
         setProcurementOptions(id);
         $("#wrap-proc").removeClass("hide");
         $("#wrap-suppSource").removeClass("hide");
     }else if(delivery_type == DeliveryType.Donation){
+        $("#wrap-suppSource").removeClass("hide");
+    }else if(delivery_type == DeliveryType.Repair){
+        $("#wrap-tally").removeClass("hide");
         $("#wrap-suppSource").removeClass("hide");
     }
     
@@ -912,68 +841,42 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
 // Load the values for the receiving details.
 function loadReceivingDetails(receiving_id) {
     var _dataRows = [];
-    if(g_tab_name==="PURCHASE"){
+    var rowCount = 0;
+    
+    _dataRows.push(
+        {text   : " "   , width:25, style : "text-align:center;", 
+            onRender:  function(d){ 
+                rowCount++;
+                return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
+                        + bs({name:"is_edited",type:"hidden"})
+                        + bs({name:"procurement_detail_id",type:"hidden", value: svn(d,"procurement_detail_id")})
+                        + bs({name:"receiving_id",type:"hidden", value: receiving_id})
+                        + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")})
+                        + (d ? rowCount : "");
+            }
+        }
+    );
+    
+    if(g_tab_name!=="AIRCRAFT"){
         _dataRows.push(
-            {text   : "Sub-Category"   , width:95, style : "text-align:center;", 
+            {text   : "Sub-Category"   , width:98, style : "text-align:center;", 
                 onRender : function(d){ 
-                        return "<a href='javascript:showModalSubCategory(\""
-                        + svn(d,"part_no") + "\","
-                        + svn(d,"receiving_detail_id") + ");'>" 
-                        + svn(d,"countSubCat") + " </a>";
-                    }
-            }
-            ,{text   : "Item No"   , width:70, style : "text-align:left;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
-                            + bs({name:"receiving_id",type:"hidden", value: receiving_id})
-                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+                    return "<a href='javascript:showModalSubCategory(\""
+                    + svn(d,"part_no") + "\","
+                    + svn(d,"receiving_detail_id") + ");'>" 
+                    + svn(d,"countSubCat") + " </a>";
                 }
             }
-        ); 
+        );
     }
-    else if(g_tab_name==="DONATION" || g_tab_name==="AIRCRAFT"){
-        _dataRows.push(
-            {text   : (g_tab_name==="DONATION" ? "Sub-Category" : " ")   , width:95, style : "text-align:center;", 
-                onRender:  function(d){ 
-                    var link = "";
-                    if(g_tab_name==="DONATION"){
-                        link = "<a href='javascript:showModalSubCategory(\""
-                                + svn(d,"part_no") + "\","
-                                + svn(d,"receiving_detail_id") + ");'>" 
-                                + svn(d,"countSubCat") + " </a>";
-                    }
-                    
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"hidden", value: svn(d,"procurement_detail_id")})
-                            + bs({name:"receiving_id",type:"hidden", value: receiving_id})
-                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")}) + link;
-                }
-            }
-        ); 
-    }
-   
+    
     _dataRows.push(
          {text  : "Part No."           , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
         ,{text  : "Nat'l Stock No."    , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
         ,{text  : "Nomenclature"       , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
     );
         
-    if(g_tab_name==="PURCHASE" || g_tab_name==="DONATION" || g_tab_name==="REPAIR"){
-        _dataRows.push(
-             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
-            ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
-        );
-    }
-    else if(g_tab_name==="AIRCRAFT"){
+    if(g_tab_name==="AIRCRAFT"){
         _dataRows.push(
             {text  : "Serial No."           , width : 150                        , style : "text-align:left;",
                 onRender:  function(d){
@@ -988,28 +891,19 @@ function loadReceivingDetails(receiving_id) {
                 }
             }
         );
-    }
-    else if(g_tab_name==="REPAIR"){
+    }else{
         _dataRows.push(
-            {text   : "Sub-Category"   , width:95, style : "text-align:center;", 
-                onRender : function(d){ 
-                        return "<a href='javascript:showModalSubCategory(\""
-                        + svn(d,"part_no") + "\","
-                        + svn(d,"receiving_detail_id") + ");'>" 
-                        + svn(d,"countSubCat") + " </a>";
-                    }
-            }
-            ,{text   : "Item No"   , width:70, style : "text-align:left;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
-                            + bs({name:"receiving_id",type:"hidden", value: receiving_id})
-                            + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
-                }
-            }
-        ); 
-    }        
+             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
+            ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
+        );
+    }
+    
     $("#tblModalReceivingDetails").dataBind({
         url: procURL + "receiving_details_sel @receiving_id=" + receiving_id
         ,width:  $(document).width() - 208
@@ -1021,10 +915,6 @@ function loadReceivingDetails(receiving_id) {
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
-            
-            if(g_tab_name==="PURCHASE"){
-                setProcurementDetailOptions(g_procurement_id);
-            }
             
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
@@ -1048,64 +938,31 @@ function showModalSubCategory(part_no, receiving_detail_id){
 }
 
 function displaySubCategoryGrid(receiving_detail_id) {
-    var _dataRows = [];
-    if(g_tab_name==="PURCHASE"){
-        _dataRows.push(
-            {text   : "Item No"   , width:70, style : "text-align:left;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: receiving_detail_id})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
-                }
-            }
-        ); 
-    }
-    else if(g_tab_name==="DONATION"){
-        _dataRows.push(
-            {text   : " "   , width:95, style : "text-align:center;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: svn (d,"receiving_detail_id")})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"hidden", value: svn(d,"procurement_detail_id")})
-                }
-            }
-        ); 
-    }
-    if(g_tab_name==="REPAIR"){
-        _dataRows.push(
-            {text   : "Item No"   , width:70, style : "text-align:left;", 
-                onRender:  function(d){ 
-                    return    bs({name:"receiving_detail_id",type:"hidden", value: receiving_detail_id})
-                            + bs({name:"is_edited",type:"hidden"})
-                            + bs({name:"procurement_detail_id",type:"select", value: svn(d,"procurement_detail_id")})
-                }
-            }
-        ); 
-    }  
-    _dataRows.push(
-         {text  : "Part No."           , width : 150                        , style : "text-align:left;",
+    var rowCount = 0;
+    var _dataRows = [
+        {text   : " "                   , width:25                          , style : "text-align:center;", 
             onRender:  function(d){ 
-                return    bs({name:"receiving_id",type:"hidden", value: svn(d,"receiving_id")})
+                rowCount++;
+                return    bs({name:"receiving_detail_id",type:"hidden", value: receiving_detail_id})
+                        + bs({name:"is_edited",type:"hidden"})
+                        + bs({name:"procurement_detail_id",type:"hidden", value: svn(d,"procurement_detail_id")})
+                        + bs({name:"receiving_id",type:"hidden", value: svn(d,"receiving_id")})
                         + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")})
-                        + bs({name:"part_no",type:"input", value: svn (d,"part_no")});
+                        + (d ? rowCount : "");
             }
-         }
-        ,{text  : "Nat'l Stock No."    , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
-        ,{text  : "Nomenclature"       , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
-    );
-        
-    if(g_tab_name==="PURCHASE" || g_tab_name==="DONATION" || g_tab_name==="REPAIR"){
-        _dataRows.push(
-             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
-            ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
-        );
-    }
+        }
+        ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
+        ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
+        ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
+        ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
+        ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
+    ];
         
     $("#tblSubCategory").dataBind({
         url: procURL + "receiving_details_sel @receiving_id=" + receiving_detail_id
@@ -1118,10 +975,6 @@ function displaySubCategoryGrid(receiving_detail_id) {
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
-            
-            //if(g_tab_name==="PURCHASE"){
-                //setProcurementDetailOptions(g_procurement_id);
-            //}
             
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
@@ -1154,9 +1007,9 @@ function SaveSubCategory(e) {
 
 function setSearchMulti(){
     var selCode = "items_on_arcraft_serials";
-    var _tableCode = "ref-0023";
-    var _condition = "'"+ (g_item_code_id ? "item_code_id="+ g_item_code_id : "")  +"'";
-    
+    var _tableCode = "ref-0031";
+    var _condition = "'"+ (g_tab_name==="PURCHASE" ? "procurement_id="+ g_procurement_id : "")  +"'";
+
     if(g_tab_name==="AIRCRAFT"){
         $("select[name='serial_no']").dataBind(selCode);
         $("input[name='item_code_id']").each(function(){
@@ -1169,7 +1022,7 @@ function setSearchMulti(){
     
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["part_no","item_code_id","item_name","national_stock_no"] 
+        , colNames: ["part_no","procurement_detail_id","item_code_id","item_name","national_stock_no","quantity","unit_of_measure_id"] 
         , displayNames: ["Part No."]
         , searchColumn:"part_no"
         , input: "input[name=part_no]"
@@ -1180,9 +1033,12 @@ function setSearchMulti(){
             
             var $zRow = $(currentObject).closest(".zRow");
             
+            $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
             $zRow.find("#item_name").val(data.item_name);
+            $zRow.find("#quantity").val(data.quantity);
+            $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
             if(g_tab_name!=="PURCHASE")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
@@ -1191,7 +1047,7 @@ function setSearchMulti(){
     
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["national_stock_no","item_code_id","item_name","part_no"] 
+        , colNames: ["national_stock_no","procurement_detail_id","item_code_id","item_name","part_no","quantity","unit_of_measure_id"] 
         , displayNames: ["Nat'l Stock No."]
         , searchColumn:"national_stock_no"
         , input: "input[name=national_stock_no]"
@@ -1202,9 +1058,12 @@ function setSearchMulti(){
             
             var $zRow = $(currentObject).closest(".zRow");
             
+            $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#item_name").val(data.item_name);
+            $zRow.find("#quantity").val(data.quantity);
+            $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
             if(g_tab_name!=="PURCHASE")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
@@ -1213,7 +1072,7 @@ function setSearchMulti(){
     
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["item_name","item_code_id","part_no","national_stock_no"] 
+        , colNames: ["item_name","procurement_detail_id","item_code_id","part_no","national_stock_no","quantity","unit_of_measure_id"] 
         , displayNames: ["Description"]
         , searchColumn:"item_name"
         , input: "input[name=item_name]"
@@ -1224,9 +1083,12 @@ function setSearchMulti(){
             
             var $zRow = $(currentObject).closest(".zRow");
             
+            $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
+            $zRow.find("#quantity").val(data.quantity);
+            $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
             if(g_tab_name!=="PURCHASE")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
@@ -1252,4 +1114,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                  
+                                                      

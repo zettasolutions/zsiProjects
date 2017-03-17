@@ -5,6 +5,10 @@ var bs  = zsi.bs.ctrl
    ,g_organization_name = ''
    ,g_today_date = new Date()
    ,g_tab_name = "Purchase"
+   ,procMode = [
+        {text:"Shopping",value:"Shopping"}
+        ,{text:"Bidding",value:"Bidding"}
+       ]
 ;
 const ProcType = {
         Purchase: 'Purchase',
@@ -30,10 +34,17 @@ var contextModalWindow = {
             +'         </div>'
             +'    </div>'
             +'    <div class="form-group  ">  '
-            +'        <label class=" col-xs-2 control-label">Procurement Name</label>'
-            +'        <div class=" col-xs-3">'
+            +'        <label class=" col-xs-2 control-label">Procurement Desc</label>'
+            +'        <div class=" col-xs-8">'
             +'             <input type="text" name="procurement_name" id="procurement_name" class="form-control input-sm"  >'
             +'        </div>'
+
+            +'    </div>'
+            +'    <div class="form-group  ">  '
+            +'           <label class=" col-xs-2 control-label">Procurement Mode</label>'
+            +'           <div class=" col-xs-3">'
+            +'                <select name="procurement_mode" id="procurement_mode" class="form-control input-sm" ></select>'
+            +'           </div>' 
             +'        <div class="hide" id="supplier_filter">'
             +'           <label class=" col-xs-2 control-label">Supplier</label>'
             +'           <div class=" col-xs-3">'
@@ -45,8 +56,8 @@ var contextModalWindow = {
             +'           <div class=" col-xs-3">'
             +'                <select name="dd_warehouse" id="dd_warehouse" class="form-control input-sm" ></select>'
             +'           </div>'  
-            +'        </div>' 
-            +'    </div>'
+            +'        </div>'             
+            +'      </div>'
             +'    <div class="form-group  ">  '
             +'        <label class=" col-xs-2 control-label">Promised Delivery Date</label>'
             +'        <div class=" col-xs-3">'
@@ -86,7 +97,7 @@ $("#btnAddPurchase").click(function () {
     $("#procurement_type").val(g_tab_name);
 
     g_procurement_id = null;
-    $("#mdlProcurement .modal-title").text("Purchase for " + g_organization_name);
+    $("#mdlProcurement .modal-title").text("Purchase Procurement for " + g_organization_name);
     $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#supplier_filter").removeClass("hide");
     $("#warehouse_filter").addClass("hide");
@@ -104,7 +115,7 @@ $("#btnAddRepair").click(function () {
     clearForm();
     $("#procurement_type").val(g_tab_name);
     g_procurement_id = null;
-    $("#mdlProcurement .modal-title").text("Repair for " + g_organization_name);
+    $("#mdlProcurement .modal-title").text("Repair Procrement for " + g_organization_name);
     $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#warehouse_filter").removeClass("hide");
     $("#supplier_filter").addClass("hide");
@@ -174,6 +185,7 @@ $("ul.nav-tabs >li").click(function(){
 function buildButtons(){
     
     $("select[name='supplier_id']").dataBind({url: base_url + "selectoption/code/dealer"});
+    $("select[name='procurement_mode']").fillSelect({data: procMode});
 
     var html = '';
     $.get(procURL + "current_process_actions_sel @page_id=1107,@doc_id=" + $("#procurement_id").val(), function(d) {
@@ -210,14 +222,17 @@ function displayPurchase(tab_name){
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
     		            + ProcType.Purchase + "\",\"" 
-    		            + svn(d,"procurement_id") +"\",\"" 
-    		            + svn(d,"procurement_name") + "\");'>" 
+    		            + svn(d,"procurement_id") +"\");'>"
+    		            //+ svn(d,"procurement_name") + "\" 
     		            + svn(d,"procurement_code") + " </a>";
     		    }
     		}
-    	    ,{text  : "Name"            , type  : "label"       , width : 250       , style : "text-align:left;"
+    	    ,{text  : "Procurement Desc"            , type  : "label"       , width : 350       , style : "text-align:left;"
     	        ,onRender : function(d){ return svn(d,"procurement_name")}
     	    }
+    	    ,{text  : "Procurement Mode"            , type  : "label"       , width : 250       , style : "text-align:left;"
+    	        ,onRender : function(d){ return svn(d,"procurement_mode")}
+    	    }    	    
     	    ,{text  : "Date"            , type  : "label"       , width : 200       , style : "text-align:left;"
     		     ,onRender : function(d){ return svn(d,"procurement_date").toDateFormat()}
     		}
@@ -235,7 +250,7 @@ function displayPurchase(tab_name){
     		}
 	    ]  
         ,onComplete: function(data){
-            $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+            $("#cbFilter1").setCheckEvent("#purchase input[name='cb']");
         }  
     });    
 }
@@ -260,14 +275,17 @@ function displayRepair(tab_name){
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
     		             + ProcType.Repair + "\",\"" 
-    		             + svn(d,"procurement_id") +"\",\"" 
-    		             + svn(d,"procurement_name") + "\");'>" 
+    		             + svn(d,"procurement_id") +"\");'>"
+    		             //+ svn(d,"procurement_name") + "\" 
     		             + svn(d,"procurement_code") + " </a>";
     		    }
     		}
-    	    ,{text  : "Name"            , type  : "label"       , width : 250       , style : "text-align:left;"
+    	    ,{text  : "Procurement Desc"            , type  : "label"       , width : 350       , style : "text-align:left;"
     	        ,onRender : function(d){ return svn(d,"procurement_name")}
     	    }
+    	    ,{text  : "Procurement Mode"            , type  : "label"       , width : 250       , style : "text-align:left;"
+    	        ,onRender : function(d){ return svn(d,"procurement_mode")}
+    	    }    	    
     	    ,{text  : "Date"            , type  : "label"       , width : 200       , style : "text-align:left;"
     		     ,onRender : function(d){ return svn(d,"procurement_date").toDateFormat()}
     		}
@@ -285,7 +303,7 @@ function displayRepair(tab_name){
     		}
 	    ]  
         ,onComplete: function(data){
-            $("#cbFilter2").setCheckEvent("#grid input[name='cb']");
+            $("#cbFilter2").setCheckEvent("#repair input[name='cb']");
         }  
     });    
 }
@@ -303,7 +321,7 @@ function showModalProcurement(procurement_type, id, title) {
         $("#procurement_type").val(g_tab_name);
     }
     $("select[name='supplier_id']").attr("selectedvalue", id);
-    $("#mdlProcurement .modal-title").text("Update Procurement » " + title + " for " + g_organization_name);
+    $("#mdlProcurement .modal-title").text(g_tab_name + " procurement " + " for " + g_organization_name);
     $("#mdlProcurement").modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#mdlProcurement #procurement_id").val(g_procurement_id);
     $("select, input").on("keyup change", function(){
@@ -318,7 +336,6 @@ function showModalProcurement(procurement_type, id, title) {
 
 function displayProcurement(callBack){
     $.get(procURL + "procurement_sel @procurement_id=" + g_procurement_id + "&@tab_name=" + g_tab_name, function(data){
-        console.log(data.rows.length);
 
         if(data.rows.length > 0){
             var d = data.rows[0];
@@ -327,6 +344,7 @@ function displayProcurement(callBack){
             $tbl.find("#procurement_date").val(d.procurement_date.toDateFormat());
             $tbl.find("#procurement_code").val(d.procurement_code);
             $tbl.find("#procurement_name").val(d.procurement_name);
+            $tbl.find("#procurement_mode").attr("selectedvalue", d.procurement_mode);
             $tbl.find("#supplier_id").attr("selectedvalue", d.supplier_id);
             $tbl.find("#dd_warehouse").attr("selectedvalue", d.warehouse_id);
             $tbl.find("#promised_delivery_date").val(d.promised_delivery_date.toDateFormat());
@@ -337,41 +355,76 @@ function displayProcurement(callBack){
 }
 
 function displayProcurementDetails(){
-     var cb = bs({name:"cbFilter3",type:"checkbox"});
+    var cb = bs({name:"cbFilter3",type:"checkbox"});
+    var _dataRows = [];
+	         _dataRows.push(
+                 {text  : cb                     , width : 25                    , style : "text-align:left;"       
+        		    ,onRender : function(d){ 
+                        return  bs({name:"procurement_detail_id",type:"hidden",value: svn (d,"procurement_detail_id")})
+                              + bs({name:"is_edited", type:"hidden"})
+                              + bs({name:"procurement_id",type:"hidden",value: (g_procurement_id ? g_procurement_id : "")})
+                              + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                    }
+                }	 
+           ); 
+
+	    if(g_tab_name==="Purchase"){
+	         _dataRows.push(
+        	    {text  : "Item No."           , width : 130                    , style : "text-align:left;"
+        	        ,onRender : function(d){ 
+                        return  bs({name:"item_no",type:"input",value: svn (d,"item_no")})
+                              + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
+                              + bs({name:"serial_no",type:"hidden",value: svn (d,"serial_no")});
+                    }
+        	    }        	     
+        	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 150       , style : "text-align:left;"}
+                ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
+                ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:right;"}
+        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:right;"}
+        	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
+        	        ,onRender : function(d){
+        	            return "<div id='amount' >" + parseFloat(svn(d,"amount", 0)).toFixed(2) + "</div>";
+        	        }
+        	    }
+    	     );
+	    }
+    	 else{
+    	     _dataRows.push(
+        	    {text  : "Item No."           , width : 130                    , style : "text-align:left;"
+        	        ,onRender : function(d){ 
+                        return  bs({name:"item_no",type:"input",value: svn (d,"item_no")})
+                              + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")});
+                    }
+        	    }                  
+        	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 150       , style : "text-align:left;"}
+                ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
+                ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 130       , style : "text-align:right;"}
+        	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:right;"}
+        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:right;"}
+        	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
+        	        ,onRender : function(d){
+        	            return "<div id='amount' >" + parseFloat(svn(d,"amount", 0)).toFixed(2) + "</div>";
+        	        }
+        	    }
+    	    );  
+    	}
+
+    
      $("#tblProcurementDetails").dataBind({
 	     url            : execURL + "procurement_detail_sel " + (g_procurement_id ? "@procurement_id=" + g_procurement_id : "")
 	    ,width          : $(document).width() -75
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
-        ,dataRows       : [
-            {text  : cb                     , width : 25                    , style : "text-align:left;"       
-    		    ,onRender : function(d){ 
-                    return  bs({name:"procurement_detail_id",type:"hidden",value: svn (d,"procurement_detail_id")})
-                          + bs({name:"is_edited", type:"hidden"})
-                          + bs({name:"procurement_id",type:"hidden",value: (g_procurement_id ? g_procurement_id : "")})
-                          + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
-                }
-            }	 
-    	    ,{text  : "Item No."           , width : 130                    , style : "text-align:left;"
-    	        ,onRender : function(d){ 
-                    return  bs({name:"item_no",type:"input",value: svn (d,"item_no")})
-                          + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")});
-                }
-    	    }
-    	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
-    	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 130       , style : "text-align:right;"}
-    	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
-    	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:right;"}
-    	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:right;"}
-    	    ,{text  : "Amount"              , name  : "amount"              , type  : "input"       , width : 130       , style : "text-align:right;"}
-
-	    ]  
+        ,dataRows       : _dataRows 
         ,onComplete: function(data){
             setMultipleSearch();
             $("#cbFilter3").setCheckEvent("#tblProcurementDetails input[name='cb']");
+            
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             
             $("select, input").on("keyup change", function(){
@@ -382,7 +435,8 @@ function displayProcurementDetails(){
                 else
                     $("#tblProcurement").find("#is_edited").val("Y");
             });
-             $("input[name='item_code_id']").each(function(){
+
+            $("input[name='item_code_id']").each(function(){
                 if(this.value){
                     var $row = $(this).closest(".zRow");
                         $row.find("select[id='serial_no']").dataBind({ 
@@ -392,13 +446,11 @@ function displayProcurementDetails(){
                         });
                 } 
             });
-
- 
+            
             $("input[name='quantity']").keyup(function(){
                 var quantity  = $.trim(this.value);
                 var $zRow     = $(this).closest(".zRow");
                 var unitPrice = $.trim($zRow.find("#unit_price").val());
-                
                 if(unitPrice && quantity){
                     var amount = parseFloat(quantity) * parseFloat(unitPrice);
                     $zRow.find("#amount").text(amount.toFixed(2));
@@ -443,10 +495,10 @@ function Save(page_process_action_id){
                         clearForm();
                         $("#grid").trigger("refresh");
                         $('#mdlProcurement').modal('hide');
-                        if(g_tab_name==="PURCHASE"){
+                        if(g_tab_name==="Purchase"){
                              displayPurchase(g_tab_name);   
                         }
-                        if(g_tab_name==="REPAIR"){
+                        else{
                              displayRepair(g_tab_name);   
                         }
 
@@ -559,4 +611,21 @@ function clearForm(){
     $('select[type="text"]').attr('selectedvalue','').val('');    
 }
 
-   
+$("#btnDelPurchase").click(function(){
+    zsi.form.deleteData({
+         code       : "ref-0030"
+        ,onComplete : function(data){
+                        displayPurchase(g_tab_name);
+                      }
+    });       
+});
+
+$("#btnDelRepair").click(function(){
+    zsi.form.deleteData({
+         code       : "ref-0030"
+        ,onComplete : function(data){
+                        displayRepair(g_tab_name);
+                      }
+    });       
+});
+       
