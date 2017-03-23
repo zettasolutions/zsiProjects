@@ -6,23 +6,23 @@ var g_recieving_id = null;
 var g_organization_id = null;
 var g_organization_name = "";
 var g_location_name = "";
-var g_tab_name = "PURCHASE";
+var g_tab_name = "Procurement";
 var g_today_date = new Date(); 
 var g_warehouse_id = null;
 var g_item_code_id = null;
 var g_procurement_id = null;
 var g_today_date = new Date();
 const DeliveryType = {
-    Purchase: 'Purchase',
+    Procurement: 'Procurement',
     Donation: 'Donation',
     Transfer: 'Transfer',
     Aircraft: 'Aircraft',
-    Repair  : 'Repair',
+    //Repair  : 'Repair',
 };
 
 zsi.ready(function(){
-    $("#purchase-tab").click(function(){
-            g_tab_name = "PURCHASE";
+    $("#Procurement-tab").click(function(){
+            g_tab_name = "Procurement";
     });
     $("#donation-tab").click(function(){
         g_tab_name = "DONATION";
@@ -33,13 +33,14 @@ zsi.ready(function(){
     $("#aircraft-tab").click(function() {
         g_tab_name = "AIRCRAFT";
     });
+    /*
     $("#repair-tab").click(function() {
         g_tab_name = "REPAIR";
     });    
-    
+    */
     getTemplate();
     setCurrentTab();
-    displayPurchase(g_tab_name);
+    displayProcurement(g_tab_name);
     
     $(window).keydown(function(event){
         if(event.target.tagName != 'TEXTAREA') {
@@ -61,8 +62,8 @@ zsi.ready(function(){
         }
     });
     
-    $("#purchase-tab").click(function () {
-        displayPurchase($(this).html());    
+    $("#Procurement-tab").click(function () {
+        displayProcurement($(this).html());    
     });
     $("#donation-tab").click(function () {
         displayDonation($(this).html());    
@@ -73,9 +74,11 @@ zsi.ready(function(){
     $("#aircraft-tab").click(function () {
         displayAircraft($(this).html());    
     });
+    /*
     $("#repair-tab").click(function () {
         displayRepair($(this).html());    
-    });    
+    });  
+    */
 });
 
 // Create modal window for the receiving
@@ -158,7 +161,7 @@ function setCurrentTab(){
     var $navTabs = $("ul.nav-tabs > li");
     $tabs.removeClass("active");
     $navTabs.removeClass("active");
-    // Set purchase delivery tab as current tab.
+    // Set Procurement delivery tab as current tab.
     $($tabs.get(0)).addClass("active"); 
     $($navTabs.get(0)).addClass("active");
 }
@@ -176,10 +179,10 @@ $("ul.nav-tabs >li").click(function(){
     });
 });
 
-// Display the grid for the purchase delivery.
-function displayPurchase(tab_name){
+// Display the grid for the Procurement delivery.
+function displayProcurement(tab_name){
     var counter = 0;
-    $("#purchase").dataBind({
+    $("#procurement").dataBind({
          url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
         ,width          : $(document).width() - 55
         ,height         : $(document).height() - 250
@@ -189,7 +192,7 @@ function displayPurchase(tab_name){
                 {text  : "Doc No."             , name  : "doc_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
-                        + DeliveryType.Purchase + "\",\""
+                        + DeliveryType.Procurement + "\",\""
                         + svn(d,"receiving_id") + "\",\"" 
                         + svn(d,"doc_no")  + "\",\"" 
                         + svn(d,"dealer_id") + "\");'>" 
@@ -355,6 +358,7 @@ function displayAircraft(tab_name){
 }
 
 // Display the grid for the repair delivery.
+/*
 function displayRepair(tab_name){
     var counter = 0;
     $("#repair").dataBind({
@@ -367,7 +371,7 @@ function displayRepair(tab_name){
                 {text  : "Doc No."             , name  : "doc_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
-                        + DeliveryType.Purchase + "\",\""
+                        + DeliveryType.Procurement + "\",\""
                         + svn(d,"receiving_id") + "\",\"" 
                         + svn(d,"doc_no")  + "\",\"" 
                         + svn(d,"dealer_id") + "\");'>" 
@@ -395,7 +399,7 @@ function displayRepair(tab_name){
         ]   
     });    
 }
-
+*/
 // Build the forms for the modal window for the receiving.
 function buildReceiving(tbl_obj) {
     buildReceivingHeader(tbl_obj);
@@ -452,12 +456,14 @@ function buildReceivingHeader(tbl_obj) {
                     '<select name="procurement_filter" id="procurement_filter" class="form-control input-sm"></select>' +
                 '</div>' +
             '</div>' +
+            /*
             '<div id="wrap-tally" class="hide">' +
                 '<label class="col-xs-2 control-label">Tallyout/W.O #</label>' +
                 '<div class=" col-xs-2">' +
                     '<select name="tally_filter" id="tally_filter" class="form-control input-sm"></select>' +
                 '</div>' +
-            '</div>' +        
+            '</div>' + 
+            */
         '</div>' +
         
         '<div class="form-group  ">' +
@@ -583,6 +589,7 @@ function buildReceivingDetails(callback) {
             });            
             setSearchMulti();
             if (callback) callback();
+            $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
         }  
     });
 }
@@ -605,6 +612,8 @@ function buildReceivingButtons() {
 }
 
 function setProcurementOptions(id, callBack){
+    $("#procurement_id").val("");
+    $("#procurement_filter").clearSelect();
     if(id){
         $("#procurement_filter").attr("selectedvalue", id);
         $("#procurement_filter").dataBind({
@@ -620,14 +629,11 @@ function setProcurementOptions(id, callBack){
                 });
             }
         });
-    }else{
-        $("#procurement_id").val("");
-        $("#procurement_filter").clearSelect();
     }
     if(callBack) callBack();
 }
 
-// Add a click event for the purchase delivery button.
+// Add a click event for the Procurement delivery button.
 $("#pdBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -672,6 +678,7 @@ $("#adBtnNew").click(function () {
 });
 
 // Add a click event for the repair delivery button.
+/*
 $("#rdBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -686,7 +693,7 @@ $("#rdBtnNew").click(function () {
     $("#wrap-tally").removeClass("hide");
     $("#wrap-suppSource").removeClass("hide");
 });
-
+*/
 // Save the new receiving entry.
 function Save(page_process_action_id) {
     var result = confirm("Entries will be saved. Continue?");
@@ -727,8 +734,8 @@ function SaveDetails(page_process_action_id) {
             }
             $("#modalReceiving").modal('toggle');
             
-            if(g_tab_name==="PURCHASE"){
-                 displayPurchase(g_tab_name);   
+            if(g_tab_name==="Procurement"){
+                 displayProcurement(g_tab_name);   
             }
             if(g_tab_name==="DONATION"){
                  displayDonation(g_tab_name);   
@@ -757,7 +764,7 @@ function setStatusName(page_process_action_id) {
 function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor) {
     var html = '';
     g_recieving_id = receiving_id;
-    if (delivery_type == DeliveryType.Purchase) {
+    if (delivery_type == DeliveryType.Procurement) {
         $("#modalReceiving .modal-title").html('Items Delivered to ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
         
         $("select[name='dealer_filter']").attr("selectedvalue", id);
@@ -788,7 +795,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
             $("#aircraft_id").val(this.value);
         });
     }
-
+    /*
     if (delivery_type == DeliveryType.Repair) {
         $("#modalReceiving .modal-title").html('Items Delivered to ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
         
@@ -798,22 +805,24 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
             $("#dealer_id").val(this.value);
         });
     } 
-    
+    */
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceivingHeader($("#tblModalReceivingHeader"));
     $("#receiving_id").val(receiving_id);
 
-    if(delivery_type == DeliveryType.Purchase){
+    if(delivery_type == DeliveryType.Procurement){
         setProcurementOptions(id);
         $("#wrap-proc").removeClass("hide");
         $("#wrap-suppSource").removeClass("hide");
     }else if(delivery_type == DeliveryType.Donation){
         $("#wrap-suppSource").removeClass("hide");
-    }else if(delivery_type == DeliveryType.Repair){
+    }
+    /*
+    else if(delivery_type == DeliveryType.Repair){
         $("#wrap-tally").removeClass("hide");
         $("#wrap-suppSource").removeClass("hide");
     }
-    
+    */
     initDatePicker();
     initSelectOptions(function(){
         $.get(procURL + "receiving_sel @receiving_id=" + receiving_id + "&@tab_name=" + g_tab_name, function(d) {
@@ -1008,7 +1017,7 @@ function SaveSubCategory(e) {
 function setSearchMulti(){
     var selCode = "items_on_arcraft_serials";
     var _tableCode = "ref-0031";
-    var _condition = "'"+ (g_tab_name==="PURCHASE" ? "procurement_id="+ g_procurement_id : "")  +"'";
+    var _condition = "'"+ (g_tab_name==="Procurement" ? "procurement_id="+ g_procurement_id : "")  +"'";
 
     if(g_tab_name==="AIRCRAFT"){
         $("select[name='serial_no']").dataBind(selCode);
@@ -1040,11 +1049,11 @@ function setSearchMulti(){
             $zRow.find("#quantity").val(data.quantity);
             $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
-            if(g_tab_name!=="PURCHASE")
+            if(g_tab_name!=="Procurement")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
         }
     });
-    
+
     new zsi.search({
         tableCode: _tableCode
         , colNames: ["national_stock_no","procurement_detail_id","item_code_id","item_name","part_no","quantity","unit_of_measure_id"] 
@@ -1065,7 +1074,7 @@ function setSearchMulti(){
             $zRow.find("#quantity").val(data.quantity);
             $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
-            if(g_tab_name!=="PURCHASE")
+            if(g_tab_name!=="Procurement")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
         }
     });
@@ -1090,7 +1099,7 @@ function setSearchMulti(){
             $zRow.find("#quantity").val(data.quantity);
             $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
-            if(g_tab_name!=="PURCHASE")
+            if(g_tab_name!=="Procurement")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
         }
     });
@@ -1114,4 +1123,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                      
+                                                         
