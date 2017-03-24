@@ -53,15 +53,37 @@ zsi.ready(function(){
     
     $.get(procURL + "user_info_sel", function(d) {
         if (d.rows !== null && d.rows.length > 0) {
+            g_user_id = d.rows[0].user_id;
             g_organization_id = d.rows[0].organization_id;
             g_organization_name = d.rows[0].organizationName;
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_warehouse_id =  d.rows[0].warehouse_id;
-            $(".pageTitle").append(' for ' + g_organization_name + g_location_name);
+            //$(".pageTitle").append(' for ' + g_organization_name + g_location_name);
+            $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
+            $("select[name='dd_warehouses']").dataBind({
+                url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
+                , text: "warehouse"
+                , value: "warehouse_id"
+                , required :true
+                , onComplete: function(){
+                    
+                    g_warehouse_id = $("select[name='dd_warehouses'] option:selected" ).val();
+                    
+                    $("select[name='dd_warehouses']").change (function(){
+                       if(this.value){
+                            g_warehouse_id = this.value;
+                            displayProcurement(g_tab_name);
+                       }
+                    });
+                    displayProcurement(g_tab_name);
+                }
+            });  
+
         }
     });
-    
+
+
     $("#Procurement-tab").click(function () {
         displayProcurement($(this).html());    
     });
@@ -74,11 +96,7 @@ zsi.ready(function(){
     $("#aircraft-tab").click(function () {
         displayAircraft($(this).html());    
     });
-    /*
-    $("#repair-tab").click(function () {
-        displayRepair($(this).html());    
-    });  
-    */
+
 });
 
 // Create modal window for the receiving
@@ -357,49 +375,7 @@ function displayAircraft(tab_name){
     });    
 }
 
-// Display the grid for the repair delivery.
-/*
-function displayRepair(tab_name){
-    var counter = 0;
-    $("#repair").dataBind({
-         url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
-        ,width          : $(document).width() - 55
-        ,height         : $(document).height() - 250
-        ,blankRowsLimit: 0
-        ,isPaging : false
-        ,dataRows : [
-                {text  : "Doc No."             , name  : "doc_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
-                    ,onRender : function(d){ 
-                        return "<a href='javascript:showModalUpdateReceiving(\""
-                        + DeliveryType.Procurement + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" 
-                        + svn(d,"doc_no")  + "\",\"" 
-                        + svn(d,"dealer_id") + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
-                    }
-                }
-                ,{text  : "Doc Date"            , name  : "doc_date"                    , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"doc_date").toDateFormat(); }
-                }
-                ,{text  : "Dealer"              , name  : "dealer_name"                   , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"dealer_name"); }
-                }
-                ,{text  : "Received By"         , name  : "received_by_name"                 , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"received_by_name"); }
-                }
-                ,{text  : "Received Date"       , name  : "received_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
-                }
-                ,{text  : "Status"              , name  : "status_name"                     , type  : "label"       , width : 150       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"status_name"); }
-                }
-                ,{text  : "Status Remarks"      , name  : "status_remarks"                  , type  : "label"       , width : 250       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"status_remarks"); }
-                }
-        ]   
-    });    
-}
-*/
+
 // Build the forms for the modal window for the receiving.
 function buildReceiving(tbl_obj) {
     buildReceivingHeader(tbl_obj);
@@ -456,14 +432,6 @@ function buildReceivingHeader(tbl_obj) {
                     '<select name="procurement_filter" id="procurement_filter" class="form-control input-sm"></select>' +
                 '</div>' +
             '</div>' +
-            /*
-            '<div id="wrap-tally" class="hide">' +
-                '<label class="col-xs-2 control-label">Tallyout/W.O #</label>' +
-                '<div class=" col-xs-2">' +
-                    '<select name="tally_filter" id="tally_filter" class="form-control input-sm"></select>' +
-                '</div>' +
-            '</div>' + 
-            */
         '</div>' +
         
         '<div class="form-group  ">' +
@@ -677,23 +645,7 @@ $("#adBtnNew").click(function () {
     clearEntries();
 });
 
-// Add a click event for the repair delivery button.
-/*
-$("#rdBtnNew").click(function () {
-    $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
-    $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
-    
-    $("select[name='dealer_filter']").dataBind("dealer");
-    $("select[name='dealer_filter']").change(function(){
-        $("#dealer_id").val(this.value);
-    });
-    buildReceiving($("#tblModalReceivingHeader"));
-    clearEntries();
 
-    $("#wrap-tally").removeClass("hide");
-    $("#wrap-suppSource").removeClass("hide");
-});
-*/
 // Save the new receiving entry.
 function Save(page_process_action_id) {
     var result = confirm("Entries will be saved. Continue?");
@@ -795,17 +747,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
             $("#aircraft_id").val(this.value);
         });
     }
-    /*
-    if (delivery_type == DeliveryType.Repair) {
-        $("#modalReceiving .modal-title").html('Items Delivered to ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
-        
-        $("select[name='dealer_filter']").attr("selectedvalue", id);
-        $("select[name='dealer_filter']").dataBind({url: base_url + "selectoption/code/dealer"});
-        $("select[name='dealer_filter']").change(function(){
-            $("#dealer_id").val(this.value);
-        });
-    } 
-    */
+
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildReceivingHeader($("#tblModalReceivingHeader"));
     $("#receiving_id").val(receiving_id);
@@ -817,12 +759,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
     }else if(delivery_type == DeliveryType.Donation){
         $("#wrap-suppSource").removeClass("hide");
     }
-    /*
-    else if(delivery_type == DeliveryType.Repair){
-        $("#wrap-tally").removeClass("hide");
-        $("#wrap-suppSource").removeClass("hide");
-    }
-    */
+ 
     initDatePicker();
     initSelectOptions(function(){
         $.get(procURL + "receiving_sel @receiving_id=" + receiving_id + "&@tab_name=" + g_tab_name, function(d) {
@@ -1123,4 +1060,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                         
+                                                           
