@@ -188,53 +188,52 @@ var  ud='undefined'
                 this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
                 return this;
             };
-            $.fn.checkValueExists   = function(o,isNotExistShow){
-                var self  =  this;
-                if(typeof self.tmr === ud) self.tmr = null;
-                if( typeof isNotExistShow === ud )  isNotExistShow=false;
+
+            $.fn.checkValueExists   = function(o){
+                var _self   =   this;
+                var _cls    =   "zDataExist";
+                var _msg    =   "data already exist";
+                var _time   =   1500;
+                if( ! isUD(o.keyInputDelay) ) _time = o.keyInputDelay;
+                $("." + _cls).remove();
+                if(o.message) _msg = o.message;
+                var _h = '<div class="'+ _cls +'">'+ _msg +'.</div>';
+                $("body").append(_h);
+                var _panel =$("." + _cls);
+                if( isUD(o.isNotExistShow) ) o.isNotExistShow = false;
+                if(typeof _self.tmr === ud) _self.tmr = null;
                 this.keyup(function(){
-                  var l_obj=this;
+                  var _obj=$(this);
                   if($.trim(this.value)===""){
-                     showPopup(l_obj,false);                  
+                     _panel.hide();
                      return false;
                   }
                   var l_value=$.trim(this.value);
                   if(zsi.timer) clearTimeout(zsi.timer);
                   zsi.timer = setTimeout(function(){              
-                     $(l_obj).addClass("loadIconR" );
+                    _obj.addClass("loadIconR" );
                      $.getJSON(base_url + "sql/exec?p=" + (typeof o.procedureName !== ud ? o.procedureName : "checkValueExists") +  " @code='" + o.code + "',@colName='" +  o.colName + "',@keyword='" +  l_value + "'"
                         , function(data) {
-                              $(l_obj).removeClass("loadIconR" );
-                              if(data.rows[0].isExists.toUpperCase() ===(isNotExistShow?"N":"Y")) {
-                                 showPopup(l_obj,true);                  
+                              _obj.removeClass("loadIconR" );
+                              if(data.rows[0].isExists.toUpperCase() === (o.isNotExistShow ? "N" : "Y")) {
+                                var _opts  = {
+                                       left : _obj.offset().left
+                                     , top  : _obj.offset().top - _panel.innerHeight() - 3
+                                     , onHide : function(){
+                                        _obj.val(""); 
+                                     }
+                                 };
+                                 if(o.time)  _opts.time = o.time; 
+                                 _panel.showAlert(_opts);           
                               }
-                              else{
-                                 showPopup(l_obj,false);                  
-                              }
+            
                           }
                      );
             
-                  }, 1000);         
-               
+                  }, _time);         
                });
-               
-               function showPopup(o,isShow){
-                  if(isShow){
-                    $(o).popover({
-                        placement   : 'right'
-                        ,content    :  (isNotExistShow ? "Data does not exist." : "Data already exist.")
-                    });
-                    $(o).popover('show');
-                    $(o).addClass("has-error");
-                    if(zsi.search) zsi.search.Panel.show(false);
-                  }
-                  else{
-                     $(o).removeClass("has-error");
-                     $(o).popover('destroy');
-                  }
-
-               }
             };
+
             $.fn.clearGrid          = function(){
                 var _panel = ".zGridPanel";
                 if(this.find(_panel).length >0)
@@ -672,309 +671,8 @@ var  ud='undefined'
                     __obj.addClickHighlight();        
                 }    
                 else{
-                    if(typeof o.limit === ud) o.limit=5;
-                    for(var y=0;y<o.limit;y++){
-                        trItem();
-                    }
-                    if (typeof o.onEachComplete === ud) if(o.onComplete) o.onComplete();
-                    //add tr click event.
-                    __obj.addClickHighlight();
-            
-                }
-                
-            };
-            $.fn.loadData2          = function(o){
-                this.arrowUp ="<span class=\"arrow-up\"></span>",
-                this.arrowDown ="<span class=\"arrow-down\"></span>",
-                this.arrows = this.arrowUp + this.arrowDown;   
-                this.setPageCtrl = function(o,url,data,pTable){
-                    var tr = data.returnValue;
-                  
-                    var opt ="";
-                    for(var x=1;x<=tr;x++){
-                        opt += "<option value='" + x + "'>" + x + "</option>";
-                    }
-                    var $pageNo = pTable.find("#pageNo").html(opt);
-                    pTable.find("#recordsNum").html(data.rows.length);
-                    pTable.find("#of").html("of " + tr);
-
-                     
-                    $pageNo.change(function(){
-                        __obj.pageParams = ",@pno=" + this.value ;
-                        if(__obj.params.url) __obj.params.url  = __obj.url + __obj.pageParams +  (typeof __obj.sortParams !== ud ? __obj.sortParams : "" );    
-                        __obj.loadData2(__obj.params);
-                    });
-                }
-                                    
-                var __obj       = this
-                    ,num_rows   = 0
-                    ,ctr        = 0  
-                    ,_gridWidth = 0
-                    ,_ch        =o.columnHeaders
-                    ,_headers
-                    ,_tbl
-                    ,_styles    = []
-                    ,trItem     = function(data){
-                        var r       = "";
-                        
-                        r +="<div rowObj class='zRow "  + zsi.getOddEven() + "'>";
-                            for(var x=0;x<o.renderCells.length;x++){
-                                var _content = "", _attr = "", _style = "", _class = "",_nd= (data===null ? " no-data ":"");
-                                if(data) data.td = {};
-                                
-                                if(o.renderCells[x])
-                                    _content = o.renderCells[x](data);
-                                else
-                                    console.log("%cArray item is not a function under renderCells[]", "color:red;");                    
-                                
-                                if(data){
-                                    _attr  = (typeof data.td.attr  === ud ? "" : " " + data.td.attr);
-                                    _class = (typeof data.td.class === ud ? "" : " " + data.td.class );
-                                    _style = (typeof data.td.style === ud ? "" : " style=\"" + data.td.style + "\"" );
-                                }
-                          
-                                r +="<div class=\"zCell" + _nd +  _class + "\"  " + _attr  + " style=\"width:" + (_styles[x].width ) +  "px;"  + _styles[x].style + "\" >" + _content + "</div>";                                                         
-                            }
-                        r +="</div>";                           
-                
-                        _tbl.append(r);
-                        var tr=$("div[rowObj]");tr.removeAttr("rowObj"); 
-                        if (isOnEC){
-                            o.onEachComplete(tr,data);
-                        }
-                    }
-                    ,setRowClickEvent = function(){
-                        
-                        var $rows = __obj.find(".zRow");
-                        $rows.click(function(){
-                            $rows.removeClass("active");
-                            $(this).addClass("active");
-                        });
-                    }
-                    ,renderColumnHeaders = function(d, id){
-                        var  hasChild = function (d,id){
-                            for(var x=0; x<d.length;x++ ){
-                                if(d[x].groupId===id) return true;
-                            }
-                            return false;
-                        };
-                        var loadChild = function (d,id){
-                            var h=""; 
-                            for(var x=0; x<d.length;x++ ){
-                                if(typeof d[x].groupId === ud ||  d[x].groupId==id ) { 
-                                    var _hasSort = (typeof d[x].sortColNo !== ud ? true:false);
-                                    
-                                    var _minusSortWidth  = ( _hasSort ? 15:0);
-                                    
-                                    var _style = "",_styleTitle=""; 
-            
-                                    if(typeof _ch[x].width !==ud){
-                                        _style = "style=\"width:" +  _ch[x].width  + "px;"  + _ch[x].style + "\"";
-                                        _styleTitle = "style=\"width:" +  (_ch[x].width -  _minusSortWidth) + "px;"  + _ch[x].style + "\"";
-                                    }
-                                    
-                                    h+= "<div class='item' " + _style + ">";
-                                    h+= "<div  class='title " + ( _hasSort ? "hasSort":"") + "' " + _styleTitle + " >" + d[x].text +  "</div>"; 
-                                    if(typeof d[x].groupId !== ud ) 
-                                        h+= renderColumnHeaders(d,d[x].id) ;
-                                    h+=renderSortHeader(d[x].sortColNo);
-                                    h+= "</div>";
-                                   
-                                }
-                            }
-                            return h;
-                        };
-                        
-            
-                        return loadChild(d,id);
-            
-                    }
-                    ,renderSortHeader = function(sortColNo){
-             
-                        if(typeof sortColNo !== ud )
-                            return  "<div class=\"zSort\">"
-                                    + "<a href=\"javascript:void(0);\" sortColNo=\"" + sortColNo + "\" >"
-                                        + "<span class=\"sPane\">" + __obj.arrows + "</span>"
-                                    + "</a>"
-                                    + "</div>";
-                        else return "";
-                    }
-                ;
-            
-                $.each(o.columnHeaders,function(){
-                    if(this.groupId > 0 || typeof this.groupId ===ud){ 
-                        _styles.push(this);
-                    }
-                });
-            
-            
-                if(typeof this.isInitiated === ud){
-                    var _footer =  "<div class=\"zPageFooter\"><div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> 0 </i></div>"
-                                +  "<div class='pagectrl'><label id='page'> Page </label> <select id='pageNo'></select>"
-                                +  "<label id='of'> of 0 </label></div></div>";
-                    this.params = o;
-                    this.url = o.url;
-                    this.isInitiated = true;
-                    this.html(
-                             "<div class=\"right\">"
-                            +"<div class=\"zHeaders\"></div>"
-                            +"<div class=\"zRows\">"
-                                +"<div id=\"table\"  ></div>"
-                            +"</div>"
-                            +"<div class=\"zFooter\"></div>"                
-                            +"</div>"  + (typeof o.isPaging !==ud ?  (o.isPaging===true ? _footer :"") :"")
-                    );
-                    this.css("overflow","hidden");
-                    
-                    if (typeof o.columnHeight  === ud) o.columnHeight = "30";
-                    //this.find(".zHeaders").css("height",o.columnHeight );
-                    _tbl = this.find("#table");
-                    
-                    
-                    _headers = __obj.find(".zHeaders");
-                    var _top =  "top:" + ((o.columnHeight / 2)-8) + "px;";
-                    
-                    for(i=0; i <_styles.length;i++){
-                        _gridWidth += _styles[i].width;
-                    }
-                    if(typeof o.startGroupId === ud) o.startGroupId=0;
-                    _headers.html(renderColumnHeaders(_ch,o.startGroupId));
-                    _headers.append("<div>&nbsp;</div");
-                    _headers.find(".item .zSort a").click(function(){
-                        var  $a = $(this)
-                            ,_colNo = $a.attr("sortColNo")
-                            ,_orderNo =0
-                            ,_oldClass = $a.attr("class")
-                        ;
-                        __obj.left=_tbl.offset().left;
-                        __obj.find(".sPane").html(__obj.arrows);
-                        
-                        __obj.find(".zSort a").removeAttr("class");
-                        $a.addClass(_oldClass);
-                        
-                        if(typeof $a.attr("class") === ud) $a.addClass("desc");
-                        var className = $a.attr("class");
-                        if(className.indexOf("asc") > -1){
-                            $a.removeClass("asc");
-                            $a.addClass("desc");
-                            $a.find(".sPane").html(__obj.arrowDown);
-                            _orderNo=1;
-                        }
-                        else{
-                            $a.removeClass("desc");
-                            $a.addClass("asc");
-                            $a.find(".sPane").html(__obj.arrowUp);
-                            _orderNo=0;
-                        }
-                        __obj.sortParams = ",@col_no=" + _colNo + ",@order_no=" + _orderNo;
-                        if(__obj.params.url) __obj.params.url  = __obj.url + __obj.sortParams +  (typeof __obj.pageParams !== ud ? __obj.pageParams : "" );
-                        
-                        if(o.onSortClick) 
-                            o.onSortClick(_colNo,_orderNo);
-                        else 
-                            __obj.loadData2(__obj.params);
-                        
-                    });
-                    _headers.css("width",(_gridWidth + 20 ) + "px");
-                    _tbl.css("width",(_gridWidth + 1 )  + "px");
-            
-                }
-                else{
-                    _tbl = this.find("#table");
-                }
-                
-                var isOnEC= (typeof o.onEachComplete !== ud);
-                if (isOnEC){    
-                    var strFunc = o.onEachComplete.toString();
-                  args = strFunc
-                  .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-                  .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-                  .split(/,/);
-                  var cbName="callback Function";
-                  if(args.length < 1) console.warn("you must implement these parameters: tr,data");
-                }
-            
-                if(typeof o.isNew !== ud){
-                    if(o.isNew===true) _tbl.html("");  
-                } 
-                
-                if(o.url || o.data){
-                    
-                    _tbl.html(""); 
-                    var params ={
-                       dataType: "json"
-                      ,cache: false
-                      ,success: function(data){
-                                    var _ch,i,_trs;
-                                    num_rows = data.rows.length;
-                                    
-                                    if(typeof o.renderCells !==ud ){
-                                        $.each(data.rows, function () {
-                                            trItem(this);
-                                        });
-                                        setRowClickEvent();
-                                    }
-                                    
-                                    if(typeof o.blankRowsLimit !==ud ){
-                                        for(var x=0; x < o.blankRowsLimit;x++){    
-                                            trItem(null);
-                                            setRowClickEvent();
-                                        }
-                                    }                                    
-
-                                    _tbl.parent().scroll(function() {
-                                        var _left = _tbl.offset().left ;
-                                        var _headers = _tbl.closest(".right").find(".zHeaders");
-                                        _headers.offset({left:_left});
-                                    }); 
-                                    
-                                    //call onComplete callback.
-                                    if(o.onComplete) o.onComplete(data);
-                                    
-                                    __obj.find("#recordsNum").html(num_rows);
-
-                                    if(typeof __obj.pageParams === ud ) __obj.setPageCtrl(o,o.url,data,__obj);    
-
-                                    //add tr click event.
-                                    __obj.addClickHighlight();
-                                    if(__obj.left) _tbl.parent().scrollLeft(Math.abs(__obj.left - 13));
-            
-                            }          
-                    };
-                    
-                    if(typeof o.data!==ud)  {
-                        if(typeof zsi.config.getDataURL===ud){
-                            alert("zsi.config.getDataURL is not defined in AppStart JS.");
-                            return;
-                        }
-                        params.url = zsi.config.getDataURL ;
-                        params.data = JSON.stringify(o.data);
-                        params.type = "POST";
-                    }
-                    else params.url = o.url
-            
-                    __obj.bind('refresh',function() {
-                        if(zsi.tmr) clearTimeout(zsi.tmr);
-                        zsi.tmr =setTimeout(function(){              
-                            __obj.loadData(o);
-                        }, 1);   
-                    });
-            
-                    $.ajax(params);
-                }
-                else if(typeof o.rows !== ud){
-                    if(typeof o.renderCells !==ud ){
-                        $.each(o.rows, function () {
-                            trItem(this)
-                        });
-                        setRowClickEvent();
-                    }
-                    if(o.onComplete) o.onComplete(data);
-                    __obj.addClickHighlight();        
-                }  
-                else{
-                    if(typeof o.limit === ud) o.limit=5;
-                    for(var y=0;y<o.limit;y++){
+                    if(typeof o.blankRowsLimit === ud) o.blankRowsLimit=5;
+                    for(var y=0;y<o.blankRowsLimit;y++){
                         trItem();
                     }
                     if (typeof o.onEachComplete === ud) if(o.onComplete) o.onComplete();
@@ -1093,14 +791,15 @@ var  ud='undefined'
     		                        else{ 
     		                            
     		                            if(typeof _info.displayText!==ud){
-                                            _content = bs({    name      : _info.name  
-                                                                ,type      : _info.type  
-                                                                ,value     : svn(o.data ,_info.name ,_info.defaultValue ) 
-                                                                ,displayText : svn(o.data  ,_info.displayText) 
+                                            _content = bs({    name         : _info.name  
+                                                                ,style      : _info.style 
+                                                                ,type       : _info.type  
+                                                                ,value      : svn(o.data ,_info.name ,_info.defaultValue ) 
+                                                                ,displayText: svn(o.data  ,_info.displayText) 
                                                         });
     		                            }
     		                            else {
-    		                                _content = bs({name:_info.name  ,type:_info.type  ,value: svn(o.data  ,_info.name  ,_info.defaultValue )});
+    		                                _content = bs({name:_info.name , style:_info.style ,type:_info.type  ,value: svn(o.data  ,_info.name  ,_info.defaultValue )});
     		                            }
     		                        }
     		                         
@@ -1413,13 +1112,15 @@ var  ud='undefined'
                     __obj.addClickHighlight();        
                 }  
                 else{
-                    if(typeof o.limit === ud) o.limit=5;
-                    for(var y=0;y<o.limit;y++){
+                    if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
+                    for(var y=0;y<o.blankRowsLimit;y++){
                         var _cls = zsi.getOddEven();
                         trItem({data:null,panelType:"L",rowClass:_cls}); 
                         trItem({data:null,panelType:"R",rowClass:_cls});       
                     }
-                    if (typeof o.onEachComplete === ud) if(o.onComplete) o.onComplete();
+                    setRowClickEvent();                                  
+                    setScrollBars();
+                    if(o.onComplete) o.onComplete();
                     //add tr click event.
                     __obj.addClickHighlight();
             
@@ -1600,6 +1301,21 @@ var  ud='undefined'
                 }
                 fire();
                 return this;
+            };
+            $.fn.showAlert          = function(o){   
+                                        var _self = this;         
+                                        var _time = 1500;
+                                        _self.show();       
+                                        if( ! isUD(o) ){ 
+                                        if( o.top ) _self.css({left:o.left,top:o.top });
+                                        if( o.center ) _self.center();
+                                        if( o.time ) _time = o.time;
+                                        }
+                                        setTimeout(function(){
+                                            _self.hide("slow");
+                                            if( ! isUD(o.onHide) ) o.onHide();
+                                        }, _time);
+
             };
             $.fn.showPopup          = function(o){
                 var _popUpName = (typeof o.id !== ud ? o.id : "popup");
@@ -2646,4 +2362,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                
+                                                                                           
