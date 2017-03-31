@@ -72,72 +72,7 @@ function displayRecords(){
    
 }
    
-    
- 
-    
-  /*  var rownum=0;
-    $("#grid").loadData({
-         url    : execURL + "tables_sel"
-        ,td_body: [ 
-            function(d){
-                return     bs({name:"table_id",type:"hidden",value: d.table_id})
-                        +  bs({name:"cb",type:"checkbox"});
-            }            
-            ,function(d){ return bs({name:"table_code",value: d.table_code }); }
-            ,function(d){ return bs({name:"table_name",value: d.table_name,type:"select" }); }
-            ,function(d){ return bs({name:"table_key_name",value: d.table_key_name,type:"select"}); }
-
-        ]
-        ,onComplete: function(){
-            displayBlankRows();
-        }
-    });    
-}*/
-
-/*function displayBlankRows(){       
-    var inputCls = "form-control input-sm";
-    $("#grid").loadData({
-         td_body: [ 
-            function(){
-                return     bs({name:"table_id",type:"hidden"})
-                        +  bs({name:"cb",type:"checkbox"});
-            }            
-            ,function(){ return bs({name:"table_code" }); }
-            ,function(){ return bs({name:"table_name",type:"select" }); }
-            ,function(){ return bs({name:"table_key_name",type:"select",value:""}); }
-
-        ]
-       ,onComplete: function(){
-           var objTable =$("select[name='table_name']");
-           objTable.change(function(){
-               
-                var tr= this.parentNode.parentNode ;
-                    if(this.value!=="")
-                        $(tr).find("#table_key_name").dataBind( execURL + "table_column_options_sel '" + this.value + "'");  
-               
-           });
-           
-           
-             objTable.dataBind({ 
-                 url : execURL + "table_options_sel"
-                 ,onComplete : function(){
-                    $ddl = $("select[name='table_name']");
-                    $.each($ddl,function(){
-                        var tr= this.parentNode.parentNode ;
-                        if(this.value!=="")
-                        $(tr).find("#table_key_name").dataBind( execURL + "table_column_options_sel '" + this.value + "'");
-                    });
-                       
-                        
-                 }
-             });
-
-       }
-    });    
-    
-   
-}*/
-
+  
 $("#btnDelete").click(function(){
     zsi.form.deleteData({
          code       : "sys-0009"
@@ -147,4 +82,4 @@ $("#btnDelete").click(function(){
     });   
 
 });     
-                                      
+                                       
