@@ -35,7 +35,7 @@ BEGIN
         ,updated_date			= GETDATE()
     FROM dbo.issuances a INNER JOIN @tt b
     ON a.issuance_id = b.issuance_id
-    WHERE isnull(b.is_edited,'N')='Y'
+    WHERE isnull(b.is_edited,'N')='Y' OR a.status_id <> b.status_id
    
 -- Insert Process
 

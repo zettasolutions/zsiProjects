@@ -1,5 +1,4 @@
 
-
 CREATE PROCEDURE [dbo].[users2_sel]
 (
     @user_id int = NULL
@@ -9,7 +8,7 @@ CREATE PROCEDURE [dbo].[users2_sel]
    ,@is_active varchar(1)='Y'
    ,@role_id INT=null
    ,@is_contact varchar(1)='N'
-   ,@col_no INT = 3
+   ,@col_no INT = 2
    ,@order_no INT = 0
    ,@pno INT = 1
    ,@rpp INT = 100
@@ -21,7 +20,7 @@ BEGIN
   DECLARE @count INT = 0;
   DECLARE @page_count INT = 1;
   
-  SET @stmt = 'SELECT user_id, logon, password, password, is_admin, role_id, rankDesc, position, organizationName  FROM user_role_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''''; 
+  SET @stmt = 'SELECT user_id, logon, last_first_name, password, is_admin, role_id, rankDesc, position, organizationName  FROM user_role_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''''; 
   SET @order = ' ORDER BY ' + CAST(@col_no + 1 AS VARCHAR(1)) + ' ' + IIF(@order_no=0,'ASC','DESC');   
   SELECT @count = COUNT(*) FROM dbo.user_role_v WHERE is_active = @is_active; 
 
@@ -60,7 +59,7 @@ BEGIN
 	EXEC(@stmt);
 
 	SET @page_count =  CEILING((CONVERT(DECIMAL(20,5),@count))/@rpp);
-	print @page_count;
+	--print @page_count;
 	RETURN @page_count;
 END;
 

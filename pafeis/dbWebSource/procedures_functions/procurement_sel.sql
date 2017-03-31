@@ -2,10 +2,11 @@
 
 CREATE PROCEDURE [dbo].[procurement_sel]
 (
-    @procurement_id  INT = null
-   ,@user_id		 INT 
-   ,@col_no			 INT = 1
-   ,@order_no		 INT = 0
+    @procurement_id    INT = null
+   ,@tab_name          NVARCHAR(30) = null  
+   ,@user_id		   INT 
+   ,@col_no			   INT = 1
+   ,@order_no		   INT = 0
 )
 AS
 BEGIN
@@ -15,12 +16,15 @@ DECLARE @role_id INT
 
   SELECT @role_id=role_id FROM users where user_id=@user_id;
 
-  SET @stmt =  'SELECT * FROM dbo.procurement_v '
+  SET @stmt =  'SELECT * FROM dbo.procurement_v WHERE 1=1 '
   
   IF @procurement_id IS NOT NULL  
-	 SET @stmt = @stmt + ' WHERE procurement_id = ' + CAST(@procurement_id AS VARCHAR(20)); 
-  ELSE
-     SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
+	 SET @stmt = @stmt + ' AND procurement_id = ' + CAST(@procurement_id AS VARCHAR(20)); 
+
+  IF ISNULL(@tab_name,'')<>''
+	 SET @stmt = @stmt + ' AND procurement_type = ''' + @tab_name + ''''
+
+  SET @stmt = @stmt + ' AND role_id = '+ cast(@role_id as varchar(20)) 
 
   SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
   
@@ -28,7 +32,7 @@ DECLARE @role_id INT
      SET @stmt = @stmt + ' ASC';
   ELSE
      SET @stmt = @stmt + ' DESC';
-   
+   PRINT(@stmt);
   EXEC(@stmt);	
 END
 

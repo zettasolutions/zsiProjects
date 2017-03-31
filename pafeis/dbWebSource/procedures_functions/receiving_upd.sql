@@ -38,7 +38,7 @@ BEGIN
         ,updated_date				= GETDATE()
     FROM dbo.receiving a INNER JOIN @tt b
     ON a.receiving_id = b.receiving_id
-    WHERE isnull(b.is_edited,'N')='Y'
+    WHERE isnull(b.is_edited,'N')='Y' OR a.status_id<>b.status_id
 	   
 -- Insert Process
 

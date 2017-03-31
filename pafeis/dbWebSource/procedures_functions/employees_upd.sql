@@ -9,10 +9,10 @@ BEGIN
 -- Update Process
     UPDATE a 
         SET id_no		    =	b.id_no
-			,last_name		=	b.last_name
-			,first_name		=	b.first_name
-			,middle_name	=	b.middle_name
-			,name_suffix	=	b.name_suffix
+			,last_name		=	upper(b.last_name)
+			,first_name		=	upper(b.first_name)
+			,middle_name	=	upper(b.middle_name)
+			,name_suffix	=	upper(b.name_suffix)
 			,civil_status	=	b.civil_status
 			,contact_nos	=	b.contact_nos
 			,email_add		=	b.email_add
@@ -67,10 +67,10 @@ BEGIN
         )
     SELECT 
 		 id_no			
-		,last_name		
-		,first_name		
-		,middle_name	
-		,name_suffix	
+		,upper(last_name)	
+		,upper(first_name)	
+		,upper(middle_name)	
+		,upper(name_suffix)
 		,civil_status	
 		,contact_nos
 		,email_add	

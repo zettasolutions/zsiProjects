@@ -14,40 +14,40 @@ BEGIN
 		,item_name				= b.item_name
 		,critical_level         = b.critical_level
 		,reorder_level          = b.reorder_level
+		,unit_of_measure_id     = b.unit_of_measure_id
+		,monitoring_type_id     = b.monitoring_type_id
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.item_codes a INNER JOIN @tt b
     ON a.item_code_id = b.item_code_id
-    WHERE (
-			isnull(a.item_type_id,0)		<> isnull(b.item_type_id,0)  
-		OR	isnull(a.part_no,'')			<> isnull(b.part_no,'')  
-		OR	isnull(a.national_stock_no,'')	<> isnull(b.national_stock_no,'') 
-		OR	isnull(a.item_name,'')			<> isnull(b.item_name,'') 
-		OR	isnull(a.critical_level,0)		<> isnull(b.critical_level,0) 
-		OR	isnull(a.reorder_level,0)		<> isnull(b.reorder_level,0) 
-		OR	isnull(a.is_active,'')			<> isnull(b.is_active,'')  
-	)
+    WHERE isnull(b.is_edited,'N')='Y'
 	   
 -- Insert Process
     INSERT INTO dbo.item_codes (
-         item_type_id 
+	     item_cat_id
+        ,item_type_id 
 		,part_no
 		,national_stock_no
 		,item_name
 		,critical_level
 		,reorder_level
+		,unit_of_measure_id
+		,monitoring_type_id
 		,is_active
         ,created_by
         ,created_date
         )
     SELECT 
-        item_type_id 
+	    item_cat_id
+       ,item_type_id 
 	   ,part_no	
 	   ,national_stock_no
 	   ,item_name
 	   ,critical_level
 	   ,reorder_level
+	   ,unit_of_measure_id
+	   ,monitoring_type_id
 	   ,is_active
        ,@user_id
        ,GETDATE()

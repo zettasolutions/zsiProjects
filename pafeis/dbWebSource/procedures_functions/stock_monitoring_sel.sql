@@ -9,7 +9,8 @@
 -- ===================================================================================================
 CREATE PROCEDURE [dbo].[stock_monitoring_sel] 
 (
-    @search  NVARCHAR(1000) = ''
+	 @field	 NVARCHAR(100) = ''
+	,@search  NVARCHAR(1000) = ''
 )
 AS
 BEGIN
@@ -19,22 +20,22 @@ SET NOCOUNT ON
 	DECLARE @stmt NVARCHAR(1000) = '';
 	DECLARE @orderby NVARCHAR(1000) = '';
    
-	SET @stmt = 'SELECT part_no, national_stock_no, item_code, item_name, item_type_name, 
-	             stock_qty,
-	             dbo.getOrganizationName(organization_id) AS organization_name
-	             FROM dbo.items_on_stock_v 
-	             WHERE is_active = ''Y'' '
-	IF @search IS NOT NULL 
+	SET @stmt = 'SELECT *
+	             FROM dbo.items_inv_v 
+	             WHERE stock_qty > 0 and is_active = ''Y'' '
+
+ 
+	IF @search <> '' 
 		SET @stmt = @stmt +
-		'AND part_no LIKE ''%' + @search + '%''
-		OR national_stock_no LIKE ''%' + @search + '%''
-		OR item_name LIKE ''%' + @search + '%'' '
+		'AND ' + @field + ' LIKE ''' + @search + '%'' '
 
 	SET @orderby = 'ORDER BY item_name'
 
 	SET @stmt = @stmt + @orderby;
 	
-	EXEC(@stmt);
+	IF @search <> ''
+		EXEC(@stmt);
+	ELSE
+		SELECT 'No record(s) found.' AS result;  
+        RETURN;
 END
-
-

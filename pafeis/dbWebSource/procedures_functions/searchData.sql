@@ -14,7 +14,7 @@ BEGIN
 
    SELECT @table_name=table_name,@table_key_name=table_key_name FROM tables  WHERE table_code=@code;
 
-   SET @stmt = 'SELECT top 20 ' + @table_key_name + ',' + @columns +  ' FROM ' +  @table_name  + ' WHERE ' + @searchColumn + ' LIKE ''%' + @searchKeyword + '%'''
+   SET @stmt = 'SELECT top 20 ' + @table_key_name + ',' + @columns +  ' FROM ' +  @table_name  + ' WHERE ' + @searchColumn + ' LIKE ''' + @searchKeyword + '%'''
    
    IF isnull(@where,'') <> '' 
       SET @stmt = @stmt + ' and ' + @where;

@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[receiving_sel]
 (
     @receiving_id INT = null
    ,@tab_name     varchar(50)=null
-   ,@user_id      INT 
+   ,@user_id      INT = null
    ,@col_no       INT = 1
    ,@order_no     INT = 0
 )
@@ -26,21 +26,9 @@ DECLARE @organization_id INT
      SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
                + ' AND warehouse_id in (SELECT warehouse_id FROM dbo.user_warehouses(' + cast(@user_id as varchar(20)) + '))'
 
-  IF @tab_name='SUPPLIER'
-     SET @stmt = @stmt + ' AND receiving_type=''SUPPLIER'''
-
-  IF @tab_name='DONATION'
-     SET @stmt = @stmt + ' AND receiving_type=''DONATION'''
-
-  IF @tab_name='TRANSFER'
-     SET @stmt = @stmt + ' AND receiving_type=''TRANSFER'''
-
-  IF @tab_name='AIRCRAFT'
-     SET @stmt = @stmt + ' AND receiving_type=''AIRCRAFT'''
-
-  IF @tab_name='OVERHAUL'
-     SET @stmt = @stmt + ' AND report_type=''OVERHAUL'''
-
+   IF ISNULL(@tab_name,'') <> ''
+      SET @stmt = @stmt + ' AND receiving_type= ''' + @tab_name + ''''
+  
    SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
   
   IF @order_no = 0
@@ -53,7 +41,6 @@ DECLARE @organization_id INT
 	
 END
 
-SELECT * FROM receiving
 
 
 

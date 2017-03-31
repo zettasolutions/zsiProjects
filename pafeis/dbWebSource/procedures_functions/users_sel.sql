@@ -9,6 +9,7 @@ CREATE PROCEDURE [dbo].[users_sel]
 )  
 AS  
 BEGIN  
+  SET NOCOUNT ON
   DECLARE @stmt           VARCHAR(4000);  
   DECLARE @order          VARCHAR(4000);  
   CREATE TABLE #tt (  
@@ -50,6 +51,7 @@ BEGIN
       SET @stmt = @stmt + ' AND role_id = ' + CAST(@role_id AS VARCHAR(20));   
   END  
 
+SET @stmt = @stmt + ' ORDER BY userFullName ';
 EXEC(@stmt);  
 DROP TABLE #tt;  
   
@@ -57,3 +59,4 @@ END;
   
   
   
+

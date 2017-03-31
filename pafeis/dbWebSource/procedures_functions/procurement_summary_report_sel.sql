@@ -14,7 +14,7 @@ SET NOCOUNT ON
 
 	DECLARE @stmt NVARCHAR(1000) = '';
 
-	SET @stmt = 'SELECT * FROM dbo.procurement_v WHERE 1=1 '
+	SET @stmt = 'SELECT * FROM dbo.procurement_v WHERE status_name <> ''NEW'' '
 
 	IF (NOT @date_from IS NULL) AND (NOT @date_to IS NULL)
 		SET @stmt = @stmt + 'AND procurement_date >= ''' + @date_from + ''' AND procurement_date <= ''' + @date_to + ''' '
@@ -25,7 +25,7 @@ SET NOCOUNT ON
     IF ISNULL(@procurement_id,0) <> 0
 		SET @stmt = @stmt + 'AND procurement_id  = ' + cast(@procurement_id as varchar(1))
 	
-	 IF ISNULL(@report_type_id,0) <> 0
+	 IF ISNULL(@report_type_id,0) >1
 	   SET @stmt = @stmt + 'AND delivery_timing = ' + cast(@report_type_id as varchar(1))
 
 	print(@stmt)    

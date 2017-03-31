@@ -4,6 +4,7 @@ CREATE PROCEDURE [dbo].[dd_warehouse_items_sel]
 (
    @item_code_id int = null
   ,@item_inv_id int = null
+  ,@warehouse_id  int  = null
 
 )
 AS
@@ -18,6 +19,11 @@ SET NOCOUNT ON
   IF isnull(@item_inv_id,0) <> 0
      SET @stmt =  @stmt + ' AND item_inv_id = ' + cast(@item_inv_id as varchar(20))
 
+  IF isnull(@warehouse_id,0) <> 0
+     SET @stmt =  @stmt + ' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
+  
   EXEC(@stmt);
 
 END
+
+

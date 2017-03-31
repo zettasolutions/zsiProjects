@@ -24,14 +24,16 @@ BEGIN
     SET  procurement_date					= b.procurement_date		
 		,procurement_code					= b.procurement_code
 		,procurement_name					= b.procurement_name
+		,procurement_mode					= b.procurement_mode
 		,supplier_id						= b.supplier_id
 		,promised_delivery_date				= b.promised_delivery_date
+		,warehouse_id                       = b.warehouse_id
 		,status_id							= b.status_id
 		,updated_by							= @user_id
         ,updated_date						= GETDATE()
     FROM dbo.procurement a INNER JOIN @tt b
     ON a.procurement_id = b.procurement_id
-    WHERE isnull(b.is_edited,'N')='Y'
+    WHERE isnull(b.is_edited,'N')='Y' OR a.status_id <> b.status_id
    
 -- Insert Process
 
@@ -39,9 +41,12 @@ BEGIN
 		 procurement_date				
 		,procurement_code				
 		,procurement_name	
+		,procurement_mode
 		,organization_id			
 		,supplier_id					
 		,promised_delivery_date
+		,warehouse_id 
+		,procurement_type
 		,status_id						
 		,created_by
 		,created_date
@@ -50,15 +55,19 @@ BEGIN
 		 procurement_date				
 		,procurement_code				
 		,procurement_name	
+		,procurement_mode
 		,dbo.getUserOrganizationId(@user_id)			
 		,supplier_id					
 		,promised_delivery_date
+		,warehouse_id
+		,procurement_type	
 		,status_id						
 	    ,@user_id
 	    ,GETDATE()
     FROM @tt
     WHERE isnull(procurement_id,0) = 0
 	AND procurement_code IS NOT NULL
+	AND supplier_id IS NOT NULL
 
 	SELECT @id = procurement_id, @statusId=dbo.getPageProcessActionIdByStatusId(status_id,1107) FROM @tt;
 	IF ISNULL(@id,0) = 0

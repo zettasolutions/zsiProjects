@@ -1,5 +1,6 @@
 
 
+
 -- ===================================================================================================
 -- Author:		Rogelio T. Novo Jr.
 -- Create date: February 24, 2017 11:56 PM
@@ -21,6 +22,7 @@ BEGIN
 -- Update Process
     UPDATE a 
     SET  item_no				    = b.item_no
+	    ,serial_no                  = b.serial_no
 		,item_code_id				= b.item_code_id
 		,unit_of_measure_id	        = b.unit_of_measure_id
 		,quantity					= b.quantity
@@ -34,7 +36,8 @@ BEGIN
 -- Insert Process
     INSERT INTO dbo.procurement_detail (
 	     procurement_id
-		,item_no				
+		,item_no	
+		,serial_no
 		,item_code_id					
 		,unit_of_measure_id	        
 		,quantity					
@@ -47,7 +50,8 @@ BEGIN
         )
     SELECT
 	     procurement_id 
-		,item_no				
+		,item_no	
+		,serial_no			
 		,item_code_id					
 		,unit_of_measure_id	        
 		,quantity					
@@ -64,6 +68,7 @@ BEGIN
 	  AND quantity > 0
 
 END
+
 
 
 
