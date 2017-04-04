@@ -28,7 +28,7 @@ var contextModalWindow = {
             +'             <input type="hidden" name="procurement_type" id="procurement_type" class="form-control input-sm" >'
             +'             <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
             +'        </div> ' 
-            +'        <label class=" col-xs-2 control-label">Procurement Code</label>'
+            +'        <label class=" col-xs-2 control-label">PR #</label>'
             +'        <div class=" col-xs-3">'
             +'           <input type="text" name="procurement_code" id="procurement_code" class="form-control input-sm" >'
             +'         </div>'
@@ -189,13 +189,14 @@ function buildButtons(){
 
     var html = '';
     $.get(procURL + "current_process_actions_sel @page_id=1107,@doc_id=" + $("#procurement_id").val(), function(d) {
-        if (d.rows !== null) {
+        if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
                     + v.status_id + ');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
 
+            $("#status_name").text(d.rows[0].status_name);
             $(".added-button").remove();
             $("#procurement-footer").html(html);
         }
@@ -628,4 +629,4 @@ $("#btnDelRepair").click(function(){
                       }
     });       
 });
-       
+           

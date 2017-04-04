@@ -107,21 +107,23 @@ function displayRecords(){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
     $("#grid").dataBind({
          url   : procURL + "roles_sel"
-        ,width          : $(document).width() - 650
+       // ,width          : $(document).width() - 650
 	    ,height         : $(document).height() - 250
         ,blankRowsLimit:5
         ,dataRows       :[
     		 { text: cb             , width:25  , style:"text-align:left;"   
     		     ,onRender : function(d){
                                 return     bs({name:"role_id",type:"hidden",value: svn(d,"role_id") })
+                                        +  bs({name:"is_edited",type:"hidden"}) 
                                         +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }             
     		 }	 
     		,{ text:"Role Name"     , width:200 , style:"text-align:center;" ,type:"input"  ,name:"role_name"}	 
+        	,{text  : "Dashboard Page"           , name  : "page_id"               , type  : "select"           , width : 300       , style : "text-align:left;"}
     		,{ text:"Export Excel?" , width:100 , style:"text-align:center;" ,type:"yesno"  ,name:"is_export_excel"  ,defaultValue:"Y"}	 
     		,{ text:"Export Pdf?"   , width:100 , style:"text-align:center;" ,type:"yesno"  ,name:"is_export_pdf"    ,defaultValue:"Y"}	 	 
     		,{ text:"Import Excel?" , width:100 , style:"text-align:center;" ,type:"yesno"  ,name:"is_import_excel"  ,defaultValue:"Y"}	 	 
-    		,{ text:"Role Menu"    , width:80   , style:"text-align:center;"  
+    		,{ text:"Role Menu"     , width:80  , style:"text-align:center;"  
     		    ,onRender : function(d){ return "<a href='javascript:manageItem(" + svn(d,"role_id") + ",\"" +  svn(d,"role_name")  + "\");'>" + svn(d,"countRoleMenus") + "</a>"; }
     		}	 
     		,{ text:"Users"         , width:81  , style:"text-align:center;" 
@@ -129,7 +131,13 @@ function displayRecords(){
     		}	 	 
 	    ]
         ,onComplete: function(){
-             $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+            $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+            $("select[name='page_id']").dataBind( "pages");
+	        $("select, input").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });            
+             
         }
     });    
 }
@@ -194,4 +202,4 @@ $("#btnDelete").click(function(){
 });      
 
     
-                                                                             
+                                                                               
