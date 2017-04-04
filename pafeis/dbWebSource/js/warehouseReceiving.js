@@ -566,13 +566,14 @@ function buildReceivingDetails(callback) {
 function buildReceivingButtons() {
     var html = '';
     $.get(procURL + "current_process_actions_sel @page_id=70,@doc_id=" + $("#receiving_id").val(), function(d) {
-        if (d.rows !== null) {
+        if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
                     + v.status_id + ');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             
+            $("#status_name").text(d.rows[0].status_name);
             $(".added-button").remove();
             $("#receiving-footer").append(html);
         }
@@ -1060,4 +1061,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                           
+                                                            

@@ -31,14 +31,14 @@ function setSearch(){
     
     new zsi.search({
         tableCode: "adm-0002"
-        ,colNames : ["logon"] 
-        ,displayNames : ["Logon"]  
+        ,colNames : ["last_first_name"] 
+        ,displayNames : ["Name"]  
         ,searchColumn :"logon"
         ,input:"input[name=logon_name_filter]"
         ,url : execURL + "searchData"
         ,condition :"'is_active=''Y'''"
         ,onSelectedItem: function(currentObject,data,i){ 
-            currentObject.value=data.logon;
+            currentObject.value=data.last_first_name;
             var tr  = currentObject.parentNode.parentNode;
             $(tr).find("#logon_id_filter").val(data.user_id);
             displayRecords( data.user_id);
@@ -169,30 +169,30 @@ function displayRecords(user_id){
     var rownum=0;
     $("#grid").dataBind({
 	     url   : procURL + "users2_sel @filter_user_id=" + user_id
-        ,width          : $(document).width() - 300
+        ,width          : $(document).width() - 200
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,isPaging : true
         ,dataRows       :[
-     		 { text:"User"          , width:270     , style:"text-align:center;"      ,type:"select"     ,name:"user_id"    }	 
-    		,{ text:"Role"          , width:150     , style:"text-align:left;"        ,type:"select"     ,name:"role_id"    }
-    		,{ text:"Logon"          , width:100     , style:"text-align:left;"
+     		 { text:"User"          , width:260     , style:"text-align:center;"      ,type:"select"     ,name:"user_id"    ,sortColNo: 0 }	 
+    		,{ text:"Role"          , width:200     , style:"text-align:left;"        ,type:"select"     ,name:"role_id"    }
+    		,{ text:"Logon"          , width:150     , style:"text-align:left;"
     		    ,onRender: function(d){
     		        return "<input type='hidden' name='password' value='" + svn(d, "password") + "'>" + svn(d, "logon");
     		    }
     		}
-    		,{ text:"Rank"          , width:130     , style:"text-align:left;"
+    		,{ text:"Rank"          , width:150     , style:"text-align:left;"
     		    ,onRender: function(d){
     		        return svn(d, "rankDesc");
     		    }
     		}
-    		,{ text:"Position"      , width:150     , style:"text-align:left;"
+    		,{ text:"Position"      , width:170     , style:"text-align:left;"
     		    ,onRender: function(d){
     		        return svn(d, "position");
     		    }
     		}
-    		,{ text:"Organization"  , width:150     , style:"text-align:left;"
+    		,{ text:"Organization"  , width:200     , style:"text-align:left;"
     		    ,onRender: function(d){
     		        return svn(d, "organizationName");
     		    }
@@ -342,4 +342,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                  
+                    

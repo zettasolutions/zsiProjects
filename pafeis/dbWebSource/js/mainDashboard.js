@@ -12,6 +12,7 @@ zsi.ready(function(){
             , value: "page_name"
             , required :true
             , onComplete: function(data){
+                console.log(data);
                 if(data.length > 0){
                     $("#dd_dashboard").removeClass("hide");
                     var pageName = $("#dd_dashboard option:selected" ).val();
@@ -30,4 +31,4 @@ function getUserInfo(callBack){
         if(callBack) callBack();
     });
 }
- 
+  

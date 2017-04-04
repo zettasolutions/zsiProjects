@@ -3,12 +3,16 @@ var bs = zsi.bs.ctrl
     ,item_cat_id = zsi.getUrlParamValue("item_cat_id")
     ,optionId = zsi.getUrlParamValue("option_id")
     ,g_warehouse_id = null
-    ,option_id = (optionId ? optionId : null)
+    ,option_id = (optionId ? optionId : "A")
     ,pageName = location.pathname.split('/').pop()
+    ,g_column_name = ""
+    ,g_keyword= ""
 ;
 
 function setInputs(){
-    $optionId    = $("#option_id");
+    $optionId = $("#option_id");
+    $keyword  = $("#keyword");
+    $column   = $("#column");
 }
 
 zsi.ready(function(){
@@ -23,6 +27,7 @@ zsi.ready(function(){
         ]
         ,selectedValue : option_id
         ,defauleValue  : "A"
+        ,required      : true
     });
     $("#option_id").val("A");
     
@@ -76,12 +81,21 @@ zsi.ready(function(){
 
 $("#btnGo").click(function(data){
     getFilterValue();
-    displayTabs();
+    displayItems(item_cat_id);
+});
 
+$("#btnClear").click(function(){
+    g_keyword = "";
+    g_column_name = "";
+    $column.val('');
+    $keyword.val('');
+    displayItems(item_cat_id);
 });
 
 function getFilterValue(){
-    option_id   = ($optionId.val() ? $optionId.val(): null);
+    option_id = ($optionId.val() ? $optionId.val(): "");
+    g_keyword = $.trim($keyword.val());
+    g_column_name = ($column.val() ? $column.val(): "");
 }
 
 function displayTabs(cbFunc){
@@ -101,47 +115,50 @@ function displayTabs(cbFunc){
         
         $("#tabWrapper").html(tabList + tabContent);
         
+        var activeTabId = $("ul.nav-tabs").find("li.active a").attr("id");
+        displayItems(activeTabId);
+         
+        $("a[role='tab']").click(function(){
+            item_cat_id = $(this).attr("id");
+            displayItems(item_cat_id);
+        });
         
-        for(i=0; i < _rows.length; i++){
-             d =_rows[i];
-             displayItems(d.item_cat_id);
-        }
-        
-        
+        //for(i=0; i < _rows.length; i++){
+        //     d =_rows[i];
+        //     displayItems(d.item_cat_id);
+        //}
     });
 } 
 
 function displayItems(id){
     var counter = 0;
+    var columnName = (g_column_name ? ",@col_name='"+ g_column_name +"'" : "");
+    var keyword    = (g_keyword ? ",@keyword='"+ g_keyword +"'" : "");
+    
     $("#tabGrid" + id).dataBind({
-	     url            : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" +  option_id + "'"
-	    ,width          : $(document).width() 
-	    ,height         : $(document).height() - 250
+	     url      : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" + option_id +"'" + columnName + keyword
+	    ,width    : $(document).width() - 25
+	    ,height   : $(document).height() - 310
+	    ,isPaging : true
         ,dataRows : [
-        		 {text  : "Item Code"                   , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return   bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
-        		                                    + svn(d,"item_code"); }
-        		}
-        		,{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return  svn(d,"part_no"); }
-        		}
-        		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
-        		}
-        		,{text  : "Item Name"                   , type  : "label"       , width : 300       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"item_name"); }
-        		}
-           		,{text  : "Reorder Level"               , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"reorder_level"); }
-        		}
-        		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"stock_qty"); }
-        		}
-        		,{text  : "Item Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"item_type_name"); }
-        		}
-
-
+    		{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"     ,sortColNo: 1
+    		    ,onRender : function(d){ return  svn(d,"part_no"); }
+    		}
+    		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"    ,sortColNo: 2
+    		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
+    		}
+    		,{text  : "Nomenclature"                   , type  : "label"       , width : 300       , style : "text-align:left;"    ,sortColNo: 3
+    		    ,onRender : function(d){ return svn(d,"item_name"); }
+    		}
+    		,{text  : "Nomenclature Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"    ,sortColNo: 4
+    		    ,onRender : function(d){ return svn(d,"item_type_name"); }
+    		}
+    		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:right;"
+    		    ,onRender : function(d){ return svn(d,"stock_qty").toLocaleString("en"); }
+    		}
+       		,{text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:right;"
+    		    ,onRender : function(d){ return svn(d,"reorder_level"); }
+    		}
 	    ]   
     });    
-}                  
+}                   
