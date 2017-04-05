@@ -8,6 +8,8 @@ var bs          = zsi.bs.ctrl
    ,g_organization_name = ""
    ,g_location_name = ""
    ,g_today_date = new Date()
+   ,g_physical_inv_id = null
+   ,g_item_code_id = null
 ;
 
 
@@ -39,7 +41,7 @@ var contextModalWindow = {
                         +'    <div class="form-group  "> ' 
                         +'        <label class=" col-xs-2 control-label">Physical Inv Date</label>'
                         +'        <div class=" col-xs-4">'
-                        +'             <input type="hidden" name="physical_inv_id" id="issuance_directive_id" >'
+                        +'             <input type="hidden" name="physical_inv_id" id="physical_inv_id" >'
                         +'             <input type="hidden" name="is_edited" id="is_edited">'
                         +'             <input type="text" name="physical_inv_date" id="physical_inv_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
                         +'             <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">'
@@ -92,8 +94,10 @@ var contextSerialNos = {
       id:"modalWindowSerialNos"
     , title: "File Upload"
     , sizeAttr: "modal-lg"
-    , footer: '<buttontype="button" onclick="SaveSerialNo();" class="btn btn-primary pull-left">'
+    , footer: '<button type="button" onclick="SaveSerialNo();" class="btn btn-primary pull-left">'
                 + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
+                + '<button type="button" onclick="DeleteSerialNo();" class="btn btn-primary pull-left">'
+                + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Delete</button>'
     , body: '<div id="tblSerialNos" class="zGrid"></div>'
 };
 
@@ -111,7 +115,7 @@ $("#btnNew").click(function () {
     $("#ctxMW").modal({ show: true, keyboard: false, backdrop: 'static' });
 
     clearForm();
-    displayPhysicalInvDetails(0);
+    displayPhysicalInvDetails('');
     buildPhysicalInvButtons();
     
     $("select, input").on("keyup change", function(){
@@ -134,7 +138,7 @@ function Save(page_process_action_id){
              if(data.isSuccess===true){ 
                  
                 var $tbl = $("#" + tblPhysicalInvDetail);
-                $tbl.find("[name='physical_inv_id']").val( data.returnValue);
+                $tbl.find("[name='physical_inv_id']").val((data.returnValue==0 ? g_physical_inv_id : data.returnValue));
                 $tbl.jsonSubmit({
                      procedure : "physical_inv_details_upd"
                     ,optionalItems : ["physical_inv_id"]
@@ -164,11 +168,11 @@ function Save(page_process_action_id){
 
 function showModalEditPhysicalInv(index, physical_inv_no) {
    var _info = dataPhysicalInv[index];
-  
+    g_physical_inv_id = _info.physical_inv_id;
+    
     $("#ctxMW .modal-title").text("Physical Inventory » " + physical_inv_no);
- 
     $("#ctxMW").modal({ show: true, keyboard: false, backdrop: 'static' });
-    $("#ctxMW #physical_inv_id").val(_info.physical_inv_id);
+    $("#ctxMW #physical_inv_id").val(g_physical_inv_id);
     $("select, input").on("keyup change", function(){
         $("#frmPhysicalInv").find("#is_edited").val("Y");
     });     
@@ -179,7 +183,7 @@ function showModalEditPhysicalInv(index, physical_inv_no) {
     });
     zsi.initDatePicker();
     displayPhysicalInv(_info);
-    displayPhysicalInvDetails(_info.physical_inv_id);
+    displayPhysicalInvDetails(g_physical_inv_id);
     buildPhysicalInvButtons();
 }
 
@@ -207,14 +211,15 @@ function setStatusName(page_process_action_id) {
 
 function buildPhysicalInvButtons() {
     var html = '';
-    $.get(procURL + "current_process_actions_sel @page_id=70,@doc_id=" + $("#physical_inv_id").val(), function(d) {
+    $.get(procURL + "current_process_actions_sel @page_id=1113,@doc_id=" + $("#physical_inv_id").val(), function(d) {
         if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
                     + v.status_id + ');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
-            html += '<button type="button" onclick="showUploadFile();" class="btn btn-primary"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>';
+            //html += '<button type="button" onclick="showUploadFile();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>';
+            html += '<button type="button" onclick="DeletePhysicalInvDetails();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>';
             
             $("#status_name").text(d.rows[0].status_name);
             $(".added-button").remove();
@@ -228,7 +233,7 @@ function displayPhysicalInv(d){
    $f.find("#physical_inv_id").val( d.physical_inv_id );
    $f.find("#physical_inv_date").val(  d.physical_inv_date.toDateFormat() );
    $f.find("#organization_id").attr("selectedvalue",  d.organization_id );
-   $f.find("#warehouse_id").attr("selectedvalue",  d.warehouse_id );
+   $f.find("#warehouse_id").val( d.warehouse_id );
    $f.find("#done_by").attr("selectedvalue",  d.done_by ); 
    $f.find("#status_id").val( d.status_id );
    $f.find("#status_name").text( d.status_name );
@@ -292,7 +297,8 @@ function displayRecords(){
 }
 
 function displayPhysicalInvDetails(physical_inv_id){
-     var cb = bs({name:"cbFilter2",type:"checkbox"});
+    var rowNo = 0;
+    var cb = bs({name:"cbFilter2",type:"checkbox"});
      $("#" + tblPhysicalInvDetail).dataBind({
 	     url            : procURL + "physical_inv_details_sel @physical_inv_id=" + physical_inv_id
 	    ,width          : $(document).width() -75
@@ -300,7 +306,7 @@ function displayPhysicalInvDetails(physical_inv_id){
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,dataRows       : [
-                 {text  : cb                                                            , width : 25        , style : "text-align:left;"       
+                {text  : cb                                                            , width : 25        , style : "text-align:left;"       
         		    , onRender      :  function(d){ 
                 		                    return     bs({name:"physical_inv_detail_id",type:"hidden",value: svn (d,"physical_inv_detail_id")})
                 		                             + bs({name:"is_edited",type:"hidden"})
@@ -308,10 +314,16 @@ function displayPhysicalInvDetails(physical_inv_id){
                 		                             + bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")})
                                                      + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
-                }	 
+                }
+                ,{text  : "#"                   , width : 30                        , style : "text-align:center;"       
+        		    , onRender      :  function(d){ 
+                        rowNo++;
+                        return (d !==null ? rowNo : "");
+                    }
+                }	
                 ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
                 ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
-                ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+                ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 300       , style : "text-align:left;"}
         	   // ,{text  : "Serial"              , name  : "serial_no"                , type  : "input"       , width : 200       , style : "text-align:left;"}
         	    ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 120       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , width : 120          , style : "text-align:left;"}
@@ -398,12 +410,30 @@ function setMultipleSearch(){
 
 $("#btnDelete").click(function(){
     zsi.form.deleteData({
-         code       : "ref-0020"
+         code       : "ref-0032"
         ,onComplete : function(data){
-                        displayRecords();
-                      }
+            displayRecords();
+        }
     });       
 });
+        
+function DeletePhysicalInvDetails(){
+    zsi.form.deleteData({
+         code       : "ref-0033"
+        ,onComplete : function(data){
+            displayPhysicalInvDetails(g_physical_inv_id);
+        }
+    });   
+}
+
+function DeleteSerialNo(){
+    zsi.form.deleteData({
+         code       : "ref-0034"
+        ,onComplete : function(data){
+            displaySerialNumbers(g_physical_inv_id, g_item_code_id);
+        }
+    });   
+}
         
 function excelFileUpload(){
     var frm      = $("#frm_modalWindowFileUpload");
@@ -445,9 +475,15 @@ function excelFileUpload(){
 }               
 
 function showModalSerialNos(physical_inv_id, item_code_id, part_no){
+    g_item_code_id = item_code_id;
     $("#modalWindowSerialNos .modal-title").text("Serial Number(s) for » "+ part_no);
     $('#modalWindowSerialNos').modal({ show: true, keyboard: false, backdrop: 'static' });
     
+    displaySerialNumbers(physical_inv_id, item_code_id);
+}
+
+function displaySerialNumbers(physical_inv_id, item_code_id){
+    var cb = bs({name:"cbFilter4",type:"checkbox"});
     $("#tblSerialNos").dataBind({
 	     url            : procURL + "physical_inv_sn_sel @physical_inv_id=" + physical_inv_id +",@item_code_id="+ item_code_id
 	    ,width          : $(document).width() -510
@@ -455,16 +491,23 @@ function showModalSerialNos(physical_inv_id, item_code_id, part_no){
         ,blankRowsLimit :5
         ,dataRows       : [
             {
-                  text  : "Serial No."       
-                , width : 120
+                text  : cb                                                          
+                , width : 25
                 , style : "text-align:left;"       
     		    , onRender  :  function(d){ 
-                    return bs({name:"physical_inv_sn_id",type:"hidden",value: svn (d,"physical_inv_sn_id")})
-                         + bs({name:"is_edited",type:"hidden"})
-                         + bs({name:"physical_inv_id",type:"hidden", value: physical_inv_id})
-                         + bs({name:"item_code_id",type:"hidden", value: item_code_id})
-                         + bs({name:"serial_no",type:"input", value: svn (d,"serial_no")});
+	                    return     bs({name:"physical_inv_sn_id",type:"hidden",value: svn (d,"physical_inv_sn_id")})
+                                 + bs({name:"is_edited",type:"hidden"})
+                                 + bs({name:"physical_inv_id",type:"hidden", value: physical_inv_id})
+                                 + bs({name:"item_code_id",type:"hidden", value: item_code_id})
+                                 + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                 }
+            }
+            ,{
+                  text  : "Serial No."       
+                , name  : "serial_no"
+                , type  : "input"
+                , width : 120
+                , style : "text-align:left;"
             }	
             ,{
                   text  : "Status"   
@@ -503,6 +546,7 @@ function showModalSerialNos(physical_inv_id, item_code_id, part_no){
             }
 	    ]  
         ,onComplete: function(){
+            $("#cbFilter4").setCheckEvent("#grid input[name='cb']");
             $("select[name='status_id']").dataBind("inv_serial_status");
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
@@ -511,7 +555,7 @@ function showModalSerialNos(physical_inv_id, item_code_id, part_no){
                 }
             });
         }  
-    });    
+    }); 
 }
    
 function SaveSerialNo(){
@@ -531,4 +575,4 @@ function SaveSerialNo(){
 
     });
 }  
-  
+    
