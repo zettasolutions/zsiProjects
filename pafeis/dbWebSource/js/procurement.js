@@ -124,12 +124,12 @@ $("#btnAddRepair").click(function () {
     $("#promised_delivery_date").val( g_today_date.toShortDate());
     displayProcurementDetails();
     zsi.initDatePicker();
-    var $row = $(this).closest(".zRow");
-    $row.find("select[id='dd_warehouse']").dataBind({ 
+    $("select[name='dd_warehouse']").dataBind({ 
          url : procURL + "dd_warehouses_sel"
         ,text: "warehouse"
         ,value: "warehouse_id"
     });
+
     $("select[name='dd_warehouse']").change(function(){
         if(this.value){
             $("#warehouse_id").val(this.value);
@@ -139,6 +139,7 @@ $("#btnAddRepair").click(function () {
     
         $("#warehouse_id").val(this.value);
     });    
+
 });
 
 function getUserInfo(callBack){
@@ -186,7 +187,6 @@ function buildButtons(){
     
     $("select[name='supplier_id']").dataBind({url: base_url + "selectoption/code/dealer"});
     $("select[name='procurement_mode']").fillSelect({data: procMode});
-
     var html = '';
     $.get(procURL + "current_process_actions_sel @page_id=1107,@doc_id=" + $("#procurement_id").val(), function(d) {
         if (d.rows.length > 0) {
@@ -219,7 +219,7 @@ function displayPurchase(tab_name){
                          + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                 }
             }
-            ,{text  : "Code"                   , width : 120       , style : "text-align:left;"
+            ,{text  : "PR #"                   , width : 120       , style : "text-align:left;"
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
     		            + ProcType.Purchase + "\",\"" 
@@ -260,7 +260,7 @@ function displayRepair(tab_name){
     var cb = bs({name:"cbFilter2",type:"checkbox"}); 
     $("#repair").dataBind({
 	     url            : procURL + "procurement_sel @tab_name='" + tab_name + "'"
-	    ,width          : $(document).width() -40
+	   // ,width          : $(document).width() -80
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -272,12 +272,11 @@ function displayRepair(tab_name){
                          + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                 }
             }
-            ,{text  : "Code"                   , width : 120       , style : "text-align:left;"
+            ,{text  : "PR #"                   , width : 120       , style : "text-align:left;"
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
     		             + ProcType.Repair + "\",\"" 
     		             + svn(d,"procurement_id") +"\");'>"
-    		             //+ svn(d,"procurement_name") + "\" 
     		             + svn(d,"procurement_code") + " </a>";
     		    }
     		}
@@ -290,14 +289,11 @@ function displayRepair(tab_name){
     	    ,{text  : "Date"            , type  : "label"       , width : 200       , style : "text-align:left;"
     		     ,onRender : function(d){ return svn(d,"procurement_date").toDateFormat()}
     		}
-    		,{text  : "Supplier"        , type  : "label"       , width : 250       , style : "text-align:left;"
-    		    ,onRender : function(d){ return svn(d,"supplier_name")}
+    		,{text  : "Warehouse"          , type  : "label"       , width : 100       , style : "text-align:center;"
+    		    ,onRender : function(d){ return  svn(d,"warehouse")}  
     		}
     		,{text  : "Promised Delivery Date"         , type  : "label"   , width : 200   , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"promised_delivery_date").toDateFormat()}
-    		}
-    		,{text  : "Total Amount"         , type  : "label"   , width : 100   , style : "text-align:right;"
-    		    ,onRender : function(d){ return svn(d,"total_amount").toLocaleString('en-PH', {minimumFractionDigits: 2})}
     		}
     		,{text  : "Status"          , type  : "label"       , width : 100       , style : "text-align:center;"
     		    ,onRender : function(d){ return  svn(d,"status_name")}  
@@ -404,13 +400,6 @@ function displayProcurementDetails(){
                 ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
         	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 130       , style : "text-align:right;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:right;"}
-        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:right;"}
-        	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
-        	        ,onRender : function(d){
-        	            return "<div id='amount' >" + parseFloat(svn(d,"amount", 0)).toFixed(2) + "</div>";
-        	        }
-        	    }
     	    );  
     	}
 
@@ -629,4 +618,4 @@ $("#btnDelRepair").click(function(){
                       }
     });       
 });
-           
+              
