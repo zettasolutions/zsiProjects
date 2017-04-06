@@ -1,72 +1,39 @@
 <script src='/javascript/name/zsiSearch'></script>
-<style>
+<style>/*
 .boxs {margin-top:5px;}
 .FilterPanel{overflow-y:auto;height:350px;}
 .zGrid .item .title {
     height: 0 !important;
-}
+}*/
 </style>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 zForm">  
-        <div class="row ">
-            <div class="col-xs-12 col-sm-12" id="stocksearch">
-                <div class="form-horizontal">
-                    <div class="col-xs-4">
-                        <div class="form-group">
-                        <label class="col-xs-4 control-label">Warehouse:</label>
-                        <div class=" col-xs-8">
-                            <div id="WarehouseGrid" class="zGrid"></div>
-                        </div>
-                            <!--<table id="WarehouseGrid" class="fullWidth">'   
-                                <thead>
-                                   <tr>
-                                       <th style="text-align:center; width: 20px"> <input type="checkbox" id="cbFilter1"> </th>
-                                   </tr>
-                               </thead>
-                            </table>-->
-                        </div> 
-                    </div> 
-                    <div class="col-xs-8" id="stocksearch">
-                        <div class="form-group">
-                            <label class="col-xs-2 control-label">Category:</label>
-                            <div class="col-xs-3">
-                                <select name="item_cat_id" id="item_cat_id" class="form-control input-sm">
-                                    <option value="0">&nbsp;</option>
-                                </select>
-                            </div>
-                            
-                            <label class="col-xs-2 control-label">Type:</label>
-                            <div class=" col-xs-3">
-                               <select name="item_type_id" id="item_type_id" class="form-control input-sm">
-                                    <option value="0">&nbsp;</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group"></div>
-                        <div class="form-group">
-                            <label class="col-xs-2 control-label">Search Field:</label>
-                            <div class="col-xs-3">
-                                <select name="" id="" class="form-control input-sm">
-                                    <option value="1">Part #</option>
-                                    <option value="2">NS #</option>
-                                    <option value="3">Nomenclature</option>
-                                    <option value="0">All</option>
-                                </select>
-                            </div>
-                            <label class="col-xs-2 control-label">Keyword:</label>
-                            <div class=" col-xs-3">
-                                <input name="" id=""  class="form-control input-sm">
-                            </div>
-                             <div class="col-xs-1">
-                                <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
-                            </div>
-                        </div>
+    <div class="row ">
+        <div class="col-xs-12 col-sm-12" id="stocksearch">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-xs-1 control-label">Search Field:</label>
+                    <div class="col-xs-3">
+                        <select name="field_search" id="field_search" class="form-control input-sm">
+                            <option value="part_no">Part No.</option>
+                            <option value="national_stock_no">National Stock No.</option>
+                            <option value="item_name">Nomenclature Name</option>
+                        </select>
+                    </div>
+                    <label class="col-xs-1 control-label">Keyword:</label>
+                    <div class=" col-xs-3">
+                        <input name="stocks_search_id_filter" id="stocks_search_id_filter" type="hidden" class="form-control input-sm">
+                        <input name="stock_search_filter" id="stock_search_filter" placeholder="Search" class="form-control input-sm">
+                    </div>
+                     <div class="col-xs-1">
+                        <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
+    </div>    
 
     <form method="post" id="frm">
-            <!--<div id="grid" class="zGrid"></div> -->
+          <div id="grid" class="zGrid"></div> 
     </form>
 </div>
 <script src="/Scripts/handlebars-v3.0.0.js"></script>

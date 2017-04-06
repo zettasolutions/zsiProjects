@@ -37,14 +37,14 @@
         <form method="post" id="frm">
              <div class="form-horizontal">
                 <div class="form-group  ">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <div class="row">
-                            <label class="col-xs-3 control-label">Procurement Code</label>
+                            <label class="col-xs-2 control-label">Procurement Code</label>
                             <div class="col-xs-3" style="margin-bottom:3px">
                                 <input name="proc_code_id" id="proc_code_id" class="form-control input-sm" type="hidden"> 
                                 <input name="proc_code" id="proc_code" class="form-control input-sm"> 
                             </div>
-                            <label class=" col-xs-3 control-label">Supplier</label>
+                            <label class=" col-xs-2 control-label">Supplier</label>
                             <div class="col-xs-3">
                                 <select name="supplier_id" id="supplier_id" class="form-control input-sm" > </select>  
                             </div>
@@ -52,13 +52,13 @@
                     </div>
                 </div>
                 <div class="form-group  ">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <div class="row">
-                            <label class=" col-xs-3 control-label" >From</label>
+                            <label class=" col-xs-2 control-label" >From</label>
                             <div class="col-xs-3" style="margin-bottom:3px">   
                                <input name="date_from" id="date_from" class="form-control input-sm"> 
                             </div>
-                            <label class=" col-xs-3 control-label" >To</label>
+                            <label class=" col-xs-2 control-label" >To</label>
                             <div class="col-xs-3" style="margin-bottom:3px">   
                                 <input name="date_to" id="date_to" class="form-control input-sm"> 
                             </div>
@@ -66,17 +66,21 @@
                     </div>
                 </div>
                 <div class="form-group  ">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <div class="row">
-                            <label class=" col-xs-3 control-label">Report Type</label>
+                            <label class=" col-xs-2 control-label">Report Type</label>
                             <div class="col-xs-3" style="margin-bottom:3px">     
                                 <select name="report_type_id" id="report_type_id" class="form-control input-sm"> </select>
                             </div>
+                            <label class=" col-xs-2 control-label">Procurement Mode</label>
+                            <div class="col-xs-3" style="margin-bottom:3px">     
+                                <select name="procurement_mode" id="procurement_mode" class="form-control input-sm"> </select>
+                            </div>
                             <label class=" col-xs-1 control-label"></label>
-                            <div class="col-xs-1" style="margin-left:-50px">
+                            <div class="col-xs-1" style="margin-left:10px; margin-top:-5px">
                                 <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
                             </div>
-                        </div>
+                       </div>
                     </div>
                 </div>
           </div>

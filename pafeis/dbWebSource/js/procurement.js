@@ -399,14 +399,14 @@ function displayProcurementDetails(){
                 ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
                 ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
         	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 130       , style : "text-align:right;"}
-        	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
+        	   // ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
     	    );  
     	}
 
     
      $("#tblProcurementDetails").dataBind({
 	     url            : execURL + "procurement_detail_sel " + (g_procurement_id ? "@procurement_id=" + g_procurement_id : "")
-	    ,width          : $(document).width() -75
+	    //,width          : $(document).width() -75
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -618,4 +618,4 @@ $("#btnDelRepair").click(function(){
                       }
     });       
 });
-              
+               

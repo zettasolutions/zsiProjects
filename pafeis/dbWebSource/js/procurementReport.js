@@ -2,27 +2,30 @@ var  bs         = zsi.bs.ctrl
     ,svn        = zsi.setValIfNull
     ,$rTypeId   = ""
     ,amount     = Number(0)
+    ,procMode = [
+        {text:"Shopping",value:"Shopping"}
+        ,{text:"Bidding",value:"Bidding"}
+    ]    
 ;
- 
-	
+
 	
 zsi.ready(function(){
     enableFilter();
     $("#supplier_id").dataBind( "supply_source");
-        $ ("#report_type_id").dataBind({
-                               url: execURL + "dd_procurement_report_type_sel"
-                               , text: "report_type"
-                               , value: "report_type_id"
-        
+    $ ("#report_type_id").dataBind({
+                           url: execURL + "dd_procurement_report_type_sel"
+                           , text: "report_type"
+                           , value: "report_type_id"
+    
         ,onComplete: function(){
             $("#report_type_id").change(function(){
                 rTypeId = this.value;
                 if(rTypeId === "") $("#zPanelId").css({display:"none"});
             });
         }
-                                
-        });
-     $("#proc_code_id").val("");
+    });
+$("select[name='procurement_mode']").fillSelect({data: procMode});
+ $("#proc_code_id").val("");
      $("input[name=proc_code]").on("keyup change", function(){
          clearform();
          disableFilter();
@@ -174,4 +177,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                         
+                                                                                          
