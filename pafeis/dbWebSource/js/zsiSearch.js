@@ -6,8 +6,7 @@ zsi.search =  function(info){
    var __url = info.url;
    var __columnIndexes = info.column_indexes; 
    var __colNames = info.colNames; 
-   var __condition = (typeof info.condition===ud?"":"," +info.condition);
-   
+
     var __parameter ="";
     for(var x=0;x< info.colNames.length;x++){
         if(__parameter!=="") __parameter +=",";
@@ -68,7 +67,7 @@ zsi.search =  function(info){
             var trActive=null;
             setPanelPosition(this); 
             
-            if(typeof info.onChange !==ud) info.onChange(this.value); 
+            if(typeof info.onChange !==ud) info.onChange(this.value,info); 
 
             switch(e.keyCode){
                case  9:break; //alt+tab
@@ -133,11 +132,13 @@ zsi.search =  function(info){
                   var _value=this.value;
                   var _input = this;
                   if(_value.length>=zsi.search.MinCharacters){
-                     zsi.search.timer = setTimeout(function(){       
+                     zsi.search.timer = setTimeout(function(){
+                         
                         $(_input).addClass("loadIconR" );
                         zsi.search.Panel.scrollTop(0);               
+                        var _cond = (typeof info.condition===ud?"":"," +info.condition);
 
-                        $.getJSON(__url + "'" + info.tableCode + "','"  + __parameter + "','" + info.searchColumn + "','" + _value + "'" + __condition
+                        $.getJSON(__url + "'" + info.tableCode + "','"  + __parameter + "','" + info.searchColumn + "','" + _value + "'" + _cond
                         ,function(data){                                                         
                               var searchGrid = zsi.search.Grid;
                               searchGrid.clearGrid();
@@ -324,4 +325,4 @@ function recallTableDisplay(obj){
    }
    return history;
 }
-   
+    
