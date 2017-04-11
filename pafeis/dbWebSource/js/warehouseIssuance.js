@@ -180,14 +180,14 @@ function displayAircraft(tab_name){
             ,{text  : "Aircraft"       , name  : "aircraft_name"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"aircraft_name"); }
             }
-            ,{text  : "Status"       , name  : "status_name"                   , type  : "label"       , width : 110       , style : "text-align:left;"
+            ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"authority_ref"); }
+            }
+            ,{text  : "Status"       , name  : "status_name"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"status_name"); }
             }
             ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"status_remarks"); }
-            }
-            ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"authority_ref"); }
             }
         ]   
     });    
@@ -211,7 +211,7 @@ function displayWarehouse(tab_name){
                 }
             }
             ,{text  : "Issued By"         , name  : "issued_by"                 , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_by"); }
+                ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
             ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_date"); }
@@ -219,17 +219,17 @@ function displayWarehouse(tab_name){
             ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
-            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 100       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"status_name"); }
-            }
-            ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 110       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"status_remarks"); }
-            }
             ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"authority_ref"); }
             }
             ,{text  : "Transfer To"       , name  : "transfer_warehouse_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"transfer_organization_warehouse"); }
+            }
+            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_name"); }
+            }
+            ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_remarks"); }
             }
         ]   
     });    
@@ -253,7 +253,7 @@ function displayMaintenance(tab_name){
                 }
             }
             ,{text  : "Issued By"         , name  : "issued_by"                 , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_by"); }
+                ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
             ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_date"); }
@@ -261,17 +261,17 @@ function displayMaintenance(tab_name){
             ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
-            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 100       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"status_name"); }
-            }
-            ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 110       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"status_remarks"); }
-            }
             ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"authority_ref"); }
             }
             ,{text  : "Transfer To"       , name  : "transfer_warehouse_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"transfer_organization_warehouse"); }
+            }
+            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_name"); }
+            }
+            ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_remarks"); }
             }
         ]   
     });    
@@ -295,7 +295,7 @@ function displayDisposal(tab_name){
                 }
             }
             ,{text  : "Issued By"         , name  : "issued_by"                 , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_by"); }
+                ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
             ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_date"); }
@@ -303,17 +303,17 @@ function displayDisposal(tab_name){
             ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
-            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 110       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"status_id"); }
-            }
-            ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"status_remarks"); }
-            }
             ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"authority_ref"); }
             }
             ,{text  : "Transfer To"       , name  : "transfer_warehouse_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"transfer_warehouse_id"); }
+            }
+            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_id"); }
+            }
+            ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_remarks"); }
             }
         ]   
     });
@@ -408,7 +408,7 @@ function buildIssuanceDetails(callback) {
                     return bs({name:"issuance_detail_id",type:"hidden", value: svn (d,"issuance_detail_id")})
                         +  bs({name:"is_edited",type:"hidden"}) 
                         +  bs({name:"issuance_id",type:"hidden", value: svn (d,"issuance_id")})
-                        +  bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
                        // +  bs({name:"serial_no",type:"hidden", value: svn (d,"serial_no")});
                 }
             }    
@@ -815,18 +815,18 @@ function loadIssuanceDetails(issuance_id) {
                     return bs({name:"issuance_detail_id",type:"hidden", value: svn (d,"issuance_detail_id")})
                         +  bs({name:"is_edited",type:"hidden"}) 
                         +  bs({name:"issuance_id",type:"hidden", value: issuance_id})
-                        +  bs({name:"item_code_id",type:"hidden", value: svn (d,"item_code_id")});
+                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
                }
             }    
             ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Description"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Unit of Measure"                                          , type  : "input"       , width : 150       , style : "text-align:left;"
-                ,onRender: function(d){ return svn(d,"unit_of_measure")}
+            ,{text  : "Unit of Measure"     , width : 150       , style : "text-align:left;"
+                ,onRender: function(d){ return "<span id='_unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"; }  
             }
-            ,{text  : "Stock Qty."                                               , type  : "input"       , width : 100       , style : "text-align:left;"
-                ,onRender: function(d){ return svn(d,"stock_qty")}
+            ,{text  : "Stock Qty."         , width : 100       , style : "text-align:left;"
+                ,onRender: function(d){ return "<span id='_stock_qty'>" + svn(d,"stock_qty") + "</span>"; }
             }
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
@@ -841,7 +841,7 @@ function loadIssuanceDetails(issuance_id) {
                     $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
             });
             
-            $("input[name='item_code_id']").each(function(){
+            $("input[name='item_inv_id']").each(function(){
                 if(this.value){
                     var $row = $(this).closest(".zRow");
                         $row.find("select[id='serial_no']").dataBind({ 
@@ -871,7 +871,7 @@ function setSearchMulti(){
     var _tableCode = "ref-0027";
         new zsi.search({
         tableCode: _tableCode
-        , colNames: ["part_no","item_code_id","item_name","national_stock_no","unit_of_measure","stock_qty"] 
+        , colNames: ["part_no","item_inv_id","item_name","national_stock_no","unit_of_measure","stock_qty"] 
         , displayNames: ["Part No."]
         , searchColumn:"part_no"
         , condition: "'warehouse_id=" + g_warehouse_id + "'"
@@ -881,20 +881,13 @@ function setSearchMulti(){
             currentObject.value = data.part_no;
             
             var $zRow = $(currentObject).closest(".zRow");
-            
-            $zRow.find("#serial_no").val(data.serial_no);
-            $zRow.find("#item_code_id").val(data.item_code_id);
-            $zRow.find("#national_stock_no").val(data.national_stock_no);
-            $zRow.find("#item_name").val(data.item_name);
-            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
-            $zRow.find("#stock_qty").text(data.stock_qty);
-            setSearchSerial(data.item_code_id, $zRow);
+            setSearchSerial(data, $zRow);
         }
     });
 
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["national_stock_no","item_code_id","item_name","part_no","unit_of_measure","stock_qty"] 
+        , colNames: ["national_stock_no","item_inv_id","item_name","part_no","unit_of_measure","stock_qty"] 
         , displayNames: ["Nat'l Stock No."]
         , searchColumn:"national_stock_no"
         , condition: "'warehouse_id=" + g_warehouse_id + "'"
@@ -904,21 +897,13 @@ function setSearchMulti(){
             currentObject.value = data.national_stock_no;
             
             var $zRow = $(currentObject).closest(".zRow");
-            
-            $zRow.find("#serial_no").val(data.serial_no);
-            $zRow.find("#item_code_id").val(data.item_code_id);
-            $zRow.find("#part_no").val(data.part_no);
-            $zRow.find("#item_name").val(data.item_name);
-            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
-            $zRow.find("#stock_qty").text(data.stock_qty);
-           
-            setSearchSerial(data.item_code_id, $zRow);
+            setSearchSerial(data, $zRow);
         }
     });
     
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["item_name","item_code_id","part_no","national_stock_no","unit_of_measure","stock_qty"] 
+        , colNames: ["item_name","item_inv_id","part_no","national_stock_no","unit_of_measure","stock_qty"] 
         , displayNames: ["Description"]
         , searchColumn:"item_name"
         , condition: "'warehouse_id=" + g_warehouse_id + "'"
@@ -928,38 +913,43 @@ function setSearchMulti(){
             currentObject.value = data.item_name;
             
             var $zRow = $(currentObject).closest(".zRow");
-            
-            $zRow.find("#serial_no").val(data.serial_no);
-            $zRow.find("#item_code_id").val(data.item_code_id);
-            $zRow.find("#part_no").val(data.part_no);
-            $zRow.find("#national_stock_no").val(data.national_stock_no);
-            $zRow.find("#unit_of_measure").text(data.unit_of_measure);
-            $zRow.find("#stock_qty").text(data.stock_qty);
-            
-            setSearchSerial(data.item_code_id, $zRow);
+            setSearchSerial(data,$zRow);
         }
     });
 }
 
-function setSearchSerial(id, row){
+ 
+function setSearchSerial(d, row){
+    row.find("#serial_no").val(d.serial_no);
+    row.find("#item_inv_id").val(d.item_inv_id);
+    row.find("#part_no").val(d.part_no);
+    row.find("#item_name").val(d.item_name);
+    row.find("#national_stock_no").val(d.national_stock_no);
+    row.find("#unit_of_measure").text(d.unit_of_measure);
+    row.find("#stock_qty").text(d.stock_qty);
+
+    row.find("#_unit_of_measure").html(d.unit_of_measure);
+    row.find("#_stock_qty").html(d.stock_qty);
+
     var $serial_no = row.find("select[id='serial_no']");
-    
     $serial_no.dataBind({ 
-         url : execURL + "dd_warehouse_items_sel @item_inv_id="+ id
+         url : execURL + "dd_warehouse_items_sel @item_inv_id="+ d.item_inv_id
         ,text: "serial_no"
         ,value: "serial_no"
     });
     
+    
     $serial_no.change(function(){
+        console.log("agi");
        if(this.value != ""){
-           row.find("input[name='unit_of_measure']").text("EACH");
-           row.find("input[name='stock_qty']").text(1);
-           row.find("input[name='quantity']").val(1);
+          row.find("input[name='quantity']").text(1);
+           
        } 
     });
     
- 
-}
+
+} 
+
 
 // Set the mandatory fields.
 function setMandatoryEntries(){
@@ -975,4 +965,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                         
+                                                 
