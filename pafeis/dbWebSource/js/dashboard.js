@@ -153,12 +153,19 @@ function displayItems(id){
     		,{text  : "Nomenclature Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"    ,sortColNo: 4
     		    ,onRender : function(d){ return svn(d,"item_type_name"); }
     		}
-    		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:right;"
+    		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:right;" ,sortColNo: 5
     		    ,onRender : function(d){ return svn(d,"stock_qty").toLocaleString("en"); }
     		}
        		,{text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:right;"
     		    ,onRender : function(d){ return svn(d,"reorder_level"); }
     		}
+       		,{text  : "Unit of Measure"               , type  : "label"       , width : 100       , style : "text-align:left;"
+    		    ,onRender : function(d){ return svn(d,"unit_of_measure"); }
+    		}    
+        		,{text  : "Bin#"               , type  : "label"       , width : 100       , style : "text-align:left;"
+    		    ,onRender : function(d){ return svn(d,"bin"); }
+    		}    		
 	    ]   
     });    
 }                   
+   

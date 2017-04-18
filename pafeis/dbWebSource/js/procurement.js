@@ -367,19 +367,19 @@ function displayProcurementDetails(){
 
 	    if(g_tab_name==="Purchase"){
 	         _dataRows.push(
-        	    {text  : "Item No."           , width : 130                    , style : "text-align:left;"
+        	    {text  : "Item No."           , width : 70                    , style : "text-align:left;"
         	        ,onRender : function(d){ 
                         return  bs({name:"item_no",type:"input",value: svn (d,"item_no")})
                               + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
                               + bs({name:"serial_no",type:"hidden",value: svn (d,"serial_no")});
                     }
         	    }        	     
-        	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 150       , style : "text-align:left;"}
-                ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
-                ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "input"       , width : 250       , style : "text-align:left;"}
+        	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 160       , style : "text-align:left;"}
+        	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 160       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 130       , style : "text-align:right;"}
-        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 130       , style : "text-align:right;"}
+        	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 90       , style : "text-align:right;"}
+        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 100       , style : "text-align:right;"}
         	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
         	        ,onRender : function(d){
         	            return "<div id='amount' >" + parseFloat(svn(d,"amount", 0)).toFixed(2) + "</div>";
@@ -389,16 +389,16 @@ function displayProcurementDetails(){
 	    }
     	 else{
     	     _dataRows.push(
-        	    {text  : "Item No."           , width : 130                    , style : "text-align:left;"
+        	    {text  : "Item No."           , width : 70                    , style : "text-align:left;"
         	        ,onRender : function(d){ 
                         return  bs({name:"item_no",type:"input",value: svn (d,"item_no")})
                               + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")});
                     }
         	    }                  
-        	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 150       , style : "text-align:left;"}
-                ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 150       , style : "text-align:left;"}
-                ,{text  : "Description"         , name  : "item_name"           , type  : "input"       , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 130       , style : "text-align:right;"}
+        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "input"       , width : 250       , style : "text-align:left;"}
+        	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 160       , style : "text-align:left;"}
+        	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 160       , style : "text-align:left;"}
+        	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 150       , style : "text-align:right;"}
         	   // ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
     	    );  
     	}
@@ -412,6 +412,7 @@ function displayProcurementDetails(){
         ,blankRowsLimit :5
         ,dataRows       : _dataRows 
         ,onComplete: function(data){
+            markMandatory();
             setMultipleSearch();
             $("#cbFilter3").setCheckEvent("#tblProcurementDetails input[name='cb']");
             
@@ -440,39 +441,45 @@ function displayProcurementDetails(){
             $("input[name='quantity']").keyup(function(){
                 var quantity  = $.trim(this.value);
                 var $zRow     = $(this).closest(".zRow");
-                var unitPrice = $.trim($zRow.find("#unit_price").val());
+                var unitPrice = $.trim($zRow.find("#unit_price").val().replace(/,/g, ''));
+                
                 if(unitPrice && quantity){
                     var amount = parseFloat(quantity) * parseFloat(unitPrice);
-                    $zRow.find("#amount").text(amount.toFixed(2));
+                    $zRow.find("#amount").text(toCurrencyFormat(amount.toFixed(2)));
                 }else{
-                    $zRow.find("#amount").text("");
+                    $zRow.find("#amount").text("0.00");
                 }
             });
             
             $("input[name='unit_price']").keyup(function(){
-                var unitPrice = $.trim(this.value);
+                var unitPrice = $.trim(this.value.replace(/,/g, ''));
                 var $zRow     = $(this).closest(".zRow");
                 var quantity  = $.trim($zRow.find("#quantity").val());
 
                 if(unitPrice && quantity){
                     var amount = parseFloat(quantity) * parseFloat(unitPrice);
-                    $zRow.find("#amount").text(amount.toFixed(2));
+                    $zRow.find("#amount").text(toCurrencyFormat(amount.toFixed(2)));
                 }else{
-                    $zRow.find("#amount").text("");
+                    $zRow.find("#amount").text("0.00");
                 }
+                $(this).val(toCurrencyFormat(unitPrice));
             });
         }  
     });    
 }
 
 function Save(page_process_action_id){
+    if( zsi.form.checkMandatory()!==true) return false;
+    
     $("#status_id").val(page_process_action_id);
     $("#tblProcurement").jsonSubmit({
          procedure : "procurement_upd"
         ,optionalItems : ["procurement_id"]
         ,onComplete: function (data) {
-         if(data.isSuccess===true){ 
-             
+         if(data.isSuccess===true){
+            
+            toggleUnitPriceComma("N"); // w/o comma
+            
             var $tbl = $("#tblProcurementDetails");
             $tbl.find("[name='procurement_id']").val((g_procurement_id ? g_procurement_id : data.returnValue));
             $tbl.jsonSubmit({
@@ -480,23 +487,22 @@ function Save(page_process_action_id){
                 ,optionalItems : ["procurement_id"]
                 ,notInclude: "#part_no,#national_stock_no,#item_name, #amount, #ordered_qty"
                 ,onComplete: function (data) {
+                    toggleUnitPriceComma("Y"); // with comma 
                     if(data.isSuccess===true){  
                         zsi.form.showAlert("alert");
                         clearForm();
                         $("#grid").trigger("refresh");
                         $('#mdlProcurement').modal('hide');
                         if(g_tab_name==="Purchase"){
-                             displayPurchase(g_tab_name);   
+                            displayPurchase(g_tab_name);   
                         }
                         else{
-                             displayRepair(g_tab_name);   
+                            displayRepair(g_tab_name);   
                         }
-
                     }
                     else {
                         console.log(data.errMsg);
                     }
-        
                 }
             });
         }
@@ -598,7 +604,7 @@ function setSearchSerial(id, row){
 function clearForm(){ 
     zsi.initDatePicker();
     $('input[type=text], input[type=hidden]').val('');
-    $('select[type="text"]').attr('selectedvalue','').val('');    
+    $('select').attr('selectedvalue','').val('');    
 }
 
 $("#btnDelPurchase").click(function(){
@@ -618,4 +624,53 @@ $("#btnDelRepair").click(function(){
                       }
     });       
 });
-               
+
+function markMandatory(){
+    zsi.form.markMandatory({       
+      "groupNames":[
+            {
+                 "names" : ["procurement_code","procurement_mode","supplier_id"]
+                ,"type":"S"
+            }             
+      ]      
+      ,"groupTitles":[ 
+             {"titles" :["PR #","Procurement mode","Supplier"]}
+      ]
+   });
+}
+
+function toggleUnitPriceComma(param){
+    $("#tblProcurementDetails").find("input[name='unit_price']").each(function(){
+        var unitPrice = $.trim(this.value);
+        if(unitPrice){
+            if(param==="Y"){
+                 $(this).val(toCurrencyFormat(unitPrice));
+            }
+            
+            if(param==="N"){
+                $(this).val(unitPrice.replace(/,/g, ''));
+            }
+        }
+    });
+}
+
+var toCurrencyFormat = function(num){
+	var str = num.toString().replace("$", ""), parts = false, output = [], i = 1, formatted = null;
+	if(str.indexOf(".") > 0) {
+		parts = str.split(".");
+		str = parts[0];
+	}
+	str = str.split("").reverse();
+	for(var j = 0, len = str.length; j < len; j++) {
+		if(str[j] != ",") {
+			output.push(str[j]);
+			if(i%3 == 0 && j < (len - 1)) {
+				output.push(",");
+			}
+			i++;
+		}
+	}
+	formatted = output.reverse().join("");
+	return(formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+};
+ 
