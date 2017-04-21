@@ -46,7 +46,7 @@ var contextModalWindow = {
             +'                <select name="procurement_mode" id="procurement_mode" class="form-control input-sm" ></select>'
             +'           </div>' 
             +'        <div class="hide" id="supplier_filter">'
-            +'           <label class=" col-xs-2 control-label">Supplier</label>'
+            +'           <label class=" col-xs-2 control-label">Dealer</label>'
             +'           <div class=" col-xs-3">'
             +'                <select name="supplier_id" id="supplier_id" class="form-control input-sm" ></select>'
             +'           </div>' 
@@ -398,8 +398,14 @@ function displayProcurementDetails(){
         	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "input"       , width : 250       , style : "text-align:left;"}
         	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 160       , style : "text-align:left;"}
         	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 160       , style : "text-align:left;"}
-        	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "select"      , width : 150       , style : "text-align:right;"}
-        	   // ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Serial No."          , width : 150                   , style : "text-align:right;"
+         	        ,onRender : function(d){
+        	            return  bs({name:"serial_no",type:"select",value: svn (d,"serial_no")})
+        	                  + bs({name:"unit_of_measure_id",type:"hidden",value: svn (d,"unit_of_measure_id")})
+        	                  + bs({name:"quantity",type:"hidden",value:"1"});
+        	        }       	        
+        	    }
+        	    ,{text  : "Amount"        , name  : "unit_price"                , type  : "input"       , width : 250       , style : "text-align:left;"}
     	    );  
     	}
 
@@ -673,4 +679,4 @@ var toCurrencyFormat = function(num){
 	formatted = output.reverse().join("");
 	return(formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
 };
- 
+   
