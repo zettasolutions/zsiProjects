@@ -59,9 +59,9 @@ function displayRecords(){
 	     url            : execURL + "employees_sel"
 	    ,width          : 1230
 	    ,height         : $(document).height() - 350
-	    //,selectorType   : "checkbox"
+	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
-        ,isPaging : false
+       // ,isPaging : true
         ,dataRows : [
             
                      {text  : cb                                 , width : 25        , style : "text-align:left;"       
@@ -81,18 +81,11 @@ function displayRecords(){
         		,{text  : "Active?"               , name  : "is_active"             , type  : "yesno"       , width : 90        , style : "text-align:left;" ,defaultValue: "Y"}
         
 	    ]
+    	     ,onComplete: function(data){
+                $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+        }  
     });    
 }
-/*$("#btnDelete").click(function(){
-    zsi.form.deleteData({
-         code       : "sys-0002"
-        ,onComplete : function(data){
-                        displayRecords();
-                      }
-    });      
-});*/     
-
-
 function displayInactiveEmp(){   
         $("#" + tblName).dataBind({
 	     url            : execURL + "employees_sel @is_active='N'" 
@@ -117,4 +110,4 @@ function displayInactiveEmp(){
 	    ]
     });    
 }
-  
+    
