@@ -4,9 +4,13 @@ var svn =  zsi.setValIfNull;
 var modalImageEmployee      = "modalWindowImageEmployee";
 
 zsi.ready(function(){
-    displayRecords();
-    getTemplate();
-    markMandatory();
+   getTemplate();
+   displayRecords($("#field_search").val(), '');
+   markMandatory();
+});
+
+$("#btnGo").click(function(){
+  displayRecords($("#field_search").val(),$("#logon_name_filter").val());
 });
 
 $("#btnSave").click(function () {
@@ -17,7 +21,7 @@ $("#btnSave").click(function () {
             , onComplete: function (data) {
                 $("#grid").clearGrid();
                 if(data.isSuccess===true) zsi.form.showAlert("alert");
-                displayRecords();
+                displayRecords($("#field_search").val(),$("#logon_name_filter").val());
             }
             
     });
@@ -37,15 +41,34 @@ function markMandatory(){
    });
 }
 
-function displayRecords(){
-     var cb = bs({name:"cbFilter1",type:"checkbox"});
-     $("#grid").dataBind({
-	     url            : execURL + "employees_sel"
+function displayRecords(col_name,keyword){
+    var cb = bs({name:"cbFilter1",type:"checkbox"});
+    var rownum=0;
+    /*if(keyword==="")
+    {
+        $("#grid").dataBind({
+	     url            : execURL + "employees_sel @col_name='"+col_name+"', @keyword='"+keyword+"'" 
+        ,width          : $(document).width() - 50
+	    ,height         : $(document).height() - 250
+	   // ,selectorType   : "checkbox"
+        ,blankRowsLimit :0
+        ,isPaging : true
+        ,dataRows       :[
+     		 { text:"Result"                      , width:$(document).width() - 56     , style:"text-align:center;"        
+     		    ,onRender: function(d){
+    		        return svn(d, "result");
+    		    }
+     		 }	 
+     		 ]});
+    }
+    else{*/
+        $("#grid").dataBind({
+	     url            : execURL + "employees_sel @col_name='"+col_name+"', @keyword='"+keyword+"'" 
 	    ,width          : $(document).width() - 35
 	    ,height         : 400
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
-        ,isPaging : false
+        ,isPaging : true
         ,dataRows : [
                 { text  : cb, width : 25, style : "text-align:left;"
                     , onRender      :  function(d) {
@@ -63,12 +86,12 @@ function displayRecords(){
                         return (d!==null ? html : "");
                     }
                 }
-                , {text  : "Id No."             , name  : "id_no"               , type  : "input"        , width : 100          , style : "text-align:left;"}
-                , {text  : "Last Name"          , name  : "last_name"           , type  : "input"        , width : 200          , style : "text-align:left;"}
-                , {text  : "First Name"         , name  : "first_name"          , type  : "input"        , width : 200          , style : "text-align:left;"}
-                , {text  : "Middle Name"        , name  : "middle_name"         , type  : "input"        , width : 200           , style : "text-align:left;"}
-                , {text  : "Name Suffix"        , name  : "name_suffix"         , type  : "input"        , width : 100           , style : "text-align:left;"}
-                , {text  : "Civil Status"       , name  : "civil_status"        , type  : "select"       , width : 100           , style : "text-align:left;"}
+                , {text  : "Id No."             , name  : "id_no"               , type  : "input"        , width : 100          , style : "text-align:left;"    ,sortColNo: 2}
+                , {text  : "Last Name"          , name  : "last_name"           , type  : "input"        , width : 200          , style : "text-align:left;"    ,sortColNo: 3}
+                , {text  : "First Name"         , name  : "first_name"          , type  : "input"        , width : 200          , style : "text-align:left;"    ,sortColNo: 4}
+                , {text  : "Middle Name"        , name  : "middle_name"         , type  : "input"        , width : 200          , style : "text-align:left;"}
+                , {text  : "Name Suffix"        , name  : "name_suffix"         , type  : "input"        , width : 100          , style : "text-align:left;"}
+                , {text  : "Civil Status"       , name  : "civil_status"        , type  : "select"       , width : 100          , style : "text-align:left;"}
                 , {text  : "Contact No."        , name  : "contact_nos"         , type  : "input"        , width : 100          , style : "text-align:left;"}
                 , {text  : "Email"              , name  : "email_add"           , type  : "input"        , width : 200          , style : "text-align:left;"}
                 , {text  : "Gender"             , width : 80                    , style : "text-align:left;"
@@ -146,6 +169,7 @@ function displayRecords(){
                 markMandatory();
         }  
     });    
+    //}
 }
     
 $("#btnDelete").click(function(){
@@ -277,4 +301,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                             
+}                                      
