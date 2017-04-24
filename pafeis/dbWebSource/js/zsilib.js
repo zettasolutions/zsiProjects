@@ -224,7 +224,7 @@ var  ud='undefined'
                                      }
                                  };
                                  if(o.time)  _opts.time = o.time; 
-                                 _panel.showAlert(_opts);           
+                                 $("." + _cls).css({"z-index"      : zsi.getHighestZindex() + 1}).showAlert(_opts);           
                               }
             
                           }
@@ -1303,18 +1303,18 @@ var  ud='undefined'
                 return this;
             };
             $.fn.showAlert          = function(o){   
-                                        var _self = this;         
-                                        var _time = 1500;
-                                        _self.show();       
-                                        if( ! isUD(o) ){ 
-                                        if( o.top ) _self.css({left:o.left,top:o.top });
-                                        if( o.center ) _self.center();
-                                        if( o.time ) _time = o.time;
-                                        }
-                                        setTimeout(function(){
-                                            _self.hide("slow");
-                                            if( ! isUD(o.onHide) ) o.onHide();
-                                        }, _time);
+                    var _self = this;         
+                    var _time = 1500;
+                    _self.show();       
+                    if( ! isUD(o) ){ 
+                    if( o.top ) _self.css({left:o.left,top:o.top });
+                    if( o.center ) _self.center();
+                    if( o.time ) _time = o.time;
+                    }
+                    setTimeout(function(){
+                       _self.hide("slow");
+                       if( ! isUD(o.onHide) ) o.onHide();
+                    }, _time);
 
             };
             $.fn.showPopup          = function(o){
@@ -1489,44 +1489,39 @@ var  ud='undefined'
             
         }
         ,__setPrototypes            : function(){
-            // Date Prototypes 
-            Date.prototype.isValid = function () {
-                return this.getTime() === this.getTime();
-            };  
-            Date.prototype.toShortDate = function () {
-                var m =  (this.getMonth()+1) + "";
-                var d = this.getDate() + "";
-                m = (m.length==1? "0"+m:m);
-                d = (d.length==1? "0" +d:d);
-                return m + '/' + d + '/' +  this.getFullYear();
+            //note: date prototype has a problem in Google Chrome.
+            String.prototype.isValidDate = function () {
+                return isValidDate(this)
             };  
             
-            Date.prototype.toShortDateTime = function () {
-              var h = this.getHours();
-              var m = this.getMinutes();
+            String.prototype.toShortDate = function () {
+                if(!isValidDate(this)) return "";
+                var _date=new Date(this);
+                var m =  (_date.getMonth()+1) + "";
+                var d = _date.getDate() + "";
+                m = (m.length==1? "0"+m:m);
+                d = (d.length==1? "0" +d:d);
+                return m + '/' + d + '/' +  _date.getFullYear();
+            };  
+            
+            String.prototype.toShortDateTime = function () {
+              if(!isValidDate(this)) return "";
+              var _date=new Date(this);
+              var h = _date.getHours();
+              var m = _date.getMinutes();
               var ampm = h >= 12 ? 'PM' : 'AM';
               h = h % 12;
               h = h ? h : 12; // the hour '0' should be '12'
               m = m < 10 ? '0'+m : m;
               var strTime = h + ':' + m + ' ' + ampm;
-              return this.getMonth()+1 + "/" + this.getDate() + "/" + this.getFullYear() + " " + strTime;
+              return _date.getMonth()+1 + "/" + _date.getDate() + "/" + _date.getFullYear() + " " + strTime;
+            };
+ 
+
+            String.prototype.toDateFormat = function () {
+                return this.toShortDate();
             };
             
-            //String Prototypes : 
-            String.prototype.toShortDate = function () {
-                var nd = new Date(this);
-                var m =  (nd.getMonth()+1) + "";
-                var d = nd.getDate() + "";
-                m = (m.length==1? "0"+m:m);
-                d = (d.length==1? "0" +d:d);
-                return (isNaN(m) ? "" :  m + '/' + d + '/' +  nd.getFullYear() );
-            };              
-            String.prototype.toDateFormat = function () {
-                var ts=Date.parse(this);
-                var r = "";
-                if(isNaN(ts)===false) r= new Date(this).toShortDate() + "";
-                return r;
-            }; 
             //military date time format
             String.prototype.toMDateTimeFormat = function () {
                 var ts=Date.parse(this);
@@ -2362,4 +2357,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                           
+                                                                                                

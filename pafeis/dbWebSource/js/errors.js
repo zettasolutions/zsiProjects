@@ -62,14 +62,14 @@ function displayRecords(params){
             ,{text  : "Created By"                  , type  : "hidden"        , width    : 100        , style : "text-align:left;"       
                     ,onRender   :   function(d){ return  d.created_by_name; }
             }
-            ,{text  : "Created Date"                , type  : "hidden"        , width    : 100        , style : "text-align:left;"       
-                    ,onRender   :   function(d){ return  d.created_date; }
+            ,{text  : "Created Date"                , type  : "hidden"        , width    : 120        , style : "text-align:left;"       
+                    ,onRender   :   function(d){ return  d.created_date.toShortDateTime(); }
             }
             ,{text  : "Updated By"                  , type  : "hidden"        , width    : 100        , style : "text-align:left;"       
                     ,onRender   :   function(d){ return  d.updated_by_name; }
             }
-            ,{text  : "Updated Date"                , type  : "hidden"        , width    : 100        , style : "text-align:left;"       
-                    ,onRender   :   function(d){ return  d.updated_date; }
+            ,{text  : "Updated Date"                , type  : "hidden"        , width    : 120        , style : "text-align:left;"       
+                    ,onRender   :   function(d){ return  d.updated_date.toShortDateTime(); }
             }
 
         ]
@@ -120,4 +120,4 @@ $("#btnRefresh").click(function(){
 $("#btnAllRefresh").click(function(){
     displayRecords("@all=1");
 });
-     
+         
