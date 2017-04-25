@@ -3,7 +3,7 @@ var bs  = zsi.bs.ctrl
    ,g_procurement_id = null
    ,g_organization_id = null
    ,g_organization_name = ''
-   ,g_today_date = new Date()
+   ,g_today_date = new Date() +""
    ,g_tab_name = "Purchase"
    ,procMode = [
         {text:"Shopping",value:"Shopping"}
@@ -19,7 +19,7 @@ var contextModalWindow = {
       id    : "mdlProcurement"
     , sizeAttr : "modal-lg fullWidth"
     , title : "New"
-    , footer: '<div id="procurement-footer" class="pull-left"><button type="button" onclick="submitData();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>Save</button></div>' 
+    , footer: '<div id="procurement-footer" class="pull-left"></div>' 
     , body  : '<div id="tblProcurement" class="form-horizontal zGrid" style="padding:5px">'
             +'    <div class="form-group  "> ' 
             +'        <label class=" col-xs-2 control-label">Procurement Date</label>'
@@ -420,6 +420,10 @@ function displayProcurementDetails(){
         ,onComplete: function(data){
             markMandatory();
             setMultipleSearch();
+            
+            $(".no-data input[name='item_name']").checkValueExists({code:"ref-0023",colName: "item_name" ,isNotExistShow : true ,message : "data not exist"});
+            $(".no-data input[name='national_stock_no']").checkValueExists({code:"ref-0023",colName: "national_stock_no" ,isNotExistShow : true ,message : "data not exist"});
+            $(".no-data input[name='part_no']").checkValueExists({code:"ref-0023",colName:"part_no" ,isNotExistShow : true ,message : "data not exist"});
             $("#cbFilter3").setCheckEvent("#tblProcurementDetails input[name='cb']");
             
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
@@ -679,4 +683,4 @@ var toCurrencyFormat = function(num){
 	formatted = output.reverse().join("");
 	return(formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
 };
-   
+         
