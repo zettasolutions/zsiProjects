@@ -175,7 +175,12 @@ function displayRecords(user_id){
         ,blankRowsLimit :5
         ,isPaging : true
         ,dataRows       :[
-     		 { text:"User"          , width:260     , style:"text-align:center;"      ,type:"select"     ,name:"user_id"    ,sortColNo: 0 }	 
+     		 { text:"User"          , width:260     , style:"text-align:center;"      ,sortColNo: 0 
+                     , onRender      :  function(d) {
+                        return     bs({name:"user_id",type:"select",value: svn (d,"user_id")})
+                                 + bs({name:"is_edited",type:"hidden"}); 
+                    }    		     
+     		 }	 
     		,{ text:"Role"          , width:200     , style:"text-align:left;"        ,type:"select"     ,name:"role_id"    }
     		,{ text:"Logon"          , width:150     , style:"text-align:left;"
     		    ,onRender: function(d){
@@ -200,7 +205,8 @@ function displayRecords(user_id){
 	    ]
 
         ,onComplete: function(){
-           
+	        
+            
             $("select[name='user_id']").dataBind({
                   url: base_url + "selectoption/code/notUsers"
                 , isUniqueOptions:true
@@ -208,8 +214,10 @@ function displayRecords(user_id){
                     $("select[name='user_id']").setUniqueOptions();
                 }
             });  
+	        
+
             
-             $("select[name='user_id']").change(function(){
+            $("select[name='user_id']").change(function(){
                 var o = $(this);
                 var selVal =o.attr("selectedvalue");
                 var zRow = o.parent().parent();
@@ -227,19 +235,17 @@ function displayRecords(user_id){
             $("select[name='role_id']").dataBind({
                 url:  getOptionsURL("roles")
                 ,onComplete:function(){
-                    $("select[name='role_id']").change();
+                    //$("select[name='role_id']").change();
                 }
             });
             markUserMandatory();
             $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
-     
+            
+            $("select, input").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });   
         }
-        /*
-        ,onSortClick : function(colNo,orderNo){
-            console.log(colNo);
-            console.log(orderNo);
-        }
-        */
         
     });    
 }
@@ -342,4 +348,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                    
+                         
