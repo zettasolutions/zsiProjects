@@ -65,6 +65,7 @@ namespace zsi.web.Controllers
         public ContentResult getNewPassword(string pwd)
         {
             try {
+                pwd = pwd.Trim().ToLower().Replace("ñ", "n");
                 return Content(new Cryptography().Encrypt(pwd));
             }
             catch (Exception ex)
