@@ -395,17 +395,22 @@ function displayProcurementDetails(){
                               + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")});
                     }
         	    }                  
-        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "input"       , width : 250       , style : "text-align:left;"}
-        	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 160       , style : "text-align:left;"}
-        	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 160       , style : "text-align:left;"}
-        	    ,{text  : "Serial No."          , width : 150                   , style : "text-align:right;"
+        	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "input"      , width : 150       , style : "text-align:left;"}
+        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "text"       , width : 350       , style : "text-align:left;"}
+        	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "text"       , width : 260       , style : "text-align:left;"}
+        	    ,{text  : "Part No."            , width : 160       , style : "text-align:left;"
          	        ,onRender : function(d){
-        	            return  bs({name:"serial_no",type:"select",value: svn (d,"serial_no")})
+        	            return  bs({name:"part_no",type:"text",value: svn (d,"part_no")})
+        	                  + bs({name:"serial_no",type:"hidden",value: svn (d,"serial_no")})
         	                  + bs({name:"unit_of_measure_id",type:"hidden",value: svn (d,"unit_of_measure_id")})
         	                  + bs({name:"quantity",type:"hidden",value:"1"});
         	        }       	        
         	    }
-        	    ,{text  : "Amount"        , name  : "unit_price"                , type  : "input"       , width : 250       , style : "text-align:left;"}
+        	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
+        	        ,onRender : function(d){
+        	            return "<div id='amount' >" + parseFloat(svn(d,"unit_price", 0)).toFixed(2) + "</div>";
+        	        }
+        	    }
     	    );  
     	}
 
@@ -420,7 +425,7 @@ function displayProcurementDetails(){
         ,onComplete: function(data){
             markMandatory();
             setMultipleSearch();
-            
+            searchSerial();
             $(".no-data input[name='item_name']").checkValueExists({code:"ref-0023",colName: "item_name" ,isNotExistShow : true ,message : "data not exist"});
             $(".no-data input[name='national_stock_no']").checkValueExists({code:"ref-0023",colName: "national_stock_no" ,isNotExistShow : true ,message : "data not exist"});
             $(".no-data input[name='part_no']").checkValueExists({code:"ref-0023",colName:"part_no" ,isNotExistShow : true ,message : "data not exist"});
@@ -485,6 +490,7 @@ function Save(page_process_action_id){
     $("#tblProcurement").jsonSubmit({
          procedure : "procurement_upd"
         ,optionalItems : ["procurement_id"]
+        ,notInclude : "#dd_warehouse"
         ,onComplete: function (data) {
          if(data.isSuccess===true){
             
@@ -607,8 +613,26 @@ function setSearchSerial(id, row){
            row.find("input[name='quantity']").val(1);
        } 
     });
-    
- 
+}
+
+function searchSerial(){
+    new zsi.search({
+        tableCode: "ref-0035"
+        , colNames: ["serial_no"] 
+        , displayNames: ["Serial No."]
+        , searchColumn:"serial_no"
+        , input: "input[name=serial_no]"
+        , url: execURL + "searchData"
+        , onSelectedItem: function(currentObject, data, i){
+            currentObject.value = data.serial_no;
+            var $zRow = $(currentObject).closest(".zRow");
+                $zRow.find("#item_code_id").val(data.item_code_id);
+                $zRow.find("#national_stock_no").val(data.national_stock_no);
+                $zRow.find("#item_name").val(data.item_name);
+                $zRow.find("#serial_no").val(data.serial_no);
+               // setSearchSerial(data.item_code_id, $zRow);
+        }
+    });
 }
 
 function clearForm(){ 
@@ -639,12 +663,12 @@ function markMandatory(){
     zsi.form.markMandatory({       
       "groupNames":[
             {
-                 "names" : ["procurement_code","procurement_mode","supplier_id"]
+                 "names" : ["procurement_code","procurement_mode"]
                 ,"type":"S"
             }             
       ]      
       ,"groupTitles":[ 
-             {"titles" :["PR #","Procurement mode","Supplier"]}
+             {"titles" :["PR #","Procurement mode"]}
       ]
    });
 }
@@ -683,4 +707,4 @@ var toCurrencyFormat = function(num){
 	formatted = output.reverse().join("");
 	return(formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
 };
-         
+          
