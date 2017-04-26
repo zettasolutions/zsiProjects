@@ -7,11 +7,10 @@ var g_organization_id = null;
 var g_organization_name = "";
 var g_location_name = "";
 var g_tab_name = "Procurement";
-var g_today_date = new Date(); 
 var g_warehouse_id = null;
 var g_item_code_id = null;
 var g_procurement_id = null;
-var g_today_date = new Date();
+var g_today_date = new Date() + "";
 const DeliveryType = {
     Procurement: 'Procurement',
     Donation: 'Donation',
@@ -58,7 +57,7 @@ zsi.ready(function(){
             g_organization_name = d.rows[0].organizationName;
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
-            g_warehouse_id =  d.rows[0].warehouse_id;
+            g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
             //$(".pageTitle").append(' for ' + g_organization_name + g_location_name);
             $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
             $("select[name='dd_warehouses']").dataBind({
@@ -375,7 +374,6 @@ function displayAircraft(tab_name){
     });    
 }
 
-
 // Build the forms for the modal window for the receiving.
 function buildReceiving(tbl_obj) {
     buildReceivingHeader(tbl_obj);
@@ -400,8 +398,8 @@ function buildReceivingHeader(tbl_obj) {
             '<div class=" col-xs-3">' +
                 '<input type="text" name="doc_no" id="doc_no" class="form-control input-sm">' +
             '</div>' +
-            '<label class=" col-xs-1 control-label">Doc Date</label>' +
-            '<div class=" col-xs-3">' +
+            '<label class=" col-xs-2 control-label">Doc Date</label>' +
+            '<div class=" col-xs-2">' +
                 '<input type="text" name="doc_date" id="doc_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
             '</div>' +
             '<label class=" col-xs-2 control-label">Status</label>' +
@@ -416,8 +414,8 @@ function buildReceivingHeader(tbl_obj) {
             '<div class=" col-xs-3">' +
                 '<select type="text" name="received_by" id="received_by" class="form-control input-sm"></select>' +
             '</div>' +
-            '<label class=" col-xs-1 control-label">Received Date</label>' +
-            '<div class=" col-xs-3">' +
+            '<label class=" col-xs-2 control-label">Received Date</label>' +
+            '<div class=" col-xs-2">' +
                 '<input type="text" name="received_date" id="received_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
                 '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
@@ -436,13 +434,13 @@ function buildReceivingHeader(tbl_obj) {
         
         '<div class="form-group  ">' +
             '<div id="wrap-suppSource" class="hide">' +
-                '<label class=" col-xs-1 control-label">Supply Source</label>' +
+                '<label class=" col-xs-1 control-label"> Source</label>' +
                 '<div class=" col-xs-3">' +
                     '<select name="supply_source_filter" id="supply_source_filter" class="form-control input-sm"></select>' +
                 '</div>' +
             '</div>' +
-            '<label class=" col-xs-1 control-label">Remarks</label>' +
-            '<div class=" col-xs-7">' +
+            '<label class=" col-xs-2 control-label">Remarks</label>' +
+            '<div class=" col-xs-6">' +
                  '<textarea type="text" name="status_remarks" id="status_remarks" class="form-control input-sm" ></textarea>' +
                  '<input type="hidden" name="receiving_type" id="receiving_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
             '</div>' +
@@ -507,20 +505,25 @@ function buildReceivingDetails(callback) {
                             + bs({name:"quantity",type:"hidden", value: 1 })
                             + bs({name:"item_class_id",type:"hidden"})
                             + bs({name:"time_since_new",type:"hidden"})
-                            + bs({name:"time_since_overhaul",type:"hidden"})
-                            + bs({name:"remarks",type:"hidden"});
+                            + bs({name:"time_since_overhaul",type:"hidden"});
                 }
             }
-        );
+            ,{text  : "Status"      , name:"status_id"    ,type:"select"     , width : 150         , style : "text-align:left;" }
+            ,{text  : "Remarks"     , name:"remarks"      ,type:"input"      , width : 250         , style : "text-align:left;"}        );
     }else{
         _dataRows.push(
-             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+             {text  : "Serial No."          , width : 150       , style : "text-align:left;"
+    	        ,onRender : function(d){
+    	            return "<input name='serial_no' id='serial_no' class='form-control' disabled>";
+    	        }
+        	 }
             ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"} 
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;" }
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
         );
     }
@@ -536,6 +539,7 @@ function buildReceivingDetails(callback) {
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
+            $("select[name='status_id']").dataBind("inv_serial_status");
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
                 if($zRow.length){
@@ -548,7 +552,6 @@ function buildReceivingDetails(callback) {
             $("[name='serial_no']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
                 var stock_qty = $zRow.find("input[name='quantity']").val();
-                console.log(this.value);
                 if(this.value){
                     $zRow.find("#quantity").val(1);
                 }else{
@@ -586,7 +589,7 @@ function setProcurementOptions(id, callBack){
     if(id){
         $("#procurement_filter").attr("selectedvalue", id);
         $("#procurement_filter").dataBind({
-            url: execURL + "dd_procurement_sel @dealer_id=" + id + ",@status_code='O'"
+            url: execURL + "dd_procurement_sel @dealer_id=" + id
             ,text: "procurement_code"
             ,value: "procurement_id"
             ,selectedValue: id
@@ -606,14 +609,13 @@ function setProcurementOptions(id, callBack){
 $("#pdBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
-    
+    clearEntries();
     $("select[name='dealer_filter']").dataBind("dealer");
     $("select[name='dealer_filter']").change(function(){
         $("#dealer_id").val(this.value);
         setProcurementOptions(this.value);
     });
     buildReceiving($("#tblModalReceivingHeader"));
-    clearEntries();
     
     $("#wrap-proc").removeClass("hide");
     $("#wrap-suppSource").removeClass("hide");
@@ -623,13 +625,11 @@ $("#pdBtnNew").click(function () {
 $("#ddBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <input name="donor_filter" id="donor_filter">');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
-    
+    clearEntries();
     $("input[name='donor_filter']").focusout(function(){
         $("#donor").val(this.value);
     });
     buildReceiving($("#tblModalReceivingHeader"));
-    clearEntries();
-    
     $("#wrap-suppSource").removeClass("hide");
 });
 
@@ -637,15 +637,13 @@ $("#ddBtnNew").click(function () {
 $("#adBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
-    
+    clearEntries();
     $("select[name='aircraft_filter']").dataBind("aircraft_info");
     $("select[name='aircraft_filter']").change(function(){
         $("#aircraft_id").val(this.value);
     });
     buildReceiving($("#tblModalReceivingHeader"));
-    clearEntries();
 });
-
 
 // Save the new receiving entry.
 function Save(page_process_action_id) {
@@ -834,19 +832,25 @@ function loadReceivingDetails(receiving_id) {
                             + bs({name:"item_class_id",type:"hidden"})
                             + bs({name:"time_since_new",type:"hidden"})
                             + bs({name:"time_since_overhaul",type:"hidden"})
-                            + bs({name:"remarks",type:"hidden"});
                 }
             }
+            ,{text  : "Status"      , name:"status_id"    ,type:"select"     , width : 150         , style : "text-align:left;" }
+            ,{text  : "Remarks"     , name:"remarks"      ,type:"input"      , width : 250         , style : "text-align:left;"}
         );
     }else{
         _dataRows.push(
-             {text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+             {text  : "Serial No."          , width : 150       , style : "text-align:left;"
+    	        ,onRender : function(d){
+    	            return "<input name='serial_no' id='serial_no' class='form-control' disabled>";
+    	        }
+        	 }
             ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;" }
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
         );
     }
@@ -862,7 +866,7 @@ function loadReceivingDetails(receiving_id) {
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
-            
+            $("select[name='status_id']").dataBind("inv_serial_status");
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
                 if($zRow.length){
@@ -954,9 +958,23 @@ function SaveSubCategory(e) {
 
 function setSearchMulti(){
     var selCode = "items_on_arcraft_serials";
-    var _tableCode = "ref-0031";
+    var _tableCode = "";
     var _condition = "'"+ (g_tab_name==="Procurement" ? "procurement_id="+ g_procurement_id : "")  +"'";
+    var _colname = "";
 
+    if(g_tab_name==="Procurement"){
+        _tableCode = "ref-0031"
+        _colname = ["part_no","national_stock_no","item_name","item_code_id","procurement_detail_id","balance_quantity","unit_of_measure_id"]
+    }
+    else if(g_tab_name==="DONATION"){
+        _tableCode = "ref-0023"
+        _colname = ["part_no","national_stock_no","item_name","item_code_id","unit_of_measure_id","with_serial"]
+    }
+    else {
+        _tableCode = "ref-0036"
+        _colname = ["part_no","national_stock_no","item_name","item_code_id","unit_of_measure_id","with_serial"] 
+    }
+    
     if(g_tab_name==="AIRCRAFT"){
         $("select[name='serial_no']").dataBind(selCode);
         $("input[name='item_code_id']").each(function(){
@@ -969,7 +987,7 @@ function setSearchMulti(){
     
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["part_no","procurement_detail_id","item_code_id","item_name","national_stock_no","quantity","unit_of_measure_id"] 
+        , colNames: _colname 
         , displayNames: ["Part No."]
         , searchColumn:"part_no"
         , input: "input[name=part_no]"
@@ -977,24 +995,24 @@ function setSearchMulti(){
         , condition : _condition
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.part_no;
-            
             var $zRow = $(currentObject).closest(".zRow");
-            
+            $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
             $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
             $zRow.find("#item_name").val(data.item_name);
-            $zRow.find("#quantity").val(data.quantity);
+            $zRow.find("#quantity").val(data.balance_quantity);
             $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
             if(g_tab_name!=="Procurement")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
+                
         }
     });
 
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["national_stock_no","procurement_detail_id","item_code_id","item_name","part_no","quantity","unit_of_measure_id"] 
+        , colNames: _colname
         , displayNames: ["Nat'l Stock No."]
         , searchColumn:"national_stock_no"
         , input: "input[name=national_stock_no]"
@@ -1002,14 +1020,13 @@ function setSearchMulti(){
         , condition : _condition
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.national_stock_no;
-            
             var $zRow = $(currentObject).closest(".zRow");
-            
+            $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
             $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#item_name").val(data.item_name);
-            $zRow.find("#quantity").val(data.quantity);
+            $zRow.find("#quantity").val(data.balance_quantity);
             $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
             if(g_tab_name!=="Procurement")
@@ -1019,7 +1036,7 @@ function setSearchMulti(){
     
     new zsi.search({
         tableCode: _tableCode
-        , colNames: ["item_name","procurement_detail_id","item_code_id","part_no","national_stock_no","quantity","unit_of_measure_id"] 
+        , colNames: _colname 
         , displayNames: ["Description"]
         , searchColumn:"item_name"
         , input: "input[name=item_name]"
@@ -1027,14 +1044,13 @@ function setSearchMulti(){
         , condition : _condition
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.item_name;
-            
             var $zRow = $(currentObject).closest(".zRow");
-            
+            $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
             $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#part_no").val(data.part_no);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
-            $zRow.find("#quantity").val(data.quantity);
+            $zRow.find("#quantity").val(data.balance_quantity);
             $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
             if(g_tab_name!=="Procurement")
@@ -1061,4 +1077,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                            
+                                                                         
