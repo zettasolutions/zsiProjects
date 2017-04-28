@@ -11,4 +11,5 @@ receiving_detail_id	INT	NULL
 ,item_class_id	INT	NULL
 ,time_since_new	DECIMAL(10)	NULL
 ,time_since_overhaul	DECIMAL(10)	NULL
+,status_id	INT	NULL
 ,remarks	NVARCHAR(0)	NULL)

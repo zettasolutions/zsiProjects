@@ -11,7 +11,7 @@
 -- Add your name, date, and description of your changes here. Thanks
 -- ===================================================================================================
 
-create PROCEDURE [dbo].[procurement_detail_upd]
+CREATE PROCEDURE [dbo].[procurement_detail_upd]
 (
     @tt    procurement_detail_tt READONLY
    ,@user_id int
@@ -25,7 +25,6 @@ BEGIN
 	    ,serial_no                  = b.serial_no
 		,item_code_id				= b.item_code_id
 		,unit_of_measure_id	        = b.unit_of_measure_id
-		,quantity					= b.quantity
 		,unit_price					= b.unit_price
 		,amount						= a.unit_price * b.unit_price
         ,updated_date				= GETDATE()
@@ -43,8 +42,6 @@ BEGIN
 		,quantity					
 		,unit_price					
 		,amount						
-		,total_delivered_quantity	
-		,balance_quantity			
 		,created_by
         ,created_date
         )
@@ -57,8 +54,6 @@ BEGIN
 		,quantity					
 		,unit_price					
 		,unit_price * quantity						
-		,0	
-		,quantity	
 	    ,@user_id
         ,GETDATE()
     FROM @tt

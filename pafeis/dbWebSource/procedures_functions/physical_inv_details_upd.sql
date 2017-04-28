@@ -11,7 +11,6 @@ BEGIN
     UPDATE a 
     SET  physical_inv_id        = b.physical_inv_id
 	    ,item_code_id			= b.item_code_id
-		,serial_no				= b.serial_no
 		,quantity				= b.quantity
 		,bin                    = b.bin
 		,remarks                = b.remarks
@@ -25,7 +24,6 @@ BEGIN
     INSERT INTO dbo.physical_inv_details (
          physical_inv_id 	
 	    ,item_code_id
-		,serial_no
 		,quantity
 		,bin
 		,remarks
@@ -35,7 +33,6 @@ BEGIN
     SELECT 
          physical_inv_id 	
 	    ,item_code_id
-		,serial_no
 		,quantity
 		,bin
 	    ,remarks

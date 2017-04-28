@@ -1,6 +1,5 @@
 
 
-
 CREATE PROCEDURE [dbo].[roles_upd]
 (
    @tt    roles_tt READONLY
@@ -20,11 +19,7 @@ DECLARE @updated_count INT;
        FROM dbo.roles a INNER JOIN @tt b
 	     ON a.role_id = b.role_id 
 		WHERE b.role_name IS NOT NULL
-	    AND (isnull(a.role_name,'')  <> isnull(b.role_name,'')   
-		     OR isnull(a.is_export_excel,'') <> isnull(b.is_export_excel,'')
-			 OR isnull(a.is_export_pdf,'') <> isnull(b.is_export_pdf,'') 
-			 OR isnull(a.is_import_excel,'') <> isnull(b.is_import_excel,'') 
-			)
+	    AND isnull(b.is_edited,'N')='Y'
 
 
 SET @updated_count = @@ROWCOUNT;
@@ -51,5 +46,7 @@ SET @updated_count = @@ROWCOUNT;
 
 SET @updated_count = @updated_count + @@ROWCOUNT;
 RETURN @updated_count;
+
+
 
 

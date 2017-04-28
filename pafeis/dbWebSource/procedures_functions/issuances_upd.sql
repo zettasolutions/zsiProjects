@@ -1,5 +1,6 @@
 
 
+
 CREATE PROCEDURE [dbo].[issuances_upd]
 (
     @tt    issuances_tt READONLY
@@ -25,12 +26,14 @@ BEGIN
     SET  issuance_no			= b.issuance_no		
 		,issued_by				= b.issued_by
 		,issued_date			= b.issued_date
-		,issuance_directive_id	= b.issuance_directive_id
+		,issuance_directive_code	= b.issuance_directive_code
 		,aircraft_id			= b.aircraft_id
 		,transfer_warehouse_id	= b.transfer_warehouse_id
 		,status_id				= b.status_id
 		,status_remarks			= b.status_remarks
 		,authority_ref			= b.authority_ref
+		,accepted_by            = b.accepted_by
+		,issued_to_organization_id=b.issued_to_organization_id
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.issuances a INNER JOIN @tt b
@@ -44,7 +47,7 @@ BEGIN
 		,issuance_no 
 		,issued_by
 		,issued_date
-		,issuance_directive_id
+		,issuance_directive_code
 		,aircraft_id
 		,transfer_warehouse_id
 		,dealer_id
@@ -52,6 +55,8 @@ BEGIN
 		,status_remarks
 		,authority_ref
 		,warehouse_id
+		,accepted_by
+		,issued_to_organization_id
 		,issuance_type
 		,created_by
 		,created_date
@@ -61,7 +66,7 @@ BEGIN
 	   ,issuance_no 
 	   ,issued_by
 	   ,issued_date
-	   ,issuance_directive_id
+	   ,issuance_directive_code
 	   ,aircraft_id
 	   ,transfer_warehouse_id
 	   ,dealer_id
@@ -69,6 +74,8 @@ BEGIN
 	   ,status_remarks
 	   ,authority_ref
 	   ,dbo.getUserWarehouseId(@user_id)
+		,accepted_by
+		,issued_to_organization_id
 	   ,issuance_type
 	   ,@user_id
 	   ,GETDATE()
@@ -98,6 +105,7 @@ BEGIN
 	EXEC dbo.doc_routing_process_upd 66,@id,@statusId,@user_id;
 
 END
+
 
 
 

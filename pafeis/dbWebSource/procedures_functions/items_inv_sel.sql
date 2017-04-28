@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[items_inv_sel]
      ,@col_no   int = 1
      ,@order_no int = 0
      ,@pno INT = 1
-     ,@rpp INT = 25
+     ,@rpp INT = 100
      ,@user_id INT = NULL
 )
 AS
@@ -24,7 +24,7 @@ SET NOCOUNT ON
     rec_count INT
   )
 
-	SET @stmt = 'SELECT  part_no, national_stock_no, item_name, item_type_name, stock_qty, reorder_level, item_code_id, warehouse_id 
+	SET @stmt = 'SELECT  part_no, national_stock_no, item_name, item_type_name, stock_qty, reorder_level, item_code_id, warehouse_id, unit_of_measure, bin
 				 FROM dbo.items_inv_v WHERE is_active=''Y'' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
 	SET @stmt2 = 'SELECT count(*) FROM dbo.items_inv_v WHERE is_active=''Y'' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
 

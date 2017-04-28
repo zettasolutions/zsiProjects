@@ -22,7 +22,7 @@ SET NOCOUNT ON
    
 	SET @stmt = 'SELECT *
 	             FROM dbo.items_inv_v 
-	             WHERE stock_qty > 0 and is_active = ''Y'' '
+	             WHERE is_active = ''Y'' '
 
  
 	IF @search <> '' 

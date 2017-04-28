@@ -3,7 +3,6 @@ physical_inv_detail_id	INT	NULL
 ,is_edited	CHAR(1)	NULL
 ,physical_inv_id	INT	NULL
 ,item_code_id	INT	NULL
-,serial_no	NVARCHAR(60)	NULL
 ,quantity	DECIMAL(20)	NOT NULL
 ,bin	NVARCHAR(200)	NULL
 ,remarks	NVARCHAR(0)	NULL)

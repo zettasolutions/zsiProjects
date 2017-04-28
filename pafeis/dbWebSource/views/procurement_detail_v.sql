@@ -1,4 +1,5 @@
-CREATE VIEW dbo.procurement_detail_v
+
+CREATE VIEW [dbo].[procurement_detail_v]
 AS
 SELECT        dbo.procurement_detail.procurement_detail_id, dbo.procurement_detail.procurement_id, dbo.procurement_detail.item_no, dbo.procurement_detail.item_code_id, dbo.item_codes.part_no, 
                          dbo.item_codes.national_stock_no, dbo.item_codes.item_code + N': ' + dbo.item_codes.item_name AS item_description, dbo.procurement_detail.unit_of_measure_id, dbo.unit_of_measure.unit_of_measure_code,
@@ -7,3 +8,4 @@ SELECT        dbo.procurement_detail.procurement_detail_id, dbo.procurement_deta
 FROM            dbo.procurement_detail LEFT OUTER JOIN
                          dbo.unit_of_measure ON dbo.procurement_detail.unit_of_measure_id = dbo.unit_of_measure.unit_of_measure_id LEFT OUTER JOIN
                          dbo.item_codes ON dbo.procurement_detail.item_code_id = dbo.item_codes.item_code_id
+

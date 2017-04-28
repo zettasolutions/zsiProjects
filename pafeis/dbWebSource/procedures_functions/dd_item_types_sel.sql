@@ -5,7 +5,7 @@ CREATE PROCEDURE [dbo].[dd_item_types_sel]
     @item_cat_id  INT = null
    ,@parent_item_cat_id  INT = null
    ,@is_active CHAR(1) = 'Y'
-   ,@col_no   int = 1
+   ,@col_no   int = 2
    ,@order_no int = 0
 )
 AS

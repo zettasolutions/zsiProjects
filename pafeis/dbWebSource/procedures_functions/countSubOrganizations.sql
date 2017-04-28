@@ -9,7 +9,7 @@ RETURNS INT
 AS
 BEGIN   
    DECLARE @l_retval    INT;
-   SELECT @l_retval = COUNT(*) FROM dbo.organizations_v WHERE organization_pid = @organization_id and level_no=@level_no
+   SELECT @l_retval = COUNT(*) FROM dbo.organizations_v WHERE organization_pid = @organization_id and level_no=@level_no and is_active='Y'
 
    RETURN @l_retval;
 END;

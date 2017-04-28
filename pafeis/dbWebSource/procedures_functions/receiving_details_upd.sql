@@ -18,6 +18,7 @@ BEGIN
 		,item_class_id			= b.item_class_id
 		,time_since_new         = b.time_since_new
 		,time_since_overhaul    = b.time_since_overhaul
+		,status_id              = b.status_id
 		,remarks	            = b.remarks
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
@@ -37,6 +38,7 @@ BEGIN
 		,item_class_id
 		,time_since_new
 		,time_since_overhaul
+		,status_id
 		,remarks
 		,created_by
         ,created_date
@@ -52,6 +54,7 @@ BEGIN
 	   ,item_class_id
 	   ,time_since_new
 	   ,time_since_overhaul
+	   ,status_id
 	   ,remarks
 	   ,@user_id
        ,GETDATE()
