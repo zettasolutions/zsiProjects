@@ -1,30 +1,19 @@
 var  bs             = zsi.bs.ctrl
     ,svn            = zsi.setValIfNull
     ,$rTypeId    = ""
-    ,reportType = [
-        {text:"Summary",value:"Summary"}
-        ,{text:"Detailed",value:"Detailed"}
-    ]    
+  
 ;
 	
 zsi.ready(function(){
     //enableFilter();
     $ ("#warehouse_id").dataBind({
-                           url: execURL + "dd_warehouses_sel"
+                           url: procURL + "dd_warehouses_sel"
                            , text: "warehouse"
                            , value: "warehouse_id"
-    
-        ,onComplete: function(){
-            $("#report_type_id").change(function(){
-                rTypeId = this.value;
-                if(rTypeId === "") $("#zPanelId").css({display:"none"});
-            });
-        }
     });
     $("select[name='dealer_id']").dataBind("dealer");
     $("select[name='supply_source_id']").dataBind( "supply_source");
     $("select[name='receiving_type_id']").dataBind( "receiving_types");
-    $("select[name='report_type_id']").fillSelect({data: reportType});
     zsi.initDatePicker();
     $('#proc_code').val('');
     clearform();
@@ -50,12 +39,12 @@ function clearform(){
 }
 
 $("#btnGo").click(function(){
-    
+    /*
     if($("#receiving_type_id").val() === ""){ 
         alert("Please select Report Type.");
         return;
     }
-    
+    */
     $("#zPanelId").css({display:"block"});
     displayRecords();
 });
@@ -71,7 +60,7 @@ function displayRecords(){
     
     $("#grid").dataBind({
         
-         toggleMasterKey    : "procurement_id"
+         toggleMasterKey    : "receiving_id"
         ,height             : 400 
         ,width              : $(document).width() - 27
         ,url                : execURL + "receiving_summary_report_sel @warehouse_id="+ (wereHId ? wereHId : null)
@@ -83,16 +72,18 @@ function displayRecords(){
         ,dataRows : [
                 {text  : "&nbsp;"                                              , width : 25           , style : "text-align:left;"
                      ,onRender : function(d){
-                          return "<a  href='javascript:void(0);' onclick='displayDetail(this,"+ d.procurement_id +");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
+                          return "<a  href='javascript:void(0);' onclick='displayDetail(this,"+ d.receiving_id +");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
                     }
                  }
-        		,{text  : "Doc No."                     , name  : "doc_no"              , width : 180           , style : "text-align:left;"}
-        		,{text  : "Doc Date"                    , name  : "doc_date"            , width : 350           , style : "text-align:left;"}
-        		,{text  : "Supplier Source"             , name  : "supply_source_name"  , width : 150           , style : "text-align:left;"}
-        		,{text  : "Promised Delivery Date"      , name  : "received_by_name"    , width : 250           , style : "text-align:left;"}
-        		,{text  : "Actual Delivery Date"        , name  : "received_date"       , width : 250           , style : "text-align:left;"}
-        		,{text  : "No. of Items"                , name  : "status_name"         , width : 150           , style : "text-align:left;"}
-        		,{text  : "Total Ordered Qty."          , name  : "status_remarks"      , width : 150           , style : "text-align:left;"}
+        		,{text  : "Doc No."                     , name  : "doc_no"                  , width : 180           , style : "text-align:left;"}
+        		,{text  : "Doc Date"                    , name  : "doc_date"                , width : 350           , style : "text-align:left;"}
+        		,{text  : "Dealer"                      , name  : "dealer_name"             , width : 150           , style : "text-align:left;"}
+        		,{text  : "Source"                      , name  : "supply_source"           , width : 250           , style : "text-align:left;"}
+        		,{text  : "Received By"                 , name  : "received_by_name"        , width : 250           , style : "text-align:left;"}
+        		,{text  : "Date Received"               , width : 150           , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
+        		}
+        		,{text  : "Receiving Warehouse"         , name  : "receiving_warehouse"     , width : 150           , style : "text-align:left;"}
 
 	    ]  
 
@@ -115,19 +106,21 @@ function displayDetail(o,id){
             */
             $grid.dataBind({
                 // width      : $(document).width() - 49
-                 url        : execURL + "procurement_detail_sel @procurement_id="+ id
+                 url        : procURL + "receiving_details_sel @receiving_id="+ id
                 ,dataRows   : [
-                		 {text  : "Item No."                , name  : "item_no"                     , width : 180           , style : "text-align:left;"}
-                		,{text  : "Part No."                , name  : "part_no"                     , width : 350           , style : "text-align:left;"}
-                		,{text  : "National Stock No."      , name  : "national_stock_no"           , width : 150           , style : "text-align:left;"}
-                		,{text  : "Item Description"        , name  : "item_description"            , width : 150           , style : "text-align:left;"}
-                		,{text  : "Unit of Measure"         , name  : "unit_of_measure_code"        , width : 150           , style : "text-align:left;"}
-                		,{text  : "Total Delivered Qty."    , name  : "total_delivered_quantity"    , width : 150           , style : "text-align:left;"}
-                		,{text  : "Balance Qty."            , name  : "balance_quantity"            , width : 150           , style : "text-align:left;"}
-                		,{text  : "Unit Price"              , name  : "unit_price"                  , width : 150           , style : "text-align:left;"}
-                		,{text  : "Amount"                  , name  : "amount"                      , width : 150           , style : "text-align:left;"}
-                	    ]          
-            });    
+                         {text  : "Part No."                , name  : "part_no"                    , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Nat'l Stock No."         , name  : "national_stock_no"          , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Nomenclature"            , name  : "item_name"                  , width : 150       , style : "text-align:left;"}
+                		,{text  : "Serial No."              , name  : "serial_no"                  , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Manufacturer"            , name  : "manufacturer_id"            , width : 150       , style : "text-align:left;"} 
+                        ,{text  : "Unit of Measure"         , name  : "unit_of_measure_id"         , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Quantity"                , name  : "quantity"                   , width : 100       , style : "text-align:left;"}
+                        ,{text  : "Item Class"              , name  : "item_class_id"              , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Time Since New"          , name  : "time_since_new"             , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Time Since Overhaul"     , name  : "time_since_overhaul"        , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Status"                  , name  : "status_id"                  , width : 150       , style : "text-align:left;" }
+                        ,{text  : "Remarks"                 , name  : "remarks"                    , width : 260       , style : "text-align:left;"}
+                	    ]                      });    
 
         }
     
