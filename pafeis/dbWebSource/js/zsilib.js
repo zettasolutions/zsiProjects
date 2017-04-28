@@ -781,8 +781,10 @@ var  ud='undefined'
                             for(var x=0;x<_dt.length;x++){
                                 var _content = "", _attr = "", _style = "", _class = "",_nd= (o.data===null ? " no-data ":"");
                                 var _info = _dt[x]; 
-                                if(o.data) o.data.td = {};
-                                
+                                if(o.data) {
+                                    o.data.td = {};
+                                    o.data.recordIndex = o.index;
+                                }
                                 if(_info.onRender)
                                     _content = _info.onRender(o.data);
                                 else{
@@ -911,8 +913,8 @@ var  ud='undefined'
                         if(typeof o.blankRowsLimit !==ud ){
                             for(var x=0; x < o.blankRowsLimit;x++){
                                 var _cls = zsi.getOddEven();
-                                trItem({data:null,panelType:"L",rowClass:_cls}); 
-                                trItem({data:null,panelType:"R",rowClass:_cls});
+                                trItem({data:null,panelType:"L",rowClass:_cls,index:x}); 
+                                trItem({data:null,panelType:"R",rowClass:_cls,index:x});
                             }
                         } 
                     }
@@ -1034,10 +1036,10 @@ var  ud='undefined'
                                     var _ch,i,_trs;
                                     num_rows = data.rows.length;
                                     
-                                    $.each(data.rows, function () {
+                                    $.each(data.rows, function (i) {
                                         var _cls = zsi.getOddEven();
-                                        trItem({data:this,panelType:"L",rowClass:_cls}); 
-                                        trItem({data:this,panelType:"R",rowClass:_cls});
+                                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
+                                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});
                                     });
                                     
                                     if(o.isAsync && __obj.curPageNo < _noOfPage ){
@@ -1098,10 +1100,10 @@ var  ud='undefined'
                     $.ajax(params);
                 }
                 else if(typeof o.rows !== ud){
-                    $.each(o.rows, function () {
+                    $.each(o.rows, function(i) {
                         var _cls = zsi.getOddEven();
-                        trItem({data:this,panelType:"L",rowClass:_cls}); 
-                        trItem({data:this,panelType:"R",rowClass:_cls});                            
+                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
+                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});                            
                     });
                     
                     createBlankRows(o);
@@ -1115,8 +1117,8 @@ var  ud='undefined'
                     if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
                     for(var y=0;y<o.blankRowsLimit;y++){
                         var _cls = zsi.getOddEven();
-                        trItem({data:null,panelType:"L",rowClass:_cls}); 
-                        trItem({data:null,panelType:"R",rowClass:_cls});       
+                        trItem({data:null,panelType:"L",rowClass:_cls,index:y}); 
+                        trItem({data:null,panelType:"R",rowClass:_cls,index:y});       
                     }
                     setRowClickEvent();                                  
                     setScrollBars();
@@ -2357,4 +2359,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                
+                                                                                                 
