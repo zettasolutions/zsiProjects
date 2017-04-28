@@ -1,7 +1,11 @@
-var bs = zsi.bs.ctrl;
-var tblName     = "employees";
-var svn =  zsi.setValIfNull;
-var modalImageEmployee      = "modalWindowImageEmployee";
+var  bs                 = zsi.bs.ctrl
+    ,tblName            = "employees"
+    ,svn                =  zsi.setValIfNull
+    ,modalImageEmployee = "modalWindowImageEmployee"
+    ,employeesData    = []
+    ,oldFileName        = ""
+
+;
 
 zsi.ready(function(){
    getTemplate();
@@ -116,14 +120,27 @@ function displayRecords(col_name,keyword){
                 , {text  : "Position"           , name  : "position_id"         , type  : "select"       , width : 200         , style : "text-align:left;"}
                 , {text  : "Active?"            , name  : "is_active"           , type  : "yesno"        , width : 80           , style : "text-align:left;"   ,defaultValue:"Y"                 }
         		, {text  : "Upload Image"       , width : 100                   , style:"text-align:center;" 
-    		    , onRender : function(d){ 
+    		    , onRender : function(d){
+    		        var h = "";
+    		        //console.log(   "record Index:" + svn(d,"recordIndex"));
+    	            	        
+    		        /*
     		        var h = "<a href='javascript:void(0);'  onclick='showModalUploadEmployeeImage(" + svn(d,"user_id") +",\"" 
                                + svn(d,"last_name") + ", " + svn(d,"first_name") + " " + svn(d,"middle_name") + "\");'  ><span class='glyphicon glyphicon-upload' style='font-size:12pt;' ></span> </a>";
     		        return (d!==null ? h : "");
+    		        */
+    		        
+    		        if(d !== null){
+    		             h = "<a href='javascript:void(0);'  onclick='showModalUploadEmployeeImage(" + svn(d,"recordIndex") + ");'  ><span class='glyphicon glyphicon-upload' style='font-size:12pt;' ></span> </a>";
+    		            
+    		        }
+    		        return h;
+    		        
         		}
     		}	 	 	
 	    ]   
-    	     , onComplete: function(){
+    	     , onComplete: function(data){
+    	         employeesData = data.rows;
     	         $("select, input").on("keyup change", function(){
                     var $zRow = $(this).closest(".zRow");
                     $zRow.find("#is_edited").val("Y");
@@ -181,10 +198,13 @@ $("#btnDelete").click(function(){
     });       
 });
 
-function showModalUploadEmployeeImage(UserId, title){
-    user_id = UserId;
+function showModalUploadEmployeeImage(index){
+    var _d= employeesData[index]; //set row info
+    var _title = _d.last_name + ", " + _d.first_name + " " + _d.middle_name;
+    user_id = _d.user_id;
+    oldFileName = _d.img_filename.toLowerCase();
     var m=$('#' + modalImageEmployee);
-    m.find(".modal-title").text("Image for » " + title);
+    m.find(".modal-title").text("Image for » " + _title);
     m.modal("show");
     m.find("form").attr("enctype","multipart/form-data");
     $.get(base_url + 'page/name/tmplImageUpload'
@@ -221,7 +241,7 @@ function getTemplate(){
         var template = Handlebars.compile(d);     
         var context = { id:"modalWindow"
                         , title: "Employees"
-                        , footer:  ' <div class="pull-left"><button type="button" onclick="submitItems();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button></div>'
+                        , footer:  ' <div class="pull-left"></div>'
                         , body:'<div ><div id="' + tblName + '" class="zGrid"></div></div>'
                       };
         
@@ -261,10 +281,18 @@ function employeeImageUpload(){
                     zsi.form.showAlert("alert");
                     $('#' + modalImageEmployee).modal('toggle');
                     //refresh latest records:
-                    displayRecords("");
+                    displayRecords($("#field_search").val(),$("#logon_name_filter").val());
                 });
+                
+                //delete existing file
+                if( oldFileName!=="" && oldFileName !== fileOrg.files[0].name.toLowerCase() ){
+                    $.get(base_url + "file/deleteFile?filename=\\temp\\" + oldFileName 
+                        ,function(data){
+                            console.log("file has been deleted.")
+                        }    
+                    ); 
+                }                
 
-                    
             } else {
                 alert(data.errMsg);
             }
@@ -301,4 +329,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                                      
+}                                         

@@ -136,12 +136,6 @@ function showModalEditIssuance(index) {
 function displayListBoxes(){
     $("select[name='issued_directive_from_id']").dataBind( "organization");
     $("select[name='issued_directive_to_id']").dataBind( "organization");
-  /*  $("select[name='issued_directive_to_id']").dataBind({
-                               // url: base_url +  "selectoption/code/employees_fullnames_v"
-                                url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
-                               , text: "userFullName"
-                               , value: "user_id"
-                                });*/
     $("select[name='process_id']").dataBind( "status");   
     $("select[name='action_id']").dataBind( "status");  
 }
@@ -255,4 +249,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                                       
+                                                                        
