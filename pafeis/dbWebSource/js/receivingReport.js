@@ -1,28 +1,33 @@
 var  bs             = zsi.bs.ctrl
     ,svn            = zsi.setValIfNull
     ,$rTypeId    = ""
-    ,receivingType= [
-             {text:"Supplier",value:"S"}
-            ,{text:"Donation",value:"D"}
-            ,{text:"Transfer",value:"T"}
-            ,{text:"Aircraft",value:"A"}
-        ]      
+    ,reportType = [
+        {text:"Summary",value:"Summary"}
+        ,{text:"Detailed",value:"Detailed"}
+    ]    
 ;
 	
 zsi.ready(function(){
     //enableFilter();
-    $("select[name='dealer_id']").dataBind("dealer");
-    $("select[name='supp_source_id']").dataBind( "supply_source");
-    $ ("#receiving_type_id").fillSelect({
-             text: "report_type"
-           , value: "report_type_id"
+    $ ("#warehouse_id").dataBind({
+                           url: execURL + "dd_warehouses_sel"
+                           , text: "warehouse"
+                           , value: "warehouse_id"
+    
+        ,onComplete: function(){
+            $("#report_type_id").change(function(){
+                rTypeId = this.value;
+                if(rTypeId === "") $("#zPanelId").css({display:"none"});
+            });
+        }
     });
-    $("select[name='receiving_type_id']").fillSelect({data: receivingType});
-
+    $("select[name='dealer_id']").dataBind("dealer");
+    $("select[name='supply_source_id']").dataBind( "supply_source");
+    $("select[name='receiving_type_id']").dataBind( "receiving_types");
+    $("select[name='report_type_id']").fillSelect({data: reportType});
     zsi.initDatePicker();
     $('#proc_code').val('');
     clearform();
-   // setSearch();
 });
 	
 /*
@@ -43,51 +48,38 @@ function clearform(){
     $('#date_to').val('');
     $('select').val('');   
 }
-/*
-function setSearch(){
-    new zsi.search({
-        tableCode: "ref-0030"
-        ,colNames : ["procurement_code"] 
-        ,displayNames : ["Search"]  
-        ,searchColumn :"procurement_code"
-        ,input:"input[name=proc_code]"
-        ,url : execURL + "searchData"
-        ,onSelectedItem: function(currentObject,data,i){ 
-            currentObject.value=data.procurement_code;
-            $("#proc_code_id").val(data.procurement_id);
-       }
-    });        
-}
-*/
+
 $("#btnGo").click(function(){
-    console.log($("#receiving_type_id").val());
-    /*
+    
     if($("#receiving_type_id").val() === ""){ 
-        alert("Please select Receiving Type.");
+        alert("Please select Report Type.");
         return;
     }
-    */
+    
     $("#zPanelId").css({display:"block"});
     displayRecords();
 });
 
 function displayRecords(){
+    var wereHId     = $("#warehouse_id").val();
     var dateFrom    = $("#date_from").val();
     var dateTo      = $("#date_to").val();
-    var suppSId     = $("#supp_source_id").val();
+    var suppSId     = $("#supply_source_id").val();
     var dealerId    = $("#dealer_id").val();
     var rTypeId     = $("#receiving_type_id").val();
+
     
     $("#grid").dataBind({
         
          toggleMasterKey    : "procurement_id"
         ,height             : 400 
         ,width              : $(document).width() - 27
-        ,url                : execURL + "receiving_sel @date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
+        ,url                : execURL + "receiving_summary_report_sel @warehouse_id="+ (wereHId ? wereHId : null)
+                                      + ",@date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
                                       + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
-                                      + ",@supp_source_id="+ (suppSId ?  suppSId : null) 
+                                      + ",@supply_source_id="+ (suppSId ?  suppSId : null) 
                                       + ",@dealer_id="+ (dealerId ?  dealerId : null)
-                                      + ",@receiving_type_id="+ (rTypeId ? rTypeId  : null)
+                                      + ",@receiving_type="+ (rTypeId ? "'" + rTypeId + "'" : null)
         ,dataRows : [
                 {text  : "&nbsp;"                                              , width : 25           , style : "text-align:left;"
                      ,onRender : function(d){
@@ -142,4 +134,4 @@ function displayDetail(o,id){
     });
 }
 
-                                                                                       
+                                                                                          
