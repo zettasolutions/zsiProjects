@@ -1,38 +1,75 @@
+<link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src='/javascript/name/zsiSearch'></script>
 <style>
-    #grid{
-        width: 100%;
+    #zPanelId {
+        display:none;
     }
     
-    .zGrid .item .title {
-        height: 22px;
-        line-height: 19px;
-    }
-    .zGrid .zHeaders .zSort {
-        
+    .zExtraRow{
+        margin-left:26px;
+        background-color:#c4defc;
+        display:none;
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
     
-    .tablePanel {
-        overflow-y:auto;
+    .zGrid a{
+        color:#3577C3;
+        margin-left:4px;
     }
-   
+    
 
 </style>
-
-<script src='/javascript/name/zsiSearch'></script>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">    
-    <form method="post" id="frm">
-        <div class="zPanel">
+<div class="zPanel">
+    <div style="min-height:20px;margin-top:10px">
+        <form method="post" id="frm">
              <div class="form-horizontal">
-                <div class="form-group">
-                    <div class=" col-xs-2"> 
-                        <input name="issuanceReport_filter" id="issuanceReport_filter" placeholder="Search" class="form-control input-sm">
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label class=" col-xs-3 control-label">Warehouse</label>
+                            <div class="col-xs-3">
+                                <input name="warehouse_id" id="warehouse_id" class="form-control input-sm" type="hidden"> 
+                                <select name="warehouse_id" id="warehouse_id" class="form-control input-sm" > </select>  
+                            </div>
+                             <label class=" col-xs-2 control-label">Issuing Type</label>
+                            <div class="col-xs-3" style="margin-bottom:3px">     
+                                <select name="receiving_type_id" id="receiving_type_id" class="form-control input-sm"> </select>
+                            </div>
+                        </div>
                     </div>
-                     <div class="col-xs-1">
-                        <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                    
+                    <div class="col-sm-3">
+                        <div class="row">
+                            <label class=" col-xs-2 control-label" >From</label>
+                            <div class="col-xs-4" style="margin-bottom:3px">   
+                               <input name="date_from" id="date_from" class="form-control input-sm"> 
+                            </div>
+                            <label class=" col-xs-1 control-label" >To</label>
+                            <div class="col-xs-4" style="margin-bottom:3px">   
+                                <input name="date_to" id="date_to" class="form-control input-sm"> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="row">
+                           
+                            <label class=" col-xs-1 control-label"></label>
+                            <div class="col-xs-1" style="margin-left:-50px">
+                                <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id="grid" class="zGrid"></div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
+            <div class="zPanel" id="zPanelId">
+                <div >
+                      <div id="grid" class="zGrid"></div>
+                </div>
+            </div>
+
+<script src="/scripts/bootstrap-datepicker.min.js"></script> 
+<script src="/Scripts/handlebars-v3.0.0.js"></script>

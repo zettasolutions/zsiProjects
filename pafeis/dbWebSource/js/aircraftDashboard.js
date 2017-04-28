@@ -63,7 +63,7 @@ function getUserInfo(callBack){
 }
 
 function displayTabs(cbFunc){
-    $.get(execURL + "aircraft_info_sel @squadron_id="+ g_squadron_id, function(data){
+    $.get(execURL + "aircraft_info_sel @squadron_id="+ (g_squadron_id ? g_squadron_id : null), function(data){
         var _rows      = data.rows;
         var tabList    = '<ul class="nav nav-tabs" role="tablist">';
         var tabContent = '<div class="tab-content">';
@@ -124,4 +124,4 @@ function displayItems(id){
         		}
 	    ]   
     });    
-}    
+}     

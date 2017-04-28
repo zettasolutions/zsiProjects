@@ -7,7 +7,7 @@ var bs          = zsi.bs.ctrl
    ,g_organization_id = null
    ,g_organization_name = ""
    ,g_location_name = ""
-   ,g_today_date = new Date()
+   ,g_today_date = new Date() +""
    ,g_physical_inv_id = null
    ,g_item_code_id = null
 ;
@@ -21,7 +21,7 @@ zsi.ready(function(){
             g_organization_name = d.rows[0].organizationName;
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
-            g_warehouse_id =  d.rows[0].warehouse_id;
+            g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
             $(".pageTitle").append(' for ' + g_organization_name + g_location_name);
         }
     });
@@ -111,6 +111,7 @@ function getTemplate(){
 }
 
 $("#btnNew").click(function () {
+    g_physical_inv_id = null;
     $("#ctxMW .modal-title").html('Physical Inventory' + ' » ' +  g_organization_name + g_location_name +" <span id='inventoryNo'></span>");
     $("#ctxMW").modal({ show: true, keyboard: false, backdrop: 'static' });
 
@@ -123,7 +124,7 @@ $("#btnNew").click(function () {
     }); 
 
     $("select[name='done_by']").dataBind({
-        url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
+        url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id  
             , text: "userFullName"
             , value: "user_id"
     });
@@ -177,7 +178,7 @@ function showModalEditPhysicalInv(index, physical_inv_no) {
         $("#frmPhysicalInv").find("#is_edited").val("Y");
     });     
     $("select[name='done_by']").dataBind({
-        url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
+        url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id 
             , text: "userFullName"
             , value: "user_id"
     });
@@ -221,7 +222,9 @@ function buildPhysicalInvButtons() {
             //html += '<button type="button" onclick="showUploadFile();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>';
             html += '<button type="button" onclick="DeletePhysicalInvDetails();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>';
             
-            $("#status_name").text(d.rows[0].status_name);
+            if(g_physical_inv_id===null){
+                $("#status_name").text(d.rows[0].status_name);
+            }
             $(".added-button").remove();
             $("#physicalInv-footer").append(html);
         }
@@ -242,7 +245,8 @@ function displayPhysicalInv(d){
 
 function clearForm(){ 
     $('input[type=text], input[type=hidden]').val('');
-    $('select[type="text"]').attr('selectedvalue','').val('');    
+    $('select[type="text"]').attr('selectedvalue','').val('');  
+    $("#status_name").text('');
     dataPhysicalInvIndex=-1;
     zsi.initDatePicker();
 }
@@ -524,7 +528,7 @@ function displaySerialNumbers(physical_inv_id, item_code_id){
                 , style : "text-align:left;"
             }	
             ,{
-                  text  : "No. of Repaird"   
+                  text  : "No. of Repairs"   
                 , name  : "no_repairs"
                 , type  : "input"   
                 , width : 120
@@ -575,4 +579,4 @@ function SaveSerialNo(){
 
     });
 }  
-    
+          

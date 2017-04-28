@@ -228,6 +228,14 @@ function displayPurchase(tab_name){
     		            + svn(d,"procurement_code") + " </a>";
     		    }
     		}
+    		,{text  : "PO No."                   , type  : "label"         , width : 120       , style : "text-align:left;"
+    		    ,onRender : function(d){ return svn(d,"po_no");
+    		    }
+    		}
+    		,{text  : "PAF BAC"                   , type  : "label"         , width : 120       , style : "text-align:left;"
+    		    ,onRender : function(d){ return svn(d,"bac_no");
+    		    }
+    		}
     	    ,{text  : "Procurement Desc"            , type  : "label"       , width : 350       , style : "text-align:left;"
     	        ,onRender : function(d){ return svn(d,"procurement_name")}
     	    }
@@ -278,6 +286,14 @@ function displayRepair(tab_name){
     		             + ProcType.Repair + "\",\"" 
     		             + svn(d,"procurement_id") +"\");'>"
     		             + svn(d,"procurement_code") + " </a>";
+    		    }
+    		}
+    		,{text  : "PO No."                   , type  : "label"         , width : 120       , style : "text-align:left;"
+    		    ,onRender : function(d){ return svn(d,"po_no");
+    		    }
+    		}
+    		,{text  : "PAF BAC"                   , type  : "label"         , width : 120       , style : "text-align:left;"
+    		    ,onRender : function(d){ return svn(d,"bac_no");
     		    }
     		}
     	    ,{text  : "Procurement Desc"            , type  : "label"       , width : 350       , style : "text-align:left;"
@@ -707,4 +723,4 @@ var toCurrencyFormat = function(num){
 	formatted = output.reverse().join("");
 	return(formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
 };
-          
+           

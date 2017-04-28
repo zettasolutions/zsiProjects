@@ -11,13 +11,14 @@ var bs = zsi.bs.ctrl
     ,warehouse_id = null
     ,g_warehouse_id = null
     ,g_issuance_id = null
-    ,g_today_date = new Date()
+    ,g_today_date = new Date() + ""
 ;
     const IssuanceType = {
     Aircraft: 'Aircraft',
     Warehouse: 'Warehouse',
     Maintenance: 'Maintenance',
     Disposal: 'Disposal',
+    Directive: 'Directive',
 };
 
 zsi.ready(function(){
@@ -36,6 +37,10 @@ zsi.ready(function(){
     $("#disposal-tab").click(function() {
         g_tab_name = "DISPOSAL";
         displayDisposal($(this).html());
+    });
+    $("#directive-tab").click(function() {
+        g_tab_name = "DIRECTIVE";
+        displayDirective($(this).html());
     });
    
     getTemplate();
@@ -64,6 +69,13 @@ var contextModalIssuance = {
             + '</span>&nbsp;Reset</button>'
     , body: '<div id="tblModalIssuanceHeader" class="zGrid header ui-front"></div><br/><div><h4>Details</h4></div><div class="zPanel"><div id="tblModalIssuanceDetails" class=" zGrid zPanel detail"></div></div>'
  };
+ 
+ var contextUploadFile = { 
+          id    : "modalUploadFile"
+        , title : "Upload File"
+        , footer: '<div class="pull-left"><button type="button" onclick="uploadFile();" class="btn btn-primary"><span class="glyphicon glyphicon-upload"></span> Upload</button>'
+                   + '</div>' 
+    };
 
 // Reset the input fields.
 function resetFields(obj) {
@@ -93,8 +105,14 @@ function initSelectOptions(callbackFunc){
                                 
         
         , onComplete : function(){
-            $("#tblModalIssuanceHeader #issuance_directive_id").dataBind({
+            /*$("#tblModalIssuanceHeader select#issuance_directive_id").dataBind({
                 url: base_url +  "selectoption/code/issuance_directive"
+                , onComplete : function(){
+                    if(callbackFunc) callbackFunc();
+                }
+            });*/
+            $("#tblModalIssuanceHeader select#accepted_by").dataBind({
+                url: base_url +  "selectoption/code/employees_fullnames_v"
                 , onComplete : function(){
                     if(callbackFunc) callbackFunc();
                 }
@@ -108,6 +126,7 @@ function getTemplate(){
     $.get(base_url + "templates/bsDialogBox.txt",function(d){
         var template = Handlebars.compile(d);
         $("body").append(template(contextModalIssuance));
+        $("body").append(template(contextUploadFile));
     });    
 }
 
@@ -117,7 +136,7 @@ function getUserInfo(callBack){
             g_user_id = d.rows[0].user_id;
             g_organization_id = d.rows[0].organization_id;
             g_organization_name = d.rows[0].organizationName;
-            g_warehouse_id = d.rows[0].warehouse_id;
+            g_warehouse_id = (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             
@@ -174,7 +193,7 @@ function displayAircraft(tab_name){
             ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_date"); }
             }
-            ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+            ,{text  : "Issued To"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
             ,{text  : "Aircraft"       , name  : "aircraft_name"                   , type  : "label"       , width : 200       , style : "text-align:left;"
@@ -188,6 +207,12 @@ function displayAircraft(tab_name){
             }
             ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"status_remarks"); }
+            }
+            , {text  : "Upload File"       , width : 100                   , style:"text-align:center;" 
+    		    , onRender : function(d){ 
+    		        var h = "<a href='javascript:void(0);' onclick='showUploadFile(" + svn(d,"issuance_id") +");'><span class='glyphicon glyphicon-upload' style='font-size:12pt;'></span></a>";
+    		        return (d!==null ? h : "");
+        		}
             }
         ]   
     });    
@@ -216,7 +241,7 @@ function displayWarehouse(tab_name){
             ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_date"); }
             }
-            ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+            ,{text  : "Issued To"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
             ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
@@ -258,7 +283,7 @@ function displayMaintenance(tab_name){
             ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_date"); }
             }
-            ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+            ,{text  : "Issued To"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
             ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
@@ -300,7 +325,49 @@ function displayDisposal(tab_name){
             ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_date"); }
             }
-            ,{text  : "Issuance Directive"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+            ,{text  : "Issued To"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
+            }
+            ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"authority_ref"); }
+            }
+            ,{text  : "Transfer To"       , name  : "transfer_warehouse_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"transfer_warehouse_id"); }
+            }
+            ,{text  : "Status"       , name  : "status_id"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_id"); }
+            }
+            ,{text  : "Status Remarks"       , name  : "status_remarks"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"status_remarks"); }
+            }
+        ]   
+    });
+}
+
+// Display the grid for the directive issuance.
+function displayDirective(tab_name){
+    $("#gridDirective").dataBind({
+         url            : procURL + "issuances_sel @tab_name='" + tab_name + "'"
+        ,width          : $(document).width() - 35
+        ,height         : $(document).height() - 250
+        ,blankRowsLimit: 0
+        ,isPaging : false
+        ,dataRows : [
+            {text  : "Issuance No."             , name  : "issuance_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
+                ,onRender : function(d){ 
+                    return "<a href='javascript:showModalUpdateIssuance(\""
+                    + IssuanceType.Disposal + "\",\""
+                    + svn(d,"issuance_id") + "\",\"" +  svn(d,"issuance_no")  + "\",\"" +  svn(d,"transfer_warehouse_id")  + "\");'>" 
+                    + svn(d,"issuance_no") + " </a>";
+                }
+            }
+            ,{text  : "Issued By"         , name  : "issued_by"                 , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issued_by_name"); }
+            }
+            ,{text  : "Issued Date"       , name  : "issued_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issued_date"); }
+            }
+            ,{text  : "Issued To"       , name  : "issuance_directive_id"                   , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
             }
             ,{text  : "Authority Ref"       , name  : "authority_ref"                   , type  : "label"       , width : 200       , style : "text-align:left;"
@@ -332,6 +399,7 @@ function buildIssuance(tbl_obj) {
 
 // Build the issuance header form.
 function buildIssuanceHeader(tbl_obj) {
+    console.log(g_today_date);
     var $table = $(tbl_obj);
     $table.html('');
     var html = '<div class="form-horizontal" style="padding:5px">' +
@@ -354,33 +422,43 @@ function buildIssuanceHeader(tbl_obj) {
             '<div class=" col-xs-3">' +
                 '<input type="text" name="issued_date" id="issued_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'" >' +
             '</div>' +
-            '<label class=" col-xs-2 control-label">Issuance Directive</label>' +
-            '<div class=" col-xs-3">' +
-                '<select type="text" name="issuance_directive_id" id="issuance_directive_id" class="form-control input-sm"></select>' +
-            '</div>' +
-            '<label class="  control-label show-hide-label"></label>' +
-            '<div class="  show-hide">' +
-            '</div>' +        '</div>' +
+            //'<label class=" col-xs-2 control-label">Issuance Directive</label>' +
+            //'<div class=" col-xs-3">' +
+            //    '<select type="text" name="issuance_directive_id" id="issuance_directive_id" class="form-control input-sm"></select>' +
+            //'</div>' +
+            '<label class="col-xs-2 control-label show-hide-label"></label>' +
+            '<div class="col-xs-3 show-hide">' +
+            '</div>' +        
+        '</div>' +
         
         '<div class="form-group  "> ' +
             '<label class=" col-xs-2 control-label">Authority Ref</label>' +
             '<div class=" col-xs-3">' +
                 '<input type="text" name="authority_ref" id="authority_ref" class="form-control input-sm" >' +
             '</div>' +
-
-            '<label class=" col-xs-2 control-label">Status</label>' +
+            
+            '<label class=" col-xs-2 control-label">Accepted By</label>' +
             '<div class=" col-xs-3">' +
-                '<label class=" col-xs-2 control-label" name="status_name" id="status_name">&nbsp;</label>' +
-                '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
+                '<select name="accepted_by" id="accepted_by" class="form-control input-sm"></select>' +
+                '<input type="hidden" name="issued_to_organization_id" id="issued_to_organization_id" class="form-control input-sm">' +
             '</div>' +
         '</div>' +
         
         '<div class="form-group  "> ' +
-            '<label class=" col-xs-2 control-label">Status Remarks</label>' +
+            '<label class=" col-xs-2 control-label">Status</label>' +
             '<div class=" col-xs-3">' +
-                '<textarea type="text" name="status_remarks" id="status_remarks" cols="62" rows="1"  class="form-control input-sm" ></textarea>' +
+                '<label class="control-label" name="status_name" id="status_name">&nbsp;</label>' +
+                '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
+            '</div>' +
+            
+            '<label class=" col-xs-2 control-label">Status Remarks</label>' +
+            '<div class=" col-xs-5">' +
+                '<textarea type="text" name="status_remarks" id="status_remarks" rows="3"  class="form-control input-sm" ></textarea>' +
                 '<input type="hidden" name="issuance_type" id="issuance_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
             '</div>' +
+        '</div>' +
+        
+        '<div class="form-group  "> ' +
             '<div class="hide" id="dealer_filter_div">'+
                 '<label class=" col-xs-2 control-label">Dealer</label>' +
                 '<div class=" col-xs-3">' +
@@ -398,7 +476,7 @@ function buildIssuanceHeader(tbl_obj) {
 function buildIssuanceDetails(callback) {
     $("#tblModalIssuanceDetails").dataBind({
         url: procURL + "issuance_details_sel"
-        ,width:  $(document).width() - 250
+        ,width:  $(document).width() - 220
         ,height: 200 
         ,blankRowsLimit: 10
         ,isPaging: false
@@ -471,12 +549,15 @@ $("#aircraftBtnNew").click(function () {
     });
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuance($("#tblModalIssuanceHeader"));
-  //  $(".show-hide-label").html('Aircraft'); 
+ 
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
+    
+    $(".show-hide-label").html(''); 
     $(".show-hide").html('');            
-    var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
+    var html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm">' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
@@ -510,8 +591,11 @@ $("#warehouseBtnNew").click(function () {
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
+    
+    $(".show-hide-label").html('');
     $(".show-hide").html('');            
-    var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+    var html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
                 '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
@@ -529,11 +613,11 @@ $("#maintenanceBtnNew").click(function () {
     $("#dealer_filter_div").addClass("hide");
     $("#modalIssuance .modal-title").html('Maintenance Items from' + ' » ' + g_organization_name + g_location_name + ' to <select name="dd_warehouse_filter" id="dd_warehouse_filter"></select>');
     $("select[name='dd_warehouse_filter']").dataBind({
-        url: procURL + "dd_warehouses_sel"
-        , text: "warehouse"
-        , value: "warehouse_id"
-        , required :true
-        , onComplete: function(){
+        //url : optionsURL + "maintenanceSquadron"
+        url: procURL + "dd_organizations_sel @squadron_type='maintenance'"
+        , text: "organization_name"
+        , value: "organization_id"
+        ,onComplete: function(){
             $transferWID = $("select[name='dd_warehouse_filter']").val();
             $("#transfer_warehouse_id").val($transferWID);
            
@@ -541,7 +625,7 @@ $("#maintenanceBtnNew").click(function () {
                 $("#transfer_warehouse_id").val(this.value);
                 setSearchMulti();
             });
-        }
+        }        
     });
 
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -549,8 +633,11 @@ $("#maintenanceBtnNew").click(function () {
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
+    
+    $(".show-hide-label").html('');
     $(".show-hide").html('');            
-    var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+    var html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
                 '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
@@ -583,13 +670,16 @@ $("#disposalBtnNew").click(function () {
 
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuance($("#tblModalIssuanceHeader"));
-   // $(".show-hide-label").html('Transfer To');            
+           
     $("select, input").on("keyup change", function(){
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
     }); 
+    
+    $(".show-hide-label").html('');
     $(".show-hide").html('');            
-    var html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
-               '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+    var html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     $(".show-hide").append(html);
     $("select, input").on("keyup change", function(){
@@ -600,6 +690,47 @@ $("#disposalBtnNew").click(function () {
     zsi.initDatePicker();
 });
 
+// Add a click event for the directive issuance button.
+$("#directiveBtnNew").click(function () {
+    $("#dealer_filter_div").addClass("hide");
+    $("#modalIssuance .modal-title").html('Directive Items from' + ' » ' + g_organization_name + g_location_name + ' to <select name="dd_directive_filter" id="dd_directive_filter"></select>');
+    $("select[name='dd_directive_filter']").dataBind({
+        //url : optionsURL + "maintenanceSquadron"
+        url: procURL + "dd_directive_wings_sel"
+        , text: "organization_name"
+        , value: "organization_id"
+        ,onComplete: function(){
+            $transferWID = $("select[name='dd_directive_filter']").val();
+            $("#transfer_warehouse_id").val($transferWID);
+           
+            $("select[name='dd_directive_filter']").change(function(){
+                $("#transfer_warehouse_id").val(this.value);
+                setSearchMulti();
+            });
+        }        
+    });
+
+    $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
+    buildIssuance($("#tblModalIssuanceHeader"));
+    $("select, input").on("keyup change", function(){
+        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
+    }); 
+    
+    $(".show-hide-label").html('Issuance Directive'); 
+    $(".show-hide").html('');            
+    var html = '<input type="text" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm">' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
+    $(".show-hide").append(html);
+    
+    $("select, input").on("keyup change", function(){
+        var $zGrid  = $(this).closest(".zGrid ");
+        $zGrid.find("#is_edited").val("Y");
+    });
+    //buildIssuanceDetails();
+    zsi.initDatePicker();
+});
 
 // Save the new issuance entry.
 function Save(page_process_action_id) {
@@ -642,7 +773,7 @@ function SaveDetails(page_process_action_id) {
             } else {
                 console.log(data.errMsg);
             }
-            $("#modalIssuance").modal('hide');
+            //$("#modalIssuance").modal('hide');
             
             if(g_tab_name==="AIRCRAFT"){
                  displayAircraft(g_tab_name);   
@@ -672,6 +803,7 @@ function setStatusName(page_process_action_id) {
 // Show the modal window for the update of issuance.
 function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
     var html  = '';
+    var label = '';
     g_issuance_id = issuance_id;
     if (issuance_type == IssuanceType.Aircraft) {
        // title = "Issue Items from ";
@@ -685,7 +817,8 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
             $("#aircraft_id").val(this.value);
         });
 
-         html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
+         html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm" >' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm">' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
@@ -707,7 +840,8 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
         }
         });
 
-        html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+        html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm" >' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
                 '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
@@ -729,7 +863,8 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
         }
         });
 
-        html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+        html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm" >' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
                 '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
@@ -752,14 +887,29 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
                 });
             }
         });*/
-        html = '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
+        html = '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm" >' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm">' +
                 '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm" >' +
                 '<input type="hidden" name="dealer_id" id="dealer_id">';
     }
+    if (issuance_type == IssuanceType.Directive) {
+        label = 'Issuance Directive';
+        $("#modalIssuance .modal-title").html('Issue Items from' + ' » ' + g_organization_name + g_location_name + ' to <select name="aircraft_filter" id="aircraft_filter"></select>');
+        
+        $("select[name='aircraft_filter']").attr("selectedvalue", id);
+        $("select[name='aircraft_filter']").dataBind({ url: base_url + "selectoption/code/aircraft_info"});
+        $("select[name='aircraft_filter']").change(function(){
+            $("#aircraft_id").val(this.value);
+        });
 
+         html = '<input type="text" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm" >' +
+                '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
+                '<input type="hidden" name="transfer_warehouse_id" id="transfer_warehouse_id" class="form-control input-sm">' +
+                '<input type="hidden" name="dealer_id" id="dealer_id">';
+    }
     $("#modalIssuance").modal({ show: true, keyboard: false, backdrop: 'static' });
     buildIssuanceHeader("#tblModalIssuanceHeader");
-    //$(".show-hide-label").html(label);
+    $(".show-hide-label").html(label);
     $(".show-hide").html('');
     $(".show-hide").append(html);
     
@@ -775,10 +925,12 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
                 $("#tblModalIssuanceHeader #issuance_no").val(d.rows[0].issuance_no);
                 $("#tblModalIssuanceHeader #issued_by").val(d.rows[0].issued_by);
                 $("#tblModalIssuanceHeader #issued_date").val(d.rows[0].issued_date);
-                $("#tblModalIssuanceHeader #issuance_directive_id").val(d.rows[0].issuance_directive_id);
+                $("#tblModalIssuanceHeader #issuance_directive_code").val(d.rows[0].issuance_directive_code);
                 $("#tblModalIssuanceHeader #aircraft_id").val(d.rows[0].aircraft_id);
                 $("#tblModalIssuanceHeader #authority_ref").val(d.rows[0].authority_ref);
                 $("#tblModalIssuanceHeader #transfer_warehouse_id").val(d.rows[0].transfer_warehouse_id);
+                $("#tblModalIssuanceHeader #accepted_by").val(d.rows[0].accepted_by);
+                $("#tblModalIssuanceHeader #issued_to_organization_sel").val(d.rows[0].issued_to_organization_sel);
                 $("#tblModalIssuanceHeader #status_name").html(d.rows[0].status_name);
                 $("#tblModalIssuanceHeader #status_remarks").val(d.rows[0].status_remarks);
                 $("#tblModalIssuanceHeader #dealer_id").val(d.rows[0].dealer_id);
@@ -866,6 +1018,84 @@ function loadIssuanceDetails(issuance_id) {
         }  
     });
 }
+
+function showUploadFile(issuance_id){
+    $('#modalUploadFile').find(".modal-title").text("Upload File");
+    $('#modalUploadFile').modal("show");
+    $('#modalUploadFile').find("form").attr("enctype","multipart/form-data");
+    
+    $.get(base_url + 'page/name/tmplImageUpload'
+        ,function(data){
+            $('#modalUploadFile').find('.modal-body').html(data);
+            $("#frm_modalUploadFile").find("#prefixKey").val("warehouseIssuance.");
+           initChangeEvent();
+        }
+    ); 
+}
+
+function initChangeEvent(){
+    $("input[name='file_thumbnail']").change(function(){
+        fileNameThumbNail= this.files[0].name;
+        var fileSize1 =  this.files[0].size / 1000.00 //to kilobytes
+        if(fileSize1 > 100){ 
+            alert("Please make sure that file size must not exceed 100 KB.");
+            this.value="";
+        }
+    });
+    
+    $("input[name='file']").change(function(){
+        fileNameOrg=this.files[0].name;
+        var fileSize2 =  this.files[0].size / 1000.00 //to kilobytes
+        if(fileSize2 > 800){ //1mb
+            alert("It is recommended that file size must not exceed 800 KB.");
+            this.value="";
+        }
+    });
+}
+
+function uploadFile(){
+    var frm = $("#frm_modalUploadFile");
+    var fileOrg=frm.find("#file").get(0);
+
+    if( fileOrg.files.length<1 ) { 
+         alert("Please select image.");
+        return;
+    }
+    var formData = new FormData( frm.get(0));
+    $.ajax({
+        url: base_url + 'file/UploadImage',  //server script to process data
+        type: 'POST',
+
+        //Ajax events
+        success: completeHandler = function(data) {
+            if(data.isSuccess) {
+                //submit filename to server
+                $.get(execURL  + "dbo.image_file_users_upd @user_id=" + user_id
+                                + ",@img_filename='warehouseIssuance." +  fileOrg.files[0].name + "'"
+                ,function(data){
+                    zsi.form.showAlert("alert");
+                    $('#modalUploadFile').modal('toggle');
+                    //refresh latest records:
+                    displayRecords("");
+                });
+
+                    
+            } else {
+                alert(data.errMsg);
+            }
+        },
+        error: errorHandler = function() {
+            console.log("error");
+        },
+        // Form data
+        data: formData,
+        //Options to tell JQuery not to process data or worry about content-type
+        cache: false,
+        contentType: false,
+        processData: false
+    }, 'json');
+}
+
 
 function setSearchMulti(){
     var _tableCode = "ref-0027";
@@ -965,4 +1195,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                 
+                                                           

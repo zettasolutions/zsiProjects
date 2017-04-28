@@ -1,4 +1,4 @@
-var bs = zsi.bs.ctrl
+ var bs = zsi.bs.ctrl
     ,svn =  zsi.setValIfNull
     ,optionId = ""
     ,g_warehouse_id = null
@@ -96,45 +96,39 @@ function getFilterValue(){
 function displayRecord(tab_name){
     var _dataRows = [
 		{
-		    text  : "Procurement Code"   
+		    text  : "PR No."   
 		    , name : "procurement_code"
-		    , type  : "label"       
-		    , width : 150       
+		    , width : 100       
 		    , style : "text-align:left;"     
 		    //, sortColNo: 1
 		}
 		,{
 		    text  : "Supplier"    
-		    , name : "supplier"
-		    , type  : "label"       
+		    , name : "supplier_name"   
 		    , width : 150      
 		    , style : "text-align:left;"
 		}
 		,{
 		    text  : "Item No."
-		    , name : "item_no"
-		    , type  : "label"       
+		    , name : "item_no"      
 		    , width : 120       
 		    , style : "text-align:left;"
 		}
 		,{ 
 		    text  : "National Stock No."    
-		    , name : "national_stock_no"
-		    , type  : "label"       
+		    , name : "national_stock_no"    
 		    , width : 150       
 		    , style : "text-align:left;"
 		}
 		,{ 
 		    text  : "Part No."    
-		    , name : "part_no"
-		    , type  : "label"       
+		    , name : "part_no"     
 		    , width : 150       
 		    , style : "text-align:left;"   
 		}
 		,{ 
 		    text  : "Nomenclature"  
-		    , name : "item_name"
-		    , type  : "label"       
+		    , name : "item_name"     
 		    , width : 200       
 		    , style : "text-align:left;" 
 		}
@@ -144,62 +138,60 @@ function displayRecord(tab_name){
     if(tab_name==="Purchase"){
          _dataRows.push({
 		    text  : "Ordered Qty." 
-		    , name : "ordered_quantity"
-		    , type  : "label"       
+		    , name : "quantity"  
 		    , width : 120       
 		    , style : "text-align:right;"
 		}   	
 		,{
 		    text  : "Delivered Qty." 
-		    , name : "delivered_quantity"
-		    , type  : "label"       
+		    , name : "total_delivered_quantity"  
 		    , width : 120       
 		    , style : "text-align:right;"
 		}
 		,{
-		    text  : "Reference No." 
-		    , name : "reference_no"
-		    , type  : "label"       
+		    text  : "Balance Qty." 
+		    , name : "balance_quantity"  
 		    , width : 120       
-		    , style : "text-align:left;"
+		    , style : "text-align:right;"
 		}
 		,{
 		    text  : "Unit" 
-		    , name : "unit"
-		    , type  : "label"       
+		    , name : "unit_of_measure_name"      
 		    , width : 120       
 		    , style : "text-align:left;"
 		}
 		,{
-		    text  : "Unit Price" 
-		    , name : "unit_price"
-		    , type  : "label"       
+		    text  : "Unit Price"   
 		    , width : 120       
 		    , style : "text-align:right;"
+		    ,onRender: function(d){
+		        return svn(d,"unit_price").toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+		    }
 		}
 		,{
-		    text  : "Amount" 
-		    , name : "amount"
-		    , type  : "label"       
+		    text  : "Amount"   
 		    , width : 120       
 		    , style : "text-align:right;"
+		    ,onRender: function(d){
+		        return svn(d,"amount").toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+		    }
 		});
     }
     
     if(tab_name==="Repair"){
          _dataRows.push({
 		    text  : "Serial No." 
-		    , name : "serial_no"
-		    , type  : "label"       
+		    , name : "serial_no"     
 		    , width : 150       
 		    , style : "text-align:left;"
 		}
 		,{
-		    text  : "Amount" 
-		    , name : "amount"
-		    , type  : "label"       
+		    text  : "Amount"    
 		    , width : 120       
 		    , style : "text-align:right;"
+		    ,onRender: function(d){
+		        return svn(d,"amount").toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+		    }
 		});  
     }
 	    
@@ -211,4 +203,4 @@ function displayRecord(tab_name){
         ,dataRows : _dataRows
     });    
 }                   
-   
+      
