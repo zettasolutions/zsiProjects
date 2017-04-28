@@ -48,29 +48,11 @@ function markMandatory(){
 function displayRecords(col_name,keyword){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
     var rownum=0;
-    /*if(keyword==="")
-    {
-        $("#grid").dataBind({
-	     url            : execURL + "employees_sel @col_name='"+col_name+"', @keyword='"+keyword+"'" 
-        ,width          : $(document).width() - 50
-	    ,height         : $(document).height() - 250
-	   // ,selectorType   : "checkbox"
-        ,blankRowsLimit :0
-        ,isPaging : true
-        ,dataRows       :[
-     		 { text:"Result"                      , width:$(document).width() - 56     , style:"text-align:center;"        
-     		    ,onRender: function(d){
-    		        return svn(d, "result");
-    		    }
-     		 }	 
-     		 ]});
-    }
-    else{*/
-        $("#grid").dataBind({
-	     url            : execURL + "employees_sel @col_name='"+col_name+"', @keyword='"+keyword+"'" 
-	    ,width          : $(document).width() - 35
-	    ,height         : 400
-	    ,selectorType   : "checkbox"
+    $("#grid").dataBind({
+         url            : execURL + "employees_sel @col_name='"+col_name+"', @keyword='"+keyword+"'" 
+        ,width          : $(document).width() - 35
+        ,height         : 400
+        ,selectorType   : "checkbox"
         ,blankRowsLimit:5
         ,isPaging : true
         ,dataRows : [
@@ -114,7 +96,6 @@ function displayRecords(col_name,keyword){
                     }
                 }
                 , {text  : "Organization"       , name:"organization_id"        , type  : "select"       , width : 150          , style : "text-align:left;"          }
-                //, {text  : "Wing"               , name  : "wing_id"             , type  : "select"       , width : 150          , style : "text-align:left;"}
                 , {text  : "Warehouse"          , name  : "warehouse_id"        , type  : "select"       , width : 150          , style : "text-align:left;"  }
                 , {text  : "Rank"               , name  : "rank_id"             , type  : "select"       , width : 150          , style : "text-align:left;"}
                 , {text  : "Position"           , name  : "position_id"         , type  : "select"       , width : 200         , style : "text-align:left;"}
@@ -122,71 +103,61 @@ function displayRecords(col_name,keyword){
         		, {text  : "Upload Image"       , width : 100                   , style:"text-align:center;" 
     		    , onRender : function(d){
     		        var h = "";
-    		        //console.log(   "record Index:" + svn(d,"recordIndex"));
-    	            	        
-    		        /*
-    		        var h = "<a href='javascript:void(0);'  onclick='showModalUploadEmployeeImage(" + svn(d,"user_id") +",\"" 
-                               + svn(d,"last_name") + ", " + svn(d,"first_name") + " " + svn(d,"middle_name") + "\");'  ><span class='glyphicon glyphicon-upload' style='font-size:12pt;' ></span> </a>";
-    		        return (d!==null ? h : "");
-    		        */
-    		        
     		        if(d !== null){
     		             h = "<a href='javascript:void(0);'  onclick='showModalUploadEmployeeImage(" + svn(d,"recordIndex") + ");'  ><span class='glyphicon glyphicon-upload' style='font-size:12pt;' ></span> </a>";
     		            
     		        }
     		        return h;
-    		        
         		}
     		}	 	 	
-	    ]   
-    	     , onComplete: function(data){
-    	         employeesData = data.rows;
-    	         $("select, input").on("keyup change", function(){
-                    var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
-                });
-                $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                
-                $("select[name='organization_id']").each(function(){
-                    var $zRow = $(this).closest(".zRow");
-                    if(this.hasAttribute("selectedvalue")) {
-                        var id = $(this).attr("selectedvalue");
-                        $zRow.find("select[name='warehouse_id']").dataBind({
-                            url: execURL + "warehouses_sel @squadron_id=" + id
-                            , text: "warehouse_location"
-                            , value: "warehouse_id"
-                        });  
-                    }
-                 });
-                 
-                 $("select[name='organization_id']").dataBind({
-                    url: procURL + "organizations_dd_sel "
-                    , text: "organization_name"
-                    , value: "organization_id"
-                    , onComplete : function(){
-                        $("select[name='organization_id']").change(function(){
-                            var $zRow = $(this).closest(".zRow");
-                            if(this.value) {
-                                $zRow.find("select[name='warehouse_id']").dataBind({
-                                    url: execURL + "warehouses_sel @squadron_id=" + this.value
-                                    , text: "warehouse_location"
-                                    , value: "warehouse_id"
-                                });  
-                            }else{
-                                $zRow.find("select[name='warehouse_id']").empty();
-                            }
-                        });
-                    }
-                });
-                
-                $("select[name='rank_id']").dataBind( "rank");
-                $("select[name='position_id']").dataBind( "position");
-                $("select[name='civil_status']").dataBind( "civil_statuses");
-                $("select[name='status_id']").dataBind( "status");
-                markMandatory();
+        ]   
+        ,onComplete: function(data){
+             employeesData = data.rows;
+             $("select, input").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });
+            $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+            
+            $("select[name='organization_id']").each(function(){
+                var $zRow = $(this).closest(".zRow");
+                if(this.hasAttribute("selectedvalue")) {
+                    var id = $(this).attr("selectedvalue");
+                    $zRow.find("select[name='warehouse_id']").dataBind({
+                        url: execURL + "warehouses_sel @squadron_id=" + id
+                        , text: "warehouse_location"
+                        , value: "warehouse_id"
+                    });  
+                }
+             });
+             
+            $("select[name='organization_id']").dataBind({
+                url: procURL + "organizations_dd_sel "
+                , text: "organization_name"
+                , value: "organization_id"
+                , onComplete : function(){
+                    $("select[name='organization_id']").change(function(){
+                        var $zRow = $(this).closest(".zRow");
+                        if(this.value) {
+                            $zRow.find("select[name='warehouse_id']").dataBind({
+                                url: execURL + "warehouses_sel @squadron_id=" + this.value
+                                , text: "warehouse_location"
+                                , value: "warehouse_id"
+                            });  
+                        }else{
+                            $zRow.find("select[name='warehouse_id']").empty();
+                        }
+                    });
+                }
+            });
+            
+            $("select[name='rank_id']").dataBind( "rank");
+            $("select[name='position_id']").dataBind( "position");
+            $("select[name='civil_status']").dataBind( "civil_statuses");
+            $("select[name='status_id']").dataBind( "status");
+            markMandatory();
         }  
     });    
-    //}
 }
     
 $("#btnDelete").click(function(){
@@ -329,4 +300,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                                         
+}                                          
