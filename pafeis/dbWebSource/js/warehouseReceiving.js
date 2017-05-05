@@ -14,32 +14,36 @@ var g_today_date = new Date() + "";
 const DeliveryType = {
     Procurement: 'Procurement',
     Donation: 'Donation',
-    Transfer: 'Transfer',
+    Warehouse: 'Warehouse',
     Aircraft: 'Aircraft',
-    //Repair  : 'Repair',
+    Maintenance: 'Maintenance',
+    Directive: 'Directive'
 };
 
 zsi.ready(function(){
     $("#Procurement-tab").click(function(){
-            g_tab_name = "Procurement";
+        g_tab_name = "Procurement";
     });
     $("#donation-tab").click(function(){
         g_tab_name = "DONATION";
-    });    
-    $("#transfer-tab").click(function() {
-        g_tab_name = "TRANSFER";
     });
     $("#aircraft-tab").click(function() {
         g_tab_name = "AIRCRAFT";
-    });
-    /*
-    $("#repair-tab").click(function() {
-        g_tab_name = "REPAIR";
     });    
-    */
+    $("#warehouse-tab").click(function() {
+        g_tab_name = "WAREHOUSE";
+    });
+    
+    $("#maintenance-tab").click(function() {
+        g_tab_name = "MAINTENANCE";
+    });
+    $("#directive-tab").click(function() {
+        g_tab_name = "DIRECTIVE";
+    });
+
     getTemplate();
     setCurrentTab();
-    displayProcurement(g_tab_name);
+    //displayProcurement(g_tab_name);
     
     $(window).keydown(function(event){
         if(event.target.tagName != 'TEXTAREA') {
@@ -89,13 +93,19 @@ zsi.ready(function(){
     $("#donation-tab").click(function () {
         displayDonation($(this).html());    
     });    
-    $("#transfer-tab").click(function () {
-        displayTransfer($(this).html());    
+    $("#warehouse-tab").click(function () {
+        displayWarehouse($(this).html());    
     });
     $("#aircraft-tab").click(function () {
         displayAircraft($(this).html());    
     });
-
+    $("#maintenance-tab").click(function() {
+        displayMaintenance($(this).html());
+    });
+    $("#directive-tab").click(function() {
+        displayDirective($(this).html());
+    });
+    
 });
 
 // Create modal window for the receiving
@@ -281,10 +291,10 @@ function displayDonation(tab_name){
     });    
 }
 
-// Display the grid for the transfer delivery.
-function displayTransfer(tab_name){
+// Display the grid for the warehouse delivery.
+function displayWarehouse(tab_name){
     var counter = 0;
-    $("#transfer").dataBind({
+    $("#warehouse").dataBind({
          url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
         ,width          : $(document).width() - 35
         ,height         : $(document).height() - 250
@@ -294,7 +304,7 @@ function displayTransfer(tab_name){
                 {text  : "Doc No."            , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
-                        + DeliveryType.Transfer + "\",\""
+                        + DeliveryType.Warehouse + "\",\""
                         + svn(d,"receiving_id") + "\",\""
                         + svn(d,"doc_no")  + "\",\""
                         + svn(d,"issuance_warehouse")  + "\",\""
@@ -308,11 +318,8 @@ function displayTransfer(tab_name){
                                          + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
                     }
                 }
-                ,{text  : "Transfer From"      , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ 
-                                    return svn(d,"issuance_warehouse") 
-                                         + bs({name:"aircraft_name",type:"hidden",value: svn (d,"aircraft_name")});
-                    }
+                ,{text  : "Transferred From"      , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
                 }
                 ,{text  : "Received By"           , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
@@ -330,7 +337,7 @@ function displayTransfer(tab_name){
     });    
 }
 
-// Display the grid for the return delivery.
+// Display the grid for the aircraft delivery.
 function displayAircraft(tab_name){
     var counter = 0;
     $("#aircraft").dataBind({
@@ -353,6 +360,103 @@ function displayAircraft(tab_name){
                                     return svn(d,"doc_date") 
                                          + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
                     }
+                }
+                ,{text  : "Transferred From"      , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
+                }
+                ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"aircraft_name"); }
+                }
+                
+                ,{text  : "Received By"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"received_by_name"); }
+                }
+                ,{text  : "Received Date"     , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
+                }
+                ,{text  : "Status"             , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"status_name"); }
+                }
+                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"status_remarks"); }
+                }
+        ]   
+    });    
+}
+
+// Display the grid for the maintenance delivery.
+function displayMaintenance(tab_name){
+    var counter = 0;
+    $("#maintenance").dataBind({
+         url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
+        ,width          : $(document).width() - 35
+        ,height         : $(document).height() - 250
+        ,blankRowsLimit: 0
+        ,isPaging : false
+        ,dataRows : [
+                {text  : "Doc No."       , type  : "input"       , width : 100       , style : "text-align:left;"
+                    ,onRender : function(d){ 
+                        return "<a href='javascript:showModalUpdateReceiving(\""
+                        + DeliveryType.Aircraft + "\",\""
+                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
+                        + svn(d,"doc_no") + " </a>";
+                    }
+                }
+                ,{text  : "Doc Date"      , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ 
+                                    return svn(d,"doc_date") 
+                                         + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
+                    }
+                }
+                ,{text  : "Transferred From"      , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
+                }
+                ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"aircraft_name"); }
+                }
+                
+                ,{text  : "Received By"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"received_by_name"); }
+                }
+                ,{text  : "Received Date"     , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
+                }
+                ,{text  : "Status"             , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"status_name"); }
+                }
+                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"status_remarks"); }
+                }
+        ]   
+    });    
+}
+
+// Display the grid for the directive delivery.
+function displayDirective(tab_name){
+    var counter = 0;
+    $("#directive").dataBind({
+         url            : procURL + "receiving_sel @tab_name='" + tab_name + "'"
+        ,width          : $(document).width() - 35
+        ,height         : $(document).height() - 250
+        ,blankRowsLimit: 0
+        ,isPaging : false
+        ,dataRows : [
+                {text  : "Doc No."       , type  : "input"       , width : 100       , style : "text-align:left;"
+                    ,onRender : function(d){ 
+                        return "<a href='javascript:showModalUpdateReceiving(\""
+                        + DeliveryType.Aircraft + "\",\""
+                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
+                        + svn(d,"doc_no") + " </a>";
+                    }
+                }
+                ,{text  : "Doc Date"      , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ 
+                                    return svn(d,"doc_date") 
+                                         + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
+                    }
+                }
+                ,{text  : "Transferred From"      , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
                 }
                 ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"aircraft_name"); }
@@ -439,8 +543,8 @@ function buildReceivingHeader(tbl_obj) {
                     '<select name="supply_source_filter" id="supply_source_filter" class="form-control input-sm"></select>' +
                 '</div>' +
             '</div>' +
-            '<label class=" col-xs-2 control-label">Remarks</label>' +
-            '<div class=" col-xs-6">' +
+            '<label class=" col-xs-1 control-label">Remarks</label>' +
+            '<div class=" col-xs-7">' +
                  '<textarea type="text" name="status_remarks" id="status_remarks" class="form-control input-sm" ></textarea>' +
                  '<input type="hidden" name="receiving_type" id="receiving_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
             '</div>' +
@@ -523,8 +627,13 @@ function buildReceivingDetails(callback) {
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;" }
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
+            //,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Remarks"             , width : 260       , style : "text-align:left;"
+                ,onRender : function(d){
+    	            return bs({name:"status_id",type:"hidden", value: 23}) //set status id to GOOD = 23 
+    	                 + bs({name:"remarks",type:"input", value: svn (d,"remarks")});
+    	        }
+            }
         );
     }
     
@@ -539,7 +648,11 @@ function buildReceivingDetails(callback) {
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
-            $("select[name='status_id']").dataBind("inv_serial_status");
+            $("select[name='status_id']").dataBind({
+                url: execURL + "statuses_sel "+ (g_tab_name==="AIRCRAFT" ? "@is_returned='Y'" : "")
+                ,text: "status_name"
+                ,value: "status_id"
+            });
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
                 if($zRow.length){
@@ -576,7 +689,9 @@ function buildReceivingButtons() {
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             
-            $("#status_name").text(d.rows[0].status_name);
+            if(!g_recieving_id || g_recieving_id===null){
+                $("#status_name").text(d.rows[0].status_name);   
+            }
             $(".added-button").remove();
             $("#receiving-footer").append(html);
         }
@@ -607,6 +722,7 @@ function setProcurementOptions(id, callBack){
 
 // Add a click event for the Procurement delivery button.
 $("#pdBtnNew").click(function () {
+    g_recieving_id = null;
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="dealer_filter" id="dealer_filter"></select>');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     clearEntries();
@@ -623,6 +739,7 @@ $("#pdBtnNew").click(function () {
 
 // Add a click event for the donation delivery button.
 $("#ddBtnNew").click(function () {
+    g_recieving_id = null;
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <input name="donor_filter" id="donor_filter">');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     clearEntries();
@@ -691,12 +808,17 @@ function SaveDetails(page_process_action_id) {
             if(g_tab_name==="DONATION"){
                  displayDonation(g_tab_name);   
             }
-
             else if(g_tab_name==="AIRCRAFT"){
                  displayAircraft(g_tab_name);   
             }
-            else if(g_tab_name==="TRANSFER"){
-                 displayTransfer(g_tab_name);   
+            else if(g_tab_name==="WAREHOUSE"){
+                 displayWarehouse(g_tab_name);   
+            }
+            else if(g_tab_name==="MAINTENANCE"){
+                 displayMaintenance(g_tab_name);   
+            }
+            else if(g_tab_name==="DIRECTIVE"){
+                 displayDirective(g_tab_name);   
             }
         }
     });
@@ -733,7 +855,7 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
         });
     }
     
-    if (delivery_type == DeliveryType.Transfer) {
+    if (delivery_type == DeliveryType.Warehouse) {
         $("#modalReceiving .modal-title").html("Items Transferred to " + g_organization_name + g_location_name + " from " +  id);
         $("#issuance_warehouse_id").val(id);
     }
@@ -841,7 +963,7 @@ function loadReceivingDetails(receiving_id) {
         _dataRows.push(
              {text  : "Serial No."          , width : 150       , style : "text-align:left;"
     	        ,onRender : function(d){
-    	            return "<input name='serial_no' id='serial_no' class='form-control' disabled>";
+    	            return "<input name='serial_no' id='serial_no' class='form-control' value='"+ svn (d,"serial_no") +"'" +(svn(d,"with_serial")!=="Y" ? 'disabled': "")+ ">";
     	        }
         	 }
             ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
@@ -850,8 +972,14 @@ function loadReceivingDetails(receiving_id) {
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;" }
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
+            //,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;" }
+            //,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 260       , style : "text-align:left;"}
+            ,{text  : "Remarks"             , width : 260       , style : "text-align:left;"
+                ,onRender : function(d){
+    	            return bs({name:"status_id",type:"hidden", value: 23}) //set status id to GOOD = 23 
+    	                 + bs({name:"remarks",type:"input", value: svn (d,"remarks")});
+    	        }
+            }
         );
     }
     
@@ -866,7 +994,11 @@ function loadReceivingDetails(receiving_id) {
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
-            $("select[name='status_id']").dataBind("inv_serial_status");
+            $("select[name='status_id']").dataBind({
+                url: execURL + "statuses_sel "+ (g_tab_name==="AIRCRAFT" ? "@is_returned='Y'" : "")
+                ,text: "status_name"
+                ,value: "status_id"
+            });
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
                 if($zRow.length){
@@ -959,12 +1091,13 @@ function SaveSubCategory(e) {
 function setSearchMulti(){
     var selCode = "items_on_arcraft_serials";
     var _tableCode = "";
-    var _condition = "'"+ (g_tab_name==="Procurement" ? "procurement_id="+ g_procurement_id : "")  +"'";
+    var _condition = "''";
     var _colname = "";
 
     if(g_tab_name==="Procurement"){
         _tableCode = "ref-0031"
-        _colname = ["part_no","national_stock_no","item_name","item_code_id","procurement_detail_id","balance_quantity","unit_of_measure_id"]
+        _colname = ["part_no","national_stock_no","item_name","item_code_id","procurement_detail_id","balance_quantity","unit_of_measure_id","with_serial"]
+        _condition = "'"+ (g_procurement_id ? "procurement_id="+ g_procurement_id : "")  +"'";
     }
     else if(g_tab_name==="DONATION"){
         _tableCode = "ref-0023"
@@ -996,7 +1129,9 @@ function setSearchMulti(){
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.part_no;
             var $zRow = $(currentObject).closest(".zRow");
-            $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
+            //if(data.with_serial !== 'Y') $zRow.find("#serial_no").val('').attr('disabled', false);
+            console.log(data.with_serial);
+             $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
             $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
@@ -1077,4 +1212,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                                         
+                                                                                  

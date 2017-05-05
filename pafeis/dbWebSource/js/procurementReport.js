@@ -108,7 +108,10 @@ function displayRecords(){
                           return "<a  href='javascript:void(0);' onclick='displayDetail(this,"+ d.procurement_id +");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
                     }
                  }
-        		,{text  : "Procurement Date"        , name  : "procurement_date"        , width : 180           , style : "text-align:left;"}
+                ,{text  : "Procurement No."         , name  : "procurement_code"        , width : 120           , style : "text-align:left;"}
+        		,{text  : "Procurement Date"                                            , width : 180           , style : "text-align:left;"
+        		    ,onRender: function(d){ return svn(d,"procurement_date").toDateFormat();}
+        		}
         		,{text  : "Procurement Name"        , name  : "procurement_name"        , width : 200           , style : "text-align:left;"}
         		,{text  : "Supplier Name"           , name  : "supplier_name"           , width : 150           , style : "text-align:left;"}
         		,{text  : "Promised Delivery Date"  , name  : "promised_delivery_date"  , width : 180           , style : "text-align:left;"}
@@ -150,6 +153,7 @@ function displayDetail(o,id){
                 		,{text  : "National Stock No."      , name  : "national_stock_no"           , width : 150           , style : "text-align:left;"}
                 		,{text  : "Item Description"        , name  : "item_description"            , width : 250           , style : "text-align:left;"}
                 		,{text  : "Unit of Measure"         , name  : "unit_of_measure_code"        , width : 150           , style : "text-align:left;"}
+                		,{text  : "Ordered Qty."            , name  : "ordered_qty"                 , width : 150          , style : "text-align:right;"}
                 		,{text  : "Total Delivered Qty."    , name  : "total_delivered_quantity"    , width : 150           , style : "text-align:right;"}
                 		,{text  : "Balance Qty."            , name  : "balance_quantity"            , width : 100           , style : "text-align:right;"}
                 		,{text  : "Unit Price"              , name  : "unit_price"                  , width : 100           , style : "text-align:right;"
@@ -164,7 +168,7 @@ function displayDetail(o,id){
                 ,onComplete: function(){
                     var totalRow = "";
                     totalRow += '<div class="zRow total">'; 
-                    totalRow +=    '<div class="zCell" style="width:1100px;text-align:right;"><span class="text">Total&nbsp;</span></div>';
+                    totalRow +=    '<div class="zCell" style="width:1250px;text-align:right;"><span class="text">Total&nbsp;</span></div>';
                     totalRow +=    '<div class="zCell" style="width:100px;text-align:right;"><span class="text">' + toCurrency.format(amt) + '</span></div>';
                     totalRow += '</div>'; 
             		$grid.find(".right #table").append(totalRow);
@@ -177,4 +181,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                          
+                                                                                           
