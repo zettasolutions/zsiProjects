@@ -24,6 +24,7 @@
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
         @userId
     </script>
+
 </head>
 <body>
     <div class="progressWindow">
@@ -105,9 +106,9 @@
     }
  }
 
-     <footer >
-         <p>&copy; @DateTime.Now.Year - Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a></p>
-       </footer>
+    <footer style="position: absolute; right: 0; left: 0; bottom:0;">
+        <p>&copy; @DateTime.Now.Year - Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a></p>
+    </footer>
 <script src="@Url.Content("~/")Scripts/bootstrap.min.js"></script>
 <div class="alert alert-success">
     <p>Data has been saved.</p>
