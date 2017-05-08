@@ -19,4 +19,5 @@ receiving_id	INT IDENTITY(1,1)	NOT NULL
 ,warehouse_id	INT	NULL
 ,procurement_id	INT	NULL
 ,supply_source_id	INT	NULL
-,donor	NVARCHAR(200)	NULL)
+,donor	NVARCHAR(200)	NULL
+,issuance_organization_id	INT	NULL)

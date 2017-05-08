@@ -1,3 +1,4 @@
+
 CREATE PROCEDURE [dbo].[item_codes_upd]
 (
     @tt    item_codes_tt READONLY
@@ -16,6 +17,7 @@ BEGIN
 		,reorder_level          = b.reorder_level
 		,unit_of_measure_id     = b.unit_of_measure_id
 		,monitoring_type_id     = b.monitoring_type_id
+		,is_repairable          = b.is_repairable
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
@@ -34,6 +36,7 @@ BEGIN
 		,reorder_level
 		,unit_of_measure_id
 		,monitoring_type_id
+		,is_repairable
 		,is_active
         ,created_by
         ,created_date
@@ -48,12 +51,16 @@ BEGIN
 	   ,reorder_level
 	   ,unit_of_measure_id
 	   ,monitoring_type_id
+	   ,is_repairable
 	   ,is_active
        ,@user_id
        ,GETDATE()
     FROM @tt
-    WHERE item_code_id IS NULL;
+    WHERE item_code_id IS NULL
+	and (part_no IS NOT NULL OR national_stock_no IS NOT NULL)
+	and item_name IS NOT NULL;
 END
+
 
 
 

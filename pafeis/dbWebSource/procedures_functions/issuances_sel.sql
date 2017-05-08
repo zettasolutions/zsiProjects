@@ -35,7 +35,8 @@ DECLARE @organization_id INT
      SET @stmt = @stmt + ' ASC';
   ELSE
      SET @stmt = @stmt + ' DESC';
-   
+  
+  print @stmt 
   EXEC(@stmt);	
 END
 

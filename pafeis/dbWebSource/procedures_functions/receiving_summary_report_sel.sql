@@ -22,13 +22,13 @@ DECLARE @stmt VARCHAR(MAX)
 		SET @stmt = @stmt + 'AND received_date >= ''' + @date_from + ''' AND received_date <= ''' + @date_to + ''' '
 
   IF @dealer_id IS NOT NULL  
-      SET @stmt = @stmt + ' AND dealer_id= ''' + @dealer_id + ''''
+      SET @stmt = @stmt + ' AND dealer_id= ' + cast(@dealer_id as varchar(20)) 
 
   IF @warehouse_id IS NOT NULL  
-      SET @stmt = @stmt + ' AND warehouse_id= ''' + @warehouse_id + ''''
+      SET @stmt = @stmt + ' AND warehouse_id= ' + cast(@warehouse_id as varchar(20))
 
   IF @supply_source_id IS NOT NULL  
-      SET @stmt = @stmt + ' AND supply_source_id= ''' + @supply_source_id + ''''
+      SET @stmt = @stmt + ' AND supply_source_id= ' + cast(@supply_source_id as varchar(20))
 
    IF ISNULL(@receiving_type,'') <> ''
       SET @stmt = @stmt + ' AND receiving_type= ''' + @receiving_type + ''''

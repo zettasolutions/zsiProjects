@@ -74,8 +74,8 @@ BEGIN
 	   ,status_remarks
 	   ,authority_ref
 	   ,dbo.getUserWarehouseId(@user_id)
-		,accepted_by
-		,issued_to_organization_id
+	   ,accepted_by
+	   ,issued_to_organization_id
 	   ,issuance_type
 	   ,@user_id
 	   ,GETDATE()

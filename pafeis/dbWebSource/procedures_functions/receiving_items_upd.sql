@@ -48,7 +48,8 @@ SELECT  receiving_detail_id
 	   ,warehouse_id 
 	   ,doc_date
 	   ,procurement_id
-  FROM dbo.receiving_details_v;
+  FROM dbo.receiving_details_v
+  WHERE receiving_id=@receiving_id;
 
 SELECT @rec_count = COUNT(*) FROM @tt;
 WHILE @count < @rec_count 
@@ -61,6 +62,7 @@ WHILE @count < @rec_count
 					 ,@procurement_detail_id        =   procurement_detail_id
 					 ,@doc_date                     =   doc_date
 					 ,@procurement_id               =   procurement_id
+					 ,@status_id                    =   status_id
 		FROM @tt WHERE id > @count;
 
 		IF ISNULL(@procurement_detail_id,0) <> 0 
@@ -91,9 +93,9 @@ WHILE @count < @rec_count
 			   AND warehouse_id=@warehouse_id;
 			END;
 
-		IF (SELECT COUNT(*) FROM dbo.items WHERE serial_no = @serial_no) <> 0
+		IF (SELECT COUNT(*) FROM dbo.items WHERE serial_no = @serial_no) = 0
 		   INSERT INTO dbo.items (item_code_id, item_inv_id, serial_no,  status_id, created_by, created_date)
-		          VALUES (@item_code_id,@item_inv_id, @serial_no,  23, @user_id, GETDATE());
+		          VALUES (@item_code_id,@item_inv_id, @serial_no,  @status_id, @user_id, GETDATE());
 	    ELSE
 		   UPDATE items SET item_inv_id=@item_inv_id, status_id=@status_id, remarks=@remarks WHERE serial_no=@serial_no;
 

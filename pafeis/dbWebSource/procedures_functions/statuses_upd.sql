@@ -1,5 +1,4 @@
 
-
 create PROCEDURE [dbo].[statuses_upd]
 (
     @tt    statuses_tt READONLY
@@ -16,20 +15,14 @@ BEGIN
 		,is_item        		= b.is_item
 		,is_aircraft		    = b.is_aircraft
 		,is_process				= b.is_process
+		,is_returned            = b.is_returned
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.statuses a INNER JOIN @tt b
     ON a.status_id = b.status_id
-    WHERE (
-			isnull(a.status_code,'')		<> isnull(b.status_code,'')  
-		OR	isnull(a.status_name,'')		<> isnull(b.status_name,'')  
-		OR	isnull(a.status_color,'')		<> isnull(b.status_color,'')   
-		OR	isnull(a.is_item,'')	        <> isnull(b.is_item,'')   
-		OR	isnull(a.is_aircraft,'')		<> isnull(b.is_aircraft,'')  
-		OR	isnull(a.is_process,'')			<> isnull(b.is_process,'')  
-		OR	isnull(a.is_active,'')			<> isnull(b.is_active,'')  
-	)
+    WHERE isnull(b.is_edited,'N') = 'Y' ;
+
 	   
 -- Insert Process
     INSERT INTO dbo.statuses (
@@ -39,6 +32,7 @@ BEGIN
 		,is_item
 		,is_aircraft
 		,is_process
+		,is_returned
 		,is_active
         ,created_by
         ,created_date
@@ -50,10 +44,13 @@ BEGIN
 	   ,is_item
 	   ,is_aircraft
 	   ,is_process
+	   ,is_returned
 	   ,is_active
        ,@user_id
        ,GETDATE()
     FROM @tt
-    WHERE status_id IS NULL;
+    WHERE status_id IS NULL
+	and status_name IS NOT NULL;
 END
+
 

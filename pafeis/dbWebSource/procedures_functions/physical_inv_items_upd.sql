@@ -25,8 +25,8 @@ SET NOCOUNT ON
 	       SELECT item_inv_id, bin, quantity FROM dbo.physical_inv_details_v
 		   WHERE physical_inv_id = @physical_inv_id;
 
-      INSERT INTO items (item_code_id, serial_no, item_inv_id, status_id) 
-	       SELECT item_code_id, serial_no, item_inv_id, status_id
+      INSERT INTO items (item_code_id, serial_no, item_inv_id, status_id, created_by, created_date) 
+	       SELECT item_code_id, serial_no, item_inv_id, status_id, created_by, created_date
 		     FROM dbo.physical_inv_sn_v 
 			WHERE serial_no NOT IN (SELECT serial_no FROM items)
 			and physical_inv_id=@physical_inv_id

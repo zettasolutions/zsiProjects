@@ -10,4 +10,5 @@ status_id	INT IDENTITY(1,1)	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
-,is_process	CHAR(1)	NULL)
+,is_process	CHAR(1)	NULL
+,is_returned	CHAR(1)	NULL)

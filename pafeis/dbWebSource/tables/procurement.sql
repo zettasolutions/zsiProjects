@@ -16,4 +16,5 @@ procurement_id	INT IDENTITY(1,1)	NOT NULL
 ,warehouse_id	INT	NULL
 ,procurement_mode	NVARCHAR(60)	NOT NULL
 ,po_no	NVARCHAR(100)	NULL
-,bac_no	NVARCHAR(100)	NULL)
+,bac_no	NVARCHAR(100)	NULL
+,img_filename	NVARCHAR(100)	NULL)

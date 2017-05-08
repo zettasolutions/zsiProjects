@@ -1,9 +1,4 @@
 
--- =============================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: March 1, 2017 9:32 PM
--- Description:	Procurement summary report.
--- =============================================
 CREATE PROCEDURE [dbo].[procurement_detail_report_sel]
 (
     @date_from			NVARCHAR(15) = NULL,

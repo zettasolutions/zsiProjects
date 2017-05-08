@@ -4,7 +4,7 @@ SELECT        dbo.issuances.issuance_id, dbo.issuances.issuance_no, dbo.issuance
                          dbo.issuances.created_by, dbo.issuances.created_date, dbo.issuances.updated_by, dbo.issuances.updated_date, dbo.issuances.aircraft_id, dbo.issuances.status_id, dbo.issuances.status_remarks, 
                          dbo.issuances.authority_ref, dbo.issuances.transfer_warehouse_id, dbo.countIssuanceDetails(dbo.issuances.issuance_id) AS countIssuanceDetails, dbo.issuance_routings_current_v.role_id, 
                          dbo.getOrganizationWarehouse(dbo.issuances.transfer_warehouse_id) AS transfer_organization_warehouse, dbo.getAircraftName(dbo.issuances.aircraft_id) AS aircraft_name, 
-                         dbo.getUserFullName(dbo.issuances.issued_by) AS issued_by_name, dbo.getStatusByPageProcessActionId(dbo.issuances.status_id) AS status_name, dbo.issuances.warehouse_id, 
-                         dbo.issuances.issuance_type, dbo.issuances.dealer_id, dbo.issuances.img_filename, dbo.issuances.accepted_by, dbo.issuances.issued_to_organization_id
+                         dbo.getUserFullName(dbo.issuances.issued_by) AS issued_by_name, dbo.getStatus(dbo.issuances.status_id) AS status_name, dbo.issuances.warehouse_id, dbo.issuances.issuance_type, 
+                         dbo.issuances.dealer_id, dbo.issuances.img_filename, dbo.issuances.accepted_by, dbo.issuances.issued_to_organization_id
 FROM            dbo.issuances INNER JOIN
                          dbo.issuance_routings_current_v ON dbo.issuances.issuance_id = dbo.issuance_routings_current_v.doc_id

@@ -14,4 +14,5 @@ item_code_id	INT IDENTITY(1,1)	NOT NULL
 ,item_code	NVARCHAR(200)	NULL
 ,item_cat_id	INT	NULL
 ,monitoring_type_id	INT	NULL
-,unit_of_measure_id	INT	NULL)
+,unit_of_measure_id	INT	NULL
+,is_repairable	CHAR(1)	NULL)

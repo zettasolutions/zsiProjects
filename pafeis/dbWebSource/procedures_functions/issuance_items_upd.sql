@@ -30,7 +30,7 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 		   ON a.serial_no = b.serial_no
 		  AND b.issuance_id = @issuance_id;
 
-	IF @is_type ='WAREHOUSE'
+	IF @is_type IN ('WAREHOUSE','MAINTENANCE','DIRECTIVE')
 	BEGIN
 		INSERT INTO dbo.receiving (    
 			 doc_no			
@@ -40,6 +40,7 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 			,status_id
 			,status_remarks
 			,receiving_type
+			,issuance_organization_id
 			,created_by
 			,created_date
 			)
@@ -50,7 +51,8 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 			,transfer_warehouse_id
 			,dbo.getPageTopPPA_Id(70)
 			,status_remarks
-			,'WAREHOUSE'
+			,issuance_type
+			,issued_to_organization_id
 		   ,@user_id
 		   ,GETDATE()
 		   FROM dbo.issuances_v
