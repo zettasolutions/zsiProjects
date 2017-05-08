@@ -202,7 +202,7 @@ var  ud='undefined'
                 var _panel =$("." + _cls);
                 if( isUD(o.isNotExistShow) ) o.isNotExistShow = false;
                 if(typeof _self.tmr === ud) _self.tmr = null;
-                this.keyup(function(){
+                this.on("keyup change",function(){
                   var _obj=$(this);
                   if($.trim(this.value)===""){
                      _panel.hide();
@@ -211,29 +211,52 @@ var  ud='undefined'
                   var l_value=$.trim(this.value);
                   if(zsi.timer) clearTimeout(zsi.timer);
                   zsi.timer = setTimeout(function(){              
-                    _obj.addClass("loadIconR" );
+                     var _opts  = {
+                        left : _obj.offset().left
+                        , top  : _obj.offset().top - _panel.innerHeight() - 3
+                        , onHide : function(){
+                            _obj.val(""); 
+                          }
+                      };
+                      
+                      if(o.time)  _opts.time = o.time;
+                      
+                      if( o.isNotExistShow===false && _self.length > 0 ){
+                          
+                          var _lineIndex = _self.index(_obj);
+                          for(var i=0;i<_self.length;i++){
+                              var input =_self[i];
+                              if(_lineIndex !==i && $.trim(input.value) !==""  ){
+                                  if(input.value.toLowerCase() === l_value.toLowerCase()){
+                                       $("." + _cls).css({"z-index"      : zsi.getHighestZindex() + 1}).showAlert(_opts);    
+                                  }
+                              }
+                              
+                          }
+                          _obj.removeClass("loadIconR" );
+    
+                      }
+                       
+                      if( ! isUD(o.checkOnDB) ) { 
+                        if(o.checkOnDB ==false) return _self;
+                      }
+                        
+                        
+                     _obj.addClass("loadIconR" );
                      $.getJSON(base_url + "sql/exec?p=" + (typeof o.procedureName !== ud ? o.procedureName : "checkValueExists") +  " @code='" + o.code + "',@colName='" +  o.colName + "',@keyword='" +  l_value + "'"
                         , function(data) {
                               _obj.removeClass("loadIconR" );
                               if(data.rows[0].isExists.toUpperCase() === (o.isNotExistShow ? "N" : "Y")) {
-                                var _opts  = {
-                                       left : _obj.offset().left
-                                     , top  : _obj.offset().top - _panel.innerHeight() - 3
-                                     , onHide : function(){
-                                        _obj.val(""); 
-                                     }
-                                 };
-                                 if(o.time)  _opts.time = o.time; 
                                  $("." + _cls).css({"z-index"      : zsi.getHighestZindex() + 1}).showAlert(_opts);           
                               }
             
                           }
                      );
-            
+
                   }, _time);         
                });
             };
-
+            
             $.fn.clearGrid          = function(){
                 var _panel = ".zGridPanel";
                 if(this.find(_panel).length >0)
@@ -2359,4 +2382,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                 
+                                                                                                  
