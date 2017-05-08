@@ -237,8 +237,8 @@ var  ud='undefined'
     
                       }
                        
-                      if( ! isUD(o.checkOnDB) ) { 
-                        if(o.checkOnDB ==false) return _self;
+                      if( ! isUD(o.isCheckOnDb) ) { 
+                        if(o.isCheckOnDb ==false) return _self;
                       }
                         
                         
@@ -2382,4 +2382,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                  
+                                                                                                    
