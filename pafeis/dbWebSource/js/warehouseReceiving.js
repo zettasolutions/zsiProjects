@@ -272,8 +272,11 @@ function displayDonation(tab_name){
                 ,{text  : "Doc Date"            , name  : "doc_date"                    , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"doc_date").toDateFormat(); }
                 }
-                ,{text  : "Supply Source"              , name  : "supply_source_name"                   , type  : "label"       , width : 200       , style : "text-align:left;"
-                    ,onRender : function(d){ return svn(d,"supply_source_name"); }
+                ,{text  : "Donor"            , name  : "donor"                          , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"donor"); }
+                }
+                ,{text  : "Supply Source"              , name  : "supply_source"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"supply_source"); }
                 }
                 ,{text  : "Received By"         , name  : "received_by_name"                 , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
@@ -790,7 +793,7 @@ function SaveDetails(page_process_action_id) {
     $("#tblModalReceivingDetails").jsonSubmit({
         procedure: "receiving_details_upd"
         , notInclude: "#item_search,#part_no,#national_stock_no,#item_name"
-        , optionalItems: ["receiving_id"]
+        , optionalItems: ["receiving_id","status_id"]
         , onComplete: function (data) {
             if (data.isSuccess === true) { 
                 zsi.form.showAlert("alert");
@@ -895,7 +898,9 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
                 $("#dealer_id").val(d.rows[0].dealer_id);
                 $("#status_remarks").val(d.rows[0].status_remarks);
                 $("#procurement_id").val(d.rows[0].procurement_id);
-                $("#supply_source_filter").val(d.rows[0].supply_source_id);
+                $("#donor").val(d.rows[0].donor);
+                $("#supply_source_id").val(d.rows[0].supply_source_id);
+                $("#supply_source_filter").attr("selectedvalue", d.rows[0].supply_source_id);
                 $("#procurement_filter").val(d.rows[0].procurement_id);
                 
                 loadReceivingDetails(receiving_id);
@@ -963,7 +968,7 @@ function loadReceivingDetails(receiving_id) {
         _dataRows.push(
              {text  : "Serial No."          , width : 150       , style : "text-align:left;"
     	        ,onRender : function(d){
-    	            return "<input name='serial_no' id='serial_no' class='form-control' value='"+ svn (d,"serial_no") +"'" +(svn(d,"with_serial")!=="Y" ? 'disabled': "")+ ">";
+    	            return "<input type='text' name='serial_no' id='serial_no' class='form-control' value='"+ svn (d,"serial_no") +"'" +(svn(d,"with_serial")!=="Y" ? 'disabled': "")+ ">";
     	        }
         	 }
             ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
@@ -1212,4 +1217,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                                                  
+                                                                                    

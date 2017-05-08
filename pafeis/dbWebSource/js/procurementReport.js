@@ -151,9 +151,9 @@ function displayDetail(o,id){
                 		 {text  : "Item No."                , name  : "item_no"                     , width : 100           , style : "text-align:left;"}
                 		,{text  : "Part No."                , name  : "part_no"                     , width : 100           , style : "text-align:left;"}
                 		,{text  : "National Stock No."      , name  : "national_stock_no"           , width : 150           , style : "text-align:left;"}
-                		,{text  : "Item Description"        , name  : "item_description"            , width : 250           , style : "text-align:left;"}
+                		,{text  : "Nomenclature"            , name  : "item_description"            , width : 250           , style : "text-align:left;"}
                 		,{text  : "Unit of Measure"         , name  : "unit_of_measure_code"        , width : 150           , style : "text-align:left;"}
-                		,{text  : "Ordered Qty."            , name  : "ordered_qty"                 , width : 150          , style : "text-align:right;"}
+                		,{text  : "Ordered Qty."            , name  : "quantity"                    , width : 150           , style : "text-align:right;"}
                 		,{text  : "Total Delivered Qty."    , name  : "total_delivered_quantity"    , width : 150           , style : "text-align:right;"}
                 		,{text  : "Balance Qty."            , name  : "balance_quantity"            , width : 100           , style : "text-align:right;"}
                 		,{text  : "Unit Price"              , name  : "unit_price"                  , width : 100           , style : "text-align:right;"
@@ -181,4 +181,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                           
+                                                                                            

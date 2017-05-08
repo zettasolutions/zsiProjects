@@ -75,6 +75,13 @@ var contextModalWindow = {
             +'<div class="modalGrid zPanel"><h4>Procurement Details</h4> <div id="tblProcurementDetails" class="zGrid Detail" ></div></div>'
 };
 
+var contextUploadFile = { 
+      id    : "modalUploadFile"
+    , title : "Upload File"
+    , footer: '<div class="pull-left"><button type="button" onclick="uploadFile();" class="btn btn-primary"><span class="glyphicon glyphicon-upload"></span> Upload</button>'
+                   + '</div>' 
+};
+
 zsi.ready(function(){
     getTemplate();
     setCurrentTab();
@@ -156,6 +163,7 @@ function getTemplate(){
     $.get(base_url + "templates/bsDialogBox.txt",function(d){
         var template = Handlebars.compile(d);
         $("body").append(template(contextModalWindow));
+        $("body").append(template(contextUploadFile));
     });    
 }
 
@@ -219,7 +227,15 @@ function displayPurchase(tab_name){
                          + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                 }
             }
-            ,{text  : "PR #"                   , width : 120       , style : "text-align:left;"
+            /*,{ text : "File"             , width:45      , style:"text-align:center;"
+                ,onRender : function(d){ 
+                    var mouseMoveEvent= "onmouseover='mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='mouseout();'";
+                    var html = "<a href='javascript:void(0);' " + mouseMoveEvent + " class='btn btn-sm'  onclick='showModalUploadImage(\""+ svn(d,"img_filename") 
+                                    +"\");'  ><span class='glyphicon glyphicon-picture'></span> </a>";
+                    return (d!==null ? html : "");
+                }
+            }*/
+            ,{text  : "PR #"                   , width : 100       , style : "text-align:left;"
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
     		            + ProcType.Purchase + "\",\"" 
@@ -228,7 +244,7 @@ function displayPurchase(tab_name){
     		            + svn(d,"procurement_code") + " </a>";
     		    }
     		}
-    		,{text  : "PO No."                   , type  : "label"         , width : 120       , style : "text-align:left;"
+    		,{text  : "PO No."                   , type  : "label"         , width : 100       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"po_no");
     		    }
     		}
@@ -236,19 +252,19 @@ function displayPurchase(tab_name){
     		    ,onRender : function(d){ return svn(d,"bac_no");
     		    }
     		}
-    	    ,{text  : "Procurement Desc"            , type  : "label"       , width : 350       , style : "text-align:left;"
+    	    ,{text  : "Procurement Desc"            , type  : "label"       , width : 320       , style : "text-align:left;"
     	        ,onRender : function(d){ return svn(d,"procurement_name")}
     	    }
-    	    ,{text  : "Procurement Mode"            , type  : "label"       , width : 250       , style : "text-align:left;"
+    	    ,{text  : "Procurement Mode"            , type  : "label"       , width : 220       , style : "text-align:left;"
     	        ,onRender : function(d){ return svn(d,"procurement_mode")}
     	    }    	    
-    	    ,{text  : "Date"            , type  : "label"       , width : 200       , style : "text-align:left;"
+    	    ,{text  : "Date"            , type  : "label"       , width : 120       , style : "text-align:left;"
     		     ,onRender : function(d){ return svn(d,"procurement_date").toDateFormat()}
     		}
-    		,{text  : "Supplier"        , type  : "label"       , width : 250       , style : "text-align:left;"
+    		,{text  : "Supplier"        , type  : "label"       , width : 220       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"supplier_name")}
     		}
-    		,{text  : "Promised Delivery Date"         , type  : "label"   , width : 200   , style : "text-align:left;"
+    		,{text  : "Promised Date"         , type  : "label"   , width : 120   , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"promised_delivery_date").toDateFormat()}
     		}
     		,{text  : "Total Amount"         , type  : "label"   , width : 100   , style : "text-align:right;"
@@ -257,6 +273,12 @@ function displayPurchase(tab_name){
     		,{text  : "Status"          , type  : "label"       , width : 100       , style : "text-align:center;"
     		    ,onRender : function(d){ return  svn(d,"status_name")}  
     		}
+    		/*, {text  : "Upload File"       , width : 100                   , style:"text-align:center;" 
+    		    , onRender : function(d){ 
+    		        var h = "<a href='javascript:void(0);' onclick='showUploadFile(" + svn(d,"procurement_id") +");'><span class='glyphicon glyphicon-upload' style='font-size:12pt;'></span></a>";
+    		        return (d!==null ? h : "");
+        		}
+            }*/
 	    ]  
         ,onComplete: function(data){
             $("#cbFilter1").setCheckEvent("#purchase input[name='cb']");
@@ -280,6 +302,14 @@ function displayRepair(tab_name){
                          + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                 }
             }
+            /*,{ text : "File"             , width:45      , style:"text-align:center;"
+                ,onRender : function(d){ 
+                    var mouseMoveEvent= "onmouseover='mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='mouseout();'";
+                    var html = "<a href='javascript:void(0);' " + mouseMoveEvent + " class='btn btn-sm'  onclick='showModalUploadImage(\""+ svn(d,"img_filename") 
+                                    +"\");'  ><span class='glyphicon glyphicon-picture'></span> </a>";
+                    return (d!==null ? html : "");
+                }
+            }*/
             ,{text  : "PR #"                   , width : 120       , style : "text-align:left;"
     		    ,onRender : function(d){ 
     		        return "<a href='javascript:showModalProcurement(\""
@@ -314,6 +344,12 @@ function displayRepair(tab_name){
     		,{text  : "Status"          , type  : "label"       , width : 100       , style : "text-align:center;"
     		    ,onRender : function(d){ return  svn(d,"status_name")}  
     		}
+    		/*, {text  : "Upload File"       , width : 100                   , style:"text-align:center;" 
+    		    , onRender : function(d){ 
+    		        var h = "<a href='javascript:void(0);' onclick='showUploadFile(" + svn(d,"procurement_id") +");'><span class='glyphicon glyphicon-upload' style='font-size:12pt;'></span></a>";
+    		        return (d!==null ? h : "");
+        		}
+            }*/
 	    ]  
         ,onComplete: function(data){
             $("#cbFilter2").setCheckEvent("#repair input[name='cb']");
@@ -723,4 +759,96 @@ var toCurrencyFormat = function(num){
 	formatted = output.reverse().join("");
 	return(formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
 };
-           
+
+function showUploadFile(procurement_id){
+    $('#modalUploadFile').find(".modal-title").text("Upload File");
+    $('#modalUploadFile').modal("show");
+    $('#modalUploadFile').find("form").attr("enctype","multipart/form-data");
+    
+    $.get(base_url + 'page/name/tmplImageUpload'
+        ,function(data){
+            $('#modalUploadFile').find('.modal-body').html(data);
+            $('#modalUploadFile').find('.control-label').html('File');
+            $("#frm_modalUploadFile").find("#prefixKey").val("procurement.");
+           initChangeEvent();
+        }
+    ); 
+}
+
+function initChangeEvent(){
+    $("input[name='file_thumbnail']").change(function(){
+        fileNameThumbNail= this.files[0].name;
+        var fileSize1 =  this.files[0].size / 1000.00 //to kilobytes
+        if(fileSize1 > 100){ 
+            alert("Please make sure that file size must not exceed 100 KB.");
+            this.value="";
+        }
+    });
+    
+    $("input[name='file']").change(function(){
+        fileNameOrg=this.files[0].name;
+        var fileSize2 =  this.files[0].size / 1000.00 //to kilobytes
+        if(fileSize2 > 800){ //1mb
+            alert("It is recommended that file size must not exceed 800 KB.");
+            this.value="";
+        }
+    });
+}
+
+function uploadFile(){
+    var frm = $("#frm_modalUploadFile");
+    var fileOrg=frm.find("#file").get(0);
+
+    if( fileOrg.files.length<1 ) { 
+         alert("Please select image.");
+        return;
+    }
+    var formData = new FormData( frm.get(0));
+    $.ajax({
+        url: base_url + 'file/UploadImage',  //server script to process data
+        type: 'POST',
+
+        //Ajax events
+        success: completeHandler = function(data) {
+            if(data.isSuccess) {
+                //submit filename to server
+                $.get(execURL  + "dbo.image_file_users_upd @user_id=" + user_id
+                                + ",@img_filename='procurement." +  fileOrg.files[0].name + "'"
+                ,function(data){
+                    zsi.form.showAlert("alert");
+                    $('#modalUploadFile').modal('toggle');
+                    //refresh latest records:
+                    displayRecords("");
+                });
+
+                    
+            } else {
+                alert(data.errMsg);
+            }
+        },
+        error: errorHandler = function() {
+            console.log("error");
+        },
+        // Form data
+        data: formData,
+        //Options to tell JQuery not to process data or worry about content-type
+        cache: false,
+        contentType: false,
+        processData: false
+    }, 'json');
+}
+
+function mouseover(fileName){
+ $("#user-box").css("display","block");
+ var $img = $("#user-box img");
+ $img.attr("src",base_url + "file/viewImage?fileName=" +  fileName + "&isThumbNail=n");
+ 
+ if(fileName!=="") 
+    $img.attr("style","margin-left:0px;");
+else
+    $img.attr("style","margin-left:-106px;");
+}
+
+function mouseout(){
+    $("#user-box").css("display","none");
+}                                           
