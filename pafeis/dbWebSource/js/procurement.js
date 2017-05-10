@@ -3,7 +3,7 @@ var bs  = zsi.bs.ctrl
    ,g_procurement_id = null
    ,g_organization_id = null
    ,g_organization_name = ''
-   ,g_today_date = new Date() +""
+   ,g_today_date = new Date() + ""
    ,g_tab_name = "Purchase"
    ,procMode = [
         {text:"Shopping",value:"Shopping"}
@@ -20,57 +20,96 @@ var contextModalWindow = {
     , sizeAttr : "modal-lg fullWidth"
     , title : "New"
     , footer: '<div id="procurement-footer" class="pull-left"></div>' 
-    , body  : '<div id="tblProcurement" class="form-horizontal zGrid" style="padding:5px">'
-            +'    <div class="form-group  "> ' 
-            +'        <label class=" col-xs-2 control-label">Procurement Date</label>'
-            +'        <div class=" col-xs-3">'
-            +'             <input type="hidden" name="procurement_id" id="procurement_id" >'
-            +'             <input type="hidden" name="procurement_type" id="procurement_type" class="form-control input-sm" >'
-            +'             <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
-            +'        </div> ' 
-            +'        <label class=" col-xs-2 control-label">PR #</label>'
-            +'        <div class=" col-xs-3">'
-            +'           <input type="text" name="procurement_code" id="procurement_code" class="form-control input-sm" >'
-            +'         </div>'
-            +'    </div>'
-            +'    <div class="form-group  ">  '
-            +'        <label class=" col-xs-2 control-label">Procurement Desc</label>'
-            +'        <div class=" col-xs-8">'
-            +'             <input type="text" name="procurement_name" id="procurement_name" class="form-control input-sm"  >'
-            +'        </div>'
-
-            +'    </div>'
-            +'    <div class="form-group  ">  '
-            +'           <label class=" col-xs-2 control-label">Procurement Mode</label>'
-            +'           <div class=" col-xs-3">'
-            +'                <select name="procurement_mode" id="procurement_mode" class="form-control input-sm" ></select>'
-            +'           </div>' 
-            +'        <div class="hide" id="supplier_filter">'
-            +'           <label class=" col-xs-2 control-label">Dealer</label>'
-            +'           <div class=" col-xs-3">'
-            +'                <select name="supplier_id" id="supplier_id" class="form-control input-sm" ></select>'
-            +'           </div>' 
-            +'        </div>'
-            +'        <div class="hide" id="warehouse_filter">'
-            +'           <label class=" col-xs-2 control-label">Warehouse</label>'
-            +'           <div class=" col-xs-3">'
-            +'                <select name="dd_warehouse" id="dd_warehouse" class="form-control input-sm" ></select>'
-            +'           </div>'  
-            +'        </div>'             
+    , body  : '<div id="tblProcurement" class= "form-horizontal zForm" style="padding:5px">'
+            +'<div class="col-sm-12">'
+            
+            +'    <div class="col-sm-6">'
+            +'      <div class="form-group  "> ' 
+            +'          <label class=" col-xs-3 control-label">PR #</label>'
+            +'          <div class=" col-xs-3">'
+            +'               <input type="hidden" name="procurement_id" id="procurement_id" >'
+            +'               <input type="hidden" name="procurement_type" id="procurement_type" class="form-control input-sm" >'
+            +'               <input type="text" name="procurement_code" id="procurement_code" class="form-control input-sm" >'
+            +'          </div> ' 
+            +'          <label class=" col-xs-3 control-label">PR Date</label>'
+            +'          <div class=" col-xs-3">'
+            +'               <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
+            +'          </div>'
             +'      </div>'
-            +'    <div class="form-group  ">  '
-            +'        <label class=" col-xs-2 control-label">Promised Delivery Date</label>'
-            +'        <div class=" col-xs-3">'
-            +'           <input type="text" name="promised_delivery_date" id="promised_delivery_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
-            +'           <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">' 
-            +'         </div>'
-            +'        <label class=" col-xs-2 control-label">Status</label>'
-            +'        <div class=" col-xs-3">'
-            +'           <label class="control-label" id="status_name">Open</label>'
-            +'           <input type="hidden" name="status_id" id="status_id" class="form-control input-sm" >'
-            +'           <input type="hidden" name="is_edited" id="is_edited" class="form-control input-sm" >'
-            +'         </div>'
+            +'    </div>'
+            
+            +'    <div class="col-sm-6">'
+            +'      <div class="form-group  "> ' 
+            +'          <label class=" col-xs-3 control-label">PO #</label>'
+            +'          <div class=" col-xs-3">'
+            +'               <input type="text" name="po_code" id="po_code" class="form-control input-sm" >'
+            +'          </div> ' 
+            +'          <label class=" col-xs-3 control-label">PO Date</label>'
+            +'          <div class=" col-xs-3">'
+            +'               <input type="text" name="po_date" id="po_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
+            +'          </div>'
             +'      </div>'
+            +'    </div>'
+            
+            +'    <div class="col-sm-6">'
+            +'      <div class="form-group  "> ' 
+            +'          <label class=" col-xs-3 control-label">BAC #</label>'
+            +'          <div class=" col-xs-3">'
+            +'               <input type="text" name="bac_code" id="bac_code" class="form-control input-sm" >'
+            +'          </div> ' 
+            +'          <label class=" col-xs-3 control-label">BAC Date</label>'
+            +'          <div class=" col-xs-3">'
+            +'               <input type="text" name="bac_date" id="bac_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
+            +'          </div>'
+            +'      </div>'
+            +'    </div>'            
+            
+            +'    <div class="col-sm-6">'
+            +'      <div class="form-group  ">  '
+            +'          <label class=" col-xs-3 control-label">Procurement Desc</label>'
+            +'          <div class=" col-xs-9">'
+            +'               <input type="text" name="procurement_name" id="procurement_name" class="form-control input-sm"  >'
+            +'          </div>'
+            +'      </div>'
+            +'    </div>'
+            
+            +'    <div class="col-sm-6">'
+            +'      <div class="form-group  ">  '
+            +'          <label class=" col-xs-3 control-label">Procurement Mode</label>'
+            +'          <div class=" col-xs-3">'
+            +'               <select name="procurement_mode" id="procurement_mode" class="form-control input-sm" ></select>'
+            +'          </div>' 
+            +'          <div class="hide" id="supplier_filter">'
+            +'             <label class=" col-xs-3 control-label">Dealer</label>'
+            +'             <div class=" col-xs-3">'
+            +'                  <select name="supplier_id" id="supplier_id" class="form-control input-sm" ></select>'
+            +'             </div>' 
+            +'          </div>'
+            +'          <div class="hide" id="warehouse_filter">'
+            +'             <label class=" col-xs-3 control-label">Warehouse</label>'
+            +'             <div class=" col-xs-3">'
+            +'                  <select name="dd_warehouse" id="dd_warehouse" class="form-control input-sm" ></select>'
+            +'             </div>'  
+            +'          </div>'             
+            +'       </div>'
+            +'    </div>'
+           
+            +'    <div class="col-sm-6">'
+            +'      <div class="form-group  ">  '
+            +'          <label class=" col-xs-3 control-label">Promised Delivery Date</label>'
+            +'          <div class=" col-xs-3">'
+            +'             <input type="text" name="promised_delivery_date" id="promised_delivery_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
+            +'             <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">' 
+            +'           </div>'
+            +'          <label class=" col-xs-3 control-label">Status</label>'
+            +'          <div class=" col-xs-3">'
+            +'             <label class="control-label" id="status_name">Open</label>'
+            +'             <input type="hidden" name="status_id" id="status_id" class="form-control input-sm" >'
+            +'             <input type="hidden" name="is_edited" id="is_edited" class="form-control input-sm" >'
+            +'           </div>'
+            +'       </div>'
+            +'     </div>'
+            +'</div>'
             +'</div>'
             +'<div class="modalGrid zPanel"><h4>Procurement Details</h4> <div id="tblProcurementDetails" class="zGrid Detail" ></div></div>'
 };
@@ -391,6 +430,10 @@ function displayProcurement(callBack){
             var $tbl = $("#tblProcurement");
             $tbl.find("#procurement_id").val(d.procurement_id);
             $tbl.find("#procurement_date").val(d.procurement_date.toDateFormat());
+            $tbl.find("#po_code").val(d.po_code);
+            $tbl.find("#po_date").val(d.po_date.toDateFormat());
+            $tbl.find("#bac_code").val(d.bac_code);
+            $tbl.find("#bac_date").val(d.bac_date.toDateFormat());
             $tbl.find("#procurement_code").val(d.procurement_code);
             $tbl.find("#procurement_name").val(d.procurement_name);
             $tbl.find("#procurement_mode").attr("selectedvalue", d.procurement_mode);
@@ -405,6 +448,7 @@ function displayProcurement(callBack){
 
 function displayProcurementDetails(){
     var cb = bs({name:"cbFilter3",type:"checkbox"});
+    var counter = 0;
     var _dataRows = [];
 	         _dataRows.push(
                  {text  : cb                     , width : 25                    , style : "text-align:left;"       
@@ -419,9 +463,10 @@ function displayProcurementDetails(){
 
 	    if(g_tab_name==="Purchase"){
 	         _dataRows.push(
-        	    {text  : "Item No."           , width : 70                    , style : "text-align:left;"
+        	    {text  : "Item #"           , width : 70                    , style : "text-align:left;"
         	        ,onRender : function(d){ 
-                        return  bs({name:"item_no",type:"input",value: svn (d,"item_no")})
+        	            counter++;
+                        return '<input class="form-control" type="text" name="item_no" id="item_no" value="' + counter + '" readonly>' 
                               + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
                               + bs({name:"serial_no",type:"hidden",value: svn (d,"serial_no")});
                     }
@@ -431,24 +476,30 @@ function displayProcurementDetails(){
         	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 160       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
         	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 90       , style : "text-align:right;"}
-        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 100       , style : "text-align:right;"}
+        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 100       , style : "text-align:right;"
+        	        ,onRender : function(d){
+        	            return bs({name:"unit_price",type:"input",value: toCurrencyFormat(svn(d,"unit_price")), class: "text-right"});
+        	        }
+        	    }
         	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            return "<div id='amount' >" + parseFloat(svn(d,"amount", 0)).toFixed(2) + "</div>";
+        	            var _val = (d ? parseFloat(svn(d,"amount")).toFixed(2)   : 0);
+        	            return  "<div id='amount' >" + _val + "</div>";
         	        }
         	    }
     	     );
 	    }
     	 else{
     	     _dataRows.push(
-        	    {text  : "Item No."           , width : 70                    , style : "text-align:left;"
+        	    {text  : "Item #"           , width : 70                    , style : "text-align:left;"
         	        ,onRender : function(d){ 
-                        return  bs({name:"item_no",type:"input",value: svn (d,"item_no")})
+        	            counter++;
+                        return '<input class="form-control" type="text" name="item_no" id="item_no" value="' + counter + '" readonly>' 
                               + bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")});
                     }
         	    }                  
         	    ,{text  : "Serial No."          , name  : "serial_no"           , type  : "input"      , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "text"       , width : 350       , style : "text-align:left;"}
+        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "text"       , width : 450       , style : "text-align:left;"}
         	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "text"       , width : 260       , style : "text-align:left;"}
         	    ,{text  : "Part No."            , width : 160       , style : "text-align:left;"
          	        ,onRender : function(d){
@@ -460,7 +511,8 @@ function displayProcurementDetails(){
         	    }
         	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            return "<div id='amount' >" + parseFloat(svn(d,"unit_price", 0)).toFixed(2) + "</div>";
+        	            var _val = (d ? parseFloat(svn(d,"amount")).toFixed(2)   : 0);
+        	            return  "<div id='amount' >" + _val + "</div>";
         	        }
         	    }
     	    );  
@@ -475,12 +527,11 @@ function displayProcurementDetails(){
         ,blankRowsLimit :5
         ,dataRows       : _dataRows 
         ,onComplete: function(data){
+            
             markMandatory();
             setMultipleSearch();
             searchSerial();
-            $(".no-data input[name='item_name']").checkValueExists({code:"ref-0023",colName: "item_name" ,isNotExistShow : true ,message : "data not exist"});
-            $(".no-data input[name='national_stock_no']").checkValueExists({code:"ref-0023",colName: "national_stock_no" ,isNotExistShow : true ,message : "data not exist"});
-            $(".no-data input[name='part_no']").checkValueExists({code:"ref-0023",colName:"part_no" ,isNotExistShow : true ,message : "data not exist"});
+            $(".no-data input[name='part_no']").checkValueExists({code:"ref-0023",isNotExistShow : true ,isCheckOnDb : false ,message : "data not exist"});
             $("#cbFilter3").setCheckEvent("#tblProcurementDetails input[name='cb']");
             
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
@@ -524,6 +575,7 @@ function displayProcurementDetails(){
                 var quantity  = $.trim($zRow.find("#quantity").val());
 
                 if(unitPrice && quantity){
+                    console.log( $zRow.find("#amount"));
                     var amount = parseFloat(quantity) * parseFloat(unitPrice);
                     $zRow.find("#amount").text(toCurrencyFormat(amount.toFixed(2)));
                 }else{
@@ -852,3 +904,4 @@ else
 function mouseout(){
     $("#user-box").css("display","none");
 }                                           
+   
