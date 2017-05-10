@@ -21,8 +21,12 @@ BEGIN
 
 -- Update Process
     UPDATE a 
-    SET  procurement_date					= b.procurement_date		
-		,procurement_code					= b.procurement_code
+    SET  procurement_code					= b.procurement_code		
+		,procurement_date					= b.procurement_date
+		,po_code					        = b.po_code		
+		,po_date					        = b.po_date
+		,bac_code					        = b.bac_code		
+		,bac_date					        = b.bac_date
 		,procurement_name					= b.procurement_name
 		,procurement_mode					= b.procurement_mode
 		,supplier_id						= b.supplier_id
@@ -39,7 +43,11 @@ BEGIN
 
     INSERT INTO dbo.procurement (
 		 procurement_date				
-		,procurement_code				
+		,procurement_code
+		,po_code
+		,po_date
+		,bac_code
+		,bac_date
 		,procurement_name	
 		,procurement_mode
 		,organization_id			
@@ -53,7 +61,11 @@ BEGIN
         )
     SELECT 
 		 procurement_date				
-		,procurement_code				
+		,procurement_code	
+		,po_code
+		,po_date
+		,bac_code
+		,bac_date			
 		,procurement_name	
 		,procurement_mode
 		,dbo.getUserOrganizationId(@user_id)			

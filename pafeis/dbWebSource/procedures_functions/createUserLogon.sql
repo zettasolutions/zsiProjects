@@ -10,6 +10,7 @@ BEGIN
 	DECLARE @count int;
 	
 	SELECT @nlogon = concat(SUBSTRING(first_name,1,1),last_name), @logon=logon FROM users where user_id=@user_id;
+	SET @nlogon= replace(lower(@nlogon),'ñ','n')
 	IF ISNULL(@logon,'') <> ''
 	   RETURN @logon;
 	

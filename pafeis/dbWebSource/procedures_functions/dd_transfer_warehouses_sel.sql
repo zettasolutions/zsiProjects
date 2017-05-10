@@ -18,7 +18,7 @@ DECLARE @wing_id INT;
   IF @type_name = 'DIRECTIVE'
      SET @stmt = @stmt + ' AND wing_id <> ' + cast(dbo.getWingId(dbo.getUserOrganizationId(@user_id)) as varchar(20)) 
   ELSE
-     SET @stmt = @stmt + ' AND wing_id = ' + cast(dbo.getWingId(dbo.getUserOrganizationId(@user_id)) as varchar(20)) + ' AND squadron_type=''' + @type_name + ''''
+     SET @stmt = @stmt + ' AND wing_id = ' + cast(dbo.getWingId(dbo.getUserOrganizationId(@user_id)) as varchar(20)) --+ ' AND squadron_type=''' + @type_name + ''''
  
 
   SET @stmt = @stmt + ' AND warehouse_id <> ' + CAST(dbo.getUserWarehouseId(@user_id) as varchar(20))

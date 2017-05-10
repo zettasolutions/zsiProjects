@@ -1,4 +1,3 @@
-
 CREATE PROCEDURE [dbo].[component_remaining_time_report_sel]
 (
     @user_id int = NULL
@@ -9,6 +8,10 @@ CREATE PROCEDURE [dbo].[component_remaining_time_report_sel]
 )
 AS
 BEGIN
+
+--temporary suspend 
+return;
+
 	DECLARE @stmt           VARCHAR(4000);
 	DECLARE @order          VARCHAR(4000);
 	DECLARE @count			INT = 0;
@@ -17,15 +20,15 @@ BEGIN
 	CREATE TABLE #TempTable(unit VARCHAR(500),part_no VARCHAR(100),item_code VARCHAR(50),item_name VARCHAR(500),national_stock_no VARCHAR(50),serial_no VARCHAR(50),organization_address VARCHAR(500),remaining_time VARCHAR(20),status_name VARCHAR(100))
 
 	INSERT INTO #TempTable
-	SELECT b.organization_code, c.part_no, a.item_code, a.item_name, c.national_stock_no, a.serial_no,b.organization_address, 
-		   CAST(a.remaining_time_hr AS VARCHAR(100)) + ':' + CAST(a.remaining_time_min AS VARCHAR(100)) AS remaining_time, 
+	SELECT b.organization_code, c.part_no, a.item_code_id, a.item_name, c.national_stock_no, a.serial_no,b.organization_address, 
+		   CAST(a.remaining_time AS VARCHAR(100)) + ':' + CAST(a.remaining_time AS VARCHAR(100)) AS remaining_time, 
 		   dbo.getStatus(a.status_id) AS status_name 
 	FROM dbo.items_v AS a 
 	INNER JOIN dbo.organizations AS b ON a.organization_id = b.organization_id 
 	INNER JOIN dbo.item_codes AS c ON a.item_code_id = c.item_code_id 
-	WHERE (CAST(a.remaining_time_hr AS VARCHAR(100)) + ':' + CAST(a.remaining_time_min AS VARCHAR(100))) <= 100 
+	WHERE (CAST(a.remaining_time AS VARCHAR(100)) + ':' + CAST(a.remaining_time AS VARCHAR(100))) <= 100 
 	AND a.item_cat_id = 23
-	ORDER BY b.organization_code, c.part_no, a.item_code, a.item_name, c.national_stock_no, a.serial_no;
+	ORDER BY b.organization_code, c.part_no, a.item_code_id, a.item_name, c.national_stock_no, a.serial_no;
   
 	SELECT @count = COUNT(*) FROM #TempTable;
 	
@@ -41,5 +44,6 @@ BEGIN
 
 	DROP TABLE #TempTable;
 END;
+
 
 

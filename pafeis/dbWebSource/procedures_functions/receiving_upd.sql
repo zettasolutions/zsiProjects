@@ -19,6 +19,9 @@ BEGIN
    DECLARE @ctr int=0;
    DECLARE @procName VARCHAR(50)
    DECLARE @statusName VARCHAR(20)
+   DECLARE @warehouse_id int
+
+   select @warehouse_id = dbo.getUserWarehouseId(@user_id);
 
 -- Update Process
     UPDATE a 
@@ -44,7 +47,8 @@ BEGIN
 
     INSERT INTO dbo.receiving (    
 		doc_no			
-		,doc_date		
+		,doc_date	
+		,receiving_no	
 		,dealer_id		
 		,aircraft_id
 		,donor
@@ -61,7 +65,8 @@ BEGIN
         )
     SELECT 
 		doc_no			
-		,doc_date		
+		,doc_date	
+		 ,concat(dbo.getWarehouseCode(@warehouse_id),'-',cast(Year(getDate()) as varchar(20)),'-',dbo.getWarehouseRRNo(@warehouse_id))	
 		,dealer_id	
 		,aircraft_id
 		,donor

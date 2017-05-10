@@ -20,6 +20,9 @@ BEGIN
    DECLARE @ctr int=0;
    DECLARE @procName VARCHAR(50)
    DECLARE @statusName VARCHAR(20)
+   DECLARE @warehouse_id int
+
+   select @warehouse_id = dbo.getUserWarehouseId(@user_id);
 
 -- Update Process
     UPDATE a 
@@ -63,7 +66,7 @@ BEGIN
         )
     SELECT 
 	    dbo.getUserOrganizationId(@user_Id)	
-	   ,issuance_no 
+	   ,concat(dbo.getWarehouseCode(@warehouse_id),'-',cast(Year(getDate()) as varchar(20)),'-',dbo.getWarehouseISNo(@warehouse_id)) 
 	   ,issued_by
 	   ,issued_date
 	   ,issuance_directive_code

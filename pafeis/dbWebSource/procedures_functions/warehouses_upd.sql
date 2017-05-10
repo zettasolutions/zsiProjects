@@ -12,6 +12,8 @@ BEGIN
     SET  squadron_id			= b.squadron_id
 		,warehouse_code			= b.warehouse_code
 		,warehouse_location		= b.warehouse_location
+		,rr_no                  = b.rr_no
+		,is_no                  = b.is_no
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
@@ -24,6 +26,8 @@ BEGIN
          squadron_id 
 		,warehouse_code
 		,warehouse_location
+		,rr_no 
+		,is_no 
 		,is_active
         ,created_by
         ,created_date
@@ -32,6 +36,8 @@ BEGIN
         squadron_id 
 	   ,warehouse_code	
 	   ,warehouse_location
+	   ,rr_no 
+	   ,is_no 
 	   ,is_active
        ,@user_id
        ,GETDATE()

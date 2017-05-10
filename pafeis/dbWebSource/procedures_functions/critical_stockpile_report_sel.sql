@@ -1,7 +1,3 @@
-
-
-
-
 CREATE PROCEDURE [dbo].[critical_stockpile_report_sel]
 (
     @user_id int = NULL
@@ -18,11 +14,11 @@ BEGIN
 	DECLARE @count INT = 0;
 	DECLARE @page_count INT = 1;
   
-	SET @stmt = 'SELECT b.organization_code, a.part_no, a.national_stock_no, a.item_code, a.item_name, a.item_type_name, COUNT(a.stock_qty) AS available_stocks '; 
+	SET @stmt = 'SELECT b.organization_code, a.part_no, a.national_stock_no, a.item_code_id, a.item_name, a.item_type_name, COUNT(a.stock_qty) AS available_stocks '; 
 	SET @stmt = @stmt + 'FROM dbo.items_on_stock_v AS a '
 	SET @stmt = @stmt + 'INNER JOIN dbo.organizations AS b ON a.organization_id = b.organization_id ';
 	SET @stmt = @stmt + 'WHERE  a.is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''' ';
-	SET @stmt = @stmt + 'GROUP BY b.organization_code, a.part_no, a.national_stock_no, a.item_name, a.item_code, a.item_type_name HAVING (COUNT(a.stock_qty) <= 100)'; 
+	SET @stmt = @stmt + 'GROUP BY b.organization_code, a.part_no, a.national_stock_no, a.item_name, a.item_code_id, a.item_type_name HAVING (COUNT(a.stock_qty) <= 100)'; 
 	SET @order = ' ORDER BY ' + CAST(@col_no + 1 AS VARCHAR(1)) + ' ' + IIF(@order_no=0,'ASC','DESC');   
 	SELECT @count = COUNT(*) FROM dbo.items_on_stock_v WHERE is_active = @is_active; 
 
@@ -34,5 +30,6 @@ BEGIN
 	--print @page_count;
 	RETURN @page_count;
 END;
+
 
 

@@ -1,8 +1,12 @@
 CREATE TYPE procurement_tt AS TABLE(
 procurement_id	INT	NULL
 ,procurement_type	NVARCHAR(40)	NULL
-,procurement_date	DATETIME	NULL
 ,procurement_code	NVARCHAR(40)	NULL
+,procurement_date	DATETIME	NULL
+,po_code	NVARCHAR(40)	NULL
+,po_date	DATETIME	NULL
+,bac_code	NVARCHAR(40)	NULL
+,bac_date	DATETIME	NULL
 ,procurement_name	VARCHAR(0)	NULL
 ,procurement_mode	VARCHAR(30)	NULL
 ,supplier_id	INT	NULL
