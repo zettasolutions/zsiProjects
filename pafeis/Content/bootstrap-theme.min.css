@@ -16,10 +16,10 @@
 	background-color:#1D64B6
 }
 .navbar-default{
-	background-image:-webkit-linear-gradient(top,#000 0,#000 100%);
-	background-image:-o-linear-gradient(top,#000 0,#000 100%);
-	background-image:linear-gradient(to bottom,#000 0,#000 100%);
-	background-repeat:repeat-x;
+	background-image:-webkit-linear-gradient(top,#183b8e 0,#292e3a 100%);
+	background-image:-o-linear-gradient(top,#183b8e 0,#292e3a 100%);
+	background-image:linear-gradient(to bottom,#183b8e 0,#292e3a 100%);
+	background-repeat:repeat-x;	
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff8f8f8', GradientType=0);
 	filter:progid:DXImageTransform.Microsoft.gradient(enabled=false);
 	border-radius:4px;

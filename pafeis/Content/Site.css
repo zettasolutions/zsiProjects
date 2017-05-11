@@ -46,6 +46,12 @@ a:hover{
     padding-top: 2px;
 }
 
+
+.pageTitle > select{
+    border-radius: 3px;
+	border: 1px solid #cccccc;
+}
+
 .formTitle {
     background-color: #333333;
     border-radius: 6px;
