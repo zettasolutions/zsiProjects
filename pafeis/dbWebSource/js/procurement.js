@@ -450,6 +450,7 @@ function displayProcurementDetails(){
     var cb = bs({name:"cbFilter3",type:"checkbox"});
     var counter = 0;
     var _dataRows = [];
+    var total = 0;
 	         _dataRows.push(
                  {text  : cb                     , width : 25                    , style : "text-align:left;"       
         		    ,onRender : function(d){ 
@@ -475,15 +476,22 @@ function displayProcurementDetails(){
         	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 160       , style : "text-align:left;"}
         	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 160       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Quantity"            , name  : "quantity"            , type  : "input"       , width : 90       , style : "text-align:right;"}
-        	    ,{text  : "Unit Price"          , name  : "unit_price"          , type  : "input"       , width : 100       , style : "text-align:right;"
+        	    
+        	    ,{text  : "Quantity"            , width : 90                    , style : "text-align:right;"
+        	        ,onRender: function(d){
+        	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
+        	        } 
+        	    }
+        	    ,{text  : "Unit Price"          , width : 100                   , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            return bs({name:"unit_price",type:"input",value: toCurrencyFormat(svn(d,"unit_price")), class: "text-right"});
+        	            var _uprice = (d ? toCurrencyFormat(parseFloat(svn(d,"unit_price")).toFixed(2))   : "");
+        	            return "<input id='unit_price' type='text' class= 'form-control  numeric' name='unit_price' value='" + _uprice + "' style='text-align:right'>" ; 
         	        }
         	    }
         	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            var _val = (d ? parseFloat(svn(d,"amount")).toFixed(2)   : 0);
+        	            var _val = (d ? toCurrencyFormat(parseFloat(svn(d,"amount")).toFixed(2))   : "");
+        	            total += svn(d,"amount") ;
         	            return  "<div id='amount' >" + _val + "</div>";
         	        }
         	    }
@@ -511,7 +519,8 @@ function displayProcurementDetails(){
         	    }
         	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            var _val = (d ? parseFloat(svn(d,"amount")).toFixed(2)   : 0);
+        	            var _val = (d ? toCurrencyFormat(parseFloat(svn(d,"amount")).toFixed(2))   : "");
+        	            
         	            return  "<div id='amount' >" + _val + "</div>";
         	        }
         	    }
@@ -521,16 +530,23 @@ function displayProcurementDetails(){
     
      $("#tblProcurementDetails").dataBind({
 	     url            : execURL + "procurement_detail_sel " + (g_procurement_id ? "@procurement_id=" + g_procurement_id : "")
-	    //,width          : $(document).width() -75
+	    ,width          : 1300
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
-        ,blankRowsLimit :5
+        ,blankRowsLimit :20
         ,dataRows       : _dataRows 
         ,onComplete: function(data){
             
             markMandatory();
             setMultipleSearch();
             searchSerial();
+            var totalRow = "";
+            totalRow += '<div class="zRow total">'; 
+            totalRow +=    '<div class="zCell" style="width:1005px;text-align:right;"><span class="text">Total&nbsp;</span></div>';
+            totalRow +=    '<div class="zCell" style="width:130px;text-align:right;"><span class="text">' + parseFloat(total).toFixed(2) + '</span></div>';
+            totalRow += '</div>'; 
+    		$("#tblProcurementDetails").find(".right #table").append(totalRow);            
+            
             $(".no-data input[name='part_no']").checkValueExists({code:"ref-0023",isNotExistShow : true ,isCheckOnDb : false ,message : "data not exist"});
             $("#cbFilter3").setCheckEvent("#tblProcurementDetails input[name='cb']");
             
@@ -583,6 +599,10 @@ function displayProcurementDetails(){
                 }
                 $(this).val(toCurrencyFormat(unitPrice));
             });
+            
+            
+            zsi.initInputTypesAndFormats();
+
         }  
     });    
 }
@@ -904,4 +924,4 @@ else
 function mouseout(){
     $("#user-box").css("display","none");
 }                                           
-   
+      
