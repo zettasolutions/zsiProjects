@@ -5382,10 +5382,10 @@ a.list-group-item-danger.active:focus {
   font-size: 12.75pt;
   font-weight: bold;
   line-height: 1;
-  color: #000000;
+  color: #fff;
   text-shadow: 0 1px 0 #ffffff;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
+  opacity: 0.8;
+  filter: alpha(opacity=80);
 }
 .close:hover,
 .close:focus {
@@ -5478,9 +5478,9 @@ button.close {
   margin: 0;
   line-height: 1.42857143;
 }
+
 .modal-body {
   position: relative;
-  padding: 15px;
 }
 .modal-footer {
   padding: 15px;

@@ -65,6 +65,31 @@ a:hover{
     padding-top: 1px;
 }
 
+.zContainer1 {
+    border: 1pt solid #d6d8d8;
+    border-radius: 4pt;
+    overflow: hidden;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.zHeaderTitle1 {
+    background-color: #17569e;
+    overflow: hidden;
+    height: 26px;
+    color: #fff;
+    line-height: normal;
+}
+
+.zHeaderTitle1 label {
+    margin-top: 5px;
+    margin-left: 5px;
+    font-weight: normal;
+    font-size: 10pt;
+}
+
+
 .zForm{
     background-color: #fff;
     border-radius: 3px;
@@ -74,6 +99,21 @@ a:hover{
     padding-left: 5px;
     padding-top: 5px;
 	overflow:auto;
+}
+
+.modal-header {
+  min-height: 16.42857143px;
+  background-color: rgb(54,119,195);
+}
+
+.modal-title {
+  color: #fff;
+}
+
+.modal-title > select {
+    color: #000;
+    border: solid 1pt #d6d8d8;
+    border-radius: 2px;
 }
 
 /*menu high-light*/
@@ -556,7 +596,8 @@ a.itemRemove:hover{
 
 .modal-body {
     overflow: auto;
-	margin-right:15px;
+	margin-right:10px;
+	margin-left:10px;
 }
 
 
