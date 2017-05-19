@@ -11,6 +11,8 @@ var g_warehouse_id = null;
 var g_item_code_id = null;
 var g_procurement_id = null;
 var g_today_date = new Date() + "";
+var g_statuses = [];
+var g_squadron_type = "";
 const DeliveryType = {
     Procurement: 'Procurement',
     Donation: 'Donation',
@@ -43,7 +45,6 @@ zsi.ready(function(){
 
     getTemplate();
     setCurrentTab();
-    //displayProcurement(g_tab_name);
     
     $(window).keydown(function(event){
         if(event.target.tagName != 'TEXTAREA') {
@@ -62,7 +63,8 @@ zsi.ready(function(){
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
-            //$(".pageTitle").append(' for ' + g_organization_name + g_location_name);
+            g_squadron_type = d.rows[0].squadron_type;
+            
             $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
             $("select[name='dd_warehouses']").dataBind({
                 url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
@@ -74,15 +76,37 @@ zsi.ready(function(){
                     g_warehouse_id = $("select[name='dd_warehouses'] option:selected" ).val();
                     
                     $("select[name='dd_warehouses']").change (function(){
-                       if(this.value){
+                        g_warehouse_id = null;
+                        if(this.value){
                             g_warehouse_id = this.value;
-                            displayProcurement(g_tab_name);
-                       }
+                        }
+                        
+                        if(g_tab_name==="Procurement"){
+                             displayProcurement(g_tab_name);   
+                        }
+                        if(g_tab_name==="DONATION"){
+                             displayDonation(g_tab_name);   
+                        }
+                        else if(g_tab_name==="AIRCRAFT"){
+                             displayAircraft(g_tab_name);   
+                        }
+                        else if(g_tab_name==="WAREHOUSE"){
+                             displayWarehouse(g_tab_name);   
+                        }
+                        else if(g_tab_name==="MAINTENANCE"){
+                             displayMaintenance(g_tab_name);   
+                        }
+                        else if(g_tab_name==="DIRECTIVE"){
+                             displayDirective(g_tab_name);   
+                        }
                     });
+                    if(g_squadron_type!=="Aircraft"){
+                        $("#aircraft-tab, #tabAircraft").hide();
+                    }
                     displayProcurement(g_tab_name);
                 }
             });  
-
+            getStatusRoles(d.rows[0].role_id);
         }
     });
 
@@ -115,8 +139,9 @@ var contextModalNewReceiving = {
     , sizeAttr: "modal-lg"
     , footer: '<div id="receiving-footer" class="pull-left">'
             + '<button type="button" onclick="resetFields(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
-            + '</span>&nbsp;Reset</button>'
-    , body: '<div id="tblModalReceivingHeader" class="zGrid header ui-front"></div><br/><div><h4>Details</h4></div><div ><div id="tblModalReceivingDetails" class="zGrid detail ui-front"></div></div>'
+            + '</span>&nbsp;Reset</button></div>'
+    , body: '<div id="tblModalReceivingHeader" class="zContainer1 header ui-front"></div>'
+            +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label>Details</label></div><div id="tblModalReceivingDetails" class="zGrid detail ui-front"></div></div>'
 };
 
 var contextModalSubCategory = {
@@ -206,6 +231,39 @@ $("ul.nav-tabs >li").click(function(){
     });
 });
 
+function getStatusRoles(role_id){
+    $.get(procURL + "roles_sel @role_id=" + role_id, function(d) {
+       if(d.rows.length > 0){
+            if(d.rows[0].is_add==="N"){
+                $("#pdBtnNew, #ddBtnNew, #adBtnNew").addClass("hide");
+            }
+           
+            if(d.rows[0].is_delete==="N"){
+                $("#pdBtnDel, #ddBtnDel, #adBtnDel").addClass("hide");
+            }
+       }
+    });   
+}
+
+function getStatuses(status_name){
+    $.get(execURL + "statuses_sel @status_name='" + status_name + "'", function(d) {
+        g_statuses = [];
+        if (d.rows.length > 0) {
+            g_statuses = d.rows[0];
+        }
+        
+        var statusClass = "";
+        if(g_statuses.is_edit==="N"){
+            statusClass = "not-editable";
+        }
+        $("#tblModalReceivingDetails").find("#table").addClass(statusClass);
+        
+        if(g_statuses.is_delete==="Y"){
+            $("#receiving-footer").append('<button type="button" onclick="javascript:void(0); return Delete();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>');
+        }
+    });
+}
+
 // Display the grid for the Procurement delivery.
 function displayProcurement(tab_name){
     var counter = 0;
@@ -216,32 +274,35 @@ function displayProcurement(tab_name){
         ,blankRowsLimit: 0
         ,isPaging : false
         ,dataRows : [
-                {text  : "Doc No."             , name  : "doc_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
+                {text  : "RR No."               , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Procurement + "\",\""
                         + svn(d,"receiving_id") + "\",\"" 
-                        + svn(d,"doc_no")  + "\",\"" 
+                        + svn(d,"receiving_no")  + "\",\"" 
                         + svn(d,"dealer_id") + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
+                        + svn(d,"receiving_no") + " </a>";
                     }
                 }
-                ,{text  : "Doc Date"            , name  : "doc_date"                    , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Doc No."             , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"doc_no") }
+                }
+                ,{text  : "Doc Date"            , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"doc_date").toDateFormat(); }
                 }
-                ,{text  : "Dealer"              , name  : "dealer_name"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Dealer"              , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"dealer_name"); }
                 }
-                ,{text  : "Received By"         , name  : "received_by_name"                 , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Received By"         , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
                 }
-                ,{text  : "Received Date"       , name  : "received_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Received Date"       , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
                 }
-                ,{text  : "Status"              , name  : "status_name"                     , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Status"              , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_name"); }
                 }
-                ,{text  : "Status Remarks"      , name  : "status_remarks"                  , type  : "label"       , width : 250       , style : "text-align:left;"
+                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_remarks"); }
                 }
         ]   
@@ -258,36 +319,38 @@ function displayDonation(tab_name){
         ,blankRowsLimit: 0
         ,isPaging : false
         ,dataRows : [
-                 {text  : "Doc No."             , name  : "doc_no"                      , type  : "input"       , width : 100       , style : "text-align:left;"
+                 {text  : "RR No."             , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Donation+ "\",\""
                         + svn(d,"receiving_id") + "\",\"" 
-                        + svn(d,"doc_no")  + "\",\""
+                        + svn(d,"receiving_no")  + "\",\""
                         + svn(d,"supply_source_id")  + "\",\""
                         + svn(d,"donor") + "\");'>"
-                        + svn(d,"doc_no") + " </a>";
+                        + svn(d,"receiving_no") + " </a>";
                     }
                 }
-                ,{text  : "Doc Date"            , name  : "doc_date"                    , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Doc No."             , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"doc_no") }
+                }                ,{text  : "Doc Date"            , name  : "doc_date"       , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"doc_date").toDateFormat(); }
                 }
-                ,{text  : "Donor"            , name  : "donor"                          , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Donor"               , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"donor"); }
                 }
-                ,{text  : "Supply Source"              , name  : "supply_source"                   , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Supply Source"       , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"supply_source"); }
                 }
-                ,{text  : "Received By"         , name  : "received_by_name"                 , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Received By"         , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
                 }
-                ,{text  : "Received Date"       , name  : "received_date"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Received Date"       , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
                 }
-                ,{text  : "Status"              , name  : "status_name"                     , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Status"              , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_name"); }
                 }
-                ,{text  : "Status Remarks"      , name  : "status_remarks"                  , type  : "label"       , width : 250       , style : "text-align:left;"
+                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_remarks"); }
                 }
         ]   
@@ -304,18 +367,20 @@ function displayWarehouse(tab_name){
         ,blankRowsLimit: 0
         ,isPaging : false
         ,dataRows : [
-                {text  : "Doc No."            , type  : "input"       , width : 100       , style : "text-align:left;"
+                {text  : "RR No."               , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Warehouse + "\",\""
                         + svn(d,"receiving_id") + "\",\""
-                        + svn(d,"doc_no")  + "\",\""
+                        + svn(d,"receiving_no")  + "\",\""
                         + svn(d,"issuance_warehouse")  + "\",\""
                         + svn(d,"warehouse_id")  + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
+                        + svn(d,"receiving_no") + " </a>";
                     }
                 }
-                ,{text  : "Doc Date"             , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Doc No."               , type  : "label"       , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"doc_no") }
+                }                ,{text  : "Doc Date"             , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ 
                                     return svn(d,"doc_date") 
                                          + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
@@ -327,10 +392,10 @@ function displayWarehouse(tab_name){
                 ,{text  : "Received By"           , type  : "label"       , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
                 }
-                ,{text  : "Received Date"                  , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Received Date"         , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
                 }
-                ,{text  : "Status"                        , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Status"                , type  : "label"       , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_name"); }
                 }
                 ,{text  : "Status Remarks"    , type  : "label"       , width : 250       , style : "text-align:left;"
@@ -350,37 +415,39 @@ function displayAircraft(tab_name){
         ,blankRowsLimit: 0
         ,isPaging : false
         ,dataRows : [
-                {text  : "Doc No."       , type  : "input"       , width : 100       , style : "text-align:left;"
+                {text  : "RR No."               , type  : "input"               , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Aircraft + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
+                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"receiving_no")  + "\");'>" 
+                        + svn(d,"receiving_no") + " </a>";
                     }
                 }
-                ,{text  : "Doc Date"      , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Doc No."             , type  : "label"               , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"doc_no") }
+                }                ,{text  : "Doc Date"      , type  : "label"    , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ 
                                     return svn(d,"doc_date") 
                                          + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
                     }
                 }
-                ,{text  : "Transferred From"      , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Transferred From"      , type  : "label"             , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
                 }
-                ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Aircraft"              , type  : "label"             , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"aircraft_name"); }
                 }
                 
-                ,{text  : "Received By"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Received By"           , type  : "label"             , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
                 }
-                ,{text  : "Received Date"     , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Received Date"         , type  : "label"             , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
                 }
-                ,{text  : "Status"             , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Status"                , type  : "label"             , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_name"); }
                 }
-                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
+                ,{text  : "Status Remarks"        , type  : "label"             , width : 250       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_remarks"); }
                 }
         ]   
@@ -397,37 +464,39 @@ function displayMaintenance(tab_name){
         ,blankRowsLimit: 0
         ,isPaging : false
         ,dataRows : [
-                {text  : "Doc No."       , type  : "input"       , width : 100       , style : "text-align:left;"
+                {text  : "RR No."               , type  : "input"       , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Aircraft + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
+                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"receiving_no")  + "\");'>" 
+                        + svn(d,"receiving_no") + " </a>";
                     }
                 }
-                ,{text  : "Doc Date"      , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Doc No."             , type  : "label"               , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"doc_no") }
+                }                ,{text  : "Doc Date"      , type  : "label"    , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ 
                                     return svn(d,"doc_date") 
                                          + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
                     }
                 }
-                ,{text  : "Transferred From"      , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Transferred From"    , type  : "label"               , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
                 }
-                ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Aircraft"            , type  : "label"               , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"aircraft_name"); }
                 }
                 
-                ,{text  : "Received By"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Received By"         , type  : "label"               , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
                 }
-                ,{text  : "Received Date"     , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Received Date"       , type  : "label"               , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
                 }
-                ,{text  : "Status"             , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Status"              , type  : "label"               , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_name"); }
                 }
-                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
+                ,{text  : "Status Remarks"      , type  : "label"               , width : 250       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_remarks"); }
                 }
         ]   
@@ -444,37 +513,39 @@ function displayDirective(tab_name){
         ,blankRowsLimit: 0
         ,isPaging : false
         ,dataRows : [
-                {text  : "Doc No."       , type  : "input"       , width : 100       , style : "text-align:left;"
+                {text  : "RR No."                   , type  : "input"           , width : 100       , style : "text-align:left;"
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Aircraft + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"doc_no")  + "\");'>" 
-                        + svn(d,"doc_no") + " </a>";
+                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"receiving_no")  + "\");'>" 
+                        + svn(d,"receiving_no") + " </a>";
                     }
                 }
-                ,{text  : "Doc Date"      , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Doc No."                 , type  : "label"           , width : 150       , style : "text-align:left;"
+                    ,onRender : function(d){ return svn(d,"doc_no") }
+                }                ,{text  : "Doc Date"      , type  : "label"    , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ 
                                     return svn(d,"doc_date") 
                                          + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
                     }
                 }
-                ,{text  : "Transferred From"      , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Transferred From"        , type  : "label"           , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
                 }
-                ,{text  : "Aircraft"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Aircraft"                , type  : "label"           , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"aircraft_name"); }
                 }
                 
-                ,{text  : "Received By"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,{text  : "Received By"             , type  : "label"           , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
                 }
-                ,{text  : "Received Date"     , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Received Date"           , type  : "label"           , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_date").toDateFormat(); }
                 }
-                ,{text  : "Status"             , type  : "label"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Status"                  , type  : "label"           , width : 150       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_name"); }
                 }
-                ,{text  : "Status Remarks"      , type  : "label"       , width : 250       , style : "text-align:left;"
+                ,{text  : "Status Remarks"          , type  : "label"           , width : 250       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"status_remarks"); }
                 }
         ]   
@@ -501,19 +572,24 @@ function buildReceivingHeader(tbl_obj) {
         '<input type="hidden" name="is_edited" id="is_edited">' +
         '<input type="hidden" name="receiving_no" id="receiving_no">' +
         '<div class="form-group  ">' +
+            '<label class=" col-xs-1 control-label">RR No.</label>' +
+            '<div class=" col-xs-1">' +
+                '<input type="text" name="receiving_no" id="receiving_no" class="form-control input-sm" readonly>' +
+            '</div>' +
             '<label class=" col-xs-1 control-label">Doc No.</label>' +
-            '<div class=" col-xs-3">' +
+            '<div class=" col-xs-1">' +
                 '<input type="text" name="doc_no" id="doc_no" class="form-control input-sm">' +
             '</div>' +
-            '<label class=" col-xs-2 control-label">Doc Date</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-xs-1 control-label">Doc Date</label>' +
+            '<div class=" col-xs-1">' +
                 '<input type="text" name="doc_date" id="doc_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
             '</div>' +
-            '<label class=" col-xs-2 control-label">Status</label>' +
+            '<label class=" col-xs-1 control-label">Status</label>' +
             '<div class=" col-xs-2">' +
                 '<label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' +
                 '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
             '</div>' +
+
         '</div>' +
         
         '<div class="form-group  "> ' +
@@ -521,8 +597,8 @@ function buildReceivingHeader(tbl_obj) {
             '<div class=" col-xs-3">' +
                 '<select type="text" name="received_by" id="received_by" class="form-control input-sm"></select>' +
             '</div>' +
-            '<label class=" col-xs-2 control-label">Received Date</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-xs-1 control-label">Received Date</label>' +
+            '<div class=" col-xs-1">' +
                 '<input type="text" name="received_date" id="received_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
                 '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
@@ -531,15 +607,18 @@ function buildReceivingHeader(tbl_obj) {
                 '<input type="hidden" name="donor" id="donor" class="form-control input-sm">' +
                 '<input type="hidden" name="supply_source_id" id="supply_source_id" class="form-control input-sm">' +
             '</div>' +
+
             '<div id="wrap-proc" class="hide">' +
-                '<label class="col-xs-2 control-label">Procurement</label>' +
+                '<label class="col-xs-1 control-label">P.O #</label>' +
                 '<div class=" col-xs-2">' +
                     '<select name="procurement_filter" id="procurement_filter" class="form-control input-sm"></select>' +
                 '</div>' +
             '</div>' +
+
         '</div>' +
         
         '<div class="form-group  ">' +
+
             '<div id="wrap-suppSource" class="hide">' +
                 '<label class=" col-xs-1 control-label"> Source</label>' +
                 '<div class=" col-xs-3">' +
@@ -621,7 +700,7 @@ function buildReceivingDetails(callback) {
         _dataRows.push(
              {text  : "Serial No."          , width : 150       , style : "text-align:left;"
     	        ,onRender : function(d){
-    	            return "<input name='serial_no' id='serial_no' class='form-control' disabled>";
+    	            return "<input name='serial_no' id='serial_no' class='form-control' readonly>";
     	        }
         	 }
             ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"} 
@@ -642,7 +721,7 @@ function buildReceivingDetails(callback) {
     
     $("#tblModalReceivingDetails").dataBind({
         url: procURL + "receiving_details_sel"
-        ,width:  $(document).width() - 208
+        ,width:  $(document).width() - 170
         ,height: 200
         ,blankRowsLimit: 10
         ,isPaging: false
@@ -758,7 +837,11 @@ $("#adBtnNew").click(function () {
     $("#modalReceiving .modal-title").html('Items Delivered to' + ' » ' +  g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     clearEntries();
-    $("select[name='aircraft_filter']").dataBind("aircraft_info");
+    $("select[name='aircraft_filter']").dataBind({ 
+        url: procURL + "dd_aircrafts_sel"
+        ,text: "aircraft_name"
+        ,value: "aircraft_info_id"
+    });
     $("select[name='aircraft_filter']").change(function(){
         $("#aircraft_id").val(this.value);
     });
@@ -803,7 +886,7 @@ function SaveDetails(page_process_action_id) {
             } else {
                 console.log(data.errMsg);
             }
-            $("#modalReceiving").modal('toggle');
+            $("#modalReceiving").modal('hide');
             
             if(g_tab_name==="Procurement"){
                  displayProcurement(g_tab_name);   
@@ -837,7 +920,7 @@ function setStatusName(page_process_action_id) {
 }
 
 // Show the modal window for updating.
-function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor) {
+function showModalUpdateReceiving(delivery_type, receiving_id, receiving_no, id, donor) {
     var html = '';
     g_recieving_id = receiving_id;
     if (delivery_type == DeliveryType.Procurement) {
@@ -889,22 +972,25 @@ function showModalUpdateReceiving(delivery_type, receiving_id, doc_no, id, donor
         $.get(procURL + "receiving_sel @receiving_id=" + receiving_id + "&@tab_name=" + g_tab_name, function(d) {
             if (d.rows !== null) {
                 g_procurement_id = d.rows[0].procurement_id;
-                $("#doc_no").val(d.rows[0].doc_no);
-                $("#doc_date").val(d.rows[0].doc_date.toDateFormat());
-                $("#status_name").html(d.rows[0].status_name);
-                $("#issuance_warehouse_id").val(d.rows[0].issuance_warehouse_id);
-                $("#received_by").val(d.rows[0].received_by);
-                $("#received_date").val(d.rows[0].received_date.toDateFormat());
-                $("#dealer_id").val(d.rows[0].dealer_id);
-                $("#status_remarks").val(d.rows[0].status_remarks);
-                $("#procurement_id").val(d.rows[0].procurement_id);
-                $("#donor").val(d.rows[0].donor);
-                $("#supply_source_id").val(d.rows[0].supply_source_id);
-                $("#supply_source_filter").attr("selectedvalue", d.rows[0].supply_source_id);
-                $("#procurement_filter").val(d.rows[0].procurement_id);
+                
+                $("#tblModalReceivingHeader #receiving_no").val(d.rows[0].receiving_no);
+                $("#tblModalReceivingHeader #doc_no").val(d.rows[0].doc_no);
+                $("#tblModalReceivingHeader #doc_date").val(d.rows[0].doc_date.toDateFormat());
+                $("#tblModalReceivingHeader #status_name").html(d.rows[0].status_name);
+                $("#tblModalReceivingHeader #issuance_warehouse_id").val(d.rows[0].issuance_warehouse_id);
+                $("#tblModalReceivingHeader #received_by").val(d.rows[0].received_by);
+                $("#tblModalReceivingHeader #received_date").val(d.rows[0].received_date.toDateFormat());
+                $("#tblModalReceivingHeader #dealer_id").val(d.rows[0].dealer_id);
+                $("#tblModalReceivingHeader #status_remarks").val(d.rows[0].status_remarks);
+                $("#tblModalReceivingHeader #procurement_id").val(d.rows[0].procurement_id);
+                $("#tblModalReceivingHeader #donor").val(d.rows[0].donor);
+                $("#tblModalReceivingHeader #supply_source_id").val(d.rows[0].supply_source_id);
+                $("#tblModalReceivingHeader #supply_source_filter").attr("selectedvalue", d.rows[0].supply_source_id);
+                $("#tblModalReceivingHeader #procurement_filter").val(d.rows[0].procurement_id);
                 
                 loadReceivingDetails(receiving_id);
-                buildReceivingButtons();    
+                buildReceivingButtons();
+                getStatuses(d.rows[0].status_name);
             }
         });
     });
@@ -968,7 +1054,7 @@ function loadReceivingDetails(receiving_id) {
         _dataRows.push(
              {text  : "Serial No."          , width : 150       , style : "text-align:left;"
     	        ,onRender : function(d){
-    	            return "<input type='text' name='serial_no' id='serial_no' class='form-control' value='"+ svn (d,"serial_no") +"'" +(svn(d,"with_serial")!=="Y" ? 'disabled': "")+ ">";
+    	            return "<input type='text' name='serial_no' id='serial_no' class='form-control' value='"+ svn (d,"serial_no") +"'" +(svn(d,"with_serial")!=="Y" ? 'readonly': "")+ ">";
     	        }
         	 }
             ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
@@ -990,12 +1076,16 @@ function loadReceivingDetails(receiving_id) {
     
     $("#tblModalReceivingDetails").dataBind({
         url: procURL + "receiving_details_sel @receiving_id=" + receiving_id
-        ,width:  $(document).width() - 208
+        ,width:  $(document).width() - 170
         ,height: 200
-        ,blankRowsLimit: 10
+        ,blankRowsLimit: (g_statuses.is_add==="Y" ? 10 : 0)
         ,isPaging: false
         ,dataRows: _dataRows
         ,onComplete: function(){
+            if(g_tab_name==="WAREHOUSE"){
+                $("#tblModalReceivingDetails").find("#table").addClass("warehouse-editable");
+            }
+            
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
@@ -1134,9 +1224,7 @@ function setSearchMulti(){
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.part_no;
             var $zRow = $(currentObject).closest(".zRow");
-            //if(data.with_serial !== 'Y') $zRow.find("#serial_no").val('').attr('disabled', false);
-            console.log(data.with_serial);
-             $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
+            $zRow.find("#serial_no").val('').prop('readonly',(data.with_serial==='Y' ? false : true));
             $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
@@ -1161,7 +1249,7 @@ function setSearchMulti(){
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.national_stock_no;
             var $zRow = $(currentObject).closest(".zRow");
-            $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
+            $zRow.find("#serial_no").val('').prop('readonly',(data.with_serial==='Y' ? false : true));
             $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#part_no").val(data.part_no);
@@ -1185,7 +1273,7 @@ function setSearchMulti(){
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.item_name;
             var $zRow = $(currentObject).closest(".zRow");
-            $zRow.find("#serial_no").val('').prop('disabled',data.with_serial !== 'Y');
+            $zRow.find("#serial_no").val('').prop('readonly',(data.with_serial==='Y' ? false : true));
             $zRow.find("#procurement_detail_id").val(data.procurement_detail_id);
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#part_no").val(data.part_no);
@@ -1217,4 +1305,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                                                    
+                                                                                              
