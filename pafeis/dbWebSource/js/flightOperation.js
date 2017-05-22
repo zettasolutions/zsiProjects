@@ -4,12 +4,44 @@ var bs          = zsi.bs.ctrl
    ,dataFlightOperationsIndex =-1
    ,tblFD = "tblFlightDetails"
    ,g_flight_operation_id = null
+   ,g_user_id = null
+   ,g_warehouse_id = null
+   ,g_organization_id = null
+   ,g_organization_name = ""
+   ,g_location_name = ""
 ;
 
 
 zsi.ready(function(){
     getTemplate();
-    $(".pageTitle").append(' for ' + ' » <select name="dd_squadron" id="dd_squadron"></select>');
+    $.get(procURL + "user_info_sel", function(d) {
+        if (d.rows !== null && d.rows.length > 0) {
+            g_user_id = d.rows[0].user_id;
+            g_organization_id = d.rows[0].organization_id;
+            g_organization_name = d.rows[0].organizationName;
+            g_location_name = d.rows[0].warehouse_location;
+            g_location_name = (g_location_name? " » " + g_location_name:"");
+            g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
+            $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
+            $("select[name='dd_warehouses']").dataBind({
+                url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
+                , text: "warehouse"
+                , value: "warehouse_id"
+                , required :true
+                , onComplete: function(){
+                    
+                    g_warehouse_id = $("select[name='dd_warehouses'] option:selected" ).val();
+                    
+                    $("select[name='dd_warehouses']").change (function(){
+                       if(this.value){
+                            g_warehouse_id = this.value;
+                       }
+                    });
+                }
+            });  
+        }
+    });
+    /*$(".pageTitle").append(' for ' + ' » <select name="dd_squadron" id="dd_squadron"></select>');
     $("#dd_squadron").dataBind({
         url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
         , text: "organization_name"
@@ -21,7 +53,7 @@ zsi.ready(function(){
                 displayRecords(this.value);
             });
         }
-    });  
+    }); */
 });
 
 var contextFlightOperation = { 
@@ -30,8 +62,7 @@ var contextFlightOperation = {
                 , title : "New"
                 , footer: '<div id="flightOperation-footer" class="pull-left">'
 
-                , body  : '<div id="frm_modalFlightOperation" class="form-horizontal" style="padding:5px">'
-                        
+                , body  : '<div id="frm_modalFlightOperation" class="form-horizontal zContainer1" style="padding:5px">'
                         +'    <div class="form-group  "> ' 
                         +'        <label class=" col-xs-2 control-label">Operaion Code</label>'
                         +'        <div class=" col-xs-4">'
@@ -98,7 +129,8 @@ var contextFlightOperation = {
                         +'    </div>'
                         +'</div>'
 
-                        +'<div class="modalGrid zPanel"><h4> Flight Details </h4><div id="'+ tblFD +'" class="zGrid Detail" ></div></div>'
+                        +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label> Flight Details </label></div><div id="'+ tblFD +'" class="zGrid Detail" ></div></div>'
+                        
             }; 
 
 function getTemplate(){
@@ -388,4 +420,4 @@ function setStatusName(page_process_action_id) {
         }
     });
 }
-          
+            

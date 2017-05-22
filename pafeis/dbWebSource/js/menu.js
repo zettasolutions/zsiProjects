@@ -4,6 +4,7 @@ var bs                          = zsi.bs.ctrl
     ,tmplPageProcess            = ""
     ,tmplPageProcessAction      = ""
     ,tmplPageProcessActionProc  = ""
+    ,tmplPageProcessRoles       = ""
     ,tmplDialog                 = ""
     ,g_page_id                  
     ,modalProcessAction         = "modalWindowProcessAction"
@@ -16,6 +17,11 @@ var bs                          = zsi.bs.ctrl
     ,contextModalProcessActionProc = {  id          : modalProcessActionProc
                                         , sizeAttr  : "pageProcessActionProcWidth"
                                      }
+    ,modalProcessRoles          = "modalWindowProcessActionRoles"
+    ,contextModalProcessRoles   = {  id             : modalProcessRoles
+                                        , sizeAttr  : "pageProcessRolesWidth"
+                                  }
+    
 ;
 
 zsi.ready(function(){
@@ -35,6 +41,7 @@ function getTemplates(){
     $.get(base_url + 'page/name/tmplPageProcess', function(d){tmplPageProcess=d;});  
     $.get(base_url + 'page/name/tmplPageProcessAction', function(d){ tmplPageProcessAction =d; });
     $.get(base_url + 'page/name/tmplPageProcessActionProc', function(d){ tmplPageProcessActionProc=d;});  
+    $.get(base_url + 'page/name/tmplPageProcessRoles', function(d){ tmplPageProcessRoles=d;});  
 }  
 
 function showModalPageProcess(id, title){
@@ -62,7 +69,7 @@ function displayRecords(){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
          $("#grid").dataBind({
 	     url            : execURL + "menus_sel"
-	    ,width          : 1150
+	    ,width          : $(document).width() - 200
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -107,4 +114,4 @@ $("#btnDelete").click(function(){
                       }
     });      
 });
- 
+    

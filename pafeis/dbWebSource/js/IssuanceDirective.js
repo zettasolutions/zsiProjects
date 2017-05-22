@@ -26,7 +26,7 @@ var contextModalWindow = {
                 , title : "New"
                 , footer: '<div class="pull-left"><button type="button" onclick="submitData();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button></div>' 
                         
-                , body  : '<div id="frmIssuanceDirective" class="form-horizontal" style="padding:5px">'
+                , body  : '<div id="frmIssuanceDirective" class="form-horizontal zContainer1" style="padding:5px">'
  
                         +'    <div class="form-group  "> ' 
                         +'        <label class=" col-xs-2 control-label">Issuance No.</label>'
@@ -62,7 +62,7 @@ var contextModalWindow = {
                         +'         </div>'
                         +'      </div>'
                         +'</div>'
-                        +'<div class="modalGrid zPanel"><h4> Issuance Directive Detail </h4><div id="'+ tblIssuanceDD +'" class="zGrid Detail" ></div></div>'
+                        +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label> Issuance Directive Detail </label></div><div id="'+ tblIssuanceDD +'" class="zGrid Detail" ></div></div>'
                         
             };
             
@@ -164,8 +164,8 @@ function displayRecords(){
      
      $("#grid").dataBind({
 	     url            : execURL + "issuance_directive_sel"
-	    ,width          : $(document).width() -50
-	    ,height         : $(document).height() -450
+	    ,width          : $(document).width() -82
+	    ,height         : $(document).height() -500
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,isPaging       : false
@@ -196,7 +196,7 @@ function displayRecords(){
         		,{text  : "Process"                 , type  : "label"                , width : 250       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"process_id")}  
         		}
-        		,{text  : "Action"                  , type  : "label"     , width : 250       , style : "text-align:left;"
+        		,{text  : "Action"                  , type  : "label"     , width : 230       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"action_id")}
         		}
 	    ]  
@@ -210,8 +210,8 @@ function displayIssuanceDirectiveDetails(issuance_directive_id){
      var cb = bs({name:"cbFilter2",type:"checkbox"});
      $("#" + tblIssuanceDD).dataBind({
 	     url            : execURL + "issuance_directive_detail_sel @issuance_directive_id=" + issuance_directive_id
-	    ,width          : 800
-	    ,height         : $(document).height() -450
+	    ,width          : $(document).height() +220
+	    ,height         : $(document).height() -500
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,dataRows       : [
@@ -225,7 +225,7 @@ function displayIssuanceDirectiveDetails(issuance_directive_id){
         	    ,{text  : "Item"                , name  : "item_id"             , type  : "select"      , width : 200       , style : "text-align:left;"}
         	    ,{text  : "Aircraft"            , name  : "aircraft_id"         , type  : "select"      , width : 300       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
-        	    ,{text  : "Qty"                 , name  : "quantity"            , type  : "input"       , width : 100       , style : "text-align:left;"}
+        	    ,{text  : "Qty"                 , name  : "quantity"            , type  : "input"       , width : 200       , style : "text-align:left;"}
 
 	    ]  
     	     ,onComplete: function(data){
@@ -249,4 +249,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                                        
+                                                                          

@@ -94,25 +94,25 @@ function displayItems(id){
 	    ,width          : $(document).width() - 30
 	    ,height         : $(document).height() - 250
         ,dataRows : [
-        		 {text  : "Item Code"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+        		/* {text  : "Item Code"                   , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return   bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
         		                                    + svn(d,"item_code"); }
-        		}
-        		,{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"
+        		}*/
+        		{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"part_no"); }
         		}
         		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
         		}
-        		,{text  : "Nomenclature"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+        		,{text  : "Nomenclature"                   , type  : "label"       , width : 400       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_name"); }
         		}
            		,{text  : "Category"               , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"category"); }
         		}
-        		,{text  : "Item Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"
+        		/*,{text  : "Item Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_type_name"); }
-        		}
+        		}*/
         		,{text  : "Remaining Time in Hours"   , type  : "label"       , width : 150       , style : "text-align:center;"
         		    ,onRender : function(d){ return svn(d,"remaining_time_hr"); }
         		}
@@ -124,4 +124,4 @@ function displayItems(id){
         		}
 	    ]   
     });    
-}     
+}      

@@ -9,6 +9,7 @@ var bs  = zsi.bs.ctrl
         {text:"Shopping",value:"Shopping"}
         ,{text:"Bidding",value:"Bidding"}
        ]
+    ,g_statuses = []
 ;
 const ProcType = {
         Purchase: 'Purchase',
@@ -20,9 +21,8 @@ var contextModalWindow = {
     , sizeAttr : "modal-lg fullWidth"
     , title : "New"
     , footer: '<div id="procurement-footer" class="pull-left"></div>' 
-    , body  : '<div id="tblProcurement" class= "form-horizontal zForm" style="padding:5px">'
+    , body  : '<div id="tblProcurement" class="zContainer1 form-horizontal zForm" style="padding:5px">'
             +'<div class="col-sm-12">'
-            
             +'    <div class="col-sm-6">'
             +'      <div class="form-group  "> ' 
             +'          <label class=" col-xs-3 control-label">PR #</label>'
@@ -111,7 +111,7 @@ var contextModalWindow = {
             +'     </div>'
             +'</div>'
             +'</div>'
-            +'<div class="modalGrid zPanel"><h4>Procurement Details</h4> <div id="tblProcurementDetails" class="zGrid Detail" ></div></div>'
+            +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label>Procurement Details</label></div><div id="tblProcurementDetails" class="zGrid Detail" ></div></div>'
 };
 
 var contextUploadFile = { 
@@ -139,53 +139,50 @@ zsi.ready(function(){
 });
 
 $("#btnAddPurchase").click(function () {
-    clearForm(); 
-    $("#procurement_type").val(g_tab_name);
-
     g_procurement_id = null;
     $("#mdlProcurement .modal-title").text("Purchase Procurement for " + g_organization_name);
     $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
+    clearForm();
     $("#supplier_filter").removeClass("hide");
     $("#warehouse_filter").addClass("hide");
-
-
-
-    buildButtons();
+    $("#procurement_type").val(g_tab_name);
     $("#procurement_date").val( g_today_date.toShortDate());
     $("#promised_delivery_date").val( g_today_date.toShortDate());
-    displayProcurementDetails();
-    zsi.initDatePicker();
+    
+    getStatuses("NEW", function(){
+        zsi.initDatePicker();
+        displayProcurementDetails();
+        buildButtons();
+    });
 });
 
 $("#btnAddRepair").click(function () {
-    clearForm();
-    $("#procurement_type").val(g_tab_name);
     g_procurement_id = null;
     $("#mdlProcurement .modal-title").text("Repair Procrement for " + g_organization_name);
     $('#mdlProcurement').modal({ show: true, keyboard: false, backdrop: 'static' });
+    clearForm();
     $("#warehouse_filter").removeClass("hide");
     $("#supplier_filter").addClass("hide");
-    buildButtons();
+    $("#procurement_type").val(g_tab_name);
     $("#procurement_date").val( g_today_date.toShortDate());
     $("#promised_delivery_date").val( g_today_date.toShortDate());
-    displayProcurementDetails();
-    zsi.initDatePicker();
+    
     $("select[name='dd_warehouse']").dataBind({ 
          url : procURL + "dd_warehouses_sel"
         ,text: "warehouse"
         ,value: "warehouse_id"
-    });
-
-    $("select[name='dd_warehouse']").change(function(){
-        if(this.value){
-            $("#warehouse_id").val(this.value);
-        }else{
-            $("#warehouse_id").val("");
+        ,onComplete: function(){
+            $("select[name='dd_warehouse']").change(function(){
+                $("#warehouse_id").val(this.value);
+            });  
         }
+    });
     
-        $("#warehouse_id").val(this.value);
-    });    
-
+    getStatuses("NEW", function(){
+        zsi.initDatePicker();
+        displayProcurementDetails();
+        buildButtons();
+    });
 });
 
 function getUserInfo(callBack){
@@ -193,6 +190,42 @@ function getUserInfo(callBack){
         if (d.rows !== null && d.rows.length > 0) {
             g_organization_id =  d.rows[0].organization_id;
             g_organization_name =  d.rows[0].organizationName;
+            
+            getStatusRoles(d.rows[0].role_id);
+        }
+        if(callBack) callBack();
+    });
+}
+
+function getStatusRoles(role_id){
+    $.get(procURL + "roles_sel @role_id=" + role_id, function(d) {
+       if(d.rows.length > 0){
+            if(d.rows[0].is_add==="N"){
+                $("#btnAddPurchase, #btnAddRepair").addClass("hide");
+            }
+           
+            if(d.rows[0].is_delete==="N"){
+                $("#btnDelPurchase, #btnDelRepair").addClass("hide");
+            }
+       }
+    });   
+}
+
+function getStatuses(status_name, callBack){
+    $.get(execURL + "statuses_sel @status_name='" + status_name + "'", function(d) {
+        g_statuses = [];
+        if (d.rows.length > 0) {
+            g_statuses = d.rows[0];
+        }
+        
+        var statusClass = "";
+        if(g_statuses.is_edit==="N"){
+            statusClass = "not-editable";
+        }
+        $("#tblProcurementDetails").find("#table").addClass(statusClass);
+        
+        if(g_statuses.is_delete==="Y"){
+            $("#procurement-footer").append('<button type="button" onclick="javascript:void(0); return Delete();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>');
         }
         if(callBack) callBack();
     });
@@ -243,7 +276,10 @@ function buildButtons(){
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
 
-            $("#status_name").text(d.rows[0].status_name);
+            if(!g_procurement_id || g_procurement_id===null){
+                $("#status_name").text(d.rows[0].status_name);   
+            }
+            
             $(".added-button").remove();
             $("#procurement-footer").html(html);
         }
@@ -414,7 +450,8 @@ function showModalProcurement(procurement_type, id, title) {
     $("#mdlProcurement #procurement_id").val(g_procurement_id);
     $("select, input").on("keyup change", function(){
        $("#tblProcurement").find("#is_edited").val("Y");
-    });    
+    });
+    zsi.initDatePicker();
 
     displayProcurement(function(){
         buildButtons();
@@ -441,6 +478,8 @@ function displayProcurement(callBack){
             $tbl.find("#dd_warehouse").attr("selectedvalue", d.warehouse_id);
             $tbl.find("#promised_delivery_date").val(d.promised_delivery_date.toDateFormat());
             $tbl.find("#status_name").text(d.status_name);
+            
+            getStatuses(d.status_name);
         }
         if(callBack) callBack();
     });
@@ -450,6 +489,7 @@ function displayProcurementDetails(){
     var cb = bs({name:"cbFilter3",type:"checkbox"});
     var counter = 0;
     var _dataRows = [];
+    var widthFooter = "";
     var total = 0;
 	         _dataRows.push(
                  {text  : cb                     , width : 25                    , style : "text-align:left;"       
@@ -463,6 +503,7 @@ function displayProcurementDetails(){
            ); 
 
 	    if(g_tab_name==="Purchase"){
+	        widthFooter = "1205px";
 	         _dataRows.push(
         	    {text  : "Item #"           , width : 70                    , style : "text-align:left;"
         	        ,onRender : function(d){ 
@@ -472,7 +513,7 @@ function displayProcurementDetails(){
                               + bs({name:"serial_no",type:"hidden",value: svn (d,"serial_no")});
                     }
         	    }        	     
-        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "input"       , width : 250       , style : "text-align:left;"}
+        	    ,{text  : "Nomenclature"        , name  : "item_name"           , type  : "input"       , width : 450       , style : "text-align:left;"}
         	    ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"   , type  : "input"       , width : 160       , style : "text-align:left;"}
         	    ,{text  : "Part No."            , name  : "part_no"             , type  : "input"       , width : 160       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"  , type  : "select"      , width : 150       , style : "text-align:left;"}
@@ -497,7 +538,8 @@ function displayProcurementDetails(){
         	    }
     	     );
 	    }
-    	 else{
+    	else{
+    	     widthFooter = "1116px";
     	     _dataRows.push(
         	    {text  : "Item #"           , width : 70                    , style : "text-align:left;"
         	        ,onRender : function(d){ 
@@ -530,20 +572,19 @@ function displayProcurementDetails(){
     
      $("#tblProcurementDetails").dataBind({
 	     url            : execURL + "procurement_detail_sel " + (g_procurement_id ? "@procurement_id=" + g_procurement_id : "")
-	    ,width          : 1300
+	    ,width          : $(document).width() - 170
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
-        ,blankRowsLimit :20
+        ,blankRowsLimit : (g_statuses.is_add==="Y" ? 20 : 0)
         ,dataRows       : _dataRows 
         ,onComplete: function(data){
-            
             markMandatory();
             setMultipleSearch();
             searchSerial();
             var totalRow = "";
             totalRow += '<div class="zRow total">'; 
-            totalRow +=    '<div class="zCell" style="width:1005px;text-align:right;"><span class="text">Total&nbsp;</span></div>';
-            totalRow +=    '<div class="zCell" style="width:130px;text-align:right;"><span class="text">' + parseFloat(total).toFixed(2) + '</span></div>';
+            totalRow +=    '<div class="zCell" style="width:'+ widthFooter +';text-align:right;"><span class="text">Total&nbsp;</span></div>';
+            totalRow +=    '<div class="zCell" style="width:130px;text-align:right;"><span class="text">' + toCurrencyFormat(parseFloat(total).toFixed(2)) + '</span></div>';
             totalRow += '</div>'; 
     		$("#tblProcurementDetails").find(".right #table").append(totalRow);            
             
@@ -649,22 +690,6 @@ function Save(page_process_action_id){
         else {
                 console.log(data.errMsg);
             }
-        }
-    });
-}
-
-function buildReceivingButtons() {
-    var html = '';
-    $.get(procURL + "current_process_actions_sel @page_id=70,@doc_id=" + $("#receiving_id").val(), function(d) {
-        if (d.rows !== null) {
-            $.each(d.rows, function(k, v) {
-                html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.status_id + ');" class="btn btn-primary added-button">'
-                    + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
-            });
-            
-            $(".added-button").remove();
-            $("#receiving-footer").append(html);
         }
     });
 }
@@ -924,4 +949,4 @@ else
 function mouseout(){
     $("#user-box").css("display","none");
 }                                           
-      
+           

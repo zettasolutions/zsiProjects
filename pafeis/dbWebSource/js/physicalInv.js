@@ -3,6 +3,7 @@ var bs          = zsi.bs.ctrl
    ,tblPhysicalInvDetail  ="tblModalPhysicalInventoryDetails"
    ,dataPhysicalInv
    ,dataPhysicalInvIndex =-1
+   ,g_user_id = null
    ,g_warehouse_id = null
    ,g_organization_id = null
    ,g_organization_name = ""
@@ -17,12 +18,30 @@ var bs          = zsi.bs.ctrl
 zsi.ready(function(){
     $.get(procURL + "user_info_sel", function(d) {
         if (d.rows !== null && d.rows.length > 0) {
+            g_user_id = d.rows[0].user_id;
             g_organization_id = d.rows[0].organization_id;
             g_organization_name = d.rows[0].organizationName;
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
-            $(".pageTitle").append(' for ' + g_organization_name + g_location_name);
+            //$(".pageTitle").append(' for ' + g_organization_name + g_location_name);
+            $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
+            $("select[name='dd_warehouses']").dataBind({
+                url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
+                , text: "warehouse"
+                , value: "warehouse_id"
+                , required :true
+                , onComplete: function(){
+                    
+                    g_warehouse_id = $("select[name='dd_warehouses'] option:selected" ).val();
+                    
+                    $("select[name='dd_warehouses']").change (function(){
+                       if(this.value){
+                            g_warehouse_id = this.value;
+                       }
+                    });
+                }
+            });  
         }
     });
     displayRecords();
@@ -36,7 +55,7 @@ var contextModalWindow = {
                 , sizeAttr : "fullWidth"
                 , title : "New"
                 , footer: '<div id="physicalInv-footer" class="pull-left">'
-                , body  : '<div id="frmPhysicalInv" class="form-horizontal" style="padding:5px">'
+                , body  : '<div id="frmPhysicalInv" class="form-horizontal zContainer1" style="padding:5px">'
  
                         +'    <div class="form-group  "> ' 
                         +'        <label class=" col-xs-2 control-label">Physical Inv Date</label>'
@@ -63,7 +82,7 @@ var contextModalWindow = {
                         +'         </div>'
                         +'      </div>'
                         +'</div>'
-                        +'<div class="modalGrid zPanel"><h4> Inventory Details </h4><div id="'+ tblPhysicalInvDetail +'" class="zGrid Detail" ></div></div>'
+                        +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label> Inventory Details </label></div><div id="'+ tblPhysicalInvDetail +'" class="zGrid Detail" ></div></div>'
                         
             };
             
@@ -289,7 +308,7 @@ function displayRecords(){
         		,{text  : "Status"                  , type  : "label"       , width : 100       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"status_name")}  
         		}
-        		,{text  : "Remarks"                 , type  : "label"       , width : 350       , style : "text-align:left;"
+        		,{text  : "Remarks"                 , type  : "label"       , width : 480       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"status_remarks")}
         		}
 	    ]  
@@ -305,7 +324,7 @@ function displayPhysicalInvDetails(physical_inv_id){
     var cb = bs({name:"cbFilter2",type:"checkbox"});
      $("#" + tblPhysicalInvDetail).dataBind({
 	     url            : procURL + "physical_inv_details_sel @physical_inv_id=" + physical_inv_id
-	    ,width          : $(document).width() -75
+	    ,width          : $(document).width() -40
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -333,7 +352,7 @@ function displayPhysicalInvDetails(physical_inv_id){
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , width : 120          , style : "text-align:left;"}
         	    ,{text  : "Bin"                 , name  : "bin"                      , type  : "input"       , width : 120       , style : "text-align:left;"}
         	    ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 300       , style : "text-align:left;"}
-        	    ,{text  : "Serial Nos."         , width : 90       , style : "text-align:center;"
+        	    ,{text  : "Serial No."          , width : 120       , style : "text-align:center;"
         	        , onRender      :  function(d){ 
         	            return (d ? "<a href='javascript:showModalSerialNos(" + physical_inv_id + ","+ svn(d,"item_code_id") +",\""+ svn(d,"part_no") +"\");'><span class='glyphicon glyphicon-list'></span></a>" : "");
         	        }
@@ -579,4 +598,4 @@ function SaveSerialNo(){
 
     });
 }  
-          
+               

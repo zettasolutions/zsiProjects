@@ -30,7 +30,7 @@ zsi.ready(function(){
             g_organization_name = d.rows[0].organizationName;
             g_warehouse_id = d.rows[0].warehouse_id;
            
-            $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
+            $(".pageTitle").append(' for ' + g_organization_name); //+ ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
             $("#dd_dashboard").dataBind({
                 url: procURL + "dd_dashboard_sel"
                 , text: "page_title"
@@ -46,7 +46,7 @@ zsi.ready(function(){
                     });
                 }
             });
-            $("select[name='dd_warehouses']").dataBind({
+            /*$("select[name='dd_warehouses']").dataBind({
                 url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
                 , text: "warehouse"
                 , value: "warehouse_id"
@@ -61,7 +61,7 @@ zsi.ready(function(){
                        }
                     });
                 }
-            });  
+            }); */ 
             
             displayRecord(g_tab_name);
         }
@@ -203,4 +203,4 @@ function displayRecord(tab_name){
         ,dataRows : _dataRows
     });    
 }                   
-      
+       

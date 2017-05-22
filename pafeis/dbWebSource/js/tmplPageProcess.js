@@ -44,6 +44,12 @@ function displayPageProcessRecords(id){
                         + svn(d,"countPageProcessActions") + "</a>"; 
                     }
                 }
+                ,{text  : "Roles"              , width : 80                    , style : "text-align:center;"      
+        		    ,onRender  : 
+                        function(d){return "<a href='javascript:showModalPageProcessRoles(" + svn(d,"page_process_id") + ",\"" +  svn(d,"process_desc")  + "\"," +  svn(d,"page_id") + ");'>" 
+                        + svn(d,"countPageProcessRoles") + "</a>"; 
+                    }
+                }
 	    ]   
     	     ,onComplete: function(){
                 $("#cbFilter2").setCheckEvent("#pageProcessGrid input[name='cb']");
@@ -73,6 +79,16 @@ function showModalPageProcessAction(id, title, page_id){
     initPageProcessActionTemplate(page_process_id, page_id);
 } 
 
+function showModalPageProcessRoles(id, title, page_id){
+    $("body").append(tmplDialog(contextModalProcessRoles));
+    page_process_id = id;
+    var m = $("#" + modalProcessRoles);
+    $("#" + modalProcessRoles + " .modal-title").text("Process Roles for » " + title);
+    m.modal("show");
+    m.find('.modal-body').html(tmplPageProcessRoles);
+    initPageProcessRolesTemplate(page_process_id, page_id);
+} 
+
 function markMandatory(){
     zsi.form.markMandatory({       
       "groupNames":[
@@ -86,3 +102,4 @@ function markMandatory(){
       ]
    });
 }        
+ 

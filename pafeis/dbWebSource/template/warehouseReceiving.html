@@ -34,14 +34,33 @@
     .tablePanel {
         overflow-y:auto;
     }
-   
+    .not-editable::before {
+        content: " ";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 25px;
+        z-index: 1;
+    }
+    .warehouse-editable::before{
+        content: " ";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 811px;
+        left: 122px;
+        z-index: 1;
+    }
 </style>
 
 <ul class="nav nav-tabs">
   <li ><a href="#purchase" data-toggle="tab" id="purchase-tab">Procurement</a></li>
   <li ><a href="#donation" data-toggle="tab" id="donation-tab">Donation</a></li>  
-  <li ><a href="#transferTeam" data-toggle="tab" id="transfer-tab">Transfer</a></li>
-  <li ><a href="#returnd" data-toggle="tab" id="aircraft-tab">Aircraft</a></li>
+  <li ><a href="#aircraft" data-toggle="tab" id="aircraft-tab">Aircraft</a></li>
+  <li ><a href="#warehouse" data-toggle="tab" id="warehouse-tab">Warehouse</a></li>
+  <!--<li ><a href="#maintenance" data-toggle="tab" id="maintenance-tab">Maintenance</a></li>-->
+  <li ><a href="#directive" data-toggle="tab" id="directive-tab">Directive</a></li>
   <!--<li ><a href="#repair" data-toggle="tab" id="repair-tab">Repair/Overhaul</a></li>-->
 </ul>
 
@@ -70,14 +89,6 @@
             </div>
         </form>
     </div>        
-
-    <div id="tabTransfer" class="tabPane">
-        <form method="post" id="frmTD">
-            <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
-                <div id="transfer" class="zGrid"></div>
-            </div>
-        </form>
-    </div>        
     <div id="tabAircraft"   class="tabPane">
         <form method="post" id="frmRD">
             <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
@@ -87,6 +98,40 @@
                     	<span class="glyphicon glyphicon-plus"></span> Add
                     </button>
                 </div>
+            </div>
+        </form>
+    </div>
+    
+    <div id="tabWarehouse" class="tabPane">
+        <form method="post" id="frmTD">
+            <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+                <div id="warehouse" class="zGrid"></div>
+            </div>
+        </form>
+    </div>        
+    
+    <!--<div id="tabMaintenance"   class="tabPane">
+        <form method="post" id="frmMaintenance">
+            <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+                <div id="maintenance" class="zGrid"></div> 
+                <!-<div class="buttonGroup">
+                    <button type="button" class="btn btn-primary btn-sm" id="maintenanceBtnNew">
+                    	<span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                </div>->
+            </div>
+        </form>
+    </div>-->
+    
+    <div id="tabDirective" class="tabPane">
+        <form method="post" id="frmDirective">
+            <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12"> 
+                <div id="directive" class="zGrid"></div> 
+                <!--<div class="buttonGroup">
+                    <button type="button" class="btn btn-primary btn-sm" id="directiveBtnNew">
+                    	<span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                </div>-->
             </div>
         </form>
     </div>
