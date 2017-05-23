@@ -1521,7 +1521,7 @@ var  ud='undefined'
             
             String.prototype.toShortDate = function () {
                 if(!isValidDate(this)) return "";
-                var _date=new Date(this);
+                var _date=new Date( Date.parse(this) );
                 var m =  (_date.getMonth()+1) + "";
                 var d = _date.getDate() + "";
                 m = (m.length==1? "0"+m:m);
@@ -1531,7 +1531,7 @@ var  ud='undefined'
             
             String.prototype.toShortDateTime = function () {
               if(!isValidDate(this)) return "";
-              var _date=new Date(this);
+              var _date=new Date( Date.parse(this) );
               var h = _date.getHours();
               var m = _date.getMinutes();
               var ampm = h >= 12 ? 'PM' : 'AM';
@@ -1550,14 +1550,14 @@ var  ud='undefined'
             //military date time format
             String.prototype.toMDateTimeFormat = function () {
                 var ts=Date.parse(this);
-                var d =  new Date(this);
-                var r = "";
+                if(isNaN(ts)!==false) return "";
+                var d  = new Date(ts)   
                 var digit = function(n){
                     return n > 9 ? "" + n : "0" + n;
                 }
-                if(isNaN(ts)===false) r= new Date(this).toShortDate() + " " + digit(d.getHours()) + ":" + digit(d.getMinutes()) + ":" + digit(d.getSeconds());
-                return r;
+                return  this.toShortDate() + " " + digit(d.getHours()) + ":" + digit(d.getMinutes()) + ":" + digit(d.getSeconds());
             }; 
+            
             String.prototype.toMoney = function(){
                 var res = "";
                 if(isNaN(this)===false) res = parseFloat(this).toMoney();
@@ -2382,4 +2382,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                    
+                                                                                                       

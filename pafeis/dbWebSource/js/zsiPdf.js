@@ -87,4 +87,4 @@
         }
         
     imgToBase64(o.logoURL, getData);
-};            
+};              
