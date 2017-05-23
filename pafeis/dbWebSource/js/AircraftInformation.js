@@ -5,25 +5,31 @@ var  bs = zsi.bs.ctrl
     ,aircraft_info_name = ""
     ,parent_item_id = null
     ,table_name = ""
+    ,g_organization_name = ''
+    ,g_organization_id = null
 ;
 
 zsi.ready(function(){
     getTemplate();
-    /*$(".pageTitle").append(' for ' + ' » <select name="dd_squadron" id="dd_squadron"></select>');
-    $("#dd_squadron").dataBind({
-        url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
-        , text: "organization_name"
-        , value: "organization_id"
-        , required :true
-        , onComplete: function(){
-            displayRecords($("#dd_squadron").val() );
-            $("select[name='dd_squadron']").change (function(){
-                displayRecords(this.value);
-            });
-        }
-    });  */
-    displayRecords();
+    getUserInfo(function(){
+        $(".pageTitle").append(' for ' + ' » ' + g_organization_name);
+        displayRecords();
+
+    });   
 });
+
+function getUserInfo(callBack){
+    $.get(procURL + "user_info_sel", function(d) {
+        g_organization_id = null;
+        if (d.rows !== null && d.rows.length > 0) {
+            g_organization_id =  d.rows[0].organization_id;
+            g_organization_name =  d.rows[0].organizationName;
+        }
+        if(callBack) callBack();
+    });
+    
+}
+
 
 var contextComponents = { id:"modalWindowComponents"
                 , title: "Components"
@@ -85,8 +91,8 @@ function btnDeleteAssembly(){
 function displayRecords(){
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
-	     url            : execURL + "aircraft_info_sel"
-	    ,width          : $(document).width() -50
+	     url            : execURL + "aircraft_info_sel @squadron_id=" + g_organization_id
+	    ,width          : $(document).width() - 35
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -101,13 +107,18 @@ function displayRecords(){
                 }	 
         		,{text  : "Code"                        , name  : "aircraft_code"               , type : "input"         , width : 100       , style : "text-align:left;"}
         		,{text  : "Name"                        , name  : "aircraft_name"               , type : "input"         , width : 170       , style : "text-align:left;"}
-        		,{text  : "Type"                        , name  : "aircraft_type_id"            , type : "select"        , width : 150       , style : "text-align:left;"}
-        		,{text  : "Squadron"                    , name  : "squadron_id"                 , type : "select"         , width : 150       , style : "text-align:left;"}
-        		,{text  : "Aircraft Time"               , name  : "aircraft_time"               , type : "input"          , width : 130       , style : "text-align:left;"}
+                ,{text  : "Type"                                                                , width : 150        , style : "text-align:left;"       
+        		    , onRender: function(d){ 
+                		                    return     bs({name:"aircraft_type_id",type:"select",value: svn (d,"aircraft_type_id")})
+                		                            +  bs({name:"squadron_id",type:"hidden" });
+                            }
+                }	 
+      		    //,{text  : "Squadron"                    , name  : "squadron_id"                 , type : "select"         , width : 150       , style : "text-align:left;"}
+        		,{text  : "Aircraft Time"               , name  : "aircraft_time"               , type : "input"          , width : 120       , style : "text-align:left;"}
         		,{text  : "Aircraft Source"             , name  : "aircraft_source_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
         		,{text  : "Aircraft Dealer"             , name  : "aircraft_dealer_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
          		,{text  : "Item Class"                  , name  : "item_class_id"               , type : "select"         , width : 150       , style : "text-align:left;"}
-        		,{text  : "Status"                      , name  : "status_id"                   , type : "select"         , width : 150       , style : "text-align:left;"}
+        		,{text  : "Status"                      , name  : "status_id"                   , type : "select"         , width : 130       , style : "text-align:left;"}
         		,{text  : "# of Assembly"               , width : 100                           , style : "text-align:center;"      
                     ,onRender:  
                         function(d){return "<a href='javascript:manageAssembly(" + svn(d,"aircraft_info_id") + ",\"" +  svn(d,"aircraft_name")  + "\");'>" + svn(d,"countItems") + "</a>"; 
@@ -120,6 +131,8 @@ function displayRecords(){
     	        $("select, input").on("keyup change", function(){
                     var $zRow = $(this).closest(".zRow");
                     $zRow.find("#is_edited").val("Y");
+                    $zRow.find("#squadron_id").val(g_organization_id);
+
                 });            
 
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
@@ -157,7 +170,7 @@ function displayRecordsAssembly(id){
     var cb = bs({name:"cbFilter2",type:"checkbox"});
     $("#" + tblCP).dataBind({
 	     url            : execURL + "items_sel @aircraft_info_id=" + id + ",@item_cat_code='A'"
-	    ,width          : $(document).width() - 50
+	    ,width          : $(document).width() - 40
 	    ,height         : 395
         ,blankRowsLimit : 5
         ,dataRows       : [
@@ -170,9 +183,9 @@ function displayRecordsAssembly(id){
                                   + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
         		 }
-        		,{text  : "Part No."                 , name  : "part_no"                , type  : "input"         , width : 100       , style : "text-align:left;"}
-        		,{text  : "National Stock No."       , name  : "national_stock_no"      , type  : "input"         , width : 160       , style : "text-align:left;"}
-        		,{text  : "Nomenclature"             , name  : "item_name"              , type  : "input"         , width : 150       , style : "text-align:left;"}
+        		,{text  : "Part No."                 , name  : "part_no"                , type  : "input"         , width : 200       , style : "text-align:left;"}
+        		,{text  : "National Stock No."       , name  : "national_stock_no"      , type  : "input"         , width : 200       , style : "text-align:left;"}
+        		,{text  : "Nomenclature"             , name  : "item_name"              , type  : "input"         , width : 350       , style : "text-align:left;"}
         		,{text  : "Serial No."               , name  : "serial_no"              , type  : "input"         , width : 200       , style : "text-align:left;"}
         		,{text  : "Manufacturer Name"        , width : 200                      , style : "text-align:left;"
         		    ,onRender  :  function(d){
@@ -367,4 +380,4 @@ function setMandatoryEntries(){
     });    
 }
     
-            
+                
