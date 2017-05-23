@@ -30,27 +30,6 @@ var form = $('#printPDF'),
 	legal = [612.00, 1008.00];
 
 zsi.ready(function(){
-    $("#aircraft-tab").click(function(){
-        g_tab_name = "AIRCRAFT";
-        displayAircraft($(this).html());  
-    });
-    $("#warehouse-tab").click(function() {
-        g_tab_name = "WAREHOUSE";
-        displayWarehouse($(this).html());    
-    });
-    $("#maintenance-tab").click(function() {
-        g_tab_name = "MAINTENANCE";
-        displayMaintenance($(this).html());    
-    });
-    $("#disposal-tab").click(function() {
-        g_tab_name = "DISPOSAL";
-        displayDisposal($(this).html());
-    });
-    $("#directive-tab").click(function() {
-        g_tab_name = "DIRECTIVE";
-        displayDirective($(this).html());
-    });
-   
     getTemplate();
     setCurrentTab();
     getUserInfo();
@@ -62,6 +41,27 @@ zsi.ready(function(){
                 return false;
             }
         }
+    });
+    
+    $("#aircraft-tab").click(function(){
+        g_tab_name = "AIRCRAFT";
+        displayAircraft(g_tab_name);  
+    });
+    $("#warehouse-tab").click(function() {
+        g_tab_name = "WAREHOUSE";
+        displayWarehouse(g_tab_name);    
+    });
+    $("#maintenance-tab").click(function() {
+        g_tab_name = "MAINTENANCE";
+        displayMaintenance(g_tab_name);    
+    });
+    $("#disposal-tab").click(function() {
+        g_tab_name = "DISPOSAL";
+        displayDisposal(g_tab_name);
+    });
+    $("#directive-tab").click(function() {
+        g_tab_name = "DIRECTIVE";
+        displayDirective(g_tab_name);
     });
 });
 
@@ -182,7 +182,7 @@ function getUserInfo(callBack){
                              displayDirective(g_tab_name);   
                         }
                     });
-                    if(g_squadron_type!=="Aircraft"){
+                    if(g_squadron_type!=="AIRCRAFT"){
                         g_tab_name = "WAREHOUSE";
                         $("#aircraft-tab, #tabAircraft").hide();
                         $("#warehouse-tab").click();
@@ -224,10 +224,10 @@ function getStatuses(status_name){
         }
         $("#tblModalReceivingDetails").find("#table").addClass(statusClass);
         
-        //if(g_statuses.is_delete==="Y"){
+        if(g_statuses.is_delete==="Y"){
             $("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return Delete();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>'
             +'<button type="button" onclick="javascript:void(0); return PrintToPDF();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-print"></span>&nbsp;Print</button>');
-        //}
+        }
     });
 }
 
@@ -582,7 +582,11 @@ function buildIssuanceDetails(callback) {
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , type  : "label"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "label"       , width : 100       , style : "text-align:left;"}
-            ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
+    	    ,{text  : "Quantity"            , width : 100                    , style : "text-align:right;"
+    	        ,onRender: function(d){
+    	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
+    	        } 
+    	    }
             ,{text  : "Status"              , name  : "item_status_id"           , type  : "select"      , width : 120       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
         ]
@@ -618,6 +622,7 @@ function buildIssuanceDetails(callback) {
             setSearchMulti();
             setMandatoryEntries();
             if(callback) callback();
+            zsi.initInputTypesAndFormats();
         }  
     });
 }
@@ -1000,7 +1005,11 @@ function loadIssuanceDetails(issuance_id) {
             ,{text  : "Stock Qty."         , width : 100       , style : "text-align:left;"
                 ,onRender: function(d){ return "<span id='_stock_qty'>" + svn(d,"stock_qty") + "</span>"; }
             }
-            ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 100       , style : "text-align:left;"}
+    	    ,{text  : "Quantity"            , width : 90                    , style : "text-align:right;"
+    	        ,onRender: function(d){
+    	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
+    	        } 
+    	    }
             ,{text  : "Status"              , name  : "item_status_id"           , type  : "select"      , width : 120       , style : "text-align:left;"}
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
         ]
@@ -1073,6 +1082,7 @@ function loadIssuanceDetails(issuance_id) {
             
             setSearchMulti();
             setMandatoryEntries();
+            zsi.initInputTypesAndFormats();
         }  
     });
 }
@@ -1354,4 +1364,4 @@ function PrintToPDF(){
         });*/
     });
 }
-    
+      
