@@ -9,12 +9,14 @@ var bs          = zsi.bs.ctrl
    ,g_organization_id = null
    ,g_organization_name = ""
    ,g_location_name = ""
+   ,squadron_id = null
 ;
 
 
 zsi.ready(function(){
     getTemplate();
     $.get(procURL + "user_info_sel", function(d) {
+        g_organization_id = null;
         if (d.rows !== null && d.rows.length > 0) {
             g_user_id = d.rows[0].user_id;
             g_organization_id = d.rows[0].organization_id;
@@ -22,7 +24,8 @@ zsi.ready(function(){
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
-            $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
+            $(".pageTitle").append(' for ' + g_organization_name);
+            /*
             $("select[name='dd_warehouses']").dataBind({
                 url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
                 , text: "warehouse"
@@ -37,9 +40,12 @@ zsi.ready(function(){
                             g_warehouse_id = this.value;
                        }
                     });
+                    displayRecords();
                 }
             });  
+            */
         }
+        displayRecords();
     });
     /*$(".pageTitle").append(' for ' + ' » <select name="dd_squadron" id="dd_squadron"></select>');
     $("#dd_squadron").dataBind({
@@ -64,7 +70,7 @@ var contextFlightOperation = {
 
                 , body  : '<div id="frm_modalFlightOperation" class="form-horizontal zContainer1" style="padding:5px">'
                         +'    <div class="form-group  "> ' 
-                        +'        <label class=" col-xs-2 control-label">Operaion Code</label>'
+                        +'        <label class=" col-xs-2 control-label">Operation Code</label>'
                         +'        <div class=" col-xs-4">'
                         +'             <input type="hidden" name="flight_operation_id" id="flight_operation_id" >'
                         +'    <input type="hidden" name="is_edited" id="is_edited">' 
@@ -84,44 +90,40 @@ var contextFlightOperation = {
                         +'        <label class=" col-xs-2 control-label">Flight Schedule</label>'
                         +'        <div class=" col-xs-4">'
                         +'             <input type="text" name="flight_schedule_date" id="flight_schedule_date" class="form-control input-sm" >'
+                        +'             <input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm"  >'
+
                         +'        </div>'  
                         +'    </div>'
 
                         +'    <div class="form-group  ">  '
-                        +'        <label class=" col-xs-2 control-label">Aircraft</label>'
-                        +'        <div class=" col-xs-4">'
-                        +'           <input type="hidden" name="unit_id" id="unit_id" class="form-control input-sm" >'
-                        +'           <select type="text" name="aircraft_id" id="aircraft_id" class="form-control input-sm"  ></select>'
-                        +'        </div>'
                         +'        <label class=" col-xs-2 control-label">Pilot</label>'
                         +'        <div class=" col-xs-4">'
-                        +'             <select type="text" name="pilot_id" id="pilot_id" class="form-control input-sm" ></select>'
+                        +'             <select type="text" name="pilot_name" id="pilot_id" class="form-control input-sm" ></select>'
                         +'        </div>  '
+                        +'        <label class=" col-xs-2 control-label">Co Pilot</label>'
+                        +'        <div class=" col-xs-4">'
+                        +'            <select type="text" name="co_pilot_name" id="co_pilot_id" class= "form-control input-sm" > </select>'
+                        +'        </div>'
 
                         +'    </div>'
 
                         +'    <div class="form-group  "> ' 
-                        +'        <label class=" col-xs-2 control-label">Co Pilot</label>'
-                        +'        <div class=" col-xs-4">'
-                        +'            <select type="text" name="co_pilot_id" id="co_pilot_id" class= "form-control input-sm" > </select>'
-                        +'        </div>'
                         +'        <label class=" col-xs-2 control-label">Origin</label>'
                         +'        <div class=" col-xs-4">'
                         +'             <input type="text" name="origin" id="origin" class="form-control input-sm" >'
                         +'        </div>  '
-                        +'    </div>'
-   
-                        +'    <div class="form-group  ">  '
                         +'         <label class=" col-xs-2 control-label">Destination</label>'
                         +'        <div class=" col-xs-4">'
                         +'           <input type="text" name="destination" id="destination" class="form-control input-sm" >'
                         +'         </div>'
+
+                        +'    </div>'
+   
+                        +'    <div class="form-group  ">  '
                         +'        <label class=" col-xs-2 control-label">Status </label>'
-                        +'        <div class=" col-xs-3"><label class="control-label" id="status_name">Open</label>'
+                        +'        <div class=" col-xs-4"><label class="control-label" id="status_name">Open</label>'
                         +'             <input type="hidden" name="status_id" id="status_id" class="form-control input-sm"  >'
                         +'        </div>'
-                        +'    </div>'
-                        +'    <div class="form-group  ">  '
                         +'        <label class=" col-xs-2 control-label">No. of Cycles</label>'
                         +'        <div class=" col-xs-4">'
                         +'             <input type="text" name="no_cycles" id="no_cycles" class="form-control input-sm"  >'
@@ -145,14 +147,14 @@ $("#btnNew").click(function () {
     var $mdl  = $("#ctxFO");
     $mdl.find(".modal-title").html("New Flight Operation" + ' for ' + ' » <select name="dd_unit" id="dd_unit"></select>');
     $("#dd_unit").dataBind({
-        url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
-        , text: "organization_name"
-        , value: "organization_id"
+        url: procURL + "dd_aircrafts_sel @squadron_id=" + g_organization_id
+        , text: "aircraft_name"
+        , value: "aircraft_info_id"
         , required :true
         , onComplete: function(){
-            $("#unit_id").val($("#dd_unit").val());
+            $("#aircraft_id").val($("#dd_unit").val());
             $("select[name='dd_unit']").change (function(){
-                $("#unit_id").val($("#dd_unit").val());
+                $("#aircraft_id").val($("#dd_unit").val());
             });
         }
     }); 
@@ -171,22 +173,24 @@ $("#btnNew").click(function () {
 function showModalUpdateOperation(index, flight_operation_id) {
    var _info = dataFlightOperations[index];
     $('#ctxFO .modal-title').html('Flight Operation for ' + ' » <select name="dd_unit" id="dd_unit"></select>');
-     $("#dd_unit").dataBind({
-        url: procURL + "dd_organizations_sel @squadron_type='aircraft '"
-        , text: "organization_name"
-        , value: "organization_id"
+    $("select[name='dd_unit']").dataBind({
+         url: procURL + "dd_aircrafts_sel @squadron_id=" + g_organization_id
+        , text: "aircraft_name"
+        , value: "aircraft_info_id"
         , required :true
         , onComplete: function(){
-            $("#unit_id").val($("#dd_unit").val());
+            $("#aircraft_id").val($("#dd_unit").val());
             $("select[name='dd_unit']").change (function(){
-                $("#unit_id").val($("#dd_unit").val());
+                $("#aircraft_id").val($("#dd_unit").val());
             });
         }
-    }); 
+    });  
+    
     $("#ctxFO").modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#ctxFO").find("#flight_schedule_date").dateTimePicker({ format:'m.d.Y H:i'});
     $("#ctxFO #flight_operation_id").val(_info.flight_operation_id);
     buildReceivingButtons();
+    displayListBoxes();
     displayFlightOperation(_info);
     displayFlightDetails(_info.flight_operation_id);
     
@@ -194,9 +198,12 @@ function showModalUpdateOperation(index, flight_operation_id) {
 
 function displayListBoxes(){
     $("select[name='flight_operation_type_id']").dataBind( "flight_operation_type");    
-    $("select[name='aircraft_id']").dataBind( "aircraft_info");
-    $("select[name='pilot_id']").dataBind( "employees_fullnames_v");
-    $("select[name='co_pilot_id']").dataBind( "employees_fullnames_v");
+    $("select[name='pilot_name'] ,select[name='co_pilot_name").dataBind({
+         url: procURL + "dd_pilots_sel @squadron_id=" + g_organization_id
+        , text: "userFullName"
+        , value: "user_id"
+    });
+
 }
 
 function displayFlightOperation(d){
@@ -204,14 +211,12 @@ function displayFlightOperation(d){
     $("#ctxFO #flight_operation_id").val( d.flight_operation_id );
     $("#ctxFO #flight_operation_code").val(  d.flight_operation_code );
     $("#ctxFO #flight_operation_name").val(  d.flight_operation_name );
-    $("#ctxFO #flight_schedule_date").val(  d.flight_schedule_date.toMDateTimeFormat() ); 
+    $("#ctxFO #flight_schedule_date").val(  d.flight_schedule_date); 
     $("#ctxFO #origin").val(  d.origin );
     $("#ctxFO #destination").val(  d.destination );  
     $("#ctxFO #no_cycles").val( d.no_cycles );    
     
     $("#ctxFO #flight_operation_type_id").attr("selectedvalue",   d.flight_operation_type_id );
-    $("#ctxFO #unit_id").attr("selectedvalue",  d.unit_id );
-    $("#ctxFO #aircraft_id").attr("selectedvalue",   d.aircraft_id );
     $("#ctxFO #pilot_id").attr("selectedvalue",  d.pilot_id );
     $("#ctxFO #co_pilot_id").attr("selectedvalue",   d.co_pilot_id );
     $("#ctxFO #status_name").text(d.status_name);
@@ -226,12 +231,12 @@ function clearForm(){
     dataFlightOperationsIndex=-1;
 }
 
-function displayRecords(squadron_id){
+function displayRecords(){
     
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      
      $("#grid").dataBind({
-	     url            : procURL + "flight_operation_sel @squadron_id=" + squadron_id
+	     url            : procURL + "flight_operation_sel @squadron_id=" + g_organization_id 
 	    ,width          : $(document).width() -55
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
@@ -245,10 +250,12 @@ function displayRecords(squadron_id){
                                                       
                             }
                 }	 
-                ,{text  : "Code"                    , type  : "input"       , width : 150       , style : "text-align:left;"
+                ,{text  : "Code"                    , type  : "input"       , width : 85       , style : "text-align:left;"
         		    ,onRender : function(d){ 
         		        dataFlightOperationsIndex++;
-        		        return "<a href='javascript:showModalUpdateOperation(\"" + dataFlightOperationsIndex + "\");'>" 
+        		        return "<a href='javascript:showModalUpdateOperation(\""
+        		        + dataFlightOperationsIndex + "\"," 
+        		        + svn(d,"flight_operation_id") + ");'>" 
         		        + svn(d,"flight_operation_code") + " </a>";
         		    }
         		}
@@ -256,23 +263,20 @@ function displayRecords(squadron_id){
         	        ,onRender : function(d){ return svn(d,"flight_operation_name")}
         	    }
         		,{text  : "Type"                    , type  : "label"     , width : 150        , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"operation_type_name")}
+        		    ,onRender : function(d){ return svn(d,"flight_operation_type_name")}
         		}
         		,{text  : "Flight Schedule"         , type  : "label"     , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return bs({name:"flight_schedule_date", type:"input" ,value:svn(d,"flight_schedule_date").toMDateTimeFormat()});
+        		    ,onRender : function(d){ return svn(d,"flight_schedule_date");
         		    } 
-        		}
-            	,{text  : "Unit"                    , type  : "label"     , width : 300       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"unit_name")}
         		}
             	,{text  : "Aircraft Name"                , type  : "label"     , width : 150       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"aircraft_name")}
         	    }
                 ,{text  : "Pilot"                   , type  : "label"     , width : 200        , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"pilot")}
+        		    ,onRender : function(d){ return svn(d,"pilot_name")}
         		}
         		,{text  : "Co Pilot"               , type  : "label"     , width : 200       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"co_pilot")}
+        		    ,onRender : function(d){ return svn(d,"co_pilot_name")}
         		}
         		,{text  : "Flight Origin"          , type  : "label"     , width : 200      , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"origin")}
@@ -316,11 +320,11 @@ function displayFlightDetails(flight_operation_id){
                             }
                 }	                                     
         	    ,{text  : "Take Off Time"          , width : 200     , style : "text-align:left;"
-        	        ,onRender : function(d){ return bs({name:"flight_take_off_time", type:"input" ,value:svn(d,"flight_take_off_time").toMDateTimeFormat()});
+        	        ,onRender : function(d){ return bs({name:"flight_take_off_time", type:"input" ,value:svn(d,"flight_take_off_time") });
         	        }
                 }   			
         		,{text  : "Landing Time"           , width : 200     , style : "text-align:left;"
-        	        ,onRender : function(d){ return bs({name:"flight_landing_time", type:"input" ,value:svn(d,"flight_landing_time").toMDateTimeFormat()});
+        	        ,onRender : function(d){ return bs({name:"flight_landing_time", type:"input" ,value:svn(d,"flight_landing_time") });
         	        }
         		    
         		}
@@ -420,4 +424,4 @@ function setStatusName(page_process_action_id) {
         }
     });
 }
-            
+                   
