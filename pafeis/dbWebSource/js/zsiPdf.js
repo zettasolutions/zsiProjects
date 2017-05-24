@@ -1,7 +1,4 @@
- zsi.generatePdfReport = function(o){
-    var __imgData = null
-    ,totalPagesExp = "{total_pages_count_string}"
-    ,imgToBase64 = function (url, callback) {
+var imgToBase64 = function (url, callback) {
         if (!window.FileReader) {
             callback(null);
             return;
@@ -17,7 +14,16 @@
         };
         xhr.open('GET', url);
         xhr.send();
-    }
+};    
+
+var setBoxColor = function(doc,r,g,b){
+            doc.setDrawColor(186, 184, 184);
+            doc.setFillColor(r,g,b);
+};
+
+zsi.generatePdfReport = function(o){
+    var __imgData = null
+    ,totalPagesExp = "{total_pages_count_string}"
     ,getData = function(imgData){
         __imgData = imgData;
         if(o.data) 
@@ -88,14 +94,13 @@
         
     imgToBase64(o.logoURL, getData);
 };       
-
-
 zsi.createPdfReport = function(o){
     if( isUD(o.detailData) ) {
-        o.masterColumn = o.columnHeader;
+        if( ! isUD(o.columnHeader) ) o.masterColumn = o.columnHeader;
         o.masterData = o.data;
     }
-    
+    if( isUD(o.fontSize) ) o.fontSize = 10;
+        
     var  rowHeight   = o.rowHeight
         ,cml         = o.cellMargin.left //cell margin left
         ,mt          = 10 //minus top
@@ -104,42 +109,64 @@ zsi.createPdfReport = function(o){
         ,row         = o.margin.top
         ,h1          = o.masterColumn //header 1
         ,i           = 0
-        ,setBoxColor = function(r,g,b){
-            doc.setDrawColor(186, 184, 184);
-            doc.setFillColor(r,g,b);
-        }
     ;
     
-    doc.setFontSize(10);
-    //print master column header 
-    for(var x=0;x<h1.length;x++){
-        h1[x].left = left;
-        //print box
-        setBoxColor(138, 191, 252);
-        doc.rect(left, row-mt, h1[x].width,rowHeight, 'FD'); 
-        //print title 
-        doc.text(left + cml, row, h1[x].title);
-        left +=h1[x].width;
+    if( ! isUD(o.onPrintHeader) ) {
+        var r = o.onPrintHeader({ doc:doc, row:row, margin : o.margin});
+        row = r.row;
     }
     
+    doc.setFontSize(o.fontSize);
+
     //print master  data
     var md = o.masterData;
     for(var y=0;y<md.length;y++){
-        row +=rowHeight;
-        for(i=0;i<h1.length;i++){
-            //print box
-            setBoxColor(207, 226, 247)
-            doc.rect(h1[i].left, row-mt, h1[i].width,rowHeight, 'FD');    
-            //print text
-            doc.text(h1[i].left  + cml, row, md[ y ][ h1[i].name ] + "");
-        }
+
+       if( ! isUD(o.onMasterDataPrint) ){ 
+            row=o.onMasterDataPrint({index:y,row:row,data:md[y],doc:doc});
+       }
+       else{    
+            if(y>0) row +=rowHeight;
+            left = o.margin.left;
+            for(i=0;i<h1.length;i++){
+                if(left > o.widthLimit){
+                    left = o.margin.left;
+                    row +=rowHeight;
+                }
+                
+                h1[i].left = left;
+            
+                //print box
+                setBoxColor(doc,207, 226, 247)
+                doc.rect(h1[i].left, row-mt, h1[i].titleWidth,rowHeight, 'FD');    
+                //print text
+                doc.text(h1[i].left  + cml, row, h1[i].title + "");
+            
+                left += h1[i].titleWidth;
+                h1[i].left = left;
+                
+            
+                //print box
+                setBoxColor(doc,219, 237, 255);
+                 doc.rect(h1[i].left, row-mt, h1[i].width,rowHeight, 'FD');    
+                //print text
+                 doc.text(h1[i].left  + cml, row,  md[ y ][ h1[i].name ] + "");
+                
+                
+                // titleWidth
+                left += h1[i].width;
+                
+            }
+       }
+
+        row +=5;
 
         //print detail data or sub table
         var dLeft = 60;
         var h2    = o.detailColumn; //header2
         var dd    = o.detailData;
         var ndd   = []; //new detail data 
-
+        
         if( ! isUD(dd) ){
             for(i=0;i<dd.length;i++){
                  if(md[y][o.MasterKey] === dd[i][o.MasterKey]  )  ndd.push(dd[i]);
@@ -151,7 +178,7 @@ zsi.createPdfReport = function(o){
                 for(var dx=0;dx<h2.length;dx++){
                     h2[dx].left = dLeft;
                     //print box
-                    setBoxColor(198, 204, 211);
+                    setBoxColor(doc,198, 204, 211);
                     doc.rect(dLeft, row-10, h2[dx].width,rowHeight, 'FD'); 
                     //print title
                     doc.text(dLeft  + cml, row, h2[dx].title);
@@ -161,17 +188,20 @@ zsi.createPdfReport = function(o){
                 //print detail data
                 for(var dy=0;dy<ndd.length;dy++){
                     row +=rowHeight;
-                    for(i=0;i<h1.length;i++){
+                    for(i=0;i<h2.length;i++){
                         //display box
-                        setBoxColor(255, 255, 255);
+                        setBoxColor(doc,255, 255, 255);
                         doc.rect(h2[i].left, row-mt, h2[i].width,rowHeight, 'FD'); 
                         //display text
                          doc.text(h2[i].left  + cml, row, ndd[ dy ][ h2[i].name ] + "");
                     }
                 }        
             }
+            row +=5;
         }//end of isUndefined
     }
  
     document.getElementById("output").src = doc.output('datauristring');
-};
+};    
+
+  
