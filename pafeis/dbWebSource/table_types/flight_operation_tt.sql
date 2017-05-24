@@ -5,7 +5,6 @@ flight_operation_id	INT	NULL
 ,flight_operation_name	NVARCHAR(1000)	NULL
 ,flight_operation_type_id	INT	NULL
 ,flight_schedule_date	DATETIME	NULL
-,unit_id	INT	NULL
 ,aircraft_id	INT	NULL
 ,pilot_id	INT	NULL
 ,co_pilot_id	INT	NULL

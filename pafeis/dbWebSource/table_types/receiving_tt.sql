@@ -1,7 +1,7 @@
 CREATE TYPE receiving_tt AS TABLE(
 receiving_id	INT	NULL
 ,is_edited	CHAR(1)	NULL
-,receiving_no	INT	NULL
+,receiving_no	NVARCHAR(60)	NULL
 ,doc_no	NVARCHAR(100)	NULL
 ,doc_date	DATETIME	NULL
 ,status_id	INT	NULL

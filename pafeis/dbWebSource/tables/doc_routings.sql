@@ -8,4 +8,5 @@ doc_routing_id	INT IDENTITY(1,1)	NOT NULL
 ,page_process_action_id	INT	NULL
 ,acted_by	INT	NULL
 ,acted_date	DATETIME	NULL
-,is_current	NCHAR(2)	NULL)
+,is_current	NCHAR(2)	NULL
+,remarks	NTEXT(2147483646)	NULL)

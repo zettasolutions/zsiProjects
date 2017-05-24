@@ -10,7 +10,6 @@ BEGIN
     UPDATE a 
     SET  item_cat_code		    = b.item_cat_code
 		,item_cat_name			= b.item_cat_name
-		,parent_item_cat_id     = b.parent_item_cat_id
 		,is_active				= b.is_active
 		,with_serial			= b.with_serial
 		,seq_no                 = b.seq_no

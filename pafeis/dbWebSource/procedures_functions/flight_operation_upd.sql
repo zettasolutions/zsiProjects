@@ -1,4 +1,5 @@
 
+
 CREATE PROCEDURE [dbo].[flight_operation_upd]
 (
     @tt    flight_operation_tt READONLY
@@ -25,7 +26,6 @@ BEGIN
 		,flight_operation_name		= b.flight_operation_name
 		,flight_operation_type_id	= b.flight_operation_type_id
 		,flight_schedule_date		= b.flight_schedule_date
-		,unit_id					= b. unit_id
 		,aircraft_id				= b.aircraft_id
 		,pilot_id					= b.pilot_id
 		,co_pilot_id				= b.co_pilot_id
@@ -46,7 +46,6 @@ BEGIN
 		,flight_operation_name
 		,flight_operation_type_id
 		,flight_schedule_date
-		,unit_id
 		,aircraft_id
 		,pilot_id
 		,co_pilot_id
@@ -62,7 +61,6 @@ BEGIN
 		,flight_operation_name
 		,flight_operation_type_id
 		,flight_schedule_date
-		,unit_id
 		,aircraft_id
 		,pilot_id
 		,co_pilot_id
@@ -94,6 +92,7 @@ END
 	END
 
 	EXEC dbo.doc_routing_process_upd 82,@id,@statusId,@user_id;
+
 
 
 

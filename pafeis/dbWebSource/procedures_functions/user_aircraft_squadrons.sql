@@ -33,16 +33,22 @@ BEGIN
     WHERE user_id = @user_id;
 
    IF @organization_type_code='SQUADRON'
-      SELECT @organization_id=organization_id FROM dbo.org_parent(@organization_id) where organization_type_code='WING'
-     
-      BEGIN
+ 	  INSERT INTO @us
+		 SELECT organization_id, organization_name FROM organizations_v WHERE organization_id = @organization_id;
+   ELSE
 		  INSERT INTO @us
 			 SELECT organization_id, organization_name
 			   FROM organizations_v 
 			  WHERE squadron_type = @squadron_type and organization_id IN (SELECT organization_id 
 									  FROM dbo.org_child(@organization_id) 
 									);
-      END
+
+
+
+ --    SELECT @organization_id=organization_id FROM dbo.org_parent(@organization_id) where organization_type_code='WING'
+     
+ --     BEGIN
+--      END
 
    RETURN
 

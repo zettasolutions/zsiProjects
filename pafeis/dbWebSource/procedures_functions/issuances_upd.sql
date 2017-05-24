@@ -84,7 +84,7 @@ BEGIN
 	   ,GETDATE()
     FROM @tt
     WHERE isnull(issuance_id,0) = 0
-	AND issuance_no IS NOT NULL
+	AND dbo.getWarehouseCode(@warehouse_id) IS NOT NULL
 
 --	AND (aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL OR dealer_id IS NOT NULL);
 

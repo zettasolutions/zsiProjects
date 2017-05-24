@@ -8,4 +8,7 @@ status_id	INT	NULL
 ,is_aircraft	CHAR(1)	NULL
 ,is_process	CHAR(1)	NULL
 ,is_returned	CHAR(1)	NULL
+,is_add	CHAR(1)	NULL
+,is_edit	CHAR(1)	NULL
+,is_delete	CHAR(1)	NULL
 ,is_active	CHAR(1)	NULL)

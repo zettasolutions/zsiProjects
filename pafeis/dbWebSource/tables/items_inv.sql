@@ -7,4 +7,5 @@ item_inv_id	INT IDENTITY(1,1)	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
 ,bin_id	NVARCHAR(200)	NULL
-,warehouse_id	INT	NULL)
+,warehouse_id	INT	NULL
+,no_reserved	INT	NULL)

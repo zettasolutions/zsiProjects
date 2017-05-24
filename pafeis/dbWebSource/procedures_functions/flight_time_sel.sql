@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[flight_time_sel]
 (
      @flight_operation_id  INT = null
+	,@user_id int = null
 	,@is_active  CHAR(1) = 'Y'
 )
 AS

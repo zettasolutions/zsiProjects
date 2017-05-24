@@ -1,19 +1,6 @@
 
 
-
-
-
--- ===================================================================================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: November 10, 2016 8:21 PM
--- Description:	Issuance details insert and update records.
--- ===================================================================================================
--- Updated by	| Date		| Description
--- ===================================================================================================
--- GOT            11-09-16    ADDED REMARKS/ITEM_ID IN WHERE CLAUSE.
--- ===================================================================================================
-
-create PROCEDURE [dbo].[issuance_details_upd]
+CREATE PROCEDURE [dbo].[issuance_details_upd]
 (
     @tt    issuance_details_tt READONLY
    ,@user_id int
@@ -26,6 +13,7 @@ BEGIN
     SET  item_inv_id           = b.item_inv_id
 		,serial_no				= b.serial_no
 		,quantity				= b.quantity
+		,item_status_id         = b.item_status_id
 		,remarks	            = b.remarks
 		,updated_by				= @user_id
         ,updated_date			= GETDATE()
@@ -39,6 +27,7 @@ BEGIN
 		,item_inv_id 
 		,serial_no
 		,quantity
+		,item_status_id
 		,remarks
 		,created_by
         ,created_date
@@ -48,6 +37,7 @@ BEGIN
 	   ,item_inv_id
 	   ,serial_no
 	   ,quantity
+	   ,item_status_id
 	   ,remarks
 	   ,@user_id
        ,GETDATE()
@@ -56,6 +46,7 @@ BEGIN
 	  AND issuance_id IS NOT NULL
 	  AND item_inv_id IS NOT NULL;
 END
+
 
 
 

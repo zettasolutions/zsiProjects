@@ -1,6 +1,6 @@
 CREATE TABLE receiving(
 receiving_id	INT IDENTITY(1,1)	NOT NULL
-,receiving_no	INT	NULL
+,receiving_no	NVARCHAR(100)	NULL
 ,doc_no	NVARCHAR(100)	NULL
 ,doc_date	DATETIME	NULL
 ,dealer_id	INT	NULL

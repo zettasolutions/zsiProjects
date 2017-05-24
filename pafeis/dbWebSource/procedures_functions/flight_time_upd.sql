@@ -10,7 +10,7 @@ BEGIN
     UPDATE a 
     SET  flight_take_off_time	= b.flight_take_off_time
 		,flight_landing_time	= b.flight_landing_time
-		,no_hours				= DATEDIFF(MINUTE,b.flight_take_off_time,b.flight_landing_time) / 60
+		,no_hours				= convert(decimal(10,2),DATEDIFF(MINUTE,b.flight_take_off_time,b.flight_landing_time) / 60.0)
 		,is_engine_off			= b.is_engine_off
 		,remarks				= b.remarks
 		,updated_by				= @user_id
@@ -34,7 +34,7 @@ BEGIN
          flight_operation_id
 		,flight_take_off_time
 		,flight_landing_time
-		,DATEDIFF(MINUTE,flight_take_off_time,flight_landing_time) / 60
+		,convert(decimal(10,2),DATEDIFF(MINUTE,flight_take_off_time,flight_landing_time) / 60.0)
 		,is_engine_off
 		,remarks
 		,@user_id

@@ -9,4 +9,5 @@ issuance_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
-,item_inv_id	INT	NULL)
+,item_inv_id	INT	NULL
+,item_status_id	INT	NULL)

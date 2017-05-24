@@ -21,6 +21,7 @@ BEGIN
 			,warehouse_id   =   b.warehouse_id
 			,rank_id		=	b.rank_id
 			,position_id	=	b.position_id
+			,is_pilot       =   b.is_pilot
 			,is_active      =   b.is_active
 			,role_id        =   IIF(b.is_active='N',NULL,role_id)
 			,updated_by		=	@user_id
@@ -60,7 +61,8 @@ BEGIN
 		,gender			
 		,organization_id				
 		,rank_id	
-		,position_id	
+		,position_id
+		,is_pilot	
 		,is_active
 		,created_by
         ,created_date	
@@ -77,7 +79,8 @@ BEGIN
 		,gender			
 		,organization_id				
 		,rank_id	
-		,position_id	
+		,position_id
+		,is_pilot	
 		,is_active
 		,@user_id  
 		,GETDATE()

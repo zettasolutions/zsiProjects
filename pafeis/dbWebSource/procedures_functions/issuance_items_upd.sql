@@ -12,8 +12,8 @@ DECLARE @aircraft_id INT=NULL;
 DECLARE @status_id INT=NULL;
 
         UPDATE a  
-		   SET stock_qty = a.stock_qty - b.quantity 
-		   FROM dbo.items_inv a INNER JOIN dbo.issuance_details_v b
+		   SET stock_qty = a.stock_qty - b.is_qty 
+		   FROM dbo.items_inv a INNER JOIN dbo.issuance_details_sum_qty_v b
 		   ON a.item_inv_id = b.item_inv_id 
 		   and b.issuance_id = @issuance_id;
 
@@ -30,7 +30,7 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 		   ON a.serial_no = b.serial_no
 		  AND b.issuance_id = @issuance_id;
 
-	IF @is_type IN ('WAREHOUSE','MAINTENANCE','DIRECTIVE')
+	IF @is_type IN ('WAREHOUSE','DIRECTIVE')
 	BEGIN
 		INSERT INTO dbo.receiving (    
 			 doc_no			
@@ -51,7 +51,7 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 			,warehouse_id
 			 ,concat(dbo.getWarehouseCode(transfer_warehouse_id),'-',cast(Year(getDate()) as varchar(20)),'-',dbo.getWarehouseRRNo(transfer_warehouse_id))	
 			,transfer_warehouse_id
-			,dbo.getPageTopPPA_Id(70)
+			,dbo.getTopPPAStatusId(dbo.getPageTopPPA_Id(70))
 			,status_remarks
 			,issuance_type
 			,issued_to_organization_id
@@ -68,6 +68,8 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 			,serial_no
 			,unit_of_measure_id
 			,quantity
+			,transfer_qty
+			,status_id
 			,remarks
 			,created_by
 			,created_date
@@ -78,6 +80,8 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 		   ,serial_no
 		   ,unit_of_measure_id	
 		   ,quantity
+		   ,quantity
+		   ,item_status_id
 		   ,remarks
 		   ,@user_id
 		   ,GETDATE()

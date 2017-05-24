@@ -1,4 +1,5 @@
 
+
 create PROCEDURE [dbo].[statuses_upd]
 (
     @tt    statuses_tt READONLY
@@ -16,6 +17,9 @@ BEGIN
 		,is_aircraft		    = b.is_aircraft
 		,is_process				= b.is_process
 		,is_returned            = b.is_returned
+		,is_add                 = b.is_add
+		,is_edit                = b.is_edit
+		,is_delete              = b.is_delete
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
@@ -33,6 +37,9 @@ BEGIN
 		,is_aircraft
 		,is_process
 		,is_returned
+		,is_add   
+		,is_edit  
+		,is_delete
 		,is_active
         ,created_by
         ,created_date
@@ -45,6 +52,9 @@ BEGIN
 	   ,is_aircraft
 	   ,is_process
 	   ,is_returned
+	   ,is_add   
+	   ,is_edit  
+	   ,is_delete
 	   ,is_active
        ,@user_id
        ,GETDATE()
@@ -52,5 +62,6 @@ BEGIN
     WHERE status_id IS NULL
 	and status_name IS NOT NULL;
 END
+
 
 

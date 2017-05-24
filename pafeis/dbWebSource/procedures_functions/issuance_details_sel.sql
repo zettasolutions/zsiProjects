@@ -22,6 +22,7 @@ BEGIN
 	ELSE
 		SET @stmt = @stmt + ' DESC';
   
+    print @stmt;
 	EXEC(@stmt);
 	
 END

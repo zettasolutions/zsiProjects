@@ -13,10 +13,11 @@ BEGIN
 SET NOCOUNT ON
 DECLARE @stmt VARCHAR(MAX)
 DECLARE @role_id INT
+DECLARE @organization_id INT
 
-  SELECT @role_id=role_id FROM users where user_id=@user_id;
+  SELECT @organization_id=organization_id,@role_id=role_id FROM users where user_id=@user_id;
 
-  SET @stmt =  'SELECT * FROM dbo.procurement_v WHERE 1=1 '
+  SET @stmt =  'SELECT * FROM dbo.procurement_v WHERE organization_id= ' + cast(@organization_id as varchar(20))
   
   IF @procurement_id IS NOT NULL  
 	 SET @stmt = @stmt + ' AND procurement_id = ' + CAST(@procurement_id AS VARCHAR(20)); 
@@ -32,7 +33,7 @@ DECLARE @role_id INT
      SET @stmt = @stmt + ' ASC';
   ELSE
      SET @stmt = @stmt + ' DESC';
-   PRINT(@stmt);
+  --PRINT(@stmt);
   EXEC(@stmt);	
 END
 

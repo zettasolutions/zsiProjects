@@ -22,4 +22,5 @@ item_id	INT IDENTITY(1,1)	NOT NULL
 ,item_class_id	INT	NULL
 ,no_repairs	INT	NULL
 ,no_overhauls	INT	NULL
-,parent_item_id	INT	NULL)
+,parent_item_id	INT	NULL
+,is_reserved	CHAR(1)	NULL)

@@ -25,8 +25,9 @@ BEGIN
 	    ,serial_no                  = b.serial_no
 		,item_code_id				= b.item_code_id
 		,unit_of_measure_id	        = b.unit_of_measure_id
+		,quantity                   = b.quantity
 		,unit_price					= b.unit_price
-		,amount						= a.unit_price * b.unit_price
+		,amount						= b.quantity * b.unit_price
         ,updated_date				= GETDATE()
     FROM dbo.procurement_detail a INNER JOIN @tt b
     ON a.procurement_detail_id = b.procurement_detail_id

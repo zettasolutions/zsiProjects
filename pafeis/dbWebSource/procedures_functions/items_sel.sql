@@ -47,7 +47,7 @@ IF ISNULL(@parent_item_id,0) <> 0
 
 SET @stmt = @stmt + ' ORDER BY item_name, part_no, national_stock_no, serial_no'; 
 
-PRINT @stmt;
+--PRINT @stmt;
 EXEC(@stmt);	
 END
 

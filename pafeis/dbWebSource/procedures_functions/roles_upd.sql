@@ -14,6 +14,9 @@ DECLARE @updated_count INT;
 	 	    ,is_export_excel   = b.is_export_excel
 	 		,is_export_pdf	   = b.is_export_pdf
 			,is_import_excel   = b.is_import_excel
+		    ,is_add            = b.is_add
+		    ,is_edit           = b.is_edit
+		    ,is_delete         = b.is_delete
 	   	    ,updated_by        = @user_id
 			,updated_date      = GETDATE()
        FROM dbo.roles a INNER JOIN @tt b
@@ -30,6 +33,9 @@ SET @updated_count = @@ROWCOUNT;
 		,is_export_excel
 		,is_export_pdf
 		,is_import_excel
+		,is_add   
+		,is_edit  
+		,is_delete
 		,created_by
 		,created_date
     )
@@ -38,6 +44,9 @@ SET @updated_count = @@ROWCOUNT;
 		,is_export_excel
 		,is_export_pdf
 		,is_import_excel
+		,is_add   
+		,is_edit  
+		,is_delete
 	    ,@user_id
 	    ,GETDATE()
 	FROM @tt 

@@ -1,5 +1,6 @@
 
 
+
 CREATE PROCEDURE [dbo].[receiving_upd]
 (
     @tt    receiving_tt READONLY
@@ -83,6 +84,7 @@ BEGIN
     FROM @tt
     WHERE receiving_id IS NULL
 	AND doc_no IS NOT NULL
+	AND @warehouse_id IS NOT NULL
 	--AND (dealer_id IS NOT NULL OR aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL)
 
 	SELECT @id = receiving_id, @statusId=dbo.getPageProcessActionIdByStatusId(status_id,70) FROM @tt;
@@ -104,6 +106,7 @@ BEGIN
 
 	EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
 END
+
 
 
 

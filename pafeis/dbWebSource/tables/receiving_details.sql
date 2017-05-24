@@ -16,4 +16,5 @@ receiving_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,time_since_overhaul	DATETIME	NULL
 ,status_id	INT	NULL
 ,procurement_detail_id	INT	NULL
-,manufacturer_id	INT	NULL)
+,manufacturer_id	INT	NULL
+,transfer_qty	INT	NULL)

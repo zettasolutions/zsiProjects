@@ -14,4 +14,5 @@ user_id	INT	NULL
 ,warehouse_id	INT	NULL
 ,rank_id	INT	NULL
 ,position_id	INT	NULL
+,is_pilot	CHAR(1)	NULL
 ,is_active	CHAR(1)	NULL)
