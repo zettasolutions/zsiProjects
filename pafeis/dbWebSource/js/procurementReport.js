@@ -5,8 +5,16 @@ var  bs         = zsi.bs.ctrl
     ,procMode = [
         {text:"Shopping",value:"Shopping"}
         ,{text:"Bidding",value:"Bidding"}
-    ]    
+    ]
+    ,g_masterData   =   null
+    ,g_masterIds    =   ""
+    ,g_imgData      =   null
 ;
+
+
+imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
+    g_imgData = img;
+});
 
 	
 zsi.ready(function(){
@@ -83,6 +91,89 @@ $("#btnGo").click(function(){
     displayRecords();
 });
 
+
+$("#btnPdf").click(function(){
+    
+    zsi.createPdfReport({
+         margin             : { top :30  ,left:25 }
+        ,cellMargin         : { left: 5 }
+        ,isDisplay          : false
+        ,fileName           : "procurement.pdf"  
+        ,rowHeight          : 14
+        ,widthLimit         : 520
+        ,pageHeightLimit    : 800
+        ,MasterKey          : "procurement_id"
+        /*
+        ,masterColumn       :  [   
+                                 {name:"procurement_code"       ,title:"Procurement No."    ,titleWidth:100 ,width:50}
+                                ,{name:"procurement_date"       ,title:"Procurement Date"   ,titleWidth:100 ,width:120}
+                                ,{name:"procurement_name"       ,title:"Procurement Name"   ,titleWidth:100 ,width:100}
+                                ,{name:"supplier_name"          ,title:"Supplier"           ,titleWidth:100 ,width:100}
+                            ]
+        */
+        ,detailColumn       : [   
+                                 {name:"item_no"                ,title:"Item No."       ,width:100}
+                                ,{name:"national_stock_no"      ,title:"Stock No."      ,width:100}
+                                ,{name:"item_name"              ,title:"Nomenclature."  ,width:150}
+                                ,{name:"unit_of_measure_code"   ,title:"Unit Measure"   ,width:100}
+                            ]
+        ,masterData         : g_masterData
+        ,detailData         : g_detailData
+        ,onPrintHeader      : function(o){
+            if (g_imgData) {
+                o.doc.addImage(g_imgData, 'JPEG', o.margin.left,  o.row, 50, 50);
+            }
+            o.row +=27;
+            o.doc.setFontSize(12);
+            o.doc.text(o.margin.left + 60, o.row, "Philippine Airforce");
+            o.row +=40;
+            o.doc.setFontSize(14);
+            o.doc.text(o.margin.left, o.row, "Procurement Report");
+            o.doc.setFontSize(10);
+            o.row +=16;
+            return o;
+        }
+        //customized master data printing
+        
+        ,onMasterDataPrint : function(o){
+            if(o.index>0) o.row +=14; 
+            //setBoxColor(o.doc,207, 226, 247);
+            //o.doc.rect(20, o.row-10, 90,14, 'FD');    
+            o.doc.text(25, o.row, "Procurement No.");
+            
+            //setBoxColor(o.doc,255, 255, 255);
+            //o.doc.rect(120, o.row-10, 60,14, 'FD');    
+            o.doc.text(125, o.row, ": "  + o.data.procurement_code);
+
+
+            //setBoxColor(o.doc,207, 226, 247);
+            //o.doc.rect(200, o.row-10, 100,14, 'FD');    
+            o.doc.text(205, o.row, "Procurement Name");
+            
+            //setBoxColor(o.doc,255, 255, 255);
+            //o.doc.rect(310, o.row-10, 110,14, 'FD');    
+            o.doc.text(315, o.row,  ": "  + o.data.procurement_name);
+            
+            //new row
+            o.row +=18; 
+            //setBoxColor(o.doc,207, 226, 247);
+            //o.doc.rect(20, o.row-10, 90,14, 'FD');    
+            o.doc.text(25, o.row, "Supplier");
+            
+            //setBoxColor(o.doc,255, 255, 255);
+            //o.doc.rect(120, o.row-10, 60,14, 'FD');    
+            o.doc.text(125, o.row, ": "  + o.data.supplier_name);
+            
+            return o.row;    
+        }  
+        
+        
+    });         
+    
+    
+    
+});
+
 function displayRecords(){
     var dateFrom    = $("#date_from").val();
     var dateTo      = $("#date_to").val();
@@ -124,7 +215,19 @@ function displayRecords(){
         		}
         		,{text  : "Status Name"             , name  : "status_name"             , width : 150           , style : "text-align:center;"}
         		
-	    ]  
+	    ]
+	    ,onComplete : function(data){
+	        g_masterData = data.rows;
+	        g_masterIds = "";
+	        for(var x =0;x<g_masterData.length;x++ ){
+	               if(g_masterIds!=="") g_masterIds +=",";
+	                g_masterIds  += g_masterData[x].procurement_id;
+
+	        }
+	        $.post(execURL + "SELECT * FROM dbo.procurement_detail_v WHERE procurement_id in (" + g_masterIds + ")" ,function(data){
+	           g_detailData = data.rows;
+	        });
+	    }
 
     });
 }
@@ -181,4 +284,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                              
+                                                                                                   
