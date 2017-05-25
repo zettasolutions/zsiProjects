@@ -166,7 +166,7 @@ function showWindow(onComplete){
 
 
 $("#btnSearch").click(function(){
-    displayDataToGrid(base_url + "sql/exec?p=page_templates_sel @Html.Raw('@')pt_content=" + $("#filter_content").val());
+    displayDataToGrid(base_url + "sql/proc?p=page_templates_sel @Html.Raw('@')pt_content='" + $("#filter_content").val() + "'");
 });
 
 
@@ -197,6 +197,7 @@ $("#btnDelete").click(function () {
 
 
 </script>
+
 
 
 
