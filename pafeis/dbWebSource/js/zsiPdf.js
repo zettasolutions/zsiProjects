@@ -89,7 +89,6 @@ zsi.generatePdfReport = function(o){
         else 
             doc.save(o.reportTitle + '.pdf');
         
-        
         }
         
     imgToBase64(o.logoURL, getData);
@@ -101,15 +100,16 @@ zsi.createPdfReport = function(o){
     }
     if( isUD(o.fontSize) ) o.fontSize = 10;
         
-    var  rowHeight   = o.rowHeight
-        ,cml         = o.cellMargin.left //cell margin left
-        ,mt          = 11 //minus top
-        ,doc         = new jsPDF("p", "pt", "A4")
-        ,left        = o.margin.left
-        ,row         = o.margin.top
-        ,h1          = o.masterColumn //header 1
-        ,i           = 0
-        ,pageNo      = 1
+    var  rowHeight      = o.rowHeight
+        ,cml            = o.cellMargin.left //cell margin left
+        ,mt             = 11 //minus top
+        ,doc            = new jsPDF("p", "pt", "A4")
+        ,left           = o.margin.left
+        ,row            = o.margin.top
+        ,h1             = o.masterColumn //header 1
+        ,i              = 0
+        ,pageNo         = 1
+        ,totalPagesExp  = "{total_pages}"
         ,checkAddPage=  function(cr){
             if(cr > o.pageHeightLimit){
                 pageNo+=1;
@@ -120,7 +120,7 @@ zsi.createPdfReport = function(o){
             return cr;    
         }
         ,setFooterText=  function(pageNo){
-                doc.text( o.margin.left-5, 810,  "Page " + pageNo);
+                doc.text( o.margin.left-5, 810,  "Page " + pageNo + " of " + totalPagesExp);
         }
         
     ;
@@ -220,8 +220,16 @@ zsi.createPdfReport = function(o){
             row +=rowHeight;
         }//end of isUndefined
     }
- 
-    document.getElementById("output").src = doc.output('datauristring');
+    
+    if (typeof doc.putTotalPages === 'function') {
+        doc.putTotalPages(totalPagesExp);
+    }
+
+    if(o.isDisplay)
+        document.getElementById("output").src = doc.output('datauristring');
+    else 
+        doc.save(o.fileName);
+
 };    
 
-   
+       
