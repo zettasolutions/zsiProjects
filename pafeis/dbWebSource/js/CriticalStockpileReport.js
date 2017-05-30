@@ -15,15 +15,13 @@ function displayRecords(){
 	    ,width          : $(document).width() - 35
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
-        ,blankRowsLimit:5
+        //,blankRowsLimit:5
         ,isPaging : false
         ,dataRows : [
                  {text  : "Unit"                , name  :"organization_code"    , width : 150           , style : "text-align:left;"}
         		,{text  : "Part No."            , name  :"part_no"              , width : 150           , style : "text-align:left;"}
         		,{text  : "National Stock No."  , name  :"national_stock_no"    , width : 150           , style : "text-align:left;"}
-        		,{text  : "Item Code"           , name  :"item_code"            , width : 150           , style : "text-align:left;"}
-        		,{text  : "Item Name"           , name  : "item_name"           , width : 300           , style : "text-align:left;"}
-        	    ,{text  : "Item Type Name"      , name  : "item_type_name"      , width : 250           , style : "text-align:left;"}
+        		,{text  : "Nomenclature"        , name  : "item_name"           , width : 300           , style : "text-align:left"}
         	    ,{text  : "Available Stocks"    , name  : "available_stocks"    , width : 130           , style : "text-align:center;"}
 	    ]   
     	     ,onComplete: function(){
@@ -31,4 +29,4 @@ function displayRecords(){
         }  
     });    
 }
-                            
+                             
