@@ -5,10 +5,16 @@ zsi.ready(function(){
     displayRecords();
 });
 
-$("select[name='criticalstockpilereport_filter']").dataBind({
+$("select[name='warehouse_filter']").dataBind({
     url: procURL + "dd_warehouse_organizations_sel" 
     , text : "organization_warehouse"
     , value: "warehouse_id"
+});
+
+$("select[name='categories_filter']").dataBind({
+    url: procURL + "item_categories_sel" 
+    , text : "item_cat_name"
+    , value: "item_cat_id"
 });
 
 $("#btnGo").click(function(){
@@ -16,10 +22,12 @@ $("#btnGo").click(function(){
 });
 
 function displayRecords(){
-    var wId = $("#criticalstockpilereport_filter").val();
+    var wId = $("#warehouse_filter").val();
+    var catId = $("#categories_filter").val();
     console.log(wId);
+    console.log(catId);
         $("#grid").dataBind({
-             url            : execURL + "critical_stockpile_report_sel @warehouse_id=" + (wId ? wId : null)
+             url            : execURL + "critical_stockpile_report_sel @warehouse_id=" + (wId ? wId : null) + ",@item_cat_id=" + (catId ? catId : null)
             ,width          : $(document).width() - 35
             ,height         : $(document).height() - 250
             ,isPaging : false
