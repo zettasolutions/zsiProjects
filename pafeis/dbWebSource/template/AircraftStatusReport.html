@@ -1,3 +1,6 @@
+<script src="/Scripts/jspdf.min.js"></script>
+<script src='/javascript/name/zsiPdf'></script>
+<script src='/javascript/name/zsiSearch'></script>
 <style>
     #grid{
         width: 100%;
@@ -14,26 +17,30 @@
     .tablePanel {
         overflow-y:auto;
     }
-   
+    .zButtons button{
+         margin-right:6px;
+    }   
 
 </style>
 
 <script src='/javascript/name/zsiSearch'></script>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">    
-    <form method="post" id="frm">
-        <div class="zPanel">
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <div class=" col-xs-2"> 
-                        <select name="aircraftStatusReport_filter" id="aircraftStatusReport_filter" class="form-control input-sm"> </select>
-                    </div>
-                     <div class="col-xs-1">
-                        <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+<div class="zPanel">
+    <div style="min-height:20px;margin-top:10px">
+        <form method="post" id="frm">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class=" col-xs-2"> 
+                            <select name="aircraftStatusReport_filter" id="aircraftStatusReport_filter" class="form-control input-sm"> </select>
+                        </div>
+                        <div class="zButtons" >
+                            <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
+                            <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> PDF Export</button>
+                        </div>
+    
                     </div>
                 </div>
-            </div>
-            <div id="grid" class="zGrid"></div>
-        </div>
-    </form>
+                <div id="grid" class="zGrid"></div>
+        </form>
+    </div>
 </div>
 <script src="/Scripts/handlebars-v3.0.0.js"></script>

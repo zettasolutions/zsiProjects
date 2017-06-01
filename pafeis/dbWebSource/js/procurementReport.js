@@ -19,7 +19,7 @@ imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
 	
 zsi.ready(function(){
     enableFilter();
-    $("#supplier_id").dataBind( "supply_source");
+    $("#supplier_id").dataBind( "dealer");
     $ ("#report_type_id").dataBind({
                            url: execURL + "dd_procurement_report_type_sel"
                            , text: "report_type"
@@ -186,7 +186,7 @@ function displayRecords(){
     
     $("#grid").dataBind({
          toggleMasterKey    : "procurement_id"
-        ,height             : $(document).height() - 308 
+        ,height             : $(document).height() - 360 
         ,width              : $(document).width() - 25
         ,url                : execURL + "procurement_summary_report_sel @date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
                                       + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
@@ -213,7 +213,7 @@ function displayRecords(){
         		,{text  : "Total Amount"                                                , width : 100           , style : "text-align:right;"
         		    ,onRender: function(d){ return svn(d,"total_amount").toLocaleString('en-PH', {minimumFractionDigits: 2})}
         		}
-        		,{text  : "Status Name"             , name  : "status_name"             , width : 150           , style : "text-align:center;"}
+        		,{text  : "Delivery Status"             , name  : "delivery_status"             , width : 150           , style : "text-align:center;"}
         		
 	    ]
 	    ,onComplete : function(data){
@@ -224,7 +224,7 @@ function displayRecords(){
 	                g_masterIds  += g_masterData[x].procurement_id;
 
 	        }
-	        $.post(execURL + "SELECT * FROM dbo.procurement_detail_v WHERE procurement_id in (" + g_masterIds + ")" ,function(data){
+	        $.post(execURL + "procurement_detail_sel @master_ids='" + g_masterIds + "'" ,function(data){
 	           g_detailData = data.rows;
 	        });
 	    }
@@ -284,4 +284,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                                   
+                                                                                                      
