@@ -96,8 +96,10 @@ zsi.generatePdfReport = function(o){
 zsi.createPdfReport = function(o){
     if( isUD(o.detailData) ) {
         if( ! isUD(o.columnHeader) ) o.masterColumn = o.columnHeader;
-        o.masterData = o.data;
+        if( ! isUD(o.data) ) o.masterData = o.data;
+
     }
+    
     if( isUD(o.fontSize) ) o.fontSize = 10;
         
     var  rowHeight      = o.rowHeight
@@ -125,12 +127,31 @@ zsi.createPdfReport = function(o){
         
     ;
     
+    if( ! isUD(o.onInit) ) {
+         doc =  o.onInit();
+    }
+    
     if( ! isUD(o.onPrintHeader) ) {
         var r = o.onPrintHeader({ doc:doc, row:row, margin : o.margin});
         row = r.row;
     }
     doc.setFontSize(o.fontSize);
     setFooterText(pageNo);
+
+
+    //check if detailData has no data, then print header columns
+    if( isUD(o.detailData) ) {
+        for(var x=0;x<h1.length;x++){
+            h1[x].left = left;
+            //print box
+            setBoxColor(doc,138, 191, 252);
+            doc.rect(left, row-mt, h1[x].width,rowHeight, 'FD'); 
+            //print title 
+            doc.text(left + cml, row, h1[x].title);
+            left +=h1[x].width;
+        }
+        row +=rowHeight;
+    }
 
     //print master  data
     var md = o.masterData;
@@ -143,41 +164,50 @@ zsi.createPdfReport = function(o){
             if(y>0) row +=rowHeight;
             left = o.margin.left;
             for(i=0;i<h1.length;i++){
-                if(left > o.widthLimit){
-                    left = o.margin.left;
-                    row +=rowHeight + 5 ;
+                if( isUD(o.detailData) ){    
+                    if( y % 2 === 0  ) 
+                        setBoxColor(doc,255, 255, 255); 
+                    else 
+                        setBoxColor(doc,207, 226, 247);
+                    doc.rect(h1[i].left, row-mt, h1[i].width,rowHeight, 'FD');    
+                    //print text
+                    doc.text(h1[i].left  + cml, row, md[ y ][ h1[i].name ] + "");
                 }
-                
+                else{
 
-                row = checkAddPage(row);
-                
+                    if(left > o.widthLimit){
+                        left = o.margin.left;
+                        row +=rowHeight + 5 ;
+                    }
+    
+                    row = checkAddPage(row);
                     
-                h1[i].left = left;
-            
-                //print box
-                setBoxColor(doc,255, 255, 255);
-                doc.rect(h1[i].left, row-mt, h1[i].titleWidth,rowHeight +  2, 'FD');    
-                //print text
-                doc.text(h1[i].left  + cml, row, h1[i].title);
-            
-                left += h1[i].titleWidth;
-                h1[i].left = left;
+                        
+                    h1[i].left = left;
                 
-            
-                //print box
-                setBoxColor(doc,255, 255, 255);
-                doc.rect(h1[i].left, row-mt, h1[i].width,rowHeight + 2, 'FD');    
-                //print text
-                doc.text(h1[i].left  + cml, row,  md[ y ][ h1[i].name ] + "");
+                    //print box
+                    setBoxColor(doc,255, 255, 255);
+                    doc.rect(h1[i].left, row-mt, h1[i].titleWidth,rowHeight +  2, 'FD');    
+                    //print text
+                    doc.text(h1[i].left  + cml, row, h1[i].title);
                 
+                    left += h1[i].titleWidth;
+                    h1[i].left = left;
+                    
                 
-                // titleWidth
-                left += h1[i].width;
-                
+                    //print box
+                    setBoxColor(doc,255, 255, 255);
+                    doc.rect(h1[i].left, row-mt, h1[i].width,rowHeight + 2, 'FD');    
+                    //print text
+                    doc.text(h1[i].left  + cml, row,  md[ y ][ h1[i].name ] + "");
+                    
+                    // titleWidth
+                    left += h1[i].width;
+                    
+                }
             }
        }
 
-        row +=5;
 
         //print detail data or sub table
         var dLeft = 60;
@@ -186,6 +216,7 @@ zsi.createPdfReport = function(o){
         var ndd   = []; //new detail data 
         
         if( ! isUD(dd) ){
+            row +=5;
             for(i=0;i<dd.length;i++){
                  if(md[y][o.MasterKey] === dd[i][o.MasterKey]  )  ndd.push(dd[i]);
             }      
@@ -232,4 +263,4 @@ zsi.createPdfReport = function(o){
 
 };    
 
-       
+               
