@@ -13,6 +13,13 @@ zsi.ready(function(){
    markMandatory();
 });
 
+$("select[name='organization_filter']").dataBind({
+    url: procURL + "organizations_dd_sel" 
+    , text: "organization_name"
+    , value: "organization_id"
+});
+
+
 $("#btnGo").click(function(){
   displayRecords($("#field_search").val(),$("#logon_name_filter").val());
 });
@@ -31,6 +38,13 @@ $("#btnSave").click(function () {
     });
 });
 
+$("#btnInactive").click(function () {
+    $(".modal-title").text("Inactive Employee");
+    $('#modalWindowInactive').modal({ show: true, keyboard: false, backdrop: 'static' });
+    //$('#modalWindow').setCloseModalConfirm(); 
+    displayInactive();
+});
+
 function markMandatory(){
     zsi.form.markMandatory({       
       "groupNames":[
@@ -46,10 +60,11 @@ function markMandatory(){
 }
 
 function displayRecords(col_name,keyword){
+    var oId      = $("#organization_filter").val();
     var cb = bs({name:"cbFilter1",type:"checkbox"});
     var rownum=0;
     $("#grid").dataBind({
-         url            : execURL + "employees_sel @col_name='"+col_name+"', @keyword='"+keyword+"'" 
+         url            : procURL + "employees_sel @col_name='"+col_name+"', @keyword="+ (keyword ? "'" + keyword +"'" : "null") + ",@organization_id=" + oId
         ,width          : $(document).width() - 35
         ,height         : 400
         ,selectorType   : "checkbox"
@@ -99,7 +114,8 @@ function displayRecords(col_name,keyword){
                 , {text  : "Warehouse"          , name  : "warehouse_id"        , type  : "select"       , width : 150          , style : "text-align:left;"  }
                 , {text  : "Rank"               , name  : "rank_id"             , type  : "select"       , width : 150          , style : "text-align:left;"}
                 , {text  : "Position"           , name  : "position_id"         , type  : "select"       , width : 200         , style : "text-align:left;"}
-                , {text  : "Active?"            , name  : "is_active"           , type  : "yesno"        , width : 80           , style : "text-align:left;"   ,defaultValue:"Y"                 }
+                , {text  : "Pilots"              , name  : "is_pilot"           , type  : "yesno"        , width : 80           , style : "text-align:left;"}
+                , {text  : "Active?"            , name  : "is_active"           , type  : "yesno"        , width : 80           , style : "text-align:left;"   ,defaultValue:"Y"}
         		, {text  : "Upload Image"       , width : 100                   , style:"text-align:center;" 
     		    , onRender : function(d){
     		        var h = "";
@@ -160,15 +176,6 @@ function displayRecords(col_name,keyword){
     });    
 }
     
-$("#btnDelete").click(function(){
-    zsi.form.deleteData({
-         code       : "sys-0008"
-        ,onComplete : function(data){
-                        displayRecords();
-                      }
-    });       
-});
-
 function showModalUploadEmployeeImage(index){
     var _d= employeesData[index]; //set row info
     var _title = _d.last_name + ", " + _d.first_name + " " + _d.middle_name;
@@ -210,6 +217,7 @@ function initChangeEvent(){
 function getTemplate(){
     $.get(base_url + "templates/bsDialogBox.txt",function(d){
         var template = Handlebars.compile(d);     
+        
         var context = { id:"modalWindow"
                         , title: "Employees"
                         , footer:  ' <div class="pull-left"></div>'
@@ -226,8 +234,150 @@ function getTemplate(){
                     };
         var htmlImageWindow    = template(contextImageWindow);     
         $("body").append(htmlImageWindow);
+        
+        var contextInactive = { id:"modalWindowInactive"
+                        , sizeAttr: "fullWidth"
+                        , title: "Employee"
+                        , footer:  ' <div class="pull-left"><button type="button" onclick="submitData();" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>'
+                                +  ' <button type="button" onclick="deleteData();" class="btn btn-primary"><span class="glyphicon glyphicon-trash"></span> Delete</button></div>'
+                        , body: '<div id="inActiveRecords" class="zGrid" ></div>'
+                      };
+        var htmlInactive    = template(contextInactive);     
+        $("body").append(htmlInactive);
+
     }); 
 }    
+
+function displayInactive(){
+    var cb = bs({name:"cbFilter2",type:"checkbox"});
+    var rownum=0;
+    $("#inActiveRecords").dataBind({
+         url            : procURL + "employees_sel @is_active='N'" 
+        ,width          : $(document).width() - 5
+        ,height         : 400
+        ,selectorType   : "checkbox"
+        //,blankRowsLimit:5
+        ,isPaging : true
+        ,dataRows : [
+                { text  : cb, width : 25, style : "text-align:left;"
+                    , onRender      :  function(d) {
+                        return     bs({name:"user_id",type:"hidden",value: svn (d,"user_id")})
+                                 + bs({name:"is_edited",type:"hidden"}) 
+                                 + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                    }
+                }
+                
+                , { text : "Image"             , width:45      , style:"text-align:center;"
+                    ,onRender : function(d){ 
+                        var mouseMoveEvent= "onmouseover='mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='mouseout();'";
+                        var html = "<a href='javascript:void(0);' " + mouseMoveEvent + " class='btn btn-sm'  onclick='showModalUploadImage(\""+ svn(d,"img_filename") 
+                                        +"\");'  ><span class='glyphicon glyphicon-picture'></span> </a>";
+                        return (d!==null ? html : "");
+                    }
+                }
+                , {text  : "Id No."             , name  : "id_no"               , type  : "input"        , width : 100          , style : "text-align:left;"    ,sortColNo: 2}
+                , {text  : "Last Name"          , name  : "last_name"           , type  : "input"        , width : 200          , style : "text-align:left;"    ,sortColNo: 3}
+                , {text  : "First Name"         , name  : "first_name"          , type  : "input"        , width : 200          , style : "text-align:left;"    ,sortColNo: 4}
+                , {text  : "Middle Name"        , name  : "middle_name"         , type  : "input"        , width : 200          , style : "text-align:left;"}
+                , {text  : "Name Suffix"        , name  : "name_suffix"         , type  : "input"        , width : 100          , style : "text-align:left;"}
+                , {text  : "Civil Status"       , name  : "civil_status"        , type  : "select"       , width : 100          , style : "text-align:left;"}
+                , {text  : "Contact No."        , name  : "contact_nos"         , type  : "input"        , width : 100          , style : "text-align:left;"}
+                , {text  : "Email"              , name  : "email_add"           , type  : "input"        , width : 200          , style : "text-align:left;"}
+                , {text  : "Gender"             , width : 80                    , style : "text-align:left;"
+                    , onRender : function(d){ 
+                        var male_selected = '';
+                        var female_selected = '';
+                        if (d !== null) {
+                            male_selected = (d.gender.toUpperCase().trim() == "M") ? 'selected' : '';
+                            female_selected = (d.gender.toUpperCase().trim() == "F") ? 'selected' : '';
+                        }
+                        return "<select id='gender' class='form-control' name='gender'>" +
+                                "<option></option>" +
+                                "<option value='M' " + male_selected + ">Male</option>" +
+                                "<option value='F' " + female_selected + ">Female</option>" +
+                            "</select>";
+                    }
+                }
+                , {text  : "Organization"       , name:"organization_id"        , type  : "select"       , width : 150          , style : "text-align:left;"          }
+                , {text  : "Warehouse"          , name  : "warehouse_id"        , type  : "select"       , width : 150          , style : "text-align:left;"  }
+                , {text  : "Rank"               , name  : "rank_id"             , type  : "select"       , width : 150          , style : "text-align:left;"}
+                , {text  : "Position"           , name  : "position_id"         , type  : "select"       , width : 200         , style : "text-align:left;"}
+                , {text  : "Pilots"              , name  : "is_pilot"           , type  : "yesno"        , width : 80           , style : "text-align:left;"}
+                , {text  : "Active?"            , name  : "is_active"           , type  : "yesno"        , width : 80           , style : "text-align:left;"   ,defaultValue:"Y"}
+        ]   
+        ,onComplete: function(data){
+             employeesData = data.rows;
+             $("select, input").on("keyup change", function(){
+                var $zRow = $(this).closest(".zRow");
+                $zRow.find("#is_edited").val("Y");
+            });
+            $("#cbFilter2").setCheckEvent("#inActiveRecords input[name='cb']");
+            
+            $("select[name='organization_id']").each(function(){
+                var $zRow = $(this).closest(".zRow");
+                if(this.hasAttribute("selectedvalue")) {
+                    var id = $(this).attr("selectedvalue");
+                    $zRow.find("select[name='warehouse_id']").dataBind({
+                        url: execURL + "warehouses_sel @squadron_id=" + id
+                        , text: "warehouse_location"
+                        , value: "warehouse_id"
+                    });  
+                }
+             });
+             
+            $("select[name='organization_id']").dataBind({
+                url: procURL + "organizations_dd_sel "
+                , text: "organization_name"
+                , value: "organization_id"
+                , onComplete : function(){
+                    $("select[name='organization_id']").change(function(){
+                        var $zRow = $(this).closest(".zRow");
+                        if(this.value) {
+                            $zRow.find("select[name='warehouse_id']").dataBind({
+                                url: execURL + "warehouses_sel @squadron_id=" + this.value
+                                , text: "warehouse_location"
+                                , value: "warehouse_id"
+                            });  
+                        }else{
+                            $zRow.find("select[name='warehouse_id']").empty();
+                        }
+                    });
+                }
+            });
+            
+            $("select[name='rank_id']").dataBind( "rank");
+            $("select[name='position_id']").dataBind( "position");
+            $("select[name='civil_status']").dataBind( "civil_statuses");
+            $("select[name='status_id']").dataBind( "status");
+            markMandatory();
+        }  
+    });    
+}
+
+function deleteItems(){
+    zsi.form.deleteData({
+         code       : "sys-0008"
+        ,onComplete : function(data){
+                $("#grid").trigger('refresh');
+                displayInactive();
+        }
+    }); 
+} 
+
+function submitData(){    
+  $("#frm_modalWindowInactive").jsonSubmit({
+            procedure  : "employees_upd"
+            ,optionalItems: ["is_active"]
+            //,notInclude: "#employee_name"
+            ,onComplete : function (data) {
+                 if(data.isSuccess===true) zsi.form.showAlert("alert");
+                 $("#grid").trigger('refresh');
+                 displayInactive();
+            }
+    });        
+}
+
+
 
 function employeeImageUpload(){
     var frm = $("#frm_" + modalImageEmployee);
@@ -300,4 +450,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                                          
+}                                             
