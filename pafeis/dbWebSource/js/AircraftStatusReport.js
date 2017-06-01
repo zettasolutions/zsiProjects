@@ -21,6 +21,7 @@ $("select[name='aircraftStatusReport_filter']").dataBind({
 
 $("#btnGo").click(function(){
    displayRecords();
+   $("#btnPdf").css({display: "block"});
 });
 
 function displayRecords(){
@@ -53,7 +54,7 @@ $("#btnPdf").click(function(){
         ,rowHeight          : 14
         ,widthLimit         : 520
         ,pageHeightLimit    : 800
-        ,MasterKey          : "organization_id"
+        ,masterKey          : "organization_id"
         ,masterColumn       :  [   
                                  {name:"wing"               ,title:"Wing"               ,titleWidth:100 ,width:200}
                                 ,{name:"squadron"           ,title:"Squadron"           ,titleWidth:100 ,width:200}
@@ -88,4 +89,4 @@ $("#btnPdf").click(function(){
 
 
  
-           
+             
