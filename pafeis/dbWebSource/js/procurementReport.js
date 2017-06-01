@@ -102,7 +102,7 @@ $("#btnPdf").click(function(){
         ,rowHeight          : 14
         ,widthLimit         : 520
         ,pageHeightLimit    : 800
-        ,MasterKey          : "procurement_id"
+        ,masterKey          : "procurement_id"
         /*
         ,masterColumn       :  [   
                                  {name:"procurement_code"       ,title:"Procurement No."    ,titleWidth:100 ,width:50}
@@ -284,4 +284,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                                      
+                                                                                                       
