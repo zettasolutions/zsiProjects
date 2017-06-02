@@ -16,7 +16,7 @@ var context = {
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="manageInactiveOrgType(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
             + '</span>&nbsp;Inactive</button>'
-    , body: '<div id="gridModal" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="gridModal" class="zGrid"></div></div>'
 };
 var contextOrgBins = { 
       id: "modalBins"
@@ -26,7 +26,7 @@ var contextOrgBins = {
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="manageInactiveOrgBins(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
             + '</span>&nbsp;Inactive</button>'
-    , body: '<div id="gridOrgBinsModal" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="gridOrgBinsModal" class="zGrid"></div></div>'
 };
 var contextLocations = { 
       id: "modalLocations"
@@ -36,9 +36,9 @@ var contextLocations = {
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="manageInactiveLocations(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
             + '</span>&nbsp;Inactive</button>'
-    , body: '<div id="gridLocations" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="gridLocations" class="zGrid"></div></div>'
             + '<h4 id="gridOrgBinsTitle"></h4>'
-            + '<div id="gridOrgBinsModal" class="zGrid"></div>'
+            + '<div class="modalGrid zContainer1"><div id="gridOrgBinsModal" class="zGrid"></div></div>'
 };
 var contextInactiveLocations = { 
       id: "modalInactiveLocations"
@@ -375,7 +375,9 @@ function displayLocations(id){
 		        ,onRender : function(d){ 
                     return bs({name:"warehouse_location",type:"input",value:svn (d,"warehouse_location")});
                 }
-    		 }	 
+    		 }
+    		,{ text:"Receiving No."       , width:100  , style:"text-align:left;"    ,type:"input"  ,name:"rr_no" }
+    		,{ text:"Issuance No."       , width:100  , style:"text-align:left;"    ,type:"input"  ,name:"is_no" }
     		,{ text:"Active?"       , width:80  , style:"text-align:left;"    ,type:"yesno"  ,name:"is_active"  ,defaultValue:"Y" }
     		,{    
                   text  : "Bins"         
@@ -510,4 +512,4 @@ function submitOrgBins(){
             displayOrgBins(g_warehouse_id);
         }
     });
-}  
+}     
