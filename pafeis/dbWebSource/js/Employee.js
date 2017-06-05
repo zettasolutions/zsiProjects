@@ -64,7 +64,9 @@ function displayRecords(col_name,keyword){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
     var rownum=0;
     $("#grid").dataBind({
-         url            : procURL + "employees_sel @col_name='"+col_name+"', @keyword="+ (keyword ? "'" + keyword +"'" : "null") + ",@organization_id=" + oId
+         url            : procURL + "employees_sel @col_name='"+col_name
+                                  + "',@keyword="+ (keyword ? "'" +keyword +"'" : "null")
+                                  + ",@organization_id=" + (oId ? oId : "null")
         ,width          : $(document).width() - 35
         ,height         : 400
         ,selectorType   : "checkbox"
@@ -450,4 +452,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                                             
+}                                                
