@@ -11,7 +11,7 @@
 
 CREATE PROCEDURE [dbo].[aircraft_status_report_details_sel]
 (
-    @aircraft_type_id  INT = 1
+    @organization_id  INT = NULL
 )
 AS
 BEGIN
@@ -19,15 +19,12 @@ SET NOCOUNT ON
 DECLARE @stmt NVARCHAR(MAX)
 
 
-SET @stmt = 'SELECT b.organization_code, a.aircraft_code, a.aircraft_name, status_name ' +  
-			'FROM dbo.aircraft_info_v as a ' +
-			'INNER JOIN dbo.organizations as b ' +
-			'ON a.squadron_id = b.organization_id '
+SET @stmt = 'SELECT * FROM dbo.aircraft_info_v ' 
 
-IF ISNULL(@aircraft_type_id,0) <> 0
-   SET @stmt = @stmt + 'WHERE a.aircraft_type_id = ' + cast(@aircraft_type_id as varchar(20)) 
+IF ISNULL(@organization_id,0) <> 0
+   SET @stmt = @stmt + 'WHERE squadron_id=' + cast(@organization_id as varchar(20)) + ' OR organization_id=' + cast(@organization_id as varchar(20))
 
-SET @stmt = @stmt + ' ORDER BY a.aircraft_code, a.aircraft_name'; 
+SET @stmt = @stmt + ' ORDER BY aircraft_code, aircraft_name '; 
 
 EXEC(@stmt);	
 END

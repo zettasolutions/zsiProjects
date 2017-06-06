@@ -1,10 +1,14 @@
 
+
 CREATE PROCEDURE [dbo].[receiving_details_sel]
 (
     @receiving_id INT = null
    ,@user_id      INT 
    ,@col_no       INT = 1
    ,@order_no     INT = 0
+   ,@master_ids varchar(max) = null
+
+
 )
 AS
 BEGIN
@@ -23,6 +27,9 @@ BEGIN
 	ELSE
 		SET @stmt = @stmt + ' DESC';
   
+	IF ltrim (rtrim( @master_ids)) <> ''
+		SET @stmt='SELECT * FROM dbo.receiving_details_v WHERE receiving_id in (' + @master_ids + ')'
+
 	EXEC(@stmt);
 	
 END

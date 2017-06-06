@@ -1,10 +1,12 @@
 
+
 CREATE PROCEDURE [dbo].[issuance_details_sel]
 (
     @issuance_id INT = null
    ,@user_id      INT 
    ,@col_no       INT = 1
    ,@order_no     INT = 0
+   ,@master_ids varchar(max) = null
 )
 AS
 BEGIN
@@ -21,9 +23,11 @@ BEGIN
 		SET @stmt = @stmt + ' ASC';
 	ELSE
 		SET @stmt = @stmt + ' DESC';
-  
+	IF ltrim (rtrim( @master_ids)) <> ''
+		SET @stmt='SELECT * FROM dbo.issuance_details_v WHERE issuance_id in (' + @master_ids + ')'
     print @stmt;
 	EXEC(@stmt);
 	
 END
+
 

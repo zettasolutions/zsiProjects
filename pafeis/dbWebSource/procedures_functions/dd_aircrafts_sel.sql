@@ -8,9 +8,14 @@ AS
 BEGIN
 
 SET NOCOUNT ON
+DECLARE @stmt NVARCHAR(MAX)
 
-SELECT aircraft_info_id, aircraft_name FROM dbo.aircraft_info WHERE squadron_id = @squadron_id
+SET @stmt = 'SELECT aircraft_info_id, aircraft_name FROM dbo.aircraft_info WHERE 1=1'
 
+IF ISNULL(@squadron_id,0) <> 0 
+   SET @stmt = @stmt + ' AND squadron_id = ' +  CAST(@squadron_id AS VARCHAR(20))
+ 
+EXEC(@stmt);
 	
 END
 

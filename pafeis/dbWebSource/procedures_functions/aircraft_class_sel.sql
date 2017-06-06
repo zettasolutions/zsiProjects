@@ -1,23 +1,20 @@
-
--- =============================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: October 25, 2016 5:10 PM
--- Description:	Aircraft class select all or by id records.
--- =============================================
 CREATE PROCEDURE [dbo].[aircraft_class_sel]
 (
     @aircraft_class_id  INT = null
+	,@is_active varchar(1) = 'Y'
 )
 AS
 BEGIN
 
 SET NOCOUNT ON
+	 DECLARE @stmt NVARCHAR(MAX)
+  SET @stmt = 'SELECT * FROM dbo.aircraft_class WHERE is_active=''' + @is_active + '''';
 
-  IF @aircraft_class_id IS NOT NULL  
-	 SELECT * FROM dbo.aircraft_class WHERE aircraft_class_id = @aircraft_class_id; 
-  ELSE
-     SELECT * FROM dbo.aircraft_class
-	 ORDER BY aircraft_class; 
-	
+  IF isnull(@aircraft_class_id,0) <> 0
+	 SET @stmt = @stmt + 'AND @aircraft_class_id=' + cast(@aircraft_class_id as varchar(20));
+	  
+   SET @stmt = @stmt + ' ORDER BY aircraft_class'; 
+
+  EXEC(@stmt);
+	 	
 END
-

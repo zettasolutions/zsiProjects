@@ -1,25 +1,23 @@
 
-
-
--- =============================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: October 24, 2016 6:53 PM
--- Description:	Monitoring types select all or by id records.
--- =============================================
 CREATE PROCEDURE [dbo].[monitoring_types_sel]
 (
     @monitoring_type_id  INT = null
+   ,@is_active CHAR(1) = 'Y'
 )
 AS
 BEGIN
 
 SET NOCOUNT ON
+DECLARE @stmt NVARCHAR(MAX)
+
+SET @stmt = 'SELECT * FROM dbo.monitoring_types WHERE is_active = ''' + @is_active + ''''
+
 
   IF @monitoring_type_id IS NOT NULL  
-	 SELECT * FROM dbo.monitoring_types WHERE monitoring_type_id = @monitoring_type_id; 
-  ELSE
-     SELECT * FROM dbo.monitoring_types
-	 ORDER BY monitoring_type_name; 
+	 SET @stmt = @stmt + ' AND monitoring_type_id = ' + CAST(@monitoring_type_id AS VARCHAR(20)); 
+ 
+  SET @stmt = @stmt + ' ORDER BY monitoring_type_name'; 
+  EXEC(@stmt);
 	
 END
 

@@ -1,5 +1,7 @@
 
 
+
+
 CREATE PROCEDURE [dbo].[flight_operation_upd]
 (
     @tt    flight_operation_tt READONLY
@@ -23,18 +25,31 @@ BEGIN
 -- Update Process
     UPDATE a 
     SET  flight_operation_code		= b.flight_operation_code
-		,flight_operation_name		= b.flight_operation_name
-		,flight_operation_type_id	= b.flight_operation_type_id
+	    ,station_id                 = b.station_id
 		,flight_schedule_date		= b.flight_schedule_date
 		,aircraft_id				= b.aircraft_id
 		,pilot_id					= b.pilot_id
 		,co_pilot_id				= b.co_pilot_id
-		,origin						= b.origin
-		,destination				= b.destination
+		,itinerary					= b.itinerary
+		,ms_essential				= b.ms_essential
+		,ms_category_id				= b.ms_category_id
+		,ms_type_id					= b.ms_type_id
+		,ms_detail_id				= b.ms_detail_id
+		,flt_cond					= b.flt_cond
+		,sort						= b.sort		
+		,pax_mil					= b.pax_mil
+		,pax_civ					= b.pax_civ
+		,fnt_mil					= b.fnt_mil
+		,fnt_civ					= b.fnt_civ
+		,cargo						= b.cargo
+		,gas_up_loc 				= b.gas_up_loc 
+		,gas_up						= b.gas_up
+		,gas_bal					= b.gas_bal
+		,remarks                    = b.remarks
 		,status_id					= b.status_id
 		,no_cycles					= b.no_cycles
-		,updated_by				= @user_id
-        ,updated_date			= GETDATE()
+		,updated_by				    = @user_id
+        ,updated_date			    = GETDATE()
 		
     FROM dbo.flight_operation a INNER JOIN @tt b
     ON a.flight_operation_id = b.flight_operation_id
@@ -42,32 +57,58 @@ BEGIN
 	   
 -- Insert Process
     INSERT INTO dbo.flight_operation(
-         flight_operation_code
-		,flight_operation_name
-		,flight_operation_type_id
+		 flight_operation_code
+		,station_id           
 		,flight_schedule_date
-		,aircraft_id
-		,pilot_id
-		,co_pilot_id
-		,origin
-		,destination
+		,aircraft_id		
+		,pilot_id			
+		,co_pilot_id		
+		,itinerary			
+		,ms_essential		
+		,ms_category_id		
+		,ms_type_id			
+		,ms_detail_id		
+		,flt_cond			
+		,sort				
+		,pax_mil			
+		,pax_civ			
+		,fnt_mil			
+		,fnt_civ			
+		,cargo				
+		,gas_up_loc 		
+		,gas_up				
+		,gas_bal			
+		,remarks   
 		,status_id
-		,no_cycles
-        ,created_by
+		,no_cycles           
+		,created_by
         ,created_date
         )
     SELECT 
-         flight_operation_code
-		,flight_operation_name
-		,flight_operation_type_id
+		 flight_operation_code
+		,station_id           
 		,flight_schedule_date
-		,aircraft_id
-		,pilot_id
-		,co_pilot_id
-		,origin
-		,destination
+		,aircraft_id		
+		,pilot_id			
+		,co_pilot_id		
+		,itinerary			
+		,ms_essential		
+		,ms_category_id		
+		,ms_type_id			
+		,ms_detail_id		
+		,flt_cond			
+		,sort				
+		,pax_mil			
+		,pax_civ			
+		,fnt_mil			
+		,fnt_civ			
+		,cargo				
+		,gas_up_loc 		
+		,gas_up				
+		,gas_bal			
+		,remarks   
 		,status_id
-		,no_cycles
+		,no_cycles           
        ,@user_id
        ,GETDATE()
     FROM @tt
@@ -92,6 +133,8 @@ END
 	END
 
 	EXEC dbo.doc_routing_process_upd 82,@id,@statusId,@user_id;
+
+
 
 
 

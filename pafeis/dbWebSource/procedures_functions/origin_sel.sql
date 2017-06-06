@@ -1,24 +1,20 @@
-
--- =============================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: October 24, 2016 10:01 PM
--- Description:	Origin select all or by id records.
--- =============================================
 CREATE PROCEDURE [dbo].[origin_sel]
 (
     @origin_id  INT = null
+	,@is_active varchar(1) = 'Y'
 )
 AS
 BEGIN
 
 SET NOCOUNT ON
+	 DECLARE @stmt NVARCHAR(MAX)
+  SET @stmt = 'SELECT * FROM dbo.origin WHERE is_active=''' + @is_active + '''';
 
-  IF @origin_id IS NOT NULL  
-	 SELECT * FROM dbo.origin WHERE origin_id = @origin_id; 
-  ELSE
-     SELECT * FROM dbo.origin
-	 ORDER BY origin_name; 
-	
+  IF isnull(@origin_id,0) <> 0
+	 SET @stmt = @stmt + 'AND @origin_idd=' + cast(@origin_id as varchar(20));
+	  
+   SET @stmt = @stmt + ' ORDER BY origin_name'; 
+
+  EXEC(@stmt);
+	 	
 END
-
-

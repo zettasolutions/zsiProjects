@@ -41,7 +41,7 @@ BEGIN
   ELSE
      SET @stmt = @stmt + ' DESC '
 
-  print @stmt;
+  --print @stmt;
   EXEC(@stmt);
 END
 

@@ -1,23 +1,20 @@
-
--- =============================================
--- Author:		Rogelio T. Novo Jr.
--- Create date: October 25, 2016 3:26 PM
--- Description:	Unit of measurement select all or by id records.
--- =============================================
 CREATE PROCEDURE [dbo].[unit_of_measure_sel]
 (
-    @unit_of_measure_id  INT = null
+     @unit_of_measure_id  INT = null
+	,@is_active varchar(1) = 'Y'
 )
 AS
 BEGIN
 
 SET NOCOUNT ON
+	 DECLARE @stmt NVARCHAR(MAX)
+  SET @stmt = 'SELECT * FROM dbo.unit_of_measure WHERE is_active=''' + @is_active + '''';
 
-  IF @unit_of_measure_id IS NOT NULL  
-	 SELECT * FROM dbo.unit_of_measure WHERE unit_of_measure_id = @unit_of_measure_id; 
-  ELSE
-     SELECT * FROM dbo.unit_of_measure
-	 ORDER BY unit_of_measure_name; 
-	
+  IF isnull(@unit_of_measure_id,0) <> 0
+	 SET @stmt = @stmt + 'AND @unit_of_measure_id=' + cast(@unit_of_measure_id as varchar(20));
+	  
+   SET @stmt = @stmt + ' ORDER BY unit_of_measure_name'; 
+
+  EXEC(@stmt);
+	 	
 END
-
