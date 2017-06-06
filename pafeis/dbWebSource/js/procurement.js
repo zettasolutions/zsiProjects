@@ -588,7 +588,19 @@ function displayProcurementDetails(){
             totalRow += '</div>'; 
     		$("#tblProcurementDetails").find(".right #table").append(totalRow);            
             
-            $(".no-data input[name='part_no']").checkValueExists({code:"ref-0023",isNotExistShow : true ,isCheckOnDb : false ,message : "data not exist"});
+            $(".no-data input[name='part_no']").checkValueExists({
+                    code:"ref-0023"
+                    ,isNotExistShow : false 
+                    ,isCheckOnDb : false 
+                    ,message : "data already exist"
+                    ,onHide: function($zRow){
+                        //clear values
+                        $zRow.find("#item_code_id").val("");
+                        $zRow.find("#national_stock_no").val("");
+                        $zRow.find("#item_name").val("");
+                    }
+                
+            });
             $("#cbFilter3").setCheckEvent("#tblProcurementDetails input[name='cb']");
             
             $("select[name='unit_of_measure_id']").dataBind("unit_of_measure");
@@ -709,6 +721,7 @@ function setMultipleSearch(){
                 $zRow.find("#national_stock_no").val(data.national_stock_no);
                 $zRow.find("#item_name").val(data.item_name);
                 setSearchSerial(data.item_code_id, $zRow);
+                $(currentObject).change();    
         }
     });
     
@@ -949,4 +962,4 @@ else
 function mouseout(){
     $("#user-box").css("display","none");
 }                                           
-           
+              

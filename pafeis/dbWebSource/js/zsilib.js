@@ -216,6 +216,7 @@ var  ud='undefined'
                         , top  : _obj.offset().top - _panel.innerHeight() - 3
                         , onHide : function(){
                             _obj.val(""); 
+                              if( ! isUD(o.onHide) ) o.onHide(_obj.closest(".zRow"));
                           }
                       };
                       
@@ -2382,4 +2383,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                       
+                                                                                                         
