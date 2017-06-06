@@ -8,20 +8,38 @@ imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
     g_imgData = img;
 });
 
+function getTemplate(){
+    $.get(base_url + "templates/bsDialogBox.txt",function(d){
+        var template = Handlebars.compile(d);     
+
+        var context = { id:"modalWindow"
+                        , sizeAttr: "fullWidth"
+                        , title: "PDF Report"
+                        , body: '<iframe id="ifrmWindow" frameborder="0"></iframe>'
+                      };
+        var html    = template(context);     
+        $("body").append(html);
+    });    
+}
 
 zsi.ready(function(){
-    displayRecords();
+    getTemplate();
 });
 
 $("select[name='aircraftStatusReport_filter']").dataBind({
-    url: execURL + "dd_aircraft_organizations_sel" 
+    url: procURL + "dd_aircraft_organizations_sel" 
     , text: "organization_name"
     , value: "organization_id"
 });
 
 $("#btnGo").click(function(){
-   displayRecords();
-   $("#btnPdf").css({display: "block"});
+    if($("#aircraftStatusReport_filter").val() === ""){
+        alert("Please select organization.");
+    }
+    else{
+       displayRecords();
+       $("#btnPdf").css({display: "block"});
+    }
 });
 
 function displayRecords(){
@@ -46,22 +64,26 @@ function displayRecords(){
 }
 
 $("#btnPdf").click(function(){
+    var mw = $('#modalWindow');
+    mw.modal({ show: true, keyboard: false, backdrop: 'static' });
+    mw.find(".modal-title").text("Aircraft Status Report");
+    
     zsi.createPdfReport({
          margin             : { top :30  ,left:25 }
         ,cellMargin         : { left: 5 }
-        ,isDisplay          : false
+        ,isDisplay          : true
         ,fileName           : "aircraftStatus.pdf"  
         ,rowHeight          : 14
         ,widthLimit         : 520
         ,pageHeightLimit    : 800
-        ,masterKey          : "organization_id"
-        ,masterColumn       :  [   
+       // ,masterKey          : "organization_id"
+        ,columnHeader       :  [   
                                  {name:"wing"               ,title:"Wing"               ,titleWidth:100 ,width:200}
                                 ,{name:"squadron"           ,title:"Squadron"           ,titleWidth:100 ,width:200}
                                 ,{name:"aircraft_name"      ,title:"Aircraftt Name"     ,titleWidth:100 ,width:150}
                                 ,{name:"status_name"        ,title:"Status"             ,titleWidth:100 ,width:200}
                             ]
-        ,masterData         : g_masterData
+        ,data               : g_masterData
         ,onInit             : function(){
             return new jsPDF("l", "pt", "A4");
         }
@@ -89,4 +111,4 @@ $("#btnPdf").click(function(){
 
 
  
-             
+                      
