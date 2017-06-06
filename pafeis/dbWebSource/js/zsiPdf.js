@@ -85,7 +85,7 @@ zsi.generatePdfReport = function(o){
            
          
         if(o.isDisplay)
-            document.getElementById("output").src = doc.output('datauristring');
+            document.getElementById("ifrmWindow").src = doc.output('datauristring');
         else 
             doc.save(o.reportTitle + '.pdf');
         
@@ -218,7 +218,7 @@ zsi.createPdfReport = function(o){
         if( ! isUD(dd) ){
             row +=5;
             for(i=0;i<dd.length;i++){
-                 if(md[y][o.MasterKey] === dd[i][o.MasterKey]  )  ndd.push(dd[i]);
+                 if(md[y][o.masterKey] === dd[i][o.masterKey]  )  ndd.push(dd[i]);
             }      
     
             if(ndd.length >0 ){ 
@@ -257,10 +257,10 @@ zsi.createPdfReport = function(o){
     }
 
     if(o.isDisplay)
-        document.getElementById("output").src = doc.output('datauristring');
+        document.getElementById("ifrmWindow").src = doc.output('datauristring');
     else 
         doc.save(o.fileName);
 
 };    
 
-               
+                  
