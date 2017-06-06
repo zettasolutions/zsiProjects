@@ -16,9 +16,30 @@ imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
     g_imgData = img;
 });
 
+
+function getTemplate(){
+    $.get(base_url + "templates/bsDialogBox.txt",function(d){
+        var template = Handlebars.compile(d);     
+
+        var context = { id:"modalWindow"
+                        , sizeAttr: "fullWidth"
+                        , title: "PDF Report"
+                        , body: '<iframe id="ifrmWindow" frameborder="0"></iframe>'
+                      };
+        var html    = template(context);     
+        $("body").append(html);
+    });    
+}
 	
 zsi.ready(function(){
+    getTemplate();
     enableFilter();
+
+    $ ("#wing_id").dataBind({
+                           url: procURL + "organizations_dd_sel @organization_type_id=2"
+                           , text: "organization_name"
+                           , value: "organization_id"
+    });
     $("#supplier_id").dataBind( "dealer");
     $ ("#report_type_id").dataBind({
                            url: execURL + "dd_procurement_report_type_sel"
@@ -32,9 +53,10 @@ zsi.ready(function(){
             });
         }
     });
-$("select[name='procurement_mode']").fillSelect({data: procMode});
- $("#proc_code_id").val("");
-     $("input[name=proc_code]").on("keyup change", function(){
+    
+    $("select[name='procurement_mode']").fillSelect({data: procMode});
+    $("#proc_code_id").val("");
+    $("input[name=proc_code]").on("keyup change", function(){
          clearform();
          disableFilter();
          if(this.value=== ""){ 
@@ -93,11 +115,15 @@ $("#btnGo").click(function(){
 
 
 $("#btnPdf").click(function(){
+    var mw = $('#modalWindow');
+    mw.modal({ show: true, keyboard: false, backdrop: 'static' });
+    mw.find(".modal-title").text("Procurement Report");
     
+
     zsi.createPdfReport({
          margin             : { top :30  ,left:25 }
         ,cellMargin         : { left: 5 }
-        ,isDisplay          : false
+        ,isDisplay          : true
         ,fileName           : "procurement.pdf"  
         ,rowHeight          : 14
         ,widthLimit         : 520
@@ -143,7 +169,7 @@ $("#btnPdf").click(function(){
             
             //setBoxColor(o.doc,255, 255, 255);
             //o.doc.rect(120, o.row-10, 60,14, 'FD');    
-            o.doc.text(125, o.row, ": "  + o.data.procurement_code);
+            o.doc.text(125, o.row, ": "  + o.data.po_code);
 
 
             //setBoxColor(o.doc,207, 226, 247);
@@ -199,9 +225,9 @@ function displayRecords(){
                           return "<a  href='javascript:void(0);' onclick='displayDetail(this,"+ d.procurement_id +");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
                     }
                  }
-                ,{text  : "Procurement No."         , name  : "procurement_code"        , width : 120           , style : "text-align:left;"}
+                ,{text  : "Procurement No."         , name  : "po_code"                 , width : 120           , style : "text-align:left;"}
         		,{text  : "Procurement Date"                                            , width : 180           , style : "text-align:left;"
-        		    ,onRender: function(d){ return svn(d,"procurement_date").toDateFormat();}
+        		    ,onRender: function(d){ return svn(d,"procurement_d ate").toDateFormat();}
         		}
         		,{text  : "Procurement Name"        , name  : "procurement_name"        , width : 200           , style : "text-align:left;"}
         		,{text  : "Supplier Name"           , name  : "supplier_name"           , width : 150           , style : "text-align:left;"}
@@ -213,7 +239,8 @@ function displayRecords(){
         		,{text  : "Total Amount"                                                , width : 100           , style : "text-align:right;"
         		    ,onRender: function(d){ return svn(d,"total_amount").toLocaleString('en-PH', {minimumFractionDigits: 2})}
         		}
-        		,{text  : "Delivery Status"             , name  : "delivery_status"             , width : 150           , style : "text-align:center;"}
+        		,{text  : "Delivery Status"         , name  : "delivery_status"         , width : 150           , style : "text-align:center;"}
+        		,{text  : "Timing Status"           , name  : "timing_status"           , width : 150           , style : "text-align:center;"}
         		
 	    ]
 	    ,onComplete : function(data){
@@ -227,6 +254,10 @@ function displayRecords(){
 	        $.post(execURL + "procurement_detail_sel @master_ids='" + g_masterIds + "'" ,function(data){
 	           g_detailData = data.rows;
 	        });
+	        
+	       //display pdf export button
+	       $("#btnPdf").css({display:"block"});  
+
 	    }
 
     });
@@ -284,4 +315,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                                       
+                                                                                                            
