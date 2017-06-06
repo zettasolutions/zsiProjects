@@ -1,3 +1,6 @@
+<script src="/Scripts/jspdf.min.js"></script>
+<script src='/javascript/name/zsiPdf'></script>
+<script src='/javascript/name/zsiSearch'></script>
 <style>
     #grid{
         width: 100%;
@@ -14,7 +17,20 @@
     .tablePanel {
         overflow-y:auto;
     }
-   
+    .zButtons button{
+         margin-right:6px;
+    }  
+     #btnPdf{
+        display : none;
+    }
+    
+    #ifrmWindow{
+        width:100%;
+        height:600px;
+        border:solid 0pt #000;
+        margin-top:10px;
+    }
+    
 
 </style>
 
@@ -32,8 +48,10 @@
                     <div class=" col-xs-2"> 
                         <select name="categories_filter" id="categories_filter" placeholder="Search" class="form-control input-sm"> </select>
                     </div>
-                     <div class="col-xs-1">
-                        <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                    
+                    <div class="zButtons" >
+                        <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
+                        <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> Show PDF</button>
                     </div>
                 </div>
             </div>
@@ -41,3 +59,4 @@
         </div>
     </form>
 </div>
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
