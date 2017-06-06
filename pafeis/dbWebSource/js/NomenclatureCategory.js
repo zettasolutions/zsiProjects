@@ -38,7 +38,7 @@ var contextItemTypes = {
                 +'<button type="button" onclick="addNewItemCodes();" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>&nbsp;New</button>'
                 +'<button type="button" onclick="showUploadFile();" class="btn btn-primary"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>'
               +'</div>'
-    , body: '<div id="' + tblIT + '" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="' + tblIT + '" class="zGrid"></div></div>'
 };
 
 var contextItemCodes = { 
@@ -49,7 +49,7 @@ var contextItemCodes = {
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="showInactiveItemCodes();" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
             + '</span>&nbsp;Inactive</button></div>'
-    , body: '<div id="' + tblIC + '" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="' + tblIC + '" class="zGrid"></div></div>'
 };
 
 var contextNewItemCodes = { 
@@ -58,7 +58,7 @@ var contextNewItemCodes = {
     , sizeAttr: "fullWidth"
     , footer: '<div class="pull-left"><button type="button" onclick="submitNewItemCodes();" class="btn btn-primary">'
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button></div>'
-    , body: '<div id="tblNewItemCodes" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="tblNewItemCodes" class="zGrid"></div></div>'
 };
 
 var contextInactiveItemCategory = { 
@@ -69,7 +69,7 @@ var contextInactiveItemCategory = {
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="deleteItemCategory();" class="btn btn-primary"><span class="glyphicon glyphicon-trash">'
             + '</span>&nbsp;Delete</button></div>'
-    , body: '<div id="' + tblInactiveICat + '" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="' + tblInactiveICat + '" class="zGrid"></div></div>'
 };
 
 var contextInactiveItemTypes = { 
@@ -80,7 +80,7 @@ var contextInactiveItemTypes = {
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="deleteItemTypes();" class="btn btn-primary"><span class="glyphicon glyphicon-trash">'
             + '</span>&nbsp;Delete</button></div>'
-    , body: '<div id="' + tblInactiveIT + '" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="' + tblInactiveIT + '" class="zGrid"></div></div>'
 };        
 
 var contextInactiveItemCodes = { 
@@ -91,7 +91,7 @@ var contextInactiveItemCodes = {
             + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
             + '<button type="button" onclick="deleteItemCodes();" class="btn btn-primary"><span class="glyphicon glyphicon-trash">'
             + '</span>&nbsp;Delete</button></div>'
-    , body: '<div id="' + tblInactiveIC + '" class="zGrid"></div>'
+    , body: '<div class="modalGrid zContainer1"><div id="' + tblInactiveIC + '" class="zGrid"></div></div>'
 };
 
 var contextFileUpload = { 
@@ -485,7 +485,7 @@ function displayRecordsItemTypes(id, parent_item_cat_id, name){
                        +  bs({name:"item_type_code",type:"input",value: svn (d,"item_type_code")});
             }   
 		}
-		,{text  : "Type Name"                                                   , type  : "input"           , width : 400       , style : "text-align:left;"
+		,{text  : "Type Name"                          , type  : "input"      ,sortColNo: 4    , width : 400       , style : "text-align:left;"
 		    , onRender      : function(d){
                 return  bs({name:"item_type_name",type:"input",value: svn (d,"item_type_name")})
                     +   (parent_item_cat_id===0 ? bs({name:"parent_item_type_id",type:"hidden",value: svn (d,"parent_item_type_id")}) : "");
@@ -593,10 +593,12 @@ function displayRecordsItemCodes(id,monitoring_type_name, count){
     		,{text  : "Part No."            , name  : "part_no"                 , type  : "input"         , width : 200         , style : "text-align:left;"    ,sortColNo: 1 }
     		,{text  : "National Stock No."  , name  : "national_stock_no"       , type  : "input"         , width : 160         , style : "text-align:left;"    ,sortColNo: 2 }
     		,{text  : "Nomenclature Name"   , name  : "item_name"               , type  : "input"         , width : 360         , style : "text-align:left;"    ,sortColNo: 3 }
-    		,{text  : "Critical Level " + "(" + monitoring_type_name + ")"      , name  : "critical_level", type  : "input"     , width : 180                   , style : "text-align:left;"}
+    		
     		,{text  : "Reorder Qty"         , name  : "reorder_level"           , type  : "input"         , width : 100         , style : "text-align:left;"}
     		,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"      , type  : "select"        , width : 110         , style : "text-align:center;"}
+    		,{text  : "Critical Level " + "(" + monitoring_type_name + ")"      , name  : "critical_level", type  : "input"     , width : 200                   , style : "text-align:center;"}
     		,{text  : "Monitoring Type"     , name  : "monitoring_type_id"      , type  : "select"        , width : 130         , style : "text-align:left;"}
+    		,{text  : "Is Repairable?"      , name  : "is_repairable"           , type  : "yesno"         , width : 100         , style : "text-align:center;"  ,defaultValue:"N"}
     		,{text  : "Is Active?"          , name  : "is_active"               , type  : "yesno"         , width : 90          , style : "text-align:center;"  ,defaultValue:"Y"}
 	    ] 
         ,onComplete: function(){
@@ -661,7 +663,7 @@ function displayNewItemCodes(item_type_id){
 	    ,height         : 250
         ,blankRowsLimit : 10
         ,dataRows       : [
-    		{text  : "Type"                    , width : 125                        , style : "text-align:left;"
+    		{text  : "Type"                    , width : 125                        , style : "text-align:left;"    
     		    , onRender      :  function(d){ 
                     return     bs({name:"item_code_id",type:"hidden"})
                             +  bs({name:"is_edited",type:"hidden"})
@@ -672,10 +674,12 @@ function displayNewItemCodes(item_type_id){
     		,{text  : "Part No."            , name  : "part_no"                 , type  : "input"           , width : 200         , style : "text-align:left;"}
     		,{text  : "National Stock No."  , name  : "national_stock_no"       , type  : "input"           , width : 160         , style : "text-align:left;"}
     		,{text  : "Nomenclature Name"   , name  : "item_name"               , type  : "input"           , width : 360         , style : "text-align:left;"}
-    		,{text  : "Critical Level " + "(" + g_monitoring_type_name + ")"    , name  : "critical_level"  , type  : "input"     , width : 180                   , style : "text-align:left;"}
+    		
     		,{text  : "Reorder Qty"         , name  : "reorder_level"           , type  : "input"           , width : 100         , style : "text-align:left;"}
     		,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"      , type  : "select"          , width : 110         , style : "text-align:center;"}
+    		,{text  : "Critical Level " + "(" + g_monitoring_type_name + ")"    , name  : "critical_level"  , type  : "input"     , width : 200                   , style : "text-align:center;"}
     		,{text  : "Monitoring Type"     , name  : "monitoring_type_id"      , type  : "select"          , width : 130         , style : "text-align:left;"}
+    		,{text  : "Is Repairable?"      , name  : "is_repairable"           , type  : "yesno"         , width : 100          , style : "text-align:center;"  ,defaultValue:"N"}
     		,{text  : "Is Active?"          , name  : "is_active"               , type  : "yesno"           , width : 90          , style : "text-align:center;"  ,defaultValue:"Y"}
 	    ] 
         ,onComplete: function(){
@@ -714,10 +718,12 @@ function displayItemCodesByCategory(item_cat_id, count){
     		,{text  : "Part No."            , name  : "part_no"                 , type  : "input"         , width : 200         , style : "text-align:left;"    ,sortColNo: 1 }
     		,{text  : "National Stock No."  , name  : "national_stock_no"       , type  : "input"         , width : 160         , style : "text-align:left;"    ,sortColNo: 2 }
     		,{text  : "Nomenclature Name"   , name  : "item_name"               , type  : "input"         , width : 360         , style : "text-align:left;"    ,sortColNo: 3 }
-    		,{text  : "Critical Level"      , name  : "critical_level"          , type  : "input"         , width : 180         , style : "text-align:left;"}
+    		
     		,{text  : "Reorder Qty"         , name  : "reorder_level"           , type  : "input"         , width : 100         , style : "text-align:left;"}
     		,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"      , type  : "select"        , width : 110         , style : "text-align:center;"}
+    		,{text  : "Critical Level"      , name  : "critical_level"          , type  : "input"         , width : 200         , style : "text-align:center;"}
     		,{text  : "Monitoring Type"     , name  : "monitoring_type_id"      , type  : "select"        , width : 130         , style : "text-align:left;"}
+    		,{text  : "Is Repairable?"      , name  : "is_repairable"           , type  : "yesno"         , width : 100         , style : "text-align:center;"  ,defaultValue:"N"}
     		,{text  : "Is Active?"          , name  : "is_active"               , type  : "yesno"         , width : 90          , style : "text-align:center;"  ,defaultValue:"Y"}
 	    ] 
         ,onComplete: function(){
@@ -811,4 +817,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }               
-     
+        

@@ -159,10 +159,10 @@ function displayItems(id){
        		,{text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:right;"
     		    ,onRender : function(d){ return svn(d,"reorder_level"); }
     		}
-       		,{text  : "Unit of Measure"               , type  : "label"       , width : 100       , style : "text-align:left;"
+       		,{text  : "Unit of Measure"               , type  : "label"       , width : 180       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"unit_of_measure"); }
     		}    
-        		,{text  : "Bin#"               , type  : "label"       , width : 100       , style : "text-align:left;"
+        		,{text  : "Bin#"               , type  : "label"       , width : 150       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"bin"); }
     		}    		
 	    ]   
