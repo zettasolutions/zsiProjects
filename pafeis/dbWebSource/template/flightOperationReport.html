@@ -8,7 +8,7 @@
     }
     
     .zGrid .item .title {
-        height: 22px;
+        height: 35px;
         line-height: 19px;
     }
     .zGrid .zHeaders .zSort {
@@ -32,8 +32,34 @@
         border:solid 0pt #000;
         margin-top:10px;
     }
+    #title5,
+    #title6,
+    #title10,
+    #title11,
+    #title13,
+    #title16,
+    #title17,
+    #title19,
+    #title20{
+        border-bottom: 1px solid;
+    }
+    .zGridPanel.right .item .item:last-child {
+        margin-left: -1px;
+    }
+    /* Fix for Chrome Only 29+ */
+    @media screen and (-webkit-min-device-pixel-ratio:0)
+      and (min-resolution:.001dpcm) {
+        .zGridPanel.right .item .item:last-child {
+            margin-left: -1.32px;
+        }
+    }
     
-
+    .zGridPanel.right .item:nth-last-child(2) .item:last-child > .title{
+        text-align: center !important;
+    }
+    _:-ms-fullscreen, :root .zGridPanel.right .item .item:last-child {  /* IE 11 above*/
+        margin-left: -1pt !important; 
+    } 
 </style>
 
 <script src='/javascript/name/zsiSearch'></script>
@@ -46,7 +72,7 @@
                         <div class=" col-xs-2"> 
                             <select name="aircraft_organization_filter" id="aircraft_organization_filter" class="form-control input-sm"> </select>
                         </div>
-                        <label class=" col-xs-2 control-label" >Flight Schedule Date (From / To)</label>
+                        <label class=" col-xs-3 control-label" >Flight Schedule Date (From / To)</label>
                         <div class="col-xs-1" >   
                            <input name="date_from" id="date_from" class="form-control input-sm"> 
                         </div>
