@@ -14,6 +14,12 @@ var bs = zsi.bs.ctrl
     ,g_today_date = new Date() + ""
     ,g_statuses = []
     ,g_squadron_type = ""
+    ,g_squadron_id = null
+    ,g_imgData        = null
+    ,g_masterColumn = []
+    ,g_masterData = []
+    ,g_detailColumn = []
+    ,g_detailData = []
 ;
     const IssuanceType = {
     Aircraft: 'Aircraft',
@@ -23,11 +29,9 @@ var bs = zsi.bs.ctrl
     Directive: 'Directive',
 };
 
-var form = $('#printPDF'),
-	cache_width = form.width()-12,
-	a4  = [ 595.28,  841.89],  // for a4 size paper width and height
-	letter = [612.00, 792.00],
-	legal = [612.00, 1008.00];
+imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
+    g_imgData = img;
+});
 
 zsi.ready(function(){
     getTemplate();
@@ -149,6 +153,7 @@ function getUserInfo(callBack){
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_squadron_type = d.rows[0].squadron_type;
+            g_squadron_id = d.rows[0].squadron_id;
             
             $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
             
@@ -182,16 +187,20 @@ function getUserInfo(callBack){
                              displayDirective(g_tab_name);   
                         }
                     });
-                    if(g_squadron_type!=="AIRCRAFT"){
-                        g_tab_name = "WAREHOUSE";
-                        $("#aircraft-tab, #tabAircraft").hide();
-                        $("#warehouse-tab").click();
-                    }else{
-                        displayAircraft(g_tab_name);
-                    }
                 }
             });
             getStatusRoles(d.rows[0].role_id);
+            if(g_squadron_type!=="" && g_squadron_type!=="AIRCRAFT"){
+                $("#aircraft-tab, #tabAircraft").hide();
+                g_tab_name = "WAREHOUSE";
+                $("#warehouse-tab").click();
+            }else{
+                displayAircraft(g_tab_name);
+            }
+            
+            if(g_squadron_type!=="" && g_squadron_type!=="SUPPLY")
+                $("#disposal-tab, #tabDisposal").hide();
+            
         }
         if(callBack) callBack();
     });
@@ -657,7 +666,7 @@ $("#aircraftBtnNew").click(function () {
     //$('#modalIssuance').on('shown.bs.modal', function (e) { //This event is fired when the modal has been made visible to the user
         $("#dealer_filter_div, #issuance_directive_code_filter_div").addClass("hide");
         $("select[name='aircraft_filter']").dataBind({ 
-            url: procURL + "dd_aircrafts_sel"
+            url: execURL + "dd_aircrafts_sel @squadron_id=" + g_squadron_id
             ,text: "aircraft_name"
             ,value: "aircraft_info_id"
         });
@@ -782,9 +791,11 @@ function Save(page_process_action_id) {
     if( zsi.form.checkMandatory()!==true) {
         return false;
     }
-    if(validateWithSerial()!==true){
-        alert("Please enter serial no.");
-        return false;
+    if(g_tab_name!=="DISPOSAL"){
+        if(validateWithSerial()!==true){
+            alert("Please enter serial no.");
+            return false;
+        }
     }
     var result = confirm("Entries will be saved. Continue?");
     if (result) {
@@ -864,7 +875,7 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
         //$('#modalIssuance').on('shown.bs.modal', function (e) { //This event is fired when the modal has been made visible to the user
             $("select[name='aircraft_filter']").attr("selectedvalue", id);
             $("select[name='aircraft_filter']").dataBind({ 
-                url: procURL + "dd_aircrafts_sel"
+                url: execURL + "dd_aircrafts_sel @squadron_id=" + g_squadron_id
                 ,text: "aircraft_name"
                 ,value: "aircraft_info_id"
             });
@@ -1239,7 +1250,7 @@ function setSearchSerial(d, row){
         _status = 60
     }
     else _status = 0
-    
+    console.log(_status);
     if(d.with_serial==="Y"){
         $serial_no.addClass("with-serial");
         $serial_no.removeAttr("readonly");
@@ -1279,89 +1290,102 @@ function setMandatoryEntries(){
     });    
 }
 
-//create pdf
-function createPDF(callBack){
-	getCanvas().then(function(canvas){
-		var 
-		img = canvas.toDataURL("image/png"),
-		doc = new jsPDF({
-		  unit:'px', 
-		  format:'letter' //'a4'
-		});     
-		doc.addImage(img, 'JPEG', 5, 10);
-		doc.save('PDFTest.pdf');
-		form.width(cache_width);
-	});
-	if(callBack) callBack();
+function displaySampleMasterDetail(){
+    zsi.createPdfReport({
+         margin             : { top :20  ,left:25 }
+        ,cellMargin         : { left: 5 }
+        ,rowHeight          : 14
+        ,widthLimit         : 550
+        ,pageHeightLimit    : 750
+        //,isDisplay          : true
+        ,MasterKey          : "issuance_id"
+        ,masterColumn       : g_masterColumn
+        ,masterData         : g_masterData
+        ,detailColumn       : g_detailColumn
+        ,detailData         : g_detailData
+        ,onPrintHeader      : function(o){
+            if (g_imgData) {
+                o.doc.addImage(g_imgData, 'JPEG', o.margin.left,  o.row, 50, 50);
+            }
+            o.row +=27;
+            o.doc.setFontSize(12);
+            o.doc.text(o.margin.left + 60, o.row, "Philippine Airforce");
+            o.row +=40;
+            o.doc.setFontSize(14);
+            o.doc.text(o.margin.left, o.row, "Warehouse Issuance Report");
+            o.doc.setFontSize(10);
+            o.row +=16;
+            return o;
+        }
+
+        //customized master data printing
+        ,onMasterDataPrint : function(o){
+            if(o.index>0) o.row +=14;  
+            o.doc.text(25, o.row, "Issuance No.");   
+            o.doc.text(110, o.row, ": "  + o.data.issuance_no);  
+            
+            o.doc.text(315, o.row, "Issued Date");
+            o.doc.text(415, o.row,  ": "  + o.data.issued_date.toDateFormat());
+            
+            //new row
+            o.row +=18;  
+            o.doc.text(25, o.row, "To");  
+            o.doc.text(110, o.row, ": "  + o.data.transfer_organization_warehouse);
+            
+            o.doc.text(315, o.row, "Ref. No.");  
+            o.doc.text(415, o.row,  ": "  + o.data.authority_ref);
+            
+            //new row
+            o.row +=18; 
+            o.doc.text(25, o.row, "Issued By");
+            o.doc.text(110, o.row, ": "  + o.data.issued_by_name);
+            
+            o.doc.text(315, o.row, "Accepted By");
+            o.doc.text(415, o.row,  ": "  + o.data.accepted_by_name);
+            
+            //new row
+            o.row +=18; 
+            o.doc.text(25, o.row, "Remarks");
+            o.doc.text(110, o.row, ": "  + o.data.status_remarks);
+            
+            return o.row;    
+        }
+    });                  
 }
 
-// create canvas object
-function getCanvas(){
-	form.width((letter[0]*1.4444) -80).css('max-width','none');
-	return html2canvas(form,{
-		imageTimeout:2000,
-		removeContainer:true
-	});	
-}
-
-function setHtml(callBack){
-    //var html = $("#modalIssuance").find(".modal-body").html();
-    //$("#printPDF").html(html);
-    
-    $.get(procURL + "issuances_sel @issuance_id=" + g_issuance_id + "&@tab_name=" + g_tab_name, function(d) {
+function PrintToPDF(){
+    $.get(procURL + "issuances_sel @issuance_id=" + g_issuance_id + ",@tab_name='" + g_tab_name +"'", function(d) {
         if (d.rows !== null) {
-            $("#printPDF #issuance_no").html(d.rows[0].issuance_no +"&nbsp;");
-            $("#printPDF #issued_by").html(d.rows[0].issued_by_name +"&nbsp;");
-            $("#printPDF #issued_date").html(d.rows[0].issued_date.toShortDate() +"&nbsp;");
-            $("#printPDF #authority_ref").html(d.rows[0].authority_ref +"&nbsp;");
-            $("#printPDF #accepted_by").html(d.rows[0].accepted_by_name +"&nbsp;");
-            $("#printPDF #issued_to_organization").html(d.rows[0].transfer_organization_warehouse +"&nbsp;");
-            $("#printPDF #status_remarks").html(d.rows[0].status_remarks +"&nbsp;");
+            g_masterColumn   = [   
+                 {name:"issuance_no"    ,title:"Issuance No."       ,titleWidth:100 ,width:50}
+                ,{name:"issued_date"      ,title:"Issued Date"      ,titleWidth:100 ,width:80}
+                ,{name:"transfer_organization_warehouse"            ,title:"To:"    ,titleWidth:100 ,width:100}
+                ,{name:"authority_ref"   ,title:"Ref. No."          ,titleWidth:100 ,width:100}
+                ,{name:"issued_by_name"   ,title:"Issued By"        ,titleWidth:100 ,width:100}
+                ,{name:"accepted_by_name"   ,title:"Accepted By"    ,titleWidth:100 ,width:100}
+                ,{name:"status_remarks"   ,title:"Remarks"                 ,titleWidth:100 ,width:100}
+            ];
+            g_masterData = d.rows;
             
             $.get(procURL + "issuance_details_sel @issuance_id=" + g_issuance_id, function(data) {
                 var d = data.rows;
                 if(d.length > 0){
-                    var html = '';
-                    for(var i=0; i<d.length; i++ ){
-                        var count = i+1;
-                        html += '<tr>' 
-                                    +'<td>'+ count +'</td>' 
-                                    +'<td>'+ d[i].part_no +'</td>' 
-                                    +'<td>'+ d[i].national_stock_no +'</td>'  
-                                    +'<td>'+ d[i].item_name +'</td>' 
-                                    +'<td>'+ d[i].quantity +'</td>'  
-                                    +'<td>'+ d[i].unit_of_measure +'</td>'  
-                                    +'<td>'+ d[i].item_status +'</td>'  
-                                +'</tr>';
-                    }
-                    $("#tblPrintIssuanceDetails").find("tbody").html(html);
-                    $("#printPDF").removeClass("hide");
-                    if(callBack) callBack();
+                    g_detailColumn   = [   
+                         //{name:"item_no"        ,title:"Item #"       ,width:60}
+                        {name:"part_no"       ,title:"Part #"      ,width:80}
+                        ,{name:"national_stock_no"   ,title:"NS #"  ,width:100}
+                        ,{name:"item_name"   ,title:"Nomenclature"  ,width:130}
+                        ,{name:"quantity"   ,title:"Qty."   ,width:50}
+                        ,{name:"unit_of_measure"   ,title:"Unit Measure"   ,width:70}
+                        ,{name:"item_status"   ,title:"Item Status"   ,width:80}
+                    ];
+                    g_detailData = data.rows;
+                    
+                    displaySampleMasterDetail();
                 }
             });
         }
     });
 }
 
-function PrintToPDF(){
-    setHtml(function(){
-        $('body').scrollTop(0);
-    	createPDF(function(){
-    		$("#printPDF").addClass('hide');
-    	});
-    	
-    	/*var pdf = new jsPDF('p', 'pt', 'letter');
-        var canvas = pdf.canvas;
-        canvas.height = 72 * 11;
-        canvas.width= 72 * 8.5;;
-
-        // can also be document.body
-        var html = $("#printPDF").html();
-
-        html2pdf(html, pdf, function(pdf) {
-            $("#printPDF").addClass('hide');
-            pdf.output('dataurlnewwindow');
-        });*/
-    });
-}
-      
+   

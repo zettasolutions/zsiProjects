@@ -13,6 +13,7 @@ var g_procurement_id = null;
 var g_today_date = new Date() + "";
 var g_statuses = [];
 var g_squadron_type = "";
+var g_serials_arr = [];
 const DeliveryType = {
     Procurement: 'Procurement',
     Donation: 'Donation',
@@ -44,6 +45,7 @@ zsi.ready(function(){
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
             g_squadron_type = d.rows[0].squadron_type;
+            
             
             $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
             $("select[name='dd_warehouses']").dataBind({
@@ -164,8 +166,8 @@ function getTemplate(){
 }
 
 function clearEntries() {
-    $('input[type=text]').val('');
-    $('select').val('');  
+    $('#modalReceiving input[type=text]').val('');
+    $('modalReceiving select').val('');  
     zsi.initDatePicker(); 
 }
 
@@ -189,8 +191,7 @@ function initSelectOptions(callbackFunc){
         url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
         , text: "userFullName"
         , value: "user_id"
-        
-        , onComplete : function(){  
+        , onComplete : function(){
             if(callbackFunc) callbackFunc(); 
         }
     });
@@ -245,7 +246,7 @@ function getStatusRoles(role_id){
     });   
 }
 
-function getStatuses(status_name){
+function getStatuses(status_name, callBack){
     $.get(execURL + "statuses_sel @status_name='" + status_name + "'", function(d) {
         g_statuses = [];
         if (d.rows.length > 0) {
@@ -261,6 +262,7 @@ function getStatuses(status_name){
         if(g_statuses.is_delete==="Y"){
             $("#receiving-footer").append('<button type="button" onclick="javascript:void(0); return Delete();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>');
         }
+        if(callBack) callBack();
     });
 }
 
@@ -419,7 +421,7 @@ function displayAircraft(tab_name){
                     ,onRender : function(d){ 
                         return "<a href='javascript:showModalUpdateReceiving(\""
                         + DeliveryType.Aircraft + "\",\""
-                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"receiving_no")  + "\");'>" 
+                        + svn(d,"receiving_id") + "\",\"" +  svn(d,"receiving_no")  + "\"," +  svn(d,"aircraft_id")  + ");'>" 
                         + svn(d,"receiving_no") + " </a>";
                     }
                 }
@@ -431,9 +433,9 @@ function displayAircraft(tab_name){
                                          + bs({name:"dealer_name",type:"hidden",value: svn (d,"transfer_organization_name")});
                     }
                 }
-                ,{text  : "Transferred From"      , type  : "label"             , width : 200       , style : "text-align:left;"
+               /* ,{text  : "Transferred From"      , type  : "label"             , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
-                }
+                }*/
                 ,{text  : "Aircraft"              , type  : "label"             , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"aircraft_name"); }
                 }
@@ -532,9 +534,9 @@ function displayDirective(tab_name){
                 ,{text  : "Transferred From"        , type  : "label"           , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"issuance_warehouse"); }
                 }
-                ,{text  : "Aircraft"                , type  : "label"           , width : 200       , style : "text-align:left;"
+                /*,{text  : "Aircraft"                , type  : "label"           , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"aircraft_name"); }
-                }
+                }*/
                 
                 ,{text  : "Received By"             , type  : "label"           , width : 200       , style : "text-align:left;"
                     ,onRender : function(d){ return svn(d,"received_by_name"); }
@@ -585,7 +587,7 @@ function buildReceivingHeader(tbl_obj) {
                 '<input type="text" name="doc_date" id="doc_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
             '</div>' +
             '<label class=" col-xs-1 control-label">Status</label>' +
-            '<div class=" col-xs-2">' +
+            '<div class=" col-xs-1">' +
                 '<label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' +
                 '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
             '</div>' +
@@ -595,7 +597,7 @@ function buildReceivingHeader(tbl_obj) {
         '<div class="form-group  "> ' +
             '<label class=" col-xs-1 control-label">Received By</label>' +
             '<div class=" col-xs-3">' +
-                '<select type="text" name="received_by" id="received_by" class="form-control input-sm"></select>' +
+                '<select name="received_by" id="received_by" class="form-control input-sm"><option value=""></option></select>' +
             '</div>' +
             '<label class=" col-xs-1 control-label">Received Date</label>' +
             '<div class=" col-xs-1">' +
@@ -627,7 +629,7 @@ function buildReceivingHeader(tbl_obj) {
             '</div>' +
             '<label class=" col-xs-1 control-label">Remarks</label>' +
             '<div class=" col-xs-7">' +
-                 '<textarea type="text" name="status_remarks" id="status_remarks" class="form-control input-sm" ></textarea>' +
+                 '<textarea name="status_remarks" id="status_remarks" class="form-control input-sm" ></textarea>' +
                  '<input type="hidden" name="receiving_type" id="receiving_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
             '</div>' +
         '</div>' +
@@ -694,6 +696,7 @@ function buildReceivingDetails(callback) {
                             + bs({name:"time_since_overhaul",type:"hidden"});
                 }
             }
+            
             ,{text  : "Status"      , name:"status_id"    ,type:"select"     , width : 150         , style : "text-align:left;" }
             ,{text  : "Remarks"     , name:"remarks"      ,type:"input"      , width : 250         , style : "text-align:left;"}        );
     }else{
@@ -710,7 +713,7 @@ function buildReceivingDetails(callback) {
     	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
     	        } 
     	    } 
-           ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
+            ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
             //,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;"}
@@ -748,6 +751,18 @@ function buildReceivingDetails(callback) {
                     $("#tblModalReceivingHeader").find("#is_edited").val("Y");
             });
             
+            $("#tblModalReceivingDetails").find(".zRow").click(function(e){
+                if($(this).find("#serial_no").hasClass("with-serial")){
+                }else{
+                    $("input[name='serial_no']").each(function(){
+                        if($(this).hasClass("with-serial")){
+                            $(this).focus().addClass('border-required');
+                            alert("Please select serial no.");
+                        }
+                    });
+                }
+            });
+            
             $("[name='serial_no']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
                 var stock_qty = $zRow.find("input[name='quantity']").val();
@@ -757,9 +772,9 @@ function buildReceivingDetails(callback) {
                     $zRow.find("#quantity").val('');
                 }
             });            
+
             setSearchMulti();
             if (callback) callback();
-            $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
             zsi.initInputTypesAndFormats();
         }  
     });
@@ -843,7 +858,7 @@ $("#adBtnNew").click(function () {
     $("#modalReceiving").modal({ show: true, keyboard: false, backdrop: 'static' });
     clearEntries();
     $("select[name='aircraft_filter']").dataBind({ 
-        url: procURL + "dd_aircrafts_sel"
+        url: procURL + "dd_aircrafts_sel @squadron_id=" + g_organization_id
         ,text: "aircraft_name"
         ,value: "aircraft_info_id"
     });
@@ -853,8 +868,27 @@ $("#adBtnNew").click(function () {
     buildReceiving($("#tblModalReceivingHeader"));
 });
 
+function validateWithSerial(){
+    var $withSerial = $("#tblModalReceivingDetails").find("input.with-serial");
+    
+    if($withSerial.length > 0){
+        $withSerial.addClass('border-required');
+        return false;
+    }else{
+        return true;
+    }
+}
+
 // Save the new receiving entry.
 function Save(page_process_action_id) {
+    
+    if(g_tab_name==="PROCUREMENT" || g_tab_name==="DONATION"){
+        
+        if(validateWithSerial()!==true){
+            alert("Please enter serial no.");
+            return false;
+        }
+    }
     var result = confirm("Entries will be saved. Continue?");
     if (result) {
         $("#tblModalReceivingHeader").find("#is_edited").val("Y");
@@ -952,9 +986,19 @@ function showModalUpdateReceiving(delivery_type, receiving_id, receiving_no, id,
     }
     
     if (delivery_type == DeliveryType.Aircraft) {
-        $("#modalReceiving .modal-title").html("Items Delivered from " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
+        $("#modalReceiving .modal-title").html("Items Delivered to " + g_organization_name + g_location_name + ' from <select name="aircraft_filter" id="aircraft_filter"></select>');
         $("select[name='aircraft_filter']").attr("selectedvalue", id);
-        $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
+        
+       // $("select[name='aircraft_filter']").dataBind({ url: base_url +  "selectoption/code/aircraft_info" });
+        $("select[name='aircraft_filter']").dataBind({ 
+            url: procURL + "dd_aircrafts_sel @squadron_id=" + g_organization_id
+            ,text: "aircraft_name"
+            ,value: "aircraft_info_id"
+            ,onComplete : function(){
+                 $("#aircraft_id").val(id);
+            }
+        });
+        
         $("select[name='aircraft_filter']").change(function(){
             $("#aircraft_id").val(this.value);
         });
@@ -993,9 +1037,10 @@ function showModalUpdateReceiving(delivery_type, receiving_id, receiving_no, id,
                 $("#tblModalReceivingHeader #supply_source_filter").attr("selectedvalue", d.rows[0].supply_source_id);
                 $("#tblModalReceivingHeader #procurement_filter").val(d.rows[0].procurement_id);
                 
-                loadReceivingDetails(receiving_id);
-                buildReceivingButtons();
-                getStatuses(d.rows[0].status_name);
+                getStatuses(d.rows[0].status_name, function(){
+                    loadReceivingDetails(receiving_id);
+                    buildReceivingButtons();
+                });
             }
         });
     });
@@ -1105,6 +1150,7 @@ function loadReceivingDetails(receiving_id) {
                 var $zRow = $(this).closest(".zRow");
                 if($zRow.length){
                     $zRow.find("#is_edited").val("Y");
+                    
                 }
                 else
                     $("#tblModalReceivingHeader").find("#is_edited").val("Y");
@@ -1208,7 +1254,7 @@ function setSearchMulti(){
     }
     else {
         _tableCode = "ref-0036"
-        _colname = ["part_no","national_stock_no","item_name","item_code_id","unit_of_measure_id","with_serial"] 
+        _colname = ["part_no","national_stock_no","item_name","item_code_id","unit_of_measure_id","with_serial","balance_quantity"] 
     }
     
     if(g_tab_name==="AIRCRAFT"){
@@ -1237,12 +1283,16 @@ function setSearchMulti(){
             $zRow.find("#item_code_id").val(data.item_code_id);
             $zRow.find("#national_stock_no").val(data.national_stock_no);
             $zRow.find("#item_name").val(data.item_name);
-            $zRow.find("#quantity").val(data.balance_quantity);
+            $zRow.find("#quantity").val( data.balance_quantity);
             $zRow.find("#unit_of_measure_id").val(data.unit_of_measure_id);
             
             if(g_tab_name!=="PROCUREMENT")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
                 
+            if(g_tab_name==="PROCUREMENT" || g_tab_name==="DONATION")
+                checkSerialExist(data.item_code_id, data, $zRow);
+                
+           
         }
     });
 
@@ -1267,6 +1317,9 @@ function setSearchMulti(){
             
             if(g_tab_name!=="PROCUREMENT")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
+                
+            if(g_tab_name==="PROCUREMENT" || g_tab_name==="DONATION")
+                checkSerialExist(data.item_code_id, data, $zRow);
         }
     });
     
@@ -1291,27 +1344,72 @@ function setSearchMulti(){
             
             if(g_tab_name!=="PROCUREMENT")
                 setSearchSerial(data.item_code_id, $zRow, selCode);
+                
+            if(g_tab_name==="PROCUREMENT" || g_tab_name==="DONATION")
+                checkSerialExist(data.item_code_id, data, $zRow);
         }
     });
 }
 
 function setSearchSerial(id, row, code){
     var aircraft_info_id = $("#aircraft_filter").val();
-    if(g_tab_name==="AIRCRAFT"){
         row.find("#serial_no").dataBind({
-            url: execURL + "items_sel @item_code_id='" + id + "'" + ",@aircraft_info_id='" + aircraft_info_id + "'"
+            url: execURL + "items_sel @item_code_id='" + id + "'" + (g_tab_name==="AIRCRAFT" ? ",@aircraft_info_id='" + aircraft_info_id + "'" : "") 
             , text: "serial_no"
             , value: "serial_no"
         });
-    }
-    else{
-        row.find("#serial_no").dataBind({
-            url: execURL + "items_sel @item_code_id='" + id + "'" 
-            , text: "serial_no"
-            , value: "serial_no"
-        });
+ }
+
+function checkSerialExist(id, d, row){
+    var $serial_no = row.find("input[name='serial_no']");
+    $.get(execURL + "items_sel @item_code_id=" + id, function(data){
+        var tempSerials = [];
+        var globalTimeout = null;
+        if(data.rows.length > 0){
+            for(var i=0; i < data.rows.length; i++){
+                tempSerials.push(data.rows[i].serial_no);
+            }
+        }
         
-    }
+        if(typeof g_serials_arr[row.index()] === 'undefined'){
+             g_serials_arr.push(tempSerials);
+        }else{
+            g_serials_arr[row.index()] = tempSerials;
+        }
+
+        $("input[name='serial_no']").unbind();
+        if(d.with_serial==="Y"){
+            $serial_no.addClass("with-serial");
+            $serial_no.removeAttr("readonly");
+            $("input[name='serial_no']").on("keyup",function(){
+                var rowIndex = $(this).closest(".zRow").index();
+                var value = $(this).val();
+                if(value && value!==""){
+    
+                    row.find("input[name='quantity']").val(1);
+                    $(this).removeClass('with-serial');
+                    $(this).removeClass('border-required');
+    
+                    if (globalTimeout != null) {
+                        clearTimeout(globalTimeout);
+                    }
+                    globalTimeout = setTimeout(function() {
+                    globalTimeout = null;  
+                        if(g_serials_arr[rowIndex].indexOf(value) > -1){
+                            alert("Serial number already exist. Please enter different serial number");
+                        }
+                    }, 200); 
+                }
+                else{
+                    $(this).addClass('with-serial');
+                    $(this).addClass('border-required');
+                }
+            });
+        }else{
+            $serial_no.removeClass("with-serial");
+        }      
+
+    });
 }
 
 // Set the mandatory fields.
@@ -1328,4 +1426,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                                                                    
+                                                                                                                      
