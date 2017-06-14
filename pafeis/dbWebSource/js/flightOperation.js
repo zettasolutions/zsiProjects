@@ -344,7 +344,7 @@ function displayRecords(){
                                           
                 }
             }	 
-            ,{text  : "Code"                    , type  : "input"       , width : 85       , style : "text-align:left;"
+            ,{text  : "Code"                    , type  : "input"       , width : 150       , style : "text-align:left;"
     		    ,onRender : function(d){ 
     		        dataFlightOperationsIndex++;
     		        return "<a href='javascript:showModalUpdateOperation(\""
@@ -353,14 +353,14 @@ function displayRecords(){
     		        + svn(d,"flight_operation_code") + " </a>";
     		    }
     		}
-    		,{text  : "Station"                    , type  : "label"     , width : 150        , style : "text-align:left;"
+    		,{text  : "Station"                    , type  : "label"     , width : 200        , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"station_code")}
     		}
-    		,{text  : "Flight Schedule"         , type  : "label"     , width : 150       , style : "text-align:left;"
+    		,{text  : "Flight Schedule"         , type  : "label"     , width : 200       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"flight_schedule_date");
     		    } 
     		}
-        	,{text  : "Aircraft Name"                , type  : "label"     , width : 150       , style : "text-align:left;"
+        	,{text  : "Aircraft Name"                , type  : "label"     , width : 230       , style : "text-align:left;"
     	        ,onRender : function(d){ return svn(d,"aircraft_name")}
     	    }
     		,{text  : "Itinerary"          , type  : "label"     , width : 200      , style : "text-align:left;"
@@ -552,4 +552,4 @@ function setStatusName(page_process_action_id) {
         }
     });
 }
-                           
+                            

@@ -73,7 +73,62 @@ function displayTabs(cbFunc){
             d =_rows[i];
             var active      = (i===0 ? "active": "");
             tabList += '<li role="presentation" class="'+ active +'"><a id="'+ d.aircraft_info_id +'" href="#tab'+ d.aircraft_info_id +'" aria-controls="'+ d.item_cat_name +'" role="tab" data-toggle="tab">'+ d.aircraft_name +'</a></li>';
-            tabContent += '<div role="tabpanel" class="tab-pane '+ active +'" id="tab'+ d.aircraft_info_id +'"><div class="zGrid" id="tabGrid'+   d.aircraft_info_id  +'" ></div></div>';
+            tabContent += '<div role="tabpanel" class="tab-pane '+ active +'" id="tab'+ d.aircraft_info_id +'">' +
+                           '<div class="zContainer1 header ui-front" id="tabBox'+ d.aircraft_info_id +'">' +
+                               '<div class="form-horizontal" style="padding:5px">' +
+                                    '<div class="col-xs-3">' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-2 control-label text-left">Type:</label>' +
+                                            '<div class="col-xs-10">' +
+                                                '<span class="col-xs-12 control-label text-left">'+ d.aircraft_type +'</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-2 control-label text-left">Origin:</label>' +
+                                            '<div class="col-xs-10">' +
+                                                '<span class="col-xs-12 control-label text-left" id="origin">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="col-xs-3">' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-4 control-label text-left">Class:</label>' +
+                                            '<div class="col-xs-8">' +
+                                                '<span class="col-xs-12 control-label text-left" id="class">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-4 control-label text-left">Manufacturer:</label>' +
+                                            '<div class="col-xs-8">' +
+                                                '<span class="col-xs-12 control-label text-left" id="manufacturer">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="col-xs-3">' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-3 control-label text-left">Role:</label>' +
+                                            '<div class="col-xs-9">' +
+                                                '<span class="col-xs-12 control-label text-left" id="role">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-3 control-label text-left">Year:</label>' +
+                                            '<div class="col-xs-9">' +
+                                                '<span class="col-xs-12 control-label text-left" id="year">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="col-xs-3">' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-3 control-label text-left">Status:</label>' +
+                                            '<div class="col-xs-9">' +
+                                                '<span class="col-xs-12 control-label text-left" id="status">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                           '<div class="zGrid" id="tabGrid'+   d.aircraft_info_id  +'" ></div></div>';
         }
         tabList += "</ul>";
         tabContent += "</div>";
@@ -82,16 +137,32 @@ function displayTabs(cbFunc){
         
         for(i=0; i < _rows.length; i++){
             d =_rows[i];
+            displayBox(d.aircraft_info_id);
             displayItems(d.aircraft_info_id);
         }
     });
 } 
 
+function displayBox(id){
+    $.get(execURL + "aircraft_info_types_sel @aircraft_info_id=" + id +",@squadron_id="+ (g_squadron_id ? g_squadron_id : null)
+    ,function(data){
+        var d = data.rows;
+        if(d.length > 0){
+            $("#tabBox"+ id +" #origin").text(d[0].origin_name);
+            $("#tabBox"+ id +" #class").text(d[0].aircraft_class_name);
+            $("#tabBox"+ id +" #manufacturer").text(d[0].manufacturer_name);
+            $("#tabBox"+ id +" #role").text(d[0].aircraft_role_name);
+            $("#tabBox"+ id +" #year").text(d[0].introduced_year);
+            $("#tabBox"+ id +" #status").text(d[0].status_name);
+        }
+    });
+}
+
 function displayItems(id){
     var counter = 0;
     $("#tabGrid" + id).dataBind({
 	     url            : execURL + "items_sel @aircraft_info_id=" + id
-	    ,width          : $(document).width() - 30
+	    ,width          : $(document).width() - 24
 	    ,height         : $(document).height() - 250
         ,dataRows : [
         		/* {text  : "Item Code"                   , type  : "label"       , width : 150       , style : "text-align:left;"
@@ -113,7 +184,7 @@ function displayItems(id){
         		/*,{text  : "Item Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_type_name"); }
         		}*/
-        		,{text  : "Remaining Time in Hours"   , type  : "label"       , width : 150       , style : "text-align:center;"
+        		,{text  : "Remaining Hours"   , type  : "label"       , width : 150       , style : "text-align:center;"
         		    ,onRender : function(d){ return svn(d,"remaining_time_hr"); }
         		}
         		//,{text  : "<div id='colspan'>Minutes</div>"                   , type  : "label"       , width : 120       , style : "text-align:center;"
@@ -124,4 +195,4 @@ function displayItems(id){
         		}
 	    ]   
     });    
-}      
+}        

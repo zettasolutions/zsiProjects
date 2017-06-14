@@ -320,7 +320,7 @@ function displayPurchase(tab_name){
     		    }
     		}
     		,{text  : "PO No."                   , type  : "label"         , width : 100       , style : "text-align:left;"
-    		    ,onRender : function(d){ return svn(d,"po_no");
+    		    ,onRender : function(d){ return svn(d,"po_code");
     		    }
     		}
     		,{text  : "PAF BAC"                   , type  : "label"         , width : 120       , style : "text-align:left;"
@@ -394,7 +394,7 @@ function displayRepair(tab_name){
     		    }
     		}
     		,{text  : "PO No."                   , type  : "label"         , width : 120       , style : "text-align:left;"
-    		    ,onRender : function(d){ return svn(d,"po_no");
+    		    ,onRender : function(d){ return svn(d,"po_code");
     		    }
     		}
     		,{text  : "PAF BAC"                   , type  : "label"         , width : 120       , style : "text-align:left;"
@@ -962,4 +962,4 @@ else
 function mouseout(){
     $("#user-box").css("display","none");
 }                                           
-              
+               

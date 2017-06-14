@@ -187,20 +187,20 @@ function getUserInfo(callBack){
                              displayDirective(g_tab_name);   
                         }
                     });
+                    
+                    getStatusRoles(d.rows[0].role_id);
+                    if(g_squadron_type!=="" && g_squadron_type!=="AIRCRAFT"){
+                        $("#aircraft-tab, #tabAircraft").hide();
+                        g_tab_name = "WAREHOUSE";
+                        $("#warehouse-tab").click();
+                    }else{
+                        displayAircraft(g_tab_name);
+                    }
+                    
+                    if(g_squadron_type!=="" && g_squadron_type!=="SUPPLY")
+                        $("#disposal-tab, #tabDisposal").hide();
                 }
             });
-            getStatusRoles(d.rows[0].role_id);
-            if(g_squadron_type!=="" && g_squadron_type!=="AIRCRAFT"){
-                $("#aircraft-tab, #tabAircraft").hide();
-                g_tab_name = "WAREHOUSE";
-                $("#warehouse-tab").click();
-            }else{
-                displayAircraft(g_tab_name);
-            }
-            
-            if(g_squadron_type!=="" && g_squadron_type!=="SUPPLY")
-                $("#disposal-tab, #tabDisposal").hide();
-            
         }
         if(callBack) callBack();
     });
@@ -1388,4 +1388,4 @@ function PrintToPDF(){
     });
 }
 
-   
+    

@@ -7,6 +7,7 @@ var bs = zsi.bs.ctrl
     ,pageName = location.pathname.split('/').pop()
     ,g_column_name = ""
     ,g_keyword= ""
+    ,g_tab_name = "ASSEMBLY" //Default Selected Tab
 ;
 
 function setInputs(){
@@ -119,8 +120,10 @@ function displayTabs(cbFunc){
         displayItems(activeTabId);
          
         $("a[role='tab']").click(function(){
+            g_tab_name = $(this).text();
             item_cat_id = $(this).attr("id");
             displayItems(item_cat_id);
+            console.log(g_tab_name);
         });
         
         //for(i=0; i < _rows.length; i++){
@@ -134,13 +137,7 @@ function displayItems(id){
     var counter = 0;
     var columnName = (g_column_name ? ",@col_name='"+ g_column_name +"'" : "");
     var keyword    = (g_keyword ? ",@keyword='"+ g_keyword +"'" : "");
-    
-    $("#tabGrid" + id).dataBind({
-	     url      : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" + option_id +"'" + columnName + keyword
-	    ,width    : $(document).width() - 25
-	    ,height   : $(document).height() - 310
-	    ,isPaging : true
-        ,dataRows : [
+    var _dataRows = [
     		{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"     ,sortColNo: 1
     		    ,onRender : function(d){ return  svn(d,"part_no"); }
     		}
@@ -155,8 +152,17 @@ function displayItems(id){
     		}
     		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:right;" ,sortColNo: 5
     		    ,onRender : function(d){ return svn(d,"stock_qty").toLocaleString("en"); }
-    		}
-       		,{text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:right;"
+    		}];
+    		
+    if(g_tab_name==="ASSEMBLY" || g_tab_name==="COMPONENTS"){
+         _dataRows.push(
+            {text  : "Serial No."               , type  : "label"       , width : 150       , style : "text-align:left;"
+    		    ,onRender : function(d){ return svn(d,"serial_no"); }
+    		});
+    }		
+    	
+    _dataRows.push(
+            {text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:right;"
     		    ,onRender : function(d){ return svn(d,"reorder_level"); }
     		}
        		,{text  : "Unit of Measure"               , type  : "label"       , width : 180       , style : "text-align:left;"
@@ -164,8 +170,14 @@ function displayItems(id){
     		}    
         		,{text  : "Bin#"               , type  : "label"       , width : 150       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"bin"); }
-    		}    		
-	    ]   
+    		});
+    
+    $("#tabGrid" + id).dataBind({
+	     url      : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" + option_id +"'" + columnName + keyword
+	    ,width    : $(document).width() - 25
+	    ,height   : $(document).height() - 310
+	    ,isPaging : true
+        ,dataRows : _dataRows
     });    
 }                   
-   
+    

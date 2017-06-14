@@ -83,27 +83,26 @@ zsi.ready(function(){
                         }
                     });
                     
+                    getStatusRoles(d.rows[0].role_id);
+                    if(g_squadron_type!=="" && g_squadron_type!=="SUPPLY"){
+                        $("#procurement-tab, #donation-tab, #tabProcurement, #tabDonation").hide();
+                        if(g_squadron_type==="AIRCRAFT"){
+                            $("#aircraft-tab").closest("li").addClass("active");
+                            $("#tabAircraft").addClass("active");
+                            g_tab_name="AIRCRAFT";
+                            displayAircraft(g_tab_name); 
+                        }else{
+                            $("#aircraft-tab, #tabAircraft").hide();
+                            $("#warehouse-tab").closest("li").addClass("active");
+                            $("#tabWarehouse").addClass("active");
+                            g_tab_name="WAREHOUSE";
+                            displayWarehouse(g_tab_name); 
+                        }
+                    }else{
+                        displayProcurement(g_tab_name);
+                    }
                 }
-            }); 
-            getStatusRoles(d.rows[0].role_id);
-        }
-        
-        if(g_squadron_type!=="" && g_squadron_type!=="SUPPLY"){
-            $("#procurement-tab, #donation-tab, #tabProcurement, #tabDonation").hide();
-            if(g_squadron_type==="AIRCRAFT"){
-                $("#aircraft-tab").closest("li").addClass("active");
-                $("#tabAircraft").addClass("active");
-                g_tab_name="AIRCRAFT";
-                displayAircraft(g_tab_name); 
-            }else{
-                $("#aircraft-tab, #tabAircraft").hide();
-                $("#warehouse-tab").closest("li").addClass("active");
-                $("#tabWarehouse").addClass("active");
-                g_tab_name="WAREHOUSE";
-                displayWarehouse(g_tab_name); 
-            }
-        }else{
-            displayProcurement(g_tab_name);
+            });
         }
     });
 
@@ -1426,4 +1425,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                                                                                      
+                                                                                                                       

@@ -1,5 +1,6 @@
 <link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
 <script src="/Scripts/jspdf.min.js"></script>
+<script src="/Scripts/jspdf.plugin.autotable.js"></script>
 <script src='/javascript/name/zsiPdf'></script>
 <script src='/javascript/name/zsiSearch'></script>
 <style>
@@ -59,7 +60,17 @@
     }
     _:-ms-fullscreen, :root .zGridPanel.right .item .item:last-child {  /* IE 11 above*/
         margin-left: -1pt !important; 
-    } 
+    }
+    #outputPane {
+        overflow:auto;
+    }
+    #outputPane .gridBox{
+        width:2000px;
+        background-color:#fff;
+    }
+    #outputPane .table{
+        margin: 0;
+    }
 </style>
 
 <script src='/javascript/name/zsiSearch'></script>
@@ -86,8 +97,58 @@
      
                     </div>
                 </div>
-                <div id="grid" class="zGrid"></div>
+                <!--<div id="grid" class="zGrid"></div>-->
         </form>
+    </div>
+</div>
+
+<div id="outputPane" class="zPanel hide">
+    <div class="gridBox table-responsive">
+        <table id="grid1" class="table">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="text-center">Auth</th>
+                    <th rowspan="2" class="text-center">Stn</th>
+                    <th rowspan="2" class="text-center">Unit</th>
+                    <th rowspan="2" class="text-center">Pilot (SN / Rank / Duty)</th>
+                    <th colspan="2" class="text-center">A/C</th>
+                    <th colspan="3" class="text-center">Msn Symbol</th>
+                    <th rowspan="2" class="text-center">Msn Essential</th>
+                    <th rowspan="2" class="text-center">Itinerary</th>
+                    <th rowspan="2" class="text-center">EngStrt</th>
+                    <th class="text-center">T/O</th>
+                    <th class="text-center">Ldg</th>
+                    <th rowspan="2" class="text-center">EngSdn</th>
+                    <th colspan="2" class="text-center">HF</th>
+                    <th rowspan="2" class="text-center">FLT Cond</th>
+                    <th rowspan="2" class="text-center">Srt</th>
+                    <th colspan="2" class="text-center">Pax</th>
+                    <th colspan="2" class="text-center">Pnt</th>
+                    <th rowspan="2" class="text-center">Cargo (Lbs)</th>
+                    <th colspan="2" class="text-center">Gas up</th>
+                    <th class="text-center">Bal</th>
+                    <th rowspan="2" class="text-center">Remarks</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Type</th>
+                    <th class="text-center">Nr</th>
+                    <th class="text-center">Catg</th>
+                    <th class="text-center">Typ</th>
+                    <th class="text-center">Dtl</th>
+                    <th class="text-center">T</th>
+                    <th class="text-center">T</th>
+                    <th class="text-center">HOUR</th>
+                    <th class="text-center">MIN</th>
+                    <th class="text-center">Mil</th>
+                    <th class="text-center">Civ</th>
+                    <th class="text-center">Mil</th>
+                    <th class="text-center">Civ</th>
+                    <th class="text-center">Loc</th>
+                    <th class="text-center">(Ltrs)</th>
+                    <th class="text-center">(Ltrs)</th>
+                </tr>
+            </thead>
+        </table>
     </div>
 </div>
 <script src="/scripts/bootstrap-datepicker.min.js"></script>

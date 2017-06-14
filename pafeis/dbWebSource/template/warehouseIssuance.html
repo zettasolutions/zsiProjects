@@ -1,7 +1,7 @@
 <link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
 <script src='/javascript/name/zsiSearch'></script>
-<script src="/Scripts/html2canvas.js"></script>
-<script src="/Scripts/jspdf.debug.js"></script>
+<script src="/Scripts/jspdf.min.js"></script>
+<script src='/javascript/name/zsiPdf'></script>
 <style>
     .modal-body { overflow: unset; }
     .modal-lg {  width: 90% !important; }
@@ -45,6 +45,14 @@
         display: block;
         line-height: 27px;
         margin-bottom: 0;
+    }
+    #printPDF::before {
+        content: " ";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
     }
 </style>
 
@@ -119,7 +127,7 @@
     </div>
 </div>
 
-<div id="printPDF" class="hide">
+<!--<div id="printPDF" class="hide">
     <div class="form-horizontal" style="padding:5px">
         <div class="form-group">
             <label class="col-xs-2 control-label">Issuance No.:</label>
@@ -173,7 +181,7 @@
         <tbody> 
         </tbody> 
     </table>
-</div>
+</div>-->
 
 <script src="/Scripts/handlebars-v3.0.0.js"></script>
 <script type="text/javascript" src="/scripts/bootstrap-datepicker.min.js"></script> 

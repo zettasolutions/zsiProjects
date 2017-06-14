@@ -43,7 +43,7 @@ $("#btnGo").click(function(){
     }
 });
 
-function displayRecords(){
+/*function displayRecords2(){
     var oId      = $("#aircraft_organization_filter").val();
     var dateFrom    = $("#date_from").val();
     var dateTo      = $("#date_to").val();
@@ -125,7 +125,7 @@ function displayRecords(){
     		    , name          : "duty"
     		    , width         : 120 
     		    , style         : "text-align:center;"
-    		}*/
+    		}**-/
     		,{ 
     		      id            : 108
                 , groupId       : 5    		      
@@ -331,11 +331,122 @@ function displayRecords(){
     		,{text:"Aircraft Name"             , name:"aircraft_name"           , width:150         , style:"text-align:left;"   }
     		,{text: "Aircraft Time"            , name:"aircraft_time"           , width:200         , style:"text-align:left;"   }
     		,{text: "Status"                   , name:"status_name"             , width:200         , style:"text-align:left;"   }
-	    ]*/
+	    ]*-/
 	   ,onComplete : function(data){
 	        g_masterData = data.rows;
+	        displayRecords2();
 	   }
     });    
+}*/
+
+function displayRecords(){
+    $("#outputPane").addClass("hide");
+    
+    var oId      = $("#aircraft_organization_filter").val();
+    var dateFrom    = $("#date_from").val();
+    var dateTo      = $("#date_to").val();
+    $("#grid1").loadData({
+         url     : execURL + "flight_operations_report_sel @organization_id=" + (oId ? oId : null)
+                                  + ",@date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
+                                  + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
+        ,td_body : [
+            function(d) {
+                return d.flight_operation_code;
+            }
+            ,function(d) {
+                return d.station;
+            }
+            ,function(d) { 
+                return d.squadron;
+            }
+            ,function(d) { 
+                return d.pilots;
+            }
+            ,function(d) { 
+                return d.aircraft_type;
+            }
+            ,function(d) { 
+                return d.aircraft_name;
+            }
+            ,function(d) { 
+                return d.ms_category;
+            }
+            ,function(d) { 
+                return d.ms_type;
+            }
+            ,function(d) { 
+                return d.ms_detail;
+            }
+            ,function(d) { 
+                return d.ms_essential;
+            }
+            ,function(d) { 
+                return d.itinerary;
+            }
+            ,function(d) { 
+                return d.engine_start;
+            }
+            ,function(d) { 
+                return "";
+    		}
+    		,function(d) { 
+                return "";
+    		}
+    		,function(d) { 
+                return d.engine_stop;
+    		}
+    		,function(d) { 
+                return d.total_hours;
+    		}
+    		,function(d) { 
+                return d.total_cycles;
+    		}
+    		,function(d) { 
+                return d.flt_cond;
+    		}
+    		,function(d) { 
+                return d.sort;
+    		}
+    		,function(d) { 
+                return d.pax_mil;
+    		}
+    		,function(d) { 
+                return d.pax_civ;
+    		}
+    		,function(d) { 
+                return d.fnt_mil;
+    		}
+    		,function(d) { 
+                return d.fnt_civ;
+    		}
+    		,function(d) { 
+                return d.cargo;
+    		}
+    		,function(d) { 
+                return d.gas_up_loc;
+    		}
+    		,function(d) { 
+                return d.gas_up;
+    		}
+    		,function(d) { 
+                return d.gas_bal;
+    		}
+    		,function(d) { 
+                return d.remarks;
+    		}
+        ]
+        ,td_properties: ["class='text-center'","class='text-center'","class='text-center'","class='text-center' style='width:470px'"
+                         ,"class='text-center' style='min-width:50px'","class='text-center'","class='text-center'","class='text-center'","class='text-center'","class='text-center'"
+                         ,"class='text-center'","class='text-center'","class='text-center'","class='text-center'","class='text-center'","class='text-center'"
+                         ,"class='text-center'","class='text-center'","class='text-center'","class='text-center'","class='text-center'","class='text-center'"
+                         ,"class='text-center'","class='text-center'","class='text-center'","class='text-center'","class='text-center'","class='text-center'"
+        ]
+        ,onComplete : function(data) {
+            g_masterData = data.rows;
+            $("#outputPane").find(".gridBox").css('height', $(document).height()-240)
+            $("#outputPane").removeClass("hide");
+        }            
+    });
 }
 
 $("#btnPdf").click(function(){
@@ -343,20 +454,28 @@ $("#btnPdf").click(function(){
     mw.modal({ show: true, keyboard: false, backdrop: 'static' });
     mw.find(".modal-title").text("Flight Operation Report");
     
-    zsi.createPdfReport({
+    var doc = new jsPDF("l", "pt", "Legal");
+    doc.text("From HTML", 14, 16);
+    var elem = document.getElementById("grid1");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data, {startY: 20});   
+    document.getElementById("ifrmWindow").src = doc.output('datauristring');
+    
+    /*zsi.createPdfReport({
          margin             : { top :30  ,left:25 }
         ,cellMargin         : { left: 5 }
         ,isDisplay          : true
         ,fileName           : "flightOperationReport.pdf"  
         ,rowHeight          : 14
         ,widthLimit         : 520
-        ,pageHeightLimit    : 800
+        ,pageHeightLimit    : 550
        // ,masterKey          : "organization_id"
         ,columnHeader       :  [   
                                  {name:"flight_operation_code"  ,title:"Auth"               ,titleWidth:100 ,width:50}
                                 ,{name:"station"                ,title:"Stn"                ,titleWidth:100 ,width:50}
                                 ,{name:"squadron"               ,title:"Unit"               ,titleWidth:100 ,width:160}
-                                ,{name:"type"                   ,title:"A/C Type"           ,titleWidth:100 ,width:60}
+                                ,{name:"pilots"          ,title:"Pilot (SN / Rank / Duty)"           ,titleWidth:100 ,width:450}
+                                ,{name:"aircraft_type"          ,title:"A/C Type"           ,titleWidth:100 ,width:60}
                                 ,{name:"aircraft_name"          ,title:"A/C Nr"             ,titleWidth:100 ,width:60}
                                 ,{name:"ms_category"            ,title:"Msn Catg"           ,titleWidth:100 ,width:50}
                                 ,{name:"ms_type"                ,title:"Msn Typ"            ,titleWidth:100 ,width:50}
@@ -382,9 +501,9 @@ $("#btnPdf").click(function(){
             o.row +=16;
             return o;
         }
-    });         
+    }); */
 });
 
 
  
-                         
+                           
