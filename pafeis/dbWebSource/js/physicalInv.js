@@ -58,15 +58,19 @@ var contextModalWindow = {
                 , body  : '<div id="frmPhysicalInv" class="form-horizontal zContainer1" style="padding:5px">'
  
                         +'    <div class="form-group  "> ' 
-                        +'        <label class=" col-xs-2 control-label">Physical Inv Date</label>'
-                        +'        <div class=" col-xs-4">'
+                        +'          <label class=" col-xs-2 control-label">Physical Inv No</label>'
+                        +'           <div class=" col-xs-2">'
+                        +'          <input type="text" name="physical_inv_no" id="physical_inv_no" class="form-control input-sm" disabled>'
+                        +'        </div> ' 
+                        +'        <label class=" col-xs-1 control-label">Physical Inv Date</label>'
+                        +'        <div class=" col-xs-2">'
                         +'             <input type="hidden" name="physical_inv_id" id="physical_inv_id" >'
                         +'             <input type="hidden" name="is_edited" id="is_edited">'
                         +'             <input type="text" name="physical_inv_date" id="physical_inv_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
                         +'             <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">'
                         +'        </div> ' 
-                        +'        <label class=" col-xs-2 control-label">Done By</label>'
-                        +'        <div class=" col-xs-4">'
+                        +'        <label class=" col-xs-1 control-label">Done By</label>'
+                        +'        <div class=" col-xs-3">'
                         +'             <select type="text" name="done_by" id="done_by" class="form-control input-sm" ></select>'
                         +'        </div>'  
                         +'    </div>'
@@ -186,13 +190,13 @@ function Save(page_process_action_id){
         });
 }
 
-function showModalEditPhysicalInv(index, physical_inv_no) {
+function showModalEditPhysicalInv(index,physical_inv_no) {
    var _info = dataPhysicalInv[index];
     g_physical_inv_id = _info.physical_inv_id;
-    
-    $("#ctxMW .modal-title").text("Physical Inventory » " + physical_inv_no);
+     $("#ctxMW .modal-title").html('Physical Inventory' + ' » ' +  g_organization_name + g_location_name +" <span id='inventoryNo'></span>");
+    //$("#ctxMW .modal-title").text("Physical Inventory » " + physical_inv_no);
     $("#ctxMW").modal({ show: true, keyboard: false, backdrop: 'static' });
-    $("#ctxMW #physical_inv_id").val(g_physical_inv_id);
+    $("#ctxMW #physical_inv_no").val(physical_inv_no);
     $("select, input").on("keyup change", function(){
         $("#frmPhysicalInv").find("#is_edited").val("Y");
     });     
@@ -292,7 +296,7 @@ function displayRecords(){
                 ,{text  : "Physical Inv No."       , type  : "input"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ 
         		        dataPhysicalInvIndex++;
-        		        return "<a href='javascript:showModalEditPhysicalInv(\"" + dataPhysicalInvIndex + "\","+ svn(d,"physical_inv_no") +");'>" 
+        		        return "<a href='javascript:showModalEditPhysicalInv(\"" + dataPhysicalInvIndex + "\",\""+ svn(d,"physical_inv_no") +"\");'>" 
         		        + svn(d,"physical_inv_no") + " </a>";
         		    }
         		}
@@ -598,4 +602,4 @@ function SaveSerialNo(){
 
     });
 }  
-               
+                   
