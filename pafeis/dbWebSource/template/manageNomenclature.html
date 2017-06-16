@@ -1,0 +1,41 @@
+<style>
+    #grid{
+        width: 100%;
+    }
+    .zGrid .item .title {
+        height: 22px;
+        line-height: 19px;
+    }
+    .filter{
+        padding-bottom: 5px;
+    }
+    
+</style>
+    <div class="col-xs-12 zPanel"> 
+        <div class="form-group filter">
+            <label class=" col-xs-1 control-label text-right">Column:</label>
+            <div class=" col-xs-2"> 
+                <select name="column" id="column" class="form-control input-sm">
+                    <option value=""></option>
+                    <option value="part_no">Part No.</option>
+                    <option value="national_stock_no">National Stock No.</option>
+                    <option value="item_name">Nomenclature Name</option>
+                </select>
+            </div>
+            <label class=" col-xs-1 control-label text-right">Keyword:</label>
+            <div class=" col-xs-2"> 
+                <input type="text" name="keyword" id="keyword" class="form-control input-sm">
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnClear">clear</button>
+        </div>
+
+        <div id="grid" class="zGrid"></div>
+        <div class="buttonGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+            </button>
+        </div>
+    </div>
+
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
