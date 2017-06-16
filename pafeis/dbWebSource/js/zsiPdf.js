@@ -122,7 +122,7 @@ zsi.createPdfReport = function(o){
             return cr;    
         }
         ,setFooterText=  function(pageNo){
-                doc.text( o.margin.left-5, 810,  "Page " + pageNo + " of " + totalPagesExp);
+                doc.text( o.margin.left-5, o.pageHeightLimit + o.rowHeight,  "Page " + pageNo + " of " + totalPagesExp);
         }
         
     ;
@@ -165,6 +165,7 @@ zsi.createPdfReport = function(o){
             left = o.margin.left;
             for(i=0;i<h1.length;i++){
                 if( isUD(o.detailData) ){    
+                    row = checkAddPage(row);
                     if( y % 2 === 0  ) 
                         setBoxColor(doc,255, 255, 255); 
                     else 
@@ -263,4 +264,4 @@ zsi.createPdfReport = function(o){
 
 };    
 
-                  
+                   
