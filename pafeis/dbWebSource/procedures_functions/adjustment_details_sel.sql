@@ -1,8 +1,8 @@
 
-CREATE PROCEDURE [dbo].[physical_inv_details_sel]
+
+create PROCEDURE [dbo].[adjustment_details_sel]
 (
-    @physical_inv_id INT = null
-   ,@physical_inv_no NVARCHAR(50) = NULL
+    @adjustment_id INT = null
    ,@user_id      INT 
    ,@col_no       INT = 1
    ,@order_no     INT = 0
@@ -13,8 +13,8 @@ BEGIN
 	DECLARE @stmt VARCHAR(MAX);
 	DECLARE @role_id INT;
 
-	SET @stmt =  'SELECT * FROM dbo.physical_inv_details_v ' 
-	           + ' WHERE physical_inv_id = ' + CAST(@physical_inv_id AS VARCHAR(20))
+	SET @stmt =  'SELECT * FROM dbo.adjustment_details_v ' 
+	           + ' WHERE adjustment_id = ' + CAST(@adjustment_id AS VARCHAR(20))
   
 	SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
   

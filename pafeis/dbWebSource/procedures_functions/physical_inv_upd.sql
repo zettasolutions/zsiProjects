@@ -18,7 +18,9 @@ BEGIN
    DECLARE @ctr int=0;
    DECLARE @procName VARCHAR(50)
    DECLARE @statusName VARCHAR(20)
+   DECLARE @warehouse_id int
 
+   select @warehouse_id = dbo.getUserWarehouseId(@user_id);
 -- Update Process
     UPDATE a 
     SET  physical_inv_date					= b.physical_inv_date		
@@ -38,6 +40,7 @@ BEGIN
 		 physical_inv_date				
 		,done_by				
 		,warehouse_id 
+		,physical_inv_no
 		,status_id
 		,status_remarks						
 		,created_by
@@ -47,6 +50,7 @@ BEGIN
 		 physical_inv_date				
 		,done_by				
 		,dbo.getUserWarehouseId(@user_id) 
+		,concat(dbo.getWarehouseCode(@warehouse_id),'-',cast(Year(getDate()) as varchar(20)),'-',dbo.getWarehousePINo(@warehouse_id))	
 		,status_id
 		,status_remarks								
 	    ,@user_id

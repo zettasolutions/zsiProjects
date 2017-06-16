@@ -1,4 +1,4 @@
-CREATE FUNCTION [dbo].[getEngineStop] 
+CREATE FUNCTION [dbo].[getFlightPilots] 
 (
    @flight_operation_id int
 )
@@ -9,10 +9,12 @@ BEGIN
    DECLARE @Delimiter CHAR(6) 
    SET @Delimiter = '<br />'
 
-   SELECT @return_var = COALESCE(@return_var + @Delimiter,'') + CONCAT(CONVERT(VARCHAR(10),f.engine_shutdown,101),' ',CONVERT(VARCHAR(5),f.engine_shutdown,114))
-             FROM dbo.flight_time f
+   SELECT @return_var = COALESCE(@return_var + @Delimiter,'') + f.pilot_name_id
+             FROM dbo.flight_operation_pilots_v f
              WHERE f.flight_operation_id = @flight_operation_id;
-
+             
    RETURN @return_var;
 
 END
+
+

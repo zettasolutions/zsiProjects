@@ -23,14 +23,12 @@ SET NOCOUNT ON
   IF isnull(@warehouse_id,0) <> 0
      SET @stmt =  @stmt + ' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
 
-   IF isnull(@status_id,0) <> 27
-     SET @stmt =  @stmt + ' AND status_id = ' + cast(@status_id as varchar(20))
-   ELSE
-     SET @stmt =  @stmt + ' AND status_id <> 27 ' 
+   IF isnull(@status_id,0) <> 0
+     SET @stmt =  @stmt + ' AND (status_id <> 27 OR status_id = ' + cast(@status_id as varchar(20)) + ')'
 
-  
+
+  --print @stmt;
   EXEC(@stmt);
 
 END
 
-select * from statuses

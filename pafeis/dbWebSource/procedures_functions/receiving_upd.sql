@@ -104,7 +104,8 @@ BEGIN
 	  SET @ctr = @ctr + 1
 	END
 
-	EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
+	IF (SELECT COUNT(*) FROM dbo.receiving_details WHERE receiving_id=@id) > 0
+	    EXEC dbo.doc_routing_process_upd 70,@id,@statusId,@user_id;
 END
 
 

@@ -28,8 +28,6 @@ BEGIN
 	    ,station_id                 = b.station_id
 		,flight_schedule_date		= b.flight_schedule_date
 		,aircraft_id				= b.aircraft_id
-		,pilot_id					= b.pilot_id
-		,co_pilot_id				= b.co_pilot_id
 		,itinerary					= b.itinerary
 		,ms_essential				= b.ms_essential
 		,ms_category_id				= b.ms_category_id
@@ -61,8 +59,6 @@ BEGIN
 		,station_id           
 		,flight_schedule_date
 		,aircraft_id		
-		,pilot_id			
-		,co_pilot_id		
 		,itinerary			
 		,ms_essential		
 		,ms_category_id		
@@ -89,8 +85,6 @@ BEGIN
 		,station_id           
 		,flight_schedule_date
 		,aircraft_id		
-		,pilot_id			
-		,co_pilot_id		
 		,itinerary			
 		,ms_essential		
 		,ms_category_id		

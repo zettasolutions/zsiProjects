@@ -1,6 +1,6 @@
 
 
-create PROCEDURE [dbo].[statuses_upd]
+CREATE PROCEDURE [dbo].[statuses_upd]
 (
     @tt    statuses_tt READONLY
    ,@user_id int
@@ -20,6 +20,7 @@ BEGIN
 		,is_add                 = b.is_add
 		,is_edit                = b.is_edit
 		,is_delete              = b.is_delete
+		,is_print               = b.is_print
 		,is_active				= b.is_active
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
@@ -40,6 +41,7 @@ BEGIN
 		,is_add   
 		,is_edit  
 		,is_delete
+		,is_print
 		,is_active
         ,created_by
         ,created_date
@@ -55,6 +57,7 @@ BEGIN
 	   ,is_add   
 	   ,is_edit  
 	   ,is_delete
+	   ,is_print
 	   ,is_active
        ,@user_id
        ,GETDATE()

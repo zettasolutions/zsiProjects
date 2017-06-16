@@ -5,8 +5,6 @@ flight_operation_id	INT IDENTITY(1,1)	NOT NULL
 ,flight_schedule_date	DATETIME	NOT NULL
 ,unit_id	INT	NULL
 ,aircraft_id	INT	NOT NULL
-,pilot_id	INT	NOT NULL
-,co_pilot_id	INT	NULL
 ,ms_essential	NVARCHAR(100)	NULL
 ,itinerary	NVARCHAR(1000)	NOT NULL
 ,ms_category_id	INT	NULL

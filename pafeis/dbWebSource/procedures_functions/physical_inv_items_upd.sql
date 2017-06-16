@@ -18,6 +18,10 @@ SET NOCOUNT ON
 		   ON a.item_inv_id = b.item_inv_id 
 		   WHERE b.physical_inv_id = @physical_inv_id;
 
+       INSERT INTO dbo.items_inv (item_code_id, stock_qty, warehouse_id, bin_id, created_by, created_date) SELECT item_code_id, quantity, warehouse_id, dbo.getPIDetailsItemBin(@physical_inv_id,item_code_id), @user_id, getdate()
+	   FROM dbo.physical_inv_details_sum_qty_v b WHERE b.physical_inv_id = @physical_inv_id AND NOT EXISTS (SELECT c.item_inv_id FROM items_inv c WHERE c.item_inv_id = b.item_inv_id ) ;
+
+
       DELETE FROM dbo.warehouse_bins WHERE item_inv_id IN (SELECT item_inv_id FROM dbo.physical_inv_details_v
 		   WHERE physical_inv_id = @physical_inv_id);
 
