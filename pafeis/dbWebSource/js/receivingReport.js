@@ -74,7 +74,8 @@ $("#btnDis").click(function(){
     }
     $("#zPanelId").css({display:"block"});
     displayRecords();
-    $("#btnPdf").css({display:"block"});
+   // $("#btnPdf").css({display:"block"});
+   
 });
 
 
@@ -194,6 +195,10 @@ function displayRecords(){
 	           g_detailData = data.rows;
 	        });
 	        
+	        if( data.rows.length > 0)
+	            $("#btnPdf").css({display: "block"});
+	        else 
+	            $("#btnPdf").css({display: "none"});
 	    }
 
     });
@@ -215,19 +220,19 @@ function displayDetail(o,id){
             */
             $grid.dataBind({
                 // width      : $(document).width() - 49
-                 url        : procURL + "receiving_details_sel @receiving_id="+ id
+                 url        : procURL + "receiving_details_report_sel @receiving_id="+ id
                 ,dataRows   : [
                          {text  : "Part No."                , name  : "part_no"                    , width : 150       , style : "text-align:left;"}
                         ,{text  : "Nat'l Stock No."         , name  : "national_stock_no"          , width : 150       , style : "text-align:left;"}
                         ,{text  : "Nomenclature"            , name  : "item_name"                  , width : 200       , style : "text-align:left;"}
                 		,{text  : "Serial No."              , name  : "serial_no"                  , width : 150       , style : "text-align:left;"}
-                        ,{text  : "Manufacturer"            , name  : "manufacturer_id"            , width : 150       , style : "text-align:left;"} 
-                        ,{text  : "Unit of Measure"         , name  : "unit_of_measure_id"         , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Manufacturer"            , name  : "manufacturer_name"            , width : 150       , style : "text-align:left;"} 
+                        ,{text  : "Unit of Measure"         , name  : "unit_of_measure"             , width : 150       , style : "text-align:left;"}
                         ,{text  : "Quantity"                , name  : "quantity"                   , width : 100       , style : "text-align:left;"}
-                        ,{text  : "Item Class"              , name  : "item_class_id"              , width : 150       , style : "text-align:left;"}
+                        ,{text  : "Item Class"              , name  : "item_class"              , width : 150       , style : "text-align:left;"}
                         ,{text  : "Time Since New"          , name  : "time_since_new"             , width : 150       , style : "text-align:left;"}
                         ,{text  : "Time Since Overhaul"     , name  : "time_since_overhaul"        , width : 150       , style : "text-align:left;"}
-                        ,{text  : "Status"                  , name  : "status_id"                  , width : 150       , style : "text-align:left;" }
+                        ,{text  : "Status"                  , name  : "item_status"                  , width : 150       , style : "text-align:left;" }
                         ,{text  : "Remarks"                 , name  : "remarks"                    , width : 260       , style : "text-align:left;"}
                 	    ]                      });    
 
@@ -236,4 +241,4 @@ function displayDetail(o,id){
     });
 }
 
-                                                                                                    
+                                                                                                      

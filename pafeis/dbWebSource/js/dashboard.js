@@ -150,22 +150,22 @@ function displayItems(id){
     		,{text  : "Nomenclature Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"    ,sortColNo: 4
     		    ,onRender : function(d){ return svn(d,"item_type_name"); }
     		}
-    		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:right;" ,sortColNo: 5
+    		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
     		    ,onRender : function(d){ return svn(d,"stock_qty").toLocaleString("en"); }
     		}];
     		
     if(g_tab_name==="ASSEMBLY" || g_tab_name==="COMPONENTS"){
          _dataRows.push(
-            {text  : "Serial No."               , type  : "label"       , width : 150       , style : "text-align:left;"
+            {text  : "Serial No(s)"               , type  : "label"       , width : 150       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"serial_no"); }
     		});
     }		
     	
     _dataRows.push(
-            {text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:right;"
+            {text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:center;"
     		    ,onRender : function(d){ return svn(d,"reorder_level"); }
     		}
-       		,{text  : "Unit of Measure"               , type  : "label"       , width : 180       , style : "text-align:left;"
+       		,{text  : "Unit of Measure"               , type  : "label"       , width : 180       , style : "text-align:center;"
     		    ,onRender : function(d){ return svn(d,"unit_of_measure"); }
     		}    
         		,{text  : "Bin#"               , type  : "label"       , width : 150       , style : "text-align:left;"

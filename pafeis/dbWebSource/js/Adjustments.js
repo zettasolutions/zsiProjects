@@ -65,7 +65,7 @@ var contextModalWindow = {
             +'        </div>'
             +'    </div>'
             +'    <div class="form-group">'
-            +'        <label class=" col-xs-2 control-label">Status</label>'
+            +'        <label class=" col-xs-2 control-label">Status:</label>'
             +'        <div class=" col-xs-2">'
             +'          <label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' 
             +'          <input type="hidden" name="status_id" id="status_id">' 
@@ -293,6 +293,7 @@ function displayAdjustmentDetails(adjustment_id){
                 ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 250       , style : "text-align:left;"}
                 ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 300       , style : "text-align:left;"}
                 ,{text  : "Serial No."          , name  : "serial_no"                , type  : "input"       , width : 120       , style : "text-align:left;"}
+                ,{text  : "Status"              , name  : "item_status_id"           , type  : "select"      , width : 150       , style : "text-align:left;"}
         	    ,{text  : "Quantity"            , name  : "adjustment_qty"           , type  : "input"       , width : 120       , style : "text-align:left;"}
         	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , width : 120           , class : "unit_of_measure"    , style : "text-align:left;"}
 
@@ -308,6 +309,11 @@ function displayAdjustmentDetails(adjustment_id){
                         $("#tblAdjustment").find("#is_edited").val("Y");
                 });
                 $("select[name='adjustment_type_id']").dataBind("adjustment_types");
+                $("select[name='item_status_id']").dataBind({
+                    url: execURL + "statuses_sel @is_item='Y'"
+                    , text: "status_name"
+                    , value: "status_id"
+                });
                 setMultipleSearch();
         }  
     });    
@@ -383,4 +389,4 @@ function DeleteAdjustmentDetails(){
         }
     });   
 }
- 
+  

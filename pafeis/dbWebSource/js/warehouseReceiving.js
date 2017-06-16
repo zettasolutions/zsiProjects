@@ -679,7 +679,7 @@ function buildReceivingDetails(callback) {
         }
         ,{text  : "Part No."           , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
         ,{text  : "Nat'l Stock No."    , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
-        ,{text  : "Nomenclature"       , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Nomenclature"       , name  : "item_name"                , type  : "input"       , width : 400       , style : "text-align:left;"}
     );
     
     if(g_tab_name==="AIRCRAFT"){
@@ -696,8 +696,9 @@ function buildReceivingDetails(callback) {
                 }
             }
             
-            ,{text  : "Status"      , name:"status_id"    ,type:"select"     , width : 150         , style : "text-align:left;" }
-            ,{text  : "Remarks"     , name:"remarks"      ,type:"input"      , width : 250         , style : "text-align:left;"}        );
+            ,{text  : "Status"      , name:"status_id"       ,type:"select"     , width : 150         , style : "text-align:left;" }
+            ,{text  : "Remarks"     , name:"remarks"        ,type:"input"       , width : 400         , style : "text-align:left;" }
+        );
     }else{
         _dataRows.push(
              {text  : "Serial No."          , width : 150       , style : "text-align:left;"
@@ -707,7 +708,7 @@ function buildReceivingDetails(callback) {
         	 }
             ,{text  : "Manufacturer"        , name  : "manufacturer_id"          , type  : "select"      , width : 150       , style : "text-align:left;"} 
             ,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"       , type  : "select"      , width : 150       , style : "text-align:left;"}
-    	    ,{text  : "Quantity"            , width : 100                    , style : "text-align:right;"
+    	    ,{text  : "Quantity"            , width : 100                       , style : "text-align:right;"
     	        ,onRender: function(d){
     	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
     	        } 
@@ -715,14 +716,29 @@ function buildReceivingDetails(callback) {
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
-            //,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;"}
+            /*,{text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Remarks"             , width : 260       , style : "text-align:left;"
                 ,onRender : function(d){
-    	            return bs({name:"status_id",type:"hidden", value: 23}) //set status id to GOOD = 23 
+    	            return bs({name:"status_id",type:"hidden", value: 23}) //set status id to SERVICEABLE = 23 
     	                 + bs({name:"remarks",type:"input", value: svn (d,"remarks")});
     	        }
-            }
+            }*/
         );
+        
+        if(g_tab_name==="PROCUREMENT"){
+            _dataRows.push(
+                {text  : "Remarks"              , width : 400       , style : "text-align:left;"
+                    ,onRender : function(d){
+        	            return bs({name:"status_id",type:"hidden", value: 23}) //set status id to SERVICEABLE = 23 
+        	                 + bs({name:"remarks",type:"input", value: svn (d,"remarks")});
+        	        }
+                });
+        }
+        if(g_tab_name==="DONATION"){
+            _dataRows.push(
+                {text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;"}
+                ,{text  : "Remarks"            , name  : "remarks"                  , type  : "input"       , width : 400       , style : "text-align:left;"});
+        }
     }
     
     $("#tblModalReceivingDetails").dataBind({
@@ -737,7 +753,7 @@ function buildReceivingDetails(callback) {
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
             $("select[name='status_id']").dataBind({
-                url: execURL + "statuses_sel "+ (g_tab_name==="AIRCRAFT" ? "@is_returned='Y'" : "")
+                url: execURL + "statuses_sel @is_item='Y'"
                 ,text: "status_name"
                 ,value: "status_id"
             });
@@ -1080,7 +1096,7 @@ function loadReceivingDetails(receiving_id) {
     _dataRows.push(
          {text  : "Part No."           , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
         ,{text  : "Nat'l Stock No."    , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
-        ,{text  : "Nomenclature"       , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
+        ,{text  : "Nomenclature"       , name  : "item_name"                , type  : "input"       , width : 400       , style : "text-align:left;"}
     );
         
     if(g_tab_name==="AIRCRAFT"){
@@ -1096,8 +1112,8 @@ function loadReceivingDetails(receiving_id) {
                             + bs({name:"time_since_overhaul",type:"hidden"})
                 }
             }
-            ,{text  : "Status"      , name:"status_id"    ,type:"select"     , width : 150         , style : "text-align:left;" }
-            ,{text  : "Remarks"     , name:"remarks"      ,type:"input"      , width : 250         , style : "text-align:left;"}
+            ,{text  : "Status"      , name:"status_id"      ,type:"select"       , width : 150         , style : "text-align:left;" }
+            ,{text  : "Remarks"     , name:"remarks"        ,type:"input"        , width : 400         , style : "text-align:left;" }
         );
     }else{
         _dataRows.push(
@@ -1116,20 +1132,34 @@ function loadReceivingDetails(receiving_id) {
             ,{text  : "Item Class"          , name  : "item_class_id"            , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since New"      , name  : "time_since_new"           , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Time Since Overhaul" , name  : "time_since_overhaul"      , type  : "input"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Remarks"             , width : 260       , style : "text-align:left;"
+            /*,{text  : "Remarks"             , width : 260       , style : "text-align:left;"
                 ,onRender : function(d){
     	            return bs({name:"status_id",type:"hidden", value: 23}) //set status id to GOOD = 23 
     	                 + bs({name:"remarks",type:"input", value: svn (d,"remarks")});
     	        }
-            }
+            }*/
         );
+        
+        if(g_tab_name==="PROCUREMENT"){
+            _dataRows.push(
+                {text  : "Remarks"              , width : 400       , style : "text-align:left;"
+                    ,onRender : function(d){
+        	            return bs({name:"status_id",type:"hidden", value: 23}) //set status id to SERVICEABLE = 23 
+        	                 + bs({name:"remarks",type:"input", value: svn (d,"remarks")});
+        	        }
+                });
+        } else {
+            _dataRows.push(
+                {text  : "Status"              , name  : "status_id"                , type  : "select"      , width : 150       , style : "text-align:left;"}
+                ,{text  : "Remarks"            , name  : "remarks"                  , type  : "input"       , width : 400       , style : "text-align:left;"});
+        }
     }
     
     $("#tblModalReceivingDetails").dataBind({
         url: procURL + "receiving_details_sel @receiving_id=" + receiving_id
         ,width:  $(document).width() - 170
         ,height: 200
-        ,blankRowsLimit: (g_statuses.is_add==="Y" ? 10 : 0)
+        ,blankRowsLimit: (g_statuses.is_add==="Y" ? (g_tab_name!=="WAREHOUSE" && g_tab_name!=="DIRECTIVE" ? 10 : 0) : 0)
         ,isPaging: false
         ,dataRows: _dataRows
         ,onComplete: function(){
@@ -1141,9 +1171,14 @@ function loadReceivingDetails(receiving_id) {
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
             $("select[name='status_id']").dataBind({
-                url: execURL + "statuses_sel "+ (g_tab_name==="AIRCRAFT" ? "@is_returned='Y'" : "")
+                url: execURL + "statuses_sel @is_item='Y'"
                 ,text: "status_name"
                 ,value: "status_id"
+                ,onComplete: function(){
+                    if(g_tab_name==="WAREHOUSE" || g_tab_name==="DIRECTIVE"){
+                        $("select[name='status_id']").parent().addClass("disabled");
+                    }
+                }
             });
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
@@ -1425,4 +1460,4 @@ function setMandatoryEntries(){
       ]
     });    
 }
-                                                                                                                       
+                                                                                                                        

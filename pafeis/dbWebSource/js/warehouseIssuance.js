@@ -232,11 +232,11 @@ function getStatuses(status_name){
             statusClass = "not-editable";
         }
         $("#tblModalReceivingDetails").find("#table").addClass(statusClass);
-        
+
         if(g_statuses.is_delete==="Y"){
-            $("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return Delete();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>'
-            +'<button type="button" onclick="javascript:void(0); return PrintToPDF();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-print"></span>&nbsp;Print</button>');
+            $("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return Delete();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>');
         }
+        //$("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return PrintToPDF();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-print"></span>&nbsp;Print</button>');
     });
 }
 
