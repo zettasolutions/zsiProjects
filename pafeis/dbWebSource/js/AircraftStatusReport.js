@@ -75,7 +75,7 @@ $("#btnPdf").click(function(){
         ,fileName           : "aircraftStatus.pdf"  
         ,rowHeight          : 14
         ,widthLimit         : 520
-        ,pageHeightLimit    : 800
+        ,pageHeightLimit    : 550
        // ,masterKey          : "organization_id"
         ,columnHeader       :  [   
                                  {name:"wing"               ,title:"Wing"               ,titleWidth:100 ,width:200}
@@ -111,4 +111,4 @@ $("#btnPdf").click(function(){
 
 
  
-                      
+                       

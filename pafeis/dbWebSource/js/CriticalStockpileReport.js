@@ -43,15 +43,12 @@ $("select[name='categories_filter']").dataBind({
 
 $("#btnGo").click(function(){
    displayRecords();
-   $("#btnPdf").css({display: "block"});
+
 });
 
 function displayRecords(){
     var wId = $("#warehouse_filter").val();
     var catId = $("#categories_filter").val();
-    
-    console.log(wId);
-    console.log(catId);
     
         $("#grid").dataBind({
              url            : execURL + "critical_stockpile_report_sel @warehouse_id=" + (wId ? wId : null) + ",@item_cat_id=" + (catId ? catId : null)
@@ -69,6 +66,12 @@ function displayRecords(){
             
             ,onComplete : function(data){
 	        g_masterData = data.rows;
+	        
+	        if( data.rows.length > 0)
+	            $("#btnPdf").css({display: "block"});
+	        else 
+	            $("#btnPdf").css({display: "none"});
+
 	   }
     });    
 }
@@ -85,7 +88,7 @@ $("#btnPdf").click(function(){
         ,fileName           : "criticalstockpile.pdf"  
         ,rowHeight          : 14
         ,widthLimit         : 520
-        ,pageHeightLimit    : 800
+        ,pageHeightLimit    : 550
        // ,masterKey          : "organization_id"
         ,columnHeader       :  [   
                                  {name:"part_no"                ,title:"Part No."                           ,titleWidth:100 ,width:120}
@@ -120,4 +123,4 @@ $("#btnPdf").click(function(){
     
     
 });
-                               
+                                   

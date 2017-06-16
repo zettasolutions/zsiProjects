@@ -39,52 +39,68 @@
     .zButtons button{
          margin-right:6px;
     }
+    .dateTo{
+       margin-left: -103px;
+    }
+    #btnPdf{
+        display:none;
+    }
+    
+    #ifrmWindow{
+        width:100%;
+        height:600px;
+        border:solid 0pt #000;
+        margin-top:10px;
+    }
     
 
 </style>
-<div class="zPanel">
+<div class="col-xs-12 col-sm-4 col-md-5 col-lg-12 zPanel">
     <div style="min-height:20px;margin-top:10px">
         <form method="post" id="frm">
              <div class="form-horizontal">
+                 
                 <div class="form-group  ">
+                    <label class="col-xs-1 control-label">Wing</label>
+                    <div class="col-xs-2" >
+                        <select name="wing_id" id="wing_id" class="form-control input-sm"> </select>
+                    </div>
                     <label class="col-xs-2 control-label">Procurement Code</label>
-                    <div class="col-xs-3" >
-                        <input name="proc_code_id" id="proc_code_id" class="form-control input-sm" type="hidden"> 
-                        <input name="proc_code" id="proc_code" class="form-control input-sm"> 
-                    </div>
-                    <label class=" col-xs-2 control-label">Supplier</label>
-                    <div class="col-xs-3">
-                        <select name="supplier_id" id="supplier_id" class="form-control input-sm" > </select>  
-                    </div>
-                </div>
-                <div class="form-group  ">
-                    <label class=" col-xs-2 control-label" >From</label>
-                    <div class="col-xs-3" >   
-                       <input name="date_from" id="date_from" class="form-control input-sm"> 
-                    </div>
-                    <label class=" col-xs-2 control-label" >To</label>
-                    <div class="col-xs-3" >   
-                        <input name="date_to" id="date_to" class="form-control input-sm"> 
-                    </div>
-                </div>
-                <div class="form-group  ">
-
-                    <label class=" col-xs-2 control-label">Report Type</label>
-                    <div class="col-xs-3" >     
-                        <select name="report_type_id" id="report_type_id" class="form-control input-sm"> </select>
+                    <div class="col-xs-2" >
+                        <input name="proc_code_id" id="proc_code_id" class="form-control input-sm" type="hidden" > 
+                        <input name="proc_code" id="proc_code" placeholder="Search P.O Code" class="form-control input-sm"> 
                     </div>
                     <label class=" col-xs-2 control-label">Procurement Mode</label>
-                    <div class="col-xs-3" >     
+                    <div class="col-xs-2" >     
                         <select name="procurement_mode" id="procurement_mode" class="form-control input-sm"> </select>
                     </div>
-                    <label class=" col-xs-1 control-label"></label>
+                </div>
+                
+                <div class="form-group  ">
+                    <label class=" col-xs-1 control-label">Dealer</label>
+                    <div class="col-xs-2">
+                        <select name="supplier_id" id="supplier_id" class="form-control input-sm" > </select>  
+                    </div>
+
+                    <label class=" col-xs-2 control-label" >Date (From / To)</label>
+                    <div class="col-xs-1" >   
+                       <input name="date_from" id="date_from" class="form-control input-sm"> 
+                    </div>
+                    <div class="col-xs-1" >   
+                        <input name="date_to" id="date_to" class="form-control input-sm"> 
+                    </div>
+                    <label class=" col-xs-2 control-label">Report Type</label>
+                    <div class="col-xs-2" >     
+                        <select name="report_type_id" id="report_type_id" class="form-control input-sm"> </select>
+                    </div>
 
                 </div>
+                
                 <div class="form-group  ">
-                    <label class=" col-xs-2">&nbsp;</label>
+                    <label class=" col-xs-1">&nbsp;</label>
                     <div class="zButtons" >
                         <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
-                        <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> PDF Export</button>
+                        <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> Show PDF </button>
                     </div>
                 </div>
           </div>
