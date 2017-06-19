@@ -153,7 +153,7 @@ function getUserInfo(callBack){
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_squadron_type = d.rows[0].squadron_type;
-            g_squadron_id = d.rows[0].squadron_id;
+            g_squadron_id = d.rows[0].squadron_type_id;
             
             $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
             
@@ -1240,6 +1240,8 @@ function setSearchSerial(d, row){
 
     var $serial_no = row.find("select[id='serial_no']");
     var _status = ""
+    var statusArr = [];
+    
     if(g_tab_name==="AIRCRAFT"){
         _status = 23
     }
@@ -1250,7 +1252,7 @@ function setSearchSerial(d, row){
         _status = 60
     }
     else _status = 0
-    console.log(_status);
+
     if(d.with_serial==="Y"){
         $serial_no.addClass("with-serial");
         $serial_no.removeAttr("readonly");
@@ -1258,16 +1260,22 @@ function setSearchSerial(d, row){
              url : execURL + "dd_warehouse_items_sel @item_inv_id="+ d.item_inv_id +",@status_id=" + _status
             ,text: "serial_no"
             ,value: "serial_no"
+            ,onComplete: function(data){
+                statusArr = data;
+            }
         });
         
         $serial_no.change(function(){
+            var $zRow = $(this).closest(".zRow");
            if(this.value != ""){
                 row.find("input[name='quantity']").val(1);
                 $(this).removeClass('with-serial');
                 $(this).removeClass('border-required');
+                $zRow.find("#item_status_id").val(statusArr[$(this).index()].status_id);
            }else{
                 $(this).addClass('with-serial');
                 $(this).addClass('border-required');
+                $zRow.find("#item_status_id").val('');
            }
         });
     }else{
@@ -1388,4 +1396,4 @@ function PrintToPDF(){
     });
 }
 
-    
+     

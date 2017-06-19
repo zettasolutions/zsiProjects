@@ -38,7 +38,7 @@ zsi.ready(function(){
     zsi.initDatePicker();
     $('#proc_code').val('');
     clearform();
-    });
+});
 
 /*function disableFilter(){
      //$("#supplier_id").attr('disabled','disabled');
@@ -59,7 +59,6 @@ function clearform(){
 }
 
 $("#btnGo").click(function(){
-    
     if($("#issuance_type_id").val() === ""){ 
         alert("Please select Issuance Type.");
         return;
@@ -197,6 +196,37 @@ function displayRecords(){
     var dateFrom    = $("#date_from").val();
     var dateTo      = $("#date_to").val();
     var rTypeId     = $("#issuance_type_id").val();
+    var issuanceType = $.trim($("#issuance_type_id option:selected").text());
+    
+    var _dataRows   = [
+            {text  : "&nbsp;"                                              , width : 25           , style : "text-align:left;"
+                 ,onRender : function(d){
+                      return "<a  href='javascript:void(0);' onclick='displayDetail(this,"+ d.issuance_id +");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
+                }
+             }
+    		,{text  : "Issuance No."                , name  : "issuance_no"                     , width : 180           , style : "text-align:left;"}
+    		,{text  : "Issued Date"                 , name  : "issued_date"                     , width : 150           , style : "text-align:left;"}
+    		,{text  : "Issued By"                   , name  : "issued_by_name"                  , width : 300           , style : "text-align:left;"}
+    		,{text  : "Issued To"                   , name  : "issuance_directive_id"           , width : 300           , style : "text-align:left;"}
+    		
+    		
+        ];
+        
+    if(issuanceType==="AIRCRAFT"){
+        _dataRows.push(
+            {text  : "Aircraft"               , name  : "aircraft"                   , width : 150           , style : "text-align:left;"});
+    }
+    if(issuanceType==="DIRECTIVE"){
+        _dataRows.push(
+            {text  : "Authority Ref"               , name  : "authority_ref"                   , width : 250           , style : "text-align:left;"});
+    }
+    
+    if(issuanceType!=="AIRCRAFT"){
+        _dataRows.push(
+            {text  : "Transfer To"                 , name  : "transfer_organization_warehouse" , width : 250           , style : "text-align:left;"});
+    }
+    
+   // _dataRows.push({text  : "Status"                      , name  : "status_name"                     , width : 150           , style : "text-align:left;"});
 
     
     $("#grid").dataBind({
@@ -208,21 +238,7 @@ function displayRecords(){
                                       + ",@date_from="+ (dateFrom ? "'" + dateFrom + "'" : null)
                                       + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
                                       + ",@issuance_type="+ (rTypeId ? "'" + rTypeId + "'" : null)
-        ,dataRows : [
-                {text  : "&nbsp;"                                              , width : 25           , style : "text-align:left;"
-                     ,onRender : function(d){
-                          return "<a  href='javascript:void(0);' onclick='displayDetail(this,"+ d.issuance_id +");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"; 
-                    }
-                 }
-        		,{text  : "Issuance No."                , name  : "issuance_no"                     , width : 180           , style : "text-align:left;"}
-        		,{text  : "Issued By"                   , name  : "issued_by_name"                  , width : 300           , style : "text-align:left;"}
-        		,{text  : "Issued Date"                 , name  : "issued_date"                     , width : 150           , style : "text-align:left;"}
-        		,{text  : "Issued To"                   , name  : "issuance_directive_id"           , width : 300           , style : "text-align:left;"}
-        		,{text  : "Authority Ref"               , name  : "authority_ref"                   , width : 150           , style : "text-align:left;"}
-        		,{text  : "Transfer To"                 , name  : "transfer_organization_warehouse"            , width : 250           , style : "text-align:left;"}
-                ,{text  : "Status"                      , name  : "status_name"                     , width : 150           , style : "text-align:left;"}
-	    ]  
-
+        ,dataRows : _dataRows
         ,onComplete : function(data){
         	        g_masterData = data.rows;
         	        g_masterIds = "";
@@ -281,4 +297,4 @@ function displayDetail(o,id){
     
     });
 }
-                                                                                              
+                                                                                               

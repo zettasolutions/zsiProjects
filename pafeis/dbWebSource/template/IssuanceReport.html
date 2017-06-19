@@ -32,9 +32,7 @@
         background-image: linear-gradient(to bottom, #9399a0 0px, #41454a 100%);
     }
     .zButtons{
-        padding-left: 6px;        
-        margin-top: 9px;
-        overflow: auto;       
+        overflow: auto;        
     }
     .zButtons button{
          margin-right:6px;
@@ -55,48 +53,30 @@
     <div style="min-height:20px;margin-top:10px">
         <form method="post" id="frm">
              <div class="form-horizontal">
-                <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12">
-                    <div class="col-sm-6">
-                        <div class="form-group  ">
-                            <div class="row">
-                                <label class=" col-xs-3 control-label">Warehouse</label>
-                                <div class="col-xs-3">
-                                    <input name="warehouse_id" id="warehouse_id" class="form-control input-sm" type="hidden"> 
-                                    <select name="warehouse_id" id="warehouse_id" class="form-control input-sm" > </select>  
-                                </div>
-                                 <label class=" col-xs-3 control-label">Issuance Type</label>
-                                <div class="col-xs-3" style="margin-bottom:3px">     
-                                    <select name="issuance_type_id" id="issuance_type_id" class="form-control input-sm"> </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-6">
-                        <div class="form-group  ">
-                            <div class="row">
-                                <label class=" col-xs-2 control-label" >From</label>
-                                <div class="col-xs-3" style="margin-bottom:3px">   
-                                   <input name="date_from" id="date_from" class="form-control input-sm"> 
-                                </div>
-                                <label class=" col-xs-1 control-label" >To</label>
-                                <div class="col-xs-3" style="margin-bottom:3px">   
-                                    <input name="date_to" id="date_to" class="form-control input-sm"> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                <div class="col-sm-12">
                     <div class="form-group  ">
-                        
-                        <label class=" col-xs-1">&nbsp;</label>
-                        <div class="zButtons" >
-                            <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
-                            <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> PDF Export</button>
-                        </div>
+                            <label class=" col-xs-1 control-label">Warehouse</label>
+                            <div class="col-xs-2">
+                                <select name="warehouse_id" id="warehouse_id" class="form-control input-sm" > </select>  
+                            </div>
+                            <label class=" col-xs-1 control-label" >Date (From / To)</label>
+                            <div class="col-xs-1" >   
+                               <input name="date_from" id="date_from" class="form-control input-sm"> 
+                            </div>
+                            <div class="col-xs-1" >   
+                                <input name="date_to" id="date_to" class="form-control input-sm"> 
+                            </div>
+                             <label class=" col-xs-1 control-label">Issuance Type</label>
+                            <div class="col-xs-2" style="margin-bottom:3px">     
+                                <select name="issuance_type_id" id="issuance_type_id" class="form-control input-sm"> </select>
+                            </div>
+                            <label class=" col-xs-1 control-label"></label>
+                            <div class="zButtons" >
+                                <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
+                                <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> PDF Export</button>
+                            </div>
                     </div>
                 </div>
-                
           </div>
         </form>
     </div>
