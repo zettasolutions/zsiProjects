@@ -99,6 +99,7 @@ zsi.createPdfReport = function(o){
         if( ! isUD(o.data) ) o.masterData = o.data;
 
     }
+     if( isUD(o.masterColumnStyle) ) o.masterColumnStyle = "table";
     
     if( isUD(o.fontSize) ) o.fontSize = 10;
         
@@ -124,7 +125,7 @@ zsi.createPdfReport = function(o){
         ,setFooterText=  function(pageNo){
                 doc.text( o.margin.left-5, o.pageHeightLimit + o.rowHeight,  "Page " + pageNo + " of " + totalPagesExp);
         }
-        
+ 
     ;
     
     if( ! isUD(o.onInit) ) {
@@ -137,7 +138,6 @@ zsi.createPdfReport = function(o){
     }
     doc.setFontSize(o.fontSize);
     setFooterText(pageNo);
-
 
     //check if detailData has no data, then print header columns
     if( isUD(o.detailData) ) {
@@ -164,7 +164,7 @@ zsi.createPdfReport = function(o){
             if(y>0) row +=rowHeight;
             left = o.margin.left;
             for(i=0;i<h1.length;i++){
-                if( isUD(o.detailData) ){    
+                if( isUD(o.detailData)  ){    
                     row = checkAddPage(row);
                     if( y % 2 === 0  ) 
                         setBoxColor(doc,255, 255, 255); 
@@ -174,39 +174,57 @@ zsi.createPdfReport = function(o){
                     //print text
                     doc.text(h1[i].left  + cml, row, md[ y ][ h1[i].name ] + "");
                 }
-                else{
+                else{//if detail data is NOT empty
+                    if(o.masterColumnStyle !== "form"){
+                        row = checkAddPage(row);
+                        //print box
+                        setBoxColor(doc,138, 191, 252);
+                        doc.rect(left, row-mt, h1[i].width,rowHeight, 'FD'); 
+                        //print title 
+                        doc.text(left + cml, row, h1[i].title);
 
-                    if(left > o.widthLimit){
-                        left = o.margin.left;
-                        row +=rowHeight + 5 ;
-                    }
-    
-                    row = checkAddPage(row);
-                    
+                        setBoxColor(doc,255, 255, 255);
+                        doc.rect(left, (row+rowHeight)-mt, h1[i].width,rowHeight, 'FD');    
+                        //print text
+                        doc.text(left  + cml, row+rowHeight, md[ y ][ h1[i].name ] + "");                        
                         
-                    h1[i].left = left;
-                
-                    //print box
-                    setBoxColor(doc,255, 255, 255);
-                    doc.rect(h1[i].left, row-mt, h1[i].titleWidth,rowHeight +  2, 'FD');    
-                    //print text
-                    doc.text(h1[i].left  + cml, row, h1[i].title);
-                
-                    left += h1[i].titleWidth;
-                    h1[i].left = left;
+                        left +=h1[i].width;
+                    }
+                    else{
+                        //this is for "form" - ColumnStyle
+                        if(left > o.widthLimit){
+                            left = o.margin.left;
+                            row +=rowHeight + 5 ;
+                        }
+        
+                        row = checkAddPage(row);
+                        
+                            
+                        h1[i].left = left;
                     
-                
-                    //print box
-                    setBoxColor(doc,255, 255, 255);
-                    doc.rect(h1[i].left, row-mt, h1[i].width,rowHeight + 2, 'FD');    
-                    //print text
-                    doc.text(h1[i].left  + cml, row,  md[ y ][ h1[i].name ] + "");
+                        //print box
+                        setBoxColor(doc,255, 255, 255);
+                        doc.rect(h1[i].left, row-mt, h1[i].titleWidth,rowHeight +  2, 'FD');    
+                        //print text
+                        doc.text(h1[i].left  + cml, row, h1[i].title);
                     
-                    // titleWidth
-                    left += h1[i].width;
+                        left += h1[i].titleWidth;
+                        h1[i].left = left;
+                        
                     
+                        //print box
+                        setBoxColor(doc,255, 255, 255);
+                        doc.rect(h1[i].left, row-mt, h1[i].width,rowHeight + 2, 'FD');    
+                        //print text
+                        doc.text(h1[i].left  + cml, row,  md[ y ][ h1[i].name ] + "");
+                        
+                        // titleWidth
+                        left += h1[i].width;
+                    }
                 }
             }
+       
+            if(o.masterColumnStyle==="table" && h1.length)  row +=rowHeight;
        }
 
 
@@ -227,6 +245,7 @@ zsi.createPdfReport = function(o){
                 //print detail column header
                 for(var dx=0;dx<h2.length;dx++){
                     h2[dx].left = dLeft;
+                    row = checkAddPage(row);
                     //print box
                     setBoxColor(doc,198, 204, 211);
                     doc.rect(dLeft, row-10, h2[dx].width,rowHeight, 'FD'); 
@@ -264,4 +283,4 @@ zsi.createPdfReport = function(o){
 
 };    
 
-                   
+                       

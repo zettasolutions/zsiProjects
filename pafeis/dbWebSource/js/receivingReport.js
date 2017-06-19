@@ -67,7 +67,7 @@ $("#btnPdf").click(function(){
     mw.find(".modal-title").text("Receiving Report");
     _headerColumn.push(
              {name:"receiving_no"           ,title:"RR #."                      ,titleWidth:100 ,width:100}
-            ,{name:"received_date"          ,title:"RR Date"                    ,titleWidth:100 ,width:100}
+            ,{name:"received_date"          ,title:"RR Date"                    ,titleWidth:100 ,width:110}
             ,{name:"received_by_name"       ,title:"Received By"                ,titleWidth:100 ,width:150}
     );      
     
@@ -93,11 +93,11 @@ $("#btnPdf").click(function(){
         );          
     }else if(rTypeId==="PROCUREMENT") {
         _headerColumn.push(
-             {title  : "DR #"                    , name  : "doc_no"             ,titleWidth:100 , width : 100       }
-            ,{title  : "P.O #"                   , name  : "po_no"              ,titleWidth:100 , width : 100       }
-            ,{title  : "Dealer"                  , name  : "dealer_name"        ,titleWidth:100 , width : 250       }
-            ,{title  : "Mode"                    , name  : "procurement_mode"   ,titleWidth:100 , width : 150       }
-            ,{title  : "Type"                    , name  : "procurement_type"   ,titleWidth:100 , width : 150       }
+             {title  : "DR #"                    , name  : "doc_no"             ,titleWidth:100 , width : 80       }
+            ,{title  : "P.O Code"                , name  : "po_code"            ,titleWidth:100 , width : 100       }
+            ,{title  : "Dealer"                  , name  : "dealer_name"        ,titleWidth:100 , width : 90       }
+            ,{title  : "Mode"                    , name  : "procurement_mode"   ,titleWidth:100 , width : 60       }
+            ,{title  : "Type"                    , name  : "procurement_type"   ,titleWidth:100 , width : 60       }
         );
     }else {
         _headerColumn.push(
@@ -113,6 +113,7 @@ $("#btnPdf").click(function(){
          margin             : { top :30  ,left:25 }
         ,cellMargin         : { left: 5 }
         ,isDisplay          : true
+        //,masterColumnStyle  : "form"
         ,fileName           : "Receiving.pdf"  
         ,rowHeight          : 14
         ,widthLimit         : 600
@@ -290,4 +291,4 @@ function displayDetail(o,id){
     });
 }
 
-                                                                                                              
+                                                                                                                 
