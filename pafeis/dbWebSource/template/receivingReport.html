@@ -24,72 +24,47 @@
         overflow: auto;       
     }
     .zButtons button{
-         margin-right:6px;
+         margin-right:3px;
     }
     #btnPdf {
         display:none;
+    }
+      #ifrmWindow{
+        width:100%;
+        height:600px;
+        border:solid 0pt #000;
+        margin-top:10px;
     }
 
 </style>
 <div class="col-xs-12 col-sm-4 col-md-5 col-lg-12 zPanel">
     <div style="min-height:20px;margin-top:10px">
         <form method="post" id="frm">
-             <div class="form-horizontal">
+            <div class="form-horizontal">
                 <div class="col-sm-12">
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <label class=" col-xs-3 control-label">Warehouse</label>
-                            <div class="col-xs-3">
+                    <div class="form-group  ">
+                            <label class=" col-xs-1 control-label">Warehouse</label>
+                            <div class="col-xs-2">
                                 <select name="warehouse_id" id="warehouse_id" class="form-control input-sm" > </select>  
                             </div>
-                            <label class=" col-xs-3 control-label">Dealer</label>
-                            <div class="col-xs-3">
-                                <select name="dealer_id" id="dealer_id" class="form-control input-sm" > </select>  
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="row">
- 
-                            <label class=" col-xs-3 control-label">Supply Source</label>
-                            <div class="col-xs-3">
-                                <select name="supp_source_id" id="supp_source_id" class="form-control input-sm" > </select>  
-                            </div>
-                            <label class=" col-xs-3 control-label">Receiving Type</label>
-                            <div class="col-xs-3" style="margin-bottom:3px">     
-                                <select name="receiving_type_id" id="receiving_type_id" class="form-control input-sm"> </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <label class=" col-xs-3 control-label" >From</label>
-                            <div class="col-xs-3" style="margin-bottom:3px">   
+                            <label class=" col-xs-1 control-label" >Date (From / To)</label>
+                            <div class="col-xs-1" >   
                                <input name="date_from" id="date_from" class="form-control input-sm"> 
                             </div>
-                            <label class=" col-xs-3 control-label" >To</label>
-                            <div class="col-xs-3" style="margin-bottom:3px">   
+                            <div class="col-xs-1" >   
                                 <input name="date_to" id="date_to" class="form-control input-sm"> 
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <label class=" col-xs-1 control-label"></label>
-                            <div class="col-xs-1" style="margin-left:-50px">
-                                <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                            <label class=" col-xs-1 control-label">Receiving Type</label>
+                            <div class="col-xs-1" style="margin-bottom:3px">     
+                                <select name="receiving_type_id" id="receiving_type_id" class="form-control input-sm"> </select>
                             </div>
-                       
-                         <div class="form-group ">
-                    <!--<label class=" col-xs-12">&nbsp;</label>-->
-                    <div class="zButtons " >
-                        <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnDis"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
-                        <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> PDF Export</button>
-                    </div>
+                           <label class=" col-xs-1 control-label"></label>
+                           <div class="zButtons " >
+                                <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnDis"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
+                                <button type="button"  class="btn btn-primary btn-sm pull-left" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> Show PDF</button>
+                           </div>
                 </div>
-                 </div>
-                    </div>
-                </div>
+            </div>
             </div>
         </form>
     </div>
