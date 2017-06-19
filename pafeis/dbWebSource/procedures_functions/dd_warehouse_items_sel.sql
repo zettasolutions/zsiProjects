@@ -12,7 +12,7 @@ AS
 BEGIN
 SET NOCOUNT ON
   DECLARE @stmt NVARCHAR(MAX)
-  SET @stmt = 'SELECT serial_no, serial_no text, item_inv_id FROM dbo.items_v WHERE 1=1 ';
+  SET @stmt = 'SELECT serial_no, serial_no text, item_inv_id, status_id FROM dbo.items_v WHERE 1=1 ';
   
    IF isnull(@item_code_id,0) <> 0
      SET @stmt =  @stmt + ' AND item_code_id = ' + cast(@item_code_id as varchar(20))

@@ -1,5 +1,4 @@
 
-
 CREATE PROCEDURE [dbo].[receiving_details_sel]
 (
     @receiving_id INT = null
@@ -30,6 +29,8 @@ BEGIN
 	IF ltrim (rtrim( @master_ids)) <> ''
 		SET @stmt='SELECT * FROM dbo.receiving_details_v WHERE receiving_id in (' + @master_ids + ')'
 
+	print @stmt;
 	EXEC(@stmt);
 	
 END
+

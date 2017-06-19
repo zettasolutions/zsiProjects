@@ -24,9 +24,18 @@ SET NOCOUNT ON
     rec_count INT
   )
 
+    
+
 	SET @stmt = 'SELECT  part_no, national_stock_no, item_name, item_type_name, stock_qty, reorder_level, item_code_id, warehouse_id, unit_of_measure, bin, dbo.getItemSerialNos(item_inv_id) serial_no
 				 FROM dbo.items_inv_v WHERE is_active=''Y'' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
 	SET @stmt2 = 'SELECT count(*) FROM dbo.items_inv_v WHERE is_active=''Y'' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
+
+	if (select squadron_type FROM dbo.warehouses_v WHERE warehouse_id=@warehouse_id) <> 'SUPPLY'
+	BEGIN
+	    SET @stmt = @stmt + ' AND stock_qty > 0 '
+		SET @stmt2 = @stmt2 + ' AND stock_qty > 0 '
+	END
+	   
 
 	IF isnull(@item_cat_id,0) <> 0
 	BEGIN
@@ -47,7 +56,7 @@ SET NOCOUNT ON
 	END
 
    SET @stmt = @stmt + ' ORDER BY ' + cast(@col_no AS VARCHAR(20))
-   print @stmt;
+   --print @stmt;
    IF @order_no = 0
       SET @stmt = @stmt + ' ASC '
    ELSE

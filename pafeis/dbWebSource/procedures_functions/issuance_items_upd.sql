@@ -34,7 +34,8 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 	BEGIN
 		INSERT INTO dbo.receiving (    
 			 doc_no			
-			,doc_date		
+			,doc_date
+			,authority_ref	
 			,issuance_warehouse_id
 			,receiving_no
 			,warehouse_id
@@ -47,7 +48,8 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 			)
 		SELECT 
 			 issuance_no
-			,issued_date			
+			,issued_date	
+			,authority_ref		
 			,warehouse_id
 			 ,concat(dbo.getWarehouseCode(transfer_warehouse_id),'-',cast(Year(getDate()) as varchar(20)),'-',dbo.getWarehouseRRNo(transfer_warehouse_id))	
 			,transfer_warehouse_id

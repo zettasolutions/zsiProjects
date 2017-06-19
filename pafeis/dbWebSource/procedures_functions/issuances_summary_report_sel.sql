@@ -12,7 +12,7 @@ BEGIN
 SET NOCOUNT ON
 DECLARE @stmt VARCHAR(MAX)
 
-  SET @stmt =  'SELECT * FROM dbo.issuances_v where 1=1 '
+  SET @stmt =  'SELECT * FROM dbo.issuances_v where status_id=16'
   
 	IF (NOT @date_from IS NULL) AND (NOT @date_to IS NULL)
 		SET @stmt = @stmt + 'AND issued_date >= ''' + @date_from + ''' AND issued_date <= ''' + @date_to + ''' '

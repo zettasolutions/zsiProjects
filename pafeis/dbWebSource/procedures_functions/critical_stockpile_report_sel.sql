@@ -10,7 +10,7 @@ BEGIN
 	DECLARE @stmt           VARCHAR(4000);
   
 	SET @stmt = 'SELECT  warehouse_location, item_cat_name, part_no, national_stock_no,  item_name, stock_qty, unit_of_measure, reorder_level '; 
-	SET @stmt = @stmt + 'FROM dbo.items_on_stock_v '
+	SET @stmt = @stmt + 'FROM dbo.items_for_reorder_v '
 	SET @stmt = @stmt + 'WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''' ';
 	SET @stmt = @stmt + 'AND warehouse_id=' + cast(@warehouse_id as varchar(20))
 	IF ISNULL(@item_cat_id,0) <> 0
