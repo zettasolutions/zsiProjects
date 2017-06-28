@@ -74,9 +74,7 @@ var contextModalIssuance = {
     id: "modalIssuance"
     , title: ""
     , sizeAttr: "modal-lg"
-    , footer: '<div id="issuance-footer" class="pull-left">'
-            + '<button type="button" onclick="resetFields(this);" class="btn btn-primary"><span class="glyphicon glyphicon-ban-circle">'
-            + '</span>&nbsp;Reset</button></div>'
+    , footer: '<div id="issuance-footer" class="pull-left"> </div>'
     , body: '<div id="tblModalIssuanceHeader" class="zContainer1 header ui-front"></div>'
             +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label>Details</label></div><div id="tblModalIssuanceDetails" class="zGrid detail"></div></div>'
  };
@@ -87,14 +85,6 @@ var contextModalIssuance = {
         , footer: '<div class="pull-left"><button type="button" onclick="uploadFile();" class="btn btn-primary"><span class="glyphicon glyphicon-upload"></span> Upload</button>'
                    + '</div>' 
     };
-
-// Reset the input fields.
-function resetFields(obj) {
-    var result = confirm("This will clear the items. Continue?");
-    if (result) {
-        clearEntries();
-    }
-}
 
 function clearEntries() {
     $('input[type=text]').val('');
@@ -220,7 +210,7 @@ function getStatusRoles(role_id){
     });   
 }
 
-function getStatuses(status_name){
+function getStatuses(status_name, callBack){
     $.get(execURL + "statuses_sel @status_name='" + status_name + "'", function(d) {
         g_statuses = [];
         if (d.rows.length > 0) {
@@ -234,9 +224,10 @@ function getStatuses(status_name){
         $("#tblModalReceivingDetails").find("#table").addClass(statusClass);
 
         if(g_statuses.is_delete==="Y"){
-            $("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return Delete();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>');
+            $("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return DeleteDetails();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>');
         }
         //$("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return PrintToPDF();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-print"></span>&nbsp;Print</button>');
+        if(callBack) callBack();
     });
 }
 
@@ -284,11 +275,11 @@ function displayAircraft(tab_name){
             ,{text  : "Issued By"         , name  : "issued_by_name"            , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
-            ,{text  : "Issued Date"       , name  : "issued_date"               , type  : "label"       , width : 150       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_date"); }
+            ,{text  : "Issued Date"       , name  : "issued_date"               , type  : "label"       , width : 120       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issued_date").toDateFormat(); }
             }
-            ,{text  : "Issued To"         , name  : "issuance_directive_id"     , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
+            ,{text  : "Issued To"         , name  : "accepted_by_name"     , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"accepted_by_name"); }
             }
             ,{text  : "Aircraft"          , name  : "aircraft_name"             , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"aircraft_name"); }
@@ -332,11 +323,11 @@ function displayWarehouse(tab_name){
             ,{text  : "Issued By"         , name  : "issued_by"                 , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
-            ,{text  : "Issued Date"       , name  : "issued_date"               , type  : "label"       , width : 150       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_date"); }
+            ,{text  : "Issued Date"       , name  : "issued_date"               , type  : "label"       , width : 120       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issued_date").toDateFormat(); }
             }
-            ,{text  : "Issued To"         , name  : "issuance_directive_id"     , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
+            ,{text  : "Issued To"         , name  : "accepted_by_name"     , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"accepted_by_name"); }
             }
             ,{text  : "Authority Ref"     , name  : "authority_ref"             , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"authority_ref"); }
@@ -374,11 +365,11 @@ function displayMaintenance(tab_name){
             ,{text  : "Issued By"               , name  : "issued_by"                 , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
-            ,{text  : "Issued Date"             , name  : "issued_date"               , type  : "label"       , width : 150       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_date"); }
+            ,{text  : "Issued Date"             , name  : "issued_date"               , type  : "label"       , width : 120       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issued_date").toDateFormat(); }
             }
-            ,{text  : "Issued To"               , name  : "issuance_directive_id"     , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
+            ,{text  : "Issued To"               , name  : "accepted_by_name"     , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"accepted_by_name"); }
             }
             ,{text  : "Authority Ref"           , name  : "authority_ref"             , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"authority_ref"); }
@@ -416,11 +407,11 @@ function displayDisposal(tab_name){
             ,{text  : "Issued By"           , name  : "issued_by"                , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
-            ,{text  : "Issued Date"         , name  : "issued_date"              , type  : "label"       , width : 150       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_date"); }
+            ,{text  : "Issued Date"         , name  : "issued_date"              , type  : "label"       , width : 120       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issued_date").toDateFormat(); }
             }
-            ,{text  : "Issued To"           , name  : "issuance_directive_id"    , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
+            ,{text  : "Issued To"           , name  : "accepted_by_name"    , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"accepted_by_name"); }
             }
             ,{text  : "Authority Ref"       , name  : "authority_ref"            , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"authority_ref"); }
@@ -458,11 +449,11 @@ function displayDirective(tab_name){
             ,{text  : "Issued By"               , name  : "issued_by"                 , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"issued_by_name"); }
             }
-            ,{text  : "Issued Date"             , name  : "issued_date"               , type  : "label"       , width : 150       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issued_date"); }
+            ,{text  : "Issued Date"             , name  : "issued_date"               , type  : "label"       , width : 120       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"issued_date").toDateFormat(); }
             }
-            ,{text  : "Issued To"               , name  : "issuance_directive_id"     , type  : "label"       , width : 200       , style : "text-align:left;"
-                ,onRender : function(d){ return svn(d,"issuance_directive_id"); }
+            ,{text  : "Issued To"               , name  : "accepted_by_name"     , type  : "label"       , width : 200       , style : "text-align:left;"
+                ,onRender : function(d){ return svn(d,"accepted_by_name"); }
             }
             ,{text  : "Authority Ref"           , name  : "authority_ref"             , type  : "label"       , width : 200       , style : "text-align:left;"
                 ,onRender : function(d){ return svn(d,"authority_ref"); }
@@ -853,6 +844,15 @@ function SaveDetails(page_process_action_id) {
     });
 }
 
+function DeleteDetails(){
+    zsi.form.deleteData({
+         code       : "ref-0007"
+        ,onComplete : function(data){
+            loadIssuanceDetails(g_issuance_id);
+        }
+    });  
+}
+
 // Set the label for the status.
 function setStatusName(page_process_action_id) {
     $.get(execURL + "select dbo.getStatusByPageProcessActionId(" + page_process_action_id + ") AS status_name", function(d) {
@@ -980,9 +980,10 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
                 $("#tblModalIssuanceHeader #dealer_id").val(d.rows[0].dealer_id);
                 $("#tblModalIssuanceHeader #dealer_filter").val(d.rows[0].dealer_id);
                 
-                loadIssuanceDetails(issuance_id);
                 buildIssuanceButtons(function(){
-                    getStatuses(d.rows[0].status_name);
+                    getStatuses(d.rows[0].status_name, function(){
+                        loadIssuanceDetails(issuance_id);
+                    });
                 }); 
             }
         });
@@ -991,6 +992,8 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
 
 // Load the values for the issuance details.
 function loadIssuanceDetails(issuance_id) {
+    var cb = bs({name:"cbFilter2",type:"checkbox"});
+    var rowCount = 0;
     $("#tblModalIssuanceDetails").dataBind({
         url: procURL + "issuance_details_sel @issuance_id=" + issuance_id
         ,width:  $(document).width() - 170
@@ -998,12 +1001,19 @@ function loadIssuanceDetails(issuance_id) {
         ,blankRowsLimit : (g_statuses.is_add==="Y" ? 10 : 0)
         ,isPaging: false
         ,dataRows: [
-            {text   : " "   , width: 26, style : "text-align:left;", 
+            {text   : cb   , width:25, style : "text-align:center;", 
                 onRender:  function(d){ 
+                    rowCount++;
                     return bs({name:"issuance_detail_id",type:"hidden", value: svn (d,"issuance_detail_id")})
                         +  bs({name:"is_edited",type:"hidden"}) 
                         +  bs({name:"issuance_id",type:"hidden", value: issuance_id})
-                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
+                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")})
+                        + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                }
+            }
+            ,{text   : " "   , width: 25, style : "text-align:left;", 
+                onRender:  function(d){ 
+                    return (d ? rowCount : "");
                }
             }    
             ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
@@ -1025,6 +1035,7 @@ function loadIssuanceDetails(issuance_id) {
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
+            $("#cbFilter2").setCheckEvent("#tblModalIssuanceDetails input[name='cb']");
             $("select[name='item_status_id']").dataBind("inv_serial_status");
             
 	        $("select, input").on("keyup change", function(){
@@ -1396,4 +1407,4 @@ function PrintToPDF(){
     });
 }
 
-     
+       
