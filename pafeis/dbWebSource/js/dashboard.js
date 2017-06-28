@@ -17,6 +17,7 @@ function setInputs(){
 }
 
 zsi.ready(function(){
+    getTemplate();
     $(".pageTitle").html('<select name="dd_dashboard" id="dd_dashboard"> </select>');
     
     wHeight = $(window).height();
@@ -79,6 +80,22 @@ zsi.ready(function(){
     });
     
 });
+
+var contextModalStockQty = {
+    id: "modalSerial"
+    , title: ""
+    , sizeAttr: "modal-xs"
+    , footer: '<div id="receiving-footer" class="pull-left">'
+    , body: '<div ><div id="tblSerial" class="zGrid detail ui-front"></div></div>'
+};
+
+// Get the template for the initialization of the modal windows.
+function getTemplate(){
+    $.get(base_url + "templates/bsDialogBox.txt",function(d){
+        var template = Handlebars.compile(d);
+        $("body").append(template(contextModalStockQty));
+    });    
+}
 
 $("#btnGo").click(function(data){
     getFilterValue();
@@ -144,33 +161,58 @@ function displayItems(id){
     		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"    ,sortColNo: 2
     		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
     		}
-    		,{text  : "Nomenclature"                   , type  : "label"       , width : 300       , style : "text-align:left;"    ,sortColNo: 3
+    		,{text  : "Nomenclature"                   , type  : "label"       , width : 450       , style : "text-align:left;"    ,sortColNo: 3
     		    ,onRender : function(d){ return svn(d,"item_name"); }
     		}
+    		/*
     		,{text  : "Nomenclature Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"    ,sortColNo: 4
     		    ,onRender : function(d){ return svn(d,"item_type_name"); }
     		}
+    	
     		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
     		    ,onRender : function(d){ return svn(d,"stock_qty").toLocaleString("en"); }
-    		}];
-    		
+    		}
+    		*/
+
+            ,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
+                ,onRender : function(d){ 
+                    return "<a href='javascript:showModalStockQty();'>" + svn(d,"stock_qty").toLocaleString("en") + " </a>";
+                }
+            }
+
+
+    		,{text  : "For Repair"                  , type  : "label"       , width : 150       , style : "text-align:center;" 
+                ,onRender : function(d){ 
+                    return "<a href='javascript:showModalForRepair();'>" + svn(d,"for_repair") + " </a>";
+                }
+    		}
+    		,{text  : "Beyond Repair"                  , type  : "label"       , width : 150       , style : "text-align:center;" 
+                ,onRender : function(d){ 
+                    return "<a href='javascript:showModalBeyondRepair();'>" + svn(d,"beyond_repair") + " </a>";
+                }
+    		}
+    		,{text  : "Total Stock Qty."                  , type  : "label"       , width : 150       , style : "text-align:center;" 
+    		    ,onRender : function(d){ return svn(d,"ttl_stock_qty").toLocaleString("en"); }
+    		}
+    		];
+    /*		
     if(g_tab_name==="ASSEMBLY" || g_tab_name==="COMPONENTS"){
          _dataRows.push(
             {text  : "Serial No(s)"               , type  : "label"       , width : 150       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"serial_no"); }
     		});
     }		
-    	
+    */	
     _dataRows.push(
             {text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:center;"
     		    ,onRender : function(d){ return svn(d,"reorder_level"); }
     		}
-       		,{text  : "Unit of Measure"               , type  : "label"       , width : 180       , style : "text-align:center;"
+       		,{text  : "Unit of Measure"               , type  : "label"       , width : 200       , style : "text-align:center;"
     		    ,onRender : function(d){ return svn(d,"unit_of_measure"); }
     		}    
-        		,{text  : "Bin#"               , type  : "label"       , width : 150       , style : "text-align:left;"
+        	/*	,{text  : "Bin#"               , type  : "label"       , width : 150       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"bin"); }
-    		});
+    		}*/);
     
     $("#tabGrid" + id).dataBind({
 	     url      : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" + option_id +"'" + columnName + keyword
@@ -180,4 +222,52 @@ function displayItems(id){
         ,dataRows : _dataRows
     });    
 }                   
-    
+        
+function showModalStockQty() {
+    $("#modalSerial .modal-title").text("Serial for Stock Qty.");
+    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+    displaySerialforStockQty();
+}
+
+function showModalForRepair() {
+    $("#modalSerial .modal-title").text("Serial for Repair");
+    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+    displaySerialforRepair();
+}
+
+function showModalBeyondRepair() {
+    $("#modalSerial .modal-title").text("Serial for Beyond Repair");
+    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+    displaySerialforBeyondRepair();
+}
+
+function displaySerialforStockQty(){
+     $("#tblSerial").dataBind({
+	     url            : execURL + "items_sel  @item_inv_id=226, @status_id=23"
+	    ,height         : 200
+        ,dataRows : [
+        		{text  :"Serial No."    , name  : "serial_no"   , width:150 , style : "text-align:left;"}
+	    ] 
+    });    
+}
+
+function displaySerialforRepair(){
+     $("#tblSerial").dataBind({
+	     url            : execURL + "items_sel  @item_inv_id=226, @status_id=12"
+	    ,height         : 200
+        ,dataRows : [
+        		{text  :"Serial No."    , name  : "serial_no"   , width:150 , style : "text-align:left;"}
+	    ] 
+    });    
+}
+
+function displaySerialforBeyondRepair(){
+     $("#tblSerial").dataBind({
+	     url            : execURL + "items_sel  @item_inv_id=226, @status_id=60"
+	    ,height         : 200
+        ,dataRows : [
+        		{text  :"Serial No."    , name  : "serial_no"   , width:150 , style : "text-align:left;"}
+	    ] 
+    });    
+}            
+         
