@@ -9,8 +9,8 @@ employee_id	INT IDENTITY(1,1)	NOT NULL
 ,gender	CHAR(1)	NOT NULL
 ,marital_status	CHAR(1)	NOT NULL
 ,position_id	INT	NOT NULL
-,present_address	TEXT(2147483647)	NULL
-,provincial_address	TEXT(2147483647)	NULL
+,present_address	VARCHAR(MAX)	NULL
+,provincial_address	VARCHAR(MAX)	NULL
 ,contact_no	VARCHAR(15)	NULL
 ,email_address	VARCHAR(300)	NULL
 ,emergency_contact_person	VARCHAR(300)	NULL

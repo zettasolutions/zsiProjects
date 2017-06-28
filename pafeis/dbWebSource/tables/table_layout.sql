@@ -9,5 +9,5 @@ tableLayoutId	INT IDENTITY(1,1)	NOT NULL
 ,blankRowsLimit	INT	NULL
 ,isPaging	VARCHAR(1)	NULL
 ,startGroupId	INT	NULL
-,onComplete	TEXT(2147483647)	NULL
+,onComplete	VARCHAR(MAX)	NULL
 ,tableName	VARCHAR(50)	NULL)

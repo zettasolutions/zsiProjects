@@ -2,7 +2,7 @@ CREATE TABLE procurement(
 procurement_id	INT IDENTITY(1,1)	NOT NULL
 ,procurement_date	DATE	NOT NULL
 ,procurement_code	NVARCHAR(40)	NOT NULL
-,procurement_name	TEXT(2147483647)	NULL
+,procurement_name	VARCHAR(MAX)	NULL
 ,organization_id	INT	NOT NULL
 ,supplier_id	INT	NULL
 ,promised_delivery_date	DATE	NULL

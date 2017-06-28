@@ -46,7 +46,9 @@ namespace createCodeBackup
         {
             foreach (fileModel info in list)
             {
-                settings.WriteFile(subFolder + "\\", info.fileName + ".sql", info.content);
+                string value = info.content.Replace("TEXT(2147483647)", "VARCHAR(MAX)");
+
+                settings.WriteFile(subFolder + "\\", info.fileName + ".sql", value);
             }
             txtMsg.AppendText(list.Count + "  " + Title + " files created/affected." + "\r\n");
         }

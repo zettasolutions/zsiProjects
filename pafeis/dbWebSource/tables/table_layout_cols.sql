@@ -11,7 +11,7 @@ tableLayoutColId	INT IDENTITY(1,1)	NOT NULL
 ,type	VARCHAR(20)	NULL
 ,isFreeze	VARCHAR(1)	NULL
 ,sortColNo	INT	NULL
-,onRender	TEXT(2147483647)	NULL
+,onRender	VARCHAR(MAX)	NULL
 ,isIdentity	VARCHAR(1)	NULL
 ,colDataType	VARCHAR(20)	NULL
 ,colSize	VARCHAR(20)	NULL
