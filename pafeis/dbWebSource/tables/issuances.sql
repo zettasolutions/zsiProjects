@@ -8,7 +8,7 @@ issuance_id	INT IDENTITY(1,1)	NOT NULL
 ,authority_ref	NVARCHAR(2000)	NULL
 ,aircraft_id	INT	NULL
 ,status_id	INT	NULL
-,status_remarks	NTEXT(2147483646)	NULL
+,status_remarks	NVARCHAR(MAX)	NULL
 ,transfer_warehouse_id	INT	NULL
 ,issuance_type	VARCHAR(20)	NULL
 ,warehouse_id	INT	NULL

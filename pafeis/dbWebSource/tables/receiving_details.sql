@@ -9,7 +9,7 @@ receiving_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
-,remarks	NTEXT(2147483646)	NULL
+,remarks	NVARCHAR(MAX)	NULL
 ,item_class_id	INT	NULL
 ,time_since_new	DATETIME	NULL
 ,time_before_overhaul	DATETIME	NULL

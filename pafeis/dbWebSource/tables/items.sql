@@ -14,7 +14,7 @@ item_id	INT IDENTITY(1,1)	NOT NULL
 ,aircraft_info_id	INT	NULL
 ,date_issued	DATETIME	NULL
 ,status_id	INT	NULL
-,remarks	NTEXT(2147483646)	NULL
+,remarks	NVARCHAR(MAX)	NULL
 ,created_by	INT	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL

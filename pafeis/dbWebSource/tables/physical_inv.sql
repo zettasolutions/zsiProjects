@@ -10,4 +10,4 @@ physical_inv_id	INT IDENTITY(1,1)	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
 ,status_id	INT	NULL
-,status_remarks	NTEXT(2147483646)	NULL)
+,status_remarks	NVARCHAR(MAX)	NULL)

@@ -79,27 +79,20 @@ WHILE @count < @rec_count
 
    	    IF isnull(@item_inv_id,0) = 0
 			BEGIN
-				INSERT INTO dbo.items_inv (item_code_id, warehouse_id, stock_qty, created_by, created_date)
-					   VALUES (@item_code_id, @warehouse_id, @quantity, @user_id, GETDATE())
+				INSERT INTO dbo.items_inv (item_code_id, warehouse_id, created_by, created_date)
+					   VALUES (@item_code_id, @warehouse_id, @user_id, GETDATE())
 				SET @item_inv_id = @@IDENTITY 
 
-				INSERT INTO dbo.item_status_quantity (item_inv_id, status_id, quantity) VALUES (@item_inv_id, @status_id, @quantity)
+				INSERT INTO dbo.item_status_quantity (item_inv_id, status_id, stock_qty) VALUES (@item_inv_id, @status_id, @quantity)
 			END
 		ELSE
 			BEGIN
-			   UPDATE dbo.items_inv 
-			      SET stock_qty = stock_qty + @quantity
-			    WHERE item_inv_id = @item_inv_id
-
 			   IF (SELECT count(*) FROM dbo.item_status_quantity WHERE item_inv_id = @item_inv_id and status_id = @status_id)=0
-				  INSERT INTO dbo.item_status_quantity (item_inv_id, status_id, quantity) VALUES (@item_inv_id, @status_id, @quantity)
+				  INSERT INTO dbo.item_status_quantity (item_inv_id, status_id, stock_qty) VALUES (@item_inv_id, @status_id, @quantity)
 			   ELSE
-                  UPDATE  dbo.item_status_quantity SET quantity = quantity + @quantity WHERE item_inv_id = @item_inv_id and status_id = @status_id;
+                  UPDATE  dbo.item_status_quantity SET stock_qty = stock_qty + @quantity WHERE item_inv_id = @item_inv_id and status_id = @status_id;
 
-			   SELECT @item_inv_id = item_inv_id FROM dbo.items_inv 
-				WHERE item_code_id = @item_code_id
-			   AND warehouse_id=@warehouse_id;
-			END;
+		END;
 
         IF isnull(@serial_no,'') <> ''
 		BEGIN

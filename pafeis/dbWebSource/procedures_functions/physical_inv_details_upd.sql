@@ -1,4 +1,5 @@
 
+
 CREATE PROCEDURE [dbo].[physical_inv_details_upd]
 (
     @tt    physical_inv_details_tt READONLY
@@ -12,6 +13,7 @@ BEGIN
     SET  physical_inv_id        = b.physical_inv_id
 	    ,item_code_id			= b.item_code_id
 		,quantity				= b.quantity
+		,item_status_id         = b.item_status_id
 		,bin                    = b.bin
 		,remarks                = b.remarks
 		,updated_by				= @user_id
@@ -25,6 +27,7 @@ BEGIN
          physical_inv_id 	
 	    ,item_code_id
 		,quantity
+		,item_status_id
 		,bin
 		,remarks
 		,created_by
@@ -34,6 +37,7 @@ BEGIN
          physical_inv_id 	
 	    ,item_code_id
 		,quantity
+		,item_status_id
 		,bin
 	    ,remarks
 	    ,@user_id
@@ -43,6 +47,7 @@ BEGIN
 	  AND physical_inv_id IS NOT NULL
 	  AND item_code_id IS NOT NULL
 END
+
 
 
 

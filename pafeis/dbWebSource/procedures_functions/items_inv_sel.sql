@@ -26,7 +26,7 @@ SET NOCOUNT ON
 
     
 
-	SET @stmt = 'SELECT  part_no, national_stock_no, item_name, item_type_name, stock_qty, reorder_level, item_code_id, warehouse_id, unit_of_measure, bin, dbo.getItemSerialNos(item_inv_id) serial_no
+	SET @stmt = 'SELECT  part_no, national_stock_no, item_name, item_type_name, stock_qty, for_repair, beyond_repair, (stock_qty + for_repair) ttl_stocks, reorder_level,  item_code_id, warehouse_id, unit_of_measure, dbo.getItemSerialNos(item_inv_id) serial_no
 				 FROM dbo.items_inv_v WHERE is_active=''Y'' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
 	SET @stmt2 = 'SELECT count(*) FROM dbo.items_inv_v WHERE is_active=''Y'' AND warehouse_id = ' + cast(@warehouse_id as varchar(20))
 

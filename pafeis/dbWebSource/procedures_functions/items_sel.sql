@@ -16,6 +16,8 @@ CREATE PROCEDURE [dbo].[items_sel]
    ,@warehouse_id int = null
    ,@item_cat_code char(1)=null
    ,@parent_item_id INT=NULL
+   ,@item_inv_id int = null
+   ,@status_id int = null
 )
 AS
 BEGIN
@@ -42,10 +44,16 @@ IF ISNULL(@item_code_id,0) <> 0
 IF ISNULL(@item_id,0) <> 0
    SET @stmt = @stmt + ' AND item_id = ' + cast(@item_id as varchar(20)) 
 
+IF ISNULL(@item_inv_id,0) <> 0
+   SET @stmt = @stmt + ' AND item_inv_id = ' + cast(@item_inv_id as varchar(20)) 
+
+IF ISNULL(@status_id,0) <> 0
+   SET @stmt = @stmt + ' AND status_id = ' + cast(@status_id as varchar(20)) 
+
 IF ISNULL(@parent_item_id,0) <> 0
    SET @stmt = @stmt + ' AND parent_item_id = ' + cast(@parent_item_id as varchar(20)) 
 
-SET @stmt = @stmt + ' ORDER BY item_name, part_no, national_stock_no, serial_no'; 
+SET @stmt = @stmt + ' ORDER BY serial_no'; 
 
 --PRINT @stmt;
 EXEC(@stmt);	

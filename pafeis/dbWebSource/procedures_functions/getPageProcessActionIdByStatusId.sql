@@ -6,7 +6,7 @@ RETURNS INT
 AS
 BEGIN
    DECLARE @l_retval int; 
-      SELECT @l_retval = page_process_action_id FROM dbo.page_process_actions_v where status_id = @status_id and page_id=@page_id
+      SELECT @l_retval = page_process_action_id FROM dbo.page_process_actions_v where status_id = @status_id and page_id=@page_id order by seq_no
       RETURN @l_retval;
 END;
 

@@ -1,6 +1,8 @@
 CREATE VIEW dbo.items_on_stock_v
 AS
-SELECT        part_no, national_stock_no, item_name, reorder_level, organization_id, stock_qty, is_active, item_cat_id, item_type_name, item_code_id, item_inv_id, warehouse_id, bin, unit_of_measure, with_serial, 
-                         warehouse_location, item_cat_name
-FROM            dbo.items_inv_v
-WHERE        (stock_qty > 0)
+SELECT        dbo.items_inv_v.part_no, dbo.items_inv_v.national_stock_no, dbo.items_inv_v.item_name, dbo.items_inv_v.reorder_level, dbo.items_inv_v.organization_id, dbo.items_inv_v.is_active, dbo.items_inv_v.item_cat_id, 
+                         dbo.items_inv_v.item_type_name, dbo.items_inv_v.item_code_id, dbo.items_inv_v.item_inv_id, dbo.items_inv_v.warehouse_id, dbo.items_inv_v.unit_of_measure, dbo.items_inv_v.with_serial, 
+                         dbo.items_inv_v.warehouse_location, dbo.items_inv_v.item_cat_name, dbo.item_status_quantity.stock_qty, dbo.item_status_quantity.status_id
+FROM            dbo.items_inv_v INNER JOIN
+                         dbo.item_status_quantity ON dbo.items_inv_v.item_inv_id = dbo.item_status_quantity.item_inv_id
+WHERE        (dbo.item_status_quantity.status_id = 23)

@@ -4,7 +4,7 @@ issuance_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,serial_no	NVARCHAR(60)	NULL
 ,aircraft_id	INT	NULL
 ,quantity	DECIMAL(20)	NOT NULL
-,remarks	NTEXT(2147483646)	NULL
+,remarks	NVARCHAR(MAX)	NULL
 ,created_by	INT	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL

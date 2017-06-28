@@ -9,4 +9,4 @@ doc_routing_id	INT IDENTITY(1,1)	NOT NULL
 ,acted_by	INT	NULL
 ,acted_date	DATETIME	NULL
 ,is_current	NCHAR(2)	NULL
-,remarks	NTEXT(2147483646)	NULL)
+,remarks	NVARCHAR(MAX)	NULL)

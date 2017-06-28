@@ -21,7 +21,7 @@ flight_operation_id	INT IDENTITY(1,1)	NOT NULL
 ,gas_up	DECIMAL(12)	NULL
 ,gas_bal	DECIMAL(12)	NULL
 ,no_cycles	INT	NULL
-,remarks	NTEXT(2147483646)	NULL
+,remarks	NVARCHAR(MAX)	NULL
 ,status_id	INT	NULL
 ,created_by	INT	NOT NULL
 ,created_date	DATETIME	NOT NULL

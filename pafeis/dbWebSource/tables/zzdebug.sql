@@ -1,3 +1,3 @@
 CREATE TABLE zzdebug(
 id	INT	NULL
-,message	NTEXT(2147483646)	NULL)
+,message	NVARCHAR(MAX)	NULL)

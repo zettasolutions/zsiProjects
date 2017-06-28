@@ -5,7 +5,7 @@ physical_inv_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,item_status_id	INT	NULL
 ,quantity	DECIMAL(20)	NOT NULL
 ,bin	NVARCHAR(200)	NULL
-,remarks	NTEXT(2147483646)	NULL
+,remarks	NVARCHAR(MAX)	NULL
 ,created_by	INT	NOT NULL
 ,created_date	DATETIME	NOT NULL
 ,updated_by	INT	NULL

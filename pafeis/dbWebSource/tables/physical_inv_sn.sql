@@ -3,7 +3,7 @@ physical_inv_sn_id	INT IDENTITY(1,1)	NOT NULL
 ,physical_inv_id	INT	NOT NULL
 ,item_code_id	INT	NULL
 ,serial_no	NVARCHAR(60)	NULL
-,remarks	NTEXT(2147483646)	NULL
+,remarks	NVARCHAR(MAX)	NULL
 ,manufacturer_id	INT	NULL
 ,status_id	INT	NULL
 ,dealer_id	INT	NULL
