@@ -8,7 +8,14 @@ var bs = zsi.bs.ctrl
     ,g_column_name = ""
     ,g_keyword= ""
     ,g_tab_name = "ASSEMBLY" //Default Selected Tab
-;
+    ,g_item_inv_id = null
+    ,status_id = "";
+    const statusId = {
+    stockQty: 23,
+    forRepair: 12,
+    beyondRepair: 60,
+};
+
 
 function setInputs(){
     $optionId = $("#option_id");
@@ -168,27 +175,55 @@ function displayItems(id){
     		,{text  : "Nomenclature Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"    ,sortColNo: 4
     		    ,onRender : function(d){ return svn(d,"item_type_name"); }
     		}
-    	
-    		,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
-    		    ,onRender : function(d){ return svn(d,"stock_qty").toLocaleString("en"); }
-    		}
     		*/
 
-            ,{text  : "Stock Qty."                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
+            ,{text  : "Serviceable"                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
                 ,onRender : function(d){ 
-                    return "<a href='javascript:showModalStockQty();'>" + svn(d,"stock_qty").toLocaleString("en") + " </a>";
+                    var html = "";
+                    if(svn(d,"with_serial") === "N"){
+                        html = "<span>" + svn(d,"stock_qty").toLocaleString("en") + "</span>";
+                    }
+                    else{
+                    html = "<a href='javascript:showModalSerial(\""
+                            + statusId.stockQty + "\",\""
+                            + svn(d,"part_no") + "\",\"" 
+                            + svn(d,"item_inv_id") + "\");'>" 
+                            + svn(d,"stock_qty").toLocaleString("en") + " </a>";
+                    }
+                    return html;
                 }
             }
 
-
     		,{text  : "For Repair"                  , type  : "label"       , width : 150       , style : "text-align:center;" 
                 ,onRender : function(d){ 
-                    return "<a href='javascript:showModalForRepair();'>" + svn(d,"for_repair") + " </a>";
+                    var html = "";
+                    if(svn(d,"with_serial") === "N"){
+                        html = "<span>" + svn(d,"stock_qty").toLocaleString("en") + "</span>";
+                    }
+                    else{
+                    html = "<a href='javascript:showModalSerial(\""
+                            + statusId.forRepair + "\",\""
+                            + svn(d,"part_no") + "\",\"" 
+                            + svn(d,"item_inv_id") + "\");'>" 
+                            + svn(d,"stock_qty").toLocaleString("en") + " </a>";
+                    }
+                    return html;
                 }
     		}
     		,{text  : "Beyond Repair"                  , type  : "label"       , width : 150       , style : "text-align:center;" 
                 ,onRender : function(d){ 
-                    return "<a href='javascript:showModalBeyondRepair();'>" + svn(d,"beyond_repair") + " </a>";
+                    var html = "";
+                    if(svn(d,"with_serial") === "N"){
+                        html = "<span>" + svn(d,"stock_qty").toLocaleString("en") + "</span>";
+                    }
+                    else{
+                    html = "<a href='javascript:showModalSerial(\""
+                            + statusId.beyondRepair + "\",\""
+                            + svn(d,"part_no") + "\",\"" 
+                            + svn(d,"item_inv_id") + "\");'>" 
+                            + svn(d,"stock_qty").toLocaleString("en") + " </a>";
+                    }
+                    return html;
                 }
     		}
     		,{text  : "Total Stock Qty."                  , type  : "label"       , width : 150       , style : "text-align:center;" 
@@ -212,7 +247,8 @@ function displayItems(id){
     		}    
         	/*	,{text  : "Bin#"               , type  : "label"       , width : 150       , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"bin"); }
-    		}*/);
+    		}*/
+    		);
     
     $("#tabGrid" + id).dataBind({
 	     url      : procURL + "items_inv_sel @item_cat_id=" + id + ",@warehouse_id=" + g_warehouse_id + ",@option_id='" + option_id +"'" + columnName + keyword
@@ -223,51 +259,44 @@ function displayItems(id){
     });    
 }                   
         
-function showModalStockQty() {
-    $("#modalSerial .modal-title").text("Serial for Stock Qty.");
-    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
-    displaySerialforStockQty();
+function showModalSerial(status_id ,part_no ,item_inv_id) {
+    g_item_inv_id = item_inv_id;
+    if(status_id==statusId.stockQty){
+        $("#modalSerial .modal-title").text('Serviceable Serial for Part No.' + ' » ' + part_no);
+        $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+        displaySerial(status_id);
+    }
+    if(status_id==statusId.forRepair){
+        $("#modalSerial .modal-title").text('For Repair Serial for Part No.' + ' » ' + part_no);
+        $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+        displaySerial(status_id);
+    }
+    if(status_id==statusId.beyondRepair){
+        $("#modalSerial .modal-title").text('Beyond Repair Serial for Part No.' + ' » ' + part_no);
+        $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+        displaySerial(status_id);
+    }
+    
 }
 
-function showModalForRepair() {
-    $("#modalSerial .modal-title").text("Serial for Repair");
-    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
-    displaySerialforRepair();
-}
+function displaySerial(status_id){
+    var id = "";
+    if(status_id==statusId.stockQty){
+        id = 23;
+    }
+    else if(status_id==statusId.forRepair){
+        id = 12;
+    }
+    else{
+        id = 60;
+    }
 
-function showModalBeyondRepair() {
-    $("#modalSerial .modal-title").text("Serial for Beyond Repair");
-    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
-    displaySerialforBeyondRepair();
-}
-
-function displaySerialforStockQty(){
-     $("#tblSerial").dataBind({
-	     url            : execURL + "items_sel  @item_inv_id=226, @status_id=23"
-	    ,height         : 200
+    $("#tblSerial").dataBind({
+	     url            : execURL + "items_sel  @item_inv_id='" + (g_item_inv_id ? g_item_inv_id : null)+ "', @status_id=" + id
+	    ,height         : 400
         ,dataRows : [
-        		{text  :"Serial No."    , name  : "serial_no"   , width:150 , style : "text-align:left;"}
+        		{text  :"Serial No."    , name  : "serial_no"   , width:450 , style : "text-align:left;"}
 	    ] 
-    });    
+    });  
 }
-
-function displaySerialforRepair(){
-     $("#tblSerial").dataBind({
-	     url            : execURL + "items_sel  @item_inv_id=226, @status_id=12"
-	    ,height         : 200
-        ,dataRows : [
-        		{text  :"Serial No."    , name  : "serial_no"   , width:150 , style : "text-align:left;"}
-	    ] 
-    });    
-}
-
-function displaySerialforBeyondRepair(){
-     $("#tblSerial").dataBind({
-	     url            : execURL + "items_sel  @item_inv_id=226, @status_id=60"
-	    ,height         : 200
-        ,dataRows : [
-        		{text  :"Serial No."    , name  : "serial_no"   , width:150 , style : "text-align:left;"}
-	    ] 
-    });    
-}            
-         
+ 
