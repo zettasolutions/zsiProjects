@@ -23,4 +23,5 @@ flight_operation_id	INT	NULL
 ,gas_up	DECIMAL(12)	NULL
 ,gas_bal	DECIMAL(12)	NULL
 ,status_id	INT	NULL
-,remarks	NVARCHAR(0)	NULL)
+,remarks	NVARCHAR(0)	NULL
+,page_process_action_id	INT	NULL)

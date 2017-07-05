@@ -14,4 +14,5 @@ issuance_id	INT	NULL
 ,issued_to_organization_id	INT	NULL
 ,status_id	INT	NULL
 ,status_remarks	NVARCHAR(0)	NULL
-,issuance_type	NVARCHAR(200)	NULL)
+,issuance_type	NVARCHAR(200)	NULL
+,page_process_action_id	INT	NULL)

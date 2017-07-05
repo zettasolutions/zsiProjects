@@ -1,6 +1,4 @@
 
-
-
 CREATE PROCEDURE [dbo].[issuances_upd]
 (
     @tt    issuances_tt READONLY
@@ -11,7 +9,7 @@ AS
 BEGIN
    SET NOCOUNT ON
    DECLARE @id INT;
-   DECLARE @statusId INT;
+   DECLARE @page_process_action_id INT;
    DECLARE @proc_tt AS TABLE (
      id int IDENTITY
 	,proc_name varchar(50)
@@ -88,15 +86,15 @@ BEGIN
 
 --	AND (aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL OR dealer_id IS NOT NULL);
 
-	SELECT @id = issuance_id,  @statusId=dbo.getPageProcessActionIdByStatusId(status_id,66) FROM @tt;
+	SELECT @id = issuance_id,  @page_process_action_id=page_process_action_id FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 		SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
-		EXEC dbo.doc_routing_process_upd 66,@id,@statusId,@user_id;
+		EXEC dbo.doc_routing_process_upd 66,@id,@page_process_action_id,@user_id;
 		RETURN @id
 	END;
 
-	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@statusId 
+	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@page_process_action_id 
 	SELECT @data_count =COUNT(*) FROM @proc_tt 
 	WHILE @ctr < @data_count 
 	BEGIN
@@ -105,9 +103,10 @@ BEGIN
 	  SET @ctr = @ctr + 1
 	END
 
-	EXEC dbo.doc_routing_process_upd 66,@id,@statusId,@user_id;
+	EXEC dbo.doc_routing_process_upd 66,@id,@page_process_action_id,@user_id;
 
 END
+
 
 
 

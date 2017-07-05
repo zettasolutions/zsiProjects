@@ -13,8 +13,9 @@ DECLARE @status_id INT=NULL;
 
         UPDATE a  
 		   SET stock_qty = a.stock_qty - b.is_qty 
-		   FROM dbo.items_inv a INNER JOIN dbo.issuance_details_sum_qty_v b
+		   FROM dbo.item_status_quantity a INNER JOIN dbo.issuance_details_sum_qty_v b
 		   ON a.item_inv_id = b.item_inv_id 
+		   and a.status_id = b.item_status_id
 		   and b.issuance_id = @issuance_id;
 
 SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_type='DISPOSAL',27,status_id)  
@@ -59,7 +60,7 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 			,issued_to_organization_id
 		   ,@user_id
 		   ,GETDATE()
-		   FROM dbo.issuances_v
+		   FROM dbo.issuances
 		   where issuance_id = @issuance_id;
 
 		   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;

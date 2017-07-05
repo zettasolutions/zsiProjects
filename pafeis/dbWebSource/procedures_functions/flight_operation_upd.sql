@@ -1,7 +1,4 @@
 
-
-
-
 CREATE PROCEDURE [dbo].[flight_operation_upd]
 (
     @tt    flight_operation_tt READONLY
@@ -12,7 +9,7 @@ AS
 BEGIN
    SET NOCOUNT ON
    DECLARE @id INT;
-   DECLARE @statusId INT;
+   DECLARE @page_process_action_id INT;
    DECLARE @proc_tt AS TABLE (
      id int IDENTITY
 	,proc_name varchar(50)
@@ -20,7 +17,6 @@ BEGIN
    DECLARE @data_count INT;
    DECLARE @ctr int=0;
    DECLARE @procName VARCHAR(50)
-   DECLARE @statusName VARCHAR(20)
 
 -- Update Process
     UPDATE a 
@@ -109,15 +105,15 @@ BEGIN
     WHERE flight_operation_id IS NULL;
 END
 
-	SELECT @id = flight_operation_id, @statusId=status_id, @statusName=dbo.getStatusByPageProcessActionId(status_id) FROM @tt;
+	SELECT @id = flight_operation_id, @page_process_action_id=page_process_action_id FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 	   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
-	   EXEC dbo.doc_routing_process_upd 82,@id,@statusId,@user_id;
+	   EXEC dbo.doc_routing_process_upd 82,@id,@page_process_action_id,@user_id;
 	   RETURN @id
 	END;
 
-	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@statusId 
+	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@page_process_action_id 
 	SELECT @data_count =COUNT(*) FROM @proc_tt 
 	WHILE @ctr < @data_count 
 	BEGIN
@@ -126,7 +122,8 @@ END
 	  SET @ctr = @ctr + 1
 	END
 
-	EXEC dbo.doc_routing_process_upd 82,@id,@statusId,@user_id;
+	EXEC dbo.doc_routing_process_upd 82,@id,@page_process_action_id,@user_id;
+
 
 
 

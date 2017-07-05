@@ -14,4 +14,5 @@ receiving_id	INT	NULL
 ,donor	NVARCHAR(200)	NULL
 ,supply_source_id	INT	NULL
 ,status_remarks	NVARCHAR(0)	NULL
-,receiving_type	NVARCHAR(40)	NULL)
+,receiving_type	NVARCHAR(40)	NULL
+,page_process_action_id	INT	NULL)

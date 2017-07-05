@@ -90,7 +90,10 @@ WHILE @count < @rec_count
 			   IF (SELECT count(*) FROM dbo.item_status_quantity WHERE item_inv_id = @item_inv_id and status_id = @status_id)=0
 				  INSERT INTO dbo.item_status_quantity (item_inv_id, status_id, stock_qty) VALUES (@item_inv_id, @status_id, @quantity)
 			   ELSE
-                  UPDATE  dbo.item_status_quantity SET stock_qty = stock_qty + @quantity WHERE item_inv_id = @item_inv_id and status_id = @status_id;
+			   BEGIN
+			      IF (SELECT COUNT(*) FROM dbo.items WHERE serial_no = @serial_no) = 0 OR isnull(@serial_no,'') = ''
+                     UPDATE  dbo.item_status_quantity SET stock_qty = stock_qty + @quantity WHERE item_inv_id = @item_inv_id and status_id = @status_id;
+			   END
 
 		END;
 
@@ -100,7 +103,8 @@ WHILE @count < @rec_count
 			   INSERT INTO dbo.items (item_code_id, item_inv_id, serial_no,  status_id, created_by, created_date)
 					  VALUES (@item_code_id,@item_inv_id, @serial_no,  @status_id, @user_id, GETDATE());
 			ELSE
-			   UPDATE items SET item_inv_id=@item_inv_id, status_id=@status_id, remarks=@remarks WHERE serial_no=@serial_no;
+			   UPDATE items SET item_inv_id=@item_inv_id, status_id=@status_id, aircraft_info_id=null, remarks=@remarks WHERE serial_no=@serial_no;
+			    
         END
 		SET @count = @count + 1;
 	END;

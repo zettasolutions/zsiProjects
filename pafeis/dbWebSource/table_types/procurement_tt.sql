@@ -13,4 +13,5 @@ procurement_id	INT	NULL
 ,promised_delivery_date	DATETIME	NULL
 ,warehouse_id	INT	NULL
 ,status_id	INT	NULL
-,is_edited	CHAR(1)	NULL)
+,is_edited	CHAR(1)	NULL
+,page_process_action_id	INT	NULL)
