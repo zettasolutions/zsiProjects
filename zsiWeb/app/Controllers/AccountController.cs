@@ -33,10 +33,33 @@ namespace zsi.web.Controllers
             }
             catch (Exception ex)
             {
-                return Content(ex.Message);
+                string link = "";
+                if (ex.Message.ToLower().Contains("cannot open database"))
+                {
+                    System.Text.RegularExpressions.MatchCollection mc = System.Text.RegularExpressions.Regex.Matches(ex.Message, "\"(.*?)\"");
+                    string dbParam = Url.Content("~/") + "account/setupDatabase?dbName=" +
+                                     mc[0].Value.Replace("\"", "");
+                    link = "<br />Do you want to setup a database? Click <a href=\"" + dbParam + "\">Yes";
+                }                
+                return Content(ex.Message + link);
             }
         }
 
+        public ActionResult setupDatabase(string dbName)
+        {
+            string msg = "";
+            try
+            {
+                DataBaseSetup.restorBackup(dbName);
+                return Redirect(Url.Content("~/"));
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+            }
+
+            return Content(msg);
+        }
 
         public ActionResult changePassword()
         {
