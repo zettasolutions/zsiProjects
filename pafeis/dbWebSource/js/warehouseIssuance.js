@@ -20,6 +20,8 @@ var bs = zsi.bs.ctrl
     ,g_masterData = []
     ,g_detailColumn = []
     ,g_detailData = []
+    ,g_status_id = ""
+    ,g_status_name = ""
 ;
     const IssuanceType = {
     Aircraft: 'Aircraft',
@@ -87,8 +89,8 @@ var contextModalIssuance = {
     };
 
 function clearEntries() {
-    $('input[type=text]').val('');
-    $('select').val('');  
+    $("#modalIssuance").find('input:text').val('');
+    $("#modalIssuance").find('select').val('');  
     $('select.border-required').removeClass('border-required');  
 }
 
@@ -543,6 +545,7 @@ function buildIssuanceHeader(tbl_obj) {
             '<div class=" col-xs-6">' +
                 '<textarea type="text" name="status_remarks" id="status_remarks" rows="3"  class="form-control input-sm" ></textarea>' +
                 '<input type="hidden" name="issuance_type" id="issuance_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
+                '<input type="hidden" name="page_process_action_id" id="page_process_action_id">' +
             '</div>' +
 
             '<div class="hide" id="dealer_filter_div">' +
@@ -571,27 +574,45 @@ function buildIssuanceDetails(callback) {
                 onRender:  function(d){ 
                     return bs({name:"issuance_detail_id",type:"hidden", value: svn (d,"issuance_detail_id")})
                         +  bs({name:"is_edited",type:"hidden"}) 
-                        +  bs({name:"issuance_id",type:"hidden", value: svn (d,"issuance_id")})
-                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
-                       // +  bs({name:"serial_no",type:"hidden", value: svn (d,"serial_no")});
+                        +  bs({name:"issuance_id",type:"hidden", value: svn (d,"issuance_id")});
                 }
-            }    
+            } 
+            ,{text  : "Status"              , width : 120       , style : "text-align:left;",
+                onRender:  function(d){ 
+                    return bs({name:"item_status_id",type:"select", value: svn (d,"item_status_id")})
+                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
+                }
+            }
             ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
-            ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , type  : "label"       , width : 150       , style : "text-align:left;"}
-            ,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "label"       , width : 100       , style : "text-align:left;"}
+            ,{text  : "Unit of Measure"     , width : 150       , style : "text-align:left;"
+                ,onRender: function(d){ 
+                    return "<span id='_unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"
+                        +  "<span class='hide' id='stock_qty'>" + svn(d,"stock_qty") + "</span>";
+                }  
+            }
+            //,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "label"       , width : 100       , style : "text-align:left;"}
     	    ,{text  : "Quantity"            , width : 100                    , style : "text-align:right;"
     	        ,onRender: function(d){
     	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
     	        } 
     	    }
-            ,{text  : "Status"              , name  : "item_status_id"           , type  : "select"      , width : 120       , style : "text-align:left;"}
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
+            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 380       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
             $("select[name='item_status_id']").dataBind("inv_serial_status");
+            $("select[name='item_status_id']").change(function(){
+                g_status_id = '';
+                g_status_name = '';
+                if(this.value){
+                    g_status_id = this.value;
+                    g_status_name = $("option:selected", this).text();
+                }
+                setSearchMulti();
+                clearIssuanceDetails(this);
+            });
             
 	        $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
@@ -601,7 +622,7 @@ function buildIssuanceDetails(callback) {
             $("[name='quantity']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
                 var stock_qty = $zRow.find('#stock_qty').text();
-                if(parseInt(this.value) > stock_qty){
+                if(parseInt(this.value) > parseInt(stock_qty)){
                     alert("Please enter quantity less than or equal to stock qty.");
                     this.value = "";
                 } 
@@ -634,7 +655,7 @@ function buildIssuanceButtons(callBack) {
         if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.status_id + ');" class="btn btn-primary added-button">'
+                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             if(!g_issuance_id || g_issuance_id===null){
@@ -657,7 +678,7 @@ $("#aircraftBtnNew").click(function () {
     //$('#modalIssuance').on('shown.bs.modal', function (e) { //This event is fired when the modal has been made visible to the user
         $("#dealer_filter_div, #issuance_directive_code_filter_div").addClass("hide");
         $("select[name='aircraft_filter']").dataBind({ 
-            url: execURL + "dd_aircrafts_sel @squadron_id=" + g_squadron_id
+            url: execURL + "dd_aircrafts_sel @squadron_id=" + g_organization_id
             ,text: "aircraft_name"
             ,value: "aircraft_info_id"
         });
@@ -778,7 +799,7 @@ function validateWithSerial(){
 }
 
 // Save the new issuance entry.
-function Save(page_process_action_id) {
+function Save(status_id, page_process_action_id) {
     if( zsi.form.checkMandatory()!==true) {
         return false;
     }
@@ -791,7 +812,8 @@ function Save(page_process_action_id) {
     var result = confirm("Entries will be saved. Continue?");
     if (result) {
         $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-        $("#status_id").val(page_process_action_id);
+        $("#tblModalIssuanceHeader").find("#status_id").val(status_id);
+        $("#tblModalIssuanceHeader").find("#page_process_action_id").val(page_process_action_id);
         $("#tblModalIssuanceHeader").jsonSubmit({
             procedure: "issuances_upd"
             , notInclude: "#dealer_filter, #issuance_directive_code_filter"
@@ -800,7 +822,7 @@ function Save(page_process_action_id) {
                     var _issuance_id = (data.returnValue==0 ? g_issuance_id : data.returnValue);
                     $("#tblModalIssuanceDetails input[name='issuance_id']").val(_issuance_id);
                     //Saving of details.
-                    SaveDetails(page_process_action_id);
+                    SaveDetails(status_id);
                 } else {
                     console.log(data.errMsg);
                 }
@@ -810,7 +832,7 @@ function Save(page_process_action_id) {
 }
 
 // Save the new issuance details entry.
-function SaveDetails(page_process_action_id) {
+function SaveDetails(status_id) {
     $("#tblModalIssuanceDetails").jsonSubmit({
         procedure: "issuance_details_upd"
         , notInclude: "#part_no,#national_stock_no,#item_name,#unit_of_measure,#stock_qty"
@@ -818,7 +840,7 @@ function SaveDetails(page_process_action_id) {
         , onComplete: function (data) {
             if (data.isSuccess === true) { 
                 zsi.form.showAlert("alert");
-                setStatusName(page_process_action_id);
+                setStatusName(status_id);
                 clearEntries();
             } else {
                 console.log(data.errMsg);
@@ -854,8 +876,8 @@ function DeleteDetails(){
 }
 
 // Set the label for the status.
-function setStatusName(page_process_action_id) {
-    $.get(execURL + "select dbo.getStatusByPageProcessActionId(" + page_process_action_id + ") AS status_name", function(d) {
+function setStatusName(status_id) {
+    $.get(execURL + "select dbo.getStatusByPageProcessActionId(" + status_id + ") AS status_name", function(d) {
         if (d.rows !== null) {
             $("#status_name").html(d.rows[0].status_name);
         }
@@ -875,7 +897,7 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
         //$('#modalIssuance').on('shown.bs.modal', function (e) { //This event is fired when the modal has been made visible to the user
             $("select[name='aircraft_filter']").attr("selectedvalue", id);
             $("select[name='aircraft_filter']").dataBind({ 
-                url: execURL + "dd_aircrafts_sel @squadron_id=" + g_squadron_id
+                url: execURL + "dd_aircrafts_sel @squadron_id=" + g_organization_id
                 ,text: "aircraft_name"
                 ,value: "aircraft_info_id"
             });
@@ -1007,36 +1029,53 @@ function loadIssuanceDetails(issuance_id) {
                     return bs({name:"issuance_detail_id",type:"hidden", value: svn (d,"issuance_detail_id")})
                         +  bs({name:"is_edited",type:"hidden"}) 
                         +  bs({name:"issuance_id",type:"hidden", value: issuance_id})
-                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")})
                         + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                 }
             }
             ,{text   : " "   , width: 25, style : "text-align:left;", 
                 onRender:  function(d){ 
                     return (d ? rowCount : "");
-               }
-            }    
+                }
+            } 
+            ,{text  : "Status"              , width : 120       , style : "text-align:left;",
+                onRender:  function(d){ 
+                    return bs({name:"item_status_id",type:"select", value: svn (d,"item_status_id")})
+                        +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
+                }
+            }
             ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Nomenclature"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , width : 150       , style : "text-align:left;"
-                ,onRender: function(d){ return "<span id='_unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"; }  
+                ,onRender: function(d){ 
+                    return "<span id='_unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"
+                        +  "<span class='hide' id='stock_qty'>" + svn(d,"stock_qty") + "</span>";
+                }  
             }
-            ,{text  : "Stock Qty."         , width : 100       , style : "text-align:left;"
-                ,onRender: function(d){ return "<span id='_stock_qty'>" + svn(d,"stock_qty") + "</span>"; }
-            }
+            //,{text  : "Stock Qty."         , width : 100       , style : "text-align:left;"
+            //    ,onRender: function(d){ return "<span id='_stock_qty'>" + svn(d,"stock_qty") + "</span>"; }
+            //}
     	    ,{text  : "Quantity"            , width : 90                    , style : "text-align:right;"
     	        ,onRender: function(d){
     	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
     	        } 
     	    }
-            ,{text  : "Status"              , name  : "item_status_id"           , type  : "select"      , width : 120       , style : "text-align:left;"}
-            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 350       , style : "text-align:left;"}
+            ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 380       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
             $("#cbFilter2").setCheckEvent("#tblModalIssuanceDetails input[name='cb']");
             $("select[name='item_status_id']").dataBind("inv_serial_status");
+            $("select[name='item_status_id']").change(function(){
+                g_status_id = '';
+                g_status_name = '';
+                if(this.value){
+                    g_status_id = this.value;
+                    g_status_name = $("option:selected", this).text();
+                }
+                setSearchMulti();
+                clearIssuanceDetails(this);
+            });
             
 	        $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
@@ -1046,22 +1085,11 @@ function loadIssuanceDetails(issuance_id) {
                 else
                     $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
             });
-            /*
-            $("input[name='item_inv_id']").each(function(){
-                if(this.value){
-                    var $row = $(this).closest(".zRow");
-                        $row.find("select[id='serial_no']").dataBind({ 
-                             url : execURL + "dd_warehouse_items_sel @item_inv_id="+ this.value 
-                            ,text: "serial_no"
-                            ,value: "serial_no"
-                        });
-                } 
-            });
-            */
+
             $("[name='quantity']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
-                var stock_qty = $zRow.find("input[name='stock_qty']").val();
-                if(parseInt(this.value) > stock_qty){
+                var stock_qty = $zRow.find('#stock_qty').text();
+                if(parseInt(this.value) > parseInt(stock_qty)){
                     alert("Please enter quantity less than or equal to stock qty.");
                     this.value = "";
                 } 
@@ -1188,7 +1216,17 @@ function uploadFile(){
 
 function setSearchMulti(){
     var _tableCode = "ref-0027";
-        new zsi.search({
+    var  statusName = $.trim(g_status_name);
+    
+    if(statusName==="SERVICEABLE"){
+        _tableCode = "ref-0027";
+    }else if(statusName==="FOR REPAIR"){
+        _tableCode = "ref-0047";
+    }else if(statusName==="BEYOND REPAIR"){
+        _tableCode = "ref-0048";
+    }
+    
+    new zsi.search({
         tableCode: _tableCode
         , colNames: ["part_no","item_inv_id","item_name","national_stock_no","unit_of_measure","stock_qty","with_serial"] 
         , displayNames: ["Part No."]
@@ -1199,8 +1237,7 @@ function setSearchMulti(){
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.part_no;
             
-            var $zRow = $(currentObject).closest(".zRow");
-            setSearchSerial(data, $zRow);
+            setSearchSerial(data, currentObject);
         }
     });
 
@@ -1215,8 +1252,7 @@ function setSearchMulti(){
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.national_stock_no;
             
-            var $zRow = $(currentObject).closest(".zRow");
-            setSearchSerial(data, $zRow);
+            setSearchSerial(data, currentObject);
         }
     });
     
@@ -1230,14 +1266,15 @@ function setSearchMulti(){
         , url: execURL + "searchData"
         , onSelectedItem: function(currentObject, data, i){
             currentObject.value = data.item_name;
-            
-            var $zRow = $(currentObject).closest(".zRow");
-            setSearchSerial(data,$zRow);
+        
+            setSearchSerial(data, currentObject);
         }
     });
 }
 
 function setSearchSerial(d, row){
+    var row = $(row).closest(".zRow");
+    
     row.find("#serial_no").val(d.serial_no);
     row.find("#item_inv_id").val(d.item_inv_id);
     row.find("#part_no").val(d.part_no);
@@ -1250,25 +1287,25 @@ function setSearchSerial(d, row){
     row.find("#_stock_qty").html(d.stock_qty);
 
     var $serial_no = row.find("select[id='serial_no']");
-    var _status = ""
+    //var _status = ""
     var statusArr = [];
     
-    if(g_tab_name==="AIRCRAFT"){
-        _status = 23
+    /*if(g_tab_name==="AIRCRAFT"){
+        _status = 23 //Good
     }
     else if(g_tab_name==="MAINTENANCE"){
-        _status = 24
+        _status = 24 //For Repair
     }
     else if(g_tab_name==="DISPOSAL"){
-        _status = 60
+        _status = 60 //
     }
-    else _status = 0
+    else _status = 0*/
 
     if(d.with_serial==="Y"){
         $serial_no.addClass("with-serial");
         $serial_no.removeAttr("readonly");
         $serial_no.dataBind({ 
-             url : execURL + "dd_warehouse_items_sel @item_inv_id="+ d.item_inv_id +",@status_id=" + _status
+             url : execURL + "dd_warehouse_items_sel @item_inv_id="+ d.item_inv_id +",@status_id=" + g_status_id
             ,text: "serial_no"
             ,value: "serial_no"
             ,onComplete: function(data){
@@ -1407,4 +1444,10 @@ function PrintToPDF(){
     });
 }
 
-       
+function clearIssuanceDetails(el){
+    var $zRow = $(el).closest(".zRow");
+    $zRow.find("#item_inv_id, input:text, #serial_no").val('');
+    $zRow.find("label").text('');
+}
+
+    
