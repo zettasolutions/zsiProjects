@@ -178,6 +178,9 @@ function displayItems(id){
         		,{text  : "Nomenclature"                   , type  : "label"       , width : 400       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"item_name"); }
         		}
+        		,{text  : "Serial No."                   , type  : "label"       , width : 150       , style : "text-align:left;"
+        		    ,onRender : function(d){ return svn(d,"serial_no"); }
+        		}
            		,{text  : "Category"               , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"category"); }
         		}
@@ -185,7 +188,7 @@ function displayItems(id){
         		    ,onRender : function(d){ return svn(d,"item_type_name"); }
         		}*/
         		,{text  : "Remaining Hours"   , type  : "label"       , width : 150       , style : "text-align:center;"
-        		    ,onRender : function(d){ return svn(d,"remaining_time_hr"); }
+        		    ,onRender : function(d){ return svn(d,"remaining_time").toFixed(2); }
         		}
         		//,{text  : "<div id='colspan'>Minutes</div>"                   , type  : "label"       , width : 120       , style : "text-align:center;"
         		//    ,onRender : function(d){ return svn(d,"remaining_time_min"); }
@@ -195,4 +198,4 @@ function displayItems(id){
         		}
 	    ]   
     });    
-}        
+}           
