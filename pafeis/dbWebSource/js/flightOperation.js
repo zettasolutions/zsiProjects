@@ -63,7 +63,7 @@ var contextFlightOperation = {
                         +'    <div class="form-group">'
                         +'        <label class="col-xs-2 control-label">No. of Cycle</label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="no_cycles" id="no_cycles" class="form-control input-sm">'
+                        +'             <input type="text" name="no_cycles" id="no_cycles" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">Category</label>'
                         +'        <div class="col-xs-2">'
@@ -95,35 +95,35 @@ var contextFlightOperation = {
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">Sort</label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="sort" id="sort" class="form-control input-sm">'
+                        +'             <input type="text" name="sort" id="sort" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">PAX MIL </label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="pax_mil" id="pax_mil" class="form-control input-sm">'
+                        +'             <input type="text" name="pax_mil" id="pax_mil" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'    </div>'
                         +'    <div class="form-group">'
                         +'        <label class="col-xs-2 control-label">PAX CIV</label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="pax_civ" id="pax_civ" class="form-control input-sm">'
+                        +'             <input type="text" name="pax_civ" id="pax_civ" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">FNT MIL </label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="fnt_mil" id="fnt_mil" class="form-control input-sm">'
+                        +'             <input type="text" name="fnt_mil" id="fnt_mil" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">FNT CIV</label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="fnt_civ" id="fnt_civ" class="form-control input-sm">'
+                        +'             <input type="text" name="fnt_civ" id="fnt_civ" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'    </div>'
                         +'    <div class="form-group">'
                         +'        <label class="col-xs-2 control-label">Cargo(lbs) </label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="cargo" id="cargo" class="form-control input-sm">'
+                        +'             <input type="text" name="cargo" id="cargo" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">Gas-up Location</label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="gas_up_loc" id="gas_up_loc" class="form-control input-sm">'
+                        +'             <input type="text" name="gas_up_loc" id="gas_up_loc" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">Gas-up(Ltr)</label>'
                         +'        <div class="col-xs-2">'
@@ -133,7 +133,7 @@ var contextFlightOperation = {
                         +'    <div class="form-group">'
                         +'        <label class="col-xs-2 control-label">Gas-up Balance(Ltr)</label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="gas_bal" id="gas_bal" class="form-control input-sm">'
+                        +'             <input type="text" name="gas_bal" id="gas_bal" class="form-control input-sm numeric">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">Status:</label>'
                         +'        <div class="col-xs-2"><label class="col-xs-12 control-label" id="status_name" style="text-align:left !important"></label>'
@@ -144,6 +144,7 @@ var contextFlightOperation = {
                         +'        <label class="col-xs-2 control-label">Remarks</label>'
                         +'        <div class="col-xs-6">'
                         +'             <textarea name="remarks" id="remarks" class="form-control input-sm"></textarea>'
+                        +'              <input type="hidden" name="page_process_action_id" id="page_process_action_id">' 
                         +'        </div>'
                         +'    </div>'
                         +'</div>'
@@ -229,9 +230,11 @@ $("#btnNew").click(function () {
     displayFlightTime(-1);
     displayFlightOperationPilot(-1);
     buildFlightOperationButtons();
+    zsi.initInputTypesAndFormats();
 });
 
 function showModalUpdateOperation(index, flight_operation_id) {
+    g_flight_operation_id = flight_operation_id;
    var _info = dataFlightOperations[index];
     $('#ctxFO .modal-title').html('Flight Operation for ' + ' » <select name="dd_unit" id="dd_unit"></select>');
     $("select[name='dd_unit']").dataBind({
@@ -255,7 +258,7 @@ function showModalUpdateOperation(index, flight_operation_id) {
     displayFlightOperation(_info);
     displayFlightTime(_info.flight_operation_id);
     displayFlightOperationPilot(_info.flight_operation_id);
-    
+    zsi.initInputTypesAndFormats();
 }
 
 function displayListBoxes(){
@@ -319,6 +322,7 @@ function displayFlightOperation(d){
     $("#ctxFO #remarks").text(d.remarks);
 
     displayListBoxes();
+    //zsi.initInputTypesAndFormats();
 }
 
 function clearForm(){
@@ -486,7 +490,7 @@ function buildFlightOperationButtons() {
         if (d.rows !== null) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return submitFlightOperations(' 
-                    + v.page_process_action_id + ');" class="btn btn-primary added-button">'
+                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             
@@ -496,9 +500,10 @@ function buildFlightOperationButtons() {
     });
 }
 
-function submitFlightOperations(page_process_action_id){   
+function submitFlightOperations(status_id, page_process_action_id){   
     $("#frm_modalFlightOperation").find("#is_edited").val("Y");
-    $("#status_id").val(page_process_action_id);
+    $("#frm_modalFlightOperation").find("#status_id").val(status_id);
+    $("#frm_modalFlightOperation").find("#page_process_action_id").val(page_process_action_id);
     $("#frm_modalFlightOperation").jsonSubmit({
          procedure : "flight_operation_upd"
         ,optionalItems : ["flight_operation_id"]
@@ -506,7 +511,7 @@ function submitFlightOperations(page_process_action_id){
         ,onComplete: function (data) {
           if(data.isSuccess===true){ 
             var $tblFTime = $("#" + tblFTime);
-            var _ft_flight_operation_id = (data.returnValue ===0 ? g_flight_operation_id : data.returnValue);
+            var _ft_flight_operation_id = (data.returnValue==0 ? g_flight_operation_id : data.returnValue);
             $tblFTime.find("input[name='flight_operation_id']").val( _ft_flight_operation_id);
             $tblFTime.jsonSubmit({
                  procedure : "flight_time_upd"
@@ -552,4 +557,4 @@ function setStatusName(page_process_action_id) {
         }
     });
 }
-                            
+                                
