@@ -123,7 +123,7 @@ var contextFlightOperation = {
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">Gas-up Location</label>'
                         +'        <div class="col-xs-2">'
-                        +'             <input type="text" name="gas_up_loc" id="gas_up_loc" class="form-control input-sm numeric">'
+                        +'             <input type="text" name="gas_up_loc" id="gas_up_loc" class="form-control input-sm ">'
                         +'        </div>'
                         +'        <label class="col-xs-2 control-label">Gas-up(Ltr)</label>'
                         +'        <div class="col-xs-2">'
