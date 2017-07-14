@@ -707,18 +707,18 @@ function displayItemCodesByCategory(item_cat_id, count){
         ,blankRowsLimit : 0
         ,isPaging       : true
         ,dataRows       : [
-    		{text  : "Type"            , width : 125               , style : "text-align:left;"
+    		{text  : "Item Category"            , width : 125               , style : "text-align:left;"
     		    , onRender      :  function(d){ 
                     return     bs({name:"item_code_id",type:"hidden",value: svn(d,"item_code_id")})
                             +  bs({name:"is_edited",type:"hidden"})
-                            +  bs({name:"item_cat_id",type:"hidden",value: item_cat_id})
-                            +  bs({name:"item_type_id",type:"select",value: svn(d,"item_type_id")});
+                            +  bs({name:"item_cat_id",type:"select",value: svn(d,"item_cat_id")});
+                            
     		    }
     		}
+    		,{text  : "Type"                , name  : "item_type_id"            , type  : "select"        , width : 125         , style : "text-align:left;" }
     		,{text  : "Part No."            , name  : "part_no"                 , type  : "input"         , width : 200         , style : "text-align:left;"    ,sortColNo: 1 }
     		,{text  : "National Stock No."  , name  : "national_stock_no"       , type  : "input"         , width : 160         , style : "text-align:left;"    ,sortColNo: 2 }
     		,{text  : "Nomenclature Name"   , name  : "item_name"               , type  : "input"         , width : 360         , style : "text-align:left;"    ,sortColNo: 3 }
-    		
     		,{text  : "Reorder Qty"         , name  : "reorder_level"           , type  : "input"         , width : 100         , style : "text-align:left;"}
     		,{text  : "Unit of Measure"     , name  : "unit_of_measure_id"      , type  : "select"        , width : 110         , style : "text-align:center;"}
     		,{text  : "Critical Level"      , name  : "critical_level"          , type  : "input"         , width : 200         , style : "text-align:center;"}
@@ -729,6 +729,7 @@ function displayItemCodesByCategory(item_cat_id, count){
         ,onComplete: function(){
             $(".no-data input[name='part_no']").checkValueExists({code:"ref-0010",colName:"part_no"});
             $(".no-data input[name='national_stock_no']").checkValueExists({code:"ref-0010",colName:"national_stock_no"});
+            $("select[name='item_cat_id']").dataBind( "item_category");
             $("select[name='monitoring_type_id']").dataBind( "monitoring_type");
             $("select[name='unit_of_measure_id']").dataBind( "unit_of_measure");
             $("select[name='item_type_id']").dataBind({
@@ -817,4 +818,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }               
-        
+          
