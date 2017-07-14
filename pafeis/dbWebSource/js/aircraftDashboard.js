@@ -76,16 +76,16 @@ function displayTabs(cbFunc){
             tabContent += '<div role="tabpanel" class="tab-pane '+ active +'" id="tab'+ d.aircraft_info_id +'">' +
                            '<div class="zContainer1 header ui-front" id="tabBox'+ d.aircraft_info_id +'">' +
                                '<div class="form-horizontal" style="padding:5px">' +
-                                    '<div class="col-xs-3">' +
+                                    '<div class="col-xs-2">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-2 control-label text-left">Type:</label>' +
-                                            '<div class="col-xs-10">' +
+                                            '<label class="col-xs-3 control-label text-left">Type:</label>' +
+                                            '<div class="col-xs-9">' +
                                                 '<span class="col-xs-12 control-label text-left">'+ d.aircraft_type +'</span>' +
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-2 control-label text-left">Origin:</label>' +
-                                            '<div class="col-xs-10">' +
+                                            '<label class="col-xs-3 control-label text-left">Origin:</label>' +
+                                            '<div class="col-xs-9">' +
                                                 '<span class="col-xs-12 control-label text-left" id="origin">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
@@ -104,25 +104,45 @@ function displayTabs(cbFunc){
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-xs-3">' +
+                                    '<div class="col-xs-1">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-3 control-label text-left">Role:</label>' +
-                                            '<div class="col-xs-9">' +
+                                            '<label class="col-xs-5 control-label text-left">Role:</label>' +
+                                            '<div class="col-xs-7">' +
                                                 '<span class="col-xs-12 control-label text-left" id="role">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-3 control-label text-left">Year:</label>' +
-                                            '<div class="col-xs-9">' +
+                                            '<label class="col-xs-5 control-label text-left">Year:</label>' +
+                                            '<div class="col-xs-7">' +
                                                 '<span class="col-xs-12 control-label text-left" id="year">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
                                     '<div class="col-xs-3">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-3 control-label text-left">Status:</label>' +
-                                            '<div class="col-xs-9">' +
+                                            '<label class="col-xs-7 control-label text-left">Status:</label>' +
+                                            '<div class="col-xs-5">' +
                                                 '<span class="col-xs-12 control-label text-left" id="status">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-7 control-label text-left">Aircraft Time:</label>' +
+                                            '<div class="col-xs-5">' +
+                                                '<span class="col-xs-12 control-label text-left" id="aircraft_time">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="col-xs-2">' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-3 control-label text-left"></label>' +
+                                            '<div class="col-xs-9">' +
+                                                '<span class="col-xs-12 control-label text-left" id="">&nbsp;</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="form-group">' +
+                                            '<label class="col-xs-7 control-label text-left">Remaining Time:</label>' +
+                                            '<div class="col-xs-5">' +
+                                                '<span class="col-xs-12 control-label text-left" id="service_time">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
@@ -144,7 +164,7 @@ function displayTabs(cbFunc){
 } 
 
 function displayBox(id){
-    $.get(execURL + "aircraft_info_types_sel @aircraft_info_id=" + id +",@squadron_id="+ (g_squadron_id ? g_squadron_id : null)
+    $.get(execURL + "aircraft_info_sel @aircraft_info_id=" + id +",@squadron_id="+ (g_squadron_id ? g_squadron_id : null)
     ,function(data){
         var d = data.rows;
         if(d.length > 0){
@@ -153,7 +173,9 @@ function displayBox(id){
             $("#tabBox"+ id +" #manufacturer").text(d[0].manufacturer_name);
             $("#tabBox"+ id +" #role").text(d[0].aircraft_role_name);
             $("#tabBox"+ id +" #year").text(d[0].introduced_year);
+            $("#tabBox"+ id +" #aircraft_time").text(d[0].aircraft_time);
             $("#tabBox"+ id +" #status").text(d[0].status_name);
+            $("#tabBox"+ id +" #service_time").text(d[0].service_time);
         }
     });
 }
@@ -165,10 +187,6 @@ function displayItems(id){
 	    ,width          : $(document).width() - 24
 	    ,height         : $(document).height() - 250
         ,dataRows : [
-        		/* {text  : "Item Code"                   , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return   bs({name:"item_code_id",type:"hidden",value: svn (d,"item_code_id")})
-        		                                    + svn(d,"item_code"); }
-        		}*/
         		{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"part_no"); }
         		}
@@ -181,21 +199,23 @@ function displayItems(id){
         		,{text  : "Serial No."                   , type  : "label"       , width : 150       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"serial_no"); }
         		}
-           		,{text  : "Category"               , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"category"); }
+        		,{text  : "Critical Level"                   , type  : "label"       , width : 150       , style : "text-align:center;"
+        		    ,onRender : function(d){ return formatCurrency(svn(d,"critical_level")); }
         		}
-        		/*,{text  : "Item Type"                   , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"item_type_name"); }
-        		}*/
-        		,{text  : "Remaining Hours"   , type  : "label"       , width : 150       , style : "text-align:center;"
-        		    ,onRender : function(d){ return svn(d,"remaining_time").toFixed(2); }
+        		,{text  : "Remaining"   , type  : "label"       , width : 150       , style : "text-align:center;"
+        		    ,onRender : function(d){ return formatCurrency(svn(d,"remaining_time")); }
         		}
-        		//,{text  : "<div id='colspan'>Minutes</div>"                   , type  : "label"       , width : 120       , style : "text-align:center;"
-        		//    ,onRender : function(d){ return svn(d,"remaining_time_min"); }
-        		//}
-                ,{text  : "Critical Level"                   , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"critical_level"); }
+        		,{text  : "Monitoring Type"   , type  : "label"       , width : 150       , style : "text-align:center;"
+        		    ,onRender : function(d){ return svn(d,"monitoring_type"); }
         		}
 	    ]   
     });    
-}           
+}          
+
+function formatCurrency(number){
+    var result = "";
+    if(number!==""){
+        result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+    return result;
+}  
