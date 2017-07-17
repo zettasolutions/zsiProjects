@@ -12,11 +12,11 @@ BEGIN
    DECLARE @page_process_action_id INT;
    DECLARE @proc_tt AS TABLE (
      id int IDENTITY
-	,proc_name varchar(50)
+	,proc_name nvarchar(50)
    )
    DECLARE @data_count INT;
    DECLARE @ctr int=0;
-   DECLARE @procName VARCHAR(50)
+   DECLARE @procName NVARCHAR(50)
 
 -- Update Process
     UPDATE a 
@@ -103,28 +103,28 @@ BEGIN
        ,GETDATE()
     FROM @tt
     WHERE flight_operation_id IS NULL;
-END
+
 
 	SELECT @id = flight_operation_id, @page_process_action_id=page_process_action_id FROM @tt;
 	IF ISNULL(@id,0) = 0
-	BEGIN
-	   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
-	   EXEC dbo.doc_routing_process_upd 82,@id,@page_process_action_id,@user_id;
-	   RETURN @id
-	END;
+		BEGIN
+		   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
+		   EXEC dbo.doc_routing_process_upd 82,@id,@page_process_action_id,@user_id;
+		   RETURN @id
+		END;
 
 	INSERT INTO @proc_tt SELECT proc_name FROM dbo.page_process_action_procs WHERE page_process_action_id=@page_process_action_id 
 	SELECT @data_count =COUNT(*) FROM @proc_tt 
 	WHILE @ctr < @data_count 
 	BEGIN
-	  SELECT TOP 1 @procName =proc_name FROM @proc_tt WHERE id> @ctr;
+	  SELECT TOP 1 @procName =proc_name FROM @proc_tt WHERE id > @ctr;
 	  EXEC @procName @id,@user_id
 	  SET @ctr = @ctr + 1
 	END
 
 	EXEC dbo.doc_routing_process_upd 82,@id,@page_process_action_id,@user_id;
 
-
+END
 
 
 

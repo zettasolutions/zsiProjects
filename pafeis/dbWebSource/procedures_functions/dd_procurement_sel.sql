@@ -4,5 +4,6 @@ AS
 BEGIN
 SET NOCOUNT ON
 DECLARE @stmt NVARCHAR(MAX)
-   SELECT procurement_id, po_code FROM procurement where status_id=16 AND supplier_id=@dealer_id 
+   SELECT procurement_id, po_code FROM procurement where status_id=14 AND supplier_id=@dealer_id 
 END
+

@@ -21,7 +21,7 @@ CREATE FUNCTION [dbo].[user_aircraft_squadrons]
 RETURNS @us TABLE 
 (
 	organization_id INT
-   ,organization_name nvarchar(50)
+   ,organization_name nvarchar(150)
 )
 AS
 BEGIN
@@ -34,22 +34,17 @@ BEGIN
 
    IF @organization_type_code='SQUADRON'
  	  INSERT INTO @us
-		 SELECT organization_id, organization_name FROM organizations_v WHERE organization_id = @organization_id;
+		 SELECT organization_id, concat(dbo.getOrganizationName(organization_pid),' ', organization_name) as organization_name FROM organizations_v WHERE organization_id = @organization_id;
    ELSE
 		  INSERT INTO @us
-			 SELECT organization_id, organization_name
+			 SELECT organization_id, concat(dbo.getOrganizationName(organization_pid),' ', organization_name) as organization_name
 			   FROM organizations_v 
 			  WHERE squadron_type = @squadron_type and organization_id IN (SELECT organization_id 
 									  FROM dbo.org_child(@organization_id) 
 									);
 
 
-
- --    SELECT @organization_id=organization_id FROM dbo.org_parent(@organization_id) where organization_type_code='WING'
-     
- --     BEGIN
---      END
-
    RETURN
 
 END
+

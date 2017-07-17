@@ -14,10 +14,11 @@ CREATE PROCEDURE [dbo].[items_sel]
    ,@item_code_id  INT = null
    ,@aircraft_info_id INT = NULL
    ,@warehouse_id int = null
-   ,@item_cat_code char(1)=null
+   ,@item_cat_code nvarchar(20)=null
    ,@parent_item_id INT=NULL
    ,@item_inv_id int = null
    ,@status_id int = null
+ 
 )
 AS
 BEGIN
@@ -35,7 +36,7 @@ IF ISNULL(@warehouse_id,0) <> 0
    SET @stmt = @stmt + ' AND warehouse_id = ' + cast(@warehouse_id as varchar(20)) 
 
 IF ISNULL(@item_cat_code,'') <> ''
-   SET @stmt = @stmt + ' AND item_cat_code = ''' + @item_cat_code + ''''
+   SET @stmt = @stmt + ' AND item_cat_code IN ( ''' + REPLACE(@item_cat_code,'|',''',''') + ''')'
 
 
 IF ISNULL(@item_code_id,0) <> 0
@@ -52,6 +53,8 @@ IF ISNULL(@status_id,0) <> 0
 
 IF ISNULL(@parent_item_id,0) <> 0
    SET @stmt = @stmt + ' AND parent_item_id = ' + cast(@parent_item_id as varchar(20)) 
+ELSE
+   SET @stmt = @stmt + ' AND ISNULL(parent_item_id,0) = 0 '
 
 SET @stmt = @stmt + ' ORDER BY serial_no'; 
 

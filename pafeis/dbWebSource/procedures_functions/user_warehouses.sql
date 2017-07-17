@@ -38,7 +38,7 @@ BEGIN
    IF @warehouse_id IS NULL
       BEGIN
 		  INSERT INTO @uw
-			 SELECT warehouse_id, warehouse_location, organization_warehouse
+			 SELECT warehouse_id, warehouse_location, concat(dbo.getOrganizationName(wing_id),' ',organization_warehouse) as organization_warehouse
 			   FROM warehouses_v 
 			  WHERE squadron_id IN (SELECT organization_id 
 									  FROM dbo.org_child(@organization_id) 
@@ -47,10 +47,11 @@ BEGIN
    ELSE
       BEGIN
 		  INSERT INTO @uw 
-		  SELECT warehouse_id, warehouse_location, organization_warehouse
+		  SELECT warehouse_id, warehouse_location, concat(dbo.getOrganizationName(wing_id),' ',organization_warehouse) as organization_warehouse
 			   FROM warehouses_v where warehouse_id=@warehouse_id;
 	  END
 
    RETURN
 
 END
+

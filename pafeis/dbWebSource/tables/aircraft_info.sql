@@ -5,7 +5,8 @@ aircraft_info_id	INT IDENTITY(1,1)	NOT NULL
 ,aircraft_type_id	INT	NOT NULL
 ,squadron_id	INT	NOT NULL
 ,aircraft_time	DECIMAL(20)	NULL
-,aircraft_source_id	INT	NOT NULL
+,service_time	DECIMAL(20)	NULL
+,aircraft_source_id	INT	NULL
 ,aircraft_dealer_id	INT	NOT NULL
 ,status_id	INT	NOT NULL
 ,created_by	INT	NOT NULL

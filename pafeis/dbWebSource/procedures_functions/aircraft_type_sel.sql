@@ -8,7 +8,7 @@ BEGIN
 
 SET NOCOUNT ON
 	 DECLARE @stmt NVARCHAR(MAX)
-  SET @stmt = 'SELECT * FROM dbo.aircraft_type WHERE is_active=''' + @is_active + '''';
+  SET @stmt = 'SELECT * FROM dbo.aircraft_types_v WHERE is_active=''' + @is_active + '''';
 
   IF isnull(@aircraft_type_id,0) <> 0
 	 SET @stmt = @stmt + 'AND @aircraft_type_id=' + cast(@aircraft_type_id as varchar(20));

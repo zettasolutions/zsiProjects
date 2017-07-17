@@ -15,20 +15,16 @@ DECLARE @stmt VARCHAR(MAX)
 DECLARE @role_id INT
 DECLARE @organization_id INT
 
---  SELECT @role_id=role_id, @organization_id=organization_id FROM users where user_id=@user_id;
+  SELECT @role_id=role_id, @organization_id=organization_id FROM users where user_id=@user_id;
 
-  SET @stmt =  'SELECT * FROM dbo.flight_operations_v '
+  SET @stmt =  'SELECT * FROM dbo.flight_operations_v where role_id= ' + cast(@role_id as varchar(20))
   
   IF @flight_operation_id IS NOT NULL  
-	 SET @stmt = @stmt + ' WHERE flight_operation_id = ' + CAST(@flight_operation_id AS VARCHAR(20)); 
+	 SET @stmt = @stmt + ' and flight_operation_id = ' + CAST(@flight_operation_id AS VARCHAR(20)); 
 
   IF @squadron_id IS NOT NULL  
-	 SET @stmt = @stmt + ' WHERE squadron_id = ' + CAST(@squadron_id AS VARCHAR(20)); 
-/*
-  ELSE
-     SET @stmt = @stmt + 'WHERE role_id = '+ cast(@role_id as varchar(20)) 
-               + ' AND squadron_id = ' + cast(@organization_id as varchar(20))
-*/
+	 SET @stmt = @stmt + ' and squadron_id = ' + CAST(@squadron_id AS VARCHAR(20)); 
+
 
   
    SET @stmt = @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(20))
@@ -38,7 +34,7 @@ DECLARE @organization_id INT
      SET @stmt = @stmt + ' ASC';
   ELSE
      SET @stmt = @stmt + ' DESC';
-   
+  print @stmt; 
   EXEC(@stmt);	
 END
 

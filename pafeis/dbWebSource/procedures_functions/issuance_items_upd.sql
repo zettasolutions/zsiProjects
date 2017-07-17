@@ -22,8 +22,8 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
   FROM dbo.issuances WHERE issuance_id=@issuance_id;
 
         UPDATE a
-		  SET item_inv_id = NULL
-		     ,status_id = @status_id
+		  SET item_inv_id = iif(isnull(@aircraft_id,0) <> 0, a.item_inv_id,NULL)
+		     ,status_id = b.item_status_id
 			 ,aircraft_info_id=@aircraft_id
 			 ,updated_by=@user_id
 			 ,updated_date=GETDATE()
@@ -93,3 +93,5 @@ SELECT @is_type = issuance_type, @aircraft_id=aircraft_id,@status_id=IIF(@is_typ
 	END;
 
 END;
+
+

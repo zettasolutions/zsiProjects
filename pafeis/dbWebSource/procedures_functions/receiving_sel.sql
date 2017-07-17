@@ -20,7 +20,7 @@ DECLARE @organization_id INT
   
 
   SET @stmt =  'SELECT * FROM dbo.receiving_v WHERE role_id = '+ cast(@role_id as varchar(20))
-  
+
   IF @receiving_id IS NOT NULL  
 	 SET @stmt = @stmt + ' AND receiving_id = ' + CAST(@receiving_id AS VARCHAR(20)); 
 
@@ -41,7 +41,7 @@ DECLARE @organization_id INT
   ELSE
      SET @stmt = @stmt + ' DESC';
   
-  print @stmt;
+  --print @stmt;
   exec(@stmt);
 	
 END

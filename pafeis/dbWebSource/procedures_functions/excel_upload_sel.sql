@@ -1,6 +1,6 @@
 CREATE PROCEDURE [dbo].[excel_upload_sel]
 ( 
-@load_name nvarchar(100)
+@load_name nvarchar(100)=null
 )
 AS
 BEGIN

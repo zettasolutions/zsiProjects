@@ -1,4 +1,6 @@
 
+
+
 CREATE PROCEDURE [dbo].[aircraft_info_upd]
 (
     @tt    aircraft_info_tt READONLY
@@ -14,6 +16,7 @@ BEGIN
 		,aircraft_type_id		= b.aircraft_type_id
 		,squadron_id			= b.squadron_id
 		,aircraft_time			= b.aircraft_time
+		,service_time           = b.service_time
 		,aircraft_source_id		= b.aircraft_source_id
 		,aircraft_dealer_id		= b.aircraft_dealer_id
 		,status_id				= b.status_id
@@ -31,6 +34,7 @@ BEGIN
 		,aircraft_type_id
 		,squadron_id
 		,aircraft_time
+		,service_time
 		,aircraft_source_id
 		,aircraft_dealer_id
 		,status_id
@@ -44,6 +48,7 @@ BEGIN
 	   ,aircraft_type_id
 	   ,squadron_id
 	   ,aircraft_time
+	   ,service_time
 	   ,aircraft_source_id
 	   ,aircraft_dealer_id
 	   ,status_id
@@ -53,5 +58,7 @@ BEGIN
     FROM @tt
     WHERE aircraft_info_id IS NULL;
 END
+
+
 
 

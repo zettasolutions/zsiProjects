@@ -74,7 +74,8 @@ WHILE @count < @rec_count
 		   UPDATE dbo.procurement set actual_delivery_date = @doc_date 
 		                             ,status_id = 19 
 		   WHERE procurement_id = @procurement_id;
-
+        
+		SET @item_inv_id=NULL;
         SELECT @item_inv_id = item_inv_id FROM dbo.items_inv WHERE item_code_id = @item_code_id AND warehouse_id=@warehouse_id;
 
    	    IF isnull(@item_inv_id,0) = 0

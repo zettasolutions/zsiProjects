@@ -9,7 +9,8 @@ AS
 BEGIN
 -- Update Process
     UPDATE a 
-    SET  item_type_id		    = b.item_type_id
+    SET  item_cat_id            = b.item_cat_id
+	    ,item_type_id		    = b.item_type_id
 		,part_no  			    = b.part_no
 		,national_stock_no		= b.national_stock_no
 		,item_name				= b.item_name
