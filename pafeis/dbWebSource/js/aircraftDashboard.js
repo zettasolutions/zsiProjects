@@ -1,5 +1,7 @@
- var bs     = zsi.bs.ctrl
+var bs     = zsi.bs.ctrl
     ,svn    = zsi.setValIfNull
+    ,aircraft_info_id = null
+    ,parent_item_id = null
     ,g_user_id = null
     ,g_squadron_id = null
     ,g_organization_name = ""
@@ -112,23 +114,23 @@ function displayTabs(cbFunc){
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-5 control-label text-left">Year:</label>' +
+                                            '<label class="col-xs-5 control-label text-left">Status:</label>' +
                                             '<div class="col-xs-7">' +
-                                                '<span class="col-xs-12 control-label text-left" id="year">&nbsp;</span>' +
+                                                '<span class="col-xs-12 control-label text-left" id="status">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
                                     '<div class="col-xs-3">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-7 control-label text-left">Status:</label>' +
+                                            '<label class="col-xs-7 control-label text-left">Aircraft Time (Hours):</label>' +
                                             '<div class="col-xs-5">' +
-                                                '<span class="col-xs-12 control-label text-left" id="status">&nbsp;</span>' +
+                                                '<span class="col-xs-12 control-label text-left" id="aircraft_time">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-7 control-label text-left">Aircraft Time:</label>' +
+                                            '<label class="col-xs-7 control-label text-left">Hours Left to Inspection:</label>' +
                                             '<div class="col-xs-5">' +
-                                                '<span class="col-xs-12 control-label text-left" id="aircraft_time">&nbsp;</span>' +
+                                                '<span class="col-xs-12 control-label text-left" id="service_time">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
@@ -139,12 +141,7 @@ function displayTabs(cbFunc){
                                                 '<span class="col-xs-12 control-label text-left" id="">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
-                                        '<div class="form-group">' +
-                                            '<label class="col-xs-7 control-label text-left">Remaining Time:</label>' +
-                                            '<div class="col-xs-5">' +
-                                                '<span class="col-xs-12 control-label text-left" id="service_time">&nbsp;</span>' +
-                                            '</div>' +
-                                        '</div>' +
+
                                     '</div>' +
                                 '</div>' +
                             '</div>' +
@@ -173,44 +170,78 @@ function displayBox(id){
             $("#tabBox"+ id +" #manufacturer").text(d[0].manufacturer_name);
             $("#tabBox"+ id +" #role").text(d[0].aircraft_role_name);
             $("#tabBox"+ id +" #year").text(d[0].introduced_year);
-            $("#tabBox"+ id +" #aircraft_time").text(d[0].aircraft_time);
+            $("#tabBox"+ id +" #aircraft_time").text(formatCurrency(d[0].aircraft_time));
             $("#tabBox"+ id +" #status").text(d[0].status_name);
             $("#tabBox"+ id +" #service_time").text(d[0].service_time);
         }
     });
 }
 
-function displayItems(id){
+function displayItems(id, callback){
     var counter = 0;
     $("#tabGrid" + id).dataBind({
 	     url            : execURL + "items_sel @aircraft_info_id=" + id
-	    ,width          : $(document).width() - 24
+	    ,toggleMasterKey    : "item_id"
+	    //,width          : $(document).width() - 24
 	    ,height         : $(document).height() - 250
         ,dataRows : [
-        		{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return  svn(d,"part_no"); }
+
+                {text  : "&nbsp;"                                               , width : 25         , style : "text-align:left;"
+                     ,onRender : function(d){
+                         return (   
+                                  d.countAircraftAC !==0  
+                                ? "<a  href='javascript:void(0);' onclick='displayRecordsComponents(this,"+ d.item_id + "," + id + ");'><span class='glyphicon glyphicon-collapse-down' style='font-size:12pt;' ></span> </a>"
+                                : ""                         
+                         );
+                     }
+                 }
+        		,{text  : "Part No."            , name:"part_no"                , width : 200       , style : "text-align:left;"}
+        		,{text  : "National Stock No."  , name:"national_stock_no"      , width : 200       , style : "text-align:left;"}
+        		,{text  : "Nomenclature"        , name:"item_name"              , width : 400       , style : "text-align:left;"}
+        		,{text  : "Serial No."          , name:"serial_no"              , width : 150       , style : "text-align:left;"}
+        		,{text  : "Critical Level"      , width : 150                , style : "text-align:center;"
+        		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))) ; }
         		}
-        		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
+        		,{text  : "Remaining"           , width : 100       , style : "text-align:right; padding-right:3px"
+        		    ,onRender : function(d){ 
+        		         if(d.remaining_time < d.critical_level)
+        		                return "<span id='remaining_time' class='remaining' " + formatCurrency(svn(d,'remaining_time')) +"</span>";
+        		         else 
+        		                return formatCurrency(svn(d,"remaining_time"));
+        		       
+        		    }
         		}
-        		,{text  : "Nomenclature"                   , type  : "label"       , width : 400       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"item_name"); }
-        		}
-        		,{text  : "Serial No."                   , type  : "label"       , width : 150       , style : "text-align:left;"
-        		    ,onRender : function(d){ return svn(d,"serial_no"); }
-        		}
-        		,{text  : "Critical Level"                   , type  : "label"       , width : 150       , style : "text-align:center;"
-        		    ,onRender : function(d){ return formatCurrency(svn(d,"critical_level")); }
-        		}
-        		,{text  : "Remaining"   , type  : "label"       , width : 150       , style : "text-align:center;"
-        		    ,onRender : function(d){ return formatCurrency(svn(d,"remaining_time")); }
-        		}
-        		,{text  : "Monitoring Type"   , type  : "label"       , width : 150       , style : "text-align:center;"
-        		    ,onRender : function(d){ return svn(d,"monitoring_type"); }
-        		}
+        		,{text  : "Monitoring Type"    , name:"monitoring_type" , width : 150       , style : "text-align:center;"}
 	    ]   
     });    
 }          
+
+function displayRecordsComponents(o,id,aircraft_info_id){
+    zsi.toggleExtraRow({
+         object     : o
+        ,parentId   : id
+        ,onLoad : function($grid){ 
+            
+            $grid.dataBind({
+                 url        : execURL + "items_sel @parent_item_id=" + id + ",@aircraft_info_id=" + aircraft_info_id
+                ,dataRows   : [
+                         {text  : "Part No."                 , name  : "part_no"                , width : 200       , style : "text-align:left;"}
+                		,{text  : "National Stock No."       , name  : "national_stock_no"      , width : 200       , style : "text-align:left;"}
+                		,{text  : "Nomenclature"             , name  : "item_name"              , width : 400       , style : "text-align:left;"}
+                		,{text  : "Serial No."               , name  : "serial_no"              , width : 150       , style : "text-align:left;"}
+                		,{text  : "Critical Level"           , width : 150                , style : "text-align:center;"
+                		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))) ; }
+                		}
+                		,{text  : "Remaining" , width : 100       , style : "text-align:right; padding-right:3px"
+                		    ,onRender : function(d){  return formatCurrency(svn(d,"remaining_time"));}
+                		}
+                		,{text  : "Monitoring Type"          , name  : "monitoring_type"        , width : 150       , style : "text-align:center;"}
+                ]                      
+                
+            });    
+        }
+    });
+}
 
 function formatCurrency(number){
     var result = "";
@@ -218,4 +249,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}  
+}        
