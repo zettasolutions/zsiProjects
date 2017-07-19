@@ -135,7 +135,7 @@ function getTemplate(){
 function displayInactiveUsers(){   
     $("#" + tblName).dataBind({
         url   : procURL + "users_sel @is_active='N'" 
-        ,width          : $(document).width() - 480
+        ,width          : $(document).width() - 550
 	    ,height         : $(document).height() - 250
         ,dataRows       :[
             { text:"Logon "   , width:220    , style:"text-align:center;"   
@@ -169,7 +169,7 @@ function displayRecords(user_id){
     var rownum=0;
     $("#grid").dataBind({
 	     url   : procURL + "users2_sel @filter_user_id=" + user_id
-        ,width          : $(document).width() - 200
+        ,width          : $(document).width() - 170
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -348,4 +348,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                           
+                            

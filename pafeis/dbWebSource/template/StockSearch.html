@@ -6,21 +6,21 @@
     height: 0 !important;
 }*/
 </style>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 zForm">  
+<div class="col-md-12 zPanel">  
     <div class="row ">
-        <div class="col-xs-12 col-sm-12" id="stocksearch">
+        <div class="col-md-12" id="stocksearch">
             <div class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-xs-2 col-sm-1 col-md-1 col-lg-1 control-label">Search Field:</label>
-                    <div class="col-xs-3">
+                    <label class="col-xs-4 col-sm-2 col-md-2 col-lg-1 control-label">Search Field:</label>
+                    <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2" style="margin-bottom:5px">
                         <select name="field_search" id="field_search" class="form-control input-sm">
                             <option value="part_no">Part No.</option>
                             <option value="national_stock_no">National Stock No.</option>
                             <option value="item_name">Nomenclature Name</option>
                         </select>
                     </div>
-                    <label class="col-xs-2 col-sm-1 col-md-1 col-lg-1 control-label">Keyword:</label>
-                    <div class=" col-xs-3">
+                    <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1 control-label">Keyword:</label>
+                    <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
                         <input name="stocks_search_id_filter" id="stocks_search_id_filter" type="hidden" class="form-control input-sm">
                         <input name="stock_search_filter" id="stock_search_filter" placeholder="Search" class="form-control input-sm">
                     </div>
@@ -33,7 +33,7 @@
     </div>    
 
     <form method="post" id="frm">
-          <div id="grid" class="zGrid"></div> 
+          <div id="grid" class="zGrid hide"></div> 
     </form>
 </div>
 <script src="/Scripts/handlebars-v3.0.0.js"></script>
