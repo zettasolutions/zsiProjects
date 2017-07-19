@@ -48,31 +48,32 @@ var contextModalWindow = {
     , footer: '<div id="adjustment-footer" class="pull-left">'
     , body  : '<div id="tblAdjustment" class="form-horizontal zContainer1" style="padding:5px">'
             +'    <div class="form-group"> ' 
-            +'        <label class=" col-xs-2 control-label">Adjustment No.:</label>'
-            +'        <div class=" col-xs-2">'
+            +'        <label class=" col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Adjustment No.</label>'
+            +'        <div class=" col-xs-7 col-sm-2 col-md-2 col-lg-2">'
             +'             <input type="hidden" name="adjustment_id" id="adjustment_id">'
             +'             <input type="hidden" name="is_edited" id="is_edited">'
             +'             <input type="text" name="adjustment_no" id="adjustment_no" class="form-control input-sm" disabled>'
             +'        </div> ' 
-            +'        <label class=" col-xs-2 control-label">Adjustment Date:</label>'
-            +'        <div class=" col-xs-2">'
+            +'        <label class=" col-xs-5 col-sm-3 col-md-3 col-lg-2 control-label">Adjustment Date</label>'
+            +'        <div class=" col-xs-7 col-sm-2 col-md-2 col-lg-2">'
             +'             <input type="text" name="adjustment_date" id="adjustment_date" class="form-control input-sm">'
             +'             <input type="hidden" name="warehouse_id" id="warehouse_id">'
             +'        </div>'  
-            +'        <label class="col-xs-1 control-label">By:</label>'
-            +'        <div class="col-xs-3">'
+            +'        <label class="col-xs-5 col-sm-1 col-md-1 col-lg-2 control-label">By</label>'
+            +'        <div class="col-xs-7 col-sm-2 col-md-2 col-lg-2">'
             +'          <select name="adjustment_by" id="adjustment_by" class="form-control input-sm"></select>'
             +'        </div>'
             +'    </div>'
             +'    <div class="form-group">'
-            +'        <label class=" col-xs-2 control-label">Status:</label>'
-            +'        <div class=" col-xs-2">'
+            +'        <label class=" col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Status</label>'
+            +'        <div class=" col-xs-8 col-sm-2 col-md-2 col-lg-2">'
             +'          <label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' 
             +'          <input type="hidden" name="status_id" id="status_id">' 
             +'        </div>'
-            +'        <label class=" col-xs-2 control-label">Remarks:</label>'
-            +'        <div class=" col-xs-6">'
-            +'          <textarea rows="3" name="adjustment_remarks" id="adjustment_remarks" class="form-control input-sm"></textarea>'
+            +'        <label class=" col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Remarks</label>'
+            +'        <div class=" col-xs-7 col-sm-6 col-md-6 col-lg-6">'
+            +'          <textarea rows="3" me="adjustment_remarks" id="adjustment_remarks" class="form-control input-sm"></textarea>'
+            +'          <input type="hidden" name="page_process_action_id" id="page_process_action_id">' 
             +'        </div>'
             +'    </div>'
             +'</div>'
@@ -106,8 +107,9 @@ $("#btnNew").click(function () {
     });
 });
 
-function Save(page_process_action_id){   
-    $("#status_id").val(page_process_action_id);
+function Save(status_id, page_process_action_id){   
+    $("#tblAdjustment").find("#status_id").val(status_id);
+    $("#tblAdjustment").find("#page_process_action_id").val(page_process_action_id);
     $("#tblAdjustment").jsonSubmit({
          procedure : "adjustments_upd"
         ,optionalItems : ["adjustment_id"]
@@ -124,7 +126,7 @@ function Save(page_process_action_id){
                         if(data.isSuccess===true){  
                             clearForm();
                             zsi.form.showAlert("alert");
-                            setStatusName(page_process_action_id);
+                            setStatusName(status_id);
                             $("#grid").trigger("refresh");
                             $('#modalAdjustment').modal('hide');
                         }
@@ -165,8 +167,8 @@ function showModalEditAdjustment(index, adjustment_id) {
 }
 
 // Set the label for the status name.
-function setStatusName(page_process_action_id) {
-    $.get(execURL + "select dbo.getStatusByPageProcessActionId(" + page_process_action_id + ") AS status_name", function(d) {
+function setStatusName(status_id) {
+    $.get(execURL + "select dbo.getStatusByPageProcessActionId(" + status_id + ") AS status_name", function(d) {
         if (d.rows !== null) {
             $("#status_name").html(d.rows[0].status_name);
         }
@@ -179,7 +181,7 @@ function buildAdjustmentButtons() {
         if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.status_id + ');" class="btn btn-primary added-button">'
+                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             html += '<button type="button" onclick="DeleteAdjustmentDetails();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>';
@@ -389,4 +391,4 @@ function DeleteAdjustmentDetails(){
         }
     });   
 }
-  
+    
