@@ -170,7 +170,7 @@ function displayItems(id){
     		,{text  : "Nomenclature"                   , type  : "label"       , width : 450       , style : "text-align:left;"    ,sortColNo: 3
     		    ,onRender : function(d){ return svn(d,"item_name"); }
     		}
-            ,{text  : "Serviceable"                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
+            ,{text  : "Serviceable"                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 6
                 ,onRender : function(d){ 
                     var html = "";
                     if(svn(d,"with_serial") === "N" || svn(d,"stock_qty") === 0){
@@ -278,4 +278,4 @@ function displaySerial(status_id){
 	    ] 
     });  
 }
-    
+     

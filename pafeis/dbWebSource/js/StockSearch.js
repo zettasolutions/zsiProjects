@@ -38,8 +38,8 @@ function displayRecords(field_name,keyword){
     {
         $("#grid").dataBind({
 	     url   : execURL + "stock_monitoring_sel @field='"+field_name+"', @search='"+keyword+"'" 
-        ,width          : $(document).width() - 50
-	    ,height         : $(document).height() - 250
+        ,width          : $(document).width() - 25
+	    ,height         : $(document).height() - 360
 	   // ,selectorType   : "checkbox"
         ,blankRowsLimit :0
        // ,isPaging : true
@@ -54,7 +54,7 @@ function displayRecords(field_name,keyword){
     else{
     $("#grid").dataBind({
 	     url   : execURL + "stock_monitoring_sel @field='"+field_name+"', @search='"+keyword+"'" 
-        ,width          : $(document).width() - 50
+        ,width          : $(document).width() - 25
 	    ,height         : $(document).height() - 250
 	   // ,selectorType   : "checkbox"
         ,blankRowsLimit :0
@@ -99,7 +99,8 @@ function displayRecords(field_name,keyword){
 	    ]
 
 	    ,onComplete: function(){
+	        $("#grid").removeClass("hide");
         }
     });   
     }
-}     
+}      

@@ -31,7 +31,7 @@ function displayRecords(filter){
     var rownum=0;
     $("#grid").dataBind({
 	     url   : execURL + "aircraft_info_search_sel @search='"+ filter +"'" 
-        ,width      : $(document).width() - 30
+        ,width      : $(document).width() - 25
 	    ,height     : $(document).height() - 250
         ,dataRows   : [
      		 {  
@@ -83,7 +83,10 @@ function displayRecords(filter){
      		    ,style : "text-align:left;"      
      		 }
 	    ]
+	    ,onComplete: function(){
+	        $("#grid").removeClass("hide");
+	    }
     });    
 }
 
-    
+     

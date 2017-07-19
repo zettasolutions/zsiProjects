@@ -33,7 +33,7 @@ function displayRecords(filter){
     var rownum=0;
     $("#grid").dataBind({
 	     url   : execURL + "assembly_item_search_sel  @search='"+ filter +"'"
-        ,width          : $(document).width() - 30
+        ,width          : $(document).width() - 25
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         // ,isPaging : true
@@ -112,6 +112,7 @@ function displayRecords(filter){
 	    ]
 
         ,onComplete: function(){
+            $("#grid").removeClass("hide");
         }
         /*
         ,onSortClick : function(colNo,orderNo){
@@ -123,4 +124,4 @@ function displayRecords(filter){
     });    
 }
 
-    
+     

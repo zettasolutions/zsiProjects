@@ -35,7 +35,7 @@ function displayRecords(filter){
     var rownum=0;
     $("#grid").dataBind({
 	     url   : procURL + "component_item_search_sel @search='"+ filter +"'" 
-        ,width          : $(document).width() - 250
+        ,width          : $(document).width() - 25
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :0
@@ -59,9 +59,10 @@ function displayRecords(filter){
     		    ,onRender: function(d){ return svn(d, "stock_qty");}
     		}
 	    ]
-
-    
+        ,onComplete : function(){
+            $("#grid").removeClass("hide");
+        }
     });    
 }
 
-        
+         

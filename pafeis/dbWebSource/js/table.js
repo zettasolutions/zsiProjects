@@ -25,7 +25,7 @@ function displayRecords(){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
           $("#grid").dataBind({
 	     url            : execURL + "tables_sel"
-	    ,width          : $(document).width() - 480
+	    ,width          : $(document).width() - 500
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -39,7 +39,7 @@ function displayRecords(){
             }	 
         		,{text  : "Code"                    , name  : "table_code"            , type  : "input"             , width : 200       , style : "text-align:left;"}
         		,{text  : "Table Name"              , name  : "table_name"            , type  : "select"            , width : 300       , style : "text-align:left;"}
-        		,{text  : "Primary Key"             , name  : "table_key_name"        , type  : "select"            , width : 250       , style : "text-align:left;"}
+        		,{text  : "Primary Key"             , name  : "table_key_name"        , type  : "select"            , width : 300       , style : "text-align:left;"}
         	
 	    ]
 	     ,onComplete: function(){
@@ -82,4 +82,4 @@ $("#btnDelete").click(function(){
     });   
 
 });     
-                                       
+                                         
