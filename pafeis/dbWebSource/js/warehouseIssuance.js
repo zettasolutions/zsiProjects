@@ -103,7 +103,7 @@ function initDatePicker(){
 // Initialize the values for the select options.
 function initSelectOptions(callbackFunc){
     $("#tblModalIssuanceHeader #issued_by").dataBind({
-        url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + (g_warehouse_id ? g_warehouse_id : null)
+        url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id
         , text: "userFullName"
         , value: "user_id"
         , onComplete : function(){
@@ -228,7 +228,9 @@ function getStatuses(status_name, callBack){
         if(g_statuses.is_delete==="Y"){
             $("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return DeleteDetails();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>');
         }
-        //$("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return PrintToPDF();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-print"></span>&nbsp;Print</button>');
+        if(g_statuses.is_export_pdf==="Y"){
+            $("#issuance-footer").append('<button type="button" onclick="javascript:void(0); return PrintToPDF();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-print"></span>&nbsp;Print</button>');
+        }
         if(callBack) callBack();
     });
 }
@@ -493,18 +495,18 @@ function buildIssuanceHeader(tbl_obj) {
         '<input type="hidden" name="is_edited" id="is_edited" class="form-control input-sm" >' +
         '<input type="hidden" name="orgranization_id" id="orgranization_id" class="form-control input-sm" >' +
         '<div class="form-group  ">' +
-            '<label class=" col-xs-2 control-label">Issuance No.</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Issuance No.</label>' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                 '<input type="text" name="issuance_no" id="issuance_no" class="form-control input-sm" readonly>' +
             '</div>' +
             
-            '<label class=" col-xs-2 control-label">Issued By</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Issued By</label>' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                 '<select type="text" name="issued_by" id="issued_by" class="form-control input-sm"></select>' +
             '</div>' +
             
-            '<label class=" col-xs-2 control-label">Issued Date</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Issued Date</label>' +
+            '<div class="  col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                 '<input type="text" name="issued_date" id="issued_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'" >' +
                 '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
@@ -515,19 +517,19 @@ function buildIssuanceHeader(tbl_obj) {
         
         '<div class="form-group  "> ' +
             '<div class="hide" id="issuance_directive_code_filter_div">'+
-                '<label class=" col-xs-2 control-label">Directive Code</label>' +
-                '<div class=" col-xs-2">' +
+                '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4  control-label">Directive Code</label>' +
+                '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                     '<input type="text" name="issuance_directive_code_filter" id="issuance_directive_code_filter" class="form-control input-sm">' +
                 '</div>' +
             '</div>'+
 
-            '<label class=" col-xs-2 control-label">Authority Ref</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Authority Ref</label>' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                 '<input type="text" name="authority_ref" id="authority_ref" class="form-control input-sm" >' +
             '</div>' +
             
-            '<label class=" col-xs-2 control-label">Accepted By</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Accepted By</label>' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                 '<select name="accepted_by" id="accepted_by" class="form-control input-sm"></select>' +
                 '<input type="hidden" name="issued_to_organization_id" id="issued_to_organization_id" class="form-control input-sm">' +
             '</div>' +
@@ -536,13 +538,13 @@ function buildIssuanceHeader(tbl_obj) {
         '</div>' +
         
         '<div class="form-group  "> ' +
-            '<label class=" col-xs-2 control-label">Status</label>' +
-            '<div class=" col-xs-2">' +
+            '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Status</label>' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                 '<label class="control-label" name="status_name" id="status_name">&nbsp;</label>' +
                 '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
             '</div>' +
-            '<label class=" col-xs-2 control-label">Status Remarks</label>' +
-            '<div class=" col-xs-6">' +
+            '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Status Remarks</label>' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
                 '<textarea type="text" name="status_remarks" id="status_remarks" rows="3"  class="form-control input-sm" ></textarea>' +
                 '<input type="hidden" name="issuance_type" id="issuance_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
                 '<input type="hidden" name="page_process_action_id" id="page_process_action_id">' +
@@ -583,40 +585,17 @@ function buildIssuanceDetails(callback) {
                         +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
                 }
             }
-            ,{text  : "Part No."            , width : 150       , style : "text-align:left;"
-                ,onRender:  function(d){ 
-                    if(g_tab_name==="AIRCRAFT"){
-                         return "<span id='part_no'>" + svn(d,"part_no") + "</span>"
-                    }else{
-                         return bs({name:"part_no",type:"input", value: svn (d,"part_no")})
-                    }
-                }
-            }
-            ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"
-                ,onRender:  function(d){ 
-                    if(g_tab_name==="AIRCRAFT"){
-                         return "<span id='national_stock_no'>" + svn(d,"national_stock_no") + "</span>"
-                    }else{
-                         return bs({name:"national_stock_no",type:"input", value: svn (d,"national_stock_no")})
-                    }
-                }
-            }
-            ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"
-                ,onRender:  function(d){ 
-                    if(g_tab_name==="AIRCRAFT"){
-                         return "<span id='item_name'>" + svn(d,"item_name") + "</span>"
-                    }else{
-                         return bs({name:"item_name",type:"input", value: svn (d,"item_name")})
-                    }
-                }
-            }
+            ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , width : 150       , style : "text-align:left;"
                 ,onRender: function(d){ 
-                    return "<span id='unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"
+                    return "<span id='_unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"
                         +  "<span class='hide' id='stock_qty'>" + svn(d,"stock_qty") + "</span>";
                 }  
             }
+            //,{text  : "Stock Qty."          , name  : "stock_qty"                , type  : "label"       , width : 100       , style : "text-align:left;"}
     	    ,{text  : "Quantity"            , width : 100                    , style : "text-align:right;"
     	        ,onRender: function(d){
     	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
@@ -625,21 +604,18 @@ function buildIssuanceDetails(callback) {
             ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 380       , style : "text-align:left;"}
         ]
         ,onComplete: function(){
-            if(g_tab_name==="AIRCRAFT"){
-                $("select[name='item_status_id']").dataBind("inv_serial_status");
-            }else{
-                $("select[name='item_status_id']").dataBind("inv_serial_status");
-                $("select[name='item_status_id']").change(function(){
-                    g_status_id = '';
-                    g_status_name = '';
-                    if(this.value){
-                        g_status_id = this.value;
-                        g_status_name = $("option:selected", this).text();
-                    }
-                    setSearchMulti();
-                    clearIssuanceDetails(this);
-                });
-            }
+            $("select[name='item_status_id']").dataBind("inv_serial_status");
+            $("select[name='item_status_id']").change(function(){
+                g_status_id = '';
+                g_status_name = '';
+                if(this.value){
+                    g_status_id = this.value;
+                    g_status_name = $("option:selected", this).text();
+                }
+                setSearchMulti();
+                clearIssuanceDetails(this);
+            });
+            
 	        $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
                 $zRow.find("#is_edited").val("Y");
@@ -710,8 +686,6 @@ $("#aircraftBtnNew").click(function () {
         });
         $("select[name='aircraft_filter']").change(function(){
             $("#aircraft_id").val(this.value);
-            setSerial(this.value);
-            i//f($("#aircraft_id").val("")) clearIssuanceDetails(this);
         });
     //});
 });
@@ -931,7 +905,6 @@ function showModalUpdateIssuance(issuance_type, issuance_id, issuance_no, id) {
             });
             $("select[name='aircraft_filter']").change(function(){
                 $("#aircraft_id").val(this.value);
-                setSerial(this.value);
             });
         //});
     }
@@ -1072,40 +1045,19 @@ function loadIssuanceDetails(issuance_id) {
                         +  bs({name:"item_inv_id",type:"hidden", value: svn (d,"item_inv_id")});
                 }
             }
-            ,{text  : "Part No."            , width : 150       , style : "text-align:left;"
-                ,onRender:  function(d){ 
-                    if(g_tab_name==="AIRCRAFT"){
-                         return "<span id='part_no'>" + svn(d,"part_no") + "</span>"
-                    }else{
-                         return bs({name:"part_no",type:"input", value: svn (d,"part_no")})
-                    }
-                }
-            }
-            ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"
-                ,onRender:  function(d){ 
-                    if(g_tab_name==="AIRCRAFT"){
-                         return "<span id='national_stock_no'>" + svn(d,"national_stock_no") + "</span>"
-                    }else{
-                         return bs({name:"national_stock_no",type:"input", value: svn (d,"national_stock_no")})
-                    }
-                }
-            }
-            ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"
-                ,onRender:  function(d){ 
-                    if(g_tab_name==="AIRCRAFT"){
-                         return "<span id='item_name'>" + svn(d,"item_name") + "</span>"
-                    }else{
-                         return bs({name:"item_name",type:"input", value: svn (d,"item_name")})
-                    }
-                }
-            }
+            ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
+            ,{text  : "Nomenclature"         , name  : "item_name"                , type  : "input"       , width : 150       , style : "text-align:left;"}
             ,{text  : "Serial No."          , name  : "serial_no"                , type  : "select"      , width : 150       , style : "text-align:left;"}
             ,{text  : "Unit of Measure"     , width : 150       , style : "text-align:left;"
                 ,onRender: function(d){ 
-                    return "<span id='unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"
+                    return "<span id='_unit_of_measure'>" + svn(d,"unit_of_measure") + "</span>"
                         +  "<span class='hide' id='stock_qty'>" + svn(d,"stock_qty") + "</span>";
                 }  
             }
+            //,{text  : "Stock Qty."         , width : 100       , style : "text-align:left;"
+            //    ,onRender: function(d){ return "<span id='_stock_qty'>" + svn(d,"stock_qty") + "</span>"; }
+            //}
     	    ,{text  : "Quantity"            , width : 90                    , style : "text-align:right;"
     	        ,onRender: function(d){
     	             return bs({ name  : "quantity" ,style : "text-align:right;" ,value : svn(d,"quantity") ,class : "numeric" });
@@ -1267,7 +1219,7 @@ function uploadFile(){
 function setSearchMulti(){
     var _tableCode = "ref-0027";
     var  statusName = $.trim(g_status_name);
-
+    
     if(statusName==="SERVICEABLE"){
         _tableCode = "ref-0027";
     }else if(statusName==="FOR REPAIR"){
@@ -1275,6 +1227,7 @@ function setSearchMulti(){
     }else if(statusName==="BEYOND REPAIR"){
         _tableCode = "ref-0048";
     }
+    
     new zsi.search({
         tableCode: _tableCode
         , colNames: ["part_no","item_inv_id","item_name","national_stock_no","unit_of_measure","stock_qty","with_serial"] 
@@ -1332,12 +1285,24 @@ function setSearchSerial(d, row){
     row.find("#unit_of_measure").text(d.unit_of_measure);
     row.find("#stock_qty").text(d.stock_qty);
 
-    //row.find("#_unit_of_measure").html(d.unit_of_measure);
-    //row.find("#_stock_qty").html(d.stock_qty);
+    row.find("#_unit_of_measure").html(d.unit_of_measure);
+    row.find("#_stock_qty").html(d.stock_qty);
 
     var $serial_no = row.find("select[id='serial_no']");
-    //console.log($serial_no);
+    //var _status = ""
     var statusArr = [];
+    
+    /*if(g_tab_name==="AIRCRAFT"){
+        _status = 23 //Good
+    }
+    else if(g_tab_name==="MAINTENANCE"){
+        _status = 24 //For Repair
+    }
+    else if(g_tab_name==="DISPOSAL"){
+        _status = 60 //
+    }
+    else _status = 0*/
+
     if(d.with_serial==="Y"){
         $serial_no.addClass("with-serial");
         $serial_no.removeAttr("readonly");
@@ -1368,63 +1333,6 @@ function setSearchSerial(d, row){
     }
 } 
 
-function setSerial(aircraft_id){
-    //var row = $(row).closest(".zRow");
-    var $serial_no = $("select[id='serial_no']");
-        if(aircraft_id != ""){ 
-            $serial_no.dataBind({ 
-                 url : execURL + "dd_aircraft_items_sel @aircraft_info_id="+ (aircraft_id ? aircraft_id : null)
-                ,text: "serial_no"
-                ,value: "serial_no"
-                ,onChange  : function(info){
-                    var i = info.index - 1; // minus 1 because empty <option> element is not included.
-                    var d = info.data; //shorten text to eliminate series of duplicated words.
-                    
-                    var _row                = info.row;
-                    var _item_name          = ""
-                        ,_partNo            = ""
-                        ,_nationalStckNo    = ""
-                        ,_itemName          = "" 
-                        ,_unitOfMeasure     = ""
-                        ,_stkQty            = ""
-
-                    if(i > -1){ //check if selected index is out of record index.
-                        _itemInvId       = d[i].item_inv_id;
-                        _partNo          = d[i].part_no;
-                        _nationalStckNo  = d[i].national_stock_no;//set data based on record index value 
-                        _itemName        = d[i].item_name;
-                        _unitOfMeasure   = d[i].unit_of_measure;
-                        _stkQty          = d[i].stock_qty
-                    }else{
-                        _row.find("#item_inv_id").val("");
-                        _row.find("#quantity").val("");
-                    }
-                    //display temporary data 
-                    _row.find("#item_inv_id").val( _itemInvId);  
-                    _row.find("#part_no").html( _partNo);
-                    _row.find("#national_stock_no").html( _nationalStckNo);  
-                    _row.find("#item_name").html( _itemName);
-                    _row.find("#unit_of_measure").text( _unitOfMeasure);
-                    _row.find("#stock_qty").text( _stkQty);
-                    _row.find("#quantity").val(1);
-                }
-            });
-        }else{
-            $serial_no.clearSelect();
-            clearData();
-        }
-} 
-
-function clearData(){
-    $("#item_inv_id").val( "");
-    $("#part_no").html( "");
-    $("#national_stock_no").html( "");
-    $("#item_name").html( "");
-    $("#unit_of_measure").text( "");
-    $("#stock_qty").text( "");
-    $("#quantity").val( "");
-}
-
 // Set the mandatory fields.
 function setMandatoryEntries(){
     zsi.form.markMandatory({       
@@ -1440,7 +1348,7 @@ function setMandatoryEntries(){
     });    
 }
 
-function displaySampleMasterDetail(){
+function displayPDFHeaderDetails(){
     zsi.createPdfReport({
          margin             : { top :20  ,left:25 }
         ,cellMargin         : { left: 5 }
@@ -1504,12 +1412,13 @@ function displaySampleMasterDetail(){
 }
 
 function PrintToPDF(){
-    $.get(procURL + "issuances_sel @issuance_id=" + g_issuance_id + ",@tab_name='" + g_tab_name +"'", function(d) {
+    //$.get(procURL + "issuances_sel @issuance_id=" + g_issuance_id + ",@tab_name='" + g_tab_name +"'", function(d) {
+    $.get(procURL + "report_hdr @wing_id=null,@squadron_id=" + g_organization_id +",@warehouse_id="+ g_warehouse_id, function(d) {
         if (d.rows !== null) {
             g_masterColumn   = [   
                  {name:"issuance_no"    ,title:"Issuance No."       ,titleWidth:100 ,width:50}
                 ,{name:"issued_date"      ,title:"Issued Date"      ,titleWidth:100 ,width:80}
-                ,{name:"transfer_organization_warehouse"            ,title:"To:"    ,titleWidth:100 ,width:100}
+                ,{name:"transfer_organization_warehouse"            ,title:"Warehouse:"    ,titleWidth:100 ,width:100}
                 ,{name:"authority_ref"   ,title:"Ref. No."          ,titleWidth:100 ,width:100}
                 ,{name:"issued_by_name"   ,title:"Issued By"        ,titleWidth:100 ,width:100}
                 ,{name:"accepted_by_name"   ,title:"Accepted By"    ,titleWidth:100 ,width:100}
@@ -1531,7 +1440,7 @@ function PrintToPDF(){
                     ];
                     g_detailData = data.rows;
                     
-                    displaySampleMasterDetail();
+                    displayPDFHeaderDetails();
                 }
             });
         }
@@ -1544,4 +1453,4 @@ function clearIssuanceDetails(el){
     $zRow.find("label").text('');
 }
 
-            
+        
