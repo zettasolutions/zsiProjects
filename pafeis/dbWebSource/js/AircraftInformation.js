@@ -20,8 +20,8 @@ zsi.ready(function(){
             , value: "organization_id"
             , required :true
             , onComplete: function(){
-                g_squadron_id = $("select#dd_squadron option:selected").val();
-
+                g_organization_id = $("select#dd_squadron option:selected").val();
+                displayRecords();
                 $("select#dd_squadron").change (function(){
                     g_organization_id = null;
                     if(this.value)
@@ -30,9 +30,6 @@ zsi.ready(function(){
                 });
             }
         });  
-        
-        displayRecords();
-
     });   
 });
 
@@ -96,7 +93,7 @@ function btnDeleteAssembly(){
         ,onComplete : function(data){
             displayRecords();
             if(table_name==="ASSEMBLY"){
-                displayRecordsAssembly(aircraft_info_id);
+                displayRecordsAssembly(_info_id);
             }else if(table_name==="COMPONENT"){
                 displayRecordsComponents(parent_item_id);
             }      
@@ -121,22 +118,24 @@ function displayRecords(){
                                                     +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
                 }	 
-        		,{text  : "Squadron"                    , width : 220       , style : "text-align:left;"
+        		,{text  : "Squadron"                    , width : 500       , style : "text-align:left;"
         		    ,onRender: function(d){
-        		                            return       bs({name:"aircraft_squadron_id",type:"select",value: + g_organization_id});
+        		                            return       (d !==null ? bs({name:"squadron_id",type:"select",value: svn (d,"squadron_id")}) : "");
         		    }
         		}
         		,{text  : "Code"                        , name  : "aircraft_code"               , type : "input"         , width : 100       , style : "text-align:left;"}
         		,{text  : "Name"                        , name  : "aircraft_name"               , type : "input"         , width : 170       , style : "text-align:left;"}
                 ,{text  : "Type"                                                                , width : 150            , style : "text-align:left;"       
         		    , onRender: function(d){ 
-                		                    return     bs({name:"aircraft_type_id",type:"select",value: svn (d,"aircraft_type_id")})
-                		                            +  bs({name:"squadron_id",type:"hidden" });
+                		                    return     bs({name:"aircraft_type_id",type:"select",value: svn (d,"aircraft_type_id")});
                             }
                 }	 
-      		    //,{text  : "Squadron"                    , name  : "squadron_id"                 , type : "select"         , width : 150       , style : "text-align:left;"}
-        		,{text  : "Aircraft Time"               , name  : "aircraft_time"               , type : "input"          , width : 120       , style : "text-align:left;"}
-        		,{text  : "Remaining Time to Maintenance" , name  : "service_time"              , type : "input"          , width : 210       , style : "text-align:left;"}
+        		,{text  : "Aircraft Time (Hours)"               , type : "input"          , width : 150       , style : "text-align:right; padding-right:3px"
+        		      
+        		           ,onRender : function(d){  return formatCurrency(svn(d,"aircraft_time"));}
+        		    
+        		}
+        		,{text  : "Hours Left to Inspection"    , name  : "service_time"                , type : "input"          , width : 100       , style : "text-align:center;"}
         		,{text  : "Aircraft Source"             , name  : "aircraft_source_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
         		,{text  : "Aircraft Dealer"             , name  : "aircraft_dealer_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
          		,{text  : "Item Class"                  , name  : "item_class_id"               , type : "select"         , width : 150       , style : "text-align:left;"}
@@ -151,28 +150,31 @@ function displayRecords(){
     	     ,onComplete: function(){
     	        setMandatoryEntries();
                 
-                $("#aircraft_squadron_id").dataBind({
+                $("#squadron_id").dataBind({
                     url: procURL + "dd_organizations_sel @squadron_type='aircraft'"
                     , text: "organization_name"
                     , value: "organization_id"
                     , required :true
+                    ,onChange  : function(){
+                        $("select[name='squadron_id']") === this.value;
+                    }
                 });
 
 
     	        $("select, input").on("keyup change", function(){
                     var $zRow = $(this).closest(".zRow");
                     $zRow.find("#is_edited").val("Y");
-                    $zRow.find("#squadron_id").val(g_organization_id);
-
+ 
                 });            
 
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
                 $("select[name='aircraft_type_id']").dataBind({
                     url : optionsURL + "aircraft_type"
+                    /*
                     ,onComplete: function(){
                          $("input[name='squadron_id']").val( $("#dd_squadron").val() );
                     }
-                    
+                    */
                 });
                 
                 $("select[name='squadron_id']").dataBind({
@@ -231,8 +233,10 @@ function displayRecordsAssembly(id){
                                   + bs({name:"time_since_overhaul",type:"hidden",value: svn (d,"time_since_overhaul")});
                     }
         		}
-        		,{text  : "Remaining"     , name  : "remaining_time"      , type  : "input"         , width : 200       , style : "text-align:left;"}
-        		,{text  : "Monitoring Type"     , name  : "monitoring_type"      , width : 120       , style : "text-align:left;"}
+        		,{text  : "Remaining"     , name  : "remaining_time"      , type  : "input"         , width : 120       , style : "text-align:right; padding-right:3px"
+        		           ,onRender : function(d){  return formatCurrency(svn(d,"remaining_time"));}
+        		}
+        		,{text  : "Monitoring Type"     , name  : "monitoring_type"      , width : 120       , style : "text-align:center;"}
         		,{text  : "# of Components"           , width : 150                 , style : "text-align:center;"
         		    ,onRender  :  
                         function(d){
@@ -305,7 +309,7 @@ function displayRecordsComponents(id){
         		,{text  : "Part No."                 , name  : "part_no"                , type  : "input"         , width : 200        , style : "text-align:left;"}
         		,{text  : "National Stock No."       , name  : "national_stock_no"      , type  : "input"         , width : 200       , style : "text-align:left;"}
         		,{text  : "Nomenclature"             , name  : "item_name"              , type  : "input"         , width : 350       , style : "text-align:left;"}
-        		,{text  : "Serial No."               , name  : "serial_no"              , type  : "input"         , width : 200       , style : "text-align:left;"}
+        		,{text  : "Serial No."               , name  : "serial_no"              , type  : "input"         , width : 150       , style : "text-align:left;"}
         		,{text  : "Manufacturer Name"        , width : 200                      , style : "text-align:left;"
         		    ,onRender  :  function(d){
         		         return     bs({name:"manufacturer_id",type:"select",value: svn (d,"manufacturer_id")})
@@ -317,17 +321,18 @@ function displayRecordsComponents(id){
                     }
         		}
         		//,{text  : "Remaining Time(Hours)"     , name  : "remaining_time_hr"      , type  : "input"         , width : 200       , style : "text-align:left;"}
-        		,{text  : "Remaining"   , width : 200       , style : "text-align:left;"
+        		,{text  : "Remaining"   , width : 100       ,style : "text-align:right; padding-right:3px"
+        		          //,onRender : function(d){  return formatCurrency(svn(d,"remaining_time"));}
         		    ,onRender  :  
                         function(d){
-                            return   bs({name:"remaining_time",type:"input",value: svn (d,"remaining_time")})
+                            return   formatCurrency(svn(d,"remaining_time"))
                                   +  bs({name:"date_delivered",type:"hidden",value: svn (d,"date_delivered")})
                                   +  bs({name:"aircraft_info_id",type:"hidden",value: aircraft_info_id})
                                   +  bs({name:"date_issued",type:"hidden",value: svn (d,"date_issued")})
                                   +  bs({name:"status_id",type:"hidden",value: svn (d,"status_id")}); 
                     }
         		}
-        		,{text  : "Monitoring Type"     , name  : "monitoring_type"      , width : 120       , style : "text-align:left;"}
+        		,{text  : "Monitoring Type"     , name  : "monitoring_type"      , width : 120       , style : "text-align:center;"}
  	    ]
  	    ,onComplete: function(){
  	        $("#cbFilter3").setCheckEvent("#" + tblCP + " input[name='cb']");
@@ -414,5 +419,11 @@ function setMandatoryEntries(){
         ]
     });    
 }
-    
-                       
+
+function formatCurrency(number){
+    var result = "";
+    if(number!==""){
+        result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+    return result;
+}          

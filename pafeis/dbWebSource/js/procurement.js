@@ -23,94 +23,80 @@ var contextModalWindow = {
     , footer: '<div id="procurement-footer" class="pull-left"></div>' 
     , body  : '<div id="tblProcurement" class="zContainer1 form-horizontal zForm" style="padding:5px">'
             +'<div class="col-sm-12">'
-            +'    <div class="col-sm-6">'
             +'      <div class="form-group  "> ' 
-            +'          <label class=" col-xs-3 control-label">PR #</label>'
-            +'          <div class=" col-xs-3">'
+            +'          <label class=" col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">PR #</label>'
+            +'          <div class=" col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'               <input type="hidden" name="procurement_id" id="procurement_id" >'
             +'               <input type="hidden" name="procurement_type" id="procurement_type" class="form-control input-sm" >'
             +'               <input type="text" name="procurement_code" id="procurement_code" class="form-control input-sm" >'
             +'          </div> ' 
-            +'          <label class=" col-xs-3 control-label">PR Date</label>'
-            +'          <div class=" col-xs-3">'
+            +'          <label class=" col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">PR Date</label>'
+            +'          <div class=" col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'               <input type="text" name="procurement_date" id="procurement_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
             +'          </div>'
             +'      </div>'
-            +'    </div>'
-            
-            +'    <div class="col-sm-6">'
-            +'      <div class="form-group  "> ' 
-            +'          <label class=" col-xs-3 control-label">PO #</label>'
-            +'          <div class=" col-xs-3">'
+            +'      <div class="form-group"> ' 
+            +'          <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">PO #</label>'
+            +'          <div class=" col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'               <input type="text" name="po_code" id="po_code" class="form-control input-sm" >'
             +'          </div> ' 
-            +'          <label class=" col-xs-3 control-label">PO Date</label>'
-            +'          <div class=" col-xs-3">'
+            +'          <label class=" col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">PO Date</label>'
+            +'          <div class=" col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'               <input type="text" name="po_date" id="po_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
             +'          </div>'
             +'      </div>'
-            +'    </div>'
-            
-            +'    <div class="col-sm-6">'
             +'      <div class="form-group  "> ' 
-            +'          <label class=" col-xs-3 control-label">BAC #</label>'
-            +'          <div class=" col-xs-3">'
+            +'          <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">BAC #</label>'
+            +'          <div class="col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'               <input type="text" name="bac_code" id="bac_code" class="form-control input-sm" >'
             +'          </div> ' 
-            +'          <label class=" col-xs-3 control-label">BAC Date</label>'
-            +'          <div class=" col-xs-3">'
+            +'          <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">BAC Date</label>'
+            +'          <div class="col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'               <input type="text" name="bac_date" id="bac_date" class="form-control input-sm" value="' + g_today_date.toShortDate() + '">'
             +'          </div>'
             +'      </div>'
-            +'    </div>'            
-            
-            +'    <div class="col-sm-6">'
             +'      <div class="form-group  ">  '
-            +'          <label class=" col-xs-3 control-label">Procurement Desc</label>'
-            +'          <div class=" col-xs-9">'
+            +'          <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">Procurement Desc</label>'
+            +'          <div class="col-xs-7 col-sm-6 col-md-8 col-lg-9 ">'
             +'               <input type="text" name="procurement_name" id="procurement_name" class="form-control input-sm"  >'
             +'          </div>'
             +'      </div>'
-            +'    </div>'
-            
-            +'    <div class="col-sm-6">'
             +'      <div class="form-group  ">  '
-            +'          <label class=" col-xs-3 control-label">Procurement Mode</label>'
-            +'          <div class=" col-xs-3">'
+            +'          <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">Procurement Mode</label>'
+            +'          <div class="col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'               <select name="procurement_mode" id="procurement_mode" class="form-control input-sm" ></select>'
             +'          </div>' 
             +'          <div class="hide" id="supplier_filter">'
-            +'             <label class=" col-xs-3 control-label">Dealer</label>'
-            +'             <div class=" col-xs-3">'
+            +'             <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">Dealer</label>'
+            +'             <div class="col-xs-7 col-sm-6 col-md-8 col-lg-3 ">'
             +'                  <select name="supplier_id" id="supplier_id" class="form-control input-sm" ></select>'
             +'             </div>' 
             +'          </div>'
             +'          <div class="hide" id="warehouse_filter">'
-            +'             <label class=" col-xs-3 control-label">Warehouse</label>'
-            +'             <div class=" col-xs-3">'
+            +'             <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">Warehouse</label>'
+            +'             <div class="col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'                  <select name="dd_warehouse" id="dd_warehouse" class="form-control input-sm" ></select>'
             +'             </div>'  
             +'          </div>'             
             +'       </div>'
-            +'    </div>'
-           
-            +'    <div class="col-sm-6">'
-            +'      <div class="form-group  ">  '
-            +'          <label class=" col-xs-3 control-label">Promised Delivery Date</label>'
-            +'          <div class=" col-xs-3">'
+            +'       <div class="form-group  ">  '
+            +'          <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">Promised Delivery Date</label>'
+            +'          <div class="col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'             <input type="text" name="promised_delivery_date" id="promised_delivery_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
             +'             <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">' 
             +'           </div>'
-            +'          <label class=" col-xs-3 control-label">Status</label>'
-            +'          <div class=" col-xs-3">'
+            +'          <label class="col-xs-5 col-sm-6 col-md-4 col-lg-3 control-label">Status</label>'
+            +'          <div class="col-xs-7 col-sm-6 col-md-8 col-lg-3">'
             +'             <label class="control-label" id="status_name">Open</label>'
             +'             <input type="hidden" name="status_id" id="status_id" class="form-control input-sm" >'
             +'             <input type="hidden" name="is_edited" id="is_edited" class="form-control input-sm" >'
-            +'           </div>'
-            +'       </div>'
-            +'     </div>'
+            +'             <input type="hidden" name="page_process_action_id" id="page_process_action_id">'
+            +'          </div>'
+            +'      </div>'
+            +'    </div>'
             +'</div>'
             +'</div>'
+            
             +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label>Procurement Details</label></div><div id="tblProcurementDetails" class="zGrid Detail" ></div></div>'
 };
 
@@ -149,10 +135,11 @@ $("#btnAddPurchase").click(function () {
     $("#procurement_date").val( g_today_date.toShortDate());
     $("#promised_delivery_date").val( g_today_date.toShortDate());
     
-    getStatuses("NEW", function(){
-        zsi.initDatePicker();
-        displayProcurementDetails();
-        buildButtons();
+    zsi.initDatePicker();
+    buildButtons(function(){
+        getStatuses("NEW", function(){
+            displayProcurementDetails();
+        });
     });
 });
 
@@ -178,10 +165,11 @@ $("#btnAddRepair").click(function () {
         }
     });
     
-    getStatuses("NEW", function(){
-        zsi.initDatePicker();
-        displayProcurementDetails();
-        buildButtons();
+    zsi.initDatePicker();
+    buildButtons(function(){
+        getStatuses("NEW", function(){
+            displayProcurementDetails();
+        });
     });
 });
 
@@ -263,7 +251,7 @@ $("ul.nav-tabs >li").click(function(){
     });
 });
 
-function buildButtons(){
+function buildButtons(callBack){
     
     $("select[name='supplier_id']").dataBind({url: base_url + "selectoption/code/dealer"});
     $("select[name='procurement_mode']").fillSelect({data: procMode});
@@ -272,7 +260,7 @@ function buildButtons(){
         if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.status_id + ');" class="btn btn-primary added-button">'
+                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
 
@@ -283,6 +271,7 @@ function buildButtons(){
             $(".added-button").remove();
             $("#procurement-footer").html(html);
         }
+        if(callBack) callBack();
     });
 }
 
@@ -451,12 +440,9 @@ function showModalProcurement(procurement_type, id, title) {
     $("select, input").on("keyup change", function(){
        $("#tblProcurement").find("#is_edited").val("Y");
     });
+    
     zsi.initDatePicker();
-
-    displayProcurement(function(){
-        buildButtons();
-        displayProcurementDetails();
-    });
+    displayProcurement();
 }
 
 function displayProcurement(callBack){
@@ -479,7 +465,11 @@ function displayProcurement(callBack){
             $tbl.find("#promised_delivery_date").val(d.promised_delivery_date.toDateFormat());
             $tbl.find("#status_name").text(d.status_name);
             
-            getStatuses(d.status_name);
+            buildButtons(function(){
+                getStatuses(d.status_name, function(){
+                    displayProcurementDetails();
+                });
+            });
         }
         if(callBack) callBack();
     });
@@ -525,13 +515,13 @@ function displayProcurementDetails(){
         	    }
         	    ,{text  : "Unit Price"          , width : 100                   , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            var _uprice = (d ? toCurrencyFormat(parseFloat(svn(d,"unit_price")).toFixed(2))   : "");
+        	            var _uprice = (svn(d,"unit_price")!=="" ? toCurrencyFormat(parseFloat(svn(d,"unit_price")).toFixed(2))   : "");
         	            return "<input id='unit_price' type='text' class= 'form-control  numeric' name='unit_price' value='" + _uprice + "' style='text-align:right'>" ; 
         	        }
         	    }
         	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            var _val = (d ? toCurrencyFormat(parseFloat(svn(d,"amount")).toFixed(2))   : "");
+        	            var _val = (svn(d,"amount")!=="" ? toCurrencyFormat(parseFloat(svn(d,"amount")).toFixed(2)) : "");
         	            total += svn(d,"amount") ;
         	            return  "<div id='amount' >" + _val + "</div>";
         	        }
@@ -561,7 +551,7 @@ function displayProcurementDetails(){
         	    }
         	    ,{text  : "Amount"              , width : 130       , style : "text-align:right;"
         	        ,onRender : function(d){
-        	            var _val = (d ? toCurrencyFormat(parseFloat(svn(d,"amount")).toFixed(2))   : "");
+        	            var _val = (svn(d,"amount")!=="" ? toCurrencyFormat(parseFloat(svn(d,"amount")).toFixed(2)) : "");
         	            
         	            return  "<div id='amount' >" + _val + "</div>";
         	        }
@@ -578,7 +568,6 @@ function displayProcurementDetails(){
         ,blankRowsLimit : (g_statuses.is_add==="Y" ? 20 : 0)
         ,dataRows       : _dataRows 
         ,onComplete: function(data){
-            markMandatory();
             setMultipleSearch();
             searchSerial();
             var totalRow = "";
@@ -589,17 +578,16 @@ function displayProcurementDetails(){
     		$("#tblProcurementDetails").find(".right #table").append(totalRow);            
             
             $(".no-data input[name='part_no']").checkValueExists({
-                    code:"ref-0023"
-                    ,isNotExistShow : false 
-                    ,isCheckOnDb : false 
-                    ,message : "data already exist"
-                    ,onHide: function($zRow){
-                        //clear values
-                        $zRow.find("#item_code_id").val("");
-                        $zRow.find("#national_stock_no").val("");
-                        $zRow.find("#item_name").val("");
-                    }
-                
+                code:"ref-0023"
+                ,isNotExistShow : false 
+                ,isCheckOnDb : false 
+                ,message : "data already exist"
+                ,onHide: function($zRow){
+                    //clear values
+                    $zRow.find("#item_code_id").val("");
+                    $zRow.find("#national_stock_no").val("");
+                    $zRow.find("#item_name").val("");
+                }
             });
             $("#cbFilter3").setCheckEvent("#tblProcurementDetails input[name='cb']");
             
@@ -614,7 +602,7 @@ function displayProcurementDetails(){
                     $("#tblProcurement").find("#is_edited").val("Y");
             });
 
-            $("input[name='item_code_id']").each(function(){
+            /*$("input[name='item_code_id']").each(function(){
                 if(this.value){
                     var $row = $(this).closest(".zRow");
                         $row.find("select[id='serial_no']").dataBind({ 
@@ -623,12 +611,18 @@ function displayProcurementDetails(){
                             ,value: "serial_no"
                         });
                 } 
-            });
+            });*/
             
             $("input[name='quantity']").keyup(function(){
                 var quantity  = $.trim(this.value);
                 var $zRow     = $(this).closest(".zRow");
                 var unitPrice = $.trim($zRow.find("#unit_price").val().replace(/,/g, ''));
+                
+                if(quantity > 0){
+                    $(this).removeClass("required");
+                }else{
+                     $(this).addClass("required");
+                }
                 
                 if(unitPrice && quantity){
                     var amount = parseFloat(quantity) * parseFloat(unitPrice);
@@ -653,17 +647,27 @@ function displayProcurementDetails(){
                 $(this).val(toCurrencyFormat(unitPrice));
             });
             
-            
+            markMandatory();
             zsi.initInputTypesAndFormats();
-
         }  
     });    
 }
 
-function Save(page_process_action_id){
+function validateQuantity(){
+    var $required = $("input.required");
+    if($required.length > 0){
+        $required.focus();
+        return false;
+    }else{
+        return true;
+    }
+}
+
+function Save(status_id, page_process_action_id){
     if( zsi.form.checkMandatory()!==true) return false;
     
-    $("#status_id").val(page_process_action_id);
+    $("#tblProcurement").find("#status_id").val(status_id);
+    $("#tblProcurement").find("#page_process_action_id").val(page_process_action_id);
     $("#tblProcurement").jsonSubmit({
          procedure : "procurement_upd"
         ,optionalItems : ["procurement_id"]
@@ -671,33 +675,37 @@ function Save(page_process_action_id){
         ,onComplete: function (data) {
          if(data.isSuccess===true){
             
-            toggleUnitPriceComma("N"); // w/o comma
-            
-            var $tbl = $("#tblProcurementDetails");
-            $tbl.find("[name='procurement_id']").val((g_procurement_id ? g_procurement_id : data.returnValue));
-            $tbl.jsonSubmit({
-                 procedure : "procurement_detail_upd"
-                ,optionalItems : ["procurement_id"]
-                ,notInclude: "#part_no,#national_stock_no,#item_name, #amount, #ordered_qty"
-                ,onComplete: function (data) {
-                    toggleUnitPriceComma("Y"); // with comma 
-                    if(data.isSuccess===true){  
-                        zsi.form.showAlert("alert");
-                        clearForm();
-                        $("#grid").trigger("refresh");
-                        $('#mdlProcurement').modal('hide');
-                        if(g_tab_name==="Purchase"){
-                            displayPurchase(g_tab_name);   
+            if(!validateQuantity()){
+                alert("Please enter a quantity that is greater than 0");
+            }
+            else{
+                toggleUnitPriceComma("N"); // w/o comma
+                var $tbl = $("#tblProcurementDetails");
+                $tbl.find("[name='procurement_id']").val((g_procurement_id ? g_procurement_id : data.returnValue));
+                $tbl.jsonSubmit({
+                     procedure : "procurement_detail_upd"
+                    ,optionalItems : ["item_no","procurement_id"]
+                    ,notInclude: "#part_no,#national_stock_no,#item_name, #amount, #ordered_qty"
+                    ,onComplete: function (data) {
+                        toggleUnitPriceComma("Y"); // with comma 
+                        if(data.isSuccess===true){  
+                            zsi.form.showAlert("alert");
+                            clearForm();
+                            $("#grid").trigger("refresh");
+                            $('#mdlProcurement').modal('hide');
+                            if(g_tab_name==="Purchase"){
+                                displayPurchase(g_tab_name);   
+                            }
+                            else{
+                                displayRepair(g_tab_name);   
+                            }
                         }
-                        else{
-                            displayRepair(g_tab_name);   
+                        else {
+                            console.log(data.errMsg);
                         }
                     }
-                    else {
-                        console.log(data.errMsg);
-                    }
-                }
-            });
+                });
+            }
         }
         else {
                 console.log(data.errMsg);
@@ -720,8 +728,9 @@ function setMultipleSearch(){
                 $zRow.find("#item_code_id").val(data.item_code_id);
                 $zRow.find("#national_stock_no").val(data.national_stock_no);
                 $zRow.find("#item_name").val(data.item_name);
-                setSearchSerial(data.item_code_id, $zRow);
-                $(currentObject).change();    
+                $zRow.find("#quantity").addClass("required");
+                //setSearchSerial(data.item_code_id, $zRow);
+                //$(currentObject).change();    
         }
     });
     
@@ -738,7 +747,8 @@ function setMultipleSearch(){
                 $zRow.find("#item_code_id").val(data.item_code_id);
                 $zRow.find("#part_no").val(data.part_no);
                 $zRow.find("#item_name").val(data.item_name);
-                setSearchSerial(data.item_code_id, $zRow);
+                $zRow.find("#quantity").addClass("required");
+                //setSearchSerial(data.item_code_id, $zRow);
         }
     });
     
@@ -755,6 +765,7 @@ function setMultipleSearch(){
                 $zRow.find("#item_code_id").val(data.item_code_id);
                 $zRow.find("#part_no").val(data.part_no);
                 $zRow.find("#national_stock_no").val(data.national_stock_no);
+                $zRow.find("#quantity").addClass("required");
         }
     });
 }
@@ -962,4 +973,4 @@ else
 function mouseout(){
     $("#user-box").css("display","none");
 }                                           
-               
+    

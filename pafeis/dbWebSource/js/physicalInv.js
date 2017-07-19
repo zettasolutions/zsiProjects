@@ -58,31 +58,32 @@ var contextModalWindow = {
                 , body  : '<div id="frmPhysicalInv" class="form-horizontal zContainer1" style="padding:5px">'
  
                         +'    <div class="form-group  "> ' 
-                        +'          <label class=" col-xs-2 control-label">Physical Inv No</label>'
-                        +'           <div class=" col-xs-2">'
+                        +'          <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Physical Inv No</label>'
+                        +'           <div class="col-xs-7 col-sm-2 col-md-2 col-lg-2">'
                         +'          <input type="text" name="physical_inv_no" id="physical_inv_no" class="form-control input-sm" disabled>'
                         +'        </div> ' 
-                        +'        <label class=" col-xs-1 control-label">Physical Inv Date</label>'
-                        +'        <div class=" col-xs-2">'
+                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Physical Inv Date</label>'
+                        +'        <div class="col-xs-7 col-sm-2 col-md-2 col-lg-2">'
                         +'             <input type="hidden" name="physical_inv_id" id="physical_inv_id" >'
                         +'             <input type="hidden" name="is_edited" id="is_edited">'
                         +'             <input type="text" name="physical_inv_date" id="physical_inv_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
                         +'             <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">'
                         +'        </div> ' 
-                        +'        <label class=" col-xs-1 control-label">Done By</label>'
-                        +'        <div class=" col-xs-3">'
+                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Done By</label>'
+                        +'        <div class="col-xs-7 col-sm-2 col-md-2 col-lg-2">'
                         +'             <select type="text" name="done_by" id="done_by" class="form-control input-sm" ></select>'
                         +'        </div>'  
                         +'    </div>'
                         +'    <div class="form-group  ">  '
-                        +'        <label class=" col-xs-2 control-label">Status</label>'
-                        +'        <div class=" col-xs-4">'
-                        +'          <label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' 
+                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Status</label>'
+                        +'        <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2">'
+                        +'          <label name="status_name" id="status_name">&nbsp;</label>' 
                         +'          <input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' 
                         +'        </div>'
-                        +'        <label class=" col-xs-2 control-label">Remarks</label>'
-                        +'        <div class=" col-xs-4">'
+                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Remarks</label>'
+                        +'        <div class="col-xs-7 col-sm-6 col-md-6 col-lg-6">'
                         +'          <textarea type="text" name="status_remarks" id="status_remarks" class="form-control input-sm" ></textarea>'
+                        +'          <input type="hidden" name="page_process_action_id" id="page_process_action_id">'
                         +'         </div>'
                         +'      </div>'
                         +'</div>'
@@ -97,8 +98,8 @@ var contextFileUpload = {
     , footer: ''
     , body: '<div class="form-horizontal">'+
                     '<div class="form-group"> '+ 
-                        '<label class="col-xs-3  control-label">Select File</label>'+
-                        '<div class=" col-xs-3">'+
+                        '<label class="col-xs-4 col-sm-2 col-md-2 col-lg-1  control-label">Select File</label>'+
+                        '<div class=" col-xs-8 col-sm-10 col-md-10 col-lg-11">'+
                             '<input type="hidden" id="tmpData" name="tmpData" class="form-control input-sm">'+
                             '<input type="file" class="browse btn btn-primary" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file">'+
                         '</div>'+
@@ -153,41 +154,43 @@ $("#btnNew").click(function () {
     });
 });
 
-function Save(page_process_action_id){   
-    $("#status_id").val(page_process_action_id);
-         $("#frmPhysicalInv").jsonSubmit({
-             procedure : "physical_inv_upd"
-            ,optionalItems : ["physical_inv_id"]
-            ,onComplete: function (data) {
-             if(data.isSuccess===true){ 
-                 
-                var $tbl = $("#" + tblPhysicalInvDetail);
-                $tbl.find("[name='physical_inv_id']").val((data.returnValue==0 ? g_physical_inv_id : data.returnValue));
-                $tbl.jsonSubmit({
-                     procedure : "physical_inv_details_upd"
-                    ,optionalItems : ["physical_inv_id"]
-                    , notInclude: "#part_no,#national_stock_no,#item_name"
-                    ,onComplete: function (data) {
-                        if(data.isSuccess===true){  
-                            clearForm();
-                            zsi.form.showAlert("alert");
-                            setStatusName(page_process_action_id);
-                            $("#grid").trigger("refresh");
-                            $('#ctxMW').modal('hide');
-                        }
-                        else {
-                            console.log(data.errMsg);
-                        }
+function Save(status_id, page_process_action_id){   
+    $("#frmPhysicalInv").find("#status_id").val(status_id);
+    $("#frmPhysicalInv").find("#page_process_action_id").val(page_process_action_id);
+    $("#frmPhysicalInv").jsonSubmit({
+         procedure : "physical_inv_upd"
+        ,optionalItems : ["physical_inv_id"]
+        ,onComplete: function (data) {
+         if(data.isSuccess===true){ 
+             
+            if( zsi.form.checkMandatory()!==true) return false;
+            var $tbl = $("#" + tblPhysicalInvDetail);
+            $tbl.find("[name='physical_inv_id']").val((data.returnValue==0 ? g_physical_inv_id : data.returnValue));
+            $tbl.jsonSubmit({
+                 procedure : "physical_inv_details_upd"
+                ,optionalItems : ["physical_inv_id"]
+                ,notInclude: "#part_no,#national_stock_no,#item_name"
+                ,onComplete: function (data) {
+                    if(data.isSuccess===true){  
+                        clearForm();
+                        zsi.form.showAlert("alert");
+                        setStatusName(status_id);
+                        $("#grid").trigger("refresh");
+                        $('#ctxMW').modal('hide');
                     }
-
-                });
-             }
-             else {
-                    console.log(data.errMsg);
+                    else {
+                        console.log(data.errMsg);
+                    }
                 }
+
+            });
+         }
+         else {
+                console.log(data.errMsg);
             }
-            
-        });
+        }
+        
+    });
 }
 
 function showModalEditPhysicalInv(index,physical_inv_no) {
@@ -225,8 +228,8 @@ function showUploadFile(){
 }
 
 // Set the label for the status name.
-function setStatusName(page_process_action_id) {
-    $.get(execURL + "select dbo.getStatusByPageProcessActionId(" + page_process_action_id + ") AS status_name", function(d) {
+function setStatusName(status_id) {
+    $.get(execURL + "select dbo.getStatusByPageProcessActionId(" + status_id + ") AS status_name", function(d) {
         if (d.rows !== null) {
             $("#status_name").html(d.rows[0].status_name);
         }
@@ -239,7 +242,7 @@ function buildPhysicalInvButtons() {
         if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.status_id + ');" class="btn btn-primary added-button">'
+                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             //html += '<button type="button" onclick="showUploadFile();" class="btn btn-primary added-button"><span class="glyphicon glyphicon-upload"></span>&nbsp;Upload File</button>';
@@ -280,7 +283,7 @@ function displayRecords(){
      
      $("#grid").dataBind({
 	     url            : procURL + "physical_inv_sel"
-	    ,width          : $(document).width() -50
+	    ,width          : $(document).width() -35
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -312,7 +315,7 @@ function displayRecords(){
         		,{text  : "Status"                  , type  : "label"       , width : 100       , style : "text-align:left;"
         		    ,onRender : function(d){ return  svn(d,"status_name")}  
         		}
-        		,{text  : "Remarks"                 , type  : "label"       , width : 480       , style : "text-align:left;"
+        		,{text  : "Remarks"                 , type  : "label"       , width : 470       , style : "text-align:left;"
         		    ,onRender : function(d){ return svn(d,"status_remarks")}
         		}
 	    ]  
@@ -351,9 +354,9 @@ function displayPhysicalInvDetails(physical_inv_id){
                 ,{text  : "Part No."            , name  : "part_no"                  , type  : "input"       , width : 150       , style : "text-align:left;"}
                 ,{text  : "Nat'l Stock No."     , name  : "national_stock_no"        , type  : "input"       , width : 150       , style : "text-align:left;"}
                 ,{text  : "Nomenclature"        , name  : "item_name"                , type  : "input"       , width : 300       , style : "text-align:left;"}
-        	   // ,{text  : "Serial"              , name  : "serial_no"                , type  : "input"       , width : 200       , style : "text-align:left;"}
         	    ,{text  : "Quantity"            , name  : "quantity"                 , type  : "input"       , width : 120       , style : "text-align:left;"}
-        	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , width : 120          , style : "text-align:left;"}
+        	    ,{text  : "Unit of Measure"     , name  : "unit_of_measure"          , width : 120           , style : "text-align:left;"}
+        	    ,{text  : "Status"              , name  : "item_status_id"          , type  : "select"      , width : 150       , style : "text-align:left;"}
         	    ,{text  : "Bin"                 , name  : "bin"                      , type  : "input"       , width : 120       , style : "text-align:left;"}
         	    ,{text  : "Remarks"             , name  : "remarks"                  , type  : "input"       , width : 300       , style : "text-align:left;"}
         	    ,{text  : "Serial No."          , width : 120       , style : "text-align:center;"
@@ -364,7 +367,15 @@ function displayPhysicalInvDetails(physical_inv_id){
 
 	    ]  
     	     ,onComplete: function(data){
+	            setMandatoryEntries();
                 $("#cbFilter2").setCheckEvent("#" + tblPhysicalInvDetail + " input[name='cb']");
+                
+                $("select[name='item_status_id']").dataBind({
+                    url: execURL + "statuses_sel @is_item='Y'"
+                    , text: "status_name"
+                    , value: "status_id"
+                });
+                
                 $("select, input").on("keyup change", function(){
                     var $zRow = $(this).closest(".zRow");
                     if($zRow.length){
@@ -602,4 +613,19 @@ function SaveSerialNo(){
 
     });
 }  
-                   
+
+// Set the mandatory fields.
+function setMandatoryEntries(){
+    zsi.form.markMandatory({       
+        "groupNames":[
+            {
+                 "names" : ["status_id"]
+                ,"type":"M"
+            }             
+        ]      
+        ,"groupTitles":[ 
+             {"titles" : ["Status"]}
+        ]
+    });    
+}
+   
