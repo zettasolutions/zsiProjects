@@ -93,7 +93,8 @@ function btnDeleteAssembly(){
         ,onComplete : function(data){
             displayRecords();
             if(table_name==="ASSEMBLY"){
-                displayRecordsAssembly(_info_id);
+                console.log("agi");
+                displayRecordsAssembly(aircraft_info_id);
             }else if(table_name==="COMPONENT"){
                 displayRecordsComponents(parent_item_id);
             }      
