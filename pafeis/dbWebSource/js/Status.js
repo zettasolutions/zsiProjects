@@ -71,7 +71,7 @@ function displayRecords(){
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : execURL + "statuses_sel"
-	    ,width          : 1220
+	    ,width          : $(document).width() - 45
 	    ,height         : 400
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -94,6 +94,7 @@ function displayRecords(){
         		,{text  : "Add"         , name  : "is_add"          , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"Y" }
         		,{text  : "Edit"        , name  : "is_edit"         , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"Y" }
         		,{text  : "Delete"      , name  : "is_delete"       , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"Y" }
+        		,{text  : "Print"       , name  : "is_print"        , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"N" }
         		,{text  : "Active?"     , name  : "is_active"       , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"Y"                 }
 	    ] 
     	     ,onComplete: function(){
@@ -146,4 +147,4 @@ function displayInactive(){
 }    
 
     
-                                                   
+                                                     
