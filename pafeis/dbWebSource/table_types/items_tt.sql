@@ -10,7 +10,7 @@ item_id	INT	NULL
 ,time_since_new	DECIMAL(12)	NULL
 ,time_before_overhaul	DECIMAL(12)	NULL
 ,time_since_overhaul	DECIMAL(12)	NULL
-,remaining_time	DECIMAL(12)	NULL
+,remaining_time	NVARCHAR(60)	NULL
 ,date_delivered	DATETIME	NULL
 ,aircraft_info_id	INT	NULL
 ,date_issued	DATETIME	NULL

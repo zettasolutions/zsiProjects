@@ -15,8 +15,8 @@ BEGIN
 		,aircraft_name			= b.aircraft_name
 		,aircraft_type_id		= b.aircraft_type_id
 		,squadron_id			= b.squadron_id
-		,aircraft_time			= b.aircraft_time
-		,service_time           = b.service_time
+		,aircraft_time			= REPLACE(b.aircraft_time,',','')
+		,service_time           = REPLACE(b.service_time,',','')
 		,aircraft_source_id		= b.aircraft_source_id
 		,aircraft_dealer_id		= b.aircraft_dealer_id
 		,status_id				= b.status_id
@@ -47,8 +47,8 @@ BEGIN
 	   ,aircraft_name
 	   ,aircraft_type_id
 	   ,squadron_id
-	   ,aircraft_time
-	   ,service_time
+	   ,REPLACE(aircraft_time,',','')
+	   ,REPLACE(service_time,',','')
 	   ,aircraft_source_id
 	   ,aircraft_dealer_id
 	   ,status_id
@@ -56,7 +56,8 @@ BEGIN
        ,@user_id
        ,GETDATE()
     FROM @tt
-    WHERE aircraft_info_id IS NULL;
+    WHERE aircraft_info_id IS NULL
+	AND squadron_id IS NOT NULL;
 END
 
 
