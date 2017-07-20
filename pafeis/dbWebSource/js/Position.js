@@ -69,7 +69,7 @@ function displayRecords(){
       var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : execURL + "positions_sel"
-	    ,width          : 700
+	    ,width          :  $(document).width() - 35
 	    ,height         : 400
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -117,4 +117,4 @@ function displayInactive(){
                 $("#cbFilter2").setCheckEvent("#inActiveRecords input[name='cb']");
         }  
     });    
-}     
+}      
