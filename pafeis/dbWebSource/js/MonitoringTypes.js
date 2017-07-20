@@ -70,7 +70,7 @@ function displayRecords(){
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : execURL + "monitoring_types_sel"
-	    ,width          : $(document).width() - 760
+	    ,width          : $(document).width() - 35
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -120,4 +120,4 @@ function displayInactive(){
 
 
     
-                                             
+                                              
