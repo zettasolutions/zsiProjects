@@ -179,7 +179,7 @@ function displayRecords(){
             	,{text  : "Engine off?"             , type  : "label"     , width : 100       , style : "text-align:center;"
         		    ,onRender : function(d){ return svn(d,"is_engine_off")}
         		}
-            	,{text  : "Remarks"                 , type  : "label"     , width : 680       , style : "text-align:left;"
+            	,{text  : "Remarks"                 , type  : "label"     , width : 470       , style : "text-align:left;"
         	        ,onRender : function(d){ return svn(d,"remarks")}
         	    }
 	    ]  
@@ -200,4 +200,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                           
+                                                            
