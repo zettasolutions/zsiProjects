@@ -176,7 +176,7 @@ function displayRecords(){
      
      $("#grid").dataBind({
 	     url            : execURL + "disposal_item_sel"
-	    ,width          : $(document).width() -150
+	    ,width          : $(document).width() -70
 	    ,height         : $(document).height() -450
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
@@ -225,4 +225,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                                  
+                                                                   
