@@ -22,7 +22,7 @@ $("#btnSave").click(function () {
       var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : execURL + "excel_upload_sel"
-	    ,width          : $(document).width()-50
+	    ,width          : $(document).width()-35
 	    ,height         : 450
         ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -36,11 +36,11 @@ $("#btnSave").click(function () {
                     }
                 }	
                 ,{ text:"Seq #"                 , width:150          , style:"text-align:center;"        , type:"input"          ,name:"seq_no"}
-            	,{ text:"Temporary Table"       , width:180          , style:"text-align:center;"        , type:"input"          ,name:"temp_table"}
-            	,{ text:"Excel Column Range"    , width:230          , style:"text-align:center;"        , type:"input"          ,name:"excel_column_range"}
-            	,{ text:"Load Name"             , width:100          , style:"text-align:center;"        , type:"input"          ,name:"load_name"}
-            	,{ text:"Redirect Page"         , width:120          , style:"text-align:center;"        , type:"input"          ,name:"redirect_page"}
-            	,{ text:"Insert Procedure"      , width:150          , style:"text-align:center;"        , type:"input"          ,name:"insert_proc"}
+            	,{ text:"Temporary Table"       , width:300          , style:"text-align:center;"        , type:"input"          ,name:"temp_table"}
+            	,{ text:"Excel Column Range"    , width:180          , style:"text-align:center;"        , type:"input"          ,name:"excel_column_range"}
+            	,{ text:"Load Name"             , width:230          , style:"text-align:center;"        , type:"input"          ,name:"load_name"}
+            	,{ text:"Redirect Page"         , width:170          , style:"text-align:center;"        , type:"input"          ,name:"redirect_page"}
+            	,{ text:"Insert Procedure"      , width:250          , style:"text-align:center;"        , type:"input"          ,name:"insert_proc"}
 	    ]
 	     
     });    
@@ -52,4 +52,4 @@ $("#btnDelete").click(function(){
                         displayRecords();
                       }
     });      
-});          
+});           
