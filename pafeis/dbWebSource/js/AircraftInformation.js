@@ -233,11 +233,11 @@ function displayRecordsAssembly(id){
                                   + bs({name:"time_since_overhaul",type:"hidden",value: svn (d,"time_since_overhaul")});
                     }
         		}
-        		,{text  : "Remaining"     , name  : "remaining_time"      , type  : "input"         , width : 120       , style : "text-align:right; padding-right:3px"
-        		           ,onRender : function(d){  return formatCurrency(svn(d,"remaining_time"));}
+            		,{text  : "Remaining"           , width : 120                     , style : "text-align:right; padding-right:3px"
+        		           ,onRender : function(d){  return bs({name:"remaining_time" ,type:"input"    ,value:formatCurrency(svn(d,"remaining_time"))});}
         		}
-        		,{text  : "Monitoring Type"     , name  : "monitoring_type"      , width : 120       , style : "text-align:center;"}
-        		,{text  : "# of Components"           , width : 150                 , style : "text-align:center;"
+        		,{text  : "Monitoring Type"         , name  : "monitoring_type"      , width : 120       , style : "text-align:center;"}
+        		,{text  : "# of Components"         , width : 150                    , style : "text-align:center;"
         		    ,onRender  :  
                         function(d){
                             
@@ -320,12 +320,10 @@ function displayRecordsComponents(id){
                                   + bs({name:"time_since_overhaul",type:"hidden",value: svn (d,"time_since_overhaul")});
                     }
         		}
-        		//,{text  : "Remaining Time(Hours)"     , name  : "remaining_time_hr"      , type  : "input"         , width : 200       , style : "text-align:left;"}
         		,{text  : "Remaining"   , width : 100       ,style : "text-align:right; padding-right:3px"
-        		          //,onRender : function(d){  return formatCurrency(svn(d,"remaining_time"));}
         		    ,onRender  :  
                         function(d){
-                            return   formatCurrency(svn(d,"remaining_time"))
+                            return   bs({name:"remaining_time",type:"input",value: formatCurrency(svn(d,"remaining_time"))})
                                   +  bs({name:"date_delivered",type:"hidden",value: svn (d,"date_delivered")})
                                   +  bs({name:"aircraft_info_id",type:"hidden",value: aircraft_info_id})
                                   +  bs({name:"date_issued",type:"hidden",value: svn (d,"date_issued")})
@@ -426,4 +424,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}           
+}            
