@@ -70,8 +70,8 @@ var contextModalWindow = {
             +'          <label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' 
             +'          <input type="hidden" name="status_id" id="status_id">' 
             +'        </div>'
-            +'        <label class=" col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Remarks</label>'
-            +'        <div class=" col-xs-7 col-sm-6 col-md-6 col-lg-6">'
+            +'        <label class=" col-xs-5 col-sm-3 col-md-3 col-lg-2 control-label">Remarks</label>'
+            +'        <div class=" col-xs-7 col-sm-5 col-md-5 col-lg-6">'
             +'          <textarea rows="3" me="adjustment_remarks" id="adjustment_remarks" class="form-control input-sm"></textarea>'
             +'          <input type="hidden" name="page_process_action_id" id="page_process_action_id">' 
             +'        </div>'
@@ -391,4 +391,4 @@ function DeleteAdjustmentDetails(){
         }
     });   
 }
-    
+     
