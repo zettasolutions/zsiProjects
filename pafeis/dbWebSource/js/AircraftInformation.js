@@ -120,20 +120,20 @@ function displayRecords(){
                 }	 
         		,{text  : "Squadron"                    , width : 500       , style : "text-align:left;"
         		    ,onRender: function(d){
-        		                            return       (d !==null ? bs({name:"squadron_id",type:"select",value: svn (d,"squadron_id")}) : "");
+        		                            return      bs({name:"squadron_id",type:"select",value: svn (d,"squadron_id")});
         		    }
         		}
         		,{text  : "Code"                        , name  : "aircraft_code"               , type : "input"         , width : 100       , style : "text-align:left;"}
         		,{text  : "Name"                        , name  : "aircraft_name"               , type : "input"         , width : 170       , style : "text-align:left;"}
-                ,{text  : "Type"                                                                , width : 150            , style : "text-align:left;"       
+                ,{text  : "Type"                                                                                         , width : 150       , style : "text-align:left;"       
         		    , onRender: function(d){ 
                 		                    return     bs({name:"aircraft_type_id",type:"select",value: svn (d,"aircraft_type_id")});
                             }
                 }	 
-        		,{text  : "Aircraft Time (Hours)"               , type : "input"          , width : 150       , style : "text-align:right; padding-right:3px"
+        		,{text  : "Aircraft Time (Hours)"      , type : "input"                                                  , width : 150       , style : "text-align:right; padding-right:3px"
         		      
-        		           ,onRender : function(d){  return formatCurrency(svn(d,"aircraft_time"));}
-        		    
+        		           ,onRender : function(d){  return bs({name:"aircraft_time" ,type:"input" ,value: formatCurrency(svn(d,"aircraft_time"))});
+        		           }
         		}
         		,{text  : "Hours Left to Inspection"    , name  : "service_time"                , type : "input"          , width : 100       , style : "text-align:center;"}
         		,{text  : "Aircraft Source"             , name  : "aircraft_source_id"          , type : "select"         , width : 180       , style : "text-align:left;"}
@@ -410,12 +410,12 @@ function setMandatoryEntries(){
     zsi.form.markMandatory({       
         "groupNames":[
             {
-                 "names" : ["aircraft_dealer_id"]
+                 "names" : ["squadron_id", "aircraft_code", "aircraft_name", "aircraft_type_id", "status_id"]
                 ,"type":"M"
             }             
         ]      
         ,"groupTitles":[ 
-             {"titles" : ["Aircraft Dealer"]}
+             {"titles" : ["Squadron", "Code", "Name", "Type", "Status"]}
         ]
     });    
 }
@@ -426,4 +426,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}          
+}           
