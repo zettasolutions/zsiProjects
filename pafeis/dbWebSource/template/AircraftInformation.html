@@ -6,28 +6,49 @@
     .zGrid .item .title {
         height: 35px;
         line-height: 19px;
+
+    }
+    .pull-right {
+        float: right !important;
+        margin-right: 50px;
+    }
+    .upload {
+        margin-left: 77px !important;
+        margin-top: 33px;
     }
 </style>
 <script src='/javascript/name/zsiSearch'></script>
 <div>    
-    <form method="post" id="frm">
         <div class="zPanel">
             <div id="grid" class="zGrid"></div>
-            
+ 
+             <form enctype="multipart/form-data" id="frmUploadFile">
+                <div class="form-horizontal">
+                    <div class="form-group">  
+                        <div class="buttonGroup">
+                            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
+                            	<span class="glyphicon glyphicon-trash"></span> Delete
+                            </button>    
     
-        <div class="buttonGroup">
-            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
-            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
-            </button>
-            <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
-            	<span class="glyphicon glyphicon-trash"></span> Delete
-            </button>    
-            <button type="button" class="btn btn-primary btn-sm" id="btnUpload">
-            	<span class="glyphicon glyphicon-arrow-up"></span> Upload
-            </button>    
+                        <div class="pull-right">
+                            <input id="tmpData" name="tmpData" type="hidden" value="temp_aircraft_type_nomenclatures,sheet1$A2:D,AircraftType" class="form-control input-sm"> 
+                            <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Select File</label>
+                            <div class=" col-xs-9 col-sm-7 col-md-7 col-lg-7">
+                                <input type="file" class="browse btn btn-primary" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file">
+                            </div>
+                            <div class="col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2 upload">
+                                <button type="button" onclick="excelFileUpload();" class="btn btn-primary" id="btnUploadFile" style="margin-left: 5px">
+                                    <span class="glyphicon glyphicon-upload"></span> Upload
+                                </button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-    </div>
-</form>
 </div>
-
 <script src="/Scripts/handlebars-v3.0.0.js"></script>

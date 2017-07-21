@@ -373,7 +373,7 @@ function displayRecords(){
     	    ,{text  : "No. of Cycles"                 , type  : "label"     , width : 100        , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"no_cycles")}
     		}
-    		,{text  : "Status"                 , type  : "label"     , width : 100        , style : "text-align:left;"
+    		,{text  : "Status"                 , type  : "label"     , width : 200        , style : "text-align:left;"
     		    ,onRender : function(d){ return svn(d,"status_name")}
     		}
 	    ]  
@@ -557,4 +557,4 @@ function setStatusName(page_process_action_id) {
         }
     });
 }
-                                  
+                                   
