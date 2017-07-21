@@ -8,10 +8,10 @@ var bs     = zsi.bs.ctrl
     ,pageName = location.pathname.split('/').pop();
 
 zsi.ready(function(){
-    $(".pageTitle").html('<select name="dd_dashboard" id="dd_dashboard" class="col-xs-12 col-sm-4 col-md-4 col-lg-5" > </select>');
+    $(".pageTitle").html('<select name="dd_dashboard" id="dd_dashboard" class="col-xs-12 col-sm-4 col-md-3 col-lg-3" > </select>');
     
     getUserInfo(function(){
-        $(".pageTitle").append('<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="text-align:right"> for » </label> <select name="dd_squadron" id="dd_squadron" class="col-xs-10 col-sm-6 col-md-6 col-lg-5"></select>');
+        $(".pageTitle").append('<label class="col-xs-2 col-sm-1" style="text-align:right"> for » </label> <select name="dd_squadron" id="dd_squadron" class="col-xs-10 col-sm-7 col-md-6 col-lg-5"></select>');
         $("#dd_dashboard").dataBind({
             url: procURL + "dd_dashboard_sel"
             , text: "page_title"
@@ -249,4 +249,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}           
+}            
