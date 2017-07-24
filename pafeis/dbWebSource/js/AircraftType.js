@@ -182,7 +182,7 @@ function displayAssembly(aircraft_type_id){
     		 }
     		,{text  : "Part No."                 , name  : "part_no"                , type  : "input"         , width : 200       , style : "text-align:left;"}
     		,{text  : "National Stock No."       , name  : "national_stock_no"      , type  : "input"         , width : 200       , style : "text-align:left;"}
-    		,{text  : "Nomenclature"             , name  : "item_name"              , type  : "input"         , width : 360       , style : "text-align:left;"}
+    		,{text  : "Nomenclature"             , name  : "item_name"              , type  : "input"         , width : 320       , style : "text-align:left;"}
     		,{text  : "# of Components"           , width : 130                 , style : "text-align:center;"
     		    ,onRender : function(d){
                     return "<a href='javascript:manageComponent(" + svn(d,"aircraft_type_nomenclature_id") + ");'>" + svn(d,"countSubComponents") + "</a>"; 
@@ -374,4 +374,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }        
-    
+     
