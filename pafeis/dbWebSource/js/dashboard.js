@@ -90,9 +90,8 @@ zsi.ready(function(){
 var contextModalStockQty = {
     id: "modalSerial"
     , title: ""
-    , sizeAttr: "modal-xs"
-    , footer: '<div id="receiving-footer" class="pull-left">'
-    , body: '<div ><div id="tblSerial" class="zGrid detail ui-front"></div></div>'
+    , sizeAttr: "fullWidth"
+    , body: '<div id="tblSerial" class="zGrid detail ui-front"></div>'
 };
 
 // Get the template for the initialization of the modal windows.
@@ -271,11 +270,29 @@ function displaySerial(status_id){
     }
 
     $("#tblSerial").dataBind({
-	     url            : execURL + "items_sel  @item_inv_id='" + (g_item_inv_id ? g_item_inv_id : null)+ "', @status_id=" + id
-	    ,height         : 400
-        ,dataRows : [
-        		{text  :"Serial No."    , name  : "serial_no"   , width:450 , style : "text-align:left;"}
+	     url        : execURL + "items_sel  @item_inv_id='" + (g_item_inv_id ? g_item_inv_id : null)+ "', @status_id=" + id
+        ,width      : $(document).width() - 45
+	    ,height     : 400
+        ,dataRows   : [
+        		{text  :"Serial No."                , name  : "serial_no"               , width:250     , style : "text-align:left;"}
+        	   ,{text  :"Manufacturer"              , name  : "manufacturer_name"       , width:300     , style : "text-align:left;"}
+        	   ,{text  :"Dealer"                    , name  : "dealer_name"             , width:300     , style : "text-align:left;"}
+        	   ,{text  :"Supply Source"             , name  : "supply_source_name"      , width:300     , style : "text-align:left;"}
+        	   ,{text  :"Time Since New"            , name  : "time_since_new"          , width:200     , style : "text-align:right; padding-right:3px"}
+        	   ,{text  :"Time Before Overhaul"      , name  : "time_before_overhaul"    , width:200     , style : "text-align:right; padding-right:3px"}
+        	   ,{text  :"Time Since Overhaul"       , name  : "time_since_overhaul"     , width:200     , style : "text-align:right; padding-right:3px"}
+        	   ,{text  :"Remaining Time"                                                , width:200     , style : "text-align:right; padding-right:3px"
+        	       ,onRender: function(d){ return formatCurrency(svn(d,"remaining_time")); }
+        	   }
+        	   ,{text  :"Monitoring Type"           , name  : "monitoring_type"         , width:200     , style : "text-align:center;"}
 	    ] 
     });  
 }
-     
+
+function formatCurrency(number){
+    var result = "";
+    if(number!==""){
+        result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+    return result;
+}                  
