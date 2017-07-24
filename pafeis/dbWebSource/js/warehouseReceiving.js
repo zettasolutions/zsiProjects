@@ -588,19 +588,19 @@ function buildReceivingHeader(tbl_obj) {
         '<input type="hidden" name="receiving_no" id="receiving_no">' +
         '<div class="form-group  ">' +
             '<label class="col-lg-1 col-md-2 col-sm-2 col-xs-4 control-label">RR No.</label>' +
-            '<div class=" col-lg-1 col-md-1 col-sm-1 col-xs-6">' +
+            '<div class=" col-lg-1 col-md-1 col-sm-1 col-xs-8">' +
                 '<input type="text" name="receiving_no" id="receiving_no" class="form-control input-sm" disabled>' +
             '</div>' +
             '<label style="padding:0;"class=" col-lg-1 col-md-1 col-sm-1 col-xs-4  control-label">Doc No.</label>' +
-            '<div class="col-lg-1 col-md-1 col-sm-1 col-xs-6">' +
+            '<div class="col-lg-1 col-md-1 col-sm-1 col-xs-8">' +
                 '<input type="text" name="doc_no" id="doc_no" class="form-control input-sm">' +
             '</div>' +
             '<label class="col-lg-1 col-md-2 col-sm-2 col-xs-4 control-label">Doc Date</label>' +
-            '<div class=" col-lg-1 col-md-1 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-1 col-md-1 col-sm-2 col-xs-8">' +
                 '<input type="text" name="doc_date" id="doc_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
             '</div>' +
             '<label class=" col-lg-1 col-md-2 col-sm-1 col-xs-4 control-label">Status</label>' +
-            '<div class=" col-lg-1 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-1 col-md-2 col-sm-2 col-xs-8">' +
                 '<label class="  col-lg-1 col-md-2 col-sm-2 col-xs-6 control-label" name="status_name" id="status_name">&nbsp;</label>' +
                 '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm">' +
             '</div>' +
@@ -609,11 +609,11 @@ function buildReceivingHeader(tbl_obj) {
         
         '<div class="form-group  "> ' +
             '<label class=" col-lg-1 col-md-2 col-sm-2 col-xs-4 control-label">Received By</label>' +
-            '<div class=" col-lg-3 col-md-3 col-sm-3 col-xs-6">' +
+            '<div class=" col-lg-3 col-md-3 col-sm-3 col-xs-8">' +
                 '<select name="received_by" id="received_by" class="form-control input-sm"><option value=""></option></select>' +
             '</div>' +
             '<label style="padding:0;" class=" col-lg-1 col-md-2 col-sm-2 col-xs-4 control-label">Received Date</label>' +
-            '<div class=" col-lg-1 col-md-1 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-1 col-md-1 col-sm-2 col-xs-8">' +
                 '<input type="text" name="received_date" id="received_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">' +
                 '<input type="hidden" name="dealer_id" id="dealer_id" class="form-control input-sm">' +
                 '<input type="hidden" name="issuance_warehouse_id" id="issuance_warehouse_id">' +
@@ -625,7 +625,7 @@ function buildReceivingHeader(tbl_obj) {
 
             '<div id="wrap-proc" class="hide">' +
                 '<label class="col-lg-1 col-md-2 col-sm-1 col-xs-4 control-label">P.O #</label>' +
-                '<div class=" col-lg-1 col-md-1 col-sm-2 col-xs-6">' +
+                '<div class=" col-lg-1 col-md-1 col-sm-2 col-xs-8">' +
                     '<select name="procurement_filter" id="procurement_filter" class="form-control input-sm"></select>' +
                 '</div>' +
             '</div>' +
@@ -636,12 +636,12 @@ function buildReceivingHeader(tbl_obj) {
 
             '<div id="wrap-suppSource" class="hide">' +
                 '<label class=" col-lg-1 col-md-2 col-sm-2 col-xs-4 control-label"> Source</label>' +
-                '<div class=" col-lg-3 col-md-3 col-sm-3 col-xs-6">' +
+                '<div class=" col-lg-3 col-md-3 col-sm-3 col-xs-8">' +
                     '<select name="supply_source_filter" id="supply_source_filter" class="form-control input-sm"></select>' +
                 '</div>' +
             '</div>' +
             '<label class=" col-lg-1 col-md-2 col-sm-2 col-xs-4 control-label">Remarks</label>' +
-            '<div class=" col-lg-3 col-md-4 col-sm-5 col-xs-6">' +
+            '<div class=" col-lg-3 col-md-4 col-sm-5 col-xs-8">' +
                  '<textarea name="status_remarks" id="status_remarks" class="form-control input-sm" ></textarea>' +
                  '<input type="hidden" name="receiving_type" id="receiving_type" value="'+ g_tab_name +'" >' +
                  '<input type="hidden" name="page_process_action_id" id="page_process_action_id">' +
@@ -847,7 +847,7 @@ function buildReceivingButtons(callBack) {
         if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button">'
+                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button '+ (g_tab_name==="AIRCRAFT" ? (k===1 ? "hide" : "") : "") +'">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             
@@ -1735,4 +1735,4 @@ function PrintToPDF(){
         }
     });
 }
-    
+      

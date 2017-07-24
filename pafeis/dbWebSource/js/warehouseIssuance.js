@@ -496,17 +496,17 @@ function buildIssuanceHeader(tbl_obj) {
         '<input type="hidden" name="orgranization_id" id="orgranization_id" class="form-control input-sm" >' +
         '<div class="form-group  ">' +
             '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Issuance No.</label>' +
-            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                 '<input type="text" name="issuance_no" id="issuance_no" class="form-control input-sm" readonly>' +
             '</div>' +
             
             '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Issued By</label>' +
-            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                 '<select type="text" name="issued_by" id="issued_by" class="form-control input-sm"></select>' +
             '</div>' +
             
             '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Issued Date</label>' +
-            '<div class="  col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class="  col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                 '<input type="text" name="issued_date" id="issued_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'" >' +
                 '<input type="hidden" name="issuance_directive_code" id="issuance_directive_code" class="form-control input-sm">' +
                 '<input type="hidden" name="aircraft_id" id="aircraft_id" class="form-control input-sm" >' +
@@ -518,18 +518,18 @@ function buildIssuanceHeader(tbl_obj) {
         '<div class="form-group  "> ' +
             '<div class="hide" id="issuance_directive_code_filter_div">'+
                 '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4  control-label">Directive Code</label>' +
-                '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+                '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                     '<input type="text" name="issuance_directive_code_filter" id="issuance_directive_code_filter" class="form-control input-sm">' +
                 '</div>' +
             '</div>'+
 
             '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Authority Ref</label>' +
-            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                 '<input type="text" name="authority_ref" id="authority_ref" class="form-control input-sm" >' +
             '</div>' +
             
             '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Accepted By</label>' +
-            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                 '<select name="accepted_by" id="accepted_by" class="form-control input-sm"></select>' +
                 '<input type="hidden" name="issued_to_organization_id" id="issued_to_organization_id" class="form-control input-sm">' +
             '</div>' +
@@ -539,12 +539,12 @@ function buildIssuanceHeader(tbl_obj) {
         
         '<div class="form-group  "> ' +
             '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Status</label>' +
-            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                 '<label class="control-label" name="status_name" id="status_name">&nbsp;</label>' +
                 '<input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' +
             '</div>' +
             '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label">Status Remarks</label>' +
-            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-6">' +
+            '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
                 '<textarea type="text" name="status_remarks" id="status_remarks" rows="3"  class="form-control input-sm" ></textarea>' +
                 '<input type="hidden" name="issuance_type" id="issuance_type" value="'+ g_tab_name +'"class="form-control input-sm" >' +
                 '<input type="hidden" name="page_process_action_id" id="page_process_action_id">' +
@@ -657,7 +657,7 @@ function buildIssuanceButtons(callBack) {
         if (d.rows.length > 0) {
             $.each(d.rows, function(k, v) {
                 html = html + '<button id="' + v.page_process_action_id + '" type="button" onclick="javascript: void(0); return Save(' 
-                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button">'
+                    + v.status_id + ','+ v.page_process_action_id +');" class="btn btn-primary added-button '+ (g_tab_name==="AIRCRAFT" ? (k===1 ? "hide" : "") : "") +'">'
                     + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;' + v.action_desc + '</button>';
             });
             if(!g_issuance_id || g_issuance_id===null){
@@ -1453,4 +1453,4 @@ function clearIssuanceDetails(el){
     $zRow.find("label").text('');
 }
 
-        
+            
