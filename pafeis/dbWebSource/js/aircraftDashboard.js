@@ -195,14 +195,14 @@ function displayItems(id, callback){
                          );
                      }
                  }
-        		,{text  : "Part No."            , name:"part_no"                , width : 200       , style : "text-align:left;"}
-        		,{text  : "National Stock No."  , name:"national_stock_no"      , width : 200       , style : "text-align:left;"}
-        		,{text  : "Nomenclature"        , name:"item_name"              , width : 400       , style : "text-align:left;"}
-        		,{text  : "Serial No."          , name:"serial_no"              , width : 150       , style : "text-align:left;"}
+        		,{text  : "Part No."            , name:"part_no"                , width : 200       , style : "text-align:left;" ,sortColNo: 2}
+        		,{text  : "National Stock No."  , name:"national_stock_no"      , width : 200       , style : "text-align:left;" ,sortColNo: 3}
+        		,{text  : "Nomenclature"        , name:"item_name"              , width : 400       , style : "text-align:left;" ,sortColNo: 4}
+        		,{text  : "Serial No."          , name:"serial_no"              , width : 150       , style : "text-align:left;" ,sortColNo: 5}
         		,{text  : "Critical Level"      , width : 150                , style : "text-align:center;"
         		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))) ; }
         		}
-        		,{text  : "Remaining"           , width : 100       , style : "text-align:right; padding-right:3px"
+        		,{text  : "Remaining"           , width : 100       , style : "text-align:right; padding-right:3px" ,sortColNo: 7
         		    ,onRender : function(d){ 
         		         if(d.remaining_time < d.critical_level)
         		                return "<span id='remaining_time' class='remaining' " + formatCurrency(svn(d,'remaining_time')) +"</span>";
@@ -249,4 +249,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}            
+}             
