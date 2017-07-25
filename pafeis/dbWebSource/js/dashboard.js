@@ -160,16 +160,16 @@ function displayItems(id){
     var columnName = (g_column_name ? ",@col_name='"+ g_column_name +"'" : "");
     var keyword    = (g_keyword ? ",@keyword='"+ g_keyword +"'" : "");
     var _dataRows = [
-    		{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"     ,sortColNo: 1
+    		{text  : "Part No."                    , type  : "label"       , width : 150       , style : "text-align:left;"     ,sortColNo: 2
     		    ,onRender : function(d){ return  svn(d,"part_no"); }
     		}
-    		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"    ,sortColNo: 2
+    		,{text  : "National Stock No."           , type  : "label"       , width : 150      , style : "text-align:left;"    ,sortColNo: 3
     		    ,onRender : function(d){ return svn(d,"national_stock_no"); }
     		}
-    		,{text  : "Nomenclature"                   , type  : "label"       , width : 450       , style : "text-align:left;"    ,sortColNo: 3
+    		,{text  : "Nomenclature"                   , type  : "label"       , width : 450       , style : "text-align:left;"    ,sortColNo: 4
     		    ,onRender : function(d){ return svn(d,"item_name"); }
     		}
-            ,{text  : "Serviceable"                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 6
+            ,{text  : "Serviceable"                  , type  : "label"       , width : 100       , style : "text-align:center;" ,sortColNo: 5
                 ,onRender : function(d){ 
                     var html = "";
                     if(svn(d,"with_serial") === "N" || svn(d,"stock_qty") === 0){
@@ -186,7 +186,7 @@ function displayItems(id){
                 }
             }
 
-    		,{text  : "For Repair"                  , type  : "label"       , width : 150       , style : "text-align:center;" 
+    		,{text  : "For Repair"                  , type  : "label"       , width : 150       , style : "text-align:center;" ,sortColNo: 6
                 ,onRender : function(d){ 
                     var html = "";
                     if(svn(d,"with_serial") === "N" || svn(d,"for_repair") === 0){
@@ -202,13 +202,13 @@ function displayItems(id){
                     return html;
                 }
     		}
-    		,{text  : "Total Stock Qty."                  , type  : "label"       , width : 150       , style : "text-align:center;" 
+    		,{text  : "Total Stock Qty."         , type  : "label"       , width : 150       , style : "text-align:center;" ,sortColNo: 7
     		    ,onRender : function(d){ return svn(d,"ttl_stocks").toLocaleString("en"); }
     		}
-            ,{text  : "Reorder Level"               , type  : "label"       , width : 100       , style : "text-align:center;"
+            ,{text  : "Reorder Level"            , type  : "label"       , width : 100       , style : "text-align:center;"
     		    ,onRender : function(d){ return svn(d,"reorder_level"); }
     		}
-    		,{text  : "Beyond Repair"                  , type  : "label"       , width : 150       , style : "text-align:center;" 
+    		,{text  : "Beyond Repair"            , type  : "label"       , width : 150       , style : "text-align:center;" 
                 ,onRender : function(d){ 
                     var html = "";
                     if(svn(d,"with_serial") === "N" || svn(d,"beyond_repair") === 0){
@@ -224,7 +224,7 @@ function displayItems(id){
                     return html;
                 }
     		}
-       		,{text  : "Unit of Measure"               , type  : "label"       , width : 200       , style : "text-align:center;"
+       		,{text  : "UOM"               , type  : "label"       , width : 100       , style : "text-align:center;"
     		    ,onRender : function(d){ return svn(d,"unit_of_measure"); }
     		}    
             ];
@@ -295,4 +295,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                  
+}                    
