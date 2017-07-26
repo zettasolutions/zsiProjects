@@ -1,5 +1,6 @@
 var bs     = zsi.bs.ctrl
     ,svn    = zsi.setValIfNull
+    ,g_aircraft_info_id = null
     ,aircraft_info_id = null
     ,parent_item_id = null
     ,g_user_id = null
@@ -8,6 +9,7 @@ var bs     = zsi.bs.ctrl
     ,pageName = location.pathname.split('/').pop();
 
 zsi.ready(function(){
+    getTemplate();
     $(".pageTitle").html('<select name="dd_dashboard" id="dd_dashboard" class="col-xs-12 col-sm-4 col-md-3 col-lg-3" > </select>');
     
     getUserInfo(function(){
@@ -53,6 +55,61 @@ zsi.ready(function(){
 //$("#btnGo").click(function(data){
 //    displayTabs();
 //});
+
+var contextModalSerial = {
+    id: "modalSerial"
+    , title: ""
+    , sizeAttr: "fullWidth"
+    , body: '<div id="tblSerial" class="zGrid header ui-front"></div>'
+};
+
+function getTemplate(){
+    $.get(base_url + "templates/bsDialogBox.txt",function(d){
+        var template = Handlebars.compile(d);
+        $("body").append(template(contextModalSerial));
+    });    
+}
+
+function buildSerial(tbl_obj) {
+    var $table = $(tbl_obj);
+    $table.html('');
+    var html = '<div class="form-horizontal" style="padding:5px">' +
+            '<div class="form-group  ">' +
+                '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label text-left">Part No.:</label>' +
+                '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
+                    '<span name="part_no" id="part_no" class="control-label text-left">&nbsp;</span>' +
+                '</div>' +
+                
+                '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label text-left">National Stock No.:</label>' +
+                '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
+                    '<span name="national_stock_no"  id="national_stock_no" class="control-label text-left">&nbsp;</span>' +
+                '</div>' +
+                
+                '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label text-left">Nomenclature:</label>' +
+                '<div class="  col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
+                    '<span name="item_name"  id="item_name" class="control-label text-left">&nbsp;</span>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    
+    $table.append(html);
+}
+
+
+function showModalSerial(part_no, aircraft_info_id) {
+    g_aircraft_info_id = aircraft_info_id;
+    $("#modalSerial .modal-title").text('Serial for Part No.' + ' » ' + part_no);
+    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+    buildSerial("#tblSerial");
+    
+    $.get(execURL + "items_sel @aircraft_info_id=" + g_aircraft_info_id ,function(d) {
+        if (d.rows !== null) {
+            $("#tblSerial #part_no").val(d.rows[0].part_no);
+            $("#tblSerial #national_stock_no").val(d.rows[0].national_stock_no);
+            $("#tblSerial #item_name").val(d.rows[0].item_name);
+        }
+    });
+}
 
 function getUserInfo(callBack){
     $.get(procURL + "user_info_sel", function(d) {
@@ -186,7 +243,13 @@ function displayItems(id, callback){
 	    ,height         : $(document).height() - 250
         ,dataRows : [
 
-                {text  : "&nbsp;"                                               , width : 25         , style : "text-align:left;"
+        	    {text  : "&nbsp;"               , width : 25                    , style : "text-align:left;"
+        	        ,onRender : function(d){ 
+        	            counter++;
+                        return '<input class="form-control" type="text" name="item_no" id="item_no" value="' + counter + '" readonly>';
+                    }
+        	    }        	     
+               ,{text  : "&nbsp;"              , width : 25         , style : "text-align:left;"
                      ,onRender : function(d){
                          return (   
                                   d.countAircraftAC !==0  
@@ -198,14 +261,20 @@ function displayItems(id, callback){
         		,{text  : "Part No."            , name:"part_no"                , width : 200       , style : "text-align:left;" ,sortColNo: 2}
         		,{text  : "National Stock No."  , name:"national_stock_no"      , width : 200       , style : "text-align:left;" ,sortColNo: 3}
         		,{text  : "Nomenclature"        , name:"item_name"              , width : 400       , style : "text-align:left;" ,sortColNo: 4}
-        		,{text  : "Serial No."          , name:"serial_no"              , width : 150       , style : "text-align:left;" ,sortColNo: 5}
+        		,{text  : "Serial No."                                          , width : 150       , style : "text-align:left;" ,sortColNo: 5
+                    ,onRender : function(d){ return "<a href='javascript:showModalSerial(" 
+                                            + svn(d,"part_no") + ",\"" 
+                                            + svn(d,"aircraft_info_id")  + "\");'>" 
+                                            + svn(d,"serial_no") + "</a>"; 
+                   }
+        		}
         		,{text  : "Critical Level"      , width : 150                , style : "text-align:center;"
         		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))) ; }
         		}
         		,{text  : "Remaining"           , width : 100       , style : "text-align:right; padding-right:3px" ,sortColNo: 7
         		    ,onRender : function(d){ 
         		         if(d.remaining_time < d.critical_level)
-        		                return "<span id='remaining_time' class='remaining' " + formatCurrency(svn(d,'remaining_time')) +"</span>";
+        		                return "<span id='remaining_time' class='remaining' >" + formatCurrency(svn(d,'remaining_time')) +"</span>";
         		         else 
         		                return formatCurrency(svn(d,"remaining_time"));
         		       
@@ -232,8 +301,14 @@ function displayRecordsComponents(o,id,aircraft_info_id){
                 		,{text  : "Critical Level"           , width : 150                , style : "text-align:center;"
                 		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))) ; }
                 		}
-                		,{text  : "Remaining" , width : 100       , style : "text-align:right; padding-right:3px"
-                		    ,onRender : function(d){  return formatCurrency(svn(d,"remaining_time"));}
+                		,{text  : "Remaining"           , width : 100       , style : "text-align:right; padding-right:3px" ,sortColNo: 7
+                		    ,onRender : function(d){ 
+                		         if(d.remaining_time < d.critical_level)
+                		                return "<span id='remaining_time' class='remaining' >" + formatCurrency(svn(d,'remaining_time')) +"</span>";
+                		         else 
+                		                return formatCurrency(svn(d,"remaining_time"));
+                		       
+                		    }
                 		}
                 		,{text  : "Monitoring Type"          , name  : "monitoring_type"        , width : 150       , style : "text-align:center;"}
                 ]                      
@@ -249,4 +324,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}             
+}               
