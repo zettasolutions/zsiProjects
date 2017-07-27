@@ -75,79 +75,68 @@ function displayDetails(tbl_obj) {
     var html =  '<div class="form-group col-xs-12 ">' +
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Part No.:</label>' +
                     '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="part_no" id="part_no" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="part_no" id="part_no" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">National Stock No.:</label>' +
                     '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="national_stock_no"  id="national_stock_no" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="national_stock_no"  id="national_stock_no" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label">Nomenclature:</label>' +
                     '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="item_name"  id="item_name" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="item_name"  id="item_name" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
-                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label">Serial No.:</label>' +
-                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="serial_no" id="serial_no" class="form-control input-sm">&nbsp;</span>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="form-group col-xs-12 ">' +
-                    
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label">Manufacturer:</label>' +
                     '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="manufacturer_name"  id="manufacturer_name" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="manufacturer_name"  id="manufacturer_name" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
                     
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Dealer:</label>' +
                     '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="dealer_name"  id="dealer_name" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="dealer_name"  id="dealer_name" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Supply Source:</label>' +
                     '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="supply_source_name" id="supply_source_name" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="supply_source_name" id="supply_source_name" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
-                    
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Time Since New:</label>' +
                     '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="time_since_new"  id="time_since_new" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="time_since_new"  id="time_since_new" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
-                    
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Time Before Overhaul:</label>' +
                     '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="time_before_overhaul"  id="time_before_overhaul" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="time_before_overhaul"  id="time_before_overhaul" class="fcontrol-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Time Since Overhaul:</label>' +
                     '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="time_since_overhaul" id="time_since_overhaul" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="time_since_overhaul" id="time_since_overhaul" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
-                    
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Remaining Time:</label>' +
                     '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="remaining_time"  id="remaining_time" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="remaining_time"  id="remaining_time" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="form-group col-xs-12 ">' +
-                    
                     '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Monitoring Type:</label>' +
                     '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
-                        '<span name="monitoring_type"  id="monitoring_type" class="form-control input-sm">&nbsp;</span>' +
+                        '<span name="monitoring_type"  id="monitoring_type" class="control-label">&nbsp;</span>' +
                     '</div>' +
                 '</div>' ;
     $table.append(html);
@@ -166,7 +155,6 @@ function showModalSerial(id, item_id, serial_no) {
             $("#tblSerial #part_no").text(d[0].part_no);
             $("#tblSerial #national_stock_no").text(d[0].national_stock_no);
             $("#tblSerial #item_name").text(d[0].item_name);
-            $("#tblSerial #serial_no").text(d[0].serial_no);
             $("#tblSerial #manufacturer_name").text(d[0].manufacturer_name);
             $("#tblSerial #dealer_name").text(d[0].dealer_name);
             $("#tblSerial #supply_source_name").text(d[0].supply_source_name);
@@ -393,4 +381,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                 
+}                  
