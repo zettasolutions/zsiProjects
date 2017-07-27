@@ -1,6 +1,5 @@
 var bs     = zsi.bs.ctrl
     ,svn    = zsi.setValIfNull
-    ,g_aircraft_info_id = null
     ,aircraft_info_id = null
     ,parent_item_id = null
     ,g_user_id = null
@@ -59,8 +58,8 @@ zsi.ready(function(){
 var contextModalSerial = {
     id: "modalSerial"
     , title: ""
-    , sizeAttr: "fullWidth"
-    , body: '<div id="tblSerial" class="zGrid header ui-front"></div>'
+    , sizeAttr: "modal-md"
+    , body: '<div id="tblSerial" style="padding-top:5px""></div>'
 };
 
 function getTemplate(){
@@ -70,43 +69,112 @@ function getTemplate(){
     });    
 }
 
-function buildSerial(tbl_obj) {
+function displayDetails(tbl_obj) {
     var $table = $(tbl_obj);
     $table.html('');
-    var html = '<div class="form-horizontal" style="padding:5px">' +
-            '<div class="form-group  ">' +
-                '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label text-left">Part No.:</label>' +
-                '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
-                    '<span name="part_no" id="part_no" class="control-label text-left">&nbsp;</span>' +
+    var html =  '<div class="form-group col-xs-12 ">' +
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Part No.:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="part_no" id="part_no" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
                 '</div>' +
-                
-                '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label text-left">National Stock No.:</label>' +
-                '<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
-                    '<span name="national_stock_no"  id="national_stock_no" class="control-label text-left">&nbsp;</span>' +
+                '<div class="form-group col-xs-12 ">' +
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">National Stock No.:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="national_stock_no"  id="national_stock_no" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
                 '</div>' +
-                
-                '<label class=" col-lg-2 col-md-2 col-sm-2 col-xs-4 control-label text-left">Nomenclature:</label>' +
-                '<div class="  col-lg-2 col-md-2 col-sm-2 col-xs-8">' +
-                    '<span name="item_name"  id="item_name" class="control-label text-left">&nbsp;</span>' +
+                '<div class="form-group col-xs-12 ">' +
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label">Nomenclature:</label>' +
+                    '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="item_name"  id="item_name" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
                 '</div>' +
-            '</div>' +
-        '</div>';
-    
+                '<div class="form-group col-xs-12 ">' +
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label">Serial No.:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="serial_no" id="serial_no" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label">Manufacturer:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="manufacturer_name"  id="manufacturer_name" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Dealer:</label>' +
+                    '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="dealer_name"  id="dealer_name" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Supply Source:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="supply_source_name" id="supply_source_name" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Time Since New:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="time_since_new"  id="time_since_new" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Time Before Overhaul:</label>' +
+                    '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="time_before_overhaul"  id="time_before_overhaul" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Time Since Overhaul:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="time_since_overhaul" id="time_since_overhaul" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Remaining Time:</label>' +
+                    '<div class=" col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="remaining_time"  id="remaining_time" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="form-group col-xs-12 ">' +
+                    
+                    '<label class=" col-lg-4 col-md-4 col-sm-4 col-xs-5 control-label ">Monitoring Type:</label>' +
+                    '<div class="  col-lg-8 col-md-8 col-sm-8 col-xs-7">' +
+                        '<span name="monitoring_type"  id="monitoring_type" class="form-control input-sm">&nbsp;</span>' +
+                    '</div>' +
+                '</div>' ;
     $table.append(html);
 }
 
 
-function showModalSerial(part_no, aircraft_info_id) {
-    g_aircraft_info_id = aircraft_info_id;
-    $("#modalSerial .modal-title").text('Serial for Part No.' + ' » ' + part_no);
+function showModalSerial(id, item_id, serial_no) {
+    $("#modalSerial .modal-title").text('Details for Serial No: ' + serial_no);
     $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
-    buildSerial("#tblSerial");
+    displayDetails("#tblSerial");
     
-    $.get(execURL + "items_sel @aircraft_info_id=" + g_aircraft_info_id ,function(d) {
-        if (d.rows !== null) {
-            $("#tblSerial #part_no").val(d.rows[0].part_no);
-            $("#tblSerial #national_stock_no").val(d.rows[0].national_stock_no);
-            $("#tblSerial #item_name").val(d.rows[0].item_name);
+    $.get(execURL + "items_sel @aircraft_info_id=" + id + ",@item_id=" + (item_id ? item_id : null) 
+    ,function(data) {
+        var d = data.rows;
+        if (d.length > 0) {
+            $("#tblSerial #part_no").text(d[0].part_no);
+            $("#tblSerial #national_stock_no").text(d[0].national_stock_no);
+            $("#tblSerial #item_name").text(d[0].item_name);
+            $("#tblSerial #serial_no").text(d[0].serial_no);
+            $("#tblSerial #manufacturer_name").text(d[0].manufacturer_name);
+            $("#tblSerial #dealer_name").text(d[0].dealer_name);
+            $("#tblSerial #supply_source_name").text(d[0].supply_source_name);
+            $("#tblSerial #time_since_new").text(d[0].time_since_new);
+            $("#tblSerial #time_before_overhaul").text(d[0].time_before_overhaul);
+            $("#tblSerial #time_since_overhaul").text(d[0].time_since_overhaul);
+            $("#tblSerial #remaining_time").text(d[0].remaining_time);
+            $("#tblSerial #monitoring_type").text(d[0].monitoring_type);
         }
     });
 }
@@ -263,8 +331,9 @@ function displayItems(id, callback){
         		,{text  : "Nomenclature"        , name:"item_name"              , width : 400       , style : "text-align:left;" ,sortColNo: 4}
         		,{text  : "Serial No."                                          , width : 150       , style : "text-align:left;" ,sortColNo: 5
                     ,onRender : function(d){ return "<a href='javascript:showModalSerial(" 
-                                            + svn(d,"part_no") + ",\"" 
-                                            + svn(d,"aircraft_info_id")  + "\");'>" 
+                                            + svn(d,"aircraft_info_id") + ",\"" 
+                                            + svn(d,"item_id") + "\",\"" 
+                                            + svn(d,"serial_no") + "\");'>" 
                                             + svn(d,"serial_no") + "</a>"; 
                    }
         		}
@@ -324,4 +393,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}               
+}                 
