@@ -45,8 +45,13 @@ namespace zsi.web.Controllers
                 }
                   if (param1 != devURL && param1 != "signin")
                 {
-                    if (Session["zsi_login"].ToString() == "N")
-                    return Redirect(Url.Content("~/") + "page/name/" + devURL);
+
+                    if(this.CurrentUser.roleId == 0 )
+                    {
+                        if (Session["zsi_login"].ToString() == "N")
+                            return Redirect(Url.Content("~/") + "page/name/" + devURL);
+                    }
+
                 }
                 if ((param1 == "selectoption" || param1 == "masterpages" || param1 == "table" || param1 == "filemanager" || param1 == "tablelayout" || param1 == "errors" || param1 == "appprofile")
                      && (Session["zsi_login"] == null || (Session["zsi_login"].ToString() == "N"))
@@ -57,7 +62,6 @@ namespace zsi.web.Controllers
                 return View();
             }
         }
-
 
 
         [HttpPost]
