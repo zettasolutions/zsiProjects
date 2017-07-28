@@ -5,9 +5,21 @@
         <div class="form-horizontal">   
             <div class="col-xs-12 col-sm-12">
                 <div class="form-group ">
-                    <div class="col-xs-10 col-sm-4">
+                    <label class="col-xs-4 col-sm-2 col-md-2 col-lg-1 control-label">Squadron:</label>
+                    <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2" style="margin-bottom:5px">
+                        <select name="squadron_filter" id="squadron_filter" class="form-control input-sm"></select>
+                    </div>
+                    <label class="col-xs-4 col-sm-2 col-md-2 col-lg-1 control-label">Aircraft Type:</label>
+                    <div class="col-xs-6 col-sm-3 col-md-2" style="margin-bottom:5px">
+                        <select name="type_filter" id="type_filter" class="form-control input-sm"></select>
+                    </div>
+                    <label class="col-xs-4 col-sm-2 col-md-1 col-lg-1 control-label">Status:</label>
+                    <div class="col-xs-6 col-sm-4 col-md-2 col-lg-1" style="margin-bottom:5px">
+                        <select name="status_filter" id="status_filter" class="form-control input-sm"></select>
+                    </div>
+                    <div class="col-xs-10 col-sm-5 col-md-4 col-lg-3">
                         <input name="aircraft_info_id_filter" id="aircraft_info_id_filter" type="hidden" class="form-control input-sm">
-                        <input name="aircraft_filter" id="aircraft_filter" placeholder="Search" class="form-control input-sm">
+                        <input name="search_filter" id="search_filter" placeholder="Search" class="form-control input-sm">
                     </div>
                      <div class="col-xs-1">
                         <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>

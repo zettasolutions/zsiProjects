@@ -3,7 +3,29 @@ var  bs = zsi.bs.ctrl
 
 zsi.ready(function(){
     //setSearch();
+    loadSquadron();
+    loadAircraftType();
+    loadStatus();
 });
+
+function loadSquadron(){
+    var $select = $("#squadron_filter");
+    $select.dataBind({
+        url: procURL + "dd_warehouse_organizations_sel" 
+        , text: "organization_warehouse"
+        , value: "warehouse_id"
+    });
+}
+
+function loadAircraftType(){
+    var $select = $("#type_filter");
+    $select.dataBind("aircraft_type");
+}
+
+function loadStatus(){
+    var $select = $("#status_filter");
+    $select.dataBind("aircraftStatuses");
+}
 
 function setSearch(){
     new zsi.search({
@@ -11,7 +33,7 @@ function setSearch(){
         ,colNames : ["aircraft_name"] 
         ,displayNames : ["Search"]  
         ,searchColumn :"aircraft_name"
-        ,input:"input[name=aircraft_filter]"
+        ,input:"input[name=search_filter]"
         ,url : execURL + "searchData"
         //,condition :"'is_active=''Y'''"
         ,onSelectedItem: function(currentObject,data,i){ 
@@ -24,7 +46,11 @@ function setSearch(){
 }
 
 $("#btnGo").click(function(){
-    displayRecords($("#aircraft_filter").val());
+    var squadronFilter = $("#squadron_filter").val();
+    var typeFilter = $("#type_filter").val();
+    var statusFilter = $("#status_filter").val();
+    var searchFilter = $("#search_filter").val();
+    displayRecords(searchFilter);
 });
 
 function displayRecords(filter){  
@@ -32,7 +58,7 @@ function displayRecords(filter){
     $("#grid").dataBind({
 	     url   : execURL + "aircraft_info_search_sel @search='"+ filter +"'" 
         ,width      : $(document).width() - 25
-	    ,height     : $(document).height() - 250
+	    ,height     : $(document).height() - 200
         ,dataRows   : [
      		 {  
      		     text  : "Aircraft Code"      
@@ -89,4 +115,4 @@ function displayRecords(filter){
     });    
 }
 
-     
+      

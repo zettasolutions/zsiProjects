@@ -4,8 +4,10 @@ var bs     = zsi.bs.ctrl
     ,parent_item_id = null
     ,g_user_id = null
     ,g_squadron_id = null
+    ,g_aircraft_info_id = null
     ,g_organization_name = ""
     ,pageName = location.pathname.split('/').pop()
+    ,g_option_id = ""
 ;
 
 function setInputs(){
@@ -23,7 +25,7 @@ zsi.ready(function(){
     $optionId.fillSelect({
         data : [
              { text: "All", value: "A" }
-            ,{ text: "For Reorder", value: "R" }
+            ,{ text: "Critical Nomenclatures", value: "C" }
         ]
         ,selectedValue : option_id
         ,defauleValue  : "A"
@@ -86,8 +88,9 @@ function getTemplate(){
 }
 
 $("#btnGo").click(function(data){
-    getFilterValue();
-    displayItems(aircraft_info_id);
+    getFilterValue(function(){
+        displayItems(g_aircraft_info_id);
+    });
 });
 
 $("#btnClear").click(function(){
@@ -95,13 +98,18 @@ $("#btnClear").click(function(){
     g_column_name = "";
     $column.val('');
     $keyword.val('');
-    displayItems(aircraft_info_id);
+    getFilterValue(function(){
+        displayItems(g_aircraft_info_id);
+    });
 });
 
-function getFilterValue(){
-    option_id = ($optionId.val() ? $optionId.val(): "");
+function getFilterValue(callBack){
+    g_aircraft_info_id = $(".nav-tabs > li.active").children("a").attr("id");
+    g_option_id = ($optionId.val() ? $optionId.val(): "");
     g_keyword = $.trim($keyword.val());
     g_column_name = ($column.val() ? $column.val(): "");
+    
+    if(callBack) callBack();
 }
 
 function displayDetails(tbl_obj) {
@@ -352,10 +360,10 @@ function displayBox(id){
 function displayItems(id, callback){
     var counter = 0;
     $("#tabGrid" + id).dataBind({
-	     url            : execURL + "items_sel @aircraft_info_id=" + id
+	     url            : procURL + "items_sel @aircraft_info_id=" + id +",@option_id='" + g_option_id +"'"
 	    ,toggleMasterKey    : "item_id"
-	    //,width          : $(document).width() - 24
-	    ,height         : $(document).height() - 250
+	    ,width          : $(document).width() - 25
+	    ,height         : $(document).height() - 360
 	    ,isPaging : true
         ,dataRows : [
 
@@ -449,4 +457,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                   
+}                    
