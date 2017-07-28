@@ -5,11 +5,31 @@ var bs     = zsi.bs.ctrl
     ,g_user_id = null
     ,g_squadron_id = null
     ,g_organization_name = ""
-    ,pageName = location.pathname.split('/').pop();
+    ,pageName = location.pathname.split('/').pop()
+;
+
+function setInputs(){
+    $optionId = $("#option_id");
+    $keyword  = $("#keyword");
+    $column   = $("#column");
+}
 
 zsi.ready(function(){
     getTemplate();
     $(".pageTitle").html('<select name="dd_dashboard" id="dd_dashboard" class="col-xs-12 col-sm-4 col-md-3 col-lg-3" > </select>');
+
+    wHeight = $(window).height();
+    setInputs();
+    $optionId.fillSelect({
+        data : [
+             { text: "All", value: "A" }
+            ,{ text: "For Reorder", value: "R" }
+        ]
+        ,selectedValue : option_id
+        ,defauleValue  : "A"
+        ,required      : true
+    });
+    $("#option_id").val("A");
     
     getUserInfo(function(){
         $(".pageTitle").append('<label class="col-xs-2 col-sm-1" style="text-align:right"> for » </label> <select name="dd_squadron" id="dd_squadron" class="col-xs-10 col-sm-7 col-md-6 col-lg-5"></select>');
@@ -51,10 +71,6 @@ zsi.ready(function(){
     });
 });
 
-//$("#btnGo").click(function(data){
-//    displayTabs();
-//});
-
 var contextModalSerial = {
     id: "modalSerial"
     , title: ""
@@ -67,6 +83,25 @@ function getTemplate(){
         var template = Handlebars.compile(d);
         $("body").append(template(contextModalSerial));
     });    
+}
+
+$("#btnGo").click(function(data){
+    getFilterValue();
+    displayItems(aircraft_info_id);
+});
+
+$("#btnClear").click(function(){
+    g_keyword = "";
+    g_column_name = "";
+    $column.val('');
+    $keyword.val('');
+    displayItems(aircraft_info_id);
+});
+
+function getFilterValue(){
+    option_id = ($optionId.val() ? $optionId.val(): "");
+    g_keyword = $.trim($keyword.val());
+    g_column_name = ($column.val() ? $column.val(): "");
 }
 
 function displayDetails(tbl_obj) {
@@ -142,7 +177,6 @@ function displayDetails(tbl_obj) {
     $table.append(html);
 }
 
-
 function showModalSerial(id, item_id, serial_no) {
     $("#modalSerial .modal-title").text('Details for Serial No: ' + serial_no);
     $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
@@ -166,6 +200,31 @@ function showModalSerial(id, item_id, serial_no) {
         }
     });
 }
+
+function showModalDetailSerial(id, item_id, parent_item_id, serial_no) {
+    $("#modalSerial .modal-title").text('Details for Serial No: ' + serial_no);
+    $("#modalSerial").modal({ show: true, keyboard: false, backdrop: 'static' });
+    displayDetails("#tblSerial");
+    
+    $.get(execURL + "items_sel @aircraft_info_id=" + id + ",@item_id=" + (item_id ? item_id : null) + ",@parent_item_id=" + (parent_item_id ? parent_item_id : null) 
+    ,function(data) {
+        var d = data.rows;
+        if (d.length > 0) {
+            $("#tblSerial #part_no").text(d[0].part_no);
+            $("#tblSerial #national_stock_no").text(d[0].national_stock_no);
+            $("#tblSerial #item_name").text(d[0].item_name);
+            $("#tblSerial #manufacturer_name").text(d[0].manufacturer_name);
+            $("#tblSerial #dealer_name").text(d[0].dealer_name);
+            $("#tblSerial #supply_source_name").text(d[0].supply_source_name);
+            $("#tblSerial #time_since_new").text(d[0].time_since_new);
+            $("#tblSerial #time_before_overhaul").text(d[0].time_before_overhaul);
+            $("#tblSerial #time_since_overhaul").text(d[0].time_since_overhaul);
+            $("#tblSerial #remaining_time").text(d[0].remaining_time);
+            $("#tblSerial #monitoring_type").text(d[0].monitoring_type);
+        }
+    });
+}
+
 
 function getUserInfo(callBack){
     $.get(procURL + "user_info_sel", function(d) {
@@ -297,6 +356,7 @@ function displayItems(id, callback){
 	    ,toggleMasterKey    : "item_id"
 	    //,width          : $(document).width() - 24
 	    ,height         : $(document).height() - 250
+	    ,isPaging : true
         ,dataRows : [
 
         	    {text  : "&nbsp;"               , width : 25                    , style : "text-align:left;"
@@ -354,7 +414,15 @@ function displayRecordsComponents(o,id,aircraft_info_id){
                          {text  : "Part No."                 , name  : "part_no"                , width : 200       , style : "text-align:left;"}
                 		,{text  : "National Stock No."       , name  : "national_stock_no"      , width : 200       , style : "text-align:left;"}
                 		,{text  : "Nomenclature"             , name  : "item_name"              , width : 400       , style : "text-align:left;"}
-                		,{text  : "Serial No."               , name  : "serial_no"              , width : 150       , style : "text-align:left;"}
+                		,{text  : "Serial No."                                          , width : 150       , style : "text-align:left;" ,sortColNo: 5
+                            ,onRender : function(d){ return "<a href='javascript:showModalDetailSerial(" 
+                                                    + svn(d,"aircraft_info_id") + ",\"" 
+                                                    + svn(d,"item_id") + "\",\"" 
+                                                    + svn(d,"parent_item_id") + "\",\""
+                                                    + svn(d,"serial_no") + "\");'>" 
+                                                    + svn(d,"serial_no") + "</a>"; 
+                           }
+                		}
                 		,{text  : "Critical Level"           , width : 150                , style : "text-align:center;"
                 		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))) ; }
                 		}
@@ -381,4 +449,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                  
+}                   
