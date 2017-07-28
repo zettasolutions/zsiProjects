@@ -8,12 +8,12 @@ namespace zsi.web.Models
     {   
         public string app_title {get;set;}    
         public string date_format { get; set; }
-        public string bg_img_path_name { get; set; }
         public string excel_folder { get; set; }
         public string image_folder { get; set; }
         public string default_page { get; set; }
         public string excel_conn_str { get; set; }
         public string network_group_folder { get; set; }
+        public string developer_key { get; set; }
 
     }
 

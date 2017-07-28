@@ -45,11 +45,8 @@ namespace zsi.web.Controllers
                 }
                   if (param1 != devURL && param1 != "signin")
                 {
-                    if (getAuthNo() == 999)
-                    {
-                        if (Session["zsi_login"].ToString() == "N")
-                            return Redirect(Url.Content("~/") + "page/name/" + devURL);
-                    }
+                    if (Session["zsi_login"].ToString() == "N")
+                    return Redirect(Url.Content("~/") + "page/name/" + devURL);
                 }
                 if ((param1 == "selectoption" || param1 == "masterpages" || param1 == "table" || param1 == "filemanager" || param1 == "tablelayout" || param1 == "errors" || param1 == "appprofile")
                      && (Session["zsi_login"] == null || (Session["zsi_login"].ToString() == "N"))
@@ -62,32 +59,18 @@ namespace zsi.web.Controllers
         }
 
 
-        private int getAuthNo()
-        {
-
-            string key = "authNo";
-            if (Session[key] == null) Session[key] = DataHelper.getDbValue("select dbo.getAuthNo(" + this.CurrentUser.userId + ")");
-            return Convert.ToInt32("0" + Session[key]);
-
-        }
-
-
 
         [HttpPost]
         public ActionResult loginAdmin()
         {
-
-            if (Request["user_name"] == "zsidev" && Request["user_pwd"] == "1&7TBbyX")
+            dcAppProfile dc = new dcAppProfile();
+            appProfile info = dc.GetInfo();
+            if (Request["user_name"] == "zsidev" && Request["user_pwd"] == info.developer_key)
             {
-                dcAppProfile dc = new dcAppProfile();
-                appProfile info = dc.GetInfo();
-
                 Session["zsi_login"] = "Y";
                 Response.Cookies["zsi_login"].Value = "Y";
                 Response.Cookies["zsi_login"].Expires = DateTime.Now.AddDays(1);
- 
                 return Redirect(gePriorityURL(Url.Content("~/") + "page/name/" + info.default_page));
-
             }
             else {
                 Session["zsi_login"] ="N";
