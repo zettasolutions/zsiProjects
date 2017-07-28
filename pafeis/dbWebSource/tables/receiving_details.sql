@@ -11,9 +11,9 @@ receiving_detail_id	INT IDENTITY(1,1)	NOT NULL
 ,updated_date	DATETIME	NULL
 ,remarks	NVARCHAR(MAX)	NULL
 ,item_class_id	INT	NULL
-,time_since_new	DATETIME	NULL
-,time_before_overhaul	DATETIME	NULL
-,time_since_overhaul	DATETIME	NULL
+,time_since_new	DECIMAL(20)	NULL
+,time_before_overhaul	DECIMAL(20)	NULL
+,time_since_overhaul	DECIMAL(20)	NULL
 ,status_id	INT	NULL
 ,procurement_detail_id	INT	NULL
 ,manufacturer_id	INT	NULL

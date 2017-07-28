@@ -1,6 +1,3 @@
-
-
-
 CREATE PROCEDURE [dbo].[sys_requests_upd]
 (
     @tt    sys_requests_tt READONLY
@@ -16,18 +13,17 @@ BEGIN
 		,request_desc        	= b.request_desc
 		,request_type_id		= b.request_type_id
 		,status_id				= b.status_id
-		,img_filename           = b.img_filename
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.sys_requests a INNER JOIN @tt b
     ON a.ticket_id = b.ticket_id
     WHERE (
-				isnull(a.ticket_date,'')			<> isnull(b.ticket_date,'')   
-			OR	isnull(a.requested_by,'')			<> isnull(b.requested_by,'')   
+			--	isnull(a.ticket_date,'')			<> isnull(b.ticket_date,'')   
+			isnull(a.requested_by,'')			<> isnull(b.requested_by,'')   
 			OR	isnull(a.request_desc,'')			<> isnull(b.request_desc,'')  
 			OR	isnull(a.request_type_id,'')		<> isnull(b.request_type_id,'')   
 			OR	isnull(a.status_id,'')				<> isnull(b.status_id,'')   
-			OR	isnull(a.img_filename,'')			<> isnull(b.img_filename,'')  
+			
 	   )
 
 	   
@@ -37,8 +33,7 @@ BEGIN
 		 ,requested_by		 	
 		 ,request_desc   
 		 ,request_type_id
-		 ,status_id		
-		 ,img_filename   
+		 ,status_id				
         ,created_by
         ,created_date
         )
@@ -48,7 +43,6 @@ BEGIN
 		,request_desc   
 		,request_type_id
 		,status_id		
-		,img_filename   
        ,@user_id
        ,GETDATE()
     FROM @tt

@@ -104,9 +104,11 @@ WHILE @count < @rec_count
 			   INSERT INTO dbo.items (item_code_id, item_inv_id, serial_no,  status_id, created_by, created_date)
 					  VALUES (@item_code_id,@item_inv_id, @serial_no,  @status_id, @user_id, GETDATE());
 			ELSE
-			   UPDATE items SET item_inv_id=@item_inv_id, status_id=@status_id, aircraft_info_id=null, remarks=@remarks WHERE serial_no=@serial_no;
-			    
-        END
+				BEGIN
+				   UPDATE items SET item_inv_id=@item_inv_id, status_id=@status_id, aircraft_info_id=null, remarks=@remarks WHERE serial_no=@serial_no;
+				   UPDATE  dbo.item_status_quantity SET stock_qty = stock_qty + @quantity WHERE item_inv_id = @item_inv_id and status_id = @status_id;
+				END    
+		END
 		SET @count = @count + 1;
 	END;
 END;

@@ -1,0 +1,21 @@
+CREATE TABLE temp_warehouse_serials(
+warehouse_code	INT	NULL
+,id	INT	NULL
+,part_no	NVARCHAR(100)	NULL
+,ns_no	NVARCHAR(100)	NULL
+,item_desc	NVARCHAR(100)	NULL
+,serial_no	NVARCHAR(40)	NOT NULL
+,manufacturer	INT	NULL
+,dealer	INT	NULL
+,supply_source	INT	NULL
+,time_since_new	DECIMAL(12)	NULL
+,time_before_overhaul	DECIMAL(12)	NULL
+,time_since_overhaul	DECIMAL(12)	NULL
+,remaining_time	DECIMAL(12)	NULL
+,date_delivered	DATETIME	NULL
+,date_issued	DATETIME	NULL
+,status	INT	NULL
+,item_class_id	INT	NULL
+,no_repairs	INT	NULL
+,no_overhauls	INT	NULL
+,parent_item_id	INT	NULL)

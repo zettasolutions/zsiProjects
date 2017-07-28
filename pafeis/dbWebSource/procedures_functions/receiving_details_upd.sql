@@ -1,4 +1,5 @@
 
+
 CREATE PROCEDURE [dbo].[receiving_details_upd]
 (
     @tt    receiving_details_tt READONLY
@@ -63,6 +64,7 @@ BEGIN
 	  AND receiving_id IS NOT NULL
 	  AND item_code_id IS NOT NULL
 END
+
 
 
 

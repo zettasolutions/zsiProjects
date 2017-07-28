@@ -19,7 +19,8 @@ BEGIN
 SET NOCOUNT ON
 DECLARE @stmt NVARCHAR(MAX)
 
-SET @stmt = 'SELECT * FROM dbo.sys_requests WHERE ticket_id=''' + @ticket_id + '''';
+SET @stmt = 'SELECT * FROM dbo.sys_requests WHERE 1=1 '
+
   IF @ticket_date IS NOT NULL  
 	SET @stmt = @stmt + ' AND ticket_date = ' + CAST(@ticket_date AS DATETIME); 
  
