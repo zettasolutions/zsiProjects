@@ -8,6 +8,8 @@ var bs     = zsi.bs.ctrl
     ,g_organization_name = ""
     ,pageName = location.pathname.split('/').pop()
     ,g_option_id = ""
+    ,g_keyword = ""
+    ,g_column_name = ""
 ;
 
 function setInputs(){
@@ -233,7 +235,6 @@ function showModalDetailSerial(id, item_id, parent_item_id, serial_no) {
     });
 }
 
-
 function getUserInfo(callBack){
     $.get(procURL + "user_info_sel", function(d) {
         if (d.rows !== null && d.rows.length > 0) {
@@ -360,7 +361,7 @@ function displayBox(id){
 function displayItems(id, callback){
     var counter = 0;
     $("#tabGrid" + id).dataBind({
-	     url            : procURL + "items_sel @aircraft_info_id=" + id +",@option_id='" + g_option_id +"'"
+	     url            : procURL + "items_sel @aircraft_info_id=" + id +",@option_id='" + g_option_id +"'" +",@keyword='" + g_keyword +"'" +",@col_name='" + g_column_name +"'"
 	    ,toggleMasterKey    : "item_id"
 	    ,width          : $(document).width() - 25
 	    ,height         : $(document).height() - 360
@@ -457,4 +458,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                    
+}                     
