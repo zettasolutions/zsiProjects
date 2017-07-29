@@ -11,9 +11,9 @@ zsi.ready(function(){
 function loadSquadron(){
     var $select = $("#squadron_filter");
     $select.dataBind({
-        url: procURL + "dd_warehouse_organizations_sel" 
-        , text: "organization_warehouse"
-        , value: "warehouse_id"
+        url: procURL + "dd_aircraft_organizations_sel" 
+        , text: "organization_name"
+        , value: "organization_id"
     });
 }
 
@@ -115,4 +115,4 @@ function displayRecords(filter){
     });    
 }
 
-      
+       
