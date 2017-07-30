@@ -913,11 +913,13 @@ var  ud='undefined'
                                     var _groupItem = (_isGroup ? " groupItem" : "" );
                                     if(typeof d[x].width !==ud){
                                         _style = "style=\"width:" +  d[x].width  + "px;"  + d[x].style + "\"";
-                                        _styleTitle = "style=\"width:" +  (d[x].width -  _minusSortWidth) + "px;"  + d[x].style + "\"";
+                                       // _styleTitle = "style=\"width:" +  (d[x].width -  _minusSortWidth) + "px;"  + d[x].style + "\"";
+                                        _styleTitle = "style=\""  + d[x].style + "\"";
                                     }
                                     
                                     h+= "<div " + _id + " class='item" + _groupItem + _level + _class + "' " + _style + ">";
                                     h+= "<div " + _titleId + " class='title" + ( _hasSort ? " hasSort":"") + "' " + _styleTitle + " ><span class=\"text\">" + d[x].text +  "</span></div>"; 
+                                    if( isUD(o.resizable)  ||  o.resizable===true) h+= "<div class='cr'></div>";
                                     if(typeof d[x].groupId !== ud ) 
                                         h+= getdataRows(d,d[x].id) ;
                                     h+=getSortHeader(d[x].sortColNo);
@@ -1111,7 +1113,8 @@ var  ud='undefined'
                                         }
                                         if(o.onComplete) o.onComplete(data);
                                     }
-            
+                                    
+                                    zsi.__setTableResize(o);
                             }          
                     };
                     
@@ -1147,7 +1150,8 @@ var  ud='undefined'
                     setScrollBars();
                     __obj.addClickHighlight();
                     if(o.onComplete) o.onComplete();
-                    __obj.addClickHighlight();        
+                    __obj.addClickHighlight();   
+                    zsi.__setTableResize(o);
                 }  
                 else{
                     if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
@@ -1161,7 +1165,7 @@ var  ud='undefined'
                     if(o.onComplete) o.onComplete();
                     //add tr click event.
                     __obj.addClickHighlight();
-            
+                    zsi.__setTableResize(o);
                 }
                 
             };
@@ -1644,6 +1648,33 @@ var  ud='undefined'
             }else{
                 console.log("table not defined. url:" + o.url);
             }
+        }
+        ,__setTableResize           : function(o){
+            if( ! isUD(o.resizable)  &&  o.resizable===false) return;
+            $(".zHeaders > .item > .cr").on('mousedown', function (e) {
+                zsi.tableResize = { 
+                     curCol         : $(e.target).parent()
+                    ,nextCol        : $(e.target).parent().next()
+                    ,curLastWidth   : parseInt($(e.target).parent().css("width"))
+                    ,nextLastWidth  : parseInt($(e.target).parent().next().css("width"))
+                    ,lastX          : e.clientX
+                };
+                
+            });
+            
+            $(document).on('mousemove', function (e) {
+                if (typeof zsi.tableResize === ud || zsi.tableResize === null ) return;
+                var _tr = zsi.tableResize;
+                var _ew  = (e.clientX  - _tr.lastX); //extra width
+                var _cls = ".zRow .zCell:nth-child";
+                _tr.curCol.css({width: _tr.curLastWidth + _ew });
+                _tr.nextCol.css({width: _tr.nextLastWidth - _ew });
+                $(_cls + "(" +  (_tr.curCol.index() +  1) + ")").css({width: _tr.curLastWidth + _ew });
+                $(_cls + "(" +  (_tr.curCol.index() +  2) + ")").css({width: _tr.nextLastWidth - _ew });
+
+            }).on('mouseup', function (e) {
+                zsi.tableResize = null;
+            });            
         }
         ,__tableObjectsHistory      : []
         ,bs                         : {
@@ -2395,4 +2426,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                            
+                                                                                                               

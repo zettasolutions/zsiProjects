@@ -20,6 +20,15 @@
     top: 1px;
 }
 
+.zHeaders > .item > .cr {
+    height: 100%;
+    right: 0px;
+    position: absolute;
+    cursor: w-resize;
+    top: 0px;
+    width: 5px;
+}
+
 .zGrid .zGridPanel{
 	float:left;
 	overflow: hidden;
@@ -57,12 +66,17 @@
     text-align: center; 
     /*border-top: 1pt solid #d6d8d8;*/
 	clear:right;
+	
 }
 
-.zGrid  .item .title {
+.zGrid .zHeaders > .item .title {
     height: 20px;
     align-items: center;
     display: flex;	
+}
+
+.zGrid .zHeaders > .item {
+    position: relative;
 }
 
 .zGrid .zHeaders .zSort {
@@ -239,10 +253,11 @@
 }
 
 .zGrid .zHeaders .zSort {
-    float: right;
-	margin-top: 1px;
-	width: 10px;
-	text-align: left;
+    width: 10px;
+    text-align: left;
+    position: absolute;
+    right: 10px;
+    top: 1px;
 }
 
 .zGrid .zHeaders .zSort a {
@@ -285,6 +300,10 @@
     line-height:10px
 }
 /*end of sort*/
+
+
+
+
 
 
 
