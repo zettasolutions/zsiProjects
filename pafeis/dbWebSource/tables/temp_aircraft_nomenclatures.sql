@@ -1,21 +1,14 @@
 CREATE TABLE temp_aircraft_nomenclatures(
-aircraft_code	INT	NULL
-,id	INT	NULL
+user_id	INT	NULL
+,aircraft_code	NVARCHAR(100)	NULL
 ,part_no	NVARCHAR(100)	NULL
-,ns_no	NVARCHAR(100)	NULL
-,item_desc	NVARCHAR(100)	NULL
-,serial_no	NVARCHAR(40)	NOT NULL
-,manufacturer	INT	NULL
-,dealer	INT	NULL
-,supply_source	INT	NULL
-,time_since_new	DECIMAL(12)	NULL
-,time_before_overhaul	DECIMAL(12)	NULL
-,time_since_overhaul	DECIMAL(12)	NULL
+,serial_no	NVARCHAR(40)	NULL
+,manufacturer	NVARCHAR(100)	NULL
+,dealer	NVARCHAR(100)	NULL
+,supply_source	NVARCHAR(100)	NULL
 ,remaining_time	DECIMAL(12)	NULL
-,date_delivered	DATETIME	NULL
 ,date_issued	DATETIME	NULL
-,status	INT	NULL
-,item_class_id	INT	NULL
-,no_repairs	INT	NULL
-,no_overhauls	INT	NULL
-,parent_item_id	INT	NULL)
+,status	NVARCHAR(100)	NULL
+,item_class	NVARCHAR(100)	NULL
+,parent_serial_no	NVARCHAR(100)	NULL
+,id	INT IDENTITY(1,1)	NOT NULL)

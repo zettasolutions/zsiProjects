@@ -12,19 +12,13 @@ BEGIN
 		,requested_by			= b.requested_by
 		,request_desc        	= b.request_desc
 		,request_type_id		= b.request_type_id
+		,is_urgent				= b.is_urgent
 		,status_id				= b.status_id
         ,updated_by				= @user_id
         ,updated_date			= GETDATE()
     FROM dbo.sys_requests a INNER JOIN @tt b
     ON a.ticket_id = b.ticket_id
-    WHERE (
-			--	isnull(a.ticket_date,'')			<> isnull(b.ticket_date,'')   
-			isnull(a.requested_by,'')			<> isnull(b.requested_by,'')   
-			OR	isnull(a.request_desc,'')			<> isnull(b.request_desc,'')  
-			OR	isnull(a.request_type_id,'')		<> isnull(b.request_type_id,'')   
-			OR	isnull(a.status_id,'')				<> isnull(b.status_id,'')   
-			
-	   )
+    WHERE isnull(b.is_edited,'N')='Y'
 
 	   
 -- Insert Process
@@ -33,7 +27,8 @@ BEGIN
 		 ,requested_by		 	
 		 ,request_desc   
 		 ,request_type_id
-		 ,status_id				
+		 ,is_urgent	
+		 ,status_id			
         ,created_by
         ,created_date
         )
@@ -42,13 +37,11 @@ BEGIN
 		,requested_by  	
 		,request_desc   
 		,request_type_id
-		,status_id		
+		,is_urgent		
+		,status_id			
        ,@user_id
        ,GETDATE()
     FROM @tt
     WHERE ticket_id IS NULL
-	and ticket_date IS NOT NULL;
+	and request_type_id IS NOT NULL;
 END
-
-
-

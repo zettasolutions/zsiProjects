@@ -52,7 +52,7 @@ BEGIN
    IF @option_id = 'C'
 	  BEGIN
 	   SET @stmt = @stmt + ' AND (remaining_time <= critical_level)'
-	   SET @stmt2 = @stmt2 + ' AND AND (remaining_time <= critical_level)'
+	   SET @stmt2 = @stmt2 + ' AND (remaining_time <= critical_level)'
 	  END
 END
 

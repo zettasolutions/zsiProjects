@@ -4,23 +4,29 @@ AS
 BEGIN
 SET NOCOUNT ON
 
---delete from temp_item_codes where part_no is null and national_stock_no is null and item_name is null
+delete from temp_item_codes where part_no is null
 insert into item_codes (	
     item_cat_id,
-    item_type_id,
 	part_no,
 	national_stock_no,
 	item_name,
 	reorder_level,
+	critical_level,
+	unit_of_measure_id,
+	monitoring_type_id,
+	is_repairable,
 	created_by,
 	created_date) 
   select
     dbo.getItemCatIdByName(item_category) item_cat_id,
-    dbo.getItemTypeIdByName(item_type) item_type_id,
     part_no,
 	national_stock_no,
 	item_name,
 	reorder_level,
+	critical_level,
+	dbo.getUnitOfMeasureId(uom),
+	dbo.getMonitoringTypeId(monitoring_type),
+	is_repairable,
 	user_id,
 	GETDATE()
 	FROM temp_item_codes
