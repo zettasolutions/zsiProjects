@@ -1,30 +1,68 @@
 var  bs = zsi.bs.ctrl
-    ,svn = zsi.setValIfNull;
+    ,svn = zsi.setValIfNull
+    ,wingFilter = null
+    ,squadronFilter = null
+    ,typeFilter = null
+    ,statusFilter = null
+    ,searchFilter = ""
+    ,g_organization_id = null;
 
 zsi.ready(function(){
     //setSearch();
-    loadSquadron();
-    loadAircraftType();
-    loadStatus();
+    setInputs();
+    //getUserInfo(function(){
+        loadWing();
+        loadSquadron();
+        loadAircraftType();
+        loadStatus();
+    //});
 });
 
+function setInputs(){
+    $wingFilter = $("#wing_filter");
+    $squadronFilter = $("#squadron_filter");
+    $typeFilter = $("#type_filter");
+    $statusFilter = $("#status_filter");
+    $searchFilter = $("#search_filter");
+}
+
+function getUserInfo(callBack){
+    $.get(procURL + "user_info_sel", function(d) {
+        if (d.rows !== null && d.rows.length > 0) {
+            g_organization_id = d.rows[0].organization_id;
+        }
+        if(callBack) callBack();
+    });
+}
+
+function loadWing(){
+    $wingFilter.dataBind({
+        url: procURL + "dd_organizations_sel @organization_type_code='Wing',@squadron_type=''" 
+        , text: "organization_name"
+        , value: "organization_id"
+        , onComplete: function(){
+            $wingFilter.change(function(){
+                g_organization_id = (this.value !==""? this.value: null);
+                loadSquadron();
+            });
+        }
+    });
+}
+
 function loadSquadron(){
-    var $select = $("#squadron_filter");
-    $select.dataBind({
-        url: procURL + "dd_aircraft_organizations_sel" 
+    $squadronFilter.dataBind({
+        url: procURL + "dd_organizations_sel @organization_id="+ g_organization_id +",@squadron_type='Aircraft'" 
         , text: "organization_name"
         , value: "organization_id"
     });
 }
 
 function loadAircraftType(){
-    var $select = $("#type_filter");
-    $select.dataBind("aircraft_type");
+    $typeFilter.dataBind("aircraft_type");
 }
 
 function loadStatus(){
-    var $select = $("#status_filter");
-    $select.dataBind("aircraftStatuses");
+    $statusFilter.dataBind("aircraftStatuses");
 }
 
 function setSearch(){
@@ -40,27 +78,36 @@ function setSearch(){
             currentObject.value=data.logon;
             var tr  = currentObject.parentNode.parentNode;
             $(tr).find("#aircraft_info_id_filter").val(data.aircraft_info_id);
-            displayRecords(data.aircraft_info_id);
+            displayRecords();
         }
     });        
 }
 
 $("#btnGo").click(function(){
-    var squadronFilter = $("#squadron_filter").val();
-    var typeFilter = $("#type_filter").val();
-    var statusFilter = $("#status_filter").val();
-    var searchFilter = $("#search_filter").val();
-    displayRecords(searchFilter);
+    squadronFilter = ($squadronFilter.val()!==""? $squadronFilter.val() : null);
+    typeFilter = ($typeFilter.val()!==""? $typeFilter.val() : null);
+    statusFilter = ($statusFilter.val()!==""? $statusFilter.val() : null);
+    searchFilter = $.trim($searchFilter.val());
+    displayRecords();
 });
 
-function displayRecords(filter){  
+function displayRecords(){  
     var rownum=0;
     $("#grid").dataBind({
-	     url   : execURL + "aircraft_info_search_sel @search='"+ filter +"'" 
+	     url   : execURL + "aircraft_info_search_sel @squadron_id="+ squadronFilter +",@aircraft_type_id="+ typeFilter +",@status_id="+ statusFilter +",@search='"+ searchFilter +"'" 
         ,width      : $(document).width() - 25
 	    ,height     : $(document).height() - 200
         ,dataRows   : [
-     		 {  
+                {  
+     		     text  : "" 
+     		    ,width : 25     
+     		    ,style : "text-align:center;"     
+     		    ,onRender : function(){
+     		        rownum++;
+     		        return rownum;
+     		    }
+     		 }
+     		 ,{  
      		     text  : "Aircraft Code"      
      		    ,name  : "aircraft_code"
      		    ,width : 150     
@@ -76,7 +123,19 @@ function displayRecords(filter){
      		     text  : "Aircraft Time"      
      		    ,name  : "aircraft_time"
      		    ,width : 150     
-     		    ,style : "text-align:left;"      
+     		    ,style : "text-align:center;"   
+     		    ,onRender : function(d){
+     		        return formatCurrency(svn(d, "aircraft_time"));
+     		    }
+     		 }
+     		 ,{  
+     		     text  : "Remaining Time To Inspection"      
+     		    ,name  : "service_time"
+     		    ,width : 150     
+     		    ,style : "text-align:center;"    
+     		    ,onRender : function(d){
+     		        return formatCurrency(svn(d, "service_time"));
+     		    }
      		 }
      		 ,{  
      		     text  : "Aircraft Type"      
@@ -115,4 +174,10 @@ function displayRecords(filter){
     });    
 }
 
-       
+function formatCurrency(number){
+    var result = "";
+    if(number!==""){
+        result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+    return result;
+}  

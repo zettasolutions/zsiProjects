@@ -1,9 +1,67 @@
 var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-
+var wingFilter = null
+    ,squadronFilter = null
+    ,warehouseFilter = null
+    ,statusFilter = null
+    ,fieldFilter = ""
+    ,keywordFilter = ""
+    ,g_organization_id = null;
+    
 zsi.ready(function(){
- 
+    setInputs();
+    loadWing();
+    loadSquadron();
+    loadWarehouse();
+    loadStatus();
 });
+
+function setInputs(){
+    $wingFilter = $("#wing_filter");
+    $squadronFilter = $("#squadron_filter");
+    $warehouseFilter = $("#warehouse_filter");
+    $statusFilter = $("#status_filter");
+    $fieldFilter = $("#field_filter");
+    $keywordFilter = $("#keyword_filter");
+}
+
+function loadWing(){
+    $wingFilter.dataBind({
+        url: procURL + "dd_organizations_sel @organization_type_code='Wing',@squadron_type=''" 
+        , text: "organization_name"
+        , value: "organization_id"
+        , onComplete: function(){
+            $wingFilter.change(function(){
+                g_organization_id = (this.value !==""? this.value: null);
+                loadSquadron();
+            });
+        }
+    });
+}
+
+function loadSquadron(){
+    $squadronFilter.dataBind({
+        url: procURL + "dd_organizations_sel @organization_id="+ g_organization_id +",@squadron_type='Supply'" 
+        , text: "organization_name"
+        , value: "organization_id"
+    });
+}
+
+function loadWarehouse(){
+    $warehouseFilter.dataBind({
+       url: procURL + "dd_warehouses_sel"
+       , text: "warehouse"
+       , value: "warehouse_id"
+    });
+}
+
+function loadStatus(){
+    $statusFilter.dataBind({
+        url: execURL + "statuses_sel @is_item='Y'"
+        ,text: "status_name"
+        ,value: "status_id"
+    });
+}
 
 function setSearch(){
     new zsi.search({
@@ -18,26 +76,31 @@ function setSearch(){
             currentObject.value=data.serial_no;
             var tr  = currentObject.parentNode.parentNode;
             $(tr).find("#stocks_search_id_filter").val(data.serial_no);
-            displayRecords( data.serial_no);
+            displayRecords();
         }
     });        
 }
 
 $("#btnGo").click(function(){
-  displayRecords($("#field_search").val(),$("#stock_search_filter").val());
+    squadronFilter = ($squadronFilter.val()!==""? $squadronFilter.val() : null);
+    warehouseFilter = ($warehouseFilter.val()!==""? $warehouseFilter.val() : null);
+    statusFilter = ($statusFilter.val()!==""? $statusFilter.val() : null);
+    fieldFilter = $fieldFilter.val();
+    keywordFilter = $.trim($keywordFilter.val());
+    displayRecords();
 });
 
 function clearGrid(){
     $("#" + tblName).clearGrid();
-    }
+}
     
-function displayRecords(field_name,keyword){   
+function displayRecords(){   
     //console.log(filter);
     var rownum=0;
-    if(keyword==="")
+    if(keywordFilter==="")
     {
         $("#grid").dataBind({
-	     url   : execURL + "stock_monitoring_sel @field='"+field_name+"', @search='"+keyword+"'" 
+	     url   : execURL + "stock_monitoring_sel @squadron_id="+ squadronFilter +",@aircraft_type_id="+ typeFilter +",@status_id="+ statusFilter +",@field='"+ fieldFilter +"', @search='"+keywordFilter+"'" 
         ,width          : $(document).width() - 25
 	    ,height         : $(document).height() - 360
 	   // ,selectorType   : "checkbox"
@@ -103,4 +166,4 @@ function displayRecords(field_name,keyword){
         }
     });   
     }
-}      
+}       

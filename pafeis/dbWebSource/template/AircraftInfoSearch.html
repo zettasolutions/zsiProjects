@@ -1,11 +1,20 @@
 <script src='/javascript/name/zsiSearch'></script>
+<style>
+    .zGrid .zHeaders > .item .title{
+        height: 30px !important;
+    }
+</style>
 
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 zPanel">  
     <div class="row ">
         <div class="form-horizontal">   
             <div class="col-xs-12 col-sm-12">
                 <div class="form-group ">
-                    <label class="col-xs-4 col-sm-2 col-md-2 col-lg-1 control-label">Squadron:</label>
+                    <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1 control-label">Wing:</label>
+                    <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2" style="margin-bottom:5px">
+                        <select name="wing_filter" id="wing_filter" class="form-control input-sm"></select>
+                    </div>
+                    <label class="col-xs-4 col-sm-2 col-md-1 col-lg-1 control-label">Squadron:</label>
                     <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2" style="margin-bottom:5px">
                         <select name="squadron_filter" id="squadron_filter" class="form-control input-sm"></select>
                     </div>
@@ -14,10 +23,11 @@
                         <select name="type_filter" id="type_filter" class="form-control input-sm"></select>
                     </div>
                     <label class="col-xs-4 col-sm-2 col-md-1 col-lg-1 control-label">Status:</label>
-                    <div class="col-xs-6 col-sm-4 col-md-2 col-lg-1" style="margin-bottom:5px">
+                    <div class="col-xs-6 col-sm-4 col-md-1 col-lg-2" style="margin-bottom:5px">
                         <select name="status_filter" id="status_filter" class="form-control input-sm"></select>
                     </div>
-                    <div class="col-xs-10 col-sm-5 col-md-4 col-lg-3">
+                    <label class="col-xs-4 col-sm-2 col-md-1 col-lg-1 control-label">Keyword:</label>
+                    <div class="col-xs-6 col-sm-9 col-md-5 col-lg-5">
                         <input name="aircraft_info_id_filter" id="aircraft_info_id_filter" type="hidden" class="form-control input-sm">
                         <input name="search_filter" id="search_filter" placeholder="Search" class="form-control input-sm">
                     </div>
