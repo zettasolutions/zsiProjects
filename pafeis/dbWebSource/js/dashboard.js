@@ -9,7 +9,8 @@ var bs = zsi.bs.ctrl
     ,g_keyword= ""
     ,g_tab_name = "ASSEMBLY" //Default Selected Tab
     ,g_item_inv_id = null
-    ,status_id = "";
+    ,status_id = ""
+;
     const statusId = {
     stockQty: 23,
     forRepair: 24,
@@ -258,6 +259,7 @@ function showModalSerial(status_id ,part_no ,item_inv_id) {
 }
 
 function displaySerial(status_id){
+    var counter = 0;    
     var id = "";
     if(status_id==statusId.stockQty){
         id = 23;
@@ -270,14 +272,21 @@ function displaySerial(status_id){
     }
 
     $("#tblSerial").dataBind({
-	     url        : execURL + "items_sel  @item_inv_id='" + (g_item_inv_id ? g_item_inv_id : null)+ "', @status_id=" + id
+	     url        : procURL + "items_sel  @item_inv_id='" + (g_item_inv_id ? g_item_inv_id : null) + "',@status_id=" + id
         ,width      : $(document).width() - 45
 	    ,height     : 400
+	    ,isPaging : true
         ,dataRows   : [
-        		{text  :"Serial No."                , name  : "serial_no"               , width:250     , style : "text-align:left;"}
-        	   ,{text  :"Manufacturer"              , name  : "manufacturer_name"       , width:300     , style : "text-align:left;"}
-        	   ,{text  :"Dealer"                    , name  : "dealer_name"             , width:300     , style : "text-align:left;"}
-        	   ,{text  :"Supply Source"             , name  : "supply_source_name"      , width:300     , style : "text-align:left;"}
+        	    {text  : "&nbsp;"               , width : 25                    , style : "text-align:left;"
+        	        ,onRender : function(d){ 
+        	            counter++;
+                        return '<input class="form-control" type="text" name="item_no" id="item_no" value="' + counter + '" readonly>';
+                    }
+        	    }        	     
+        	   ,{text  :"Serial No."                , name  : "serial_no"               , width:250     , style : "text-align:left;" ,sortColNo: 1}
+        	   ,{text  :"Manufacturer"              , name  : "manufacturer_name"       , width:300     , style : "text-align:left;" ,sortColNo: 2}
+        	   ,{text  :"Dealer"                    , name  : "dealer_name"             , width:300     , style : "text-align:left;" ,sortColNo: 3}
+        	   ,{text  :"Supply Source"             , name  : "supply_source_name"      , width:300     , style : "text-align:left;" ,sortColNo: 4}
         	   ,{text  :"Time Since New"            , name  : "time_since_new"          , width:200     , style : "text-align:right; padding-right:3px"}
         	   ,{text  :"Time Before Overhaul"      , name  : "time_before_overhaul"    , width:200     , style : "text-align:right; padding-right:3px"}
         	   ,{text  :"Time Since Overhaul"       , name  : "time_since_overhaul"     , width:200     , style : "text-align:right; padding-right:3px"}
@@ -295,4 +304,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                    
+}                      
