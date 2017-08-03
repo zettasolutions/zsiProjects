@@ -20,7 +20,7 @@
     top: 1px;
 }
 
-.zHeaders > .item > .cr {
+.zHeaders .item .cr {
     height: 100%;
     right: 0px;
     position: absolute;
@@ -64,10 +64,13 @@
 .zGrid .item {
     float: left;
     text-align: center; 
-    /*border-top: 1pt solid #d6d8d8;*/
 	clear:right;
 	
 }
+.zGrid .zHeaders .groupItem {
+    border-top : 1pt solid #d6d8d8;
+}
+
 
 .zGrid .zHeaders > .item .title {
     height: 20px;
@@ -75,7 +78,7 @@
     display: flex;	
 }
 
-.zGrid .zHeaders > .item {
+.zGrid .zHeaders .item {
     position: relative;
 }
 
@@ -300,6 +303,7 @@
     line-height:10px
 }
 /*end of sort*/
+
 
 
 

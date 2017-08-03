@@ -30,6 +30,9 @@ a:hover{
       background-color: #1D64B6;
     height: 44px;
 }
+.zBanner {
+    background-image: url(/images/new_banners.jpg);
+}
 .container {
     width: 939px !important;
 }
@@ -412,7 +415,6 @@ table.zTableReport > tfoot > tr > td {
     border: 1pt solid #e5e5e5;
     min-height: 500px;
     padding-top: 10px;
-	overflow:auto;
 }
 ul
 {
@@ -861,6 +863,8 @@ ul.imgFrame li.imgItem .text { text-align:center; }
 
 
 /*end of Report*/
+
+
 
 
 
