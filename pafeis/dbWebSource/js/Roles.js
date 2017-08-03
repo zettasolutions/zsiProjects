@@ -125,7 +125,7 @@ function displayRecords(){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
     $("#grid").dataBind({
          url   : procURL + "roles_sel"
-       // ,width          : $(document).width() - 650
+        //,width          : $(document).width() - 650
 	    ,height         : $(document).height() - 250
         ,blankRowsLimit:5
         ,dataRows       :[
@@ -306,4 +306,4 @@ $("#btnDelete").click(function(){
 });      
 
     
-                                                                                    
+                                                                                     

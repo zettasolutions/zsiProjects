@@ -741,24 +741,51 @@ var  ud='undefined'
                         _self.dataBindGrid(_self.params);
                     });
                 }
-                
                 this.setColumnResize = function(){
-                    var _self = this;
+                    var  _self      = this
+                        ,_clsGrp0   = "group0"
+                        ,_grpItem   = "groupItem"
+                    ;
+                    
                     if( ! isUD(_self.params.resizable)  &&  _self.params.resizable===false) return;
-                    $(".zHeaders > .item > .cr").unbind("mousedown").on('mousedown', function (e) {
+                    $(".zHeaders .item .cr").unbind("mousedown").on('mousedown', function (e) {
+                        var _curCol = $(e.target).parent();
+                        
+                        // if group0 found get last column element.
+                        if(_curCol.hasClass(_clsGrp0)) {
+                            var _gis =  _curCol.find("." + _grpItem);
+                              _curCol = $(_gis[_gis.length-1]);
+                        } 
+                        
                         zsi.tableResize = { 
-                             curCol         : $(e.target).parent()
-                            ,nextCol        : $(e.target).parent().next()
-                            ,curLastWidth   : parseInt($(e.target).parent().css("width"))
-                            ,nextLastWidth  : parseInt($(e.target).parent().next().css("width"))
+                             curCol         : _curCol
+                            ,nextCol        : _curCol.next()
+                            ,curLastWidth   : parseInt(_curCol.css("width"))
+                            ,nextLastWidth  : parseInt(_curCol.next().css("width"))
                             ,lastX          : e.clientX
                         };
                     });
+                    
                     $(document).on('mousemove', function (e) {
                         if (typeof zsi.tableResize === ud || zsi.tableResize === null ) return;
                         var _tr = zsi.tableResize;
                         if( ! _self.is( _tr.curCol.closest(".zGrid")) ) return;  //check if zGrid object is the same.
+                        
+                        //find current column index
+                        var _groupIndex = -1
+                        var _grp0  =  _tr.curCol.closest("." + _clsGrp0);
+                        if(_grp0.length > 0){
+                            var _zHeaders = _grp0.parent();
+                            var _gItems = _zHeaders.find("." + _grpItem);
+                            for( var x=0; x < _gItems.length;x++){
+                                if( ! $(_gItems[x]).hasClass(_clsGrp0)){
+                                  _groupIndex++;
+                                  if(_tr.curCol.is(_gItems[x]) ) break;
+                                }  
+                            }
+                        }    
 
+                        var _cIndex = (_grp0.length > 0 ? _groupIndex : _tr.curCol.index() );           
                         var _ew  = (e.clientX  - _tr.lastX); //extra width
                         var _rows = _tr.curCol.closest(".zGridPanel").find(".zRows").eq(0);
                         var _getCurrentCell = function(j){
@@ -772,12 +799,16 @@ var  ud='undefined'
                         var _cls = "#table > .zRow > .zCell:nth-child";
                         _tr.curCol.css({width: _tr.curLastWidth + _ew });
                         _tr.nextCol.css({width: _tr.nextLastWidth - _ew });
-                        var _zCell1 =  _rows.find(_cls + "(" +  (_tr.curCol.index() +  1) + ")");
-                        var _zCell2 =  _rows.find(_cls + "(" +  (_tr.curCol.index() +  2) + ")");
+                        
+                        var _zCell1 =  _rows.find(_cls + "(" +  ( _cIndex +  1) + ")");
+                        var _zCell2 =  _rows.find(_cls + "(" +  ( _cIndex +  2) + ")");
                         _getCurrentCell(_zCell1).css({width: _tr.curLastWidth + _ew });
                         _getCurrentCell(_zCell2).css({width: _tr.nextLastWidth - _ew });
-                        _self.params.dataRows[_tr.curCol.index()].width =  (_tr.curLastWidth + _ew);
-                        _self.params.dataRows[_tr.curCol.index()+1].width =  (_tr.nextLastWidth - _ew);
+                        
+                        var _dr =_self.params.dataRows;
+                        
+                        if(_dr[ _cIndex]    ) _dr[_cIndex].width =  (_tr.curLastWidth + _ew);
+                        if(_dr[ _cIndex + 1]) _dr[_cIndex+1].width =  (_tr.nextLastWidth - _ew);
                     }).on('mouseup', function (e) {
                         zsi.tableResize = null;
                     });            
@@ -844,7 +875,7 @@ var  ud='undefined'
                             
                         });
                         if(_isGroup || o.width > __o.width ) o.headers.css("width",(o.width + 20 ) + "px");
-                        o.table.css("width",(o.width + 1 )  + "px");
+                        if (__o.width) o.table.css("width",(o.width + 1 )  + "px");
                     }
                     ,trItem             = function(o){
                         

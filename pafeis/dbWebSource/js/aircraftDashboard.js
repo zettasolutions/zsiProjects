@@ -205,7 +205,7 @@ function showModalSerial(id, item_id, serial_no) {
             $("#tblSerial #time_since_new").text(d[0].time_since_new);
             $("#tblSerial #time_before_overhaul").text(d[0].time_before_overhaul);
             $("#tblSerial #time_since_overhaul").text(d[0].time_since_overhaul);
-            $("#tblSerial #remaining_time").text(d[0].remaining_time);
+            $("#tblSerial #remaining_time").text(formatCurrency(d[0].remaining_time));
             $("#tblSerial #monitoring_type").text(d[0].monitoring_type);
         }
     });
@@ -229,7 +229,7 @@ function showModalDetailSerial(id, item_id, parent_item_id, serial_no) {
             $("#tblSerial #time_since_new").text(d[0].time_since_new);
             $("#tblSerial #time_before_overhaul").text(d[0].time_before_overhaul);
             $("#tblSerial #time_since_overhaul").text(d[0].time_since_overhaul);
-            $("#tblSerial #remaining_time").text(d[0].remaining_time);
+            $("#tblSerial #remaining_time").text(formatCurrency(d[0].remaining_time));
             $("#tblSerial #monitoring_type").text(d[0].monitoring_type);
         }
     });
@@ -412,6 +412,7 @@ function displayItems(id, callback){
 }          
 
 function displayRecordsComponents(o,id,aircraft_info_id){
+    var counter = 0;
     zsi.toggleExtraRow({
          object     : o
         ,parentId   : id
@@ -420,10 +421,16 @@ function displayRecordsComponents(o,id,aircraft_info_id){
             $grid.dataBind({
                  url        : execURL + "items_sel @parent_item_id=" + id + ",@aircraft_info_id=" + aircraft_info_id
                 ,dataRows   : [
-                         {text  : "Part No."                 , name  : "part_no"                , width : 200       , style : "text-align:left;"}
-                		,{text  : "National Stock No."       , name  : "national_stock_no"      , width : 200       , style : "text-align:left;"}
-                		,{text  : "Nomenclature"             , name  : "item_name"              , width : 400       , style : "text-align:left;"}
-                		,{text  : "Serial No."                                          , width : 150       , style : "text-align:left;" ,sortColNo: 5
+                	    {text  : "&nbsp;"               , width : 25                    , style : "text-align:left;"
+                	        ,onRender : function(d){ 
+                	            counter++;
+                                return '<input class="form-control" type="text" name="item_no" id="item_no" value="' + counter + '" readonly>';
+                            }
+                	    }        	     
+                        ,{text  : "Part No."                 , name  : "part_no"                , width : 196       , style : "text-align:left;" ,sortColNo: 1}
+                		,{text  : "National Stock No."       , name  : "national_stock_no"      , width : 200       , style : "text-align:left;" ,sortColNo: 2}
+                		,{text  : "Nomenclature"             , name  : "item_name"              , width : 400       , style : "text-align:left;" ,sortColNo: 3}
+                		,{text  : "Serial No."                                          , width : 150       , style : "text-align:left;" ,sortColNo: 4
                             ,onRender : function(d){ return "<a href='javascript:showModalDetailSerial(" 
                                                     + svn(d,"aircraft_info_id") + ",\"" 
                                                     + svn(d,"item_id") + "\",\"" 
@@ -435,7 +442,7 @@ function displayRecordsComponents(o,id,aircraft_info_id){
                 		,{text  : "Critical Level"           , width : 150                , style : "text-align:center;"
                 		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))) ; }
                 		}
-                		,{text  : "Remaining"           , width : 100       , style : "text-align:right; padding-right:3px" ,sortColNo: 7
+                		,{text  : "Remaining"           , width : 100       , style : "text-align:right; padding-right:3px" 
                 		    ,onRender : function(d){ 
                 		         if(d.remaining_time < d.critical_level)
                 		                return "<span id='remaining_time' class='remaining' >" + formatCurrency(svn(d,'remaining_time')) +"</span>";
@@ -458,4 +465,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                     
+}                         
