@@ -54,11 +54,17 @@ function displayRecords(){
     		,{text:"Squadron"                  , name:"squadron"                , width:200         , style:"text-align:left;"   }	  
             ,{text:"Aircraft Type"             , name:"aircraft_type"           , width:200         , style:"text-align:left;"   }
     		,{text:"Aircraft Name"             , name:"aircraft_name"           , width:150         , style:"text-align:left;"   }
-    		,{text: "Aircraft Time"            , name:"aircraft_time"           , width:200         , style:"text-align:left;"   }
-    		,{text: "Status"                   , name:"status_name"             , width:200         , style:"text-align:left;"   }
+    		,{text:"Aircraft Time"             , width:200                      , style:"text-align:left;"   
+    		    ,onRender : function(d){ return formatCurrency(svn(d,"aircraft_time")); }
+    		}
+    		,{text:"Remaining Time to Inspection"            , width : 200                    , style : "text-align:center;" 
+    		    ,onRender : function(d){ return formatCurrency(svn(d,"service_time")); }
+    		}
+    		,{text:"Status"                    , name:"status_name"             , width:200         , style:"text-align:left;"   }
 	    ]
 	   ,onComplete : function(data){
 	        g_masterData = data.rows;
+	        
 	   }
     });    
 }
@@ -78,10 +84,12 @@ $("#btnPdf").click(function(){
         ,pageHeightLimit    : 550
        // ,masterKey          : "organization_id"
         ,columnHeader       :  [   
-                                 {name:"wing"               ,title:"Wing"               ,titleWidth:100 ,width:200}
-                                ,{name:"squadron"           ,title:"Squadron"           ,titleWidth:100 ,width:200}
-                                ,{name:"aircraft_name"      ,title:"Aircraftt Name"     ,titleWidth:100 ,width:150}
-                                ,{name:"status_name"        ,title:"Status"             ,titleWidth:100 ,width:200}
+                                 {name:"wing"               ,title:"Wing"                           ,titleWidth:100 ,width:100}
+                                ,{name:"squadron"           ,title:"Squadron"                       ,titleWidth:100 ,width:100}
+                                ,{name:"aircraft_name"      ,title:"Aircraftt Name"                 ,titleWidth:100 ,width:100}
+                                ,{name:"aircraft_time"      ,title:"Aircraftt Time"                 ,titleWidth:100 ,width:100}
+                                ,{name:"service_time"       ,title:"Remaining Time to Inspection"   ,titleWidth:100 ,width:200}
+                                ,{name:"status_name"        ,title:"Status"                         ,titleWidth:100 ,width:200}
                             ]
         ,data               : g_masterData
         ,onInit             : function(){
@@ -101,14 +109,15 @@ $("#btnPdf").click(function(){
             o.row +=16;
             return o;
         }
-       
-        
-    });         
-    
-    
-    
+    });
 });
 
-
+function formatCurrency(number){
+    var result = "";
+    if(number!==""){
+        result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+    return result;
+}
  
-                       
+                        
