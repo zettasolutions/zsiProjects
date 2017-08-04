@@ -229,7 +229,7 @@ function displayRecords(){
         		,{text  : "Procurement Date"                                            , width : 180           , style : "text-align:left;"
         		    ,onRender: function(d){ return svn(d,"procurement_d ate").toDateFormat();}
         		}
-        		,{text  : "Procurement Name"        , name  : "procurement_name"        , width : 200           , style : "text-align:left;"}
+        		,{text  : "Procurement Name"        , name  : "procurement_name"        , width : 500           , style : "text-align:left;"}
         		,{text  : "Supplier Name"           , name  : "supplier_name"           , width : 150           , style : "text-align:left;"}
         		,{text  : "Promised Delivery Date"  , name  : "promised_delivery_date"  , width : 180           , style : "text-align:left;"}
         		,{text  : "Actual Delivery Date"    , name  : "actual_delivery_date"    , width : 150           , style : "text-align:left;"}
@@ -315,4 +315,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                                             
+                                                                                                               
