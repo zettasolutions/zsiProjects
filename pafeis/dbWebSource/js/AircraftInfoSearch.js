@@ -5,7 +5,8 @@ var  bs = zsi.bs.ctrl
     ,typeFilter = null
     ,statusFilter = null
     ,searchFilter = ""
-    ,g_organization_id = null;
+    ,g_organization_id = null
+    ,g_squadron_id = null;
 
 zsi.ready(function(){
     //setSearch();
@@ -41,9 +42,11 @@ function loadWing(){
         , text: "organization_name"
         , value: "organization_id"
         , onComplete: function(){
+            $wingFilter.unbind();
             $wingFilter.change(function(){
-                g_organization_id = (this.value !==""? this.value: null);
+                g_organization_id = (this.value!=="" ? this.value: null);
                 loadSquadron();
+                loadAircraftType();
             });
         }
     });
@@ -54,11 +57,22 @@ function loadSquadron(){
         url: procURL + "dd_organizations_sel @organization_id="+ g_organization_id +",@squadron_type='Aircraft'" 
         , text: "organization_name"
         , value: "organization_id"
+        , onComplete: function(){
+            $squadronFilter.unbind();
+            $squadronFilter.change(function(){
+                g_squadron_id = (this.value!=="" ? this.value: null);
+                loadAircraftType();
+            });
+        }
     });
 }
 
 function loadAircraftType(){
-    $typeFilter.dataBind("aircraft_type");
+    $typeFilter.dataBind({
+        url: procURL + "dd_aircraft_types_sel @wing_id="+ g_organization_id +",@squadron_id="+ g_squadron_id 
+        , text: "aircraft_type"
+        , value: "aircraft_type_id"
+    });
 }
 
 function loadStatus(){
@@ -181,3 +195,4 @@ function formatCurrency(number){
     }
     return result;
 }  
+ 

@@ -275,6 +275,7 @@ function displayDetail(o,id){
             $grid.dataBind({
                 // width      : $(document).width() - 49
                  url        : procURL + "issuance_details_sel @issuance_id="+ id
+                ,width      : $(document).width() - 60
                 ,dataRows   : [
                 		 
                                  {text  : "Part No."                       , name  : "part_no"           , width : 180           , style : "text-align:center;"}
@@ -297,4 +298,4 @@ function displayDetail(o,id){
     
     });
 }
-                                                                                               
+                                                                                                

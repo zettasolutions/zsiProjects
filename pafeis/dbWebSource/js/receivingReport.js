@@ -256,7 +256,7 @@ function displayRecords(callback) {
 	        });
 	        
 	        if( data.rows.length > 0)
-	            $("#btnPdf").css({display: "block"});
+	            $("#btnPdf").css({display: "inline"});
 	        else 
 	            $("#btnPdf").css({display: "none"});
         }  
@@ -271,6 +271,7 @@ function displayDetail(o,id){
             
             $grid.dataBind({
                  url        : procURL + "receiving_details_report_sel @receiving_id="+ id
+                ,width      : $(document).width() - 60
                 ,dataRows   : [
                          {text  : "Part No."                , name  : "part_no"                    , width : 150       , style : "text-align:left;"}
                         ,{text  : "Nat'l Stock No."         , name  : "national_stock_no"          , width : 150       , style : "text-align:left;"}
@@ -291,4 +292,4 @@ function displayDetail(o,id){
     });
 }
 
-                                                                                                                 
+                                                                                                                  
