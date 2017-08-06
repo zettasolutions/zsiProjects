@@ -18,7 +18,7 @@
 }
 .zHeaders .title .text{
 	padding-left: 4px;
-	width: 100%;
+	white-space: nowrap;
 }
 .zHeaders .title .text input[type="checkbox"], .zHeaders .title .text input[type="radio"]{
     left: -2px;
@@ -267,7 +267,7 @@
     width: 10px;
     text-align: left;
     position: absolute;
-    right: 10px;
+    right: 6px;
     top: 1px;
 }
 
@@ -277,7 +277,6 @@
  
 .zGrid .zHeaders .zSort span.sPane{
     float:left;
-	width:13px;
 	line-height:5px; 
 }  
 
@@ -289,7 +288,7 @@
 
 
 .zGrid .zHeaders .arrow-up {
-    border-bottom: 4px solid #fff;
+    border-bottom: 4px solid #dff904;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     display: inline-block;
@@ -298,7 +297,7 @@
 }
 
 .zGrid .zHeaders .arrow-down {
-	border-top: 4px solid #fff;
+	border-top: 4px solid #dff904;
 	border-left: 4px solid transparent;
 	border-right: 4px solid transparent;
     display: inline-block;
@@ -311,6 +310,9 @@
     line-height:10px
 }
 /*end of sort*/
+
+
+
 
 
 
