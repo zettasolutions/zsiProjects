@@ -759,7 +759,7 @@ var  ud='undefined'
                         
                         zsi.tableResize = { 
                              curCol         : _curCol
-                            ,nextCol        : _curCol.next()
+                            //,nextCol        : _curCol.next()
                             ,curLastWidth   : parseInt(_curCol.css("width"))
                             ,nextLastWidth  : parseInt(_curCol.next().css("width"))
                             ,lastX          : e.clientX
@@ -788,6 +788,8 @@ var  ud='undefined'
                         var _cIndex = (_grp0.length > 0 ? _groupIndex : _tr.curCol.index() );           
                         var _ew  = (e.clientX  - _tr.lastX); //extra width
                         var _rows = _tr.curCol.closest(".zGridPanel").find(".zRows").eq(0);
+                        var _dr =_self.params.dataRows;
+                        var _cls = "#table > .zRow > .zCell:nth-child";
                         var _getCurrentCell = function(j){
                             var _r = [];
                             for(var x=0;x<j.length;x++){
@@ -795,20 +797,27 @@ var  ud='undefined'
                             }
                             return $(_r);
                         };
-
-                        var _cls = "#table > .zRow > .zCell:nth-child";
+                        
+                        var _col2 = _tr.curCol.next();
+                        var _col3 = _tr.curCol.next().next();
+                        var _lastXPosition = (_col3.length > 0 ? _col3.offset().left : _self.outerWidth() + _self.offset().left ) ; 
+                        if( ( _tr.curLastWidth + _ew  < 25 ) || (  _lastXPosition - e.clientX  < 30 ) )   return;
+                        
                         _tr.curCol.css({width: _tr.curLastWidth + _ew });
-                        _tr.nextCol.css({width: _tr.nextLastWidth - _ew });
+                        _tr.curCol.next().css({width: _tr.nextLastWidth - _ew });
                         
                         var _zCell1 =  _rows.find(_cls + "(" +  ( _cIndex +  1) + ")");
-                        var _zCell2 =  _rows.find(_cls + "(" +  ( _cIndex +  2) + ")");
+                        var _zCell2 =  _zCell1.next();
+                        
                         _getCurrentCell(_zCell1).css({width: _tr.curLastWidth + _ew });
-                        _getCurrentCell(_zCell2).css({width: _tr.nextLastWidth - _ew });
-                        
-                        var _dr =_self.params.dataRows;
-                        
                         if(_dr[ _cIndex]    ) _dr[_cIndex].width =  (_tr.curLastWidth + _ew);
-                        if(_dr[ _cIndex + 1]) _dr[_cIndex+1].width =  (_tr.nextLastWidth - _ew);
+                        
+                        
+                        if(_zCell2.length >0) {
+                            _getCurrentCell(_zCell2).css({width: _tr.nextLastWidth - _ew });
+                            //if(_dr[ _cIndex + 1]) 
+                            _dr[_cIndex+1].width =  (_tr.nextLastWidth - _ew);
+                        }
                     }).on('mouseup', function (e) {
                         zsi.tableResize = null;
                     });            
@@ -2470,4 +2479,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                    
+                                                                                                                     
