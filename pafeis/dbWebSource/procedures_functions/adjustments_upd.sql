@@ -16,11 +16,13 @@ BEGIN
      id int IDENTITY
 	,proc_name varchar(50)
    )
+   DECLARE @page_process_action_id INT;
    DECLARE @data_count INT;
    DECLARE @ctr int=0;
    DECLARE @procName VARCHAR(50)
    DECLARE @statusName VARCHAR(20)
    DECLARE @warehouse_id int
+   DECLARE @remarks NVARCHAR(MAX)
 
    select @warehouse_id = dbo.getUserWarehouseId(@user_id);
 
@@ -63,11 +65,11 @@ BEGIN
     WHERE adjustment_id IS NULL
 	AND @warehouse_id IS NOT NULL
 
-	SELECT @id = adjustment_id, @statusId=dbo.getPageProcessActionIdByStatusId(status_id,1133) FROM @tt;
+	SELECT @id = adjustment_id, @page_process_action_id=page_process_action_id, @remarks=adjustment_remarks FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 	   SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
-	   EXEC dbo.doc_routing_process_upd 1133,@id,@statusId,@user_id;
+	   EXEC dbo.doc_routing_process_upd 1133,@id,@page_process_action_id,@user_id;
 	   RETURN @id
 	END;
 
@@ -81,7 +83,7 @@ BEGIN
 	END
 
 	IF (SELECT COUNT(*) FROM dbo.adjustment_details WHERE adjustment_id=@id) > 0
-	    EXEC dbo.doc_routing_process_upd 1133,@id,@statusId,@user_id;
+	    EXEC dbo.doc_routing_process_upd 1133,@id, @remarks, @statusId,@user_id;
 END
 
 

@@ -3,6 +3,7 @@ CREATE PROCEDURE [dbo].[doc_routing_process_upd]
 (
    @page_id  INT
   ,@doc_id   INT
+  ,@remarks  nvarchar(max) = null
   ,@page_process_action_id INT
   ,@user_id  INT
 )
@@ -23,8 +24,7 @@ BEGIN
 	IF ISNULL(@page_process_id,0) <> 0 
 		BEGIN
 			UPDATE dbo.doc_routings SET is_current = 'Y' WHERE page_process_id=@page_process_id and doc_id=@doc_id;
-			UPDATE dbo.doc_routings SET is_current = 'N' WHERE page_id=@page_id and doc_id=@doc_id AND page_process_action_id=@page_process_action_id;
+			UPDATE dbo.doc_routings SET is_current = 'N', remarks = @remarks WHERE page_id=@page_id and doc_id=@doc_id AND page_process_action_id=@page_process_action_id;
 		END
 END
  
-

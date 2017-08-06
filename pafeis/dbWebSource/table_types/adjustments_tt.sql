@@ -5,4 +5,5 @@ adjustment_id	INT	NULL
 ,warehouse_id	INT	NULL
 ,adjustment_by	INT	NULL
 ,status_id	INT	NULL
-,adjustment_remarks	NVARCHAR(0)	NULL)
+,adjustment_remarks	NVARCHAR(0)	NULL
+,page_process_action_id	INT	NULL)

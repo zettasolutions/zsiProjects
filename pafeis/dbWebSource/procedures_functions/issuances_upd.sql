@@ -16,9 +16,10 @@ BEGIN
    )
    DECLARE @data_count INT;
    DECLARE @ctr int=0;
-   DECLARE @procName VARCHAR(50)
-   DECLARE @statusName VARCHAR(20)
+   DECLARE @procName NVARCHAR(100)
+   DECLARE @statusName NVARCHAR(50)
    DECLARE @warehouse_id int
+   DECLARE @remarks NVARCHAR(MAX)
 
    select @warehouse_id = dbo.getUserWarehouseId(@user_id);
 
@@ -86,7 +87,7 @@ BEGIN
 
 --	AND (aircraft_id IS NOT NULL OR transfer_warehouse_id IS NOT NULL OR dealer_id IS NOT NULL);
 
-	SELECT @id = issuance_id,  @page_process_action_id=page_process_action_id FROM @tt;
+	SELECT @id = issuance_id,  @page_process_action_id=page_process_action_id, @remarks=status_remarks FROM @tt;
 	IF ISNULL(@id,0) = 0
 	BEGIN
 		SELECT @id=doc_id FROM doc_routings WHERE doc_routing_id = @@IDENTITY;
@@ -103,7 +104,7 @@ BEGIN
 	  SET @ctr = @ctr + 1
 	END
 
-	EXEC dbo.doc_routing_process_upd 66,@id,@page_process_action_id,@user_id;
+	EXEC dbo.doc_routing_process_upd 66,@id,@remarks, @page_process_action_id,@user_id;
 
 END
 

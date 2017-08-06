@@ -42,7 +42,7 @@ DECLARE @page_count	INT = 1;
 IF ISNULL(@aircraft_info_id,0) =0
 BEGIN
    SET @stmt = ' SELECT * FROM dbo.items_v WHERE 1=1 ';
-   SET @stmt2 = 'SELECT count(*) FROM dbo.items_v WHERE WHERE 1=1 '
+	   SET @stmt2 = 'SELECT count(*) FROM dbo.items_v WHERE 1=1 '
 END
 ELSE
 BEGIN

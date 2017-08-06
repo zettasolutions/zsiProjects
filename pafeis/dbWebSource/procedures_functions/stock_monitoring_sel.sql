@@ -8,8 +8,10 @@
 -- Add your name, date, and description of your changes here. Thanks
 -- ===================================================================================================
 CREATE PROCEDURE [dbo].[stock_monitoring_sel] 
-(
-	 @field	 NVARCHAR(100) = ''
+(    @wing_id int = null
+    ,@squadron_id int = null
+	,@warehouse_id int = null
+	,@field	 NVARCHAR(100) = ''
 	,@search  NVARCHAR(1000) = ''
 )
 AS
@@ -25,6 +27,16 @@ SET NOCOUNT ON
 	             WHERE is_active = ''Y'' '
 
  
+    IF ISNULL(@wing_id,0) <> 0 
+	   SET @stmt = @stmt + ' AND wing_id=' + cast(@wing_id as varchar(20))
+
+    IF ISNULL(@squadron_id,0) <> 0 
+	   SET @stmt = @stmt + ' AND organization_id=' + cast(@squadron_id as varchar(20))
+
+    IF ISNULL(@warehouse_id,0) <> 0 
+	   SET @stmt = @stmt + ' AND warehouse_id=' + cast(@warehouse_id as varchar(20))
+
+
 	IF @search <> '' 
 		SET @stmt = @stmt +
 		'AND ' + @field + ' LIKE ''' + @search + '%'' '
