@@ -1,4 +1,4 @@
-﻿body{
+body{
     font-family: Verdana,Arial,"Verdana","Helvetica",Sans-serif;
     margin-left:1px; 
     margin-right:1px;  
@@ -7,12 +7,12 @@
     background:#f5f6f6;
 }
 a{
-  color: #1F1F1E;	
+  color: #0000FF;	
   text-decoration:none;
 }	
 a:hover{
-	color:#f11716;
-	text-decoration:none;
+	color:#508BD1;
+	text-decoration:underline;
 }
 
 .zPanel table a{
@@ -27,8 +27,11 @@ a:hover{
     white-space: normal;
 }
 .pageHeader {
-    background-color: #ED1806;
-    height: 76px;
+      background-color: #1D64B6;
+    height: 44px;
+}
+.zBanner {
+    background-image: url(/images/new_banners.jpg);
 }
 .container {
     width: 939px !important;
@@ -46,6 +49,12 @@ a:hover{
     padding-top: 2px;
 }
 
+
+.pageTitle > select{
+    border-radius: 3px;
+	border: 1px solid #cccccc;
+}
+
 .formTitle {
     background-color: #333333;
     border-radius: 6px;
@@ -59,6 +68,31 @@ a:hover{
     padding-top: 1px;
 }
 
+.zContainer1 {
+    border: 1pt solid #d6d8d8;
+    border-radius: 4pt;
+    overflow: hidden;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.zHeaderTitle1 {
+    background-color: #17569e;
+    overflow: hidden;
+    height: 26px;
+    color: #fff;
+    line-height: normal;
+}
+
+.zHeaderTitle1 label {
+    margin-top: 5px;
+    margin-left: 5px;
+    font-weight: normal;
+    font-size: 10pt;
+}
+
+
 .zForm{
     background-color: #fff;
     border-radius: 3px;
@@ -70,17 +104,42 @@ a:hover{
 	overflow:auto;
 }
 
+.zDataExist {
+	position: absolute;
+	padding: 4px;
+	border-radius: 3px;
+	background-color: #3577c3;
+	color: #fff;
+	display:none;
+	z-index: 2000;
+}
+
+.modal-header {
+  min-height: 16.42857143px;
+  background-color: rgb(54,119,195);
+}
+
+.modal-title {
+  color: #fff;
+}
+
+.modal-title > select {
+    color: #000;
+    border: solid 1pt #d6d8d8;
+    border-radius: 2px;
+}
+
 /*menu high-light*/
 ul.nav li.zParentHighLight a,ul.nav li.zChildHighLight a{
 	color:#fff !important;	
 }
 
 ul.nav li.zParentHighLight{
-	background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);
+	background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
 }
 
 ul.nav li.zChildHighLight{
-	background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);
+	background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
 }
 
 /*zPanel Table*/
@@ -88,7 +147,7 @@ div.zPanel table .align-l{ text-align:left;}
 div.zPanel table .align-r{ text-align:right;}
 div.zPanel table .align-c{ text-align:center;}
 div.zPanel table tr.total td {
-    background-image:linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);    
+    background-image:linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);    
     padding-bottom: 4px;
     padding-top: 4px;
     color:#fff;
@@ -96,8 +155,8 @@ div.zPanel table tr.total td {
 }    
 div.zPanel table tr th{
     vertical-align: inherit;
-    background-color:#F11716;    
-    background-image:linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);    
+    background-color:#508BD1;    
+    background-image:linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);    
     padding-bottom: 4px;
     padding-top: 4px;
     color: #fff;
@@ -123,7 +182,7 @@ div.zPanel {
 }
 
 div.zPanel .headerTitle{
-	background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);    
+	background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);    
 	color: #fff;
 	padding: 3px 10px;  
 	border: 1pt solid #a8acad;
@@ -240,7 +299,7 @@ table.zTableReport tr.total td {
 }    
 table.zTableReport tr th{
     vertical-align: inherit;
-    background-color:#F11716;    
+    background-color:#508BD1;    
     background-image:linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);	
     padding-bottom: 4px;
     padding-top: 4px;
@@ -294,51 +353,6 @@ table.zTableReport > tfoot > tr > td {
 } 
 /*end of zTableReport*/
 
-/* sort */
- .zSort {
-    float: right;
-}
-
- .zSort a {
-    color: #fff;
-}
- 
-.zSort span.sPane{
-    float:left;width:13px;line-height:5px; 
-}  
-
-.zHeaders  .zSort {
-	white-space: normal;
-}
-.zHeaders  .zSort span.sPane{
-}
-
-
-.arrow-up {
-    border-bottom: 4px solid #fff;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    display: inline-block;
-    height: 0;
-    width: 0;
-}
-
-.arrow-down {
-	border-top: 4px solid #fff;
-	border-left: 4px solid transparent;
-	border-right: 4px solid transparent;
-    display: inline-block;
-	width: 0; 
-	height: 0; 
-
-}
-.zSort > .asc > .sPane, .zSort  > .desc > .sPane{
-    line-height:10px
-}
-
-/*end of sort*/
-
-
 .table {
     margin-top: 10px;
 }
@@ -356,7 +370,6 @@ table.zTableReport > tfoot > tr > td {
     border: 1pt solid #e5e5e5;
     min-height: 500px;
     padding-top: 10px;
-	overflow:auto;
 }
 ul
 {
@@ -406,7 +419,7 @@ ul
 
 
 #banner{
- background :url("/images/banner.jpg") no-repeat; 
+ background :url("../images/banner.jpg") no-repeat; 
  height:39px;
  background-color:#99B7FD;
 }
@@ -468,6 +481,14 @@ a.itemRemove:hover{
 
 .nav-tabs{
   margin-top: 5px
+}
+
+.nav-tabs > li > a {
+    color: #000;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    font-weight: bold;
 }
 
 .buttonGroup {
@@ -542,7 +563,8 @@ a.itemRemove:hover{
 
 .modal-body {
     overflow: auto;
-	margin-right:15px;
+	margin-right:10px;
+	margin-left:10px;
 }
 
 
@@ -693,14 +715,14 @@ td #delete-row span{
 }
 
 .loadingImg{
-   background :url("/images/loading.gif") no-repeat;
+   background :url("../images/loading.gif") no-repeat;
    width:30px;   
    height:19px;   
    float: left;
 }
 
 .loadIconR{
-   background-image: url("/images/loading.gif") ;
+   background-image: url("../images/loading.gif") ;
    background-repeat: no-repeat;
    background-size: 17px 15px;
    background-position: right center;   
@@ -796,3 +818,13 @@ ul.imgFrame li.imgItem .text { text-align:center; }
 
 
 /*end of Report*/
+
+
+
+
+
+
+
+
+
+

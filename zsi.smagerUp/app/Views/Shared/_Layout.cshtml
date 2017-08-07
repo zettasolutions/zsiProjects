@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="@Url.Content("~/")favicon.png" type="image/x-icon">
     
-    <title>@ViewBag.pageTitle - Lear Benchmarking</title>
+    <title>@ViewBag.pageTitle - PAF ELECTRONIC INVENTORY SYSTEM</title>
     
     <script src="@Url.Content("~/")Scripts/jquery-1.12.0.min.js"></script>
+    <script src="@Url.Content("~/")Scripts/detectmobilebrowser.js"></script>	
     <link href="@Url.Content("~/")Content/bootstrap.css" rel="stylesheet" />
     <link href="@Url.Content("~/")Content/bootstrap-theme.min.css" rel="stylesheet" />
     <link href="@Url.Content("~/")Content/site.css" rel="stylesheet" />    
@@ -23,6 +24,22 @@
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
         @userId
     </script>
+
+	<style>
+	 img.appLogo{
+			margin-top: -14px;
+			position: relative;
+			z-index: 100;
+			width: 133px;
+	 }	
+	 .appTitle{
+		color:#fff; 
+		font-size: 28px;
+		margin-top:7px;
+		font-weight:bold;
+	 }
+	</style>
+	
 </head>
 <body>
     <div class="progressWindow">
@@ -35,19 +52,13 @@
     </div>
     <div class="pageHeader">
         <div class="container-fluid">
-            <div class="row">
-
-                <div class="col-xs-2 pull-left">
-                    <a href="@Url.Content("~/")" class="navbar-brand">
-                        <img style="float: left; margin-top: -16px; position: relative; z-index: 100;" src="@Url.Content("~/")images/lear-bms-logo.png" style="float: left; margin-top: -16px; position: relative; z-index: 100;" >
-                    </a>
+            <div class="row zBanner">
+                <div class="col-xs-1 pull-left">
+                    <a href="@Url.Content("~/")" class="navbar-brand"><img class="appLogo" src="@Url.Content("~/")images/logo.png"  ></a>
                 </div>
-                <div class="col-xs-7">
-                    <img src="@Url.Content("~/")images/new_bannerMap1.jpg" >
+                <div class="col-xs-9 col-xs-offset-2 col-sm-10 col-sm-offset-0">
+					<h1 class="appTitle" >Demo</h1>
                 </div> 
-                <div class="col-xs-3">
-                    
-                </div>
             </div>
         </div>
     </div>
@@ -66,8 +77,24 @@
                 <div id="menuPanel"> </div>
                 <ul class="nav navbar-nav navbar-right">
                     @{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }
-					<li><a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role) </a></li>
+					<li class="">
+						<a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
+						<span class="glyphicon glyphicon-user"></span> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
+						<span class="caret"></span></a>
+
+						<ul class="dropdown-menu">
+						  <li class="dropdown">
+							<a href="@Url.Content("~/")page/name/docs"><span class="glyphicon glyphicon-question-sign"></span> User Manual</a>
+						  </li>
+						  <li class="dropdown">
+							<a href="@Url.Content("~/")page/name/changepassword"><span class="glyphicon glyphicon-lock"></span> Change Password </a>
+						  </li>
+						  <li class="dropdown">
+							<a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a>
+						  </li>
+						</ul>
+				  
+				</li>
                 </ul>
             </div>
         </div>
@@ -92,12 +119,21 @@
     }
  }
 
-     <footer >
-         <p>&copy; @DateTime.Now.Year - Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a></p>
-       </footer>
+    <footer style="position: fixed; right: 0; left: 0; bottom: -10px;">
+        <p>&copy; @DateTime.Now.Year - Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a></p>
+    </footer>
 <script src="@Url.Content("~/")Scripts/bootstrap.min.js"></script>
 <div class="alert alert-success">
     <p>Data has been saved.</p>
 </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

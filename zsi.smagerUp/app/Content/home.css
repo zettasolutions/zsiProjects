@@ -1,6 +1,24 @@
-﻿body{
+
+body{
 	font-family: Arial,Helvetica,sans-serif !important;
     font-size: 12px !important;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Black Ops One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Black Ops One'), local('BlackOpsOne-Regular'), url(../fonts/military1.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Black Ops One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Black Ops One'), local('BlackOpsOne-Regular'), url(../fonts/military2.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
 .panel-heading a:after {
@@ -55,10 +73,10 @@
 	width:600px;
 }
 
-.pageHeader{
-	background-color:#ED1806;
-	 height: 76px;
- }
+/*.pageHeader{
+	  background-color: #3b483c;
+    height: 44px;
+ }*/
  
  .menu-horizontal {
 	background-color:#000;
@@ -525,10 +543,8 @@ table.zTableReport > tfoot > tr > td {
 }
     
 .page {
-	background: #fff;
-	min-height:700px;
 	padding-bottom:10px;
-
+	color:#fff;
 }
 .footer {
 	padding-top:5px;
@@ -595,7 +611,7 @@ border-color:#333333;
 }
 
 .container {
-  width: 939px !important;
+  /*width: 939px !important;*/
 }
 
 .container-full{
@@ -680,13 +696,14 @@ a.itemRemove:hover{
 }
 
 .buttonGroup {
-  margin-top:5px;
-  margin-right:20px;
-  padding-left: 6px;
-  margin-bottom: 5px;
+     margin-top: 10px;
+    /* margin-right: 20px; */
+    padding-left: 144px;
+    margin-bottom: 5px;
 }
 .buttonGroup button {
-  margin-right:5px;
+    margin-right: 4px;
+    margin-top: 10px;
 }
 
 .pageholder{
@@ -1013,3 +1030,9 @@ td #delete-row span{
 .btnlink ul li > a:hover, .btnlink ul li > a:active{
 	color: #000;
 }
+
+
+
+
+
+

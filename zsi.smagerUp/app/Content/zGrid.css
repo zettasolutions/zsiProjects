@@ -1,17 +1,38 @@
-﻿.zGrid{
+.zGrid{
     border: 1pt solid #d6d8d8;
 }
-
+.zCell a{
+    text-decoration:underline;
+}
 .zGrid .zHeaders{
-	background-color: #ed1806;
+	background-image: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
 	color: #fff;
 	font-weight: bold;
 	overflow: hidden;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+.zHeaders .title .text{
+	padding-left: 4px;
+	white-space: nowrap;
 }
 .zHeaders .title .text input[type="checkbox"], .zHeaders .title .text input[type="radio"]{
-    left: 5px;
+    left: -2px;
     position: relative;
     top: 1px;
+}
+
+.zHeaders .item .cr {
+    height: 100%;
+    right: 0px;
+    position: absolute;
+    cursor: w-resize;
+    top: 0px;
+    width: 5px;
 }
 
 .zGrid .zGridPanel{
@@ -49,14 +70,23 @@
 .zGrid .item {
     float: left;
     text-align: center; 
-    border-top: 1pt solid #d6d8d8;
 	clear:right;
+	
+}
+.zGrid .zHeaders .groupItem {
+    border-top : 1pt solid #d6d8d8;
 }
 
-.zGrid  .item .title {
+
+.zGrid .zHeaders > .item .title {
     height: 20px;
     align-items: center;
     display: flex;	
+}
+
+.zGrid .zHeaders .item {
+    position: relative;
+    overflow: hidden;
 }
 
 .zGrid .zHeaders .zSort {
@@ -105,6 +135,8 @@
     height: inherit;
     line-height: 18pt;
     min-width: 25px;
+	position: relative;
+	overflow: hidden;
  }
  
  
@@ -196,6 +228,35 @@
     z-index: 1;
 }
 
+/*dropdown list */
+.zDdlBtn {
+	background-color: #fff;
+	border-left: 1pt solid #d6d8d8;
+	float: right;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 17px;
+	color:#000;
+	padding-right: 3px;
+}
+.zDdlBtn > .caret {
+	margin-left: 4px;
+}
+
+.zDDList{
+	background-color: #333333;
+	color: #fff;
+	font-size: 9pt;
+	left: 0;
+	position: absolute;
+	z-index: 1000;
+	top:100px;
+	display:none;
+	
+}
+/*end of dropdown list */
+
 
 /*sort */
 .zHeaders .item > .title.hasSort {
@@ -203,10 +264,11 @@
 }
 
 .zGrid .zHeaders .zSort {
-    float: right;
-	margin-top: 1px;
-	width: 10px;
-	text-align: left;
+    width: 10px;
+    text-align: left;
+    position: absolute;
+    right: 6px;
+    top: 1px;
 }
 
 .zGrid .zHeaders .zSort a {
@@ -215,7 +277,6 @@
  
 .zGrid .zHeaders .zSort span.sPane{
     float:left;
-	width:13px;
 	line-height:5px; 
 }  
 
@@ -227,7 +288,7 @@
 
 
 .zGrid .zHeaders .arrow-up {
-    border-bottom: 4px solid #fff;
+    border-bottom: 4px solid #dff904;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     display: inline-block;
@@ -236,7 +297,7 @@
 }
 
 .zGrid .zHeaders .arrow-down {
-	border-top: 4px solid #fff;
+	border-top: 4px solid #dff904;
 	border-left: 4px solid transparent;
 	border-right: 4px solid transparent;
     display: inline-block;
@@ -249,4 +310,18 @@
     line-height:10px
 }
 /*end of sort*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
