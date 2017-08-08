@@ -259,66 +259,66 @@ function displayTabs(cbFunc){
             tabContent += '<div role="tabpanel" class="tab-pane '+ active +'" id="tab'+ d.aircraft_info_id +'">' +
                            '<div class="zContainer1 header ui-front" id="tabBox'+ d.aircraft_info_id +'">' +
                                '<div class="form-horizontal" style="padding:5px">' +
-                                    '<div class="col-xs-2">' +
+                                    '<div class="col-xs-12 col-sm-3">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-3 control-label text-left">Type:</label>' +
-                                            '<div class="col-xs-9">' +
+                                            '<label class="col-xs-6 col-sm-3 control-label text-left">Type:</label>' +
+                                            '<div class="col-xs-6 col-sm-9">' +
                                                 '<span class="col-xs-12 control-label text-left">'+ d.aircraft_type +'</span>' +
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-3 control-label text-left">Origin:</label>' +
-                                            '<div class="col-xs-9">' +
+                                            '<label class="col-xs-6 col-sm-3 control-label text-left">Origin:</label>' +
+                                            '<div class="col-xs-6 col-sm-9">' +
                                                 '<span class="col-xs-12 control-label text-left" id="origin">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-xs-3">' +
+                                    '<div class="col-xs-12 col-sm-3">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-4 control-label text-left">Class:</label>' +
-                                            '<div class="col-xs-8">' +
+                                            '<label class="col-xs-6 col-sm-3 control-label text-left">Class:</label>' +
+                                            '<div class="col-xs-6 col-sm-9">' +
                                                 '<span class="col-xs-12 control-label text-left" id="class">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-4 control-label text-left">Manufacturer:</label>' +
-                                            '<div class="col-xs-8">' +
+                                            '<label class="col-xs-6 col-sm-5 control-label text-left">Manufacturer:</label>' +
+                                            '<div class="col-xs-6 col-sm-7">' +
                                                 '<span class="col-xs-12 control-label text-left" id="manufacturer">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-xs-1">' +
+                                    '<div class="col-xs-12 col-sm-2">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-5 control-label text-left">Role:</label>' +
-                                            '<div class="col-xs-7">' +
+                                            '<label class="col-xs-6 col-sm-5 control-label text-left">Role:</label>' +
+                                            '<div class="col-xs-6 col-sm-7">' +
                                                 '<span class="col-xs-12 control-label text-left" id="role">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-5 control-label text-left">Status:</label>' +
-                                            '<div class="col-xs-7">' +
+                                            '<label class="col-xs-6 col-sm-5 control-label text-left">Status:</label>' +
+                                            '<div class="col-xs-6 col-sm-7">' +
                                                 '<span class="col-xs-12 control-label text-left" id="status">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-xs-3">' +
+                                    '<div class="col-xs-12 col-sm-4">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-7 control-label text-left">Aircraft Time (Hours):</label>' +
-                                            '<div class="col-xs-5">' +
+                                            '<label class="col-xs-6 col-sm-7 control-label text-left">Aircraft Time (Hours):</label>' +
+                                            '<div class="col-xs-6 col-sm-5">' +
                                                 '<span class="col-xs-12 control-label text-left" id="aircraft_time">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-7 control-label text-left">Hours Left to Inspection:</label>' +
-                                            '<div class="col-xs-5">' +
+                                            '<label class="col-xs-6 col-sm-7 control-label text-left">Hours Left to Inspection:</label>' +
+                                            '<div class="col-xs-6 col-sm-5">' +
                                                 '<span class="col-xs-12 control-label text-left" id="service_time">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-xs-2">' +
+                                    '<div class="col-xs-12 col-sm-2">' +
                                         '<div class="form-group">' +
-                                            '<label class="col-xs-3 control-label text-left"></label>' +
-                                            '<div class="col-xs-9">' +
+                                            '<label class="col-xs-6 col-sm-3 control-label text-left"></label>' +
+                                            '<div class="col-xs-6 col-sm-9">' +
                                                 '<span class="col-xs-12 control-label text-left" id="">&nbsp;</span>' +
                                             '</div>' +
                                         '</div>' +
@@ -465,4 +465,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                         
+}                           
