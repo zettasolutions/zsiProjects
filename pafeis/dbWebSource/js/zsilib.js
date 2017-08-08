@@ -188,7 +188,6 @@ var  ud='undefined'
                 this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
                 return this;
             };
-
             $.fn.checkValueExists   = function(o){
                 var _self   =   this;
                 var _cls    =   "zDataExist";
@@ -257,7 +256,6 @@ var  ud='undefined'
                   }, _time);         
                });
             };
-            
             $.fn.clearGrid          = function(){
                 var _panel = ".zGridPanel";
                 if(this.find(_panel).length >0)
@@ -269,7 +267,6 @@ var  ud='undefined'
               var _dt =  (defaultText ? defaultText : "");
               this.html(   (hasOption ? "<option>"  + _dt + "</option>" : _dt ));
             };              
-            
             $.fn.createZoomCtrl     = function(){
                 this.zmVal  = 1;
                 var self = this;
@@ -329,7 +326,6 @@ var  ud='undefined'
                });
                return this;
             };
-
             $.fn.dataBind2          = function(){
                 var _curHid,_curSpan;
                 var _ctrlId= this.attr("name") + "_ddl";
@@ -414,310 +410,6 @@ var  ud='undefined'
                 });  
                return this;
             }; 
-
-            $.fn.deleteData         = function(o){
-                var ids = "";
-                var cb = this.find("input[name='cb']:checked");
-                var data = cb.getCheckBoxesValues();
-                for (var x = 0; x < data.length; x++) {
-                    if (ids !== "") ids += "/";
-                    ids += data[x];
-                }
-                if (ids !== "") {
-                    if (confirm("Are you sure you want to delete selected items?")) {
-                        $.post(base_url + "sql/exec?p=deleteData @pkey_ids='" + ids + "',@table_code='" + o.code + "'", function (d) {
-                            o.onComplete(d);
-                        }).fail(function (d) {
-                            alert("Sorry, the curent transaction is not successfull.");
-                        });
-                    }
-            
-                }
-            };
-            $.fn.expandCollapse     = function(o){
-                this.click(function(){ 
-                    //console.log(_afterInitFunc);
-                    var obj =this;
-                    var span = $(this).find("span");
-                    var spanCls ="";
-                    
-                    if(span.attr("class").indexOf("down") >-1)
-                         span.removeClass("glyphicon glyphicon-collapse-down").addClass("glyphicon glyphicon-collapse-up");
-                    else
-                         span.removeClass("glyphicon glyphicon-collapse-up").addClass("glyphicon glyphicon-collapse-down");
-                
-                    var tr = $(this.parentNode.parentNode);
-                    if(typeof tr.attr("extrarow") === ud ) {
-                
-                            tr.attr("extrarow","1");
-                            tr.after("<tr class='trOpen extraRow " + tr.attr("class") + "'> <td colspan='" + tr.find("td").length + "'> "  + o.onInit(obj) +  " </td></tr>");
-                            o.onAfterInit(tr.next());
-                            
-                    }else{
-                       // contentFunc(obj); 
-                        var trNext = tr.next();
-                        if(trNext.attr("class").indexOf("trOpen")>-1) 
-                            trNext.removeClass("trOpen").addClass("trClose");
-                        else
-                            trNext.removeClass("trClose").addClass("trOpen");
-                    }
-                   
-                });
-                
-                return this;
-            };
-            $.fn.fillSelect         = function(o){
-                var $ddl = this;
-                if(typeof o.isRequired ===ud )  o.isRequired = false;
-                if(typeof o.required !==ud )  o.isRequired = o.required;
-                if(typeof o.selectedValue ===ud)  o.selectedValue="";
-                this.clearSelect();
-                
-               if(o.isRequired===false){
-                   $ddl.append('<option></option>');
-               }
-               $.each(o.data, function(index, optionData) {
-                    var _value2 = (typeof this.value2===ud ? "": " value2=\"" +  this.value2 + "\"");
-                    var _text ="",_value = "";
-                    if(typeof o.text !== ud && typeof o.value !== ud ){
-                        _value = this[o.value];
-                        _text = this[o.text];            
-                    }else{
-                        _value = this.value;
-                        _text = this.text;
-                    }
-                    
-                    $ddl.append("<option " + _value2 + " value=\""  + _value +  "\">"  + _text + " </option>");
-               }); 
-               $(this).change(function(){
-                   if( ! isUD(o.onChange) ) 
-                       o.onChange({
-                             index : $(this).find(":selected").index() 
-                            ,data  : o.data
-                            ,object   :  $(this)
-                            ,row :  $(this).closest(".zRow")
-                       });
-               })
-                   
-               setTimeout(function(){              
-                    $.each($ddl,function(){
-                        var _selectedValue  = $(this).attr("selectedvalue");
-                        $.each($(this).find("option"),function(){
-                            var _r=false;
-                            if(_selectedValue)
-                                _r=(this.value === _selectedValue); 
-                            else
-                                _r=(this.value === o.selectedValue); 
-                            if(_r) $(this).prop("selected",true);            
-                        });             
-                    }); 
-                    if(o.onComplete) o.onComplete(o.data);
-               }, 10);   
-               return this;
-            };
-            $.fn.getCheckBoxesValues= function(){
-                var arrayItems = [];
-                if(this){
-                    $.each(this,function(){
-                        arrayItems.push( $(this.parentNode).children("input[type=hidden]").val() );
-                    });
-                }
-                return arrayItems;    
-            };
-            $.fn.jsonSubmit         = function(o) {
-                var p = {
-                    type: 'POST'
-                  , url: (typeof o.url!==ud?o.url:base_url + "data/update")
-                  , data: JSON.stringify(  this.find(".left").length > 0 ? this.toJSON2(o) :this.toJSON(o) )
-                  , contentType: 'application/json'
-                };
-            
-                if (typeof o.onError !== 'undefined') p.error = o.onError;
-                if (typeof o.onComplete !== 'undefined') p.success = o.onComplete;
-                $.ajax(p);
-            };
-            $.fn.loadData           = function(o){
-                var __obj = this;
-                zsi.__setTableObjectsHistory(__obj,o);
-                
-                var isOnEC= (typeof o.onEachComplete !== ud);
-                if (isOnEC){    
-                    var strFunc = o.onEachComplete.toString();
-                  args = strFunc
-                  .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-                  .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-                  .split(/,/);
-                  var cbName="callback Function";
-                  if(args.length < 1) console.warn("you must implement these parameters: tr,data");
-                }
-            
-                if (typeof o.sortIndexes !== ud && zsi.__getTableObject(__obj).isInitiated===false){
-                    var indexes=o.sortIndexes;
-                    var ths  = __obj.find("thead th");
-                    if(ths.length ===0) console.log("No THead found.");
-                    var arrowUp ="<span class='arrow-up'></span>"
-                    var arrowDown ="<span class='arrow-down'></span>"
-                    var arrows =arrowUp + arrowDown;
-                    for(var x=0; x< indexes.length;x++){
-                        var th =  ths[indexes[x]];
-                        $(th).append("<span class='zSort'>"
-                                + "<a href='javascript:void(0);'>"
-                                    + "<span class='sPane'>" + arrows + "</span>"
-                                + "</a>"
-                                + "</span>");
-                    }
-                    var aObj =  __obj.find(".zSort a");
-                    var url = o.url; 
-                    
-                    aObj.click(function(){
-                        var i = aObj.index(this);
-                        zsi.table.sort.colNo =indexes[i]
-                        
-                        var val = this.text; 
-                        $(".sPane").html(arrows);
-                        
-                        var className = $(this).attr("class");
-                        
-                        if(typeof className ===ud) { 
-                            aObj.removeAttr("class");
-            
-                            $(this).addClass("asc")
-                            $(this).find(".sPane").html(arrowUp)
-                        }else{
-                            if(className.indexOf("asc") > -1){
-                                $(this).removeClass("asc")
-                                $(this).addClass("desc")
-                                $(this).find(".sPane").html(arrowDown)
-                                zsi.table.sort.orderNo=1;
-                            }
-                            else{
-                                $(this).removeClass("desc")
-                                $(this).addClass("asc")
-                                $(this).find(".sPane").html(arrowUp)
-                                zsi.table.sort.orderNo=0;
-                            }
-                        }
-                        
-                        zsi.table.__sortParameters =  "@col_no=" + zsi.table.sort.colNo + ",@order_no=" + zsi.table.sort.orderNo; 
-                        
-                        o.url = (url.indexOf("@") < 0? url + " " : url +"," )  + zsi.table.__sortParameters  + (zsi.table.__pageParameters===""?"":"," + zsi.table.__pageParameters);
-                        __obj.loadData(o);
-                    });
-                }
-                
-            
-                var l_grid = __obj;
-                var num_rows=0;
-                var ctr = 0;   
-                var trItem= function(data){
-                    var r = "";
-                    
-                    r +="<tr rowObj class='"  + zsi.getOddEven() + "'>";
-                        for(var x=0;x<o.td_body.length;x++){
-                            var _prop='';
-                            if (typeof o.td_properties !== ud){
-                                if (typeof o.td_properties[x] !== ud) _prop = o.td_properties[x]; 
-                            } 
-                            
-                            var _content = "", _attr = "", _style = "", _class = "";
-                            if(data) data.td = {};
-                            
-                            if(o.td_body[x])
-                                _content = o.td_body[x](data);
-                            else
-                                console.log("%cArray item is not a function under td_body[]", "color:red;");                    
-                            
-                            if(data){
-                                _attr  = (typeof data.td.attr  === ud ? "" : data.td.attr);
-                                _style = (typeof data.td.style === ud ? "" : style = " style=\"" + data.td.style + "\" ");
-                                _class = (typeof data.td.class === ud ? "" : style = " class=\"" + data.td.class + "\" ");
-                            }
-                            r +="<td " + _prop + _attr + _style + _class + " >" + _content + "</td>";                                                         
-                        }
-                    r +="</tr>";                           
-            
-                    l_grid.append(r);
-                    var tr=$("tr[rowObj]");tr.removeAttr("rowObj"); 
-                    if (isOnEC){
-                        o.onEachComplete(tr,data);
-                    }
-                }
-                if(typeof o.isNew !== ud){
-                    if(o.isNew==true) l_grid.clearGrid();  
-                } 
-                
-                if(o.url || o.data){
-                  if( l_grid.find("thead").length > 0)  l_grid.clearGrid(); 
-                    var params ={
-                       dataType: "json"
-                      ,cache: false
-                      ,success: function(data){
-                                    num_rows = data.rows.length;
-                                    
-                                    if(typeof o.td_body !==ud ){
-                                        $.each(data.rows, function () {
-                                            trItem(this)
-                                        });
-                                    }
-                                    
-                                    __obj.find("#recordsNum").html(num_rows);
-            
-                                    if(typeof zsi.page.__pageNo===ud ||  zsi.page.__pageNo===null){
-                                       zsi.page.__pageNo=1;
-                                       zsi.__setPageCtrl(o,o.url,data,__obj);
-                                    }
-                                    //set table initiated.
-                                    zsi.__getTableObject(__obj).isInitiated=true;
-                                    
-                                    //add tr click event.
-                                    __obj.addClickHighlight();
-                                    
-                                    if(o.onComplete) o.onComplete(data);
-            
-                            }          
-                    }
-                    
-                    if(typeof o.data!==ud)  {
-                        if(typeof zsi.config.getDataURL===ud){
-                            alert("zsi.config.getDataURL is not defined in AppStart JS.");
-                            return;
-                        }
-                        params.url = zsi.config.getDataURL ;
-                        params.data = JSON.stringify(o.data);
-                        params.type = "POST";
-                    }
-                    else params.url = o.url
-            
-                    __obj.bind('refresh',function() {
-                        if(zsi.tmr) clearTimeout(zsi.tmr);
-                        zsi.tmr =setTimeout(function(){              
-                            __obj.loadData(o);
-                        }, 1);   
-                    });
-            
-                    $.ajax(params);
-                }
-                else if(typeof o.rows !== ud){
-                    if(typeof o.td_body !==ud ){
-                        $.each(o.rows, function () {
-                            trItem(this)
-                        });
-                    }
-                    if(o.onComplete) o.onComplete(data);
-                    __obj.addClickHighlight();        
-                }    
-                else{
-                    if(typeof o.blankRowsLimit === ud) o.blankRowsLimit=5;
-                    for(var y=0;y<o.blankRowsLimit;y++){
-                        trItem();
-                    }
-                    if (typeof o.onEachComplete === ud) if(o.onComplete) o.onComplete();
-                    //add tr click event.
-                    __obj.addClickHighlight();
-            
-                }
-                
-            };
             $.fn.dataBindGrid       = function(o){
                 this.arrowUp ="<span class=\"arrow-up\"></span>",
                 this.arrowDown ="<span class=\"arrow-down\"></span>",
@@ -759,15 +451,16 @@ var  ud='undefined'
                         
                         zsi.tableResize = { 
                              curCol         : _curCol
-                            //,nextCol        : _curCol.next()
-                            ,curLastWidth   : parseInt(_curCol.css("width"))
-                            ,nextLastWidth  : parseInt(_curCol.next().css("width"))
+                            ,curLastWidth   : parseFloat(_curCol.css("width"))
+                            ,hdrLastWidth   : parseFloat(_curCol.parent().css("width")) 
+                            ,tblLastWidth   : parseFloat(_curCol.closest(".zGridPanel").find("#table").css("width"))
+                            ,nextLastWidth  : parseFloat(_curCol.next().css("width"))
                             ,lastX          : e.clientX
                         };
                     });
                     
                     $(document).on('mousemove', function (e) {
-                        if (typeof zsi.tableResize === ud || zsi.tableResize === null ) return;
+                         if (typeof zsi.tableResize === ud || zsi.tableResize === null ) return;
                         var _tr = zsi.tableResize;
                         if( ! _self.is( _tr.curCol.closest(".zGrid")) ) return;  //check if zGrid object is the same.
                         
@@ -798,26 +491,16 @@ var  ud='undefined'
                             return $(_r);
                         };
                         
-                        var _col2 = _tr.curCol.next();
-                        var _col3 = _tr.curCol.next().next();
-                        var _lastXPosition = (_col3.length > 0 ? _col3.offset().left : _self.outerWidth() + _self.offset().left ) ; 
-                        if( ( _tr.curLastWidth + _ew  < 25 ) || (  _lastXPosition - e.clientX  < 30 ) )   return;
+                        if( _tr.curLastWidth + _ew  < 25  )   return;
                         
                         _tr.curCol.css({width: _tr.curLastWidth + _ew });
-                        _tr.curCol.next().css({width: _tr.nextLastWidth - _ew });
+                        _tr.curCol.parent().css({width: _tr.hdrLastWidth + _ew});
+
+                        var _zCell1 =  _getCurrentCell(_rows.find(_cls + "(" +  ( _cIndex +  1) + ")"));
+                        _zCell1.css({width: _tr.curLastWidth + _ew });
+                        _zCell1.parent().parent().css({width: _tr.tblLastWidth + _ew});
                         
-                        var _zCell1 =  _rows.find(_cls + "(" +  ( _cIndex +  1) + ")");
-                        var _zCell2 =  _zCell1.next();
-                        
-                        _getCurrentCell(_zCell1).css({width: _tr.curLastWidth + _ew });
                         if(_dr[ _cIndex]    ) _dr[_cIndex].width =  (_tr.curLastWidth + _ew);
-                        
-                        
-                        if(_zCell2.length >0) {
-                            _getCurrentCell(_zCell2).css({width: _tr.nextLastWidth - _ew });
-                            //if(_dr[ _cIndex + 1]) 
-                            _dr[_cIndex+1].width =  (_tr.nextLastWidth - _ew);
-                        }
                     }).on('mouseup', function (e) {
                         zsi.tableResize = null;
                     });            
@@ -1246,6 +929,309 @@ var  ud='undefined'
                     //add tr click event.
                     __obj.addClickHighlight();
                     __obj.setColumnResize();
+                }
+                
+            };
+            $.fn.deleteData         = function(o){
+                var ids = "";
+                var cb = this.find("input[name='cb']:checked");
+                var data = cb.getCheckBoxesValues();
+                for (var x = 0; x < data.length; x++) {
+                    if (ids !== "") ids += "/";
+                    ids += data[x];
+                }
+                if (ids !== "") {
+                    if (confirm("Are you sure you want to delete selected items?")) {
+                        $.post(base_url + "sql/exec?p=deleteData @pkey_ids='" + ids + "',@table_code='" + o.code + "'", function (d) {
+                            o.onComplete(d);
+                        }).fail(function (d) {
+                            alert("Sorry, the curent transaction is not successfull.");
+                        });
+                    }
+            
+                }
+            };
+            $.fn.expandCollapse     = function(o){
+                this.click(function(){ 
+                    //console.log(_afterInitFunc);
+                    var obj =this;
+                    var span = $(this).find("span");
+                    var spanCls ="";
+                    
+                    if(span.attr("class").indexOf("down") >-1)
+                         span.removeClass("glyphicon glyphicon-collapse-down").addClass("glyphicon glyphicon-collapse-up");
+                    else
+                         span.removeClass("glyphicon glyphicon-collapse-up").addClass("glyphicon glyphicon-collapse-down");
+                
+                    var tr = $(this.parentNode.parentNode);
+                    if(typeof tr.attr("extrarow") === ud ) {
+                
+                            tr.attr("extrarow","1");
+                            tr.after("<tr class='trOpen extraRow " + tr.attr("class") + "'> <td colspan='" + tr.find("td").length + "'> "  + o.onInit(obj) +  " </td></tr>");
+                            o.onAfterInit(tr.next());
+                            
+                    }else{
+                       // contentFunc(obj); 
+                        var trNext = tr.next();
+                        if(trNext.attr("class").indexOf("trOpen")>-1) 
+                            trNext.removeClass("trOpen").addClass("trClose");
+                        else
+                            trNext.removeClass("trClose").addClass("trOpen");
+                    }
+                   
+                });
+                
+                return this;
+            };
+            $.fn.fillSelect         = function(o){
+                var $ddl = this;
+                if(typeof o.isRequired ===ud )  o.isRequired = false;
+                if(typeof o.required !==ud )  o.isRequired = o.required;
+                if(typeof o.selectedValue ===ud)  o.selectedValue="";
+                this.clearSelect();
+                
+               if(o.isRequired===false){
+                   $ddl.append('<option></option>');
+               }
+               $.each(o.data, function(index, optionData) {
+                    var _value2 = (typeof this.value2===ud ? "": " value2=\"" +  this.value2 + "\"");
+                    var _text ="",_value = "";
+                    if(typeof o.text !== ud && typeof o.value !== ud ){
+                        _value = this[o.value];
+                        _text = this[o.text];            
+                    }else{
+                        _value = this.value;
+                        _text = this.text;
+                    }
+                    
+                    $ddl.append("<option " + _value2 + " value=\""  + _value +  "\">"  + _text + " </option>");
+               }); 
+               $(this).change(function(){
+                   if( ! isUD(o.onChange) ) 
+                       o.onChange({
+                             index : $(this).find(":selected").index() 
+                            ,data  : o.data
+                            ,object   :  $(this)
+                            ,row :  $(this).closest(".zRow")
+                       });
+               })
+                   
+               setTimeout(function(){              
+                    $.each($ddl,function(){
+                        var _selectedValue  = $(this).attr("selectedvalue");
+                        $.each($(this).find("option"),function(){
+                            var _r=false;
+                            if(_selectedValue)
+                                _r=(this.value === _selectedValue); 
+                            else
+                                _r=(this.value === o.selectedValue); 
+                            if(_r) $(this).prop("selected",true);            
+                        });             
+                    }); 
+                    if(o.onComplete) o.onComplete(o.data);
+               }, 10);   
+               return this;
+            };
+            $.fn.getCheckBoxesValues= function(){
+                var arrayItems = [];
+                if(this){
+                    $.each(this,function(){
+                        arrayItems.push( $(this.parentNode).children("input[type=hidden]").val() );
+                    });
+                }
+                return arrayItems;    
+            };
+            $.fn.jsonSubmit         = function(o) {
+                var p = {
+                    type: 'POST'
+                  , url: (typeof o.url!==ud?o.url:base_url + "data/update")
+                  , data: JSON.stringify(  this.find(".left").length > 0 ? this.toJSON2(o) :this.toJSON(o) )
+                  , contentType: 'application/json'
+                };
+            
+                if (typeof o.onError !== 'undefined') p.error = o.onError;
+                if (typeof o.onComplete !== 'undefined') p.success = o.onComplete;
+                $.ajax(p);
+            };
+            $.fn.loadData           = function(o){
+                var __obj = this;
+                zsi.__setTableObjectsHistory(__obj,o);
+                
+                var isOnEC= (typeof o.onEachComplete !== ud);
+                if (isOnEC){    
+                    var strFunc = o.onEachComplete.toString();
+                  args = strFunc
+                  .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+                  .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+                  .split(/,/);
+                  var cbName="callback Function";
+                  if(args.length < 1) console.warn("you must implement these parameters: tr,data");
+                }
+            
+                if (typeof o.sortIndexes !== ud && zsi.__getTableObject(__obj).isInitiated===false){
+                    var indexes=o.sortIndexes;
+                    var ths  = __obj.find("thead th");
+                    if(ths.length ===0) console.log("No THead found.");
+                    var arrowUp ="<span class='arrow-up'></span>"
+                    var arrowDown ="<span class='arrow-down'></span>"
+                    var arrows =arrowUp + arrowDown;
+                    for(var x=0; x< indexes.length;x++){
+                        var th =  ths[indexes[x]];
+                        $(th).append("<span class='zSort'>"
+                                + "<a href='javascript:void(0);'>"
+                                    + "<span class='sPane'>" + arrows + "</span>"
+                                + "</a>"
+                                + "</span>");
+                    }
+                    var aObj =  __obj.find(".zSort a");
+                    var url = o.url; 
+                    
+                    aObj.click(function(){
+                        var i = aObj.index(this);
+                        zsi.table.sort.colNo =indexes[i]
+                        
+                        var val = this.text; 
+                        $(".sPane").html(arrows);
+                        
+                        var className = $(this).attr("class");
+                        
+                        if(typeof className ===ud) { 
+                            aObj.removeAttr("class");
+            
+                            $(this).addClass("asc")
+                            $(this).find(".sPane").html(arrowUp)
+                        }else{
+                            if(className.indexOf("asc") > -1){
+                                $(this).removeClass("asc")
+                                $(this).addClass("desc")
+                                $(this).find(".sPane").html(arrowDown)
+                                zsi.table.sort.orderNo=1;
+                            }
+                            else{
+                                $(this).removeClass("desc")
+                                $(this).addClass("asc")
+                                $(this).find(".sPane").html(arrowUp)
+                                zsi.table.sort.orderNo=0;
+                            }
+                        }
+                        
+                        zsi.table.__sortParameters =  "@col_no=" + zsi.table.sort.colNo + ",@order_no=" + zsi.table.sort.orderNo; 
+                        
+                        o.url = (url.indexOf("@") < 0? url + " " : url +"," )  + zsi.table.__sortParameters  + (zsi.table.__pageParameters===""?"":"," + zsi.table.__pageParameters);
+                        __obj.loadData(o);
+                    });
+                }
+                
+            
+                var l_grid = __obj;
+                var num_rows=0;
+                var ctr = 0;   
+                var trItem= function(data){
+                    var r = "";
+                    
+                    r +="<tr rowObj class='"  + zsi.getOddEven() + "'>";
+                        for(var x=0;x<o.td_body.length;x++){
+                            var _prop='';
+                            if (typeof o.td_properties !== ud){
+                                if (typeof o.td_properties[x] !== ud) _prop = o.td_properties[x]; 
+                            } 
+                            
+                            var _content = "", _attr = "", _style = "", _class = "";
+                            if(data) data.td = {};
+                            
+                            if(o.td_body[x])
+                                _content = o.td_body[x](data);
+                            else
+                                console.log("%cArray item is not a function under td_body[]", "color:red;");                    
+                            
+                            if(data){
+                                _attr  = (typeof data.td.attr  === ud ? "" : data.td.attr);
+                                _style = (typeof data.td.style === ud ? "" : style = " style=\"" + data.td.style + "\" ");
+                                _class = (typeof data.td.class === ud ? "" : style = " class=\"" + data.td.class + "\" ");
+                            }
+                            r +="<td " + _prop + _attr + _style + _class + " >" + _content + "</td>";                                                         
+                        }
+                    r +="</tr>";                           
+            
+                    l_grid.append(r);
+                    var tr=$("tr[rowObj]");tr.removeAttr("rowObj"); 
+                    if (isOnEC){
+                        o.onEachComplete(tr,data);
+                    }
+                }
+                if(typeof o.isNew !== ud){
+                    if(o.isNew==true) l_grid.clearGrid();  
+                } 
+                
+                if(o.url || o.data){
+                  if( l_grid.find("thead").length > 0)  l_grid.clearGrid(); 
+                    var params ={
+                       dataType: "json"
+                      ,cache: false
+                      ,success: function(data){
+                                    num_rows = data.rows.length;
+                                    
+                                    if(typeof o.td_body !==ud ){
+                                        $.each(data.rows, function () {
+                                            trItem(this)
+                                        });
+                                    }
+                                    
+                                    __obj.find("#recordsNum").html(num_rows);
+            
+                                    if(typeof zsi.page.__pageNo===ud ||  zsi.page.__pageNo===null){
+                                       zsi.page.__pageNo=1;
+                                       zsi.__setPageCtrl(o,o.url,data,__obj);
+                                    }
+                                    //set table initiated.
+                                    zsi.__getTableObject(__obj).isInitiated=true;
+                                    
+                                    //add tr click event.
+                                    __obj.addClickHighlight();
+                                    
+                                    if(o.onComplete) o.onComplete(data);
+            
+                            }          
+                    }
+                    
+                    if(typeof o.data!==ud)  {
+                        if(typeof zsi.config.getDataURL===ud){
+                            alert("zsi.config.getDataURL is not defined in AppStart JS.");
+                            return;
+                        }
+                        params.url = zsi.config.getDataURL ;
+                        params.data = JSON.stringify(o.data);
+                        params.type = "POST";
+                    }
+                    else params.url = o.url
+            
+                    __obj.bind('refresh',function() {
+                        if(zsi.tmr) clearTimeout(zsi.tmr);
+                        zsi.tmr =setTimeout(function(){              
+                            __obj.loadData(o);
+                        }, 1);   
+                    });
+            
+                    $.ajax(params);
+                }
+                else if(typeof o.rows !== ud){
+                    if(typeof o.td_body !==ud ){
+                        $.each(o.rows, function () {
+                            trItem(this)
+                        });
+                    }
+                    if(o.onComplete) o.onComplete(data);
+                    __obj.addClickHighlight();        
+                }    
+                else{
+                    if(typeof o.blankRowsLimit === ud) o.blankRowsLimit=5;
+                    for(var y=0;y<o.blankRowsLimit;y++){
+                        trItem();
+                    }
+                    if (typeof o.onEachComplete === ud) if(o.onComplete) o.onComplete();
+                    //add tr click event.
+                    __obj.addClickHighlight();
+            
                 }
                 
             };
@@ -2479,4 +2465,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                     
+                                                                                                                      
