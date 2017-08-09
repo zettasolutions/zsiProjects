@@ -448,11 +448,11 @@ var  ud='undefined'
                             var _gis =  _curCol.find("." + _grpItem);
                               _curCol = $(_gis[_gis.length-1]);
                         } 
-                        
+                        //console.log(  _curCol.parent() );
                         zsi.tableResize = { 
                              curCol         : _curCol
                             ,curLastWidth   : parseFloat(_curCol.css("width"))
-                            ,hdrLastWidth   : parseFloat(_curCol.parent().css("width")) 
+                            ,hdrLastWidth   : parseFloat(_curCol.closest(".zHeaders").css("width")) 
                             ,tblLastWidth   : parseFloat(_curCol.closest(".zGridPanel").find("#table").css("width"))
                             ,nextLastWidth  : parseFloat(_curCol.next().css("width"))
                             ,lastX          : e.clientX
@@ -465,11 +465,11 @@ var  ud='undefined'
                         if( ! _self.is( _tr.curCol.closest(".zGrid")) ) return;  //check if zGrid object is the same.
                         
                         //find current column index
-                        var _groupIndex = -1
-                        var _grp0  =  _tr.curCol.closest("." + _clsGrp0);
+                        var  _groupIndex = -1
+                            ,_grp0  =  _tr.curCol.closest("." + _clsGrp0);
                         if(_grp0.length > 0){
-                            var _zHeaders = _grp0.parent();
-                            var _gItems = _zHeaders.find("." + _grpItem);
+                            var  _zHeaders = _grp0.parent()
+                                ,_gItems = _zHeaders.find("." + _grpItem);
                             for( var x=0; x < _gItems.length;x++){
                                 if( ! $(_gItems[x]).hasClass(_clsGrp0)){
                                   _groupIndex++;
@@ -478,23 +478,23 @@ var  ud='undefined'
                             }
                         }    
 
-                        var _cIndex = (_grp0.length > 0 ? _groupIndex : _tr.curCol.index() );           
-                        var _ew  = (e.clientX  - _tr.lastX); //extra width
-                        var _rows = _tr.curCol.closest(".zGridPanel").find(".zRows").eq(0);
-                        var _dr =_self.params.dataRows;
-                        var _cls = "#table > .zRow > .zCell:nth-child";
-                        var _getCurrentCell = function(j){
-                            var _r = [];
-                            for(var x=0;x<j.length;x++){
-                                if( $(j[x]).closest(".zRows").is(_rows) )  _r.push(j[x]);
-                            }
-                            return $(_r);
-                        };
+                        var  _cIndex = (_grp0.length > 0 ? _groupIndex : _tr.curCol.index() )
+                            ,_ew     = (e.clientX  - _tr.lastX) //extra width
+                            ,_rows   = _tr.curCol.closest(".zGridPanel").find(".zRows").eq(0)
+                            ,_dr     = _self.params.dataRows
+                            ,_cls    = "#table > .zRow > .zCell:nth-child"
+                            ,_getCurrentCell = function(j){
+                                var _r = [];
+                                for(var x=0;x<j.length;x++){
+                                    if( $(j[x]).closest(".zRows").is(_rows) )  _r.push(j[x]);
+                                }
+                                return $(_r);
+                            };
                         
                         if( _tr.curLastWidth + _ew  < 25  )   return;
                         
                         _tr.curCol.css({width: _tr.curLastWidth + _ew });
-                        _tr.curCol.parent().css({width: _tr.hdrLastWidth + _ew});
+                        _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
 
                         var _zCell1 =  _getCurrentCell(_rows.find(_cls + "(" +  ( _cIndex +  1) + ")"));
                         _zCell1.css({width: _tr.curLastWidth + _ew });
@@ -2465,4 +2465,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                      
+                                                                                                                       
