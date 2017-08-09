@@ -4,6 +4,7 @@ using zsi.web.Models;
 using zsi.DataAccess;
 using zsi.DataAccess.Provider.SQLServer;
 using zsi.Framework.Common;
+using Microsoft.Ajax.Utilities;
 
 namespace zsi.web.Controllers
 {
@@ -48,11 +49,25 @@ namespace zsi.web.Controllers
                 return Redirect(Url.Content("~/"));
             else
             {
-
-                return Content(new dcJavaScript().GetInfo(param1).js_content, "application/javascript");
-                
+                var r = new dcJavaScript().GetInfo(param1).js_content;
+                r = JsMinify(r);
+                return Content(r, "application/javascript");
             }
         }
+
+
+        private string JsMinify(string content)
+        {
+
+            var minifier = new Minifier();
+            var minifiedJs = minifier.MinifyJavaScript(content, new CodeSettings
+            {
+                EvalTreatment = EvalTreatment.MakeImmediateSafe,
+                PreserveImportantComments = false
+            });
+            return minifiedJs;
+        }
+
 
         [HttpPost, ValidateInput(false)]
         public JsonResult update(FormCollection fc)
