@@ -109,7 +109,7 @@ function displayRecords(){
     var rownum=0;
     $("#grid").dataBind({
 	     url   : execURL + "aircraft_info_search_sel @squadron_id="+ squadronFilter +",@aircraft_type_id="+ typeFilter +",@status_id="+ statusFilter +",@search='"+ searchFilter +"'" 
-        ,width      : $(document).width() - 25
+        ,width      : $(document).width() - 45
 	    ,height     : $(document).height() - 200
         ,dataRows   : [
                 {  
@@ -195,4 +195,4 @@ function formatCurrency(number){
     }
     return result;
 }  
- 
+  
