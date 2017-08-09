@@ -32,7 +32,7 @@
     position: absolute;
     cursor: w-resize;
     top: 0px;
-    width: 5px;
+    width: 2px;
 }
 
 .zGrid .zGridPanel{
@@ -107,10 +107,13 @@
     display: inline-block;
 }
 
-.zGrid .item:not(:last-child)  {
+.zGrid .item {
     border-right: 1pt solid #d6d8d8;
+}
+
+.groupItem > .groupItem:last-child {
+    border-right: 0pt;
 } 
- 
  
 .zGrid .zRows > #table {
    
@@ -310,6 +313,8 @@
     line-height:10px
 }
 /*end of sort*/
+
+
 
 
 
