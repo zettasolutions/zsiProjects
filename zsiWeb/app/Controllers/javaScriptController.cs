@@ -50,7 +50,8 @@ namespace zsi.web.Controllers
             else
             {
                 var r = new dcJavaScript().GetInfo(param1).js_content;
-                r = JsMinify(r);
+                appProfile ap = (appProfile)Session["appProfile"];
+                if(ap.is_source_minified =="Y") r = JsMinify(r);
                 return Content(r, "application/javascript");
             }
         }

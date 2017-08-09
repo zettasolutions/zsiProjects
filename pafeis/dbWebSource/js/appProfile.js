@@ -20,6 +20,7 @@ function displayAppProfile(){
         $("#default_page").val( i.default_page );
         $("#network_group_folder").val( i.network_group_folder );
         $("#developer_key").val(  i.developer_key );
+        $("#is_source_minified").val(  i.is_source_minified );
         
     });
     
@@ -34,12 +35,11 @@ $("#btnSave").click(function(){
         + ",@image_folder='" +          $("#image_folder").val() + "'"
         + ",@default_page='" +          $("#default_page").val() + "'"
         + ",@network_group_folder='" +  $("#network_group_folder").val() + "'"
-       // + ",@developer_key='test'"
         + ",@developer_key='" + escape($("#developer_key").val()) + "'"
-        
+        + ",@is_source_minified='" + $("#is_source_minified").val() + "'"
         ,function(data){
               if(data.isSuccess===true) zsi.form.showAlert("alert");      
               
         }
     );
-});         
+});          

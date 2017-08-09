@@ -1,3 +1,4 @@
+
 CREATE PROCEDURE [dbo].[app_profile_upd](
         @app_title				VARCHAR(100)                      
        ,@date_format			VARCHAR(20)
@@ -7,6 +8,7 @@ CREATE PROCEDURE [dbo].[app_profile_upd](
 	   ,@default_page			VARCHAR(100)
 	   ,@network_group_folder	VARCHAR(4000)
 	   ,@developer_key			VARCHAR(100)
+	   ,@is_source_minified		VARCHAR(1)
 
 )
 AS 
@@ -22,7 +24,7 @@ BEGIN
 			,default_page		=	@default_page
 			,network_group_folder = @network_group_folder	
 			,developer_key		  = @developer_key		
-			
+			,is_source_minified	  = @is_source_minified
 
 END 
 

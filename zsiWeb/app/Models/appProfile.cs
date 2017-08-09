@@ -14,7 +14,7 @@ namespace zsi.web.Models
         public string excel_conn_str { get; set; }
         public string network_group_folder { get; set; }
         public string developer_key { get; set; }
-
+        public string is_source_minified { get; set; }
     }
 
     public class dcAppProfile : MasterDataController<appProfile>
