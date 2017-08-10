@@ -494,8 +494,9 @@ var  ud='undefined'
                         if( _tr.curLastWidth + _ew  < 25  )   return;
                         
                         _tr.curCol.css({width: _tr.curLastWidth + _ew });
-                        _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
-
+                        if(_ew > 0)
+                            _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
+                            
                         var _zCell1 =  _getCurrentCell(_rows.find(_cls + "(" +  ( _cIndex +  1) + ")"));
                         _zCell1.css({width: _tr.curLastWidth + _ew });
                         _zCell1.parent().parent().css({width: _tr.tblLastWidth + _ew});
@@ -2465,4 +2466,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                       
+                                                                                                                        
