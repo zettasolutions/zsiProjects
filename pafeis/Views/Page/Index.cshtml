@@ -29,6 +29,14 @@
 		</div>
 	</div>
 </div>
+<style>
+
+ .iconEdit{
+	font-size: 12pt;
+    color: #3878C4;
+ }
+
+</style>
 <script>
     var bs 		= zsi.bs.ctrl;
 	var svn  	=  zsi.setValIfNull;
@@ -57,37 +65,37 @@
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
          url			: base_url + "sql/exec?p=pages_sel" + params
-        ,width          : 807
+        ,width          : $(document).width()- 50
 	    ,height         : $(document).height()-275
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,dataRows       :[
             
        		 { text: cb           , width:25  , style:"text-align:center;", type:"hidden" , name:"page_id"}
-    		,{ text:"Page Name"   , width:180 , style:"text-align:center;", type:"input"  , name:"page_name"}	 
-    		,{ text:"Page Title"   , width:180 , style:"text-align:center;", type:"input" , name:"page_title"}	 	 
+    		,{ text:"Page Name"   , width:214 , style:"text-align:left;", type:"input"  , name:"page_name"}	 
+    		,{ text:"Page Title"   , width:300 , style:"text-align:left;", type:"input" , name:"page_title"}	 	 
     		,{ text:"Master Page"   , width:100 , style:"text-align:center;", type:"select" , name:"master_page_id"}
     		,{ text:"URL"   
-				, width:100 
+				, width:37 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a target="_blank" href="./page/name/' + svn(d,"page_name") + '"> view page</a>'; 
+					return '<a class="iconEdit"  title="Open URL" target="_blank" href="./page/name/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-globe"><span></a>'; 
 				}
 			
 			}  	 	 
     		,{ text:"Template"   
-				, width:100 
+				, width:70 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a target="_blank" href="./pagetemplate/source/' + svn(d,"page_name") + '"> open source</a>'; 
+					return '<a class="iconEdit" title="Edit Source Code" target="_blank" href="./pagetemplate/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
 				}
 			
 			}  	 	 
     		,{ text:"JavaScript"   
-				, width:100 
+				, width:75 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a target="_blank" href="./javascript/source/' + svn(d,"page_name") + '"> open source</a>'; 
+					return '<a class="iconEdit" title="Edit Source Code"  target="_blank" href="./javascript/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
 				}
 			
 			}  	 	 
