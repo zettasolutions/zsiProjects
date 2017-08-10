@@ -28,4 +28,4 @@ user_id	INT IDENTITY(1,1)	NOT NULL
 ,is_zsi	CHAR(1)	NULL
 ,warehouse_id	INT	NULL
 ,is_pilot	CHAR(1)	NULL
-,session_id	NVARCHAR(2000)	NULL)
+,last_activity_dt	DATETIME	NULL)
