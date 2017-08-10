@@ -197,10 +197,10 @@ function displayRecord(tab_name){
 	    
     $("#tbl" + tab_name).dataBind({
 	     url      : procURL + "procurement_dashboard_sel @tab_name='" + tab_name + "'"
-	    ,width    : $(document).width() - 30
-	    ,height   : $(document).height() - 310
+	    ,width    : $(document).width() - 25
+	    ,height   : $(document).height() - 280
 	    ,isPaging : true
         ,dataRows : _dataRows
     });    
 }                   
-       
+        
