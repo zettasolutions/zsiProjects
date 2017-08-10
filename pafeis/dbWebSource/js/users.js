@@ -2,14 +2,18 @@
 var tblName     = "tblusers";
 var svn =  zsi.setValIfNull;
 var modalImageUser      = "modalWindowImageUser";
+var g_rankFilter = null
+    ,g_roleFilter = null
+    ,g_organizationFilter = null
+    ,g_keywordFilter = "";
 
 zsi.ready(function(){
-      $(".zPanel").css({
-            height:$(window).height()-210
-        });     
     setInputs();
-    setSearch();
-    displayRecords(logon_id_filter.val());
+    //setSearch();
+    loadRole();
+    loadRank();
+    loadOrganization();
+    displayRecords();
     getTemplate();
 });
 function markUserMandatory(){
@@ -26,7 +30,7 @@ function markUserMandatory(){
       ]
     });    
 }
-function setSearch(){
+/*function setSearch(){
     var ofilterId =  $("#logon_id_filter");
     
     new zsi.search({
@@ -52,32 +56,66 @@ function setSearch(){
        }
        
     });        
-}
+}*/
 function setInputs(){
     logon_id_filter = $("#logon_id_filter");
+    $roleFilter = $("#role_filter");
+    $rankFilter = $("#rank_filter");
+    $organizationFilter = $("#organization_filter");
+    $keywordFilter = $("#organization_filter");
 }   
+
 $("#btnSave").click(function () {
     if( zsi.form.checkMandatory()!==true) return false;
     
-    $("#frm").jsonSubmit({
-             procedure  : "users_upd"
-             ,optionalItems: ["is_active"]
-            ,onComplete : function (data) {
-                 if(data.isSuccess===true) zsi.form.showAlert("alert");
-                 displayRecords( $("#logon_id_filter").val());
-            }
+    $("#grid").jsonSubmit({
+         procedure  : "users_upd"
+         ,optionalItems: ["is_active"]
+        ,onComplete : function (data) {
+             if(data.isSuccess===true) zsi.form.showAlert("alert");
+             displayRecords();
+        }
     });
-     
 });
+
+$("#btnGo").click(function () {
+    g_roleFilter = ($roleFilter.val()!==""? $roleFilter.val() : null);
+    g_rankFilter = ($rankFilter.val()!==""? $rankFilter.val() : null);
+    g_organizationFilter = ($organizationFilter.val()!==""? $organizationFilter.val() : null);
+    g_keywordFilter = $.trim($keywordFilter.val());
+    
+    displayRecords();
+});
+
+function loadRole(){
+    $("select[name='role_filter']").dataBind({
+        url:  getOptionsURL("roles")
+        ,onComplete:function(){ }
+    });
+}
+
+function loadRank(){
+    $("select[name='rank_filter']").dataBind({
+        url:  getOptionsURL("rank")
+        ,onComplete:function(){ }
+    });
+}
+
+function loadOrganization(){
+    $("select[name='organization_filter']").dataBind({
+        url:  getOptionsURL("organization")
+        ,onComplete:function(){ }
+    });
+}
 
 function clearGrid(){
     $("#" + tblName).clearGrid();
-    }
+}
 
 function initChangeEvent(){
     $("input[name='file_thumbnail']").change(function(){
         fileNameThumbNail= this.files[0].name;
-        var fileSize1 =  this.files[0].size / 1000.00 //to kilobytes
+        var fileSize1 =  this.files[0].size / 1000.00; //to kilobytes
         if(fileSize1 > 100){ 
             alert("Please make sure that file size must not exceed 100 KB.");
             this.value="";
@@ -86,7 +124,7 @@ function initChangeEvent(){
     
     $("input[name='file']").change(function(){
         fileNameOrg=this.files[0].name;
-        var fileSize2 =  this.files[0].size / 1000.00 //to kilobytes
+        var fileSize2 =  this.files[0].size / 1000.00; //to kilobytes
         if(fileSize2 > 800){ //1mb
             alert("It is recommended that file size must not exceed 800 KB.");
             this.value="";
@@ -99,7 +137,7 @@ function submitItems(){
              ,optionalItems: ["is_active"]
             ,onComplete : function (data) {
                  if(data.isSuccess===true) zsi.form.showAlert("alert");
-                 displayRecords($("#logon_id_filter").val());
+                 displayRecords();
                  displayInactiveUsers();
             }
     });    
@@ -165,34 +203,40 @@ function displayInactiveUsers(){
     });  
 }
 
-function displayRecords(user_id){   
+function displayRecords(){   
     var rownum=0;
     $("#grid").dataBind({
-	     url   : procURL + "users2_sel @filter_user_id=" + user_id
-        ,width          : $(document).width() - 170
+	     url   : procURL + "users2_sel @role_id="+ g_roleFilter+",@rank_id="+ g_rankFilter +",@organization_id="+ g_organizationFilter +",@keyword='"+ g_keywordFilter +"'"
+        ,width          : $(document).width() - 25
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,isPaging : true
         ,dataRows       :[
-     		 { text:"User"          , width:260     , style:"text-align:center;"      ,sortColNo: 0 
-                     , onRender      :  function(d) {
-                        return     bs({name:"user_id",type:"select",value: svn (d,"user_id")})
-                                 + bs({name:"is_edited",type:"hidden"}); 
-                    }    		     
+            { text:"#"          , width:25     , style:"text-align:center;" 
+                 , onRender      :  function(d) {
+                    rownum++;
+                    return (d!==null ? rownum : ""); 
+                }    		     
+     		 }	 
+     		,{ text:"User"          , width:280     , style:"text-align:center;"      ,sortColNo: 0 
+                 , onRender      :  function(d) {
+                    return     bs({name:"user_id",type:"select",value: svn (d,"user_id")})
+                             + bs({name:"is_edited",type:"hidden"}); 
+                }    		     
      		 }	 
     		,{ text:"Role"          , width:200     , style:"text-align:left;"        ,type:"select"     ,name:"role_id"    }
-    		,{ text:"Logon"          , width:150     , style:"text-align:left;"
+    		,{ text:"Logon"          , width:180     , style:"text-align:left;"
     		    ,onRender: function(d){
     		        return "<input type='hidden' name='password' value='" + svn(d, "password") + "'>" + svn(d, "logon");
     		    }
     		}
-    		,{ text:"Rank"          , width:150     , style:"text-align:left;"
+    		,{ text:"Rank"          , width:200     , style:"text-align:left;"
     		    ,onRender: function(d){
     		        return svn(d, "rankDesc");
     		    }
     		}
-    		,{ text:"Position"      , width:170     , style:"text-align:left;"
+    		,{ text:"Position"      , width:200     , style:"text-align:left;"
     		    ,onRender: function(d){
     		        return svn(d, "position");
     		    }
@@ -203,19 +247,14 @@ function displayRecords(user_id){
     		    }
     		}
 	    ]
-
         ,onComplete: function(){
-	        
-            
             $("select[name='user_id']").dataBind({
                   url: base_url + "selectoption/code/notUsers"
                 , isUniqueOptions:true
                 , onComplete: function(){
                     $("select[name='user_id']").setUniqueOptions();
                 }
-            });  
-	        
-
+            }); 
             
             $("select[name='user_id']").change(function(){
                 var o = $(this);
@@ -238,15 +277,15 @@ function displayRecords(user_id){
                     //$("select[name='role_id']").change();
                 }
             });
-            markUserMandatory();
-            $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
             
             $("select, input").on("keyup change", function(){
                 var $zRow = $(this).closest(".zRow");
                 $zRow.find("#is_edited").val("Y");
             });   
+            
+            markUserMandatory();
+            $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
         }
-        
     });    
 }
 
@@ -304,7 +343,7 @@ function userImageUpload(){
                     $('#' + modalImageUser).modal('toggle');
                     
                     //refresh latest records:
-                    displayRecords("");
+                    displayRecords();
                 });
 
                     
@@ -348,4 +387,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                            
+                              
