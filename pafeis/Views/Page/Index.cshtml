@@ -79,7 +79,7 @@
 				, width:37 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit"  title="Open URL" target="_blank" href="./page/name/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-globe"><span></a>'; 
+					return '<a class="iconEdit"  title="Open URL" target="_blank" href="' + base_url + 'page/name/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-globe"><span></a>'; 
 				}
 			
 			}  	 	 
@@ -87,7 +87,7 @@
 				, width:70 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit" title="Edit Source Code" target="_blank" href="./pagetemplate/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
+					return '<a class="iconEdit" title="Edit Source Code" target="_blank" href="' + base_url + 'pagetemplate/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
 				}
 			
 			}  	 	 
@@ -95,7 +95,7 @@
 				, width:75 
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit" title="Edit Source Code"  target="_blank" href="./javascript/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
+					return '<a class="iconEdit" title="Edit Source Code"  target="_blank" href="' + base_url + 'javascript/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
 				}
 			
 			}  	 	 
