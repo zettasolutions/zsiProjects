@@ -1,0 +1,72 @@
+<link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src="/Scripts/jspdf.min.js"></script>
+<script src='/javascript/name/zsiPdf'></script>
+<script src='/javascript/name/zsiSearch'></script>
+<style>
+    #zPanelId {
+        display:none;
+    }
+    
+    span.text-left {
+        text-align: left !important;
+    }
+    .zGrid a{
+        color:#3577C3;
+        margin-left:4px;
+    }
+    .zButtons{
+        overflow: auto;       
+    }
+    .zButtons button{
+         margin-right:3px;
+    }
+    #btnPdf {
+        display:none;
+    }
+      #ifrmWindow{
+        width:100%;
+        height:600px;
+        border:solid 0pt #000;
+        margin-top:10px;
+    }
+
+</style>
+<div class="zPanel">
+    <div style="min-height:20px;margin-top:10px">
+        <form method="post" id="frm">
+            <div class="form-horizontal">
+                <div class="col-sm-12">
+                    <div class="form-group  ">
+                        <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1 control-label">Wing</label>
+                        <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2" style="margin-bottom:5px">
+                            <select name="wing_filter" id="wing_filter" class="form-control input-sm"></select>
+                        </div>
+                        <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1 control-label">Squadron</label>
+                        <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2" style="margin-bottom:5px">
+                            <select name="squadron_filter" id="squadron_filter" class="form-control input-sm"></select>
+                        </div>
+                        <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1 control-label">Aircraft</label>
+                        <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2" style="margin-bottom:5px">
+                            <select name="aircraft_filter" id="aircraft_filter" class="form-control input-sm"></select>
+                        </div>
+                        <div class="zButtons col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <button type="button"  class="btn btn-primary btn-sm" id="btnDis" style="margin-bottom:3px"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
+                            <button type="button"  class="btn btn-primary btn-sm" id="btnPdf" style="margin-bottom:3px"><span class="glyphicon glyphicon-file"> </span> Show PDF</button>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <div class="zPanel" id="zPanelId">
+    <div id="tabWrapper"></div>
+
+        <div >
+              <div id="grid" class="zGrid"></div>
+        </div>
+    </div>
+
+<script src="/scripts/bootstrap-datepicker.min.js"></script> 
+<script src="/Scripts/handlebars-v3.0.0.js"></script>
