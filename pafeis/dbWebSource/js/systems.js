@@ -41,9 +41,9 @@ function displayRecords(){
 }
 $("#btnDelete").click(function(){
     zsi.form.deleteData({
-         code       : "sys-0001"
+         code       : "sys-0011"
         ,onComplete : function(data){
                         displayRecords();
                       }
     });      
-});     
+});      

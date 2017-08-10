@@ -19,9 +19,6 @@
 					<input type="text" name="filter_content" id="filter_content" class="form-control input-sm ">
 				</div>
 
-				<button type="button" class="btn btn-primary btn-sm" id="btnSearch">
-					<span class="glyphicon glyphicon-search"></span>
-				</button>
 			</div>
 		</div>
 	</div>
@@ -43,6 +40,7 @@
 var bs 		= zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
 var controller_url = base_url + "javascript/";
+var tmr;
 
 $(document).ready(function(){
     setInputs();
@@ -61,49 +59,35 @@ $(document).ready(function(){
 
     });
 
-
 });
 
 function setInputs() {
-    filter_name = $("#filter_name");
-    filter_content = $("#filter_content");
+    $filter_name = $("#filter_name");
+    $filter_content = $("#filter_content");
 
-    $("#filter_name,#filter_content").keyup(function (e) {
-        var key = e.which;
-        if (key == 13) {
-            getData();
-        }
-    });
+    $("#filter_name,#filter_content").keyup(function(e){
+		clearTimeout(tmr);
+		tmr = setTimeout(
+		function(){
+			 displayDataToGrid();
+		},600);		
+	});
 }
 
  
 
-function displayDataToGrid(_url) {
-    if (_url == null) _url = base_url + "sql/exec?p=javascripts_sel";
-	/*
-    $("#grid").loadData({
-         url    : url
-        ,td_body: [
-            function(d){
-                return '<input id="cb" name="cb" class="" type="checkbox">'
-                + '<input id="js_id" name="js_id" value="' + d.js_id + '" type="hidden">'
-            }
-            , function (d) { return '<a target="_blank" href="' + base_url + 'javascript/source/' + d.page_name + '">' + d.page_name + '</a>'; }
-            ,function(d){ return d.rev_no; }
-            ,function(d){ return d.created_by; }
-            ,function(d){ return d.created_date; }
-            ,function(d){ return d.updated_by; }
-            ,function(d){ return d.updated_date; }
-        ]
-
-    });
-	*/
-	 var cb = bs({name:"cbFilter1",type:"checkbox"});
+function displayDataToGrid() {
+	var _url = base_url + "sql/proc?p=javascripts_sel "
+	var _params = "";
+	 
+	_params  = createParameter(_params,"@Html.Raw('@')page_name",$filter_name,true);
+	_params  = createParameter(_params,"@Html.Raw('@')js_content",$filter_content,true);   
+	
+    //if (_url == null) _url = base_url + "sql/exec?p=javascripts_sel";
  
-
- 
-     $("#grid").dataBind({
-	     url            : _url
+	var cb = bs({name:"cbFilter1",type:"checkbox"});
+    $("#grid").dataBind({
+	     url            : _url + _params
 	    ,width          : $(document).width() - 50
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
@@ -136,17 +120,15 @@ function displayDataToGrid(_url) {
 }
 
      
-
-$("#btnSearch").click(function(){   
-    getData();
-});
-
-function getData() {
-    displayDataToGrid(
-         base_url + "sql/exec?p=javascripts_sel null,'" + filter_name.val() + "','" + filter_content.val() + "'"
-    );
+function createParameter(src,name,obj,isString){
+    var _q  =  ( typeof isString  === "undefined") ? "": "'";
+	if( obj.val()  !== "") {
+		if( src !== "") src +=",";
+		src += name + "=" +  _q + obj.val() + _q;
+	} 
+	return src;	
 }
-
+ 
 
 $("#btnDelete").click(function () {
     zsi.form.deleteData({
