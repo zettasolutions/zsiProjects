@@ -19,8 +19,28 @@ namespace zsi.web
 
         }
 
-        
-        
+
+        public static appProfile AppConfig
+        {
+            get
+            {
+                try
+                {
+
+                    return (appProfile)HttpContext.Current.Session["appProfile"];
+                }
+                catch
+                {
+                    HttpContext.Current.Session["appProfile"] = new dcAppProfile().GetInfo();
+                    return (appProfile)HttpContext.Current.Session["appProfile"];
+                }
+            }
+            set { HttpContext.Current.Session["appProfile"] = value; }
+
+        }
+
+
+
 
     }
 }

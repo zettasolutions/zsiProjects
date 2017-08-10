@@ -18,8 +18,6 @@ namespace zsi.web.Controllers
 
         public fileController()
         {
-            this.dc = new dcAppProfile();
-            this.app = dc.GetInfo();
             this.tempPath = AppSettings.BaseDirectory + @"temp\";
             if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
         }
@@ -27,8 +25,8 @@ namespace zsi.web.Controllers
         #region "Private Methods"
         private string excelConnectionString;
         private string tempPath { get; set; }
-        private appProfile app { get; set; }
-        private dcAppProfile dc { get; set; }
+ 
+        
 
         private void MigrateExcelFile(string fileName, string excel_column_range, string tempTable)
         {
@@ -72,14 +70,12 @@ namespace zsi.web.Controllers
             string colRange = tmpData.Split(',')[1];
             try
             {
-                dcAppProfile dc = new dcAppProfile();
-                appProfile ap = dc.GetInfo();
-                excelConnectionString = ap.excel_conn_str;
+                excelConnectionString = this.AppConfig.excel_conn_str;
                 var fullPath = tempPath;
                 if (file != null && file.ContentLength > 0)
                 {
-                    ap.excel_folder = app.excel_folder.Replace("~", AppSettings.BaseDirectory);
-                    if (Directory.Exists(ap.excel_folder)) tempPath = ap.excel_folder;
+                    this.AppConfig.excel_folder = this.AppConfig.excel_folder.Replace("~", AppSettings.BaseDirectory);
+                    if (Directory.Exists(this.AppConfig.excel_folder)) tempPath = this.AppConfig.excel_folder;
                     var fileName = Path.GetFileName(file.FileName);
                     fullPath = Path.Combine(tempPath, fileName);
                     file.SaveAs(fullPath);
@@ -102,7 +98,7 @@ namespace zsi.web.Controllers
 
             var path = this.tempPath;
             var fullPath = path;
-            if (Directory.Exists(app.image_folder)) path = app.image_folder;
+            if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
             if (isThumbNail.ToLower() == "y") path = path + "thumbnails\\";
             fullPath = Path.Combine(path, fileName);
             if (!System.IO.File.Exists(fullPath))
@@ -121,10 +117,10 @@ namespace zsi.web.Controllers
                 var path = this.tempPath;
                 var fullPath = path;
                 var fileNameOrg = "";
-                if (app.image_folder.Contains("~")) app.image_folder = app.image_folder.Replace("~", AppSettings.BaseDirectory);
+                if (this.AppConfig.image_folder.Contains("~")) this.AppConfig.image_folder = this.AppConfig.image_folder.Replace("~", AppSettings.BaseDirectory);
                 if (file != null && file.ContentLength > 0)
                 {
-                    if (Directory.Exists(app.image_folder)) path = app.image_folder;
+                    if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
                     fileNameOrg = Path.GetFileName(file.FileName);
                     fullPath = Path.Combine(path, prefixKey + fileNameOrg);
                     file.SaveAs(fullPath);
@@ -149,7 +145,7 @@ namespace zsi.web.Controllers
 
             var path = this.tempPath;
 
-            if (Directory.Exists(app.image_folder)) path = app.image_folder;
+            if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
             var fullPath = Path.Combine(path, fileName);
             string contentType = MimeMapping.GetMimeMapping(fileName);
             return File(fullPath, contentType);
@@ -158,7 +154,7 @@ namespace zsi.web.Controllers
         public FileResult loadTmpFile(string subDir, string fileName)
         {
             var _path = "";
-            _path = this.app.network_group_folder + subDir;
+            _path = this.AppConfig.network_group_folder + subDir;
             var fullPath = Path.Combine(_path, fileName);
             string contentType = MimeMapping.GetMimeMapping(fileName);
             return File(fullPath, contentType);
@@ -168,7 +164,7 @@ namespace zsi.web.Controllers
         {
 
             var path = this.tempPath;
-            if (Directory.Exists(app.image_folder)) path = app.image_folder;
+            if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
             var fullPath = Path.Combine(path, fileName);
 
             return Content(System.IO.File.Exists(fullPath).ToString(), "text/plain", System.Text.Encoding.UTF8);
@@ -274,7 +270,7 @@ namespace zsi.web.Controllers
                 if (path != "") { if (!path.EndsWith(@"\")) path = path + @"\"; }
                 for (int x = 0; x < folders.Count; x++)
                 {
-                    string _fullPath = this.app.network_group_folder + path + folders[x];
+                    string _fullPath = this.AppConfig.network_group_folder + path + folders[x];
                     if (!Directory.Exists(_fullPath)) Directory.CreateDirectory(_fullPath);
                 }
 
@@ -430,9 +426,9 @@ namespace zsi.web.Controllers
                 string[] _files;
 
                 if (searchPattern != null)
-                    _files = Directory.GetFiles(this.app.image_folder + subDir, searchPattern);
+                    _files = Directory.GetFiles(this.AppConfig.image_folder + subDir, searchPattern);
                 else
-                    _files = Directory.GetFiles(this.app.image_folder + subDir);
+                    _files = Directory.GetFiles(this.AppConfig.image_folder + subDir);
 
                 foreach (var f in _files)
                 {

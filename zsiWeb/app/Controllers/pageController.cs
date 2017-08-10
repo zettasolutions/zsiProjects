@@ -67,14 +67,12 @@ namespace zsi.web.Controllers
         [HttpPost]
         public ActionResult loginAdmin()
         {
-            dcAppProfile dc = new dcAppProfile();
-            appProfile info = dc.GetInfo();
-            if (Request["user_name"] == "zsidev" && Request["user_pwd"] == info.developer_key)
+            if (Request["user_name"] == "zsidev" && Request["user_pwd"] == this.AppConfig.developer_key)
             {
                 Session["zsi_login"] = "Y";
                 Response.Cookies["zsi_login"].Value = "Y";
                 Response.Cookies["zsi_login"].Expires = DateTime.Now.AddDays(1);
-                return Redirect(gePriorityURL(Url.Content("~/") + "page/name/" + info.default_page));
+                return Redirect(gePriorityURL(Url.Content("~/") + "page/name/" + this.AppConfig.default_page));
             }
             else {
                 Session["zsi_login"] ="N";

@@ -10,7 +10,10 @@ namespace zsi.web.Controllers
 {
     public class baseController : Controller
     {
+     
+
         public user CurrentUser { get { return SessionHandler.CurrentUser; } }
+        public appProfile AppConfig { get { return SessionHandler.AppConfig; } }
 
         public IBasicFormAuth _FormAuth;
         public IBasicFormAuth FormAuth
@@ -28,6 +31,9 @@ namespace zsi.web.Controllers
                 _FormAuth = (BasicFormAuth)value;
             }
         }
+
+ 
+
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {
             return new JsonNetResult(data, contentType, contentEncoding, JsonRequestBehavior.AllowGet);
