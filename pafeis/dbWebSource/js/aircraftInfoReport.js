@@ -1,11 +1,15 @@
 var  bs             = zsi.bs.ctrl
     ,svn            = zsi.setValIfNull
     ,g_masterData   =   null
+    ,g_detailData   = []
     ,g_masterIds    =   ""
     ,g_imgData      =   null
     ,g_organization_id = null
     ,g_squadron_id = null
     ,g_aircraft_id = null
+    ,g_aircraft_length= 0 
+    ,g_aircraft_counter=0
+    
 ;
 
 imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
@@ -32,40 +36,52 @@ zsi.ready(function(){
         url: procURL + "dd_organizations_sel @organization_type_code='Wing',@squadron_type=''" 
         , text: "organization_name"
         , value: "organization_id"
-    });
-    $("#squadron_filter").dataBind({
-        url: procURL + "dd_organizations_sel @organization_id="+ g_organization_id +",@squadron_type='Aircraft'" 
-        , text: "organization_name"
-        , value: "organization_id"
         , onComplete: function(){
-            $("select#squadron_filter").change (function(){
-                g_squadron_id = $("select#squadron_filter option:selected").val();
-                $("#aircraft_filter").dataBind({
-                    url: procURL + "dd_aircrafts_sel @wing_id="+ g_organization_id +",@squadron_id="+ g_squadron_id 
-                    , text: "aircraft_name"
-                    , value: "aircraft_info_id"
+            $("select#wing_filter").change (function(){
+                g_organization_id = $("select#wing_filter option:selected").val();   
+                $("#squadron_filter").dataBind({
+                    url: procURL + "dd_organizations_sel @organization_id="+ g_organization_id +",@squadron_type='Aircraft'" 
+                    , text: "organization_name"
+                    , value: "organization_id"
                     , onComplete: function(){
-                        $("select#aircraft_filter").change (function(){
-                            g_aircraft_id = $("select#aircraft_filter option:selected").val();
+                        $("select#squadron_filter").change (function(){
+                            g_squadron_id = $("select#squadron_filter option:selected").val();
+                            $("#aircraft_filter").dataBind({
+                                url: procURL + "dd_aircrafts_sel @squadron_id="+ g_squadron_id 
+                                , text: "aircraft_name"
+                                , value: "aircraft_info_id"
+                                , onComplete: function(){
+                                    $("select#aircraft_filter").change (function(){
+                                        g_aircraft_id = $("select#aircraft_filter option:selected").val();
+                                    });
+                                }
+                            });
                         });
                     }
                 });
             });
         }
     });
-
     zsi.initDatePicker();
 });
 
 $("#btnDis").click(function(){
-    if($("#aircraft_filter").val() === ""){ 
-        alert("Please select Aircraft Type.");
+    if(g_organization_id === null){ 
+        alert("Please select Wing.");
         return;
     }
-    $("#zPanelId").css({display:"block"});
-    displayHeader("#tabWrapper");
-    displayRecords();
-
+    //else if(g_squadron_id === null){
+     //   alert("Please select Squadron.");
+     ///   return;        
+    //}else if(g_aircraft_id === null) {
+     //   alert("Please select Aircraft.");
+     //   return;        
+    //}
+    else{
+        $("#zPanelId").css({display:"block"});
+        displayHeaders();
+        //displayRecords();
+    }
 });
 
 $("#btnPdf").click(function(){
@@ -114,8 +130,8 @@ $("#btnPdf").click(function(){
 
             o.row +=15;
             o.doc.setFontSize(8);
-            //o.doc.text(o.margin.left + 60, o.row, g_masterData[0].receiving_warehouse);
-            o.doc.text(o.margin.left + 60, o.row, "testing");
+            //o.doc.text(o.margin.left + 60, o.row, g_masterData[0].g_organization_id);
+            //o.doc.text(o.margin.left + 60, o.row, "testing");
               
             o.row +=40;
             o.doc.setFontSize(14);
@@ -127,15 +143,18 @@ $("#btnPdf").click(function(){
     });   
 });
 
-function displayHeader(cbFunc){
+function displayHeaders(){
     $.get(execURL + "aircraft_info_sel @aircraft_info_id="+ (g_aircraft_id ? g_aircraft_id : null), function(data){
         var _rows      = data.rows;
-        var content = '<div>';
+        g_masterData  = _rows;
+        g_detailData  = [];
         var i,d;
-        
+        var $boxWrapper = $("#boxWrapper");
+        $boxWrapper.empty();
+        g_aircraft_length = _rows.length;
         for(i=0; i < _rows.length; i++){
             d =_rows[i];
-            content += '<div role="tabpanel"'+ d.aircraft_info_id +'">' +
+            var content = '<div id="boxItem'+ d.aircraft_info_id +'">' +
                            '<div class="zContainer1 header ui-front"'+ d.aircraft_info_id +'">' +
                                '<div class="form-horizontal" style="padding:5px">' +
                                     '<div class="col-xs-12 col-sm-3">' +
@@ -205,48 +224,52 @@ function displayHeader(cbFunc){
                                     '</div>' +
                                 '</div>' +
                             '</div>' +
-                           '<div class="zGrid" id="tabGrid'+   d.aircraft_info_id  +'" ></div></div>';
+                           '<div class="zGrid" id="gridItem'+   d.aircraft_info_id  +'" ></div></div>';
+             $boxWrapper.append(content);  
+             displayRecords(d.aircraft_info_id);
         }
-        content += "</div>";
-        $("#tabWrapper").html(content);
+        
+        if(_rows.length>0) $("#btnPdf").css({display:"block"});
     });
 } 
 
-function displayRecords(callback) {
-    var _dataRows  = [];
-    _dataRows.push(
-		 {text  : "Part No."            , name:"part_no"                , width : 200       , style : "text-align:left;" }
-		,{text  : "National Stock No."  , name:"national_stock_no"      , width : 200       , style : "text-align:left;" }
-		,{text  : "Nomenclature"        , name:"item_name"              , width : 400       , style : "text-align:left;" }
-		,{text  : "Serial No."          , name:"serial_no"              , width : 150       , style : "text-align:left;" }
-		,{text  : "Critical Level"      , width : 150                , style : "text-align:center;"
-		    ,onRender : function(d){ return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))); }
-		}
-		,{text  : "Remaining"           , name:"remaining_time"         , width : 100       , style : "text-align:right; padding-right:3px;"}
-		,{text  : "Monitoring Type"     , name:"monitoring_type"        , width : 150       , style : "text-align:center;"}
-    );
+function displayRecords(aircraft_info_id) {
+ 
     
-    $("#grid").dataBind({
-         toggleMasterKey    : "aircraft_info_id"
-        ,height             : 400 
-        ,width              : $(document).width() - 27
-        ,url                : execURL + "items_sel @aircraft_info_id="+ (g_aircraft_id ? g_aircraft_id : null)
-        ,dataRows: _dataRows
-        ,onComplete: function(data){
-	        g_masterData = data.rows;
-	        g_masterIds = "";
-	        for(var x =0;x<g_masterData.length;x++ ){
-	               if(g_masterIds!=="") g_masterIds +=",";
-	                g_masterIds  += g_masterData[x].aircraft_info_id;
+    $("#gridItem" + aircraft_info_id).dataBind({
+       //  height             : 400 
+         width              : $(document).width() - 27
+        ,url                : execURL + "items_sel @aircraft_info_id="+ aircraft_info_id
+        ,dataRows: [
+             {text  : "Part No."            , name:"part_no"                , width : 200       , style : "text-align:left;" }
+            ,{text  : "National Stock No."  , name:"national_stock_no"      , width : 200       , style : "text-align:left;" }
+            ,{text  : "Nomenclature"        , name:"item_name"              , width : 400       , style : "text-align:left;" }
+            ,{text  : "Serial No."          , name:"serial_no"              , width : 150       , style : "text-align:left;" }
+            ,{text  : "Critical Level"      , width : 150                , style : "text-align:center;"
+            ,onRender : function(d){ 
+                return (formatCurrency(svn(d,"critical_level")) === "" ? 0 : formatCurrency(svn(d,"critical_level"))); }
+            }
+            ,{text  : "Remaining"           , name:"remaining_time"         , width : 100       , style : "text-align:right; padding-right:3px;"}
+            ,{text  : "Monitoring Type"     , name:"monitoring_type"        , width : 150       , style : "text-align:center;"}
+		]
+		,onComplete : function(data){
 
-	        }
-	        if( data.rows.length > 0)
-	            $("#btnPdf").css({display: "inline"});
-	        else 
-	            $("#btnPdf").css({display: "none"});
-        }  
+		    if(data.rows.length > 0) g_detailData = g_detailData.concat(data.rows);
+		    
+		    CheckAllCompleteAirCraftLoaded();
+		}
     });
 }
+
+function CheckAllCompleteAirCraftLoaded(){
+    g_aircraft_counter++;
+    if( g_aircraft_length ===g_aircraft_counter){ // completed display
+        console.log("All Aircraft Loaded");
+        console.log( g_detailData);
+    }
+}
+
+
 
 function formatCurrency(number){
     var result = "";
@@ -254,4 +277,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                                                                                                                                         
+}                                                                                                                                               
