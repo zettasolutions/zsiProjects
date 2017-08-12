@@ -1,15 +1,14 @@
-var  bs             = zsi.bs.ctrl
-    ,svn            = zsi.setValIfNull
-    ,g_masterData   =   null
-    ,g_detailData   = []
-    ,g_masterIds    =   ""
-    ,g_imgData      =   null
-    ,g_organization_id = null
-    ,g_squadron_id = null
-    ,g_aircraft_id = null
-    ,g_aircraft_length= 0 
-    ,g_aircraft_counter=0
-    
+var  bs                     = zsi.bs.ctrl
+    ,svn                    = zsi.setValIfNull
+    ,g_masterData           =   null
+    ,g_detailData           = []
+    ,g_masterIds            =   ""
+    ,g_imgData              =   null
+    ,g_organization_id      = null
+    ,g_squadron_id          = null
+    ,g_aircraft_id          = null
+    ,g_aircraft_length      = 0 
+    ,g_aircraft_counter     =0
 ;
 
 imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
@@ -70,17 +69,9 @@ $("#btnDis").click(function(){
         alert("Please select Wing.");
         return;
     }
-    //else if(g_squadron_id === null){
-     //   alert("Please select Squadron.");
-     ///   return;        
-    //}else if(g_aircraft_id === null) {
-     //   alert("Please select Aircraft.");
-     //   return;        
-    //}
     else{
         $("#zPanelId").css({display:"block"});
         displayHeaders();
-        //displayRecords();
     }
 });
 
@@ -90,12 +81,6 @@ $("#btnPdf").click(function(){
     var mw = $('#modalWindow');
     mw.modal({ show: true, keyboard: false, backdrop: 'static' });
     mw.find(".modal-title").text("Aircraft Info Report");
-    _headerColumn.push(
-             {title  : "Part No."                , name  : "part_no"                    ,titleWidth:100, width :100}
-            ,{title  : "Nat'l Stock No."         , name  : "national_stock_no"          ,titleWidth:100, width :100}
-            ,{title  : "Nomenclature"            , name  : "item_name"                  ,titleWidth:100, width :100}
-    		,{title  : "Serial No."              , name  : "serial_no"                  ,titleWidth:100, width :100}
-    );      
     zsi.createPdfReport({
          margin             : { top :30  ,left:25 }
         ,cellMargin         : { left: 5 }
@@ -106,17 +91,27 @@ $("#btnPdf").click(function(){
         ,widthLimit         : 600
         ,pageHeightLimit    : 550
         ,masterKey          : "aircraft_info_id"
-        ,masterColumn       : _headerColumn
+        ,masterColumn       : [
+                                 {title  : "Type"                           , name  : "aircraft_type"               ,titleWidth:100, width :100}
+                                ,{title  : "Class"                          , name  : "aircraft_class_name"         ,titleWidth:100, width :100}
+                                ,{title  : "Role"                           , name  : "aircraft_role_name"          ,titleWidth:100, width :100}
+                                ,{title  : "Aircraft Time(Hours)"           , name  : "aircraft_time"               ,titleWidth:100, width :100}
+                                ,{title  : "Origin"                         , name  : "origin_name"                 ,titleWidth:100, width :100}
+                                ,{title  : "Manufacturer"                   , name  : "manufacturer_name"           ,titleWidth:100, width :100}
+                                ,{title  : "Status"                         , name  : "status_name"                 ,titleWidth:100, width :100}
+                                ,{title  : "Hrs. Left to Inspection"        , name  : "service_time"                ,titleWidth:100, width :100}
+                            ]
         ,masterData         : g_masterData
-        /*
         ,detailColumn       :  [
-                         {title  : "Part No."                , name  : "part_no"                    ,titleWidth:100, width :100}
-                        ,{title  : "Nat'l Stock No."         , name  : "national_stock_no"          ,titleWidth:100, width :100}
-                        ,{title  : "Nomenclature"            , name  : "item_name"                  ,titleWidth:100, width :100}
-                		,{title  : "Serial No."              , name  : "serial_no"                  ,titleWidth:100, width :100}
-        ]
-        */
-       // ,detailData         : g_detailData
+                                 {title  : "Part No."                       , name  : "part_no"                     ,titleWidth:100, width :100}
+                                ,{title  : "Nat'l Stock No."                , name  : "national_stock_no"           ,titleWidth:100, width :100}
+                                ,{title  : "Nomenclature"                   , name  : "item_name"                   ,titleWidth:200, width :200}
+                        		,{title  : "Serial No."                     , name  : "serial_no"                   ,titleWidth:100, width :100}
+                                ,{title  : "Critical Level"                 , name  : "critical_level"              ,titleWidth:75 , width :75 }
+                                ,{title  : "Remaining"                      , name  : "remaining_time"              ,titleWidth:75 , width :75 }
+                        		,{title  : "Monitoring Type"                , name  : "monitoring_type"             ,titleWidth:100, width :100}
+                            ]
+        ,detailData         : g_detailData
         ,onInit             : function(){
             return new jsPDF("l", "pt", "A4");
         }
@@ -130,9 +125,12 @@ $("#btnPdf").click(function(){
 
             o.row +=15;
             o.doc.setFontSize(8);
-            //o.doc.text(o.margin.left + 60, o.row, g_masterData[0].g_organization_id);
-            //o.doc.text(o.margin.left + 60, o.row, "testing");
-              
+            o.doc.text(o.margin.left + 60, o.row, g_masterData[0].wing);
+
+            o.row +=15;
+            o.doc.setFontSize(8);
+            o.doc.text(o.margin.left + 60, o.row, g_masterData[0].squadron);
+
             o.row +=40;
             o.doc.setFontSize(14);
             o.doc.text(o.margin.left, o.row, "Aircraft Info Report");
@@ -140,14 +138,52 @@ $("#btnPdf").click(function(){
             o.row +=16;
             return o;
         }
+        //customized master data printing
+        ,onMasterDataPrint : function(o){
+            if(o.index>0) o.row +=14; 
+
+            o.row = o.checkAddPage(o.row);
+            o.doc.text(25, o.row, "Type");
+            o.doc.text(125, o.row, ": "  + o.data.aircraft_type);
+
+            o.doc.text(305, o.row, "Class");
+            o.doc.text(415, o.row,  ": "  + o.data.aircraft_class_name);
+            
+            o.doc.text(585, o.row, "Role");
+            o.doc.text(705, o.row, ": "  + o.data.aircraft_role_name);
+
+           //new row
+            o.row +=18; 
+            o.row = o.checkAddPage(o.row);
+            o.doc.text(25, o.row, "Origin");
+            o.doc.text(125, o.row, ": "  + o.data.origin_name);
+            
+            o.doc.text(305, o.row, "Manufacturer");
+            o.doc.text(415, o.row,  ": "  + o.data.manufacturer_name);
+
+            o.doc.text(585, o.row, "Status");
+            o.doc.text(705, o.row, ": "  + o.data.status_name);
+
+           //new row
+            
+            o.row +=18; 
+
+            o.row = o.checkAddPage(o.row);
+            o.doc.text(25, o.row, "Aircraft Time(Hours)");
+            o.doc.text(125, o.row, ": "  + formatCurrency(o.data.aircraft_time));
+            
+            o.doc.text(305, o.row, "Hrs. Left to Inspection");
+            o.doc.text(415, o.row,  ": "  + formatCurrency(o.data.service_time));
+           return o.row;    
+        }
     });   
 });
 
 function displayHeaders(){
-    $.get(execURL + "aircraft_info_sel @aircraft_info_id="+ (g_aircraft_id ? g_aircraft_id : null), function(data){
+    $.get(execURL + "aircraft_info_sel @squadron_id=" + (g_squadron_id ? g_squadron_id : null) + ",@aircraft_info_id="+ (g_aircraft_id ? g_aircraft_id : null), function(data){
         var _rows      = data.rows;
-        g_masterData  = _rows;
-        g_detailData  = [];
+        g_masterData  = _rows; //store master data
+        g_detailData  = [];    //empty first
         var i,d;
         var $boxWrapper = $("#boxWrapper");
         $boxWrapper.empty();
@@ -225,20 +261,20 @@ function displayHeaders(){
                                 '</div>' +
                             '</div>' +
                            '<div class="zGrid" id="gridItem'+   d.aircraft_info_id  +'" ></div></div>';
-             $boxWrapper.append(content);  
+            //write html content                
+             $boxWrapper.append(content);
+             
              displayRecords(d.aircraft_info_id);
-        }
+             
+        }//end of loop
         
         if(_rows.length>0) $("#btnPdf").css({display:"block"});
     });
 } 
 
 function displayRecords(aircraft_info_id) {
- 
-    
     $("#gridItem" + aircraft_info_id).dataBind({
-       //  height             : 400 
-         width              : $(document).width() - 27
+         width              : $(document).width() - 42
         ,url                : execURL + "items_sel @aircraft_info_id="+ aircraft_info_id
         ,dataRows: [
              {text  : "Part No."            , name:"part_no"                , width : 200       , style : "text-align:left;" }
@@ -265,11 +301,8 @@ function CheckAllCompleteAirCraftLoaded(){
     g_aircraft_counter++;
     if( g_aircraft_length ===g_aircraft_counter){ // completed display
         console.log("All Aircraft Loaded");
-        console.log( g_detailData);
     }
 }
-
-
 
 function formatCurrency(number){
     var result = "";
@@ -277,4 +310,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                                                                                                                                               
+}                                                                                                                                                   
