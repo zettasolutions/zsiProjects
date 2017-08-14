@@ -76,9 +76,9 @@ function setInputs() {
  
 function displayDataToGrid(){
 	var _url = base_url + "sql/proc?p=page_templates_sel "
-	var _params = "@Html.Raw('@')is_list='Y'";
+	var _params = "";
 	 
-	_params  = createParameter(_params,"@Html.Raw('@')page_name",$filter_name,true);
+	_params  = createParameter(_params,"@Html.Raw('@')search_page_name",$filter_name,true);
 	_params  = createParameter(_params,"@Html.Raw('@')pt_content",$filter_content,true);   
 
     var page_id='';

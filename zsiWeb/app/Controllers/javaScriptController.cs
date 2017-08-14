@@ -13,7 +13,7 @@ namespace zsi.web.Controllers
 
         public ActionResult Index()
         {
-            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
+            if ( this.isAuthorizedUser() )
             {
                 setPageLinks("admin");
                 return View();
@@ -31,14 +31,17 @@ namespace zsi.web.Controllers
                 return Redirect(Url.Content("~/"));
             else
             {
-
-                javascript_v d = new dcJavaScript().GetInfo(param1);
-                page_v page = new dcPage().GetPageByName(param1);
-                ViewBag.jsId = d.js_id;
-                ViewBag.pageId = page.page_id;
-                ViewBag.pageTitle = page.page_title;
-                ViewBag.jsContent = d.js_content;
-                return View();
+                if ( ! this.isAuthorizedUser())
+                    return this.ShowNotAllowedPage();
+                else
+                {
+                    javascript_v d = new dcJavaScript().GetInfo(param1);
+                    ViewBag.jsId = d.js_id;
+                    ViewBag.pageId = d.page_id;
+                    ViewBag.pageTitle = d.page_title;
+                    ViewBag.jsContent = d.js_content;
+                    return View();
+                }
                 
             }
         }
@@ -82,29 +85,20 @@ namespace zsi.web.Controllers
                 p.Add("new_id", System.Data.SqlDbType.Int, System.Data.ParameterDirection.Output);
                 dc.Execute(SQLCommandType.Update);                    
                 return Json(new { js_id = p.GetItem("new_id").Value });
-          
-
-
         }
 
         public JsonResult allBackup()
         {
-
-
             generateBackup(false);
-            return Json(new { status = "ok" });
-      
+            return Json(new { status = "ok" });      
         }
 
         public JsonResult selfBackup()
         {
-
                 generateBackup(true);
                 return Json(new { status = "ok" });
 
         }
-
-
         private void generateBackup(bool selfBackup) {
 
             dcJavaScript dc = new dcJavaScript();

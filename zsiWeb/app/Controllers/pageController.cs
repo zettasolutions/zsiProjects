@@ -9,7 +9,7 @@ namespace zsi.web.Controllers
         // GET: Page
         public ActionResult Index()
         {
-            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
+            if ( this.isAuthorizedUser() )
             {
                 setPageLinks("admin");
                 return View();
@@ -48,13 +48,20 @@ namespace zsi.web.Controllers
 
                     if(this.CurrentUser.roleId == 0 )
                     {
-                        if (Session["zsi_login"].ToString() == "N")
+                        if ( ! this.isAuthorizedUser() )
                             return Redirect(Url.Content("~/") + "page/name/" + devURL);
                     }
 
                 }
-                if ((param1 == "selectoption" || param1 == "masterpages" || param1 == "table" || param1 == "filemanager" || param1 == "tablelayout" || param1 == "errors" || param1 == "appprofile")
-                     && (Session["zsi_login"] == null || (Session["zsi_login"].ToString() == "N"))
+                if ( (      param1 == "selectoption" 
+                         || param1 == "masterpages" 
+                         || param1 == "table" 
+                         || param1 == "filemanager" 
+                         || param1 == "tablelayout" 
+                         || param1 == "errors" 
+                         || param1 == "appprofile"
+                     )
+                     && ! this.isAuthorizedUser()
                 )
                     return Redirect(Url.Content("~/"));
 

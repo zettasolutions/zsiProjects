@@ -13,7 +13,7 @@ namespace zsi.web.Controllers
 
         public ActionResult Index()
         {
-            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
+            if ( this.isAuthorizedUser())
             {
                 setPageLinks("admin");
                 return View();
@@ -28,7 +28,7 @@ namespace zsi.web.Controllers
 
         public ActionResult source(string param1)
         {
-            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
+            if (this.isAuthorizedUser())
             {
                 page_template_v d = new dcPageTemplate().GetInfo(param1);
                 ViewBag.ptId = d.pt_id; ;
@@ -37,11 +37,7 @@ namespace zsi.web.Controllers
                 ViewBag.ptContent = d.pt_content;
                 return View();
             }
-            else
-            {
-                setRequestedURL();
-                return Redirect(Url.Content("~/"));
-            }
+            else return this.ShowNotAllowedPage();
         }
 
 

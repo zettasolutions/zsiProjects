@@ -3,40 +3,38 @@ CREATE procedure [dbo].[javascripts_sel]
 	,@page_name varchar(50) =null
 	,@js_content varchar(50) =null
 	,@self_backup int=null
+	,@search_page_name varchar(50) =null
 	,@user_id int = null
 
 as
 begin
   DECLARE @stmt AS VARCHAR(1000);
  
-  SET @stmt = 'select a.*,b.page_name,dbo.getUser(a.created_by) as created_by_name,dbo.getUser(a.updated_by) as updated_by_name from dbo.javascripts a inner join dbo.pages b on a.page_id=b.page_id where 1=1 ';
+  SET @stmt = 'select * from dbo.javascripts_v where 1=1 ';
   
   IF ISNULL(@js_id,0) <> 0
-     SET @stmt = @stmt + ' AND a.js_id = ' +  CAST(@js_id AS VARCHAR);
+     SET @stmt = @stmt + ' AND js_id = ' +  CAST(@js_id AS VARCHAR);
 
-  IF ISNULL(@page_name,'') <> ''
-     SET @stmt = @stmt + ' AND lower(b.page_name) like ''%' + CAST(lower(@page_name) AS VARCHAR(50)) +  '%''';
+  IF ISNULL(@page_name,'') <> ''  
+     SET @stmt = @stmt + ' AND page_name = ''' + @page_name +  '''';
 
---     SET @stmt = @stmt + ' AND lower(b.page_name) like ''' + CONCAT('%', lower(@page_name),'%') +  '''';
+  IF ISNULL(@search_page_name,'')   <> '' 
+     SET @stmt = @stmt + ' AND page_name like ''%' + @search_page_name +  '%''';
 
   IF ISNULL(@js_content,'') <> ''
-     SET @stmt = @stmt + ' AND js_content like ''' + CONCAT('%', @js_content,'%') + '''';
+     SET @stmt = @stmt + ' AND js_content like ''%' +  @js_content + '%''';
 
 
   IF NOT @self_backup IS NULL 
 	BEGIN
 		 
-     SET @stmt = @stmt + ' AND a.updated_by=' + CONVERT(varchar(50),@user_id) + ' and not b.page_name like ''%test%'' '
-	 SET @stmt = @stmt + ' OR (a.created_by= ' + CONVERT(varchar(50), @user_id) + ' and a.updated_by is null and not b.page_name like ''%test%'')'
+     SET @stmt = @stmt + ' AND updated_by=' + CONVERT(varchar(50),@user_id) + ' and not page_name like ''%test%'' '
+	 SET @stmt = @stmt + ' OR (created_by= ' + CONVERT(varchar(50), @user_id) + ' and updated_by is null and not page_name like ''%test%'')'
 	END
 
-     SET @stmt = @stmt + ' order by b.page_name';
-  EXEC (@stmt);
+     SET @stmt = @stmt + ' order by page_name';
+
+	--print @stmt
+    EXEC (@stmt);
 END
-
-
-
-
-
-
 

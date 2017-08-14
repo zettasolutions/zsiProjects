@@ -32,7 +32,18 @@ namespace zsi.web.Controllers
             }
         }
 
- 
+        public ActionResult ShowNotAllowedPage()
+        {
+            return PartialView("~/Views/Shared/_NotAllowed.cshtml");
+        }
+        public bool isAuthorizedUser()
+        {
+            bool f = false;
+            string sn = "zsi_login";
+            if (Session[sn] == null) return f;
+            if (Session[sn].ToString() != "Y") return f;
+            return true;
+        }
 
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {

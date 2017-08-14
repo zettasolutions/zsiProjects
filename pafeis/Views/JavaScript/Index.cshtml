@@ -80,7 +80,7 @@ function displayDataToGrid() {
 	var _url = base_url + "sql/proc?p=javascripts_sel "
 	var _params = "";
 	 
-	_params  = createParameter(_params,"@Html.Raw('@')page_name",$filter_name,true);
+	_params = createParameter(_params, "@Html.Raw('@')search_page_name", $filter_name, true);
 	_params  = createParameter(_params,"@Html.Raw('@')js_content",$filter_content,true);   
 	
     //if (_url == null) _url = base_url + "sql/exec?p=javascripts_sel";

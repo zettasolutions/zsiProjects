@@ -6,7 +6,7 @@ namespace zsi.web.Controllers
     {
         public ActionResult Index()
         {
-            if (Session["zsi_login"] != null && (Session["zsi_login"].ToString() == "Y"))
+            if ( this.isAuthorizedUser() )
                 return View();
             else
                 return Redirect(Url.Content("~/"));
