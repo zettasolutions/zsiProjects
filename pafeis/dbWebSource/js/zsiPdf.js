@@ -158,7 +158,7 @@ zsi.createPdfReport = function(o){
     for(var y=0;y<md.length;y++){
 
        if( ! isUD(o.onMasterDataPrint) ){ 
-            row=o.onMasterDataPrint({index:y,row:row,data:md[y],doc:doc});
+            row=o.onMasterDataPrint({index:y,row:row,data:md[y],doc:doc,checkAddPage:checkAddPage});
        }
        else{    
             if(y>0) row +=rowHeight;
@@ -283,4 +283,4 @@ zsi.createPdfReport = function(o){
 
 };    
 
-                       
+                        
