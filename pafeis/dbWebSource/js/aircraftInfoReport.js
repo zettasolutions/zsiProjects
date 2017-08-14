@@ -1,14 +1,14 @@
 var  bs                     = zsi.bs.ctrl
     ,svn                    = zsi.setValIfNull
-    ,g_masterData           =   null
+    ,g_masterData           = null
     ,g_detailData           = []
-    ,g_masterIds            =   ""
-    ,g_imgData              =   null
+    ,g_masterIds            = ""
+    ,g_imgData              = null
     ,g_organization_id      = null
     ,g_squadron_id          = null
-    ,g_aircraft_id          = null
+    ,g_aircraft_info_id     = null
     ,g_aircraft_length      = 0 
-    ,g_aircraft_counter     =0
+    ,g_aircraft_counter     = 0
 ;
 
 imgToBase64( base_url + 'images/airforce-logo.jpg'  , function(img){
@@ -51,7 +51,8 @@ zsi.ready(function(){
                                 , value: "aircraft_info_id"
                                 , onComplete: function(){
                                     $("select#aircraft_filter").change (function(){
-                                        g_aircraft_id = $("select#aircraft_filter option:selected").val();
+                                        g_aircraft_info_id = $("select#aircraft_filter option:selected").val();
+                                        $("#btnPdf").css({display:"none"});
                                     });
                                 }
                             });
@@ -67,6 +68,12 @@ zsi.ready(function(){
 $("#btnDis").click(function(){
     if(g_organization_id === null){ 
         alert("Please select Wing.");
+        return;
+    } else if(g_squadron_id === null){ 
+        alert("Please select Squadron.");
+        return;
+    } else if(g_aircraft_info_id === null){ 
+        alert("Please select Aircraft.");
         return;
     }
     else{
@@ -180,7 +187,8 @@ $("#btnPdf").click(function(){
 });
 
 function displayHeaders(){
-    $.get(execURL + "aircraft_info_sel @squadron_id=" + (g_squadron_id ? g_squadron_id : null) + ",@aircraft_info_id="+ (g_aircraft_id ? g_aircraft_id : null), function(data){
+    //var _aInfoId = $("select#aircraft_filter option:selected").val();
+    $.get(execURL + "aircraft_info_sel @squadron_id=" + (g_squadron_id ? g_squadron_id : null) + ",@aircraft_info_id="+ (g_aircraft_info_id ? g_aircraft_info_id : null), function(data){
         var _rows      = data.rows;
         g_masterData  = _rows; //store master data
         g_detailData  = [];    //empty first
@@ -268,7 +276,7 @@ function displayHeaders(){
              
         }//end of loop
         
-        if(_rows.length>0) $("#btnPdf").css({display:"block"});
+        if(_rows.length>0) $("#btnPdf").css({display:"inline"});
     });
 } 
 
@@ -310,4 +318,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                                                                                                                                                   
+}                                                                                                                                                      
