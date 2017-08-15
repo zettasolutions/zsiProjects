@@ -15,6 +15,7 @@ namespace zsi.web.Models
         public string network_group_folder { get; set; }
         public string developer_key { get; set; }
         public string is_source_minified { get; set; }
+        public string system_pages { get; set; }
     }
 
     public class dcAppProfile : MasterDataController<appProfile>
@@ -23,6 +24,12 @@ namespace zsi.web.Models
         {
             this.DBConn = new SqlConnection(dbConnection.ConnectionString);
             this.Procedures.Add(new Procedure("dbo.app_profile_sel"), SQLCommandType.SingleRecord);
+        }
+
+        public appProfile GetInfoByCurrentUser()
+        {
+            this.SelectInfoParameters.Add("user_id", SessionHandler.CurrentUser.userId);
+            return this.GetInfo();
         }
     }
 

@@ -31,7 +31,7 @@ namespace zsi.web
                 }
                 catch
                 {
-                    HttpContext.Current.Session["appProfile"] = new dcAppProfile().GetInfo();
+                    HttpContext.Current.Session["appProfile"] = new dcAppProfile().GetInfoByCurrentUser();
                     return (appProfile)HttpContext.Current.Session["appProfile"];
                 }
             }

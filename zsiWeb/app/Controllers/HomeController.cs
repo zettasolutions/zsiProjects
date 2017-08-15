@@ -10,8 +10,8 @@ namespace zsi.web.Controllers
             if (Session["isAuthenticated"] != null)
             {
                 dcAppProfile dc = new dcAppProfile();
-                appProfile info = dc.GetInfo();
-                Session["appProfile"] = info;
+                appProfile info = dc.GetInfoByCurrentUser();
+                SessionHandler.AppConfig = info;
                 return Redirect(Url.Content("~/") + "page/name/" + info.default_page);
               
             }

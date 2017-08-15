@@ -53,17 +53,7 @@ namespace zsi.web.Controllers
                     }
 
                 }
-                if ( (      param1 == "selectoption" 
-                         || param1 == "masterpages" 
-                         || param1 == "table" 
-                         || param1 == "filemanager" 
-                         || param1 == "tablelayout" 
-                         || param1 == "errors" 
-                         || param1 == "appprofile"
-                     )
-                     && ! this.isAuthorizedUser()
-                )
-                    return Redirect(Url.Content("~/"));
+                if ( this.AppConfig.system_pages.ToLower().Contains(param1.ToLower())  && ! this.isAuthorizedUser() ) return Redirect(Url.Content("~/"));
 
                 setPageLinks(param1);
                 return View();
