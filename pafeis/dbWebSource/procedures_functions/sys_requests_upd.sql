@@ -9,8 +9,7 @@ AS
 BEGIN
 -- Update Process
     UPDATE a 
-    SET  ticket_date		    = b.ticket_date
-		,requested_by			= b.requested_by
+    SET  requested_by			= b.requested_by
 		,request_desc        	= b.request_desc
 		,request_type_id		= b.request_type_id
 		,is_urgent				= b.is_urgent
@@ -24,8 +23,7 @@ BEGIN
 	   
 -- Insert Process
     INSERT INTO dbo.sys_requests (
-          ticket_date	
-		 ,requested_by		 	
+		  requested_by		 	
 		 ,request_desc   
 		 ,request_type_id
 		 ,is_urgent	
@@ -34,8 +32,7 @@ BEGIN
         ,created_date
         )
     SELECT 
-         ticket_date	
-		,requested_by  	
+         requested_by  	
 		,request_desc   
 		,request_type_id
 		,is_urgent		
