@@ -6,14 +6,18 @@ CREATE PROCEDURE [dbo].[pages_sel]
 )
 AS
 BEGIN
+  DECLARE @sql  VARCHAR(MAX) ='SELECT *,0 page_includes_count FROM pages_v WHERE 1=1';
+
   IF @page_id IS NOT NULL  
-	 SELECT * FROM pages_v WHERE page_id = @page_id; 
+		SET @SQL = @SQL + ' AND page_id =' +  cast(@page_id AS VARCHAR(20)) 
   IF @page_name IS NOT NULL  
-      SELECT * FROM pages_v WHERE page_name = @page_name ORDER BY page_name; 
+		SET @SQL = @SQL + ' AND page_name = ' +  cast(@page_id AS VARCHAR(20)) 
   IF @search_page_name IS NOT NULL
-      SELECT * FROM pages_v WHERE page_name like '%'  + @search_page_name +  '%' ORDER BY page_name; 
-  ELSE
-       SELECT * FROM pages_v ORDER BY page_name;
+      SET @SQL = @SQL + ' AND page_name like ''%'  +  cast(@search_page_name AS VARCHAR(20))  +  '%''' 
+  
+  SET @SQL = @SQL + ' ORDER BY page_name'
+
+  --print @SQL
+  EXEC(@SQL)
       
 END
- 
