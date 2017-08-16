@@ -11,9 +11,9 @@ BEGIN
   IF @page_id IS NOT NULL  
 		SET @SQL = @SQL + ' AND page_id =' +  cast(@page_id AS VARCHAR(20)) 
   IF @page_name IS NOT NULL  
-		SET @SQL = @SQL + ' AND page_name = ' +  cast(@page_id AS VARCHAR(20)) 
+		SET @SQL = @SQL + ' AND page_name = ''' +  @page_name + ''''
   IF @search_page_name IS NOT NULL
-      SET @SQL = @SQL + ' AND page_name like ''%'  +  cast(@search_page_name AS VARCHAR(20))  +  '%''' 
+      SET @SQL = @SQL + ' AND page_name like ''%'  +  @search_page_name +  '%''' 
   
   SET @SQL = @SQL + ' ORDER BY page_name'
 
