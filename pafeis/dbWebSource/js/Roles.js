@@ -145,13 +145,13 @@ function displayRecords(){
     		,{text  : "Edit"        , name  : "is_edit"         , type  : "yesno"         , width:60          , style : "text-align:center;"   ,defaultValue:"Y" }
     		,{text  : "Delete"      , name  : "is_delete"       , type  : "yesno"         , width:60          , style : "text-align:center;"   ,defaultValue:"Y" }
     		,{ text:"Role Menu"     , width:80  , style:"text-align:center;"  
-    		    ,onRender : function(d){ return "<a href='javascript:manageItem(" + svn(d,"role_id") + ",\"" +  svn(d,"role_name")  + "\");'>" + svn(d,"countRoleMenus") + "</a>"; }
+    		    ,onRender : function(d){ return "<a href='javascript:manageItem(" + svn(d,"role_id") + ",\"" +  svn(d,"role_name")  + "\");'><span class='badge'>" + svn(d,"countRoleMenus") + "</span></a>"; }
     		}	 
     		,{ text:"Users"         , width:81  , style:"text-align:center;" 
-    		    ,onRender : function(d){ return "<a href='javascript:manageItemUser(" + svn(d,"role_id") + ",\"" + svn(d,"role_name")  + "\");'>" + svn(d,"countUsers") + "</a>"; }
+    		    ,onRender : function(d){ return "<a href='javascript:manageItemUser(" + svn(d,"role_id") + ",\"" + svn(d,"role_name")  + "\");'><span class='badge'>" + svn(d,"countUsers") + "</span></a>"; }
     		}	 	 
 	        ,{text  : "Dashboards"   , width : 100 , style:"text-align:center;" 
-                ,onRender : function(d){ return "<a href='javascript:manageItemDashboard(" + svn(d,"role_id") + ",\"" +  svn(d,"role_name")  + "\");'>" + svn(d,"countRoleDashboards") + "</a>"; }
+                ,onRender : function(d){ return "<a href='javascript:manageItemDashboard(" + svn(d,"role_id") + ",\"" +  svn(d,"role_name")  + "\");'><span class='badge'>" + svn(d,"countRoleDashboards") + "</span></a>"; }
             }
         ]
         ,onComplete: function(){
@@ -164,10 +164,7 @@ function displayRecords(){
                     $("select[name='user_id']").setUniqueOptions();
                 }
             }); */ 
-	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });            
+	               
              
         }
     });    
@@ -264,11 +261,11 @@ function displayRolesDashboard(id){
                     $zRow.find("#is_edited").val("Y");
                 });  
             $("select[name='page_id']").dataBind( "pages");    
-            /*$("select[name='page_id']").dataBind({
+            $("select[name='page_id']").dataBind({
                 url : execURL + "dd_dashboard_sel @role_id=" + id 
                 ,text: "page_title"
                 ,value: "page_id"
-            });*/
+            });
         }
     });    
 }
@@ -306,4 +303,4 @@ $("#btnDelete").click(function(){
 });      
 
     
-                                                                                     
+                                                                                        
