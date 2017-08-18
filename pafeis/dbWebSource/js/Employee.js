@@ -130,11 +130,7 @@ function displayRecords(col_name,keyword){
     		}	 	 	
         ]   
         ,onComplete: function(data){
-             employeesData = data.rows;
-             $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });
+            employeesData = data.rows;
             $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
             
             $("select[name='organization_id']").each(function(){
@@ -308,11 +304,7 @@ function displayInactive(){
                 , {text  : "Active?"            , name  : "is_active"           , type  : "yesno"        , width : 80           , style : "text-align:left;"   ,defaultValue:"Y"}
         ]   
         ,onComplete: function(data){
-             employeesData = data.rows;
-             $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });
+            employeesData = data.rows;
             $("#cbFilter2").setCheckEvent("#inActiveRecords input[name='cb']");
             
             $("select[name='organization_id']").each(function(){
@@ -452,4 +444,4 @@ else
 
 function mouseout(){
     $("#user-box").css("display","none");
-}                                                
+}                                                 

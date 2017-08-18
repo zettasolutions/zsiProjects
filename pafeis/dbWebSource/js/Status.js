@@ -99,10 +99,6 @@ function displayRecords(){
 	    ] 
     	     ,onComplete: function(){
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-     	        $("select, input").on("keyup change", function(){
-                    var $zRow = $(this).closest(".zRow");
-                        $zRow.find("#is_edited").val("Y");
-                });
         }  
     });    
 }
@@ -138,13 +134,9 @@ function displayInactive(){
 	    ] 
     	     ,onComplete: function(){
                 $("#cbFilter2").setCheckEvent("#inActiveRecords input[name='cb']");
-     	        $("select, input").on("keyup change", function(){
-                    var $zRow = $(this).closest(".zRow");
-                        $zRow.find("#is_edited").val("Y");
-                });
         }  
     });    
 }    
 
     
-                                                     
+                                                      

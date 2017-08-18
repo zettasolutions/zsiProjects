@@ -199,7 +199,7 @@ function setGridLayout(o){
             }
             
             for(var i=8; i < keyHeaderCount ; i++){
-                var _fn = (_keyHeaders2 !== null ? new Function('d', 'return  svn(d,"' +  _keyHeaders2[i] + '")') : "");
+                var _fn = (_keyHeaders2 !== null ? new Function('d', 'return svn(d,"' +  _keyHeaders2[i] + '")') : "");
                 var _text = _keyHeaders[i].split("_")[0];
                 _dataRows.push({    
                           text  : _text
@@ -226,7 +226,7 @@ function setGridLayout(o){
             		, width : 80          
             		, style : "text-align:center;"
                     ,onRender : function(d){
-            		    return  "<a href='javascript:void(0);' onclick='manageLocations("+ svn (d,"organization_id") +",\""+ svn (d,"organization_name")  +"\");'>"+ svn (d,"warehouseCount") +"</a>";
+            		    return  "<a href='javascript:void(0);' onclick='manageLocations("+ svn (d,"organization_id") +",\""+ svn (d,"organization_name")  +"\");'><span class='badge'>"+ svn (d,"warehouseCount") +"</span></a>";
                     }
         		});
             }
@@ -264,11 +264,6 @@ function setGridLayout(o){
                             orgArr = [];
                         });
                     }
-                    
-                    $("input, select").on("keyup change", function(){
-                        var $zRow = $(this).closest(".zRow");
-                        $zRow.find("#is_edited").val("Y");
-                    });
                 }  
             });
         });
@@ -383,14 +378,11 @@ function displayLocations(id){
                   text  : "Bins"         
         		, width : 80          
         		, style : "text-align:center;"
-                ,onRender : function(d){ return "<a href='javascript:manageItemBins("+ svn(d,"warehouse_id") +",\""+  svn(d,"warehouse_location") +"\");'>" + svn(d,"countWarehouseBins") + "</a>"; }
+                ,onRender : function(d){ return "<a href='javascript:manageItemBins("+ svn(d,"warehouse_id") +",\""+  svn(d,"warehouse_location") +"\");'><span class='badge'>" + svn(d,"countWarehouseBins") + "</span></a>"; }
     		}
  	    ]
         ,onComplete: function(){
-            $("#gridLocations input").on("keyup", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });
+
         }
     });   
 }
@@ -441,10 +433,7 @@ function displayInactiveLocations(){
     		,{ text:"Active?"       , width:80  , style:"text-align:left;"    ,type:"yesno"  ,name:"is_active"  ,defaultValue:"Y" }	 	 
  	    ]
         ,onComplete: function(){
-            $("#gridInactiveLocations input").on("keyup", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });
+
         }
     });   
 }
@@ -493,10 +482,7 @@ function displayOrgBins(id){
     		,{ text:"Active?"   , width:80  , style:"text-align:left;"  ,type:"yesno"   ,name:"is_active"    ,defaultValue:"Y" }	 	 
  	    ]
  	    ,onComplete: function(){
- 	        $("#gridOrgBinsModal input, #gridOrgBinsModal select").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });
+
  	    }
     });    
 }
@@ -512,4 +498,4 @@ function submitOrgBins(){
             displayOrgBins(g_warehouse_id);
         }
     });
-}     
+}       
