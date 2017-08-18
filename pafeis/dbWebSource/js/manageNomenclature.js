@@ -127,11 +127,7 @@ function displayRecords(){
                         , text: "status_name"
                         , value: "status_id"
                 });
-    	        $("select, input").on("keyup change", function(){
-                    var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
-                });   
         }  
     });    
 }              
-       
+        

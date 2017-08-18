@@ -78,11 +78,6 @@ function displayRecords(){
         ]   
         ,onComplete: function(){
             $("#cbFilter" + g_tab_name).setCheckEvent("#grid" + g_tab_name + " input[name='cb']");
-	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-                $zRow.find("#ms_classification_code").val(g_tab_name);
-            });
         }
     });    
 }
@@ -107,4 +102,4 @@ $(".btnDelete").click(function(){
         }
     });       
 });
-    
+     
