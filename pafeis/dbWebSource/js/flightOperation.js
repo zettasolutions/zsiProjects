@@ -416,16 +416,6 @@ function displayFlightTime(flight_operation_id){
                             +'  <div class="zCell no-data" style="width:120px;text-align:center;"><label>'+ totalHours +'</label></div>'
                             +'  <div class="zCell no-data " style="width:500px;text-align:left;"></div></div>';
                 $("#tblFlightDetails .zGridPanel.right").find("#table").append(gridFooter);
-                
-                $("select, input").on("keyup change", function(){
-                    var $zRow = $(this).closest(".zRow");
-                    if($zRow.length){
-                        $zRow.find("#is_edited").val("Y");
-                    }
-                    else
-                        $("#" + tblFTime).find("#is_edited").val("Y");
-                });
-	        
                 $("#cbFilter2").setCheckEvent("#" + tblFTime + " input[name='cb']");
                 $("input[name='engine_start']").dateTimePicker({ format:'m.d.Y H:i'});
                 $("input[name='engine_shutdown']").dateTimePicker({ format:'m.d.Y H:i'});
@@ -471,10 +461,6 @@ function displayFlightOperationPilot(flight_operation_id){
 	    ]
     	     ,onComplete: function(data){
                 $("#cbFilter3").setCheckEvent("#" + tblPilot + " input[name='cb']");
-    	        $("select, input").on("keyup change", function(){
-                    var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
-                });            
                 $("select[name='pilot_id']").dataBind({
                      url: procURL + "dd_pilots_sel @squadron_id=" + g_organization_id
                     , text: "userFullName"
@@ -557,4 +543,4 @@ function setStatusName(page_process_action_id) {
         }
     });
 }
-                                   
+                                    

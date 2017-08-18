@@ -670,10 +670,6 @@ function fixTextAreaEvent(){
     //Set current date to Doc Date and Received Date
     $("#doc_date").val(g_today_date.toShortDate());
     $("#received_date").val(g_today_date.toShortDate());
-    
-    $("select, input").on("keyup change", function(){
-        $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    });
 }
 // Build the receiving details form.
 function buildReceivingDetails(callback) {
@@ -792,15 +788,7 @@ function buildReceivingDetails(callback) {
                 ,text: "status_name"
                 ,value: "status_id"
             });
-            $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                if($zRow.length){
-                    $zRow.find("#is_edited").val("Y");
-                }
-                else
-                    $("#tblModalReceivingHeader").find("#is_edited").val("Y");
-            });
-            
+
             $("#tblModalReceivingDetails").find(".zRow").click(function(e){
                 if($(this).find("#serial_no").hasClass("with-serial")){
                 }else{
@@ -1262,16 +1250,7 @@ function loadReceivingDetails(receiving_id) {
                     }
                 }
             });
-            $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                if($zRow.length){
-                    $zRow.find("#is_edited").val("Y");
-                    
-                }
-                else
-                    $("#tblModalReceivingHeader").find("#is_edited").val("Y");
-            });
-            
+
             $("#tblModalReceivingDetails").find(".zRow").click(function(e){
                 if($(this).find("#serial_no").hasClass("with-serial")){
                 }else{
@@ -1340,12 +1319,6 @@ function displaySubCategoryGrid(receiving_detail_id) {
             $("select[name='manufacturer_id']").dataBind("manufacturer");
             $("select[name='item_class_id']").dataBind("item_class");
             
-            $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                if($zRow.length){
-                    $zRow.find("#is_edited").val("Y");
-                }
-            });
             setSearchMulti();
         }  
     });
@@ -1735,4 +1708,4 @@ function PrintToPDF(){
         }
     });
 }
-      
+       

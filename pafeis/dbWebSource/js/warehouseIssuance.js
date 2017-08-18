@@ -116,14 +116,6 @@ function initSelectOptions(callbackFunc){
         } 
     });
     
-    $("select, input").on("keyup change", function(){
-            $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-    }); 
-    
-    $("select, input").on("keyup change", function(){
-        var $zGrid  = $(this).closest(".zGrid ");
-        $zGrid.find("#is_edited").val("Y");
-    });
 }
 
 // Get the template for the initialization of the modal windows.
@@ -616,11 +608,6 @@ function buildIssuanceDetails(callback) {
                 clearIssuanceDetails(this);
             });
             
-	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });            
-
             $("[name='quantity']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
                 var stock_qty = $zRow.find('#stock_qty').text();
@@ -1079,15 +1066,6 @@ function loadIssuanceDetails(issuance_id) {
                 clearIssuanceDetails(this);
             });
             
-	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                if($zRow.length){
-                    $zRow.find("#is_edited").val("Y");
-                }
-                else
-                    $("#tblModalIssuanceHeader").find("#is_edited").val("Y");
-            });
-
             $("[name='quantity']").keyup(function(){
                 var $zRow = $(this).closest(".zRow");
                 var stock_qty = $zRow.find('#stock_qty').text();
@@ -1453,4 +1431,4 @@ function clearIssuanceDetails(el){
     $zRow.find("label").text('');
 }
 
-            
+               
