@@ -3,8 +3,6 @@ var svn =  zsi.setValIfNull;
 
 zsi.ready(function(){
     displayRecords();
-    
-    
 });
 
 
@@ -82,4 +80,4 @@ $("#btnDelete").click(function(){
     });   
 
 });     
-                                         
+                                          

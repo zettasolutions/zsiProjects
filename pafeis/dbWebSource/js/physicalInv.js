@@ -143,9 +143,7 @@ $("#btnNew").click(function () {
     displayPhysicalInvDetails('');
     buildPhysicalInvButtons();
     
-    $("select, input").on("keyup change", function(){
-        $("#frmPhysicalInv").find("#is_edited").val("Y");
-    }); 
+    
 
     $("select[name='done_by']").dataBind({
         url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id  
@@ -200,9 +198,7 @@ function showModalEditPhysicalInv(index,physical_inv_no) {
     //$("#ctxMW .modal-title").text("Physical Inventory » " + physical_inv_no);
     $("#ctxMW").modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#ctxMW #physical_inv_no").val(physical_inv_no);
-    $("select, input").on("keyup change", function(){
-        $("#frmPhysicalInv").find("#is_edited").val("Y");
-    });     
+       
     $("select[name='done_by']").dataBind({
         url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id 
             , text: "userFullName"
@@ -586,12 +582,7 @@ function displaySerialNumbers(physical_inv_id, item_code_id){
         ,onComplete: function(){
             $("#cbFilter4").setCheckEvent("#grid input[name='cb']");
             $("select[name='status_id']").dataBind("inv_serial_status");
-            $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                if($zRow.length){
-                    $zRow.find("#is_edited").val("Y");
-                }
-            });
+           
         }  
     }); 
 }
@@ -628,4 +619,4 @@ function setMandatoryEntries(){
         ]
     });    
 }
-   
+    

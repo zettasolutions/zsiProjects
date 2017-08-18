@@ -278,10 +278,6 @@ function displayRecords(){
                 }
             });
             
-            $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                $zRow.find("#is_edited").val("Y");
-            });   
             
             markUserMandatory();
             $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"});
@@ -387,4 +383,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                              
+                                
