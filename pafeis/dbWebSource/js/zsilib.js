@@ -571,7 +571,7 @@ var  ud='undefined'
                         if (__o.width) o.table.css("width",(o.width + 1 )  + "px");
                     }
                     ,trItem             = function(o){
-                        
+                        if(o.panelType === "Y" && _chLeft.length > 0) return; 
                         var _dt =  (o.panelType ==="R"? _chRight : _chLeft ); 
                         var _table =  (o.panelType ==="R"? __obj.find(__obj.clsPanelR).find("#table") : __obj.find(__obj.clsPanelL).find("#table") ); 
                         
@@ -754,30 +754,34 @@ var  ud='undefined'
                 if(typeof this.isInitiated === ud){
                     var _footer =  "<div class=\"zPageFooter\"><div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> 0 </i></div>"
                                 +  "<div class='pagectrl'><label id='page'> Page </label> <select id='pageNo'></select>"
-                                +  "<label id='of'> of 0 </label></div></div>";
+                                +  "<label id='of'> of 0 </label></div></div>"
+                       ,_head = "";
+                    
+                    if(_chLeft.length > 0)
+                        _head +="<div class=\"zGridPanel left\">"
+                                    +"<div class=\"zHeaders\"></div>"
+                                    +"<div class=\"zRows\">"
+                                        +"<div id=\"table\"  ></div>"
+                                    +"</div>"
+                                    +"<div class=\"zFooter\"></div>"                
+                                   +"</div>"
+                               +"</div>"
+                        
+                     
+                             
+                    _head +="<div class=\"zGridPanel right\">"
+                                +"<div class=\"zHeaders\"></div>"
+                                +"<div class=\"zRows\">"
+                                    +"<div id=\"table\" ></div>"
+                                +"</div>"
+                                +"<div class=\"zFooter\"></div>"                
+                                +"</div>"
+                            +"</div>"                                
+
                     this.params = o;
                     this.url = o.url;
                     this.isInitiated = true;
-                    this.html(
-                             "<div class=\"zGridPanel left\">"
-                                +"<div class=\"zHeaders\"></div>"
-                                    +"<div class=\"zRows\">"
-                                        +"<div id=\"table\"  ></div>"
-                                    +"</div>"
-                                    +"<div class=\"zFooter\"></div>"                
-                                +"</div>"
-                             +"</div>"
-                             +"<div class=\"zGridPanel right\">"
-                                +"<div class=\"zHeaders\"></div>"
-                                    +"<div class=\"zRows\">"
-                                        +"<div id=\"table\"  ></div>"
-                                    +"</div>"
-                                    +"<div class=\"zFooter\"></div>"                
-                                +"</div>"
-                             +"</div>"
-                            
-                            + (typeof o.isPaging !==ud ?  (o.isPaging===true ? _footer :"") :"")
-                    );
+                    this.html( _head + (typeof o.isPaging !==ud ?  (o.isPaging===true ? _footer :"") :"") );
                     
                     o.isAsync = (typeof o.isAsync !== ud ? o.isAsync : false);
                     __obj.curPageNo = (o.isAsync ===true?1:0);
@@ -803,13 +807,14 @@ var  ud='undefined'
                     _panelLeft.css("width", _gridWidthLeft + "px");
                     _panelRight.css("width", (o.width - _gridWidthLeft -4  )  + "px");
                    
-                    createColumnHeader({ 
-                          headers       : _panelLeft.find(".zHeaders")
-                         ,table         : _tableLeft
-                         ,dataTable     : _chLeft
-                         ,width         : _gridWidthLeft
-                         ,startGroupId  : o.startGroupId
-                    });
+                    if(_chLeft.length > 0)
+                        createColumnHeader({ 
+                              headers       : _panelLeft.find(".zHeaders")
+                             ,table         : _tableLeft
+                             ,dataTable     : _chLeft
+                             ,width         : _gridWidthLeft
+                             ,startGroupId  : o.startGroupId
+                        });
                      
                     createColumnHeader({
                           headers    : _panelRight.find(".zHeaders")
@@ -2459,4 +2464,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                          
+                                                                                                                            
