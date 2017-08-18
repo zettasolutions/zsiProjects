@@ -391,11 +391,7 @@ function deleteItemCodes(){
     }); 
 }
 
-function setEditedRow(){
-    $("input, select").on("change keyup paste", function(){
-        $(this).closest(".zRow").find("#is_edited").val("Y");
-    });  
-}
+
 
 function displayRecords(){
      $("#grid").dataBind({
@@ -420,20 +416,20 @@ function displayRecords(){
     		,{text  : "Nomenclature Types"          , width : 150                       , style : "text-align:center;"      
                 ,onRender : function(d){
                     var catId = (svn(d,"parent_item_cat_id")? svn(d,"parent_item_cat_id"):0);
-                    return "<a href='javascript:manageItemTypes(" + svn(d,"item_cat_id") + ",\"" +  svn(d,"item_cat_name")  + "\"," + catId + ");'>" + svn(d,"countItemTypes") + "</a>"; 
+                    return "<a href='javascript:manageItemTypes(" + svn(d,"item_cat_id") + ",\"" +  svn(d,"item_cat_name")  + "\"," + catId + ");'><span class='badge'>" + svn(d,"countItemTypes") + "</span></a>"; 
                 }
             }
             ,{text  : "Nomenclatures"          , width : 120                       , style : "text-align:center;"      
                 ,onRender : function(d){
                     var catId = (svn(d,"parent_item_cat_id")? svn(d,"parent_item_cat_id"):0);
-                    return "<a href='javascript:manageItemCodesByCategory(" + svn(d,"item_cat_id") + ","+ svn(d,"countItemCodesByCat") +",\"" +  svn(d,"item_cat_name")  + "\");'>" + svn(d,"countItemCodesByCat") + "</a>"; 
+                    return "<a href='javascript:manageItemCodesByCategory(" + svn(d,"item_cat_id") + ","+ svn(d,"countItemCodesByCat") +",\"" +  svn(d,"item_cat_name")  + "\");'><span class='badge'>" + svn(d,"countItemCodesByCat") + "</span></a>"; 
                 }
             }
         	,{text  : "With Serial?"             , name  : "with_serial"     , type  : "yesno"         , width : 90        , style : "text-align:left;"   ,defaultValue:"Y"}
 	    ] 
 	    ,onComplete: function(){
             $("select[name='parent_item_cat_id']").dataBind( "item_category");
-            setEditedRow();
+           
         }  
     });    
 }
@@ -504,8 +500,8 @@ function displayRecordsItemTypes(id, parent_item_cat_id, name){
 		{text  : "Is Active?"          , name  : "is_active"               , type  : "yesno"           , width : 75        , style : "text-align:center;"  ,defaultValue:"Y"}
 		,{text  : "Nomenclature Codes"  , width : 150                       , style : "text-align:center;"      
             ,onRender  : function(d){return "<a  href='javascript:void(0);' onclick='manageItemCodes(this," + svn(d,"item_type_id") + ",\"" 
-                +  svn(d,"item_type_name")  + "\","+ svn(d,"countItemCodes") +");'>" 
-                +  svn(d,"countItemCodes") + "</a>"; 
+                +  svn(d,"item_type_name")  + "\","+ svn(d,"countItemCodes") +");'><span class='badge'>" 
+                +  svn(d,"countItemCodes") + "</span></a>"; 
             }
         }
     );
@@ -530,7 +526,7 @@ function displayRecordsItemTypes(id, parent_item_cat_id, name){
            	}
             $(".no-data input[name='item_type_code']").checkValueExists({code:"ref-0008",colName:"item_type_code"});
             $(".no-data input[name='item_type_name']").checkValueExists({code:"ref-0008",colName:"item_type_name"});
-            setEditedRow();
+          
         }  
     });    
 }
@@ -566,7 +562,7 @@ function displayInactiveItemTypes(){
             $("#cbFilter2").setCheckEvent("#" + tblInactiveIT + " input[name='cb']");
             //$("select[name='monitoring_type_id']").dataBind( "monitoring_type");
             //$("select[name='unit_of_measure_id']").dataBind( "unit_of_measure");
-            setEditedRow();
+           
         }  
     });    
 }    
@@ -611,7 +607,7 @@ function displayRecordsItemCodes(id,monitoring_type_name, count){
                 ,text: "item_type_name"
                 ,value: "item_type_id"
             });
-            setEditedRow();
+           
             
             $("#column_name").change(function(){
                 if(!this.value){
@@ -652,7 +648,7 @@ function displayInactiveItemCodes(){
 	    ] 
         ,onComplete: function(){
             $("#cbFilter3").setCheckEvent("#" + tblInactiveIC + " input[name='cb']");
-            setEditedRow();
+            
         }  
     });    
 }    
@@ -737,7 +733,7 @@ function displayItemCodesByCategory(item_cat_id, count){
                 ,text: "item_type_name"
                 ,value: "item_type_id"
             });
-            setEditedRow();
+           
             
             $("#column_name").change(function(){
                 if(!this.value){
@@ -818,4 +814,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }               
-            
+              

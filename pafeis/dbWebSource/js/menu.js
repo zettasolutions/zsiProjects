@@ -91,7 +91,7 @@ function displayRecords(){
         		    ,onRender  : 
                         function(d){
                             if(d!==null && (d.page_id !=="") )
-                                return "<a href='javascript:showModalPageProcess(" + d.page_id  + ",\"" +  d.menu_name  + "\");'>" + d.ProcessCount + "</a>";
+                                return "<a href='javascript:showModalPageProcess(" + d.page_id  + ",\"" +  d.menu_name  + "\");'><span class='badge'>" + d.ProcessCount + "</span></a>";
                             else 
                                 return "";
                     }
@@ -114,4 +114,4 @@ $("#btnDelete").click(function(){
                       }
     });      
 });
-      
+       

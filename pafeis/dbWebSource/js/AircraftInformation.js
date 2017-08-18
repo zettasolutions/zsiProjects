@@ -143,7 +143,7 @@ function displayRecords(){
         		,{text  : "Status"                      , name  : "status_id"                   , type : "select"         , width : 130       , style : "text-align:left;"}
         		,{text  : "# of Assembly / Components"               , width : 120                           , style : "text-align:center;"      
                     ,onRender:  
-                        function(d){return "<a href='javascript:manageAssembly(" + svn(d,"aircraft_info_id") + ",\"" +  svn(d,"aircraft_name")  + "\","+ svn(d,"aircraft_type_id")  +");'>" + svn(d,"countItems") + "</a>"; 
+                        function(d){return "<a href='javascript:manageAssembly(" + svn(d,"aircraft_info_id") + ",\"" +  svn(d,"aircraft_name")  + "\","+ svn(d,"aircraft_type_id")  +");'><span class='badge'>" + svn(d,"countItems") + "</span></a>"; 
                     }
                 }
 
@@ -162,11 +162,7 @@ function displayRecords(){
                 });
 
 
-    	        $("select, input").on("keyup change", function(){
-                    var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
- 
-                });            
+    	                
 
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
                 $("select[name='aircraft_type_id']").dataBind({
@@ -246,7 +242,7 @@ function displayRecordsAssembly(id){
                                   +  bs({name:"aircraft_info_id",type:"hidden",value: id})
                                   +  bs({name:"date_issued",type:"hidden",value: svn (d,"date_issued")})
                                   +  bs({name:"status_id",type:"hidden",value: svn (d,"status_id")})
-                                  + "<a href='javascript:manageComponent(" + svn(d,"item_id") + ",\""+ svn(d,"item_name") +" / "+  svn(d,"serial_no") +"\","+ svn(d,"g_aircraft_type_id") +");'>" + svn(d,"countAircraftAC") + "</a>"; 
+                                  + "<a href='javascript:manageComponent(" + svn(d,"item_id") + ",\""+ svn(d,"item_name") +" / "+  svn(d,"serial_no") +"\","+ svn(d,"g_aircraft_type_id") +");'><span class='badge'>" + svn(d,"countAircraftAC") + "</span></a>"; 
                     }
         		}
  	    ] 
@@ -254,10 +250,7 @@ function displayRecordsAssembly(id){
  	        $("#cbFilter2").setCheckEvent("#" + tblCP + " input[name='cb']");
  	        setSearch("A");
  	        $("select[name='manufacturer_id']").dataBind( "manufacturer");
- 	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
-            });
+ 	        
  	    }
     });    
 }  
@@ -337,10 +330,7 @@ function displayRecordsComponents(id){
  	        $("#cbFilter3").setCheckEvent("#" + tblCP + " input[name='cb']");
  	        setSearch("C");
  	        $("select[name='manufacturer_id']").dataBind( "manufacturer");
- 	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
-            });
+ 	        
  	    }
     });    
 }
@@ -464,3 +454,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }        
+  

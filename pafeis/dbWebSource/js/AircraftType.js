@@ -102,7 +102,7 @@ function displayRecords(){
         	,{ text:"Active?"                   , width:70              , style:"text-align:center;"        , type:"yesno"          ,name:"is_active"  ,defaultValue:"Y"}
         	,{ text:"# of Assembly / Components"             , width : 120           , style : "text-align:center;"      
                 ,onRender:  
-                    function(d){return "<a href='javascript:manageAssembly(" + svn(d,"aircraft_type_id") + ",\"" +  svn(d,"aircraft_type")  + "\");'>" + svn(d,"countAssembly") + "</a>"; 
+                    function(d){return "<a href='javascript:manageAssembly(" + svn(d,"aircraft_type_id") + ",\"" +  svn(d,"aircraft_type")  + "\");'><span class='badge'>" + svn(d,"countAssembly") + "</span></a>"; 
                 }
             }
 	    ]
@@ -185,17 +185,14 @@ function displayAssembly(aircraft_type_id){
     		,{text  : "Nomenclature"             , name  : "item_name"              , type  : "input"         , width : 320       , style : "text-align:left;"}
     		,{text  : "# of Components"           , width : 130                 , style : "text-align:center;"
     		    ,onRender : function(d){
-                    return "<a href='javascript:manageComponent(" + svn(d,"aircraft_type_nomenclature_id") + ");'>" + svn(d,"countSubComponents") + "</a>"; 
+                    return "<a href='javascript:manageComponent(" + svn(d,"aircraft_type_nomenclature_id") + ");'><span class='badge'>" + svn(d,"countSubComponents") + "</span></a>"; 
                 }
     		}
  	    ] 
  	    ,onComplete: function(){
  	        $("#cbFilter2").setCheckEvent("#tblAssemblyAndComponents input[name='cb']");
  	        setSearch("A");
- 	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
-            });
+ 	        
  	    }
     });    
 } 
@@ -236,10 +233,7 @@ function displayComponents(aircraft_type_nomenclature_id){
  	    ,onComplete: function(){
  	        $("#cbFilter3").setCheckEvent("#tblAssemblyAndComponents input[name='cb']");
  	        setSearch("C");
- 	        $("select, input").on("keyup change", function(){
-                var $zRow = $(this).closest(".zRow");
-                    $zRow.find("#is_edited").val("Y");
-            });
+ 	       
  	    }
     });    
 }
@@ -374,4 +368,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }        
-     
+       
