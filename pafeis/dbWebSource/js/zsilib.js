@@ -643,8 +643,15 @@ var  ud='undefined'
                             var _i = $(this).index();
                             $rows.removeClass("active");
                              __obj.find(".zRow:nth-child("  + (_i + 1) +  ")").addClass("active");
-                            //$(this).addClass("active");
                         });
+                        
+                        //check on input change if current row is edited.
+                        $rows.find("select, input").on("keyup change", function(){
+                                var $zRow = $(this).closest(".zRow");
+                                $zRow.find("#is_edited").val("Y");
+                        });   
+                        
+                        
                     }
                     ,setScrollBars      = function(){
                         _tableRight.parent().scroll(function() {
@@ -719,6 +726,14 @@ var  ud='undefined'
                                 trItem({data:null,panelType:"R",rowClass:_cls,index:x});
                             }
                         } 
+                    }
+                    ,rowsCompleted = function(){
+                        //setRowsKeyUpChange();
+                        createBlankRows(o);
+                        setRowClickEvent();
+                        setScrollBars();
+                        __obj.addClickHighlight(); 
+                        __obj.setColumnResize();
                     }
                 ;
             
@@ -810,9 +825,7 @@ var  ud='undefined'
                     _panelLeft = this.find(".left").find("#table");
                     _tableRight = this.find(".right").find("#table");
                 }
-                
-                //console.log(this.isInitiated );
-                
+
                 var isOnEC= (typeof o.onEachComplete !== ud);
                 if (isOnEC){    
                     var strFunc = o.onEachComplete.toString();
@@ -856,19 +869,13 @@ var  ud='undefined'
                                             __obj.dataBindGrid(__obj.params);
                                     }
                                     else{
-                                        //curPageNo=0;
-                                        createBlankRows(o);
-                                        setRowClickEvent();                                  
-                                        setScrollBars();
+                                        rowsCompleted();
                                         __obj.find("#recordsNum").html(num_rows);
-                                        
                                          if(typeof __obj.isPageInitiated === ud){
                                             __obj.setPageCtrl(o,o.url,data);    
                                             __obj.isPageInitiated=true;
                                          }
-
-                                        //add tr click event.
-                                        __obj.addClickHighlight();
+                                        
                                         if(__obj.left) _tableRight.parent().scrollLeft(Math.abs(__obj.left ));
                                         
                                         if(o.isAsync && o.onAsyncComplete) {
@@ -877,8 +884,8 @@ var  ud='undefined'
                                         }
                                         if(o.onComplete) o.onComplete(data);
                                     }
-                                    //console.log(o)
-                                    __obj.setColumnResize()
+                                   
+                                   
                             }          
                     };
                     
@@ -908,28 +915,14 @@ var  ud='undefined'
                         trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
                         trItem({data:this,panelType:"R",rowClass:_cls,index:i});                            
                     });
-                    
-                    createBlankRows(o);
-                    setRowClickEvent();
-                    setScrollBars();
-                    __obj.addClickHighlight();
+                    rowsCompleted();
                     if(o.onComplete) o.onComplete();
-                    __obj.addClickHighlight();   
-                    __obj.setColumnResize();
                 }  
                 else{
                     if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
-                    for(var y=0;y<o.blankRowsLimit;y++){
-                        var _cls = zsi.getOddEven();
-                        trItem({data:null,panelType:"L",rowClass:_cls,index:y}); 
-                        trItem({data:null,panelType:"R",rowClass:_cls,index:y});       
-                    }
-                    setRowClickEvent();                                  
-                    setScrollBars();
+                    rowsCompleted();                  
                     if(o.onComplete) o.onComplete();
-                    //add tr click event.
-                    __obj.addClickHighlight();
-                    __obj.setColumnResize();
+
                 }
                 
             };
@@ -2466,4 +2459,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                        
+                                                                                                                          
