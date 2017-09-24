@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[load_item_codes] 
-   @user_id int
+   @user_id int null
 AS
 BEGIN
 SET NOCOUNT ON

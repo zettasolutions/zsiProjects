@@ -4,6 +4,7 @@ CREATE PROCEDURE [dbo].[load_aircraft_type_nomenclatures]
 AS
 BEGIN
 SET NOCOUNT ON
+
 delete from dbo.temp_aircraft_type_nomenclatures where part_no IS NULL;
 insert into aircraft_type_nomenclatures (	
     aircraft_type_id,
@@ -11,8 +12,8 @@ insert into aircraft_type_nomenclatures (
 	created_by,
 	created_date) 
   select
-    dbo.getAircraftTypeId(aircraft_type) aircraft_type_id,
-    dbo.getItemCodeId(part_no) item_code_id,
+    aircraft_type_id,
+    item_code_id,
     user_id,
 	GETDATE()
 	FROM temp_aircraft_type_nomenclatures_v
