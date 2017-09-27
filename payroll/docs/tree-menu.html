@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Menu</title>
+	<link rel="StyleSheet" href="dtree.css" type="text/css" />
+	<script type="text/javascript" src="js/dtree.js"></script>
+
+</head>
+
+<body>
+
+<div class="dtree">
+
+<script type="text/javascript">
+<!--
+  /* Modification History
+   Date       By    History
+   ---------  ----  -------------------------------------------------------
+   09-April-14  GF  Removed : hard-coded ParentId & ChildId.
+*/   
+var TreeItems=[];
+function TreeItem(){
+	this.Title="";
+	this.URL="";
+	this.Id=null;
+	this.ParentCode="";
+	this.ChildCode="";
+
+	}
+
+TreeItems.add = function(title, url,parentCode,childCode){
+	var ilength = this.length;
+	var ti = new TreeItem();
+	ti.Title = title;
+	ti.Url = url;
+	ti.Id = ilength;
+	
+	ti.ParentCode=parentCode;
+	ti.ChildCode=childCode;	
+	
+	if(childCode){ 	
+		for(var x=0; x < ilength;x++){
+			if (this[x].ParentCode == childCode){
+				ti.ParentId = this[x].Id; 
+				break;
+			} 
+		}
+	}
+
+	this[ilength] = ti;	
+ 
+}
+
+TreeItems.Display= function(){
+	  d = new dTree('d');
+		for(var x=0; x < this.length;x++){				
+			if(this[x].Id ==0) 
+				d.add(this[x].Id,-1, this[x].Title, this[x].Url,'','basefrm');
+			else
+				d.add(
+					 this[x].Id
+					,this[x].ParentId
+					,this[x].Title
+					,this[x].Url
+					,''
+					,'basefrm'
+				);	
+				 
+		}
+	document.write(d);
+} 
+
+
+var t = TreeItems;                                                                                                              
+t.add("Documentation overview","startup.html","home",null); 
+	t.add("Landing Page","landingpage.html#landingpage",null,"home");
+	
+	t.add("Dashboard","","dashboard","home");
+		t.add("Inventory Dashboard","dash.html#dash",null,"dashboard");	
+		t.add("Procurement Dashboard","dash.html#proc",null,"dashboard");
+		t.add("Aicraft Dashboard","dash.html#air",null,"dashboard");
+		
+    t.add("Transaction","","transaction","home");
+		t.add("Physical Inventory","transaction.html#pi",null,"transaction");
+		t.add("Stock Adjustment","transaction.html#sa",null,"transaction");
+		t.add("Procurements","transaction.html#proc",null,"transaction");
+		t.add("Warehouse Receiving","transaction.html#wrt",null,"transaction");
+		t.add("Issuance Directives","transaction.html#idt",null,"transaction");
+		t.add("Warehouse Issuances","transaction.html#wit",null,"transaction");
+		t.add("Flight Operations","transaction.html#fott",null,"transaction");
+		
+	
+	t.add("Inquiry","","inquiry2","home");	
+		t.add("Stocks Search","inquiry2.html#ssi",null,"inquiry2");						
+		t.add("Aircraft Search","inquiry2.html#aisi",null,"inquiry2");	
+		t.add("Assembly Search","inquiry2.html#assi",null,"inquiry2");
+		t.add("Component Search","inquiry2.html#csi",null,"inquiry2");
+		
+	t.add("Reports","","reports","home");
+		t.add("Components with Remaining Time Report","reports.html#cr",null,"reports");						
+		t.add("Critical Stockpile Report","reports.html#csr",null,"reports");						
+		t.add("Aircraft Status Report","reports.html#asr",null,"reports");	
+		t.add("Issuance Report","reports.html#ir",null,"reports");	
+		t.add("Procurement Report","reports.html#pr",null,"reports");
+		t.add("Receiving Report","reports.html#rr",null,"reports");
+		t.add("Flight Operations Report","reports.html#for",null,"reports");
+	
+		
+	t.add("Manage ","","manage","home");																					
+		t.add("Manufacturers","manage.html#mm",null,"manage");			 
+		t.add("Dealers","manage.html#md",null,"manage");				 
+		t.add("Supply Sources","manage.html#mss",null,"manage");
+		t.add("Organization Groups","manage.html#mog",null,"manage");
+		t.add("Organization","manage.html#mo",null,"manage");
+		t.add("Squadron Types","manage.html#st",null,"manage");
+		t.add("Statuses","manage.html#ms",null,"manage");
+		t.add("Unit of Measure","manage.html#mum",null,"manage");
+		t.add("Positions","manage.html#mp",null,"manage");
+		t.add("Employees","manage.html#me",null,"manage");												 
+		t.add("Monitoring Types","manage.html#mmt",null,"manage");
+		t.add("Set-up Nomenclature","manage.html#sn",null,"manage");
+		t.add("Types of Adjustment","manage.html#ta",null,"manage");
+		t.add("Flight Operation Types","manage.html#fot",null,"manage");		
+		t.add("Origin","manage.html#o",null,"manage");
+		t.add("Aircaft Class","manage.html#ac",null,"manage");
+		t.add("Aircaft Roles","manage.html#ar",null,"manage");
+		t.add("Aircaft Types","manage.html#at",null,"manage");
+		t.add("Aicraft Information","manage.html#ai",null,"manage");
+		t.add("Mission Symbols","manage.html#miss",null,"manage");
+		t.add("Stations","manage.html#sts",null,"manage");
+		t.add("Ranks","manage.html#rks",null,"manage");
+		t.add("Designations/Positions","manage.html#dp",null,"manage");
+		
+	t.add("Administration","","administration","home");																					
+		t.add("Roles","administration.html#roles",null,"administration");			 
+		t.add("Users","administration.html#users",null,"administration");				 
+		
+		
+	t.add(" System USER","","system","home");	
+		t.add("User Manual","system.html#um",null,"system");
+		t.add("Change Password","system.html#cp",null,"system");
+		t.add("Logout","system.html#out",null,"system");
+		
+ t.Display(); 
+ 
+</script>
+</div>
+</body>
+</html>

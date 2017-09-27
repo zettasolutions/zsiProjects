@@ -1,0 +1,121 @@
+<link href="/content/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src="/Scripts/jspdf.min.js"></script>
+<script src='/javascript/name/zsiPdf'></script>
+
+<script src='/javascript/name/zsiSearch'></script>
+<style>
+    #zPanelId {
+        display:none;
+    }
+    
+    .zExtraRow{
+        margin-left:26px;
+        background-color:#fff;
+        display:none;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .zGrid a{
+        color:#3577C3;
+        margin-left:4px;
+    }
+    
+    .zGrid .zRow.total {
+        background-color: gray;
+        color: #fff;
+        font-weight: bold;
+    }
+    
+    
+    .zRows .zGrid .zHeaders {
+        background-image: linear-gradient(to bottom, #9399a0 0px, #41454a 100%);
+    }
+    .zButtons{
+        padding-left: 6px;        
+        margin-top: 9px;
+        overflow: auto;       
+    }
+    .zButtons button{
+         margin-right:6px;
+    }
+    .dateTo{
+       margin-left: -103px;
+    }
+    #btnPdf{
+        display:none;
+    }
+    
+    #ifrmWindow{
+        width:100%;
+        height:600px;
+        border:solid 0pt #000;
+        margin-top:10px;
+    }
+    
+
+</style>
+<div class="zPanel">
+    <div style="min-height:20px;margin-top:10px">
+        <form method="post" id="frm">
+             <div class="form-horizontal">
+                 
+                <div class="form-group  ">
+                    <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1 control-label">Wing</label>
+                    <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2" >
+                        <select name="wing_id" id="wing_id" class="form-control input-sm"> </select>
+                    </div>
+                    <label class="col-xs-4 col-sm-2 col-md-2 col-lg-2 control-label">Procurement Code</label>
+                    <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2" >
+                        <input name="proc_code_id" id="proc_code_id" class="form-control input-sm" type="hidden" > 
+                        <input name="proc_code" id="proc_code" placeholder="Search P.O Code" class="form-control input-sm"> 
+                    </div>
+                    <label class="col-xs-4 col-sm-3 col-md-2 col-lg-2 control-label">Procurement Mode</label>
+                    <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2" >     
+                        <select name="procurement_mode" id="procurement_mode" class="form-control input-sm"> </select>
+                    </div>
+                </div>
+                
+                <div class="form-group  ">
+                    <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1 control-label">Dealer</label>
+                    <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2">
+                        <select name="supplier_id" id="supplier_id" class="form-control input-sm" > </select>  
+                    </div>
+
+                    <label class="col-xs-4 col-sm-2 col-md-2 col-lg-2 control-label" >Date (From / To)</label>
+                    <div class="col-xs-4 col-sm-1 col-md-1 col-lg-1" >   
+                       <input name="date_from" id="date_from" class="form-control input-sm"> 
+                    </div>
+                    <div class="col-xs-4 col-sm-1 col-md-1 col-lg-1" >   
+                        <input name="date_to" id="date_to" class="form-control input-sm"> 
+                    </div>
+                    <label class="col-xs-4 col-sm-3 col-md-2 col-lg-2 control-label">Report Type</label>
+                    <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2" >     
+                        <select name="report_type_id" id="report_type_id" class="form-control input-sm"> </select>
+                    </div>
+
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-4 col-sm-1 col-md-1 col-lg-1">&nbsp;</label>
+                    <div class="zButtons"  style="padding-left:5px;padding-top:2px;">
+                        <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1" >
+                            <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class="glyphicon glyphicon-filter"></span> Display Report</button>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="padding-left:25px" >
+                            <button type="button"  class="btn btn-primary btn-sm" id="btnPdf"><span class="glyphicon glyphicon-file"> </span> Show PDF </button>
+                        </div >
+                    </div>
+                </div>
+          </div>
+        </form>
+    </div>
+</div>
+            <div class="zPanel" id="zPanelId">
+                <div >
+                      <div id="grid" class="zGrid"></div>
+                </div>
+            </div>
+
+<script src="/scripts/bootstrap-datepicker.min.js"></script> 
+<script src="/Scripts/handlebars-v3.0.0.js"></script>

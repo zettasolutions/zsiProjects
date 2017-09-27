@@ -1,0 +1,215 @@
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Home.cshtml";
+}
+<style>
+
+    body{
+       background-color:#ffffff;
+       background-image: url("@Url.Content("~/")image.jpg");
+    }
+    #loginform {
+        margin-top: -10px;
+        padding-right: 25px;
+    }
+
+    #loginform label {
+        color: #ffffff;
+    }
+	.login-panel h1, .login-panel h2 { 
+    text-align: center;
+    font-family: 'Black Ops One', cursive;
+    font-size: 36px;
+	text-shadow: 2px 2px 5px #333;
+	color: #FFB20C;
+	}
+	
+	.login-form {
+        background-color: #0B2972;
+        /*border: 1pt solid #92bc6d;*/
+        min-height: 127px;
+        
+        padding: 35px 35px 15px;
+    }
+
+.container {
+   /* width: 939px !important;*/
+    margin-top: 65px;
+}
+.form-group .control-label {
+    text-align: left;
+    color:#ffffff;
+    
+}
+.ftrlogin {
+    font-size: 10px;
+	color: #000;
+}
+
+</style>
+
+<div class="pageHeader">
+    <div class="container-fluid">
+        <div class="row">
+            <!--<div class="col-md-12">
+                <a href="@Url.Content("~/")">
+                    <img src="@Url.Content("~/")images/loginAirforce.png" style="z-index: 100;width: 173px;"/>
+                </a>
+            </div>-->
+        </div>
+    </div>
+</div>
+<div class="container page">
+	<div class="login-panel col-md-12 col-md-12">
+	    <div style="text-align: center;">
+            <img src="@Url.Content("~/")images/PAYROLLlogo-sm.png" style="z-index: 100;"/>
+	    </div>
+	    <div>
+	        <h1 class="pafText"> <br>  PAYROLL SYSTEM</h1>
+	    </div>
+	    <div>
+    		<form id="frmLogin" method="post" action="@Url.Content("~/")account/validate" 
+    		      class="login-form col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">  
+    			<div class="form-horizontal">
+    				<div class="form-group  "> 
+    					<div class=" col-xs-12">
+    					     <label class=" col-xs-12 control-label">Login Name</label>
+    					    <input type="text" name="username" id="username" class="form-control input-sm "></div>
+    				</div>
+    				<div class="form-group  ">  
+    					<div class=" col-xs-12">
+    					    <label class=" col-xs-12 control-label">Password</label>
+    					    <input type="password" name="password" id="password" class="form-control input-sm "></div>
+    				    <div class="buttonGroup pull-right">
+    				    	<button type="submit" class="btn btn-primary btn-sm" id="btnLogIn">Log In</button>    
+    				    </div>
+    				</div> 
+    				           
+    			</div>        
+    		</form> 
+    		<div class="ftrlogin">
+    		    <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">Powered By ZettaSolutions, Inc.</div>
+            </div>		
+		</div>
+	</div>			
+</div>
+
+<script>
+    $(document).ready(function () {
+	    var msg = zsi.getUrlParamValue("access");
+	    var _username = readCookie("username");
+	   
+		if(_username){
+			if (msg !== "") {
+				$("#username").val(_username);
+				$("#password").val( readCookie("userpwd"));
+				$("#isremember").prop('checked',true);
+				$("#frmLogin").submit();
+			}
+			else
+				clearCookies();
+		}
+		else {
+		    if (msg) alert( unescape(msg) + " Please try again.")
+        }
+		
+        $('.carousel').carousel({
+            interval: 6000
+        })		
+    });
+
+$("#frmLogin").submit(function () {
+
+    if ($("#username").val() === "") { alert("Please enter username."); return false; }
+    if ($("#password").val() === "") { alert("Please enter password."); return false; }
+	checkRememberSignin();
+});
+
+$("#btnTest").click(function () {
+	checkRememberSignin();
+});
+
+function clearCookies(){
+	createCookie("username","",0);
+	createCookie("userpwd","",0);
+	$("#isremember").prop('checked',false);
+}
+
+function checkRememberSignin(){
+	if ( $("#isremember").is(':checked') ){
+			createCookie("username",$("#username").val(),1);
+			createCookie("userpwd",$("#password").val(),1);
+	}
+	else clearCookies();
+}
+
+var button = $("#example-one");
+button.on("click", function () {
+
+    var x = $(this);
+    if (x.text() == x.data("text-swap")) {
+        x.text(x.data("text-original"));
+    } else {
+        x.data("text-original", x.text());
+        x.text(x.data("text-swap"));
+    }
+
+});
+
+var button = $("#example-two");
+button.on("click", function () {
+
+    var x = $(this);
+    if (x.text() == x.data("text-swap")) {
+        x.text(x.data("text-original"));
+    } else {
+        x.data("text-original", x.text());
+        x.text(x.data("text-swap"));
+    }
+
+});
+
+function createCookie(name,value,days) {
+    var expires;
+    if (days) {
+    	var date = new Date();
+    	date.setTime(date.getTime()+(days*24*60*60*1000));
+    	expires = "; expires="+date.toGMTString();
+    }
+    else expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
