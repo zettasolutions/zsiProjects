@@ -1,0 +1,21 @@
+CREATE TABLE payroll(
+payroll_id	INT IDENTITY(1,1)	NOT NULL
+,employee_id	INT	NULL
+,cut_off_id	INT	NULL
+,tax_contribution_code	CHAR(5)	NULL
+,basic_pay_amount	DECIMAL(12)	NULL
+,ot_amount	DECIMAL(12)	NULL
+,np_pay_amount	DECIMAL(12)	NULL
+,leave_wpay_amount	DECIMAL(12)	NULL
+,leave_wopay_amount	NCHAR(20)	NULL
+,sss_amount	DECIMAL(12)	NULL
+,pag_ibig_amount	DECIMAL(12)	NULL
+,philheath_amount	DECIMAL(12)	NULL
+,gross_amount	DECIMAL(12)	NULL
+,tax_amount	DECIMAL(12)	NULL
+,other_deduction_amount	DECIMAL(12)	NULL
+,net_amount	DECIMAL(12)	NULL
+,created_by	INT	NULL
+,created_date	DATETIME	NULL
+,updated_by	INT	NULL
+,updated_date	DATETIME	NULL)
