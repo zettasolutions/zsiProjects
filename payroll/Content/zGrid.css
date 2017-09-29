@@ -81,7 +81,7 @@
 .zGrid .zHeaders > .item .title {
     height: 20px;
     align-items: center;
-    display: flex;	
+   /* display: flex;*/
 }
 
 .zGrid .zHeaders .item {
@@ -313,6 +313,7 @@
     line-height:10px
 }
 /*end of sort*/
+
 
 
 

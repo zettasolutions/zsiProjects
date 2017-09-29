@@ -27,7 +27,7 @@ a:hover{
     white-space: normal;
 }
 .pageHeader {
-      background-color: #1D64B6;
+      background-color: #ffffff;
     height: 44px;
 }
 .zBanner {
@@ -766,7 +766,7 @@ ul.imgFrame li.imgItem{}
 ul.imgFrame li.imgItem .text { text-align:center; }
 	
 .debugPanel {
-    background-color: #fff;
+    background-color: #cccccc;
     border: 1pt solid #333333;
     border-radius: 0 0 3px 3px;
     font-size: 8pt;
