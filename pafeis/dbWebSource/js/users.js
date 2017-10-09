@@ -211,7 +211,8 @@ function displayRecords(){
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
-        ,isPaging : true
+        ,isPaging       : true
+        ,rowsPerPage    : 100
         ,dataRows       :[
             { text:"#"          , width:25     , style:"text-align:center;" 
                  , onRender      :  function(d) {
@@ -383,4 +384,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                                
+                                 

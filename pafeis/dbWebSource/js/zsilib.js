@@ -267,7 +267,7 @@ var  ud='undefined'
               var _dt =  (defaultText ? defaultText : "");
               this.html(   (hasOption ? "<option>"  + _dt + "</option>" : _dt ));
             };              
-            $.fn.createZoomCtrl     = function(){
+            $.fn.createZoomCtrl     = function(o){
                 this.zmVal  = 1;
                 var self = this;
                 var _onZoom = function(isIn){
@@ -280,6 +280,7 @@ var  ud='undefined'
                         return self.zmVal;
                     };
                     self.css({transform : "scale(" + getVal() + ")"});
+                    if(o.onChange) o.onChange(self.closest(".imgFrame"));
                 };
                 var $p = this.parent();
                 $p.append(
@@ -297,6 +298,7 @@ var  ud='undefined'
                 var x =  $p.find("#zoomIn,#zoomOut").click( function(){
                     if(this.id.toLowerCase() === "zoomin") _onZoom(true); else _onZoom(false);
                 });
+                return this;
             };
             $.fn.dataBind           = function(){
                 var a = arguments;
@@ -416,23 +418,50 @@ var  ud='undefined'
                 this.arrows = this.arrowUp + this.arrowDown;   
                 this.clsPanelR = ".right";
                 this.clsPanelL = ".left";
-                this.setPageCtrl = function(o,url,data){
-                    var _self = this;
-                    var tr = data.returnValue;
-                    var opt ="";
-                    for(var x=1;x<=tr;x++){
-                        opt += "<option value='" + x + "'>" + x + "</option>";
-                    }
-                    var $pageNo = _self.find("#pageNo").html(opt);
-                    _self.find("#recordsNum").html(data.rows.length);
-                    _self.find("#of").html("of " + tr);
-
-                    $pageNo.change(function(){
-                        _self.pageParams = ",@pno=" + this.value ;
-                        if(_self.params.url) _self.params.url  = _self.url +  _self.pageParams +  (typeof _self.sortParams !== ud   ?  _self.sortParams : "" );    
-                        _self.dataBindGrid(_self.params);
+                this.setPageCtrl = function(o,data){
+                    var _self = $(this);
+                    var _$pageNo;
+                  
+                    var _createPageList = function(_rows,_pages){
+                        var opt ="";
+                        for(var x=1;x<=_pages;x++){
+                            opt += "<option value='" + x + "'>" + x + "</option>";
+                        }
+                        _$pageNo = _self.find("#pageNo").html(opt);
+                        _self.find("#recordsNum").html(_rows.length);
+                        _self.find("#of").html("of " + _pages);
+                    };
+                    
+                    _createPageList(data.rows,data.returnValue);
+                     
+                    _$pageNo.change(function(){
+                        __obj.pageParams = ",@pno=" + this.value ;
+                        if(__obj.params.url) __obj.params.url  = __obj.url +  __obj.pageParams +  (typeof __obj.sortParams !== ud   ?  __obj.sortParams : "" );    
+                        __obj.dataBindGrid(__obj.params);
                     });
-                }
+                    
+                    _self.find("#rpp").keyup(function(e){
+                        var k = (e.keyCode ? e.keyCode : e.which);
+                    	if(k == '13'){
+                            o.rowsPerPage =  this.value ;
+                            if(__obj.params.url) __obj.params.url  = __obj.url + (typeof __obj.pageParams !== ud ? __obj.pageParams : "")   +  (typeof __obj.sortParams !== ud   ?  __obj.sortParams : "" );    
+                            __obj.params.callBack = function(o){
+                                _createPageList(o.data.rows,o.data.returnValue);
+                                __obj.params.callBack = null;
+                            };
+                            __obj.dataBindGrid(__obj.params);
+                    	}
+                    });  
+            
+                };
+                this.onRequestDone = function(o){
+                    if(o.params.onComplete){
+                        if(o.data) o.params.onComplete(o.data); else o.params.onComplete();
+                    }
+                    if(o.params.callBack) o.params.callBack(o);
+                };
+                            
+                
                 this.setColumnResize = function(){
                     var  _self      = this
                         ,_clsGrp0   = "group0"
@@ -753,7 +782,8 @@ var  ud='undefined'
 
                 if(typeof this.isInitiated === ud){
                     var _footer =  "<div class=\"zPageFooter\"><div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> 0 </i></div>"
-                                +  "<div class='pagectrl'><label id='page'> Page </label> <select id='pageNo'></select>"
+                                +  "<div class='pagectrl'>" + (isUD(o.rowsPerPage) ? "" : "<label> No. of Rows: </label> <input id='rpp' name='rpp' type='text' value='" + o.rowsPerPage  + "'>" ) 
+                                +  "<label id='page'> Page </label> <select id='pageNo'></select>"
                                 +  "<label id='of'> of 0 </label></div></div>"
                        ,_head = "";
                     
@@ -877,17 +907,17 @@ var  ud='undefined'
                                         rowsCompleted();
                                         __obj.find("#recordsNum").html(num_rows);
                                          if(typeof __obj.isPageInitiated === ud){
-                                            __obj.setPageCtrl(o,o.url,data);    
+                                            __obj.setPageCtrl(o,data);
                                             __obj.isPageInitiated=true;
                                          }
                                         
                                         if(__obj.left) _tableRight.parent().scrollLeft(Math.abs(__obj.left ));
                                         
                                         if(o.isAsync && o.onAsyncComplete) {
-                                            data.pageNo = __obj.curPageNo
+                                            data.pageNo = __obj.curPageNo;
                                             o.onAsyncComplete(data);
                                         }
-                                        if(o.onComplete) o.onComplete(data);
+                                        __obj.onRequestDone({params:o,data:data});
                                     }
                                    
                                    
@@ -903,7 +933,7 @@ var  ud='undefined'
                         params.data = JSON.stringify(o.data);
                         params.type = "POST";
                     }
-                    else params.url = o.url
+                    else params.url = o.url + ( isUD(o.rowsPerPage) ? "" : ",@rpp=" +  o.rowsPerPage  )
             
                     __obj.bind('refresh',function() {
                         if(zsi.tmr) clearTimeout(zsi.tmr);
@@ -921,12 +951,12 @@ var  ud='undefined'
                         trItem({data:this,panelType:"R",rowClass:_cls,index:i});                            
                     });
                     rowsCompleted();
-                    if(o.onComplete) o.onComplete();
+                    __obj.onRequestDone({params:o});
                 }  
                 else{
                     if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
                     rowsCompleted();                  
-                    if(o.onComplete) o.onComplete();
+                    __obj.onRequestDone({params:o});
 
                 }
                 
@@ -2464,4 +2494,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                            
+                                                                                                                               

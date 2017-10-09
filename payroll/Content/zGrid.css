@@ -81,7 +81,7 @@
 .zGrid .zHeaders > .item .title {
     height: 20px;
     align-items: center;
-   /* display: flex;*/
+    display: flex;	
 }
 
 .zGrid .zHeaders .item {
@@ -225,6 +225,15 @@
     padding-top: 4px;
 }
 
+.zGrid  .zPageFooter .pagectrl input#rpp {
+    height: 18px;
+    width: 35px;
+}
+
+.pagectrl input, .pagectrl select {
+    border: 1pt solid #5f6061;
+    border-radius: 2pt;
+}
 
 .zGrid .left {
     position: relative;
@@ -313,7 +322,6 @@
     line-height:10px
 }
 /*end of sort*/
-
 
 
 

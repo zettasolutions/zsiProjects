@@ -225,6 +225,15 @@
     padding-top: 4px;
 }
 
+.zGrid  .zPageFooter .pagectrl input#rpp {
+    height: 18px;
+    width: 35px;
+}
+
+.pagectrl input, .pagectrl select {
+    border: 1pt solid #5f6061;
+    border-radius: 2pt;
+}
 
 .zGrid .left {
     position: relative;
