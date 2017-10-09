@@ -120,4 +120,4 @@ $("#btnRefresh").click(function(){
 $("#btnAllRefresh").click(function(){
     displayRecords("@all=1");
 });
-         
+           
