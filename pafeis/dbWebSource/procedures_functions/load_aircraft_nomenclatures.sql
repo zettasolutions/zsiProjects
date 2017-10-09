@@ -4,17 +4,18 @@ CREATE PROCEDURE [dbo].[load_aircraft_nomenclatures]
 AS
 BEGIN
 SET NOCOUNT ON
+update temp_aircraft_nomenclatures set remaining_time = replace(remaining_time,':','.')
 delete from dbo.temp_aircraft_nomenclatures where ISNULL(part_no,'')='';
 insert into items (	
     aircraft_info_id,
     item_code_id,
 	serial_no,
 	manufacturer_id,
-	dealer_id,
-	supply_source_id,
+--	dealer_id,
+--	supply_source_id,
 	remaining_time,
-	date_issued,
-	item_class_id,
+--	date_issued,
+--	item_class_id,
 	status_id,
 	created_by,
 	created_date) 
@@ -23,16 +24,16 @@ insert into items (
     item_code_id,
 	serial_no,
 	manufacturer_id,
-	dealer_id,
-	supply_source_id,
-	remaining_time,
-	date_issued,
-	item_class_id,
+--	dealer_id,
+--	supply_source_id,
+	cast(remaining_time as decimal(10,2)),
+--	date_issued,
+--	item_class_id,
 	status_id,
     user_id,
 	GETDATE()
 	FROM temp_aircraft_nomenclatures_v
-	WHERE user_id = @user_id
+	WHERE user_id = 85
 	and item_code_id IS NOT NULL
 	order by id;
 
@@ -45,6 +46,8 @@ UPDATE a
 
 END;	
 
+--select top 1 convert(decimal(10,2), remaining_time) from temp_aircraft_nomenclatures
 
 
 
+--Select * From temp_aircraft_nomenclatures Where IsNumeric(remaining_time) = 0

@@ -1,4 +1,3 @@
-
 CREATE PROCEDURE [dbo].[users2_sel]
 (
     @user_id int = NULL
