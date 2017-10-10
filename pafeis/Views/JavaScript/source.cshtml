@@ -1,4 +1,3 @@
-
 @{
     Layout = "~/Views/Shared/_Source.cshtml";   
 }
@@ -12,18 +11,10 @@
             <pre id="editor">@ViewBag.jsContent </pre>
         </div>
     </div>
-
-    <div class="col-xs-12 buttonGroup">
-        <button id="btnSubmit" class="btn btn-primary btn-sm" type="button">
-            <span class="glyphicon glyphicon-floppy-disk"></span> Save
-        </button>
-
-    </div>
 </form>
 <script>
     var js_id = '@ViewBag.jsId';
     var editor = null;
-    var w1 = null;
 
     $(window).bind('keydown', function (e) {
         var isCtrlS = (e.ctrlKey && e.which == 83);
@@ -40,13 +31,8 @@
 
     });
 
-    $("#btnSubmit").click(function () {
-        submit();
-    });
-
-
     function initAceEditor() {
-
+        $("#editor").css({height:  $(window).height() - 71 });
         ace.require("ace/ext/language_tools");
         editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
@@ -57,13 +43,10 @@
             enableBasicAutocompletion: true,
             enableSnippets: true,
             enableLiveAutocompletion: false,
-            maxLines: 100,
             fontSize: "10pt"
         });
 
     }
-
-
     function submit() {
 
         $("#js_content").val(editor.getSession().getValue());
@@ -71,16 +54,9 @@
         $.post(base_url + "javascript/update", data, function (d) {
             $("#js_id").val(d.js_id);
             zsi.form.showAlert("alert");
-
         });
 
     }
-
-
-
-
 </script>
-
-
 
 
