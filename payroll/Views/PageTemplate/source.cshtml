@@ -1,8 +1,6 @@
-
 @{
     Layout = "~/Views/Shared/_Source.cshtml";
 }
-
 <div class="pageTitle">HTML Source: @ViewBag.pageTitle</div> 
 <form id="frmWindow">
     <div class="form-horizontal">
@@ -13,18 +11,10 @@
             <pre id="editor">@ViewBag.ptContent</pre>
         </div>
     </div>
-
-    <div class="col-xs-12 buttonGroup">
-        <button id="btnSubmit" class="btn btn-primary btn-sm" type="button">
-            <span class="glyphicon glyphicon-floppy-disk"></span> Save
-        </button>
-    </div>
 </form>
 
 <script>
  var editor =null;
- var w1=null;
-
 $(window).bind('keydown', function(e) {
     var isCtrlS = (e.ctrlKey && e.which == 83);
     if(isCtrlS){
@@ -39,13 +29,8 @@ $(document).ready(function(){
     initAceEditor();
 });
 
-$("#btnSubmit").click(function () {
-    submit();
-});
-
-
 function initAceEditor(){
-
+    $("#editor").css({height:  $(window).height() - 71 });
     ace.require("ace/ext/language_tools");
     editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
@@ -56,13 +41,11 @@ function initAceEditor(){
            enableBasicAutocompletion: true,
            enableSnippets: true,
            enableLiveAutocompletion: false,
-           maxLines: 200,
            fontSize: "10pt"
     });
 
 }
   
-
 function submit() {
 
     $("#pt_content").val(editor.getSession().getValue());
@@ -74,10 +57,6 @@ function submit() {
     });
 
 }
-
-
 </script>
-
-
 
 
