@@ -951,7 +951,7 @@ var  ud='undefined'
                         trItem({data:this,panelType:"R",rowClass:_cls,index:i});                            
                     });
                     rowsCompleted();
-                    __obj.onRequestDone({params:o});
+                    __obj.onRequestDone({params:o,data:o.rows});
                 }  
                 else{
                     if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
@@ -2494,4 +2494,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                               
+                                                                                                                                 
