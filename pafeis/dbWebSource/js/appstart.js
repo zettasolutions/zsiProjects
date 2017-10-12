@@ -53,8 +53,9 @@ if(isMenuItemsSaved ==="N"){
     if(isLocalStorageSupport()) localStorage.clear();
 }
 
- 
+
 if(isLocalStorageSupport()) {
+    loadPublicTemplates();
     var menuItems = localStorage.getItem("menuItems");
     if(menuItems)
         displayMenu( JSON.parse(menuItems));
@@ -82,6 +83,19 @@ function loadMenu(){
              
         });
                     
+    }
+
+}
+
+function loadPublicTemplates(){
+    if(isLocalStorageSupport()) {
+        var _name ="publicTemplates";
+        var _tmpls = localStorage.getItem(_name);
+        if(_tmpls === null)
+            $.get(base_url + "page/name/tmplPublic", function(html){
+                    localStorage.setItem(_name, html);
+
+            });  
     }
 }
 
@@ -263,4 +277,4 @@ function readCookie(name) {
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
-                           
+                            

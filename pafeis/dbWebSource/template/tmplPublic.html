@@ -1,0 +1,66 @@
+<ul>
+    <li name="div" >
+        <div name="{{name}}" id="{{id}}" class="{{class}}"></div>
+    </li>
+    <li  name="a">
+        <a id="{{id}}" name="{{name}}" href="{{href}}" class="{{class}}" style="{{style}}" > {{value}}</a>
+    </li>
+    <li  name="label">
+        <label id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" for="{{for}}" > {{value}}</label>
+    </li>
+    <li  name="span">
+        <span id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" > {{value}}</span>
+    </li>    
+    <li  name="input">
+        <input id="{{id}}" name="{{name}}" type="{{type}}" class="{{class}}" style="{{style}}" value="{{value}}" />
+    </li>
+    <li  name="button">
+        <button type="button" id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" for="{{for}}" onclick="{{onClick}}"> {{value}}</button>
+    </li>    
+    
+    <li  name="select">
+        <select id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" value="{{value}}" >{{options}}</select>
+    </li>
+    <li  name="textArea">
+        <textarea id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" value="{{value}}" ></textarea>
+    </li>   
+    <li  name="bsFormHorizontal">
+        <div id="{{id}}" class="form-horizontal {{class}}" style="{{style}}" ></div>
+    </li>     
+    <li  name="bsFormGroup" >
+        <div id="{{id}}" class="form-group {{class}}" style="{{style}}" ></div>
+    </li>  
+    <li  name="bsInput">
+        <input id="{{id}}" name="{{name}}" type="{{type}}" class="form-control {{class}}" style="{{style}}" placeholder="{{placeHolder}}" value="{{value}}" />
+    </li>
+    <li  name="bsButton">
+        <button type="button" id="{{id}}" name="{{name}}" class="btn {{class}}" style="{{style}}" ><span class="glyphicon glyphicon-plus"></span> {{value}} </button>
+    </li>
+    <li  name="bsLabelInput">
+        <label class="{{labelSize}} control-label">{{labelText}}</label>
+        <div class="{{divSize}}">
+            <input id="{{id}}" name="{{name}}" class="form-control {{inputClass}}" placeholder="{{placeHolder}}" value="{{value}}">
+        </div>
+    </li> 
+    <li name="bsModalBox">
+         <div class="modal fade" id="{{id}}" tabindex="-1" role="dialog" aria-labelledby="{{id}}Label" aria-hidden="true">
+          <div class="modal-dialog {{sizeAttr}}">
+            <div class="modal-content">
+            <form id="frm_{{id}}" >
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="{{id}}Label">{{title}}</h4>
+              </div>
+              <div class="modal-body">
+               {{{body}}}
+              </div>
+              <div class="modal-footer">
+                {{{footer}}}
+              </div>
+            </form>                
+            </div>
+          </div>
+        </div> 
+    </li> 
+
+</ul>
