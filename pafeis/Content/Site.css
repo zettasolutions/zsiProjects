@@ -114,6 +114,8 @@ a:hover{
 	z-index: 2000;
 }
 
+#localTemplates{display:none;}
+
 .modal-header {
   min-height: 16.42857143px;
   background-color: rgb(54,119,195);
@@ -684,12 +686,12 @@ td #delete-row span{
    color: #333;
    font-weight: bold;
    height: 27px;
-   top: 55px;
+   top: 0px;
    padding-left: 10px;
    padding-top: 3px;   
    position: fixed;
    width: 200px;
-   z-index: 1000;
+   z-index: 1001;
    display:none;
    border: 1pt dotted #b8b8b8;
 }
@@ -818,6 +820,8 @@ ul.imgFrame li.imgItem .text { text-align:center; }
 
 
 /*end of Report*/
+
+
 
 
 
