@@ -19,8 +19,11 @@ zsi.easyJsTemplateWriter = function(sn){
     
     this.templates = [];
     this.lastObj;
-    this.html = function(){
-        return $(sn).html();
+    this.html = function(isNoEmpty){
+        var _$o = $(sn);
+        var _r =_$o.html();
+        if( ! isNoEmpty) _$o.empty(); 
+        return _r;
     };
     this.in = function(){
         _lastTarget  = _self.target;
@@ -51,7 +54,7 @@ zsi.easyJsTemplateWriter = function(sn){
             if(o.parent) _self.target = $(o.parent);   
         }else 
             _self.lastObj = _new;
-            
+               
         _self.target.append(_new);  
     }
     ,_loadTemplates = function(jObject){
