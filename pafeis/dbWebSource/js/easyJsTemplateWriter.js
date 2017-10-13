@@ -54,7 +54,7 @@ zsi.easyJsTemplateWriter = function(sn){
             if(o.parent) _self.target = $(o.parent);   
         }else 
             _self.lastObj = _new;
-               
+            
         _self.target.append(_new);  
     }
     ,_loadTemplates = function(jObject){
@@ -91,4 +91,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-            
+               

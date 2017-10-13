@@ -1,17 +1,19 @@
-var bs          = zsi.bs.ctrl
-    ,svn         = zsi.setValIfNull
-    ,g_adjustment_id = null
-    ,dataAdjustment = []
-    ,dataAdjustmentIndex = -1
-    ,g_user_id = null
-    ,g_warehouse_id = null
-    ,g_organization_id = null
-    ,g_organization_name = ""
-    ,g_location_name = ""
-    ,g_today_date = new Date() +""
+var bs                      = zsi.bs.ctrl
+    ,svn                    = zsi.setValIfNull
+    ,g_adjustment_id        = null
+    ,dataAdjustment         = []
+    ,dataAdjustmentIndex    = -1
+    ,g_user_id              = null
+    ,g_warehouse_id         = null
+    ,g_organization_id      = null
+    ,g_organization_name    = ""
+    ,g_location_name        = ""
+    ,g_today_date           = new Date() +""
+    ,gTw
 ;
 
 zsi.ready(function(){
+    gTw = new zsi.easyJsTemplateWriter();
     getTemplate();
     displayRecords();
     $.get(procURL + "user_info_sel", function(d) {
@@ -41,50 +43,17 @@ zsi.ready(function(){
     });
 });
 
-var contextModalWindow = { 
-      id    :"modalAdjustment"
-    , sizeAttr : "modal-lg fullWidth"
-    , title : "New"
-    , footer: '<div id="adjustment-footer" class="pull-left">'
-    , body  : '<div id="tblAdjustment" class="form-horizontal zContainer1" style="padding:5px">'
-            +'    <div class="form-group"> ' 
-            +'        <label class=" col-xs-3 col-sm-2 col-md-2 col-lg-2 control-label">Adjustment No.</label>'
-            +'        <div class=" col-xs-9 col-sm-2 col-md-2 col-lg-2">'
-            +'             <input type="hidden" name="adjustment_id" id="adjustment_id">'
-            +'             <input type="hidden" name="is_edited" id="is_edited">'
-            +'             <input type="text" name="adjustment_no" id="adjustment_no" class="form-control input-sm" disabled>'
-            +'        </div> ' 
-            +'        <label class=" col-xs-3 col-sm-3 col-md-3 col-lg-2 control-label">Adjustment Date</label>'
-            +'        <div class=" col-xs-9 col-sm-2 col-md-2 col-lg-2">'
-            +'             <input type="text" name="adjustment_date" id="adjustment_date" class="form-control input-sm">'
-            +'             <input type="hidden" name="warehouse_id" id="warehouse_id">'
-            +'        </div>'  
-            +'        <label class="col-xs-3 col-sm-1 col-md-1 col-lg-2 control-label">By</label>'
-            +'        <div class="col-xs-9 col-sm-2 col-md-2 col-lg-2">'
-            +'          <select name="adjustment_by" id="adjustment_by" class="form-control input-sm"></select>'
-            +'        </div>'
-            +'    </div>'
-            +'    <div class="form-group">'
-            +'        <label class=" col-xs-3 col-sm-2 col-md-2 col-lg-2 control-label">Status</label>'
-            +'        <div class=" col-xs-10 col-sm-2 col-md-2 col-lg-2">'
-            +'          <label class=" col-xs-1 control-label" name="status_name" id="status_name">&nbsp;</label>' 
-            +'          <input type="hidden" name="status_id" id="status_id">' 
-            +'        </div>'
-            +'        <label class=" col-xs-3 col-sm-3 col-md-3 col-lg-2 control-label">Remarks</label>'
-            +'        <div class=" col-xs-9 col-sm-5 col-md-5 col-lg-6">'
-            +'          <textarea rows="3" me="adjustment_remarks" id="adjustment_remarks" class="form-control input-sm"></textarea>'
-            +'          <input type="hidden" name="page_process_action_id" id="page_process_action_id">' 
-            +'        </div>'
-            +'    </div>'
-            +'</div>'
-            +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label> Adjustment Details </label></div><div id="tblAdjustmentDetails" class="zGrid Detail"></div></div>'
-};
-
+ 
 function getTemplate(){
-    $.get(base_url + "templates/bsDialogBox.txt",function(d){
-        var template = Handlebars.compile(d);
-        $("body").append(template(contextModalWindow));
-    });    
+    new zsi.easyJsTemplateWriter("body")
+        .bsModalBox({ 
+              id    :"modalAdjustment"
+            , sizeAttr : "modal-lg fullWidth"
+            , title : "New"
+            , footer: '<div id="adjustment-footer" class="pull-left">'
+            , body  : gTw.newEntryTemplate({gridId:"tblAdjustmentDetails"}).html() 
+        });
+      
 }
 
 $("#btnNew").click(function () {
@@ -96,9 +65,9 @@ $("#btnNew").click(function () {
     displayAdjustmentDetails('');
     buildAdjustmentButtons();
     
-    $("select, input").on("keyup change", function(){
+    /*$("select, input").on("keyup change", function(){
         $("#frmPhysicalInv").find("#is_edited").val("Y");
-    }); 
+   }); */
 
     $("select[name='adjustment_by']").dataBind({
         url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id  
@@ -151,9 +120,9 @@ function showModalEditAdjustment(index, adjustment_id) {
     $("#modalAdjustment").modal({ show: true, keyboard: false, backdrop: 'static' });
     $("#modalAdjustment #adjustment_id").val(g_adjustment_id);
     
-    $("select, input").on("keyup change", function(){
-        $("#tblAdjustment").find("#is_edited").val("Y");
-    });     
+    /*$("select, input").on("keyup change", function(){
+     //   $("#tblAdjustment").find("#is_edited").val("Y");
+    }); */    
     
     $("select[name='adjustment_by']").dataBind({
         url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id 
@@ -391,4 +360,4 @@ function DeleteAdjustmentDetails(){
         }
     });   
 }
-      
+          
