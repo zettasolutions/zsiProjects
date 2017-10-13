@@ -1,28 +1,58 @@
 if(typeof zsi==='undefined') zsi={};
 zsi.easyJsTemplateWriter = function(sn){
     //sn="selectorName"
+    var _tmp    = "tmpHtml"
+        ,_$b     = $("body")
+        ,_isTmp  = false
+        ,_lastTarget = null 
+    ;
+    
     if(!sn) { 
-        console.error("selector name is required.");
-        return;
+        _isTmp  = true;
+        sn      = "#" + _tmp;
+        if(_$b.find(sn).length === 0) _$b.append("<div id='" + _tmp + "'/>");
     }
     var _self = this;
-    var _target  = $(sn);
+    this.target  = $(sn);
     var _$lt = $("#localTemplates");
-    if(_target.length===0) {console.error("selector name not found.");return;}
+    if(_self.target.length===0) {console.error("selector name not found.");return;}
     
     this.templates = [];
     this.lastObj;
+    this.html = function(){
+        return $(sn).html();
+    };
+    this.in = function(){
+        _lastTarget  = _self.target;
+        _self.target = _self.lastObj;
+        return _self;
+    };
+    this.out = function(){
+        _self.target = _lastTarget;
+        return _self;
+    };
+
+    if(_isTmp){
+        this.new = function(){
+            var _$sn= $(sn);
+            _$sn.empty();
+            _self.target = _$sn;
+            _self.lastObj = null;
+            return _self;
+        };
+    }
     
     var _isLocalStorageSupport = function(){
         if(typeof(Storage) !== "undefined") return true; else return false;
     }
     ,_write = function(o){
+        var _new = $(o.html);
         if(_self.lastObj){
-            if(o.parent) _target = $(o.parent);   
+            if(o.parent) _self.target = $(o.parent);   
         }else 
-            _self.lastObj = $(o.html);
+            _self.lastObj = _new;
             
-        _target.append(o.html);  
+        _self.target.append(_new);  
     }
     ,_loadTemplates = function(jObject){
         $.each(jObject.find("li"),function(){
@@ -47,6 +77,7 @@ zsi.easyJsTemplateWriter = function(sn){
         
     };
     
+    
     if( _isLocalStorageSupport() ) _loadTemplates($(localStorage.getItem("publicTemplates")));
     if(_$lt.length > 0) _loadTemplates(_$lt);
 
@@ -57,4 +88,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-       
+            

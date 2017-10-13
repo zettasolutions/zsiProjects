@@ -93,8 +93,7 @@ function loadPublicTemplates(){
         var _tmpls = localStorage.getItem(_name);
         if(_tmpls === null)
             $.get(base_url + "page/name/tmplPublic", function(html){
-                    localStorage.setItem(_name, html);
-
+                if(html.indexOf("</html>") < 0) localStorage.setItem(_name, html);
             });  
     }
 }
@@ -277,4 +276,4 @@ function readCookie(name) {
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
-                            
+                             
