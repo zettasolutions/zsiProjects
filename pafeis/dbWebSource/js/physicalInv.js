@@ -1,21 +1,20 @@
-var bs          = zsi.bs.ctrl
-   ,svn         = zsi.setValIfNull
-   ,tblPhysicalInvDetail  ="tblModalPhysicalInventoryDetails"
+var bs                      = zsi.bs.ctrl
+   ,svn                     = zsi.setValIfNull
+   ,tblPhysicalInvDetail    = "tblModalPhysicalInventoryDetails"
    ,dataPhysicalInv
-   ,dataPhysicalInvIndex =-1
-   ,g_user_id = null
-   ,g_warehouse_id = null
-   ,g_organization_id = null
-   ,g_organization_name = ""
-   ,g_location_name = ""
-   ,g_today_date = new Date() +""
-   ,g_physical_inv_id = null
-   ,g_item_code_id = null
+   ,dataPhysicalInvIndex    =-1
+   ,g_user_id               = null
+   ,g_warehouse_id          = null
+   ,g_organization_id       = null
+   ,g_organization_name     = ""
+   ,g_location_name         = ""
+   ,g_today_date            = new Date() +""
+   ,g_physical_inv_id       = null
+   ,g_item_code_id          = null
+   ,gTw
 ;
-
-
-
 zsi.ready(function(){
+    gTw = new zsi.easyJsTemplateWriter();
     $.get(procURL + "user_info_sel", function(d) {
         if (d.rows !== null && d.rows.length > 0) {
             g_user_id = d.rows[0].user_id;
@@ -24,8 +23,9 @@ zsi.ready(function(){
             g_location_name = d.rows[0].warehouse_location;
             g_location_name = (g_location_name? " » " + g_location_name:"");
             g_warehouse_id =  (d.rows[0].warehouse_id ? d.rows[0].warehouse_id : null);
-            //$(".pageTitle").append(' for ' + g_organization_name + g_location_name);
+            
             $(".pageTitle").append(' for ' + g_organization_name + ' » <select name="dd_warehouses" id="dd_warehouses"></select>');
+            
             $("select[name='dd_warehouses']").dataBind({
                 url: execURL + "dd_warehouses_sel @user_id=" + g_user_id
                 , text: "warehouse"
@@ -44,94 +44,35 @@ zsi.ready(function(){
             });  
         }
     });
-    displayRecords();
-    getTemplate();
-    
-    
+  
+    displayRecords();      
+    writeTemplate();
+
 });
 
-var contextModalWindow = { 
-                  id    :"ctxMW"
-                , sizeAttr : "fullWidth"
-                , title : "New"
-                , footer: '<div id="physicalInv-footer" class="pull-left">'
-                , body  : '<div id="frmPhysicalInv" class="form-horizontal zContainer1" style="padding:5px">'
- 
-                        +'    <div class="form-group  "> ' 
-                        +'          <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Physical Inv No</label>'
-                        +'           <div class="col-xs-7 col-sm-2 col-md-2 col-lg-2">'
-                        +'          <input type="text" name="physical_inv_no" id="physical_inv_no" class="form-control input-sm" disabled>'
-                        +'        </div> ' 
-                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Physical Inv Date</label>'
-                        +'        <div class="col-xs-7 col-sm-2 col-md-2 col-lg-2">'
-                        +'             <input type="hidden" name="physical_inv_id" id="physical_inv_id" >'
-                        +'             <input type="hidden" name="is_edited" id="is_edited">'
-                        +'             <input type="text" name="physical_inv_date" id="physical_inv_date" class="form-control input-sm" value="'+ g_today_date.toShortDate() +'">'
-                        +'             <input type="hidden" name="warehouse_id" id="warehouse_id" class="form-control input-sm">'
-                        +'        </div> ' 
-                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Done By</label>'
-                        +'        <div class="col-xs-7 col-sm-2 col-md-2 col-lg-2">'
-                        +'             <select type="text" name="done_by" id="done_by" class="form-control input-sm" ></select>'
-                        +'        </div>'  
-                        +'    </div>'
-                        +'    <div class="form-group  ">  '
-                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Status</label>'
-                        +'        <div class="col-xs-8 col-sm-2 col-md-2 col-lg-2">'
-                        +'          <label name="status_name" id="status_name">&nbsp;</label>' 
-                        +'          <input type="hidden" name="status_id" id="status_id" class="form-control input-sm" readonly="readonly">' 
-                        +'        </div>'
-                        +'        <label class="col-xs-5 col-sm-2 col-md-2 col-lg-2 control-label">Remarks</label>'
-                        +'        <div class="col-xs-7 col-sm-6 col-md-6 col-lg-6">'
-                        +'          <textarea type="text" name="status_remarks" id="status_remarks" class="form-control input-sm" ></textarea>'
-                        +'          <input type="hidden" name="page_process_action_id" id="page_process_action_id">'
-                        +'         </div>'
-                        +'      </div>'
-                        +'</div>'
-                        +'<div class="modalGrid zContainer1"><div class="zHeaderTitle1"><label> Inventory Details </label></div><div id="'+ tblPhysicalInvDetail +'" class="zGrid Detail" ></div></div>'
-                        
-            };
-            
-var contextFileUpload = { 
-      id:"modalWindowFileUpload"
-    , title: "File Upload"
-    , sizeAttr: "modal-xs"
-    , footer: ''
-    , body: '<div class="form-horizontal">'+
-                    '<div class="form-group"> '+ 
-                        '<label class="col-xs-4 col-sm-2 col-md-2 col-lg-1  control-label">Select File</label>'+
-                        '<div class=" col-xs-8 col-sm-10 col-md-10 col-lg-11">'+
-                            '<input type="hidden" id="tmpData" name="tmpData" class="form-control input-sm">'+
-                            '<input type="file" class="browse btn btn-primary" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file">'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="form-group">'+ 
-                        '<div class="col-xs-offset-3">'+
-                            '<button type="button" onclick="excelFileUpload();" class="btn btn-primary" id="btnUploadFile" style="margin-left: 5px">'+
-                                '<span class="glyphicon glyphicon-upload"></span> Upload'+
-                            '</button>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>'
-};
-
-var contextSerialNos = { 
-      id:"modalWindowSerialNos"
-    , title: "File Upload"
-    , sizeAttr: "modal-lg"
-    , footer: '<button type="button" onclick="SaveSerialNo();" class="btn btn-primary pull-left">'
-                + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save</button>'
-                + '<button type="button" onclick="DeleteSerialNo();" class="btn btn-primary pull-left">'
-                + '<span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Delete</button>'
-    , body: '<div id="tblSerialNos" class="zGrid"></div>'
-};
-
-function getTemplate(){
-    $.get(base_url + "templates/bsDialogBox.txt",function(d){
-        var template = Handlebars.compile(d);
-        $("body").append(template(contextModalWindow));
-        $("body").append(template(contextFileUpload));
-        $("body").append(template(contextSerialNos));
-    });    
+function writeTemplate(){
+    new zsi.easyJsTemplateWriter("body")
+        .bsModalBox({ 
+              id        : "ctxMW"
+            , sizeAttr  : "fullWidth"
+            , title     : "New"
+            , footer    : gTw.div({id:"physicalInv-footer",class:"pull-left"}).html()  
+            , body      : gTw.newEntryTemplate({ todayDate : g_today_date.toShortDate(), gridId : tblPhysicalInvDetail}).html() 
+        })
+        .bsModalBox({ 
+              id        : "modalWindowFileUpload"
+            , title     : "File Upload"
+            , sizeAttr  : "modal-xs"
+            , body      :  gTw.newEntryTemplate().html()
+        })
+        .bsModalBox({ 
+              id        : "modalWindowSerialNos"
+            , title     : "File Upload"
+            , sizeAttr  : "modal-lg"
+            , footer    : gTw.SerialNoFooterTemplate().html()
+            , body      : gTw.div({id:"tblSerialNos",class:"zGrid"}).html()
+        });
+    
 }
 
 $("#btnNew").click(function () {
@@ -619,4 +560,4 @@ function setMandatoryEntries(){
         ]
     });    
 }
-     
+      

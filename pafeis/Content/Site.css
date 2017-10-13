@@ -114,7 +114,7 @@ a:hover{
 	z-index: 2000;
 }
 
-#localTemplates{display:none;}
+#localTemplates,#tmpHtml{display:none;}
 
 .modal-header {
   min-height: 16.42857143px;
@@ -820,6 +820,7 @@ ul.imgFrame li.imgItem .text { text-align:center; }
 
 
 /*end of Report*/
+
 
 
 
