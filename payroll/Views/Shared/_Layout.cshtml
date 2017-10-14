@@ -5,10 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="@Url.Content("~/")favicon.png" type="image/x-icon">
-    
     <title>@ViewBag.pageTitle - PAYROLL SYSTEM</title>
-    
     <script src="@Url.Content("~/")Scripts/jquery-1.12.0.min.js"></script>
+	<script src='@Url.Content("~/")Scripts/handlebars-v3.0.0.js'></script>
     <script src="@Url.Content("~/")Scripts/detectmobilebrowser.js"></script>	
     <link href="@Url.Content("~/")Content/bootstrap.css" rel="stylesheet" />
     <link href="@Url.Content("~/")Content/bootstrap-theme.min.css" rel="stylesheet" />
@@ -24,7 +23,7 @@
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
         @userId
     </script>
-
+	<script src='@Url.Content("~/")javascript/name/easyJsTemplateWriter'></script>	
 </head>
 <body>
     <div class="progressWindow">
@@ -40,12 +39,12 @@
             <div class="row zBanner">
                 <div class="col-xs-1 pull-left">
                     <a href="@Url.Content("~/")" class="navbar-brand">
-                        <img style="float: left; margin-top: -15px;; position: relative; z-index: 100;width: 100px;border-radius: 20px;" 
+                        <img style="float: left; margin-top: -15px;; position: relative; z-index: 100;width: 90px;border-radius: 20px;    -webkit-box-shadow: 0 8px 17px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19); box-shadow: 0 8px 17px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19);" 
                         src="@Url.Content("~/")images/logo.png" style="float: left; margin-top: -16px; position: relative; z-index: 100;" >
                     </a>
                 </div>
                 <div class="col-xs-9 col-xs-offset-2 col-sm-10 col-sm-offset-0">
-					<h1 style="color:#FFB20C; font-size: 28px;margin-top:7px;"><b style="font-weight:bold">PAYROLL SYSTEM</b></h1>
+					<h1 style="color:#FFB20C; font-size: 28px;margin-top:7px;    text-shadow: 2px 2px 5px #333;"><b style="font-weight:bold">PAYROLL SYSTEM</b></h1>
                 </div> 
             </div>
         </div>

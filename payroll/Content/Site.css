@@ -114,6 +114,8 @@ a:hover{
 	z-index: 2000;
 }
 
+#localTemplates,#tmpHtml{display:none;}
+
 .modal-header {
   min-height: 16.42857143px;
   background-color: rgb(54,119,195);
