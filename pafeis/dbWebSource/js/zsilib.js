@@ -1455,10 +1455,17 @@ var  ud='undefined'
 
             };
             $.fn.showPopup          = function(o){
-                var _popUpName = (typeof o.id !== ud ? o.id : "popup");
-                var _popUpId = "#" + _popUpName;
-                this.find(_popUpId).remove();
-                this.append('<div id="' + _popUpName + '" class="zPopup overlay">'
+                var _id;
+                if ( isUD(o.id) ){ 
+                    _id =  this.data("ctr") + 1 || 1 ;
+                    this.data("ctr",_id);
+                }
+                else _id =  o.id;
+                var _name = "popup" + _id;
+                var _pId = "#" + _name;
+            
+                this.find(_pId).remove();
+                this.append('<div id="' + _name + '" class="zPopup overlay">'
                                 	+ '<div class="panel">'
                                 	+   '<div class="header">'
                                     +		'<h2>'  + (o.title ? o.title :"")  + '</h2>'
@@ -1468,18 +1475,20 @@ var  ud='undefined'
                                 	+ '</div>'
                                     +'</div>');
             
-                $p = this.find(_popUpId);
+                $p = this.find(_pId);
                 $p.css({
                      "visibility"   : "visible"
                     ,"opacity"      : 1
                     ,"z-index"      : zsi.getHighestZindex() + 1
-                });           
+                });   
+            
                 $p.find("#close").click(function(e){
-                    $p.remove();
-                    if(typeof o.onClose !== ud ) o.onClose();
+                    $(this).closest(".zPopup").remove();
+                    if(typeof o.onClose !== ud ) o.onClose(this,o);
                 });
                 return this;
             };
+
             $.fn.toJSON             = function(o) { //for multiple data only
                 if (typeof o === ud) o={};
                 var isExistOptionalItems = function (o, name) {
@@ -2494,4 +2503,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                                 
+                                                                                                                                  
