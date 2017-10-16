@@ -34,16 +34,13 @@ zsi.easyJsTemplateWriter = function(sn){
         _self.target = _lastTarget;
         return _self;
     };
-
-    if(_isTmp){
-        this.new = function(){
-            var _$sn= $(sn);
-            _$sn.empty();
-            _self.target = _$sn;
-            _self.lastObj = null;
-            return _self;
-        };
-    }
+    this.new = function(){
+        var _$sn= $(sn);
+        _$sn.empty();
+        _self.target = _$sn;
+        _self.lastObj = null;
+        return _self;
+    };
     
     var _isLocalStorageSupport = function(){
         if(typeof(Storage) !== "undefined") return true; else return false;
@@ -91,4 +88,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-               
+                

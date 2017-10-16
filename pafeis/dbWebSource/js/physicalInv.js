@@ -63,7 +63,7 @@ function writeTemplate(){
               id        : "modalWindowFileUpload"
             , title     : "File Upload"
             , sizeAttr  : "modal-xs"
-            , body      :  gTw.newEntryTemplate().html()
+            , body      :  gTw.fileUploadTemplate().html()
         })
         .bsModalBox({ 
               id        : "modalWindowSerialNos"
@@ -215,9 +215,7 @@ function clearForm(){
 }
 
 function displayRecords(){
-    
      var cb = bs({name:"cbFilter1",type:"checkbox"});
-     
      $("#grid").dataBind({
 	     url            : procURL + "physical_inv_sel"
 	    ,width          : $(document).width() -35
@@ -560,4 +558,4 @@ function setMandatoryEntries(){
         ]
     });    
 }
-      
+        
