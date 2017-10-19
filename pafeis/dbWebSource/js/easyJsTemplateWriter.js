@@ -23,7 +23,7 @@ zsi.easyJsTemplateWriter = function(sn){
         var _$o = $(sn);
 
         //replace tag-li, and other tag-table elements
-        _$o.find("[class^='tag']").replaceWith(function(){
+        _$o.find("[class^='tag-']").replaceWith(function(){
             var _cls = $(this).attr("class");
             var _tag = _cls.match(/tag-(\w+)/g,"")[0].substr(4);
             return $("<" + _tag + "/>", {html: $(this).html()})
@@ -99,4 +99,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-                 
+                  
