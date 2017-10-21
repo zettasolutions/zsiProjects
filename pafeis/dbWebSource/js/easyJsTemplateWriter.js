@@ -1,17 +1,7 @@
 if(typeof zsi==='undefined') zsi={};
 zsi.easyJsTemplateWriter = function(sn){
     //sn="selectorName"
-    var _tmp    = "tmpHtml"
-        ,_$b     = $("body")
-        ,_isTmp  = false
-        ,_lastTarget = null 
-    ;
-    
-    if(!sn) { 
-        _isTmp  = true;
-        sn      = "#" + _tmp;
-        if(_$b.find(sn).length === 0) _$b.append("<div id='" + _tmp + "'/>");
-    }
+    if(!sn) sn = $("<div/>"); 
     var _self = this;
     this.target  = $(sn);
     var _$lt = $("#localTemplates");
@@ -19,38 +9,41 @@ zsi.easyJsTemplateWriter = function(sn){
     
     this.templates = [];
     this.lastObj;
-    this.html = function(isNoEmpty){
-        var _$o = $(sn);
-
-        //replace tag-li, and other tag-table elements
-        _$o.find("[class^='tag-']").replaceWith(function(){
+    
+    _replaceTagElements = function ($o){
+        console.log($o);
+        $o.find("[class^='tag-']").replaceWith(function(){
             var _cls = $(this).attr("class");
             var _tag = _cls.match(/tag-(\w+)/g,"")[0].substr(4);
             return $("<" + _tag + "/>", {html: $(this).html()})
                 .attr("class",_cls)
                 .attr("style",$(this).attr("style"))
                 .removeClass("tag-" + _tag) ;
-        });
-
+        });        
+    };
+    
+    this.html = function(isNoEmpty){
+        var _$o = $(sn);
+        //replace tag-li, and other tag-table elements
+        _replaceTagElements(_$o);
         var _r =_$o.html();
         if( ! isNoEmpty) _$o.empty(); 
         return _r;
     };
     this.in = function(){
-        _lastTarget  = _self.target;
         _self.target = _self.lastObj;
-        return _self;
+        return this;
     };
     this.out = function(){
-        _self.target = _lastTarget;
-        return _self;
+        _self.target = _self.target.parent();
+        return this;
     };
     this.new = function(){
         var _$sn= $(sn);
         _$sn.empty();
         _self.target = _$sn;
         _self.lastObj = null;
-        return _self;
+        return this;
     };
     
     var _isLocalStorageSupport = function(){
@@ -58,12 +51,12 @@ zsi.easyJsTemplateWriter = function(sn){
     }
     ,_write = function(o){
         var _new = $(o.html);
-        if(_self.lastObj){
-            if(o.parent) _self.target = $(o.parent);   
-        }else 
-            _self.lastObj = _new;
-            
+        if(o.parent){
+            self.target = $(o.parent);   
+        }
         _self.target.append(_new);  
+        _self.lastObj = _new;
+        
     }
     ,_loadTemplates = function(jObject){
         $.each(jObject.find("li"),function(){
@@ -92,11 +85,9 @@ zsi.easyJsTemplateWriter = function(sn){
     if( _isLocalStorageSupport() ) _loadTemplates($(localStorage.getItem("publicTemplates")));
     if(_$lt.length > 0) _loadTemplates(_$lt);
 
-    //if(o.onReady){ this.onReady = o.onReady; this.onReady();} 
-
     return this;
 };  
 
  
 	
-                  
+                    
