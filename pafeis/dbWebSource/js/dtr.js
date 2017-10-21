@@ -1,5 +1,22 @@
- var bs = zsi.bs.ctrl;
+var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
+
+Date.prototype.addHours = function(h) {    
+   this.setTime(this.getTime() + (h*60*60*1000)); 
+   return this;   
+}
+
+Date.prototype.getUTCDateTime = function(){
+    var now = new Date(this); 
+    return new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+};
+
+function getCurrentDateTime(_date,serverUTCDiff){
+    var localUtcDiff = Math.abs( (new Date() - new Date().getUTCDateTime() ) /1000/60/60 ) ;
+    console.log(localUtcDiff);
+    return new Date(_date).addHours( localUtcDiff +  Math.abs(serverUTCDiff) ).toString().toShortDateTime();
+
+}
 
 
 zsi.ready(function(){
@@ -66,12 +83,14 @@ function displayRecords(){
                 }	 
             	,{ text:"Time in"                       , width:400             , style:"text-align:left;"                    ,name:"time_in"
                     	    ,onRender:function(d){
-                    	        return d.time_in.toDateTime();
+                    	         return getCurrentDateTime(d.time_in,d.utc_diff);
+                    	   
                     	    }
                     	}
             	,{ text:"Time out"                      , width:400             , style:"text-align:left;"                    ,name:"time_out"
                     	     ,onRender:function(d){
-                    	        return d.time_out.toDateTime();
+                    	        return getCurrentDateTime(d.time_out,d.utc_diff);
+        
                     	    }
                     	}
 	    ]
@@ -79,29 +98,9 @@ function displayRecords(){
 }
 
 
-
-String.prototype.toDateTime = function(){
-  var date  =  new Date(this);    
-  if( ! date.isValid())  return "";
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  return this.toDateFormat() + " " + strTime + " : " + getWeekDay(date.getDay());
-    
-};
-
-
-function getWeekDay(dayNo) {
-  return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayNo];
-}
+ 
 
 
 
 
-
-
-            
+                
