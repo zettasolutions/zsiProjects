@@ -11,21 +11,25 @@ zsi.easyJsTemplateWriter = function(sn){
     this.lastObj;
     
     _replaceTagElements = function ($o){
-        console.log($o);
-        $o.find("[class^='tag-']").replaceWith(function(){
-            var _cls = $(this).attr("class");
-            var _tag = _cls.match(/tag-(\w+)/g,"")[0].substr(4);
-            return $("<" + _tag + "/>", {html: $(this).html()})
-                .attr("class",_cls)
-                .attr("style",$(this).attr("style"))
-                .removeClass("tag-" + _tag) ;
-        });        
+        var _r = $o;
+        var _cls = $o.attr("class");
+        if(_cls && _cls.indexOf("tag-") > -1 ){
+            $o.replaceWith(function(){
+                var _cls = $(this).attr("class");
+                var _tag = _cls.match(/tag-(\w+)/g,"")[0].substr(4);
+                _r =  $("<" + _tag + "/>", {html: $(this).html()})
+                    .attr("class",_cls)
+                    .attr("style",$(this).attr("style"))
+                    .removeClass("tag-" + _tag) ;
+                    return _r;
+            });
+        }
+        return _r;
     };
+    
     
     this.html = function(isNoEmpty){
         var _$o = $(sn);
-        //replace tag-li, and other tag-table elements
-        _replaceTagElements(_$o);
         var _r =_$o.html();
         if( ! isNoEmpty) _$o.empty(); 
         return _r;
@@ -46,20 +50,27 @@ zsi.easyJsTemplateWriter = function(sn){
         return this;
     };
     
+    this.custom = function( fn){
+        _write({ html: fn() });
+        return this;
+    };
+    
     var _isLocalStorageSupport = function(){
         if(typeof(Storage) !== "undefined") return true; else return false;
     }
     ,_write = function(o){
         var _new = $(o.html);
+        
+        //replace tag-li, and other tag-table elements
+        _new = _replaceTagElements(_new);
         if(o.parent){
             self.target = $(o.parent);   
         }
         _self.target.append(_new);  
         _self.lastObj = _new;
-        
     }
     ,_loadTemplates = function(jObject){
-        $.each(jObject.find("li"),function(){
+        $.each(jObject.children(),function(){
                 var _o = $(this);
                 var _ctrl = {
                      name       : _o.attr("name")        
@@ -77,11 +88,11 @@ zsi.easyJsTemplateWriter = function(sn){
                     _write(_o);
                     return this;
                 };
-        });        
+        });   
+
         
     };
-    
-    
+
     if( _isLocalStorageSupport() ) _loadTemplates($(localStorage.getItem("publicTemplates")));
     if(_$lt.length > 0) _loadTemplates(_$lt);
 
@@ -90,4 +101,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-                    
+                     
