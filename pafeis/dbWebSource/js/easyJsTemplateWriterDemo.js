@@ -1,14 +1,11 @@
- var gTw;
  $(document).ready(function(){
-     gTw = zsi.easyJsTemplateWriter();
      _tw = new zsi.easyJsTemplateWriter(".output")
             
             .bsFormGroup({id:"group1"}) 
                 .bsInput({name:"first_name",type:"text"},"#group1")
                 .bsInput({name:"last_name",type:"text"})
                 .bsFormGroup({id:"group2"})
-            
-        
+
              .li({id:"myli1" ,class:"my-class",value:"my li value"})
                 .in()
                 .div({id:"div1", value:"div-smager1"})
@@ -45,4 +42,4 @@
     ;
     
  });
-       
+         

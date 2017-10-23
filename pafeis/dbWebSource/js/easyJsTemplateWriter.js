@@ -64,7 +64,7 @@ zsi.easyJsTemplateWriter = function(sn){
         //replace tag-li, and other tag-table elements
         _new = _replaceTagElements(_new);
         if(o.parent){
-            self.target = $(o.parent);   
+            _self.target = $(o.parent);   
         }
         _self.target.append(_new);  
         _self.lastObj = _new;
@@ -101,4 +101,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-                     
+                      
