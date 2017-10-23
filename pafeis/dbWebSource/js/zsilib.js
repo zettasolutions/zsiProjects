@@ -404,7 +404,7 @@ var  ud='undefined'
                 	}
                 });                
         
-                this.closest(".zGrid").on('wheel mouseup', function(e){
+                $(document).on('wheel mouseup', function(e){
                     var _e = $(".zDDList");
                     if (!_e.is(e.target) && _e.has(e.target).length === 0) {
                         _e.hide();
@@ -2503,4 +2503,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                                  
+                                                                                                                                   
