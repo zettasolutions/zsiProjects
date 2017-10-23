@@ -242,7 +242,6 @@
 
 /*dropdown list */
 .zDdlBtn {
-	background-color: #fff;
 	border-left: 1pt solid #d6d8d8;
 	float: right;
 	position: absolute;
@@ -267,6 +266,18 @@
 	display:none;
 	
 }
+.zRow.odd .zDdlBtn{
+    background-color: #e3e4e5;
+}
+
+.zRow.even .zDdlBtn{
+    background-color: #fff;
+}
+.zRow.active .zDdlBtn {
+	background-color:#333333;
+    color: #fff;
+}
+
 /*end of dropdown list */
 
 
@@ -322,6 +333,9 @@
     line-height:10px
 }
 /*end of sort*/
+
+
+
 
 
 
