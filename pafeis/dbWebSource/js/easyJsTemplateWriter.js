@@ -4,7 +4,7 @@ zsi.easyJsTemplateWriter = function(sn){
     if(!sn) sn = $("<div/>"); 
     var _self = this;
     this.target  = $(sn);
-    var _$lt = $("#localTemplates");
+    var _$lt = $("[id='localTemplates']");
     if(_self.target.length===0) {console.error("selector name not found.");return;}
     
     this.templates = [];
@@ -70,26 +70,28 @@ zsi.easyJsTemplateWriter = function(sn){
         _self.lastObj = _new;
     }
     ,_loadTemplates = function(jObject){
-        $.each(jObject.children(),function(){
-                var _o = $(this);
-                var _ctrl = {
-                     name       : _o.attr("name")        
-                    ,html       : _o.html()
-                    ,template   : Handlebars.compile(_o.html())
-                };
-                _self.templates.push(_ctrl);
-                _self[_o.attr("name")] = function(){
-                    var a = arguments;
-                    var _r =  _ctrl.template(a[0])
-                              .replace(/(\w+\s?=\s?\"\")|(\w+\s?=\s?\'\')/g,"") //replace empty values
-                              .replace(/(\n)/g,""); //replace lines
-                    var _o = {html:_r};
-                    if (a[1]) _o.parent=a[1];
-                    _write(_o);
-                    return this;
-                };
-        });   
-
+        $.each(jObject,function(){
+            $.each($(this).children(),function(){
+                    var _o = $(this);
+                    var _ctrl = {
+                         name       : _o.attr("name")        
+                        ,html       : _o.html()
+                        ,template   : Handlebars.compile(_o.html())
+                    };
+                    _self.templates.push(_ctrl);
+                    _self[_o.attr("name")] = function(){
+                        var a = arguments;
+                        var _r =  _ctrl.template(a[0])
+                                  .replace(/(\w+\s?=\s?\"\")|(\w+\s?=\s?\'\')/g,"") //replace empty values
+                                  .replace(/(\n)/g,""); //replace lines
+                        var _o = {html:_r};
+                        if (a[1]) _o.parent=a[1];
+                        _write(_o);
+                        return this;
+                    };
+            });   
+        });
+        
         
     };
 
@@ -101,4 +103,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-                      
+                         
