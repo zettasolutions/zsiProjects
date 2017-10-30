@@ -1062,14 +1062,16 @@ var  ud='undefined'
                return this;
             };
             $.fn.getCheckBoxesValues= function(){
-                var arrayItems = [];
+                var _a = arguments;
+                var _sel = ( _a ? _a[0] : "input[type=hidden]" ); 
+                var _r = [];
                 if(this){
                     $.each(this,function(){
-                        arrayItems.push( $(this.parentNode).children("input[type=hidden]").val() );
+                        _r.push( $(this.parentNode).children(_sel).val() );
                     });
                 }
-                return arrayItems;    
-            };
+                return _r;    
+            };            
             $.fn.jsonSubmit         = function(o) {
                 var p = {
                     type: 'POST'
@@ -2503,4 +2505,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                                   
+                                                                                                                                    
