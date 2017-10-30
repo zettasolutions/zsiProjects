@@ -49,9 +49,10 @@ zsi.easyJsTemplateWriter = function(sn){
         _self.lastObj = null;
         return this;
     };
-    
-    this.custom = function( fn){
-        _write({ html: fn() });
+
+    this.custom = function(fn){
+        this.__fn = fn;
+        this.__fn();
         return this;
     };
     
@@ -103,4 +104,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-                         
+                           
