@@ -183,8 +183,8 @@ function displayRecords(){
         	        ,onRender : function(d){ return svn(d,"remarks")}
         	    }
 	    ]  
-    	     ,onComplete: function(data){
-    	         dataFlightTime = data.rows;
+    	     ,onComplete: function(o){
+    	         dataFlightTime = o.data.rows;
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
         }  
     });    
@@ -200,4 +200,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                            
+                                                             

@@ -30,33 +30,7 @@ function markUserMandatory(){
       ]
     });    
 }
-/*function setSearch(){
-    var ofilterId =  $("#logon_id_filter");
-    
-    new zsi.search({
-        tableCode: "adm-0002"
-        ,colNames : ["last_first_name"] 
-        ,displayNames : ["Name"]  
-        ,searchColumn :"logon"
-        ,input:"input[name=logon_name_filter]"
-        ,url : execURL + "searchData"
-        ,condition :"'is_active=''Y'''"
-        ,onSelectedItem: function(currentObject,data,i){ 
-            currentObject.value=data.last_first_name;
-            var tr  = currentObject.parentNode.parentNode;
-            $(tr).find("#logon_id_filter").val(data.user_id);
-            displayRecords( data.user_id);
-        }
-       ,onChange:function(text){
-          if(text===""){ 
-              ofilterId.val("");
-              displayRecords("");
-          }
-  
-       }
-       
-    });        
-}*/
+ 
 function setInputs(){
     logon_id_filter = $("#logon_id_filter");
     $roleFilter = $("#role_filter");
@@ -70,10 +44,9 @@ $("#btnSave").click(function () {
     
     $("#grid").jsonSubmit({
          procedure  : "users_upd"
-         ,optionalItems: ["is_active"]
         ,onComplete : function (data) {
-             if(data.isSuccess===true) zsi.form.showAlert("alert");
-             displayRecords();
+            if(data.isSuccess===true) zsi.form.showAlert("alert");
+            displayRecords();
         }
     });
 });
@@ -336,7 +309,6 @@ function userImageUpload(){
                                 + ",@img_filename='user." +  fileOrg.files[0].name + "'"
                 ,function(data){
                     zsi.form.showAlert("alert");
-                    //$("#userImgBox").attr("src",  base_url + "file/viewImage?fileName=user." + fileOrg.files[0].name + "&isthumbnail=n" );
                     $('#' + modalImageUser).modal('toggle');
                     
                     //refresh latest records:
@@ -384,4 +356,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                                 
+                                   

@@ -109,9 +109,9 @@ function displayRecords(){
 	    ,height   : $(document).height() - 310
 	    ,isPaging : true
         ,dataRows : _dataRows
-        ,onComplete : function(data){
-	        if(data.rows.length > 0){
-	            g_masterData = data.rows;
+        ,onComplete : function(o){
+	        if(o.data.rows.length > 0){
+	            g_masterData = o.data.rows;
 	            $("#zPanelId, #btnPdf").show();
 	        }
         }
@@ -241,3 +241,4 @@ function generatePDFReport(){
     });  //
 }*/
 
+ 

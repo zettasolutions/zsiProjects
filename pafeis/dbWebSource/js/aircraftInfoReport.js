@@ -296,9 +296,9 @@ function displayRecords(aircraft_info_id) {
             ,{text  : "Remaining"           , name:"remaining_time"         , width : 100       , style : "text-align:right; padding-right:3px;"}
             ,{text  : "Monitoring Type"     , name:"monitoring_type"        , width : 150       , style : "text-align:center;"}
 		]
-		,onComplete : function(data){
+		,onComplete : function(o){
 
-		    if(data.rows.length > 0) g_detailData = g_detailData.concat(data.rows);
+		    if(o.data.rows.length > 0) g_detailData = g_detailData.concat(o.data.rows);
 		    
 		    CheckAllCompleteAirCraftLoaded();
 		}
@@ -318,4 +318,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                                                                                                                                                      
+}                                                                                                                                                       

@@ -67,10 +67,10 @@ function displayRecords(){
             	    ,{text  : "Reoder Level"        , name  : "reorder_level"       , width : 130           , style : "text-align:center;"}
             ]   
             
-            ,onComplete : function(data){
-	        g_masterData = data.rows;
+            ,onComplete : function(o){
+	        g_masterData = o.data.rows;
 	        
-	        if( data.rows.length > 0)
+	        if( o.data.rows.length > 0)
 	            $("#btnPdf").css({display: "block"});
 	        else 
 	            $("#btnPdf").css({display: "none"});
@@ -214,4 +214,4 @@ $("#btnPdf").click(function(){
     
     
 });*/
-                                     
+                                      

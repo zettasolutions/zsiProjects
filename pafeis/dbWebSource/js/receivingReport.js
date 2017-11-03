@@ -243,8 +243,8 @@ function displayRecords(callback) {
                                       + ",@date_to="+ (dateTo ? "'" + dateTo + "'" : null)
                                       + ",@receiving_type="+ (rTypeId ? "'" + rTypeId + "'" : null)
         ,dataRows: _dataRows
-        ,onComplete: function(data){
-	        g_masterData = data.rows;
+        ,onComplete: function(o){
+	        g_masterData = o.data.rows;
 	        g_masterIds = "";
 	        for(var x =0;x<g_masterData.length;x++ ){
 	               if(g_masterIds!=="") g_masterIds +=",";
@@ -255,7 +255,7 @@ function displayRecords(callback) {
 	           g_detailData = data.rows;
 	        });
 	        
-	        if( data.rows.length > 0)
+	        if( o.data.rows.length > 0)
 	            $("#btnPdf").css({display: "inline"});
 	        else 
 	            $("#btnPdf").css({display: "none"});
@@ -292,4 +292,4 @@ function displayDetail(o,id){
     });
 }
 
-                                                                                                                  
+                                                                                                                   

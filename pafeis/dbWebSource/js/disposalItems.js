@@ -209,8 +209,8 @@ function displayRecords(){
         		    ,onRender : function(d){ return svn(d,"status_name")}
         		}
 	    ]  
-    	     ,onComplete: function(data){
-    	         dataItemDisposal = data.rows;
+    	     ,onComplete: function(o){
+    	         dataItemDisposal = o.data.rows;
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
         }  
     });    
@@ -225,4 +225,4 @@ $("#btnDelete").click(function(){
     });       
 });
         
-                                                                   
+                                                                    

@@ -254,8 +254,8 @@ function displayRecords(){
         		    ,onRender : function(d){ return svn(d,"status_remarks")}
         		}
 	    ]  
-    	     ,onComplete: function(data){
-    	         dataPhysicalInv = data.rows;
+    	     ,onComplete: function(o){
+    	         dataPhysicalInv = o.data.rows;
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
         }  
     });    
@@ -558,4 +558,4 @@ function setMandatoryEntries(){
         ]
     });    
 }
-        
+         

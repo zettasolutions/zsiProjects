@@ -65,9 +65,6 @@ $("#btnNew").click(function () {
     displayAdjustmentDetails('');
     buildAdjustmentButtons();
     
-    /*$("select, input").on("keyup change", function(){
-        $("#frmPhysicalInv").find("#is_edited").val("Y");
-   }); */
 
     $("select[name='adjustment_by']").dataBind({
         url: execURL + "dd_warehouse_emp_sel @warehouse_id=" + g_warehouse_id  
@@ -223,8 +220,8 @@ function displayRecords(){
     		    ,onRender : function(d){ return svn(d,"adjustment_remarks")}
     		}
 	    ]  
-        ,onComplete: function(data){
-            dataAdjustment = data.rows;
+        ,onComplete: function(o){
+            dataAdjustment = o.data.rows;
             $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
         }  
     });    
@@ -360,4 +357,4 @@ function DeleteAdjustmentDetails(){
         }
     });   
 }
-          
+           

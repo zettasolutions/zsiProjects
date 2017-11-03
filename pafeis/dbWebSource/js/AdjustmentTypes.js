@@ -22,18 +22,7 @@ $("#btnDelete").click(function(){
         }
     });       
 });
-/*
-function submitData(){    
-  $("#frm_modalWindow").jsonSubmit({
-            procedure  : "adjustment_types_upd"
-            ,onComplete : function (data) {
-                 if(data.isSuccess===true) zsi.form.showAlert("alert");
-                 $("#grid").trigger('refresh');
 
-            }
-    });        
-}
-*/
 
 $("#btnSave").click(function () {
    $("#grid").jsonSubmit({
@@ -73,4 +62,4 @@ function displayRecords(){
         }  
     });    
 }
-       
+        

@@ -243,8 +243,8 @@ function displayRecords(){
         		,{text  : "Timing Status"           , name  : "timing_status"           , width : 150           , style : "text-align:center;"}
         		
 	    ]
-	    ,onComplete : function(data){
-	        g_masterData = data.rows;
+	    ,onComplete : function(o){
+	        g_masterData = o.data.rows;
 	        g_masterIds = "";
 	        for(var x =0;x<g_masterData.length;x++ ){
 	               if(g_masterIds!=="") g_masterIds +=",";
@@ -315,4 +315,4 @@ function displayDetail(o,id){
 }
 
 
-                                                                                                               
+                                                                                                                

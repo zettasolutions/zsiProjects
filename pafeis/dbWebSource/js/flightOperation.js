@@ -377,8 +377,8 @@ function displayRecords(){
     		    ,onRender : function(d){ return svn(d,"status_name")}
     		}
 	    ]  
-        ,onComplete: function(data){
-            dataFlightOperations = data.rows;
+        ,onComplete: function(o){
+            dataFlightOperations = o.data.rows;
             $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
         }  
     });    
@@ -543,4 +543,4 @@ function setStatusName(page_process_action_id) {
         }
     });
 }
-                                    
+                                      
