@@ -455,13 +455,22 @@ var  ud='undefined'
             
                 };
                 this.onRequestDone = function(o){
+                    var _Pnl =".zGridPanel";
+                    var _PL  =  _Pnl  + ".left"
+                    var _PR  =  _Pnl  + ".right"
+                    var _row = ".zRows";
+                    var _$pl =  this.children(_PL);
+                    var _$pr =  this.children(_PR);
+                    
+                    this.left = { panel :_$pl, rows: _$pl.find(_row)}; 
+                    this.right  = { panel :_$pr, rows: _$pr.find(_row)}; 
+                    
                     if(o.params.onComplete){
-                        if(o.data) o.params.onComplete(o.data); else o.params.onComplete();
+                        this.__onComplete = o.params.onComplete;
+                        this.__onComplete(o);
                     }
                     if(o.params.callBack) o.params.callBack(o);
                 };
-                            
-                
                 this.setColumnResize = function(){
                     var  _self      = this
                         ,_clsGrp0   = "group0"
@@ -657,13 +666,13 @@ var  ud='undefined'
                             r +="<div id=\"childPanel" + svn(o.data,__o.toggleMasterKey) +   "\" class=\"zExtraRow\"><div class=\"zGrid\"></div></div>";                           
                         }
                         
-                        
                         _table.append(r);
-
-                        var tr=$("div[rowObj]");tr.removeAttr("rowObj"); 
-                        if (isOnEC){
-                            o.onEachComplete(tr,data);
-                        }
+                        var _row=$("div[rowObj]");_row.removeAttr("rowObj");
+                        if ( ! isUD(__o.onEachComplete) ) {
+                            _row.__onEachComplete =__o.onEachComplete;
+                            _row.__onEachComplete(o);
+                        }                        
+                        
                     }
                     ,setRowClickEvent   = function(){
                         
@@ -861,17 +870,6 @@ var  ud='undefined'
                     _tableRight = this.find(".right").find("#table");
                 }
 
-                var isOnEC= (typeof o.onEachComplete !== ud);
-                if (isOnEC){    
-                    var strFunc = o.onEachComplete.toString();
-                  args = strFunc
-                  .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-                  .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-                  .split(/,/);
-                  var cbName="callback Function";
-                  if(args.length < 1) console.warn("you must implement these parameters: tr,data");
-                }
-            
                 if(typeof o.isNew !== ud){
                     if(o.isNew===true) clearTables();
                 } 
@@ -1035,14 +1033,17 @@ var  ud='undefined'
                     
                     $ddl.append("<option " + _value2 + " value=\""  + _value +  "\">"  + _text + " </option>");
                }); 
-               $(this).change(function(){
-                   if( ! isUD(o.onChange) ) 
-                       o.onChange({
-                             index : $(this).find(":selected").index() 
-                            ,data  : o.data
-                            ,object   :  $(this)
-                            ,row :  $(this).closest(".zRow")
-                       });
+               $(this).change(function(){ 
+                    var _$self =  $(this);
+                    if( ! isUD(o.onChange) ){ 
+                        _$self.__onChange = o.onChange;   
+                        _$self.__onChange({
+                                 index : $(this).find(":selected").index() 
+                                ,data  : o.data
+                                //,object   :  $(this)
+                                ,row :  $(this).closest(".zRow")
+                        });
+                   }
                })
                    
                setTimeout(function(){              
@@ -1057,7 +1058,11 @@ var  ud='undefined'
                             if(_r) $(this).prop("selected",true);            
                         });             
                     }); 
-                    if(o.onComplete) o.onComplete(o.data);
+                    if(o.onComplete) {
+                        $ddl.__onComplete = o.onComplete; 
+                        $ddl.__onComplete(o.data);
+                    }
+                    
                }, 10);   
                return this;
             };
@@ -1076,7 +1081,7 @@ var  ud='undefined'
                 var p = {
                     type: 'POST'
                   , url: (typeof o.url!==ud?o.url:base_url + "data/update")
-                  , data: JSON.stringify(  this.find(".left").length > 0 ? this.toJSON2(o) :this.toJSON(o) )
+                  , data: JSON.stringify(  this.hasClass("zGrid") > 0 ? this.toJSON2(o) :this.toJSON(o) )
                   , contentType: 'application/json'
                 };
             
@@ -1492,6 +1497,8 @@ var  ud='undefined'
             };
 
             $.fn.toJSON             = function(o) { //for multiple data only
+                            console.log("toJSON");
+
                 if (typeof o === ud) o={};
                 var isExistOptionalItems = function (o, name) {
                     if (typeof o.optionalItems !== ud) {
@@ -1562,9 +1569,9 @@ var  ud='undefined'
                 var json = [];
                 var ctr = 0;
                 var _obj =this;
-                $.each( this.find(".left .zRow"),function(i){
-                    var $rowLeft  =  $(this);
-                    var $rowRight = _obj.find(".right .zRow:eq(" + i + ")");
+                $.each( this.find(".right .zRow"),function(i){
+                    var $rowRight  =  $(this);
+                    var $rowLeft = _obj.find(".left .zRow:eq(" + i + ")");
                     var arrLeft = $rowLeft.find('input, textarea, select').not(':checkbox').not((typeof o.notInclude !== ud?o.notInclude:"")).serializeArray();
                     var arrRight = $rowRight.find('input, textarea, select').not(':checkbox').not((typeof o.notInclude !== ud?o.notInclude:"")).serializeArray();
                     var info = {};
@@ -2505,4 +2512,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                                    
+                                                                                                                                            
