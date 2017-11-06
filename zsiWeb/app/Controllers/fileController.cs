@@ -28,9 +28,9 @@ namespace zsi.web.Controllers
  
         
 
-        private void MigrateExcelFile(string fileName, string excel_column_range, string tempTable)
+        private void MigrateExcelFile(string fileName, string excel_column_range, string tempTable, string extraColumns)
         {
-            string virtualColumns = this.CurrentUser.userId + " as user_id";
+            string virtualColumns = this.CurrentUser.userId + " as user_id" + extraColumns;
             OleDbCommand command = default(OleDbCommand);
             OleDbDataReader rdr = default(OleDbDataReader);
             OleDbConnection conn = default(OleDbConnection);
@@ -66,8 +66,10 @@ namespace zsi.web.Controllers
         [HttpPost]
         public JsonResult templateUpload(HttpPostedFileBase file, string tmpData)
         {
-            string tmpTable = tmpData.Split(',')[0];
-            string colRange = tmpData.Split(',')[1];
+            string[] arrParams = tmpData.Split(',');
+            string tmpTable = arrParams[0];
+            string colRange = arrParams[1];
+            string extraColumns = (arrParams.Length == 3 ? "," + arrParams[2]:"");
             try
             {
                 excelConnectionString = this.AppConfig.excel_conn_str;
@@ -80,7 +82,7 @@ namespace zsi.web.Controllers
                     fullPath = Path.Combine(tempPath, fileName);
                     file.SaveAs(fullPath);
                     DataHelper.execute("temp_data_del @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
-                    MigrateExcelFile(fullPath, colRange, tmpTable);
+                    MigrateExcelFile(fullPath, colRange, tmpTable, extraColumns);
                     DataHelper.execute("temp_data_upd @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
 
                 }
