@@ -21,9 +21,10 @@
 	white-space: nowrap;
 }
 .zHeaders .title .text input[type="checkbox"], .zHeaders .title .text input[type="radio"]{
-    left: -2px;
+    left: 1px;
     position: relative;
     top: 1px;
+    width: inherit;    
 }
 
 .zHeaders .item .cr {
@@ -333,6 +334,7 @@
     line-height:10px
 }
 /*end of sort*/
+
 
 
 
