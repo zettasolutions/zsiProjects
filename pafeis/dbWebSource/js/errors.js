@@ -114,10 +114,10 @@ $("#btnGo").click(function(){
 
 
 $("#btnRefresh").click(function(){
-    displayRecords("");
+    displayRecords("@user_id=" + userId);
 });
 
 $("#btnAllRefresh").click(function(){
     displayRecords("@all=1");
 });
-           
+            
