@@ -12,7 +12,7 @@ begin
  
   IF(@page_name IS NOT NULL )     
     BEGIN  
-     select top 1 p.page_title,p.page_name, j.js_id,p.page_id,j.js_content from dbo.pages p  
+     select top 1 p.page_title,p.page_name, j.js_id,p.page_id,j.js_content,rev_no from dbo.pages p  
        left join  dbo.javascripts j on j.page_id = p.page_id   
        where p.page_name=@page_name 
      RETURN
@@ -42,3 +42,4 @@ begin
     EXEC (@stmt);  
 END  
   
+
