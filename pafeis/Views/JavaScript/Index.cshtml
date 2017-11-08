@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "JavaScript List";
     Layout = "~/Views/Shared/_Admin.cshtml";
@@ -100,12 +100,12 @@ function displayDataToGrid() {
                                                       +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                       }
 				}	
-                ,{ text  : "Page Name"  , width : 150        , style : "text-align:left;"       
+                ,{ text  : "Page Name"  , width : 250        , style : "text-align:left;"       
         		    , onRender      :  function(d){ 
-						return  '&nbsp;<a target="_blank" href="' + base_url + 'javascript/source/' + d.page_name + '">' + d.page_name + '</a>';;
+						return '<a class="iconEdit" title="Open URL" target="_blank" href="' + base_url + 'page/name/' + d.page_name + '"><span class="glyphicon glyphicon-globe"><span></span></span></a>'
+					  +'&nbsp;<a target="_blank" href="' + base_url + 'javascript/source/' + d.page_name + '">' + d.page_name + '</a>';
                     }
 				}	
-				 
         		,{text  : "Revision"     , name  : "rev_no"     		, width : 65       	, style : "text-align:center;"}
         		,{text  : "Created By"   , name  : "created_by_name"  	, width : 180      	 , style : "text-align:left;"}
         		,{text  : "Created Date" , name  : "created_date"   	, width : 133          , style : "text-align:left;"}
@@ -142,5 +142,6 @@ $("#btnDelete").click(function () {
 
 
 </script>
+
 
 
