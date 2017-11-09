@@ -13,7 +13,7 @@
     <link href="@Url.Content("~/")Content/bootstrap-theme.min.css" rel="stylesheet" />
     <link href="@Url.Content("~/")Content/site.css" rel="stylesheet" />    
     <link href="@Url.Content("~/")Content/zGrid.css" rel="stylesheet" />
-    @Html.Raw(ViewBag.zsiLibJSLink)    
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))   
     @{
         string userId = "";
         if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
@@ -86,7 +86,7 @@
             </div>
         </div>
     </div>
-    @Html.Raw(ViewBag.appStartLink)
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart")) 
     <div class="container-fluid page">
         @RenderBody()
     </div>

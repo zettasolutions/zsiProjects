@@ -13,7 +13,7 @@
     <link href="@Url.Content("~/")Content/site.css" rel="stylesheet" />    
     <link href="@Url.Content("~/")Content/zGrid.css" rel="stylesheet" />
 
-    @Html.Raw(ViewBag.zsiLibJSLink)    
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))    
     <script>
         var base_url = '@Url.Content("~/")';
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
@@ -28,7 +28,7 @@
         Some processe(s) encountered a problem.
         <br> Please Contact System Administrator.
     </div>
-    @Html.Raw(ViewBag.appStartLink)
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart")) 
     <div class="container-fluid page">
         @RenderBody()
     </div>
@@ -54,5 +54,6 @@
 </div>
 </body>
 </html>
+
 
 
