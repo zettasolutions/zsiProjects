@@ -47,21 +47,18 @@
     });
 
     $("#btnSave").click(function () {
-        $("#grid").jsonSubmit({
-              url: controller_url + "update"
+        $("#frm").jsonSubmit({
+            procedure: "pages_upd"
             , onComplete: function (data) {
-				if(data.msg==="ok") {
-					zsi.form.showAlert("alert");
-					$("#grid").clearGrid();				
-					displayRecords();
-				}
-
+				zsi.form.showAlert("alert");
+				$("#grid").clearGrid();
+				displayRecords();
             }
         });
     });
     function displayRecords() {
 		var sName = $("#filter_name");
-		var params =  (sName.val()!=="" ? " @@search_page_name='" + sName.val() + "'" : "");		
+		var params =  (sName.val()!=="" ? " @@search_page_name='" + sName.val() + "'" : "");
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
          url			: base_url + "sql/exec?p=pages_sel" + params
@@ -70,49 +67,49 @@
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,dataRows       :[
-            
+
        		 { text: cb           , width:25  , style:"text-align:center;", type:"hidden" , name:"page_id"}
-    		,{ text:"Page Name"   , width:214 , style:"text-align:left;", type:"input"  , name:"page_name"}	 
-    		,{ text:"Page Title"   , width:300 , style:"text-align:left;", type:"input" , name:"page_title"}	 	 
+    		,{ text:"Page Name"   , width:214 , style:"text-align:left;", type:"input"  , name:"page_name"}
+    		,{ text:"Page Title"   , width:300 , style:"text-align:left;", type:"input" , name:"page_title"}
     		,{ text:"Master Page"   , width:100 , style:"text-align:center;", type:"select" , name:"master_page_id"}
-    		,{ text:"URL"   
-				, width:37 
+    		,{ text:"URL"
+				, width:37
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit"  title="Open URL" target="_blank" href="' + base_url + 'page/name/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-globe"><span></a>'; 
+					return '<a class="iconEdit"  title="Open URL" target="_blank" href="' + base_url + 'page/name/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-globe"><span></a>';
 				}
-			
-			}  	 	 
-    		,{ text:"Template"   
-				, width:70 
+
+			}
+    		,{ text:"Template"
+				, width:70
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit" title="Edit Source Code" target="_blank" href="' + base_url + 'pagetemplate/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
+					return '<a class="iconEdit" title="Edit Source Code" target="_blank" href="' + base_url + 'pagetemplate/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>';
 				}
-			
-			}  	 	 
-    		,{ text:"JavaScript"   
-				, width:75 
+
+			}
+    		,{ text:"JavaScript"
+				, width:75
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit" title="Edit Source Code"  target="_blank" href="' + base_url + 'javascript/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>'; 
+					return '<a class="iconEdit" title="Edit Source Code"  target="_blank" href="' + base_url + 'javascript/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>';
 				}
-			
-			}  	 	 
+
+			}
 
         ]
             ,onComplete: function(){
 				 $("select[name='master_page_id']").dataBind("masterpages");
             }
-        });    		
+        });
     }
-	
+
 	$("#filter_name").keyup(function(e){
 		clearTimeout(tmr);
 		tmr = setTimeout(
 		function(){
 			displayRecords();
-		},600);		
+		},600);
 	});
 
     $("#btnDelete").click(function () {

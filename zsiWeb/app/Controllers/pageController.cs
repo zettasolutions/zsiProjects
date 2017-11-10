@@ -78,19 +78,6 @@ namespace zsi.web.Controllers
             
 
         }
- 
-
-
-        [HttpPost, ValidateInput(false)]
-        public JsonResult update(List<page> list)
-        {
-
-            DataHelper.dataTableUpdate ("dbo.pages_upd", CollectionHelper.toDataTable(list));
-          
-            return Json(new { msg = "ok" });
-          
-        }
-
-       
+      
     }
 }
