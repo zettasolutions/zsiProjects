@@ -98,6 +98,7 @@ function displayRecords(){
      var columnName = (g_column_name ? ",@col_name='"+ g_column_name +"'" : "");
      var keyword    = (g_keyword ? ",@keyword='"+ g_keyword +"'" : "");
      var cb = bs({name:"cbFilter1",type:"checkbox"});
+     if(!g_warehouse_id) {alert("Warehouse is required");return;}
      $("#grid").dataBind({
 	     url            : execURL + "items_inv_with_serials_sel @warehouse_id='" + g_warehouse_id +"'" + columnName + keyword
 	    ,width          : $(document).width() - 35
@@ -130,4 +131,4 @@ function displayRecords(){
         }  
     });    
 }              
-        
+         

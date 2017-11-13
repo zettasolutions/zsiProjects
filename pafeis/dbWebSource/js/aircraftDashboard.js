@@ -359,6 +359,7 @@ function displayBox(id){
 }
 
 function displayItems(id, callback){
+    if(isUD(id)) {alert("Aircraft is required"); return;};
     var counter = 0;
     $("#tabGrid" + id).dataBind({
 	     url            : procURL + "items_sel @aircraft_info_id=" + id +",@option_id='" + g_option_id +"'" +",@keyword='" + g_keyword +"'" +",@col_name='" + g_column_name +"'"
@@ -465,4 +466,4 @@ function formatCurrency(number){
         result = parseFloat(number).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
     return result;
-}                             
+}                              

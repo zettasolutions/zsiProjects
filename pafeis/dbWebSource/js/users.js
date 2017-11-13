@@ -222,6 +222,7 @@ function displayRecords(){
     		}
 	    ]
         ,onComplete: function(){
+            rownum=0;
             $("select[name='user_id']").dataBind({
                   url: base_url + "selectoption/code/notUsers"
                 , isUniqueOptions:true
@@ -356,4 +357,4 @@ function showModalUploadImage(filename){
         m.find('.modal-body').html(img); 
 }
 
-                                   
+                                    

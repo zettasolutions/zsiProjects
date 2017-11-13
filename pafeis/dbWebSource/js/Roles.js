@@ -45,10 +45,7 @@ function getTemplate(){
                       };
         var htmlDashboard    = template(contextDashboard);     
         $("body").append(htmlDashboard);
-
-
-
-    });    
+    });
     
      
 
@@ -73,7 +70,6 @@ function manageItemDashboard(id,name){
     }    
     
   // clearGrid();
-    
 }
 function clearGrid(){
     $("#" + tblName).clearGrid();
@@ -262,7 +258,7 @@ function displayRolesDashboard(id){
                 });  
             $("select[name='page_id']").dataBind( "pages");    
             $("select[name='page_id']").dataBind({
-                url : execURL + "dd_dashboard_sel @role_id=" + id 
+                url : procURL + "dd_dashboard_sel" 
                 ,text: "page_title"
                 ,value: "page_id"
             });
@@ -303,4 +299,4 @@ $("#btnDelete").click(function(){
 });      
 
     
-                                                                                        
+                                                                                           
