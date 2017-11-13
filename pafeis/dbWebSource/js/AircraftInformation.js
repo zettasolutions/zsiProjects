@@ -103,6 +103,7 @@ function btnDeleteAssembly(){
 }
 
 function displayRecords(){
+    if(isUD(g_organization_id)) return;
      var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
 	     url            : execURL + "aircraft_info_sel @squadron_id=" + g_organization_id
@@ -438,7 +439,9 @@ function excelFileUpload(){
         //Ajax events
         success: completeHandler = function(data) {
             if(data.isSuccess){
-                 alert("Data has been successfully uploaded.");
+                $.post(procURL + "load_aircraft_nemanclatures", function(){
+                    alert("Data has been successfully uploaded.");
+                });
             }
             else
                 alert(data.errMsg);
@@ -454,4 +457,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }        
-  
+    

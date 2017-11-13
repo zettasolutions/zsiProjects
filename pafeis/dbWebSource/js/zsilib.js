@@ -307,7 +307,8 @@ var  ud='undefined'
 
                 //dropdownlist
                 if(typeof a[0] ==="string"){
-                     p={}; p.url = zsi.config.baseURL + "selectoption/code/" + a[0]; 
+			        var _url = zsi.config.baseURL;					
+                     p={}; p.url = (_url ? _url :"/") + "selectoption/code/" + a[0];                      
                     if(typeof a[1] !==ud) p.onComplete = a[1];
                 }
                 var obj=this;
@@ -1495,7 +1496,46 @@ var  ud='undefined'
                 });
                 return this;
             };
-
+            $.fn.showWaitingBox     = function(o) {
+                var _name = "_waitingBox"
+                var _id = this.attr("id") + _name;
+                var _$doc = $("body");
+                var _wb = $("#" + _id);
+                if ( _wb.length > 0) _wb.show();
+                else{
+                    var _rect = this.get(0).getBoundingClientRect();
+            
+                    var _html = new zsi.easyJsTemplateWriter()
+                                .div({
+                                     id     : _id
+                                    ,class  : "waitingBox"
+                                    ,style  : "display:block;"
+                                            + "line-height:" + _rect.height + "px;"
+                                            + "height:" + _rect.height + "px;" 
+                                            + "width:"  + _rect.width  + "px;" 
+                                            + "top:"    + _rect.top +   "px;"
+                                            + "left:"    + _rect.left +   "px;"
+                                            + "z-index: " + (zsi.getHighestZindex() + 1)
+                                    }
+                                )
+                                    .in()
+                                    .div({class:"label"})
+                                        .in()
+                                        .div({class:"img"})
+                                        .div({class:"text",value: (o.text ? o.text : "loading..." ) })
+                                .html();
+                    
+                    _wb = $(_html);
+                    _$doc.append(_wb);
+               }
+               
+               $.fn.hideWaitingBox = function() {
+                    var _id = this.attr("id") + _name;
+                    var _wb = $("#" + _id);
+                    if(_wb.length > 0 ) _wb.hide();
+               };
+            
+            };
             $.fn.toJSON             = function(o) { //for multiple data only
                             console.log("toJSON");
 
@@ -1617,7 +1657,7 @@ var  ud='undefined'
                 if(typeof o.procedure !==ud) json={procedure: o.procedure, rows: json}; 
                 if(typeof o.parentId !==ud) json.parentId= o.parentId
                 return json;
-            };            
+            };              
         }            
         ,__setPageCtrl              : function(o,url,data,pTable){
             var tr = data.returnValue;
@@ -2512,3 +2552,4 @@ $(document).ready(function(){
     zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
+  
