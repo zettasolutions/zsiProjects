@@ -1,14 +1,14 @@
 if(typeof zsi==='undefined') zsi={};
 zsi.easyJsTemplateWriter = function(sn){
     //sn="selectorName"
-    if(!sn) sn = $("<div/>"); 
+    if(!sn) sn = $("<div/>");  
     var _self = this;
-    this.target  = $(sn);
+    this.target  = (typeof sn ==="string" ? $(sn) : sn); 
     var _$lt = $("[id='localTemplates']");
     if(_self.target.length===0) {console.error("selector name not found.");return;}
     
     this.templates = [];
-    this.lastObj;
+    this.lastObj=this.target;
     
     _replaceTagElements = function ($o){
         var _r = $o;
@@ -65,7 +65,7 @@ zsi.easyJsTemplateWriter = function(sn){
         //replace tag-li, and other tag-table elements
         _new = _replaceTagElements(_new);
         if(o.parent){
-            _self.target = $(o.parent);   
+            _self.target = (typeof o.parent === "string" ? $(o.parent) : sn);  
         }
         _self.target.append(_new);  
         _self.lastObj = _new;
@@ -104,4 +104,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-                           
+                            
