@@ -213,6 +213,7 @@ namespace zsi.web
                             cmd.Parameters.AddWithValue("@" + pair.Key, pair.Value.ToString());
                         }
                     }
+                    cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
 
                     StringBuilder allJSONs = new StringBuilder();
                     conn.Open();
