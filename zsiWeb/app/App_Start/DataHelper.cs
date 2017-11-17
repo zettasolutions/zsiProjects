@@ -175,34 +175,44 @@ namespace zsi.web
             conn.Close();
             return returnValue;
         }
-
-
-        public static string getGetRecordsByDataTable(string procedureName, DataTable dt)
+        public static string getGetRecordsByJsonObject(JObject json)
         {
-            String json = "";
-            if (dt.Rows.Count == 0) {
-                json = createMessageJSONStr(new Message
-                {
-                    isSuccess = true
-                    ,recordsAffected = -1
-                    ,rows = "[]"
-                });
-                return json;
-            }
 
+            String _json = "";
             SqlDataReader rdr = null;
             SqlConnection conn = null;
-            String connectionString = string.Empty;
-
             try
             {
                 conn = new SqlConnection(dbConnection.ConnectionString);
                 using (conn)
                 {
-                    SqlCommand cmd = new SqlCommand(procedureName, conn);
+                    if (json["procedure"] == null)
+                        throw new Exception("sql procedure is required.");
+                    SqlCommand cmd = new SqlCommand(json["procedure"].ToString(), conn);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
-                    tvparam.SqlDbType = SqlDbType.Structured;
+                    if (json["rows"] != null)
+                    {
+                        DataTable dt = new DataTable();
+                        string _jRowStr = "";
+                        _jRowStr = json["rows"].ToString();
+
+                        if (_jRowStr == "" || _jRowStr.ToCharArray()[0] != '[')
+                            throw new Exception("rows parameter must be array.");
+                        dt = JsonConvert.DeserializeObject<DataTable>(_jRowStr);
+                        if (dt.Rows.Count > 0)
+                        {
+                            SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
+                            tvparam.SqlDbType = SqlDbType.Structured;
+                        }
+                    }
+                    if (json["parameters"] != null)
+                    {
+                        JObject obj = (JObject)json["parameters"];
+                        foreach (var pair in obj)
+                        {
+                            cmd.Parameters.AddWithValue("@" + pair.Key, pair.Value.ToString());
+                        }
+                    }
 
                     StringBuilder allJSONs = new StringBuilder();
                     conn.Open();
@@ -214,34 +224,34 @@ namespace zsi.web
                     cmd.Parameters.Add(retval);
 
                     rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                    json = toJSON(rdr);
+                    _json = toJSON(rdr);
                     rdr.Close();
 
-                    if (json == "[]" && rdr.RecordsAffected > 0)
-                        json = createMessageJSONStr(new Message
+                    if (_json == "[]" && rdr.RecordsAffected > 0)
+                        _json = createMessageJSONStr(new Message
                         {
-                            isSuccess = true
-                            ,recordsAffected = rdr.RecordsAffected
-                            ,rows = "[]"
+                            isSuccess = true,
+                            recordsAffected = rdr.RecordsAffected,
+                            rows = "[]"
                         });
                     else
-                        json = createMessageJSONStr(new Message
+                        _json = createMessageJSONStr(new Message
                         {
-                            isSuccess = true
-                            ,recordsAffected = rdr.RecordsAffected
-                            ,rows = json
-                            ,returnValue = Convert.ToString(retval.Value)
+                            isSuccess = true,
+                            recordsAffected = rdr.RecordsAffected,
+                            rows = _json,
+                            returnValue = Convert.ToString(retval.Value)
                         });
 
                 }
             }
             catch (SqlException sqlException)
             {
-                json = createMessageJSONStr(new Message
+                _json = createMessageJSONStr(new Message
                 {
-                    isSuccess = false
-                    ,recordsAffected = -1
-                    ,errMsg = sqlException.ToString()
+                    isSuccess = false,
+                    recordsAffected = -1,
+                    errMsg = sqlException.ToString()
                 });
 
             }
@@ -249,7 +259,7 @@ namespace zsi.web
             {
                 conn.Close();
             }
-            return json;
+            return _json;
 
         }
 
@@ -362,8 +372,7 @@ namespace zsi.web
                 request.InputStream.Seek(0, SeekOrigin.Begin);
                 string jsonString = new StreamReader(request.InputStream).ReadToEnd();
                 JObject json = JObject.Parse(jsonString);
-                DataTable dt = JsonConvert.DeserializeObject<DataTable>(json["rows"].ToString());
-                return getGetRecordsByDataTable(json["procedure"].ToString(), dt);
+                return getGetRecordsByJsonObject(json);
             }
             catch (Exception ex) {
 
