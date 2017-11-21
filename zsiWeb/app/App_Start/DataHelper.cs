@@ -95,8 +95,6 @@ namespace zsi.web
         {
             return _dataTableUpdate(procedureName, dt, "");
         }
-
-
         private static Message _dataTableUpdate(string procedureName,DataTable dt,string parentId)
         {
             Message m = new Message();
@@ -137,9 +135,6 @@ namespace zsi.web
             return m;
 
         }
-
-
-
         public static string DataTableToJSON(DataTable table)
         {
             string JSONString = string.Empty;
@@ -228,21 +223,13 @@ namespace zsi.web
                     _json = toJSON(rdr);
                     rdr.Close();
 
-                    if (_json == "[]" && rdr.RecordsAffected > 0)
-                        _json = createMessageJSONStr(new Message
-                        {
-                            isSuccess = true,
-                            recordsAffected = rdr.RecordsAffected,
-                            rows = "[]"
-                        });
-                    else
-                        _json = createMessageJSONStr(new Message
-                        {
-                            isSuccess = true,
-                            recordsAffected = rdr.RecordsAffected,
-                            rows = _json,
-                            returnValue = Convert.ToString(retval.Value)
-                        });
+                    _json = createMessageJSONStr(new Message
+                    {
+                        isSuccess = true,
+                        recordsAffected = rdr.RecordsAffected,
+                        rows = _json,
+                        returnValue = Convert.ToString(retval.Value)
+                    });
 
                 }
             }
@@ -263,11 +250,9 @@ namespace zsi.web
             return _json;
 
         }
-
         public static void execute(string sql, bool isProcedure) {
             toJSON(sql, isProcedure);
         }
-
         public static string toJSON(string sql, bool isProcedure)
         {
             SqlDataReader rdr = null;
@@ -356,7 +341,6 @@ namespace zsi.web
             }
             return json;
         }
-
         public static Message processPostData( HttpRequestBase request) {
             request.InputStream.Seek(0, SeekOrigin.Begin);
             string jsonString = new StreamReader(request.InputStream).ReadToEnd();
@@ -365,7 +349,6 @@ namespace zsi.web
             string parentId = (json["parentId"] ==null ? "" :  json["parentId"].ToString());
             return dataTableUpdate(json["procedure"].ToString(), dt, parentId);
         }
-
         public static string GetJSONData(HttpRequestBase request)
         {
             try
