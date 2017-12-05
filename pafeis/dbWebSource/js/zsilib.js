@@ -14,33 +14,6 @@ var  ud='undefined'
         	}
             return r.value;
         }
-        ,__initFormAdjust           : function(){
-           /*adjustment form with search*/
-           var searchIcon=$(".form-group .glyphicon-search");
-           if(searchIcon.length>0){
-              $(document.body).css("margin-left","10px");
-              $(document.body).css("margin-right","10px");
-           }
-        }
-        ,__initTabNavigation        : function(){
-           $(".nav-tabs li").each(function(){
-              $(this).click(function(){
-                 $(".nav-tabs li").removeClass("active");
-                 $(this).addClass("active" );
-                  var l_a=$(this).children("a")[0];
-                  $("#p_tab").val(l_a.id);          
-                  var l_clsTabPagesName =".tab-pages";
-                  var l_tab = $( l_clsTabPagesName + " #" + l_a.id);
-        
-                  l_tab.parent().children().each(function(){
-                    $(this).removeClass("active");
-                  });
-                  l_tab.addClass("active" );
-                  
-              });
-        
-           });
-        }
         ,__monitorAjaxResponse      : function(){
             $(document).ajaxStart(function(){});      
             $( document ).ajaxSend(function(event,request,settings) {
@@ -266,38 +239,82 @@ var  ud='undefined'
             $.fn.clearSelect    = function(hasOption,defaultText) {
               var _dt =  (defaultText ? defaultText : "");
               this.html(   (hasOption ? "<option>"  + _dt + "</option>" : _dt ));
-            };              
+            };
+            $.fn.createDragScroll = function (o) {
+                var x, y, top, left, down;
+                var _$self = $(this); //scroll Area
+                var _$zp = _$self.children(".zoomPanel");
+                _$self.mousedown(function (e) {
+                    e.preventDefault();
+                    down = true;
+                    x = e.pageX;
+                    y = e.pageY;
+                    top = $(this).scrollTop();
+                    left = $(this).scrollLeft();
+                });
+                _$self.mouseleave(function (e) {
+                    down = false;
+                });
+                $("body").mousemove(function (e) {
+                    if (down) {
+                        var newX = e.pageX;
+                        var newY = e.pageY;
+                        _$self.scrollTop(top - newY + y);
+                        _$self.scrollLeft(left - newX + x);
+            
+                        var _m = _$zp.css('transform').match( /\d*\.?\d+/);
+                        var _scaleVal = (_m ?_m[0]:1);   
+                        if(_scaleVal > 1){
+                            var _target         = $(e.target);    
+                            var _xOrigin =  ( _$self.scrollLeft() / ( _target.width()  -  _$self.width()) ) * 100;
+                            var _yOrigin =  ( _$self.scrollTop()  / ( _target.height() - _$self.height()) ) * 100;
+                            _$zp.css("transform-origin", _xOrigin + "% " + _yOrigin + "%");
+                        }
+                    }
+                });
+                $("body").mouseup(function (e) { 
+                    down = false; 
+                });
+                
+                _$self.bind('mousewheel DOMMouseScroll', function(e) {
+                    var evt=window.event || e;
+                    var delta=evt.detail? evt.detail*(-120) : evt.wheelDelta; 
+                    if( delta > 0 ) $("#zoomIn").click(); 
+                        else {
+                            if( evt.target.getBoundingClientRect().width > _$self.width() ) $("#zoomOut").click();
+                    }
+                });
+            
+                if(o.isZoom || o.isZoom === true) _$zp.createZoomCtrl({});
+            };
             $.fn.createZoomCtrl     = function(o){
-                this.zmVal  = 1;
                 var self = this;
+                this.zmVal  = 1.0;
+                this.inVal = 0.1;
+                 _$zp = self;
                 var _onZoom = function(isIn){
-                    var inVal = 0.1;
                     var getVal  =   function(){
-                        if(isIn)
-                            self.zmVal =  self.zmVal + inVal;
-                        else 
-                            self.zmVal =  self.zmVal - inVal;
+                        if(isIn){
+                            self.zmVal +=  self.inVal;
+                        }else {
+                            self.zmVal  -= self.inVal;
+                        }            
                         return self.zmVal;
                     };
                     self.css({transform : "scale(" + getVal() + ")"});
-                    if(o.onChange) o.onChange(self.closest(".imgFrame"));
                 };
                 var $p = this.parent();
-                $p.append(
-                    "<div class=\"zoomCtrl\">"
-                        +"<button id=\"zoomIn\" type=\"button\" class=\"btn btn-default btn-sm\" >"
-                           +"<span class=\"glyphicon glyphicon-zoom-in\" aria-hidden=\"true\"> </span>"
-                        +"</button>"
-                        
-                        +"<button id=\"zoomOut\" type=\"button\" class=\"btn btn-default btn-sm\" >"
-                           +"<span class=\"glyphicon glyphicon-zoom-out\" aria-hidden=\"true\"></span>"
-                        +"</button>"
-                    +"</div>"
-                );
-                
-                var x =  $p.find("#zoomIn,#zoomOut").click( function(){
+                new zsi.easyJsTemplateWriter($p).div({class:"zoomCtrl"})
+                    .in()
+                    .bsButton({id:"zoomIn",class:"btn-default btn-sm",icon:"zoom-in"})
+                    .bsButton({id:"zoomOut",class:"btn-default btn-sm",icon:"zoom-out"});
+            
+                $p.find("#zoomIn,#zoomOut").click( function(){
                     if(this.id.toLowerCase() === "zoomin") _onZoom(true); else _onZoom(false);
                 });
+            
+                $p.children(".zoomCtrl").css({top: $p.offset().top,left: $p.offset().left  });
+                
                 return this;
             };
             $.fn.dataBind           = function(){
@@ -875,7 +892,7 @@ var  ud='undefined'
                     if(o.isNew===true) clearTables();
                 } 
                 
-                if(o.url || o.data){
+                if(o.url || o.procedure){
                     if( (o.isAsync && __obj.curPageNo === 1) ||  ! o.isAsync ) clearTables();
                     var params ={
                        dataType: "json"
@@ -923,13 +940,13 @@ var  ud='undefined'
                             }          
                     };
                     
-                    if(typeof o.data!==ud)  {
+                    if(typeof o.procedure!==ud)  {
                         if(typeof zsi.config.getDataURL===ud){
                             alert("zsi.config.getDataURL is not defined in AppStart JS.");
                             return;
                         }
                         params.url = zsi.config.getDataURL ;
-                        params.data = JSON.stringify(o.data);
+                        params.data = JSON.stringify({procedure :o.procedure,parameters:o.parameters});
                         params.type = "POST";
                     }
                     else params.url = o.url + ( isUD(o.rowsPerPage) ? "" : ",@rpp=" +  o.rowsPerPage  )
@@ -964,13 +981,14 @@ var  ud='undefined'
                 var ids = "";
                 var cb = this.find("input[name='cb']:checked");
                 var data = cb.getCheckBoxesValues();
+                var procedure = (o.procedure ? o.procedure : "deleteData");  
                 for (var x = 0; x < data.length; x++) {
                     if (ids !== "") ids += "/";
                     ids += data[x];
                 }
                 if (ids !== "") {
                     if (confirm("Are you sure you want to delete selected items?")) {
-                        $.post(base_url + "sql/exec?p=deleteData @pkey_ids='" + ids + "',@table_code='" + o.code + "'", function (d) {
+                        $.post(base_url + "sql/exec?p=" + procedure + " @pkey_ids='" + ids + "',@table_code='" + o.code + "'", function (d) {
                             o.onComplete(d);
                         }).fail(function (d) {
                             alert("Sorry, the curent transaction is not successfull.");
@@ -1497,24 +1515,32 @@ var  ud='undefined'
                 return this;
             };
             $.fn.showWaitingBox     = function(o) {
-                var _name = "_waitingBox"
-                var _id = this.attr("id") + _name;
+                o = o || {};
+                var _$self = this;
+                var _name = "_waitingBox";
+                var _id = _$self.attr("id") + _name;
                 var _$doc = $("body");
                 var _wb = $("#" + _id);
+                
+                $.fn.hideWaitingBox = function() {
+                    var _$self = this;
+                    var _id = _$self.attr("id") + _name;
+                    var _wb = $("#" + _id);
+                    if(_wb.length > 0 ) _wb.hide();
+                };
+                var _rect = _$self.get(0).getBoundingClientRect();
                 if ( _wb.length > 0) _wb.show();
                 else{
-                    var _rect = this.get(0).getBoundingClientRect();
-            
                     var _html = new zsi.easyJsTemplateWriter()
                                 .div({
                                      id     : _id
                                     ,class  : "waitingBox"
                                     ,style  : "display:block;"
-                                            + "line-height:" + _rect.height + "px;"
-                                            + "height:" + _rect.height + "px;" 
-                                            + "width:"  + _rect.width  + "px;" 
-                                            + "top:"    + _rect.top +   "px;"
-                                            + "left:"    + _rect.left +   "px;"
+                                            + "line-height:" + (o.height ? o.height : _rect.height) + "px;"
+                                            + "height:" + (o.height ?  o.height : _rect.height) + "px;" 
+                                            + "width:"  + (o.width ? o.width : _rect.width)  + "px;" 
+                                            + "top:"    + (o.top ? o.top : _rect.top) +   "px;"
+                                            + "left:"    + (o.left ? o.left : _rect.left) +   "px;"
                                             + "z-index: " + (zsi.getHighestZindex() + 1)
                                     }
                                 )
@@ -1528,13 +1554,6 @@ var  ud='undefined'
                     _wb = $(_html);
                     _$doc.append(_wb);
                }
-               
-               $.fn.hideWaitingBox = function() {
-                    var _id = this.attr("id") + _name;
-                    var _wb = $("#" + _id);
-                    if(_wb.length > 0 ) _wb.hide();
-               };
-            
             };
             $.fn.toJSON             = function(o) { //for multiple data only
                             console.log("toJSON");
@@ -1903,7 +1922,15 @@ var  ud='undefined'
                 return result;
             }
         }
-        ,calendar                   : {}
+        ,collectData                : function(o){
+            $.ajax({
+                method : "POST"
+                ,url : zsi.config.getDataURL 
+                ,data :JSON.stringify(o )
+                ,dataType : "json"
+                ,success : o.onComplete
+            });
+        }     
         ,config                     : {}
         ,control                    : {}
         ,form                       : {
@@ -2548,8 +2575,6 @@ zsi.__setExtendedJqFunctions();
 /* Page Initialization */
 $(document).ready(function(){
     zsi.initDatePicker();
-    zsi.__initTabNavigation();
-    zsi.__initFormAdjust();
     zsi.initInputTypesAndFormats();
 });
-  
+         
