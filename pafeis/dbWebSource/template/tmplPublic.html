@@ -21,9 +21,15 @@
     <li  name="select">
         <select id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" value="{{value}}" >{{options}}</select>
     </li>
+    <li  name="option">
+        <option value="{{value}}">{{text}}</option>
+    </li>
     <li  name="textArea">
-        <textarea id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" value="{{value}}" ></textarea>
-    </li>   
+        <textarea id="{{id}}" name="{{name}}" class="{{class}}" style="{{style}}" rows="{{rows}}" cols="{{cols}}" > {{value}} </textarea>
+    </li>
+    <li name="img">
+        <img src="{{src}}" alt="{{alt}}" class="{{class}}" style="{{style}}" id="{{}}" />
+    </li>
 
      <!---list elements -->
     <li name="ul" >
@@ -71,7 +77,7 @@
         <input id="{{id}}" name="{{name}}" type="{{type}}" class="form-control {{class}}" style="{{style}}" placeholder="{{placeHolder}}" value="{{value}}" />
     </li>
     <li  name="bsButton">
-        <button type="button" id="{{id}}" name="{{name}}" class="btn {{class}}" style="{{style}}" ><span class="glyphicon glyphicon-plus"></span> {{value}} </button>
+        <button type="button" id="{{id}}" name="{{name}}" class="btn {{class}}" style="{{style}}" onclick="{{onClick}}"><span class="glyphicon glyphicon-{{icon}}"></span> {{value}} </button>
     </li>
     <li  name="bsLabelInput">
         <label class="{{labelSize}} control-label">{{labelText}}</label>
