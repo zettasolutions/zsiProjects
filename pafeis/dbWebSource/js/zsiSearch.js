@@ -270,6 +270,7 @@ $(document).click(function(event){
    }
 });  
 
+/*
 $(document).on("keypress", 'form', function (e) {
    if (e.target.className.indexOf("allowEnter") == -1) {
        var code = e.keyCode || e.which;
@@ -279,6 +280,7 @@ $(document).on("keypress", 'form', function (e) {
        }
    }
 });
+*/
 
 function computeScroll(tr,direction){   
    var scrollHeight=zsi.search.Panel.prop("scrollHeight");
@@ -325,4 +327,4 @@ function recallTableDisplay(obj){
    }
    return history;
 }
-    
+     
