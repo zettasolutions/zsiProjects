@@ -46,8 +46,3 @@ UPDATE a
 
 END;	
 
---select top 1 convert(decimal(10,2), remaining_time) from temp_aircraft_nomenclatures
-
-
-
---Select * From temp_aircraft_nomenclatures Where IsNumeric(remaining_time) = 0
