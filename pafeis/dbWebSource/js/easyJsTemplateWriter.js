@@ -14,20 +14,24 @@ zsi.easyJsTemplateWriter = function(sn){
         var _r = $o;
         var _cls = $o.attr("class");
         if(_cls && _cls.indexOf("tag-") > -1 ){
+            var _attrs =  $o.get(0).attributes;
             $o.replaceWith(function(){
-                var _cls = $(this).attr("class");
                 var _tag = _cls.match(/tag-(\w+)/g,"")[0].substr(4);
                 _r =  $("<" + _tag + "/>", {html: $(this).html()})
-                    .attr("class",_cls)
-                    .attr("style",$(this).attr("style"))
-                    .removeClass("tag-" + _tag) ;
-                    return _r;
+                .removeClass("tag-" + _tag) ;
+                var _newAttrs =  {};
+                for(var j=0; j<_attrs.length; j+=1){
+                    var _attr = _attrs[j];
+                    if(_attr.nodeName,_attr.nodeName !=="=\"\"") _newAttrs[_attr.nodeName]=_attr.nodeValue;
+                }
+                _r.attr( _newAttrs);
+                return _r;
+    
             });
         }
         return _r;
     };
-    
-    
+
     this.html = function(isNoEmpty){
         var _$o = $(sn);
         var _r =_$o.html();
@@ -104,4 +108,4 @@ zsi.easyJsTemplateWriter = function(sn){
 
  
 	
-                            
+                             

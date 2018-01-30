@@ -139,6 +139,7 @@ $("#btnSave").click(function () {
    $("#grid").jsonSubmit({
           procedure: "item_categories_upd"
         , optionalItems: ["is_active","with_serial"]
+      //  , notInclude : "#parent_item_cat_id"
         , onComplete: function (data) {
             if(data.isSuccess===true) zsi.form.showAlert("alert");
             
@@ -151,6 +152,7 @@ function submitInactiveItemCategory(){
     $("#frm_modalWindowInactiveItemCategory").jsonSubmit({
          procedure      : "item_categories_upd"
         ,optionalItems  : ["is_active"]
+      //  , notInclude : "#parent_item_cat_id"
         ,onComplete     : function (data) {
            if(data.isSuccess===true) zsi.form.showAlert("alert");
            $("#grid").trigger("refresh");
@@ -158,7 +160,6 @@ function submitInactiveItemCategory(){
         }
     });
 }
-
 function submitItemsTypes(){
     $("#frm_modalWindowItemTypes").jsonSubmit({
          procedure      : "item_types_upd"
@@ -187,9 +188,11 @@ function submitInactiveItemTypes(){
 }
 
 function submitItemsCodes(){
+    
     $("#frm_modalWindowItemTypes").jsonSubmit({
          procedure      : "item_codes_upd"
         ,optionalItems  : ["item_type_id","is_active"]
+        ,notInclude     : "#column_name,#keyword"
         ,onComplete     : function (data) {
             if(data.isSuccess===true) zsi.form.showAlert("alert");
 
@@ -410,7 +413,7 @@ function displayRecords(){
     		}
     		,{text  : "Code"                , name  : "item_cat_code"           , type  : "input"         , width : 80        , style : "text-align:left;"}
     		,{text  : "Name"                , name  : "item_cat_name"           , type  : "input"         , width : 300       , style : "text-align:left;"}
-    		,{text  : "Parent Item"         , name  : "parent_item_cat_id"      , type  : "select"        , width : 200       , style : "text-align:left;"}
+    		//,{text  : "Parent Item"         , name  : "parent_item_cat_id"      , type  : "select"        , width : 200       , style : "text-align:left;"}
     		,{text  : "Active?"             , name  : "is_active"               , type  : "yesno"         , width : 60        , style : "text-align:left;"   ,defaultValue:"Y"}
     		
     		,{text  : "Nomenclature Types"          , width : 150                       , style : "text-align:center;"      
@@ -454,8 +457,8 @@ function displayInactiveItemCategory(){
     		,{text  : "Code"                , name  : "item_cat_code"          , type  : "input"         , width : 65        , style : "text-align:left;"}
     		,{text  : "Name"                , width : 300       , style : "text-align:left;"
     		    ,onRender      :  function(d){ 
-                    return      bs({name:"item_cat_name",type:"input",value: svn(d,"item_cat_name")})
-                            +   bs({name:"parent_item_cat_id",type:"hidden",value: svn(d,"parent_item_cat_id")});
+                    return      bs({name:"item_cat_name",type:"input",value: svn(d,"item_cat_name")});
+                            //+   bs({name:"parent_item_cat_id",type:"hidden",value: svn(d,"parent_item_cat_id")});
                 }
     		}
     		,{text  : "Active?"             , width : 55        , style : "text-align:left;"
@@ -814,4 +817,4 @@ function excelFileUpload(){
         processData: false
     }, 'json');        
 }               
-              
+                
