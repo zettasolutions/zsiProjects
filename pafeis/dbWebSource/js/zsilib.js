@@ -244,6 +244,7 @@ var  ud='undefined'
                 var x, y, top, left, down;
                 var _$self = $(this); //scroll Area
                 var _$zp = _$self.children(".zoomPanel");
+                _$self.data("isDraggable", true);
                 _$self.mousedown(function (e) {
                     e.preventDefault();
                     down = true;
@@ -255,7 +256,15 @@ var  ud='undefined'
                 _$self.mouseleave(function (e) {
                     down = false;
                 });
+                _$self.mousemove(function (e) {
+                    var _bcr = (_$self.data("bcr") === undefined) ? _$self.data("bcr", this.getBoundingClientRect()) : _$self.data("bcr");
+                    if ((_bcr.width - 20) < Math.abs(_bcr.x - e.pageX) || (_bcr.height - 20) < Math.abs(_bcr.y - e.pageY)) {
+                        _$self.css("overflow","scroll");
+                        console.log("!");
+                    } else { _$self.css("overflow","hidden"); }
+                });   
                 $("body").mousemove(function (e) {
+                    if(!_$self.data("isDraggable")) return;
                     if (down) {
                         var newX = e.pageX;
                         var newY = e.pageY;
@@ -279,15 +288,16 @@ var  ud='undefined'
                 _$self.bind('mousewheel DOMMouseScroll', function(e) {
                     var evt=window.event || e;
                     var delta=evt.detail? evt.detail*(-120) : evt.wheelDelta; 
-                    if( delta > 0 ) $("#zoomIn").click(); 
+                    if( delta > 0 ) _$self.find("#zoomIn").click(); 
                         else {
-                            if( evt.target.getBoundingClientRect().width > _$self.width() ) $("#zoomOut").click();
+                            if( evt.target.getBoundingClientRect().width > _$self.width() ) _$self.find("#zoomOut").click();
                     }
                 });
             
                 if(o.isZoom || o.isZoom === true) _$zp.createZoomCtrl({});
             };
             $.fn.createZoomCtrl     = function(o){
+                var _clsFrame = ".imgFrame";
                 var self = this;
                 this.zmVal  = 1.0;
                 this.inVal = 0.1;
@@ -302,6 +312,16 @@ var  ud='undefined'
                         return self.zmVal;
                     };
                     self.css({transform : "scale(" + getVal() + ")"});
+                    
+                    //fix for google chrome
+                    
+                    var _$frm = self.closest(_clsFrame);
+                    _$frm.css("overflow", "hidden");
+                    setTimeout(function(){
+                        _$frm.css("overflow", "auto");
+                    },1);
+                    
+                    
                 };
                 var $p = this.parent();
                 new zsi.easyJsTemplateWriter($p).div({class:"zoomCtrl"})
@@ -1299,6 +1319,15 @@ var  ud='undefined'
                   var l_option = new Option(monthNames[x], x+1);
                   _select.add(l_option, null);
                 }
+            };
+            $.fn.resetDragScroll    = function() {
+                var _$imagePanel    = $(this);
+                var _$zoomPanel     = _$imagePanel.find(".zoomPanel");
+                var _$img           = _$imagePanel.find("img");
+                
+                var _scale = Math.min(_$imagePanel.width() / _$img.width(), _$imagePanel.height() / _$img.height());
+                _$zoomPanel.css({ "transform" : "scale(" + _scale + ")" });
+                _$imagePanel.scrollTop(0).scrollLeft(0);
             };
             $.fn.serializeExclude   = function(p_arr_exclude) {
               var _arr =  this.serializeArray();
@@ -2577,4 +2606,3 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
-         
