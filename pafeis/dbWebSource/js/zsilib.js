@@ -240,7 +240,7 @@ var  ud='undefined'
               var _dt =  (defaultText ? defaultText : "");
               this.html(   (hasOption ? "<option>"  + _dt + "</option>" : _dt ));
             };
-            $.fn.createDragScroll = function (o) {
+            $.fn.createDragScroll   = function(o){
                 var x, y, top, left, down;
                 var _$self = $(this); //scroll Area
                 var _$zp = _$self.children(".zoomPanel");
@@ -256,13 +256,14 @@ var  ud='undefined'
                 _$self.mouseleave(function (e) {
                     down = false;
                 });
+                
                 _$self.mousemove(function (e) {
                     var _bcr = (_$self.data("bcr") === undefined) ? _$self.data("bcr", this.getBoundingClientRect()) : _$self.data("bcr");
                     if ((_bcr.width - 20) < Math.abs(_bcr.x - e.pageX) || (_bcr.height - 20) < Math.abs(_bcr.y - e.pageY)) {
                         _$self.css("overflow","scroll");
-                        console.log("!");
                     } else { _$self.css("overflow","hidden"); }
-                });   
+                });    
+                
                 $("body").mousemove(function (e) {
                     if(!_$self.data("isDraggable")) return;
                     if (down) {
@@ -270,15 +271,7 @@ var  ud='undefined'
                         var newY = e.pageY;
                         _$self.scrollTop(top - newY + y);
                         _$self.scrollLeft(left - newX + x);
-            
-                        var _m = _$zp.css('transform').match( /\d*\.?\d+/);
-                        var _scaleVal = (_m ?_m[0]:1);   
-                        if(_scaleVal > 1){
-                            var _target         = $(e.target);    
-                            var _xOrigin =  ( _$self.scrollLeft() / ( _target.width()  -  _$self.width()) ) * 100;
-                            var _yOrigin =  ( _$self.scrollTop()  / ( _target.height() - _$self.height()) ) * 100;
-                            _$zp.css("transform-origin", _xOrigin + "% " + _yOrigin + "%");
-                        }
+
                     }
                 });
                 $("body").mouseup(function (e) { 
@@ -290,7 +283,10 @@ var  ud='undefined'
                     var delta=evt.detail? evt.detail*(-120) : evt.wheelDelta; 
                     if( delta > 0 ) _$self.find("#zoomIn").click(); 
                         else {
-                            if( evt.target.getBoundingClientRect().width > _$self.width() ) _$self.find("#zoomOut").click();
+                            var _e = evt.target;
+                            if(evt.target.tagName.toLowerCase() !== "img") _e = $(_e).find("#targetImg").get(0);
+
+                            if( _e.getBoundingClientRect().width > (_$self.width() / 2) ) _$self.find("#zoomOut").click();
                     }
                 });
             
@@ -299,6 +295,7 @@ var  ud='undefined'
             $.fn.createZoomCtrl     = function(o){
                 var _clsFrame = ".imgFrame";
                 var self = this;
+                var _$frm = self.closest(_clsFrame);
                 this.zmVal  = 1.0;
                 this.inVal = 0.1;
                  _$zp = self;
@@ -314,23 +311,21 @@ var  ud='undefined'
                     self.css({transform : "scale(" + getVal() + ")"});
                     
                     //fix for google chrome
-                    
-                    var _$frm = self.closest(_clsFrame);
                     _$frm.css("overflow", "hidden");
                     setTimeout(function(){
                         _$frm.css("overflow", "auto");
                     },1);
-                    
-                    
                 };
                 var $p = this.parent();
                 new zsi.easyJsTemplateWriter($p).div({class:"zoomCtrl"})
                     .in()
                     .bsButton({id:"zoomIn",class:"btn-default btn-sm",icon:"zoom-in"})
-                    .bsButton({id:"zoomOut",class:"btn-default btn-sm",icon:"zoom-out"});
+                    .bsButton({id:"zoomOut",class:"btn-default btn-sm",icon:"zoom-out"})
+                    .bsButton({id:"refresh",class:"btn-default btn-sm",icon:"refresh"});
             
-                $p.find("#zoomIn,#zoomOut").click( function(){
+                $p.find("#zoomIn,#zoomOut,#refresh").click( function(){
                     if(this.id.toLowerCase() === "zoomin") _onZoom(true); else _onZoom(false);
+                    if(this.id.toLowerCase() === "refresh") _$frm.resetDragScroll();
                 });
             
                 $p.children(".zoomCtrl").css({top: $p.offset().top,left: $p.offset().left  });
@@ -701,7 +696,7 @@ var  ud='undefined'
                         r +="</div>";               
 
                         if( o.panelType ==="R" && ! isUD(__o.toggleMasterKey) ){
-                            r +="<div id=\"childPanel" + svn(o.data,__o.toggleMasterKey) +   "\" class=\"zExtraRow\"><div class=\"zGrid\"></div></div>";                           
+                            r +="<div id=\"childPanel" + zsi.replaceIllegalId(svn(o.data,__o.toggleMasterKey)) +   "\" class=\"zExtraRow\"><div class=\"zGrid\"></div></div>";                           
                         }
                         
                         _table.append(r);
@@ -1520,7 +1515,7 @@ var  ud='undefined'
                 var _pId = "#" + _name;
             
                 this.find(_pId).remove();
-                this.append('<div id="' + _name + '" class="zPopup overlay">'
+                this.append('<div id="' + _name + '" class="zPopup overlay" style="width:' + o.width + ';height:' + o.height + '">'
                                 	+ '<div class="panel">'
                                 	+   '<div class="header">'
                                     +		'<h2>'  + (o.title ? o.title :"")  + '</h2>'
@@ -2274,15 +2269,15 @@ var  ud='undefined'
             }
         }
         ,getHighestZindex           : function(){
-            var _selector = "*";
+            var _selector = "body > *";
             var _a = arguments;
-            if(typeof _a[0] !== ud)  _selector = _a[0];          
-            var highest = -999;
-            $(_selector).each(function() {
-                var current = parseInt($(this).css("z-index"), 10);
-                if(current && highest < current) highest = current;
-            });
-            return highest;
+            if(typeof _a[0] !== ud)  _selector = _a[0];         
+            var _max = Math.max.apply(null,$.map($(_selector), function(e,n){
+                   if($(e).css('position')=='absolute')
+                        return parseInt($(e).css('z-index'))||1 ;
+                   })
+            );      
+            return _max;
         }
         ,getOddEven                 : function(){
             var _o="odd";
@@ -2532,6 +2527,7 @@ var  ud='undefined'
           return data;
         }
         ,toggleExtraRow             : function(o){
+            o.parentId = zsi.replaceIllegalId(o.parentId);
             var _cpId = "#childPanel";
             var $span = $(o.object).find("span");
             var $cp = $(_cpId + o.parentId);
@@ -2552,6 +2548,9 @@ var  ud='undefined'
                 if( ! isUD(o.onLoad) ) o.onLoad( $(_cpId + o.parentId + " .zGrid") );
             }
         
+        }
+        ,replaceIllegalId : function(p){
+            return (typeof p ==="number" ? p : p.replace(/^[^a-z]+|[^\w:.-]+/gi, "__"));
         }
         ,setValIfNull               : function(data,colName,defaultValue){
             var _d = (typeof defaultValue !== ud ? defaultValue : "" );   
@@ -2606,3 +2605,4 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
+                   
