@@ -35,9 +35,6 @@ src: url("../fonts/EraserRegular.ttf");
 .breadcrumb-dn, .float-left .fa{
 	color: white;
 }
-.breadcrumb-dn p{
-	font-family: Eraser;
-}
 
 .car{
 	position: relative;
@@ -55,3 +52,16 @@ src: url("../fonts/EraserRegular.ttf");
 	margin-left: 85px;
 }
 
+h5 {
+  display: inline-block;
+  padding: 10px;
+  background: #B9121B;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.full-screen {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
