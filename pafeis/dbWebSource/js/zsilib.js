@@ -141,6 +141,382 @@ var  ud='undefined'
                 if(typeof o.data!==ud) params.data = JSON.stringify(o.data);
                 $.ajax(params);
             };
+            $.fn.addColResize       = function(o) {
+                var __obj   = this;
+                if ( ! __obj.length) { console.error("Target not found."); return false; }
+                if ( ! __obj.parent().hasClass("zTable")) { console.error("zTable div parent is not found."); return false; }
+                else {
+                    // Initialize object parameters
+                    var width           = ( ! isUD(o)) ? o.width : __obj[0].offsetWidth
+                        ,height         = ( ! isUD(o)) ? o.height : __obj[0].offsetHeight
+                        ,hasSpan        = (__obj.html().indexOf('span=') > 0) ? true : false
+                    
+                    // Initialize DOM objects
+                        ,$ztable        = __obj.closest(".zTable")
+                        ,$thead         = __obj.find("thead")
+                        ,$ths           = $thead.find("tr:last-child th")
+                        ,$tbody         = __obj.find("tbody")
+                    
+                    // Initialize variables 
+                        ,tw             = new zsi.easyJsTemplateWriter()
+                        ,cache          = []
+                    ;
+                    
+                    var  colWidth       = (isUD(o.colWidth)) ? [] : o.colWidth;
+                    if (isUD(o.colWidth)) { 
+                        $.each(o.dataRows, function(i,v) {
+                            colWidth.push(v.width);
+                        });
+                    }
+                    var colWidthL       = colWidth.length;
+                    
+                    if (hasSpan) {
+                        /* ----------------------------------- THEAD ----------------------------------- */
+                        var $theadTr    = $thead.find("tr")
+                            ,$tbodyTr   = $tbody.find("tr")
+                            ,theadTrL   = $theadTr.length
+                            ,tbodyTrL   = $tbodyTr.length
+                            ,rowspan    = []
+                            ,lastI      = 0
+                        ;
+                        
+                        for (let i = 0; i < theadTrL; i++) {
+                            let _$ths       = $theadTr.eq(i).find("th")
+                                ,_thL       = _$ths.length
+                                ,_temp      = {}
+                                ,_temp2     = []
+                                ,_index     = 0
+                            ;
+                            
+                            for (let _i = 0; _i < _thL; _i++) {
+                                let _$th    = _$ths.eq(_i)
+                                    ,_newW  = 0;
+                                
+                                if ( ! isUD(_$th.attr("colspan"))) {
+                                    let _cs         = parseInt(_$th.attr("colspan"), 10)
+                                        ,_csMinus1  = _cs - 1;
+                                        
+                                    for (let _ctr = 1; _ctr <= _cs; _ctr++) {
+                                        _index++;
+                                        _temp[(_index - 1)] = _$th;
+                                    }
+                                    
+                                    if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
+                                    for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                        if (lastI !== i) {
+                                            for (let rowI = 0; rowI < rowspan.length; rowI++) {
+                                                for (let a = 0; a < rowspan[rowI].length; a++) {
+                                                    let _b = rowspan[rowI][a];
+                                                    if (_b.i == y && _b.rowspan > 0) {
+                                                        _b.rowspan--;
+                                                        if ((_index + 1) - 1 < colWidthL) _index++;
+                                                    }  
+                                                }
+                                            }
+                                        }
+                                        if (_index - 1 < colWidthL) _newW += parseInt(colWidth[y], 10);
+                                    }
+                                    
+                                    if ( ! isUD(_$th.attr("rowspan"))) {
+                                        for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                            _temp2.push({ i : y , rowspan : parseInt(_$th.attr("rowspan"), 10) - 1 });
+                                        }
+                                    }
+                                } else {
+                                    if ((_index + 1) - 1 < colWidthL) { _index++; }
+                                    
+                                    if (lastI !== i) {
+                                        for (let rowI = 0; rowI < rowspan.length; rowI++) {
+                                            for (let a = 0; a < rowspan[rowI].length; a++) {
+                                                let _b = rowspan[rowI][a];
+                                                if (_b.i == (_index - 1) && _b.rowspan > 0) {
+                                                    _b.rowspan--;
+                                                    if ((_index + 1) - 1 < colWidthL) _index++;
+                                                }  
+                                            }
+                                        }
+                                    }
+                                    if (_index - 1 < colWidthL) _newW = parseInt(colWidth[(_index - 1)], 10);
+                                    
+                                    if ( ! isUD(_$th.attr("rowspan"))) {
+                                        _temp2.push({ i : _index - 1 , rowspan : parseInt(_$th.attr("rowspan"), 10) - 1 });
+                                    }
+                                }
+                                _$th.css({ "min-width" : _newW , "width" : _newW });
+                                _temp[(_index - 1)] = _$th;
+                            }
+                            
+                            rowspan.push(_temp2);
+                            cache.push(_temp);
+                            lastI = i;
+                        }
+                        
+                        /* ----------------------------------- TBODY ----------------------------------- */
+                        rowspan    = [];
+                        lastI      = 0;
+                        for (let i = 0; i < tbodyTrL; i++) {
+                            let _$tds       = $tbodyTr.eq(i).find("td")
+                                ,_tdL       = _$tds.length
+                                ,_temp      = {}
+                                ,_temp2     = []
+                                ,_index     = 0
+                            ;
+                            
+                            for (let _i = 0; _i < _tdL; _i++) {
+                                let _$td    = _$tds.eq(_i)
+                                    ,_newW  = 0;
+                                
+                                if ( ! isUD(_$td.attr("colspan"))) {
+                                    let _cs         = parseInt(_$td.attr("colspan"), 10)
+                                        ,_csMinus1  = _cs - 1;
+                                        
+                                    for (let _ctr = 1; _ctr <= _cs; _ctr++) {
+                                        _index++;
+                                        _temp[(_index - 1)] = _$th;
+                                    }
+                                        
+                                    if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
+                                    for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                        if (lastI !== i) {
+                                            for (let rowI = 0; rowI < rowspan.length; rowI++) {
+                                                for (let a = 0; a < rowspan[rowI].length; a++) {
+                                                    let _b = rowspan[rowI][a];
+                                                    if (_b.i == y && _b.rowspan > 0) {
+                                                        _b.rowspan--;
+                                                        if ((_index + 1) - 1 < colWidthL) _index++;
+                                                    }  
+                                                }
+                                            }
+                                        }
+                                        if (_index - 1 < colWidthL) _newW += parseInt(colWidth[y], 10);
+                                    }
+                                    
+                                    if ( ! isUD(_$td.attr("rowspan"))) {
+                                        for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                            _temp2.push({ i : y , rowspan : parseInt(_$td.attr("rowspan"), 10) - 1 });
+                                        }
+                                    }
+                                } else {
+                                    if ((_index + 1) - 1 < colWidthL) { _index++; }
+                                    
+                                    if (lastI !== i) {
+                                        for (let rowI = 0; rowI < rowspan.length; rowI++) {
+                                            for (let a = 0; a < rowspan[rowI].length; a++) {
+                                                let _b = rowspan[rowI][a];
+                                                if (_b.i == (_index - 1) && _b.rowspan > 0) {
+                                                    _b.rowspan--;
+                                                    if ((_index + 1) - 1 < colWidthL) _index++;
+                                                }  
+                                            }
+                                        }
+                                    }
+                                    if (_index - 1 < colWidthL) _newW = parseInt(colWidth[(_index - 1)], 10);
+                                    
+                                    if ( ! isUD(_$td.attr("rowspan"))) {
+                                        _temp2.push({ i : _index - 1 , rowspan : parseInt(_$td.attr("rowspan"), 10) - 1 });
+                                    }
+                                }
+                                
+                                _$td.css({ "min-width" : _newW , "width" : _newW });
+                                _temp[(_index - 1)] = _$td;
+                            }
+                            
+                            rowspan.push(_temp2);
+                            cache.push(_temp);
+                            lastI = i;
+                        }
+                    } else {
+                        $.each(colWidth, function(i,w) {
+                            var _nth = i + 1;
+                            $ztable.find("th:nth-child(" + _nth + ") , td:nth-child(" + _nth + ")").css({ "width" : w ,"min-width" : w });
+                        });
+                    }
+                    
+                    var _$crPanel   = $ztable.find(".crPanel");
+                    if (_$crPanel.length === 0) {
+                        var _cr = [];
+                        var _posX = 0;
+                        // Create the cr
+                        tw.new().div({ class : "crPanel" , style : "left:" + __obj[0].offsetLeft + "px; top:" + __obj[0].offsetTop + "px;"}).in();
+                        $.each(colWidth, function(i,w) {
+                            _posX += w;
+                            _cr.push({ 
+                                x : _posX 
+                               ,width : w
+                            });
+                            
+                            tw.div({ 
+                                class : (_posX >= width) ? "cr hidden" : "cr"
+                                ,style : "left:" + _posX + "px; height : " + (height - 17) + "px; top:0;"
+                            });
+                        });
+                        $ztable.append(tw.html());
+                        
+                        // Dynamic positioning and display of crs
+                        _$crPanel       = $ztable.find(".crPanel");
+                        var _$cr        = _$crPanel.find(".cr");
+                        var _crL        = _cr.length;
+                        var _objOffL    = __obj[0].offsetLeft;
+                        $tbody.on("scroll", function() {
+                            var _left = _objOffL - $tbody.scrollLeft();
+                            
+                            _$crPanel.css({ "left" : _left + "px" });
+                            for (var i = 0; i < _crL; i++) {
+                                var _info = _cr[i];
+                                var _x = _info.x + _left;
+                                if ( _x >= width || _x <= _objOffL) $(_$cr[i]).addClass("hidden");
+                                else $(_$cr[i]).removeClass("hidden");
+                            }
+                        });
+                        
+                        // On click cr
+                        var _$curCr
+                            ,_crIndex
+                            ,__cr
+                            ,_limit
+                            ,_pageX
+                            ,_originX
+                            ,_pageX2
+                        _$cr.off("mousedown").on("mousedown", function(e) {
+                            _$curCr     = $(this);
+                            _crIndex    = _$curCr.index();
+                            __cr        = _cr[_crIndex];
+                            _limit      = (_crIndex === 0) ? 25 : _cr[_crIndex - 1].x + 25;
+                            _pageX      = e.pageX;
+                            _pageX2     = e.pageX;
+                            _originX    = __cr.x;
+                            
+                            _$curCr.addClass("active");
+                            $ztable.addClass("noSelect");
+                        });
+                        
+                        // On move an release
+                        $ztable.off("mousemove").on("mousemove", function(e) {
+                            if ( ! isUD(_$curCr) && e.target.classList[0] !== "cr") {
+                                var _x = (e.pageX - $(this).offset().left) + $tbody.scrollLeft();
+                                if (_x > _limit) {
+                                    _$curCr.css({ "left" : _x });
+                                    _originX = _x;
+                                    _pageX2 = e.pageX;
+                                }
+                            }
+                        });
+                        
+                        // Review nalang sa mouse up ug down
+                        $(window).on("mouseup", function(e) {
+                            if ( ! isUD(_$curCr)) {
+                                _$curCr.removeClass("active");
+                                $ztable.removeClass("noSelect");
+                                
+                                var _newW = (_pageX2 >= _pageX) ? __cr.width + (_originX - __cr.x) : __cr.width - (__cr.x - _originX);
+                                __cr.width = _newW;
+                                
+                                if (hasSpan) {
+                                    for (let i = 0; i < cache.length; i++) {
+                                        var _c = cache[i];
+                                        for (var key in _c) {
+                                            if (_crIndex === parseInt(key)) { 
+                                                _c[key].css({ "width" : _newW ,"min-width" : _newW }); 
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    var _nth = _crIndex + 1;
+                                    $ztable.find("th:nth-child(" + _nth + ") , td:nth-child(" + _nth + ")").css({ "width" : _newW ,"min-width" : _newW });
+                                }
+                                
+                                // Adjust the cr position
+                                _posX = 0;
+                                for (var i = 0; i < _crL; i++) {
+                                    var _info = _cr[i];
+                                    
+                                    _posX += _info.width;
+                                    _info.x = _posX;
+                                    
+                                    if ( _info.x >= width || _info.x <= _objOffL) {
+                                        $(_$cr[i]).addClass("hidden").css({ "left" : _info.x + "px" });
+                                    } else {
+                                        $(_$cr[i]).removeClass("hidden").css({ "left" : _info.x + "px" });
+                                    }
+                                }
+                                
+                                _$curCr = undefined; // Reset
+                                
+                                // Resize tbody and change color if there is a scroll
+                                $tbody.css({
+                                    width : width
+                                    ,height : height - $thead.height()
+                                });
+                            }
+                        });
+                    }
+                }
+                
+                return __obj;
+            };
+            $.fn.addScrollbar       = function(o) {
+                var __obj   = this;
+                if ( ! __obj.length) { console.error("Target not found."); return false; }
+                if ( ! __obj.parent().hasClass("zTable")) { console.error("zTable div parent is not found."); return false; }
+                else {
+                    clearTimeout(zsi.tmr);
+                    zsi.tmr = setTimeout(function() {
+                        // Initialize object parameters
+                        var width           = ( ! isUD(o)) ? o.width : __obj[0].offsetWidth
+                            ,height         = ( ! isUD(o)) ? o.height : __obj[0].offsetHeight
+                        
+                        // Initialize DOM objects
+                            ,$ztable        = __obj.closest(".zTable")
+                            ,$thead         = __obj.find("thead")
+                            ,$tbody         = __obj.find("tbody")
+                        ;
+                        
+                        $thead.css({
+                            "width" : width - (($tbody[0].scrollHeight > $tbody.height() - 17) ? 17 : 0)
+                        });
+                        $tbody.css({
+                            width : width
+                            ,height : height - $thead.height()
+                        }).on("scroll", function() {
+                            $thead.scrollLeft($(this).scrollLeft());
+                        });
+                        
+                        __obj.addColResize(o);
+                        __obj.addClickHighlight();
+                    }, 1);   
+                }
+            
+                return __obj;
+            };
+            $.fn.autoHideScroll     = function(o) {
+                o = o || {};
+                o.isHoverBR = o.isHoverBR || false;
+                
+                for (let i = 0; i < this.length; i++) {
+                    var _this       = this[i];
+                    var _$target    = $(_this);
+                    var _offset     = _$target.offset();
+                    var _offW       = _this.offsetWidth;
+                    var _offH       = _this.offsetHeight;
+                    
+                    if ((_offW || _offH) && _$target.css("overflow")) {
+                        if ( ! o.isHoverBR ) {
+                            _$target.mouseover(function() { this.style.overflow = "auto"; })
+                            .mouseout(function() { this.style.overflow = "hidden"; });
+                        } else {
+                            $(window).mousemove(function (e) {
+                                var _x = e.pageX - _offset.left;
+                                var _y = e.pageY - _offset.top;
+                                if ((_offW - 17 < _x && _offW > _x) || (_offH - 17 < _y && _offH > _y)) {
+                                    _this.style.overflow = "auto";
+                                } else { _this.style.overflow = "hidden"; }
+                            });
+                        }
+                    } else { alert("Style height, width, and overfow are undefined."); }
+                }
+                
+                return this;
+            };
             $.fn.addClickHighlight  = function(){
                 var $tr = this.find("tbody > tr");
                 $tr.unbind("click");
@@ -336,6 +712,7 @@ var  ud='undefined'
                 var a = arguments;
                 var p=a[0];
                 if(this.hasClass("zGrid")) return $(this).dataBindGrid(p);
+                if(this.parent().hasClass("zTable")) return $(this).loadTable(p);
 
                 //dropdownlist
                 if(typeof a[0] ==="string"){
@@ -1315,6 +1692,238 @@ var  ud='undefined'
                   _select.add(l_option, null);
                 }
             };
+            $.fn.loadTable          = function(o) {
+                var __obj   = this;
+                if ( ! __obj.length) { console.error("Target not found."); return false; }
+                if ( ! __obj.parent().hasClass("zTable")) { console.error("zTable div parent is not found."); return false; }
+                else {
+                    zsi.__setTableObjectsHistory(__obj,o);
+                    __obj.onComplete = o.onComplete;
+                    
+                    var isOnEC  = ( ! isUD(o.onEachComplete));
+                    if (isOnEC){    
+                        var _strFunc = o.onEachComplete.toString();
+                        var _args = _strFunc
+                        .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+                        .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+                        .split(/,/);
+                        if (_args.length < 1) console.warn("You must implement these parameters: tr,data");
+                    }
+                    
+                    if ( ! __obj.find("thead").length) __obj.append("<thead/>"); 
+                    if ( ! __obj.find("tbody").length) __obj.append("<tbody/>"); 
+                    
+                    // Initialize object parameters
+                    var width           = o.width
+                        ,height         = o.height
+                        ,dataRows       = o.dataRows
+                        ,dRowsLength    = dataRows.length
+                        ,blankRowsLimit = o.blankRowsLimit
+                    
+                    // Initialize DOM objects
+                        ,$ztable        = __obj.closest(".zTable")
+                        ,$thead         = __obj.find("thead")
+                        ,$ths           = $thead.find("th")
+                        ,$tbody         = __obj.find("tbody")
+                    
+                    // Initialize variables 
+                        ,tw             = new zsi.easyJsTemplateWriter()
+                        ,bs             = zsi.bs.ctrl
+                        ,svn            = zsi.setValIfNull
+                    ;
+                    
+                    // Set table width and height
+                    $ztable.css({
+                        width : width
+                        ,height : height
+                    });
+                    
+                    // Create table headers
+                    if ($ths.length === 0) {
+                        tw.tr().in();
+                        for (var i = 0; i < dRowsLength; i++) {
+                            var _dr = dataRows[i];
+                            tw.th({ 
+                                value : _dr.text 
+                                ,style : _dr.style + "min-width:" + _dr.width + "px;width:" + _dr.width + "px;"
+                            });
+                        }
+                        $thead.html(tw.html());   
+                        $ths = $thead.find("th");
+                    }
+                    
+                    // Add sorting functions
+                    if (typeof o.sortIndexes !== ud && zsi.__getTableObject(__obj).isInitiated === false) {
+                        var indexes     = o.sortIndexes
+                            ,arrowUp    = "<span class='arrow-up'></span>"
+                            ,arrowDown  = "<span class='arrow-down'></span>"
+                            ,arrows     = arrowUp + arrowDown
+                        ;
+                        
+                        for (var x = 0; x < indexes.length; x++) {
+                            $($ths[indexes[x]]).append(
+                                tw.new().span({ class : "zSort" })
+                                .in().a({ href : "javascript:void(0);" })
+                                .in().span({ class : "sPane" , value : arrows }).html()
+                            );
+                        }
+                        
+                        var aObj    = __obj.find(".zSort a");
+                        var url     = o.url; 
+                        
+                        aObj.click(function() {
+                            var _$self  = $(this);
+                            var i       = aObj.index(this);
+                            zsi.table.sort.colNo = indexes[i];
+                            
+                            $(".sPane").html(arrows);
+                            
+                            var className = _$self.attr("class");
+                            
+                            if (typeof className === ud) { 
+                                aObj.removeAttr("class");
+                                _$self.addClass("asc").find(".sPane").html(arrowUp);
+                            } else {
+                                if (className.indexOf("asc") > -1) {
+                                    _$self.removeClass("asc").addClass("desc").find(".sPane").html(arrowDown);
+                                    zsi.table.sort.orderNo = 1;
+                                } else {
+                                    _$self.removeClass("desc").addClass("asc").find(".sPane").html(arrowUp);
+                                    zsi.table.sort.orderNo = 0;
+                                }
+                            }
+                            
+                            zsi.table.__sortParameters = "@col_no=" + zsi.table.sort.colNo + ",@order_no=" + zsi.table.sort.orderNo; 
+                            
+                            o.url = (url.indexOf("@") < 0 ? url + " " : url + "," ) + zsi.table.__sortParameters + (zsi.table.__pageParameters === "" ? "" : "," + zsi.table.__pageParameters);
+                            __obj.loadTable(o);
+                        });
+                    }
+                    
+                    // Create table data
+                    var createTr = function(data) {
+                        tw.new().tr({ class : zsi.getOddEven() }).in()
+                        .custom(function() {
+                            for (var i = 0; i < dRowsLength; i++) {
+                                var _info = dataRows[i];
+                                var _td = {
+                                    style : _info.style + "min-width:" + _info.width + "px;width:" + _info.width + "px;"
+                                    ,attr : 'colindex="' + i + '"'
+                                };
+                                
+                                if ( ! isUD(_info.attr)) _td.attr += _info.attr;
+                                if ( ! isUD(_info.class)) _td.class = _info.class;
+                                if (_info.onRender) {
+                                    _td.value = _info.onRender(data);
+                                } else {
+                                    if (isUD(_info.type)) {
+                                        _td.value = data[_info.name];
+                                    } else {
+                                        if ( ! isUD(_info.displayText)) {
+                                            _td.value = bs({ name        : _info.name  
+                                                            ,style       : _info.style 
+                                                            ,type        : _info.type  
+                                                            ,value       : svn(data , _info.name , _info.defaultValue) 
+                                                            ,displayText : svn(data , _info.displayText) 
+                                                        });
+                                        } else {
+                                            _td.value = bs({name : _info.name , style : _info.style , type : _info.type , value : svn(data , _info.name , _info.defaultValue )});
+                                        }
+                                    }
+                                     
+                                    if (i === 0 || i === o.selectorIndex) {
+                                        if ( ! isUD(o.selectorType)) {
+                                            _td.value += (data !== null ? bs({name: (o.selectorType==="checkbox" ? "cb" : (o.selectorType==="radio" ? "rad" : "ctrl" )),type:o.selectorType}) : "" );
+                                        }
+                                    }
+                                }
+                                this.td(_td);
+                            }
+                            return this;
+                        });
+                        
+                        $tbody.append(tw.html());
+                        if (isOnEC) {
+                            o.onEachComplete($tbody.find("tr:last-child"),data);
+                        }
+                    };
+                    
+                    if (typeof o.isNew !== ud) { if (o.isNew == true) __obj.clearGrid(); } 
+                    __obj.children("tbody").html("");
+                    
+                    if (o.url || o.data) {
+                        if ($thead.length > 0) __obj.clearGrid(); 
+                        var params = {
+                            dataType : "json"
+                            ,cache : false
+                            ,success : function(data) {
+                                var _num_rows = data.rows.length;
+                                var _$recordsNum = __obj.find("#recordsNum");
+                                
+                                if (dRowsLength) {
+                                    $.each(data.rows, function() {
+                                        createTr(this);
+                                    });
+                                }
+                                
+                                // Set pagination
+                                if (_$recordsNum.length) {
+                                    __obj.find("#recordsNum").html(_num_rows);
+                                    if (typeof zsi.page.__pageNo === ud || zsi.page.__pageNo === null) {
+                                        zsi.page.__pageNo = 1;
+                                        zsi.__setPageCtrl(o, o.url, data, __obj);
+                                    }
+                                }
+                                
+                                // Set table initiated.
+                                zsi.__getTableObject(__obj).isInitiated = true;
+                                
+                                if(o.rowSpan) __obj.rowSpan(o.rowSpan);
+                                if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:data});
+                                __obj.addScrollbar(o); // This must be after onComplete()
+                            }          
+                        };
+                        
+                        if (typeof o.data !== ud) {
+                            if(typeof zsi.config.getDataURL === ud) {
+                                alert("zsi.config.getDataURL is not defined in AppStart JS.");
+                                return;
+                            }
+                            params.url = zsi.config.getDataURL;
+                            params.data = JSON.stringify(o.data);
+                            params.type = "POST";
+                        } else params.url = o.url;
+                
+                        __obj.bind('refresh', function() {
+                            if (zsi.tmr) clearTimeout(zsi.tmr);
+                            zsi.tmr = setTimeout(function() {
+                                __obj.loadTable(o);
+                            }, 1);   
+                        });
+                        
+                        $.ajax(params);
+                    } else if (o.rows.length && dRowsLength) {
+                        $.each(o.rows, function() {
+                            createTr(this);
+                        });
+                        
+                        if(o.rowSpan) __obj.rowSpan(o.rowSpan);
+                        if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:o});
+                        __obj.addScrollbar(o); // This must be after onComplete()
+                    } else {
+                        if (typeof blankRowsLimit === ud) blankRowsLimit = 5;
+                        for (var y = 0; y < blankRowsLimit; y++) {
+                            createTr();
+                        }
+                        
+                        if(o.rowSpan) __obj.rowSpan(o.rowSpan);
+                        if ( ! isUD(__obj.onComplete)) onComplete({params:null,data:null});
+                        __obj.addScrollbar(o); // This must be after onComplete()
+                    }
+                }
+                
+                return __obj;
+            };
             $.fn.resetDragScroll    = function() {
                 var _$imagePanel    = $(this);
                 var _$zoomPanel     = _$imagePanel.find(".zoomPanel");
@@ -1324,6 +1933,55 @@ var  ud='undefined'
                 _$zoomPanel.css({ "transform" : "scale(" + _scale + ")" });
                 _$imagePanel.scrollTop(0).scrollLeft(0);
             };
+            $.fn.rowSpan            = function(rowspan){
+                var _$tbl = this;
+                var _cls = "has-duplicate";
+                $.each( rowspan,function(i){
+                    var index = this;
+                
+                    var thCellLength    = _$tbl.find("th").length ;
+                    var colElements = [];
+                    $.each( _$tbl.find("tbody > tr") ,function(){
+                         var trCellLength = $(this).find("td").length;
+                         var extraCells = thCellLength - trCellLength;
+                         colElements.push(  ( $(this).find("td").eq( index - extraCells )).get(0));
+                    });
+                    //create groups
+                    var col=[];
+                    for(var x=0;x<colElements.length;x++){
+                        var curEl = colElements[x];
+                        var nextEl = colElements[x+1];
+                        var prevEl = colElements[x-1];
+                        var isExist = ( ( nextEl  && curEl.innerText == nextEl.innerText ) || ( prevEl && curEl.innerText == prevEl.innerText) );
+                        if(isExist) {
+                            var o= {key: curEl.innerText, el: curEl};
+                            keyItem = {keyName:"key",  value: o.key };
+                            var _indexes = col.findIndexes( keyItem );
+                            if(_indexes.length === 0){
+                                col.push( {key: o.key,items:[curEl] });
+                            }else{
+                                var _i = _indexes[0];
+                                var item = col[_i];
+                                item.items.push(o.el);
+                            } 
+                        }    
+                    }
+                  //add class
+                   $.each(col, function(i) {
+                        $(this.items[0]).attr({class:_cls}).attr({rowspan: this.items.length});
+                   });
+                     
+                     
+                   $.each(col, function(i) {
+                       $.each(this.items, function(i) {
+                           if( ! $(this).hasClass(_cls) ){
+                             $(this).remove();
+                           }
+                       });        
+                   });
+                });
+                _$tbl.find("tr > td").removeClass(_cls); 
+            };            
             $.fn.serializeExclude   = function(p_arr_exclude) {
               var _arr =  this.serializeArray();
                var str = '';
@@ -2605,4 +3263,3 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
-                   
