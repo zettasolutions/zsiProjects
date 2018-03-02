@@ -5,8 +5,7 @@ MDBootstrap - Magic Portfolio
 html,
 body {
     height: 100%;
-    background: -webkit-linear-gradient(50deg,#2096ff,#05ffa3);
-    background: linear-gradient(40deg,#2096ff,#05ffa3);
+    background-color: #212121;
 }
 
 
@@ -157,13 +156,10 @@ footer.page-footer {
 
 /* Parallax */
 
-#par-myprofile {
-    background-image: url(../images/402939923-graduation-wallpapers.jpg);
+#par-about-me {
+    background-image: url(../images/3.jpg);
 }
-.bgmyprofile{
-	background: -webkit-linear-gradient(50deg,#2096ff,#05ffa3);
-    background: linear-gradient(40deg,#2096ff,#05ffa3);
-}
+
 
 #par-special-offer {
     background-image: url(http://mdbootstrap.com/wp-content/uploads/2015/10/kfi5dark.jpg);
@@ -202,9 +198,7 @@ footer.page-footer {
 .parallax-container .container-small img {
     opacity: 1;
 }
-section#par-myprofile.parallax {
-	padding-bottom:0px !important;
-}
+
 /* Lightbox Gallery */
 
 .light-box-gallery .margin-top {
