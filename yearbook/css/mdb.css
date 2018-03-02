@@ -2043,6 +2043,9 @@ Colors
 .blue-grey-text.text-darken-4 {
   color: #263238 !important;
 }
+.blue-zsi{
+	background-color:#092c4c !important;
+}
 
 .grey.lighten-5 {
   background-color: #fafafa !important;
@@ -2874,7 +2877,9 @@ footer.page-footer .footer-copyright {
 }
 
 .section-dark {
-  background-color: #212121;
+background: #092c4c;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #092c4c, #1670b8, #092c4c);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #092c4c, #1670b8, #092c4c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */	
   color: #fff;
   text-align: center;
   padding: 2.8em 0;

@@ -1,43 +1,32 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
+
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WELCOME TO YOUR YEAR BOOK</title>
 
 <!-- Material Design Icons -->
-<link href="./css/icon.css" rel="stylesheet">
+<link href="./icon" rel="stylesheet">
 
 <!-- Font Awesome -->
-<link rel="stylesheet" href="./css/font-awesome.css">
+<link rel="stylesheet" href="./css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
 <!-- Bootstrap core CSS -->
-<link href="./css/bootstrap.css" rel="stylesheet">
+<link href="./css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Material Design Bootstrap Compiled -->
 <link href="./css/mdb.css" rel="stylesheet">
+
 <!-- Template style -->
 <link href="./css/style.css" rel="stylesheet">
 <link href="./css/home.css" rel="stylesheet">
-<style>
-.menu-horizontal {
-	background: #396afc;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to top, #2948ff, #396afc);  /* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(to top, #2948ff, #396afc); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-	height: 80px;
-	border-bottom: 3pt solid #F11716;
-}
-#loginform {
-	margin-top: -10px;
+<style rel="stylesheet">
+	
+	
+#loginform {	
 	padding-right: 25px;
 }
 
-#loginform label {
-	color: #fff;
-	}
 li, a, span {
 	color:white !important;
 }
@@ -47,7 +36,7 @@ li, a, span {
 }
 
 #loginform label {
-	color: #fff;
+	color: #ccc;
 }
 #pass {
 	padding-left: 90px;
@@ -88,16 +77,17 @@ button, input, optgroup, select, textarea {
 	margin: 0;
 }
 .imglogo{
-	margin-top:-15px;
+	margin-top:-20px;
 }
-</style>
+	</style>
 </head>
 
-<body>
-	<div class="menu-horizontal">
-		<div class="container-full">
-			<a href=""><img class="imglogo" src="images/yb-logo.png"></a>
+<body cz-shortcut-listen="true">
 
+    <!--Navigation-->
+    <nav class="navbar navbar-fixed-top z-depth-1" role="navigation">		
+        <div class="container-fluid">
+			<a href="" class="navbar-brand"><img class="imglogo" src="images/yb-logo.png"></a>
 			<div id="loginform" class="pull-right">
 				<form id="frmLogin" action="" method="post"  >
 					<label>User Name </label><label id="pass">Password </label>
@@ -105,34 +95,36 @@ button, input, optgroup, select, textarea {
 					<button id="btnLogin" class="btn btn-primary btn-sm" type="submit"><i class="fa fa-user"></i> Login</button>					
 				</form>
 			</div>
-		</div>
-	</div>
+        </div>
+    </nav>
+    <!--/.Navigation-->
 
     <!-- Carousel -->
-    <div id="carousel-bg" class="carousel carousel-full-bg slide carousel-fade" data-interval="false">
+    <div id="carousel-yb" class="carousel carousel-full-bg slide carousel-fade" data-interval="false">
 
         <!-- Indicators -->
         <ol class="carousel-indicators">
-            <li data-target="#carousel-bg" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-bg" data-slide-to="1" class=""></li>
-            <li data-target="#carousel-bg" data-slide-to="2"></li>
+            <li data-target="#carousel-yb" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-yb" data-slide-to="1" class=""></li>
+            <li data-target="#carousel-yb" data-slide-to="2" class=""></li>
         </ol>
 
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
+
             <!-- First slide -->
             <div class="item active">
-                <div class="homepage-hero-module" style="height: 915px;">
-                    <!-- <div class="carousel-caption animated fadeIn"> -->
-                        <!-- <h3>Magic Portfolio - Video Maker</h3> -->
-                        <!-- <button type="button" class="btn btn-border-light waves-effect waves-teal">Learn more</button> -->
-                    <!-- </div> -->
-                    <video autoplay="autoplay" loop="" class="fillWidth">
-                        <source src="./img/Sail-Away.mp4" type="video/mp4">
+                <div class="homepage-hero-module" style="height: 874px;">
+                    <!--<div class="carousel-caption animated fadeIn">
+                        <h3>Magic Portfolio - Video Maker</h3>
+                        <button type="button" class="btn btn-border-light waves-effect waves-teal">Learn more</button>
+                    </div>-->
+                    <video autoplay="" loop="" class="fillWidth">
+                        <source src="img/Sail-Away.mp4" type="video/mp4">
 
                     </video>
                     <div class="poster hidden">
-                        <img src="./PATH_TO_JPEG.htm" alt="">
+                        <img src="./PATH_TO_JPEG" alt="">
                     </div>
                 </div>
             </div>
@@ -140,35 +132,35 @@ button, input, optgroup, select, textarea {
 
             <!-- Second slide -->
             <div class="item">
-                <div class="homepage-hero-module" style="height: 915px;">
-                    <!-- <div class="carousel-caption animated fadeIn"> -->
-                        <!-- <h3>Magic Portfolio - Video Maker</h3> -->
-                        <!-- <button type="button" class="btn btn-border-light waves-effect waves-teal">Learn more</button> -->
-                    <!-- </div> -->
-                    <video autoplay="autoplay" loop="" class="fillWidth">
-                        <source src="./img/Nowhere.mp4" type="video/mp4">
+                <div class="homepage-hero-module" style="height: 874px;">
+                    <!--<div class="carousel-caption animated fadeIn">
+                         <h3>Magic Portfolio - Video Maker</h3>
+                        <button type="button" class="btn btn-border-light waves-effect waves-teal">Learn more</button>
+                    </div>-->
+                    <video autoplay="" loop="" class="fillWidth">
+                        <source src="img/Nowhere.mp4" type="video/mp4">
 
                     </video>
                     <div class="poster hidden">
-                        <img src="./PATH_TO_JPEG.htm" alt="">
+                        <img src="./PATH_TO_JPEG" alt="">
                     </div>
                 </div>
             </div>
             <!-- /.item -->
 
             <!-- Third slide -->
-            <div class="item ">
-                <div class="homepage-hero-module" style="height: 915px;">
-                    <!-- <div class="carousel-caption animated fadeIn"> -->
-                        <!-- <h3>Magic Portfolio - Video Maker</h3> -->
-                        <!-- <button type="button" class="btn btn-border-light waves-effect waves-teal">Learn more</button> -->
-                    <!-- </div> -->
-                    <video autoplay="autoplay" loop="" class="fillWidth">
-                        <source src="./img/Strum-Away.mp4" type="video/mp4">
+            <div class="item">
+                <div class="homepage-hero-module" style="height: 874px;">
+                    <!--<div class="carousel-caption animated fadeIn">
+                        <h3>Magic Portfolio - Video Maker</h3>
+                        <button type="button" class="btn btn-border-light waves-effect waves-teal">Learn more</button>
+                    </div>-->
+                    <video autoplay="" loop="" class="fillWidth">
+                        <source src="img/Strum-Away.mp4" type="video/mp4">
 
                     </video>
                     <div class="poster hidden">
-                        <img src="./PATH_TO_JPEG.htm" alt="">
+                        <img src="./PATH_TO_JPEG" alt="">
                     </div>
                 </div>
             </div>
@@ -178,11 +170,11 @@ button, input, optgroup, select, textarea {
         <!-- /.carousel-inner -->
 
         <!-- Controls -->
-        <a class="left carousel-control new-control" href="#carousel-bg" role="button" data-slide="prev">
+        <a class="left carousel-control new-control" href="yearbook/index.html#carousel-yb" role="button" data-slide="prev">
             <span class="fa fa fa-angle-left waves-effect waves-light"></span>
             <span class="sr-only">Previous</span>
         </a>
-        <a class="right carousel-control new-control" href="#carousel-bg" role="button" data-slide="next">
+        <a class="right carousel-control new-control" href="yearbook/index.html#carousel-yb" role="button" data-slide="next">
             <span class="fa fa fa-angle-right waves-effect waves-light"></span>
             <span class="sr-only">Previous</span>
         </a>
@@ -190,7 +182,7 @@ button, input, optgroup, select, textarea {
     </div>
     <!-- /.carousel -->
 
-    
+  
 
     <!-- Parallax beginning -->    
     <section class="parallax" id="par-bg1">
@@ -257,24 +249,55 @@ goals. And then we do it. It’s that simple.</p>
 	<section class="parallax" id="par-bg2">
         <div class="container text-center" style="height: 500px;"></div>
     </section>
-  
+	
+    <section class="section-dark" id="portfolio">
+        <h3 class="wow fadeIn" style="visibility: visible; animation-name: fadeIn;">Lightbox Gallery</h3>
+    </section>
 
+    <div class="container-fluid">
+        <div class="light-box-gallery">
+            <!-- Gallery Row -->
+            <div class="row">
+                <div class="col-md-4 portfolio-item wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                    <div class="material-placeholder"><img class="materialboxed center-block responsive-img animated zoomIn initialized" src="./images/lbgallery-1.jpg"></div>
+                </div>
+                <div class="col-md-4 portfolio-item wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                    <div class="material-placeholder"><img class="materialboxed center-block responsive-img animated zoomIn initialized" src="./images/lbgallery-2.jpg"></div>
+                </div>
+                <div class="col-md-4 portfolio-item wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                    <div class="material-placeholder"><img class="materialboxed center-block responsive-img animated zoomIn initialized" src="./images/lbgallery-3.jpg"></div>
+                </div>
+                <div class="col-md-4 portfolio-item wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                    <div class="material-placeholder"><img class="materialboxed center-block responsive-img animated zoomIn initialized" src="./images/lbgallery-4.jpg"></div>
+                </div>
+
+                <div class="col-md-4 portfolio-item wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                    <div class="material-placeholder"><img class="materialboxed center-block responsive-img animated zoomIn initialized" src="./images/lbgallery-5.jpg"></div>
+                </div>
+                <div class="col-md-4 portfolio-item wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                    <div class="material-placeholder"><img class="materialboxed center-block responsive-img animated zoomIn initialized" src="./images/lbgallery-6.jpg"></div>
+                </div>
+
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+    
 
     <!-- Footer with social buttons -->
-    <footer class="page-footer blue-grey">
+    <footer class="page-footer">
         <div class="container-fluid">
-            <div class="row text-center wow fadeIn" style="visibility: hidden; animation-name: none;">
+            <div class="row text-center wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
                 <h4 class="white-text">Find us on social media</h4>
                 <a href="https://www.facebook.com/mdbootstrap" class="btn-sm-full fb-bg rectangle waves-effect waves-light"><i class="fa fa-facebook"> </i> <span>Facebook</span> </a>
                 <a href="https://twitter.com/MDBootstrap" class="btn-sm-full tw-bg rectangle waves-effect waves-light"><i class="fa fa-twitter"> </i> <span>Twitter</span></a>
                 <a href="https://plus.google.com/+Mdbootstrap" class="btn-sm-full gplus-bg rectangle waves-effect waves-light"><i class="fa fa-google-plus"> </i> <span>Google +</span></a>
-                <a class="btn-sm-full ins-bg rectangle waves-effect waves-light"><i class="fa fa-instagram"> </i> <span>Instagram</span></a>               
+                <a class="btn-sm-full ins-bg rectangle waves-effect waves-light"><i class="fa fa-instagram"> </i> <span>Instagram</span></a>
                 <a class="btn-sm-full yt-bg rectangle waves-effect waves-light"><i class="fa fa-youtube"> </i> <span>Youtube</span></a>
-                
             </div>
         </div>
         <br>
-        <div class="footer-copyright">
+        <div class="footer-copyright blue-zsi">
             <div class="container-fluid text-center">
                 © 2015 Copyright
                 <a class="grey-text text-lighten-4 right" href=""></a>
@@ -291,22 +314,27 @@ goals. And then we do it. It’s that simple.</p>
     <!-- SCRIPTS -->
 
     <!-- JQuery -->
-    <script type="text/javascript" src="./script/jquery.js"></script>
-
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="./script/bootstrap.js"></script>
-
-    <!-- Material Design Bootstrap -->
+    <script type="text/javascript" src="./script/jquery.min.js"></script>
+                                          
+    <!-- Bootstrap core JavaScript -->    
+    <script type="text/javascript" src="./script/bootstrap.min.js"></script>
+                                          
+    <!-- Material Design Bootstrap -->    
     <script type="text/javascript" src="./script/mdb.js"></script>
-
-    <!-- Smooth scroll -->
+                                          
+    <!-- Smooth scroll -->                
     <script type="text/javascript" src="./script/smooth-scroll.js"></script>
-
-    <!-- WOW effect -->
+    
+    <!-- WOW effect -->                   
+	
     <script>
         new WOW().init();
     </script>
 
+
+
+
 <div class="hiddendiv common"></div>
+<script type="text/javascript" async="" src="./script/mixpanel-2-latest.min.js"></script>
 </body>
 </html>
