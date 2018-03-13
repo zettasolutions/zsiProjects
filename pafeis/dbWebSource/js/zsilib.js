@@ -147,8 +147,8 @@ var  ud='undefined'
                 if ( ! __obj.parent().hasClass("zTable")) { console.error("zTable div parent is not found."); return false; }
                 else {
                     // Initialize object parameters
-                    var width           = ( ! isUD(o)) ? o.width : __obj[0].offsetWidth
-                        ,height         = ( ! isUD(o)) ? o.height : __obj[0].offsetHeight
+                    var width           = ( ! isUD(o)) ? ( ! isUD(o.width)) ? o.width : __obj[0].offsetWidth : __obj[0].offsetWidth
+                        ,height         = ( ! isUD(o)) ? ( ! isUD(o.height)) ? o.height : __obj[0].offsetHeight : __obj[0].offsetHeight
                         ,hasSpan        = (__obj.html().indexOf('span=') > 0) ? true : false
                     
                     // Initialize DOM objects
@@ -201,7 +201,7 @@ var  ud='undefined'
                                         _temp[(_index - 1)] = _$th;
                                     }
                                     
-                                    if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
+                                    //if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
                                     for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
                                         if (lastI !== i) {
                                             for (let rowI = 0; rowI < rowspan.length; rowI++) {
@@ -275,7 +275,7 @@ var  ud='undefined'
                                         _temp[(_index - 1)] = _$th;
                                     }
                                         
-                                    if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
+                                    //if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
                                     for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
                                         if (lastI !== i) {
                                             for (let rowI = 0; rowI < rowspan.length; rowI++) {
@@ -447,6 +447,11 @@ var  ud='undefined'
                                     width : width
                                     ,height : height - $thead.height()
                                 });
+                                
+                                var _tbody = $tbody[0];
+                                $thead.css({
+                                    "width" : width - ((_tbody.scrollHeight > _tbody.offsetHeight) ? 17 : 0)
+                                });
                             }
                         });
                     }
@@ -459,31 +464,30 @@ var  ud='undefined'
                 if ( ! __obj.length) { console.error("Target not found."); return false; }
                 if ( ! __obj.parent().hasClass("zTable")) { console.error("zTable div parent is not found."); return false; }
                 else {
-                    clearTimeout(zsi.tmr);
-                    zsi.tmr = setTimeout(function() {
-                        // Initialize object parameters
-                        var width           = ( ! isUD(o)) ? o.width : __obj[0].offsetWidth
-                            ,height         = ( ! isUD(o)) ? o.height : __obj[0].offsetHeight
-                        
-                        // Initialize DOM objects
-                            ,$ztable        = __obj.closest(".zTable")
-                            ,$thead         = __obj.find("thead")
-                            ,$tbody         = __obj.find("tbody")
-                        ;
-                        
-                        $thead.css({
-                            "width" : width - (($tbody[0].scrollHeight > $tbody.height() - 17) ? 17 : 0)
-                        });
-                        $tbody.css({
-                            width : width
-                            ,height : height - $thead.height()
-                        }).on("scroll", function() {
-                            $thead.scrollLeft($(this).scrollLeft());
-                        });
-                        
-                        __obj.addColResize(o);
-                        __obj.addClickHighlight();
-                    }, 1);   
+                    // Initialize object parameters
+                    var width       = ( ! isUD(o)) ? ( ! isUD(o.width)) ? o.width : __obj[0].offsetWidth : __obj[0].offsetWidth
+                        ,height     = ( ! isUD(o)) ? ( ! isUD(o.height)) ? o.height : __obj[0].offsetHeight : __obj[0].offsetHeight
+                    
+                    // Initialize DOM objects
+                        ,$ztable        = __obj.closest(".zTable")
+                        ,$thead         = __obj.find("thead")
+                        ,$tbody         = __obj.find("tbody")
+                    ;
+                    
+                    $tbody.css({
+                        width : width
+                        ,height : height - $thead.height()
+                    }).on("scroll", function() {
+                        $thead.scrollLeft($(this).scrollLeft());
+                    });
+                    
+                    var _tbody = $tbody[0];
+                    $thead.css({
+                        "width" : width - ((_tbody.scrollHeight > _tbody.offsetHeight) ? 17 : 0)
+                    });
+                    
+                    __obj.addColResize(o);
+                    __obj.addClickHighlight();
                 }
             
                 return __obj;
@@ -612,7 +616,7 @@ var  ud='undefined'
                 else 
                     $(this).children('tbody').html('');
             };
-            $.fn.clearSelect    = function(hasOption,defaultText) {
+            $.fn.clearSelect        = function(hasOption,defaultText) {
               var _dt =  (defaultText ? defaultText : "");
               this.html(   (hasOption ? "<option>"  + _dt + "</option>" : _dt ));
             };
@@ -1479,7 +1483,7 @@ var  ud='undefined'
             };
             $.fn.getCheckBoxesValues= function(){
                 var _a = arguments;
-                var _sel = ( _a ? _a[0] : "input[type=hidden]" ); 
+                var _sel = ( _a.length > 0 ? _a[0] : "input[type=hidden]" );                 
                 var _r = [];
                 if(this){
                     $.each(this,function(){
@@ -1878,7 +1882,7 @@ var  ud='undefined'
                                 // Set table initiated.
                                 zsi.__getTableObject(__obj).isInitiated = true;
                                 
-                                if(o.rowSpan) __obj.rowSpan(o.rowSpan);
+                                if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                                 if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:data});
                                 __obj.addScrollbar(o); // This must be after onComplete()
                             }          
@@ -1907,17 +1911,8 @@ var  ud='undefined'
                             createTr(this);
                         });
                         
-                        if(o.rowSpan) __obj.rowSpan(o.rowSpan);
+                        if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                         if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:o});
-                        __obj.addScrollbar(o); // This must be after onComplete()
-                    } else {
-                        if (typeof blankRowsLimit === ud) blankRowsLimit = 5;
-                        for (var y = 0; y < blankRowsLimit; y++) {
-                            createTr();
-                        }
-                        
-                        if(o.rowSpan) __obj.rowSpan(o.rowSpan);
-                        if ( ! isUD(__obj.onComplete)) onComplete({params:null,data:null});
                         __obj.addScrollbar(o); // This must be after onComplete()
                     }
                 }
@@ -1933,55 +1928,99 @@ var  ud='undefined'
                 _$zoomPanel.css({ "transform" : "scale(" + _scale + ")" });
                 _$imagePanel.scrollTop(0).scrollLeft(0);
             };
-            $.fn.rowSpan            = function(rowspan){
-                var _$tbl = this;
-                var _cls = "has-duplicate";
-                $.each( rowspan,function(i){
-                    var index = this;
-                
-                    var thCellLength    = _$tbl.find("th").length ;
-                    var colElements = [];
-                    $.each( _$tbl.find("tbody > tr") ,function(){
-                         var trCellLength = $(this).find("td").length;
-                         var extraCells = thCellLength - trCellLength;
-                         colElements.push(  ( $(this).find("td").eq( index - extraCells )).get(0));
-                    });
-                    //create groups
-                    var col=[];
-                    for(var x=0;x<colElements.length;x++){
-                        var curEl = colElements[x];
-                        var nextEl = colElements[x+1];
-                        var prevEl = colElements[x-1];
-                        var isExist = ( ( nextEl  && curEl.innerText == nextEl.innerText ) || ( prevEl && curEl.innerText == prevEl.innerText) );
-                        if(isExist) {
-                            var o= {key: curEl.innerText, el: curEl};
-                            keyItem = {keyName:"key",  value: o.key };
-                            var _indexes = col.findIndexes( keyItem );
+            $.fn.rowColSpan         = function(o){
+                var  _$tbl = this
+                    ,_cls  = "hasDuplicate"
+                    ,_cls2 = "toBeRemove"
+                    ,_isAllCols=(o.columns ? false : true )
+                ;
+                var _markElements = function(els,spanType){
+                    //create list of elements
+                    var list=[];
+                    var lastEl=null;
+                    var lastElExist=null;
+                    for(var x=0;x<els.length;x++){
+                        var curEl = els[x];
+                        var nextEl = els[x+1];
+                        var curVsNext = (nextEl ? (curEl.innerText == nextEl.innerText? true : false ) : false); 
+                        var curVsLast = (lastEl ? (curEl.innerText == lastEl.innerText? true : false ) : false);
+                        if(curVsNext  || curVsLast) {
+                            var searchKey=lastElExist;
+                            if(lastElExist === null ||  (curVsNext && ! curVsLast) ){
+                                searchKey = curEl;  
+                            }
+                            var _indexes = list.findIndexes( {keyName:"key",  value: searchKey } );
                             if(_indexes.length === 0){
-                                col.push( {key: o.key,items:[curEl] });
+                                lastElExist= curEl;
+                                list.push({key: curEl, items:[curEl]});
                             }else{
                                 var _i = _indexes[0];
-                                var item = col[_i];
-                                item.items.push(o.el);
-                            } 
-                        }    
-                    }
-                  //add class
-                   $.each(col, function(i) {
-                        $(this.items[0]).attr({class:_cls}).attr({rowspan: this.items.length});
+                                var item = list[_i];
+                                item.items.push(curEl);
+                            }
+
+                        }else{
+                            lastElExist =null;
+                        }
+                        
+                        lastEl = curEl;
+                    }                    
+                    //add class, add rowspan on 1st found element.
+                    $.each(list, function(i) {
+                        var attr = {};
+                        attr[spanType] = this.items.length;
+                        $(this.items[0]).addClass(_cls).attr(attr);
                    });
                      
-                     
-                   $.each(col, function(i) {
+                   //start tagging elements - to be remove.     
+                   $.each(list, function(i) {
                        $.each(this.items, function(i) {
                            if( ! $(this).hasClass(_cls) ){
-                             $(this).remove();
+                             $(this).addClass(_cls2);
                            }
                        });        
-                   });
-                });
-                _$tbl.find("tr > td").removeClass(_cls); 
-            };            
+                   });                    
+                }; 
+
+                //rowspan
+                if(o.type=="row"){
+                    $.each((o.columns ? o.columns : _$tbl.find("th")) ,function(i){
+                        var index = this;
+                        var thCellLength    = _$tbl.find("th").length ;
+                        var colElements = [];
+                        $.each( _$tbl.find("tbody > tr") ,function(){
+                             var trCellLength = $(this).find("td").length;
+                             var extraCells = thCellLength - trCellLength;
+                             colElements.push(  ( $(this).find("td").eq(( _isAllCols ? i : index) - extraCells )).get(0));
+                            
+                        });
+                        _markElements(colElements,"rowspan");
+                       
+                    }); 
+                }
+                
+                
+                //colspan
+                if(o.type=="column"){
+                    $.each(_$tbl.find("tr"),function(i){
+                        var _$tr=$(this);
+                        
+                        if(_isAllCols) 
+                            _markElements(_$tr.find("td"),"colspan");
+                        else{
+                            var _$arr=$([]);
+                            $.each(o.columns,function(i){
+                                 _$arr.push(_$tr.find("td")[this]);
+                            });
+                            _markElements(_$arr,"colspan");
+                        }
+                    });
+                }
+                
+                //remove elements.
+                _$tbl.find("." + _cls2).remove();
+               
+            };       
             $.fn.serializeExclude   = function(p_arr_exclude) {
               var _arr =  this.serializeArray();
                var str = '';
@@ -3010,6 +3049,7 @@ var  ud='undefined'
         }
         /*initialize configuration settings*/
         ,init                       : function(o){
+            zsi.initURLParameters();
             zsi.config =o;
             zsi.__monitorAjaxResponse();    
         }            
@@ -3031,7 +3071,15 @@ var  ud='undefined'
                    l_dp.css("z-index",zsi.getHighestZindex() + 1);
               });
            }
-        }            
+        }   
+        ,initURLParameters          : function(){
+          this.urlParam = {};
+          var parts = window.location.search.substr(1).split("&");
+          for (var i = 0; i < parts.length; i++) {
+                        var temp = parts[i].split("=");
+                        this.urlParam[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+          }     
+        }          
         ,json                       : {
             groupByColumnIndex      : function(data,column_index){
                var _result ={};
