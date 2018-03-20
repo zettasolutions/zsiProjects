@@ -1,0 +1,67 @@
+<div class="zPanel">
+    <form method="post" id="frm" >
+        <div class="row" >
+            <div class="form-horizontal" style="padding:5px">
+                
+                <input type="hidden" id="source" name="source">
+                <div class="col-xs-12 ">
+                    <div class="form-group  ">  
+                        <label class=" col-xs-1 control-label">Developer</label>
+                        <div class=" col-xs-3">
+                            <select name="developer" id="developer" class="form-control input-sm">
+                                <option value="BD">BD</option>    
+                                <option value="GF">GF</option>    
+                                <option value="GT">GT</option>    
+                            </select>
+                        </div>  
+                        
+                    </div>  
+                    <div class="form-group  ">  
+                        <label class=" col-xs-1 control-label">Server - User Name</label>
+                        <div class=" col-xs-3">
+                            <select name="server_user" id="server_user" class="form-control input-sm">
+                                <option value="BWDEV/eproj2014@eproj">   BWDEV</option> 
+                                <option value="CSDEV/eproj2014@eproj">   CSDEV</option> 
+                                <option value="DANA/eproj2014@eproj">    DANA</option> 
+                                <option value="EPDEMO/eproj2014@eproj">  EPDEMO</option> 
+                                <option value="EPDEV/eproj2014@eproj">   EPDEV</option> 
+                                <option value="FLEXDEV/eproj2014@eproj"> FLEXDEV</option> 
+                                <option value="INTEVA/eproj2014@eproj">  INTEVA</option> 
+                                <option value="ITDEMO/eproj2014@eproj">  ITDEMO</option> 
+                                <option value="MPGDEV/eproj2014@eproj">  MPGDEV</option> 
+                                <option value="MRDEV/eproj2014@eproj">   MRDEV</option> 
+                                <option value="NOVARES/eproj2014@eproj"> NOVARES</option> 
+                                <option value="QUALDEMO/eproj2014@eproj">QUALDEMO</option> 
+                                <option value="ROUSH/eproj2014@eproj">   ROUSH</option> 
+                                <option value="SHILOH/eproj2014@eproj">  SHILOH</option> 
+                                <option value="STANLEY/eproj2014@eproj"> STANLEY</option> 
+                                <option value="STANT/eproj2014@eproj">   STANT</option> 
+                                <option value="SUPERIOR/eproj2014@eproj">SUPERIOR</option> 
+                                <option value="TNDEV/eproj2014@eproj">   TNDEV</option> 
+                                <option value="UPDEV/eproj2014@eproj">   UPDEV</option> 
+
+
+                            </select>
+                        </div>  
+                        
+                    </div>                  
+                    <div class="form-group  ">  
+
+                        <label class=" col-xs-1 control-label">Code</label>
+                        <div class=" col-xs-11">
+                             <pre id="editor"></pre>
+                        </div>
+                                  
+                    </div>  
+        
+                        
+                    
+                </div>
+            </div>
+               
+        </div>
+    </form> 
+</div>
+
+<script src="/ace/src-noconflict/ace.js"></script>
+<script src="/ace/src-noconflict/ext-language_tools.js"></script>
