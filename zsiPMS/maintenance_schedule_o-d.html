@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 	
-   <title>Technician Dashboard</title>
+   <title>Operator's Dashboard</title>
 	
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -20,6 +20,8 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/full-slider.css">
 	<link rel="stylesheet" href="css/gallery.css">
+	<link rel="stylesheet" href="css/zGrid2.css">
+	<link rel="stylesheet" href="css/zTable.css">
 	
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
@@ -60,13 +62,24 @@
 				<!-- Side navigation links -->
 				<li>
 					<ul class="collapsible collapsible-accordion">
-						<li><a class="collapsible-header waves-effect arrow-r" href="index.html"><i class="fa fa-home"></i> PMS HOME</a></li>
-						<li><a class="collapsible-header waves-effect arrow-r active" href="maintenance_schedule.html"><i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a></li>
-						<li><a class="collapsible-header waves-effect arrow-r" href="schedule_alert.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT</a></li>
-						<li><a class="collapsible-header waves-effect arrow-r" href="inspection_request.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST</i></a></li>
-						<li><a class="collapsible-header waves-effect arrow-r" href="maintenance_report.html"><i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a></li>
-						<li><a class="collapsible-header waves-effect arrow-r" href="messages.html"><i class="fa fa-envelope"></i> MESSAGES</a></li>
-						
+						<li><a class="collapsible-header waves-effect arrow-r" href="index.html">					
+							<i class="fa fa-home"></i> PMS HOME</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r active" href="maintenance_schedule.html">
+							<i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="schedule_alert.html">
+							<i class="fa fa-qq"></i> SCHEDULE ALERT</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="inspection_request.html">
+							<i class="fa fa-wrench"></i> INSPECTION REQUEST</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="maintenance_report.html">
+							<i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="messages.html">
+							<i class="fa fa-envelope"></i> MESSAGES</a>
+						</li>						
 					</ul>
 				</li>
 				<!--Search Form-->
@@ -93,9 +106,9 @@
 					<p>Preventive & Maintenance System</p>
 				</div>
 				<!--Circle Image-->
-			<div class="dropdown">
+				<div class="dropdown">
 			  <a href="#" data-toggle="dropdown">
-				<img src="images/male-circle.png" class="rounded-circle" style="width: 40px; float: right;">
+				<img src="images/male-circle.png" class="rounded-circle" style="width: 30px; float: right;">
 			  </a>
 			  
 			  <ul class="dropdown-menu">
@@ -108,17 +121,14 @@
 			<!-- /.Navbar -->	
 		</header>
 	</nav>		
-	<div class="row">
-		<div class="col-md-9">
-			
-		</div>					
-		<div class="col-md-3 dash">
+	
+		<div class="col-md-3 dash pull-right">
 			Operator's Dashboard <br>			
 			WELCOME, <i style="color:red">Jaypee</i>			
 		</div>
-	</div>
+	
 </div>
-	<div class="container-fluid page">
+<div class="container-fluid page">
 		<div class="row">			
 			<div class="pageTitle">
 			<span>MACHINE & MAINTENANCE SCHEDULE LIST > Rm101</span>
@@ -128,7 +138,7 @@
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
 					<!--Table-->
-				<table class="table table-striped table-responsive w-auto">
+				<table class="zTable">
 
 					<!--Table head-->
 					<thead>
@@ -178,6 +188,7 @@
 			<div class="col-md-2"></div>
 		</div>		
 	</div>
+	
 	
 
     <!-- SCRIPTS -->

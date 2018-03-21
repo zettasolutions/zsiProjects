@@ -24,7 +24,7 @@ body{
     background: #D4D5D6 none repeat scroll 0 0;
     /* border: 1pt solid #e5e5e5; */
     min-height: 500px;
-    padding-top: 10px;
+    padding-top: 2px;
     overflow: auto;
 }
 .pageTitle {
