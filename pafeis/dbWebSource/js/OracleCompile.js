@@ -1,4 +1,7 @@
-  var editor =null;
+  var editor =null
+      responseLoaded = false
+  
+ ;
 $(window).bind('keydown', function(e) {
     var isCtrlS = (e.ctrlKey && e.which == 83);
     if(isCtrlS){
@@ -31,15 +34,37 @@ function initAceEditor(){
 }
   
 function submit() {
-    $("#source").val(editor.getSession().getValue());
-       $.post( execURL + "oracle_compile_scripts_upd"
-        + " @developer='" + $("#developer").val()  + "'"
-        + ",@source='"   +$("#source").val() + "'"
-        + ",@server_user='"   +$("#server_user").val() + "'"
-        ,function(data){
-              if(data.isSuccess===true) zsi.form.showAlert("alert");      
-              
+    var _source = editor.getSession().getValue();
+    $("#source").val(_source);
+    zsi.collectData({
+             procedure  : "oracle_compile_scripts_upd"
+            ,parameters : {
+                 developer    : $("#developer").val() 
+                ,source       : $("#source").val() 
+                ,server_user  : $("#server_user").val() 
         }
-    );
+        ,onComplete : function(d) {
+              if(d.isSuccess===true) zsi.form.showAlert("alert");      
+              responseLoaded=false;
+              checkResponse();
 
-}
+        }
+    });    
+
+}  
+
+function checkResponse(){
+    $.post( execURL + "oracle_compile_scripts_response_sel @developer='" + $("#developer").val()  + "'"
+    ,function(data){
+        if(data.isSuccess){
+            var row = data.rows[0];
+            if(row.source==="" && row.response){
+                var $r=$("#response");
+                var _rc = "response status #" + row.response_counter + "\r\n";
+                $r.val(_rc + row.response);
+                responseLoaded=true;
+            }
+        }
+        if(!responseLoaded) checkResponse();        
+    });
+} 
