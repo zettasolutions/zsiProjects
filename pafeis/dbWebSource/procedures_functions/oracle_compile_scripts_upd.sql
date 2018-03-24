@@ -2,7 +2,9 @@ CREATE PROCEDURE [dbo].[oracle_compile_scripts_upd](
 @developer	VARCHAR(10)
 ,@source	VARCHAR(max)
 ,@server_user	VARCHAR(50)
+,@file_type		VARCHAR(3)
 ,@user_id int
+
 )
 AS
 BEGIN
@@ -14,7 +16,9 @@ BEGIN
         set developer = @developer
         ,[source] = @source
         ,server_user = @server_user
+		,file_type = @file_type
         where developer=@developer
     else
-        INSERT INTO oracle_compile_scripts(developer,source,server_user) values(@developer,@source,@server_user)
+        INSERT INTO oracle_compile_scripts(developer,source,server_user,file_type) values(@developer,@source,@server_user,@file_type)
 END
+

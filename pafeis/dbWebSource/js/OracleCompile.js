@@ -42,11 +42,16 @@ function submit() {
                  developer    : $("#developer").val() 
                 ,source       : $("#source").val() 
                 ,server_user  : $("#server_user").val() 
+                ,file_type    : $("#file_type").val() 
         }
         ,onComplete : function(d) {
               if(d.isSuccess===true) zsi.form.showAlert("alert");      
               responseLoaded=false;
-              checkResponse();
+              
+              setTimeout(function(){
+			    checkResponse();
+		      },5000);
+              
 
         }
     });    
@@ -67,4 +72,4 @@ function checkResponse(){
         }
         if(!responseLoaded) checkResponse();        
     });
-} 
+}   
