@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="shortcut icon" href="images/icon.ico" />
+    <title>Sotero B. Cabahug Forum For Learning</title>
+	
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+	
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="css/mdb.min.css">
+	
+	<!-- Bookblock -->
+	<link rel="stylesheet" type="text/css" href="css/default2.css" />
+	<link rel="stylesheet" type="text/css" href="css/bookblock.css" />
+	<!-- custom demo style -->
+	<link rel="stylesheet" type="text/css" href="css/demo4.css" />
+	<script src="js/modernizr2.custom.js"></script>
+	<!-- My Style -->
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/full-slider.css">
+	<link rel="stylesheet" href="css/gallery.css">
+	
+	<link rel="stylesheet" href="fancybox/jquery.fancybox-1.2.6.css"/>
+		
+</head>
+
+<body class="fixed-sn white-skin body">
+
+    <!--Main Navigation-->
+	<div class="pageHeader">
+		<div class="container-fluid">
+				<!-- Sidebar Holder -->
+			<nav id="sidebar">
+				<header>
+					<!-- Sidebar navigation -->
+					<ul id="slide-out" class="side-nav fixed custom-scrollbar" style="background-image: url(images/bg.jpg);">
+						<!-- Logo -->
+							<li class="logo-sn waves-effect">
+								<div class=" text-center">
+									<a href="myYearbook.html" class="pl-0"><img src="images/forum.png" class=""></a>
+								</div>
+							</li>
+						<!--/. Logo -->
+
+						<!-- Side navigation links -->
+						<li>
+							<ul class="collapsible collapsible-accordion">
+								<li>
+									<a href="myYearbook.html"class="collapsible-header waves-effect arrow-r"><i class="fa fa-book"></i> My Yearbook</a>
+								</li>
+								<li>
+									<a href="myProfile.html"class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> &nbspMy Profile</a>
+								</li>
+								<li>
+									<a class="collapsible-header waves-effect arrow-r"><i class="fa fa-photo"></i> Photos<i class="fa fa-angle-down rotate-icon"></i></a>
+									 <div class="collapsible-body">
+										<ul>
+											 <ul class="collapsible collapsible-accordion">
+													<li><a class="collapsible-header waves-effect arrow-r">Class Photos<i class="fa fa-angle-down rotate-icon"></i></a>
+														<div class="collapsible-body">
+															<ul class="wew">
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspSample Section 1</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspSample Section 2</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspSample Section 3</a></li>
+															</ul>
+														</div>
+													</li>
+													<li>
+														<a href="photos2.html" class="waves-effect">Mix Photos</a>
+													</li>
+													<li><a class="collapsible-header waves-effect arrow-r">Event Photos<i class="fa fa-angle-down rotate-icon"></i></a>
+														<div class="collapsible-body">
+															<ul class="wew">
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspChristmas Party</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspCamping</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspRecollection</a></li>
+															</ul>
+														</div>
+													</li>
+											</ul>
+										</ul>
+									</div>
+								</li>
+								<li>
+									<a href="videos.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-video-camera"></i> Videos</i></a>
+								</li>
+								<li>
+									<a class="collapsible-header waves-effect arrow-r"><i class="fa fa-book"></i> Other Yearbooks<i class="fa fa-angle-down rotate-icon"></i></a>
+									<div class="collapsible-body">
+										
+										 <ul class="collapsible collapsible-accordion">
+											<li>
+											    <a href="myYearbook.html" class="collapsible-header waves-effect arrow-r">Batch 2016-2017</a>
+											</li>
+											<li>
+												<a href="myYearbook.html" class="collapsible-header waves-effect arrow-r">Batch 2015-2016</i></a>
+											</li>
+											<li>
+												<a href="myYearbook.html" class="collapsible-header waves-effect arrow-r">Batch 2014-2015</i></a>
+											</li>
+										</ul>
+										
+									</div>
+								</li>
+								<li>
+									<a onclick="getfocus()" id="browse" class="collapsible-header waves-effect arrow-r"><i class="fa fa-search"></i> Browse</i></a>
+								</li>
+								<li>
+								<input id="upload" type="file" style="display: none;"/>
+								<a href="" id="upload_link" class="collapsible-header waves-effect arrow-r"><i class="fa fa-upload"></i> Upload Picture(s)</i></a>​
+								</li>
+								<li>
+									<a href="" class="collapsible-header waves-effect"><i class="fa fa-sign-out"></i> Logout</a>
+								</li>
+							</ul>
+						</li>
+						<!--/. Side navigation links -->
+						<div class="sidenav-bg mask-strong"></div>
+					</ul>
+					<!--/. Sidebar navigation -->
+
+					<!-- Navbar top-->
+					<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+						<!-- SideNav slide-out button -->
+						<div class="float-left">
+							<a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fa fa-bars"></i></a>
+						</div>
+						<!-- Breadcrumb-->
+						<div class="breadcrumb-dn mr-auto">
+							<p>Sotero B. Cabahug Forum For Learning</p>
+						</div>
+						<!--Search Form-->
+							<div class="movingarrow">
+								<img src="images/arrow.png" style="width: 50px">
+							</div>
+							<form class="search-form" role="search">
+								<div class="waves-effect">
+									<input type="text" id="searchfield" class="form-control" placeholder="Search . .">
+								</div>
+							</form>
+						<label><a href="#" class="waves-effect"><i class="fa fa-search"></i></a></label>
+						<!--/.Search Form-->
+					</nav>
+					<!-- /.Navbar -->
+
+				</header>
+			</nav>
+		</div>
+	</div>
+
+	
+	<div class="container">
+	<div class="card card-body mb-5 pxy-10">
+		<!--Section: Magazine v.1-->
+		<section class="wow fadeIn">
+
+			<!--Section heading-->
+			<h2 class="h1 text-center my-5 font-weight-bold">Clips</h2>
+
+			<!--Grid row-->
+			<div class="row text-left">
+
+				<!--Grid column-->
+				<div class="col-lg-6 col-md-12">
+
+					<!--Image-->
+					<div class="view overlay rounded z-depth-1-half mb-3 dbma" style="width:200px;">
+						<div class="container playbutton">
+							<a href="#" class="pop">
+								<img class="dbma" src="images/play.png" style="width: 100px; height: 100px; margin: 80px auto;">
+								<div class="mask rgba-white-slight"></div>
+							</a>
+						</div>
+						<img src="images/g1.jpg" class="img-fluid" alt="Sample post image" >
+							
+					</div>
+
+					<!--Excerpt-->
+					<div class="container-fluid" style="height: 15%; overflow: scroll;">
+						<h3 class="white-text">
+							<a>
+								<strong>Genesis 1, verse 1: In the benengging</strong>
+							</a>
+						</h3>
+						<p class="white-text">
+							Info: Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed dowewe	 adadsasdeiusmod tempor incididunt uasdat.
+						</p>
+						<div class="news-data text-right">
+								<p>
+									<strong>
+										<i class="fa fa-clock-o"></i> 20/08/2018
+									</strong>
+								</p>
+						</div>
+					</div>
+					<!--/Featured news-->
+
+					<hr>
+
+					<!--Small news-->
+					<div class="row">
+						<div class="col-md-3">
+
+							<!--Image-->
+							<div class="view overlay rounded z-depth-1">
+								<div class="container playbutton">
+									<a href="#" class="pop">
+										<img class="dbma" src="images/play.png" style="width: 75px; height: 75px;">
+										<div class="mask rgba-white-slight"></div>
+									</a>
+								</div>
+								<img src="https://mdbootstrap.com/img/Photos/Others/photo8.jpg" class="img-fluid" alt="Minor sample post image">
+							</div>
+						</div>
+
+						<!--Excerpt-->
+						<div class="col-md-9 white-text">
+							<p class="grey-text">
+								<strong>19/08/2018</strong>
+							</p>
+							<a>Lorem ipsum dolor sit amet
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+
+					</div>
+					<!--/Small news-->
+
+					<hr>
+
+					<!--Small news-->
+					<div class="row">
+						<div class="col-md-3">
+
+							<!--Image-->
+							<div class="view overlay rounded z-depth-1" >
+								<div class="container playbutton">
+									<a href="#" class="pop">
+										<img class="dbma" src="images/play.png" style="width: 75px; height: 75px;">
+										<div class="mask rgba-white-slight"></div>
+									</a>
+								</div>
+								
+								<img src="https://mdbootstrap.com/img/Photos/Others/images/54.jpg" class="img-fluid" alt="Minor sample post image">
+							</div>
+						</div>
+
+						<!--Excerpt-->
+						<div class="col-md-9 white-text">
+							<p class="grey-text">
+								<strong>18/08/2018</strong>
+							</p>
+							<a>Soluta nobis est eligendi
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+
+					</div>
+					<!--/Small news-->
+
+					<hr>
+
+					<!--Small news-->
+					<div class="row">
+						<div class="col-md-3">
+
+							<!--Image-->
+							<div class="view overlay rounded z-depth-1">
+								<div class="container playbutton">
+									<a href="#" class="pop">
+										<img class="dbma" src="images/play.png" style="width: 75px; height: 75px;">
+										<div class="mask rgba-white-slight"></div>
+									</a>
+								</div>
+								
+								<img src="https://mdbootstrap.com/img/Photos/Others/images/49.jpg" class="img-fluid" alt="Minor sample post image">
+							</div>
+						</div>
+
+						<!--Excerpt-->
+						<div class="col-md-9 white-text">
+							<p class="grey-text">
+								<strong>17/08/2018</strong>
+							</p>
+							<a>Voluptatem accusantium doloremque
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+
+					</div>
+					<!--/Small news-->
+
+				</div>
+				<!--Grid column-->
+
+				<!--Grid column-->
+				<div class="col-lg-6 col-md-12">
+
+					<!--Image-->
+					<div class="view overlay rounded z-depth-1-half mb-3 dbma" style="width:200px;">
+						<div class="container playbutton">
+									<a href="#" class="pop">
+										<img class="dbma" src="images/play.png" style="width: 100px; height: 100px; margin: 80px auto">
+										<div class="mask rgba-white-slight"></div>
+									</a>
+								</div>
+						<img src="images/g2.jpg" class="img-fluid" alt="Sample post image">
+					</div>
+
+					<!--Excerpt-->
+					<div class="container-fluid" style="height: 15%; overflow: scroll;">
+						<h3 class="white-text">
+							<a>
+								<strong>W O W ! ! ! ;)</strong>
+							</a>
+						</h3>
+						<p class="white-text">
+							Info: Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet,  
+							Lorem ipsum dolor sit amet,  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed dowewe	 adadsasdeiusmod tempor incididunt uasdat.
+						</p>
+						<div class="news-data text-right">
+								<p>
+									<strong>
+										<i class="fa fa-clock-o"></i> 20/08/2018
+									</strong>
+								</p>
+						</div>
+					</div>
+
+					<!--/Featured news-->
+
+					<hr>
+
+					<!--Small news-->
+					<div class="row">
+						<div class="col-md-3">
+
+							<!--Image-->
+							<div class="view overlay rounded z-depth-1">
+								<div class="container playbutton">
+									<a href="#" class="pop">
+										<img class="dbma" src="images/play.png" style="width: 75px; height: 75px;">
+										<div class="mask rgba-white-slight"></div>
+									</a>
+								</div>
+								
+								<img src="https://mdbootstrap.com/img/Photos/Others/photo11.jpg" class="img-fluid" alt="Minor sample post image">
+							</div>
+						</div>
+
+						<!--Excerpt-->
+						<div class="col-md-9 white-text">
+							<p class="grey-text">
+								<strong>19/08/2018</strong>
+							</p>
+							<a>Lorem ipsum dolor sit amet
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+
+					</div>
+					<!--/Small news-->
+
+					<hr>
+
+					<!--Small news-->
+					<div class="row">
+						<div class="col-md-3">
+
+							<!--Image-->
+							<div class="view overlay rounded z-depth-1">
+								<div class="container playbutton">
+									<a href="#" class="pop">
+										<img class="dbma" src="images/play.png" style="width: 75px; height: 75px;">
+										<div class="mask rgba-white-slight"></div>
+									</a>
+								</div>
+								
+								<img src="https://mdbootstrap.com/img/Photos/Others/images/51.jpg" class="img-fluid" alt="Minor sample post image">
+							</div>
+						</div>
+
+						<!--Excerpt-->
+						<div class="col-md-9 white-text">
+							<p class="grey-text">
+								<strong>18/08/2018</strong>
+							</p>
+							<a>Soluta nobis est eligendi
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+
+					</div>
+					<!--/Small news-->
+
+					<hr>
+
+					<!--Small news-->
+					<div class="row">
+						<div class="col-md-3">
+
+							<!--Image-->
+							<div class="view overlay rounded z-depth-1">
+								<div class="container playbutton">
+									<img class="dbma" src="images/play.png" style="width: 75px; height: 75px;">
+								</div>
+								
+								<img src="https://mdbootstrap.com/img/Photos/Others/images/44.jpg" class="img-fluid" alt="Minor sample post image">
+							</div>
+						</div>
+
+						<!--Excerpt-->
+						<div class="col-md-9 white-text">
+							<p class="grey-text">
+								<strong>17/08/2018</strong>
+							</p>
+							<a>Voluptatem accusantium doloremque
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+
+					</div>
+					<!--/Small news-->
+
+				</div>
+				<!--Grid column-->
+
+			</div>
+			<!--Grid row-->
+
+		</section>
+		<!--/Section: Magazine v.1-->
+
+
+	</div>
+    <!--Main layout-->
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" data-dismiss="modal">
+    <div class="modal-content"  >              
+      <div class="modal-body">
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <iframe width="360" height="315" src="https://www.youtube.com/embed/i42PFralrhI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div> 
+      <div class="modal-footer">
+          <div class="col-lg-12">
+			<div class="row">
+				<div class="col">
+					<p class="text-left">Ahhn shisi wan Vsh wan<br>In the benengging<br>ine the, ine the benengging HAHAHAHAAH</p>
+				</div>
+			</div>
+		 </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="js/jquery-3.2.1.min.js"></script>
+
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="js/popper.min.js"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="js/bootstrap.js"></script>
+
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="js/mdb.min.js"></script>
+
+<!--Custom scripts-->
+<script src="js/sidenav.js"></script>
+
+<script>
+$(function() {
+			$('.pop').on('click', function() {
+				$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+				$('#imagemodal').modal('show');   
+			});
+			
+			$('#browse').on('click', function() {
+				$('.movingarrow').show();
+				$('.side-nav').css({"transform": "translate(-100%)","transition": "0.15s ease all"});
+				$('#sidenav-overlay').remove();
+			});
+			
+			$('#searchfield').on('click', function() {
+				$('.movingarrow').hide();
+			});
+			
+			$("#upload_link").on('click', function(e){
+				e.preventDefault();
+				$("#upload:hidden").trigger('click');
+			});
+			
+});
+	
+function getfocus() {
+    document.getElementById("searchfield").focus();
+}
+
+</script>
+</body>
+
+</html>

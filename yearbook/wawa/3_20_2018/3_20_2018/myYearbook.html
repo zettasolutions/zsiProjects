@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="shortcut icon" href="images/icon.ico" />
+    <title>Sotero B. Cabahug Forum For Learning</title>
+	
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+	
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="css/mdb.min.css">
+	
+	<!-- Bookblock -->
+	<link rel="stylesheet" type="text/css" href="css/default2.css" />
+	<link rel="stylesheet" type="text/css" href="css/bookblock.css" />
+	<!-- custom demo style -->
+	<link rel="stylesheet" type="text/css" href="css/demo4.css" />
+	<script src="js/modernizr2.custom.js"></script>
+	<!-- My Style -->
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/full-slider.css">
+	<link rel="stylesheet" href="css/gallery.css">
+	
+		
+</head>
+
+<body class="fixed-sn white-skin body">
+
+    <!--Main Navigation-->
+	<div class="pageHeader">
+		<div class="container-fluid">
+				<!-- Sidebar Holder -->
+			<nav id="sidebar">
+				<header>
+					<!-- Sidebar navigation -->
+					<ul id="slide-out" class="side-nav fixed custom-scrollbar" style="background-image: url(images/bg.jpg);">
+						<!-- Logo -->
+							<li class="logo-sn waves-effect">
+								<div class=" text-center">
+									<a href="myYearbook.html" class="pl-0"><img src="images/forum.png" class=""></a>
+								</div>
+							</li>
+						<!--/. Logo -->
+
+						<!-- Side navigation links -->
+						<li>
+							<ul class="collapsible collapsible-accordion">
+								<li>
+									<a href="myYearbook.html"class="collapsible-header waves-effect arrow-r"><i class="fa fa-book"></i> My Yearbook</a>
+								</li>
+								<li>
+									<a href="myProfile.html"class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> &nbspMy Profile</a>
+								</li>
+								<li>
+									<a class="collapsible-header waves-effect arrow-r"><i class="fa fa-photo"></i> Photos<i class="fa fa-angle-down rotate-icon"></i></a>
+									 <div class="collapsible-body">
+										<ul>
+											 <ul class="collapsible collapsible-accordion">
+													<li><a class="collapsible-header waves-effect arrow-r">Class Photos<i class="fa fa-angle-down rotate-icon"></i></a>
+														<div class="collapsible-body">
+															<ul class="wew">
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspSample Section 1</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspSample Section 2</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspSample Section 3</a></li>
+															</ul>
+														</div>
+													</li>
+													<li>
+														<a href="photos2.html" class="waves-effect">Mix Photos</a>
+													</li>
+													<li><a class="collapsible-header waves-effect arrow-r">Event Photos<i class="fa fa-angle-down rotate-icon"></i></a>
+														<div class="collapsible-body">
+															<ul class="wew">
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspChristmas Party</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspCamping</a></li>
+																<li><a href="photos2.html" class="waves-effect">&nbsp&nbsp&nbsp&nbsp&nbspRecollection</a></li>
+															</ul>
+														</div>
+													</li>
+											</ul>
+										</ul>
+									</div>
+								</li>
+								<li>
+									<a href="videos.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-video-camera"></i> Videos</i></a>
+								</li>
+								<li>
+									<a class="collapsible-header waves-effect arrow-r"><i class="fa fa-book"></i> Other Yearbooks<i class="fa fa-angle-down rotate-icon"></i></a>
+									<div class="collapsible-body">
+										
+										 <ul class="collapsible collapsible-accordion">
+											<li>
+											    <a href="myYearbook.html" class="collapsible-header waves-effect arrow-r">Batch 2016-2017</a>
+											</li>
+											<li>
+												<a href="myYearbook.html" class="collapsible-header waves-effect arrow-r">Batch 2015-2016</i></a>
+											</li>
+											<li>
+												<a href="myYearbook.html" class="collapsible-header waves-effect arrow-r">Batch 2014-2015</i></a>
+											</li>
+										</ul>
+										
+									</div>
+								</li>
+								<li>
+									<a onclick="getfocus()" id="browse" class="collapsible-header waves-effect arrow-r"><i class="fa fa-search"></i> Browse</i></a>
+								</li>
+								<li>
+								<input id="upload" type="file" style="display: none;"/>
+								<a href="" id="upload_link" class="collapsible-header waves-effect arrow-r"><i class="fa fa-upload"></i> Upload Picture(s)</i></a>​
+								</li>
+								<li>
+									<a href="" class="collapsible-header waves-effect"><i class="fa fa-sign-out"></i> Logout</a>
+								</li>
+							</ul>
+						</li>
+						<!--/. Side navigation links -->
+						<div class="sidenav-bg mask-strong"></div>
+					</ul>
+					<!--/. Sidebar navigation -->
+
+					<!-- Navbar top-->
+					<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+						<!-- SideNav slide-out button -->
+						<div class="float-left">
+							<a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fa fa-bars"></i></a>
+						</div>
+						<!-- Breadcrumb-->
+						<div class="breadcrumb-dn mr-auto">
+							<p>Sotero B. Cabahug Forum For Learning</p>
+						</div>
+						<!--Search Form-->
+							<div class="movingarrow">
+								<img src="images/arrow.png" style="width: 50px">
+							</div>
+							<form class="search-form" role="search">
+								<div class="waves-effect">
+									<input type="text" id="searchfield" class="form-control" placeholder="Search . .">
+								</div>
+							</form>
+						<label><a href="#" class="waves-effect"><i class="fa fa-search"></i></a></label>
+						<!--/.Search Form-->
+					</nav>
+					<!-- /.Navbar -->
+
+				</header>
+			</nav>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="bb-custom-wrapper">
+			
+			<div id="bb-bookblock" class="bb-bookblock">
+				<!-- first page -->
+				<div class="bb-item">
+					<div class="bb-custom-firstpage">
+						<h1>The Graduates
+						<span style="opacity: 0.8">Sample Batch</span>
+						<span style="color: black; font-size: 20px; opacity: 0.8"><br><br><br><br><br>
+						<strong>Sample Section</strong><br>
+						<strong>Sample Section</strong><br><br>
+							Sample Date
+						</span>
+						</h1>
+					</div>
+					<div class="bb-custom-side">
+						<img src="images/grad2.jpeg">
+					</div>
+				</div>
+				<!-- second page -->
+				<div class="bb-item">
+					<div class="bb-custom-firstpage">
+						<h1>Sample Section
+						<span>Adviser: Sample Name</span>
+						</h1>
+					</div>
+					<div class="bb-custom-side">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g1.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g13.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">	
+											<img class="img-fluid dbma" src="images/g9.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g4.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="bb-item">
+					<div class="bb-custom-side">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g5.jpg" style="width: 200px">
+										</a>	
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g6.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g7.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g8.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="bb-custom-side">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g9.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g11.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g12.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g13.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="bb-item">
+					<div class="bb-custom-side">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g14.jpg" style="width: 200px">
+										</a>	
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g3.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g15.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g16.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="bb-custom-side">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g17.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g9.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma" src="images/g11.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="imagee">
+										<a href="#" class="pop">
+											<img class="img-fluid dbma	" src="images/g2.jpg" style="width: 200px">
+										</a>
+										<div class="wordd">Sample Name</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="bb-item">
+					<div class="bb-custom-side">
+					<p style="color: white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+					  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+					  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+					  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+					  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+					  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui 
+					  officia deserunt mollit anim id est laborum.</p></div>
+					<div class="bb-custom-side">
+						<p style="color: white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+					  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+					  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+					  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+					  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+					  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui 
+					  officia deserunt mollit anim id est laborum.</p></div>
+				</div>
+			</div>
+			
+			<nav>
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<a id="bb-nav-first" href="#" class="bb-custom-icon bb-custom-icon-first">First page</a>
+							<a id="bb-nav-prev" href="#" class="bb-custom-icon bb-custom-icon-arrow-left">Previous</a>
+							<a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right">Next</a>
+							<a id="bb-nav-last" href="#" class="bb-custom-icon bb-custom-icon-last">Last page</a>
+						</div>
+					</div>
+				</div>
+			</nav>
+
+		</div>
+	</div>
+	
+	
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" data-dismiss="modal">
+    <div class="modal-content"  >              
+      <div class="modal-body">
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div> 
+      <div class="modal-footer">
+          <div class="col-lg-12">
+			<div class="row">
+				<div class="col">
+					<p class="text-left">Class Aguinaldo<br>Cum Laude<br>Di jd ko ganahan mahonor HAHAH</p>
+				</div>
+			</div>
+		 </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="js/jquery-3.2.1.min.js"></script>
+
+<!-- BookBlock -->
+<script src="js/jquerypp.custom.js"></script>
+<script src="js/jquery.bookblock.js"></script>
+<script src="js/pageswitch.js"></script>
+
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="js/popper.min.js"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="js/bootstrap.js"></script>
+
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="js/mdb.min.js"></script>
+
+<!--Custom scripts-->
+<script src="js/sidenav.js"></script>
+
+<script>
+	$(function() {
+			$('.pop').on('click', function() {
+				$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+				$('#imagemodal').modal('show');   
+			});		
+			
+			$('#browse').on('click', function() {
+				$('.movingarrow').show();
+				$('.side-nav').css({"transform": "translate(-100%)","transition": "0.15s ease all"});
+				$('#sidenav-overlay').remove();
+			});
+			
+			$('#searchfield').on('click', function() {
+				$('.movingarrow').hide();
+			});
+			
+			$("#upload_link").on('click', function(e){
+				e.preventDefault();
+				$("#upload:hidden").trigger('click');
+			});
+			
+			$(".img-fluid, .wordd").on("mouseenter", function(){
+				$(this).closest(".imagee").find(".wordd").css("transform", "scale(1.1)");
+			});
+			
+			$(".img-fluid, .wordd").on("mouseleave", function(){
+				$(this).closest(".imagee").find(".wordd").css("transform", "scale(0.0)");
+			});
+	});
+	
+	
+	Page.init();
+</script>
+</body>
+
+</html>
