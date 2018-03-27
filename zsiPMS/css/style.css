@@ -8,8 +8,7 @@ font-family: Eraser;
 src: url("../fonts/EraserRegular.ttf");
 }
 
-body{
-	
+body{	
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -52,6 +51,9 @@ body{
 
 .navbar{
 	
+}
+.navbar.scrolling-navbar.top-nav-collapse{
+	background: linear-gradient(to right, #000000, #b29f94 ) !important;	
 }
 
 .navbar.scrolling-navbar{
