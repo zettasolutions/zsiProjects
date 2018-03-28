@@ -15,9 +15,10 @@ var  ud='undefined'
             return r.value;
         }
         ,__monitorAjaxResponse      : function(){
-            $(document).ajaxStart(function(event){});      
+            $(document).ajaxStart(function(){});      
             $( document ).ajaxSend(function(event,request,settings) {
                 if(typeof zsi_request_count === ud) zsi_request_count=0;
+                
                 var eAW = zsi.config.excludeAjaxWatch;    
                 for(var x=0; x<eAW.length;x++){
                     if(zsi.strExist(settings.url, eAW[x] ) ) return;
@@ -271,7 +272,7 @@ var  ud='undefined'
                                         
                                     for (let _ctr = 1; _ctr <= _cs; _ctr++) {
                                         _index++;
-                                        _temp[(_index - 1)] = _$td;
+                                        _temp[(_index - 1)] = _$th;
                                     }
                                         
                                     //if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
@@ -454,9 +455,6 @@ var  ud='undefined'
                             }
                         });
                     }
-                    
-                    o.cache = cache;
-                    if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                 }
                 
                 return __obj;
@@ -502,31 +500,27 @@ var  ud='undefined'
                     var _this       = this[i];
                     var _$target    = $(_this);
                     var _offset     = _$target.offset();
-                    var _cW         = _this.clientWidth;
-                    var _cH         = _this.clientHeight;
+                    var _offW       = _this.offsetWidth;
+                    var _offH       = _this.offsetHeight;
                     
-                    if ( ! isUD(_$target.data("autoHide"))) continue;
-                    
-                    if ((_cW || _cH) && (_$target.css("overflow") === "hidden" || _$target.css("overflow") === "auto")) {
-                        _$target.scrollTop(0).scrollLeft(0);
+                    if ((_offW || _offH) && _$target.css("overflow")) {
                         if ( ! o.isHoverBR ) {
-                            _$target.off("mouseover, mouseout").on("mouseover", function() { this.style.overflow = "scroll"; })
+                            _$target.mouseover(function() { this.style.overflow = "auto"; })
                             .mouseout(function() { this.style.overflow = "hidden"; });
                         } else {
-                            _$target.off("mousemove, mouseout").on("mousemove", function(e) {
+                            $(window).mousemove(function (e) {
                                 var _x = e.pageX - _offset.left;
                                 var _y = e.pageY - _offset.top;
-                                if ((_cW - 17 <= _x && _cW >= _x) || (_cH - 17 <= _y && _cH >= _y)) {
-                                    _this.style.overflow = "scroll";
+                                if ((_offW - 17 < _x && _offW > _x) || (_offH - 17 < _y && _offH > _y)) {
+                                    _this.style.overflow = "auto";
                                 } else { _this.style.overflow = "hidden"; }
-                            }).mouseout(function() { _this.style.overflow = "hidden"; });
+                            });
                         }
-                        _$target.data("autoHide",true);
-                    } else { console.error(_$target.attr("id") + " style height, width, and overfow are undefined."); }
+                    } else { alert("Style height, width, and overfow are undefined."); }
                 }
                 
                 return this;
-            }; 
+            };
             $.fn.addClickHighlight  = function(){
                 var $tr = this.find("tbody > tr");
                 $tr.unbind("click");
@@ -625,12 +619,11 @@ var  ud='undefined'
             $.fn.clearSelect        = function(hasOption,defaultText) {
               var _dt =  (defaultText ? defaultText : "");
               this.html(   (hasOption ? "<option>"  + _dt + "</option>" : _dt ));
-            };              
+            };
             $.fn.createDragScroll   = function(o){
                 var x, y, top, left, down;
                 var _$self = $(this); //scroll Area
                 var _$zp = _$self.children(".zoomPanel");
-                
                 _$self.data("isDraggable", true);
                 _$self.mousedown(function (e) {
                     e.preventDefault();
@@ -643,6 +636,13 @@ var  ud='undefined'
                 _$self.mouseleave(function (e) {
                     down = false;
                 });
+                
+                _$self.mousemove(function (e) {
+                    var _bcr = (_$self.data("bcr") === undefined) ? _$self.data("bcr", this.getBoundingClientRect()) : _$self.data("bcr");
+                    if ((_bcr.width - 20) < Math.abs(_bcr.x - e.pageX) || (_bcr.height - 20) < Math.abs(_bcr.y - e.pageY)) {
+                        _$self.css("overflow","scroll");
+                    } else { _$self.css("overflow","hidden"); }
+                });    
                 
                 $("body").mousemove(function (e) {
                     if(!_$self.data("isDraggable")) return;
@@ -662,19 +662,15 @@ var  ud='undefined'
                     var evt=window.event || e;
                     var delta=evt.detail? evt.detail*(-120) : evt.wheelDelta; 
                     if( delta > 0 ) _$self.find("#zoomIn").click(); 
-                    else {
-                        var _e = evt.target;
-                        if(evt.target.tagName.toLowerCase() !== "img") _e = $(_e).find("#targetImg").get(0);
+                        else {
+                            var _e = evt.target;
+                            if(evt.target.tagName.toLowerCase() !== "img") _e = $(_e).find("#targetImg").get(0);
 
-                        if( _e.getBoundingClientRect().width > (_$self.width() / 2) ) _$self.find("#zoomOut").click();
+                            if( _e.getBoundingClientRect().width > (_$self.width() / 2) ) _$self.find("#zoomOut").click();
                     }
                 });
             
                 if(o.isZoom || o.isZoom === true) _$zp.createZoomCtrl({});
-                
-                _$self.autoHideScroll({ isHoverBR : true });
-                
-                return _$self;
             };
             $.fn.createZoomCtrl     = function(o){
                 var _clsFrame = ".imgFrame";
@@ -724,7 +720,8 @@ var  ud='undefined'
 
                 //dropdownlist
                 if(typeof a[0] ==="string"){
-                     p={}; p.url = zsi.config.baseURL + "selectoption/code/" + a[0]; 
+			        var _url = zsi.config.baseURL;					
+                     p={}; p.url = (_url ? _url :"/") + "selectoption/code/" + a[0];                      
                     if(typeof a[1] !==ud) p.onComplete = a[1];
                 }
                 var obj=this;
@@ -1208,7 +1205,7 @@ var  ud='undefined'
 
                 if(typeof this.isInitiated === ud){
                     var _footer =  "<div class=\"zPageFooter\"><div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> 0 </i></div>"
-                                +  "<div class='pagectrl'>" + (isUD(o.rowsPerPage) ? "" : "<label> Default No. of Rows: </label> <input id='rpp' name='rpp' type='text' value='" + o.rowsPerPage  + "'>" ) 
+                                +  "<div class='pagectrl'>" + (isUD(o.rowsPerPage) ? "" : "<label> No. of Rows: </label> <input id='rpp' name='rpp' type='text' value='" + o.rowsPerPage  + "'>" ) 
                                 +  "<label id='page'> Page </label> <select id='pageNo'></select>"
                                 +  "<label id='of'> of 0 </label></div></div>"
                        ,_head = "";
@@ -1387,7 +1384,7 @@ var  ud='undefined'
                 }
                 if (ids !== "") {
                     if (confirm("Are you sure you want to delete selected items?")) {
-                        $.post(base_url + "sql/exec?p="+ procedure +" @pkey_ids='" + ids + "',@table_code='" + o.code + "'", function (d) {
+                        $.post(base_url + "sql/exec?p=" + procedure + " @pkey_ids='" + ids + "',@table_code='" + o.code + "'", function (d) {
                             o.onComplete(d);
                         }).fail(function (d) {
                             alert("Sorry, the curent transaction is not successfull.");
@@ -1486,7 +1483,7 @@ var  ud='undefined'
             };
             $.fn.getCheckBoxesValues= function(){
                 var _a = arguments;
-                var _sel = ( _a.length > 0 ? _a[0] : "input[type=hidden]" ); 
+                var _sel = ( _a.length > 0 ? _a[0] : "input[type=hidden]" );                 
                 var _r = [];
                 if(this){
                     $.each(this,function(){
@@ -1885,6 +1882,7 @@ var  ud='undefined'
                                 // Set table initiated.
                                 zsi.__getTableObject(__obj).isInitiated = true;
                                 
+                                if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                                 if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:data});
                                 __obj.addScrollbar(o); // This must be after onComplete()
                             }          
@@ -1913,6 +1911,7 @@ var  ud='undefined'
                             createTr(this);
                         });
                         
+                        if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                         if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:o});
                         __obj.addScrollbar(o); // This must be after onComplete()
                     }
@@ -1928,8 +1927,6 @@ var  ud='undefined'
                 var _scale = Math.min(_$imagePanel.width() / _$img.width(), _$imagePanel.height() / _$img.height());
                 _$zoomPanel.css({ "transform" : "scale(" + _scale + ")" });
                 _$imagePanel.scrollTop(0).scrollLeft(0);
-                
-                return _$imagePanel;
             };
             $.fn.rowColSpan         = function(o){
                 var  _$tbl = this
@@ -2240,24 +2237,31 @@ var  ud='undefined'
             };
             $.fn.showWaitingBox     = function(o) {
                 o = o || {};
-                var _name = "_waitingBox"
-                var _id = this.attr("id") + _name;
+                var _$self = this;
+                var _name = "_waitingBox";
+                var _id = _$self.attr("id") + _name;
                 var _$doc = $("body");
                 var _wb = $("#" + _id);
+                
+                $.fn.hideWaitingBox = function() {
+                    var _$self = this;
+                    var _id = _$self.attr("id") + _name;
+                    var _wb = $("#" + _id);
+                    if(_wb.length > 0 ) _wb.hide();
+                };
+                var _rect = _$self.get(0).getBoundingClientRect();
                 if ( _wb.length > 0) _wb.show();
                 else{
-                    var _rect = this.get(0).getBoundingClientRect();
-            
                     var _html = new zsi.easyJsTemplateWriter()
                                 .div({
                                      id     : _id
                                     ,class  : "waitingBox"
                                     ,style  : "display:block;"
-                                            + "line-height:" + _rect.height + "px;"
-                                            + "height:" + _rect.height + "px;" 
-                                            + "width:"  + _rect.width  + "px;" 
-                                            + "top:"    + _rect.top +   "px;"
-                                            + "left:"    + _rect.left +   "px;"
+                                            + "line-height:" + (o.height ? o.height : _rect.height) + "px;"
+                                            + "height:" + (o.height ?  o.height : _rect.height) + "px;" 
+                                            + "width:"  + (o.width ? o.width : _rect.width)  + "px;" 
+                                            + "top:"    + (o.top ? o.top : _rect.top) +   "px;"
+                                            + "left:"    + (o.left ? o.left : _rect.left) +   "px;"
                                             + "z-index: " + (zsi.getHighestZindex() + 1)
                                     }
                                 )
@@ -2271,15 +2275,10 @@ var  ud='undefined'
                     _wb = $(_html);
                     _$doc.append(_wb);
                }
-               
-               $.fn.hideWaitingBox = function() {
-                    var _id = this.attr("id") + _name;
-                    var _wb = $("#" + _id);
-                    if(_wb.length > 0 ) _wb.hide();
-               };
-            
             };
             $.fn.toJSON             = function(o) { //for multiple data only
+                            console.log("toJSON");
+
                 if (typeof o === ud) o={};
                 var isExistOptionalItems = function (o, name) {
                     if (typeof o.optionalItems !== ud) {
@@ -2398,7 +2397,7 @@ var  ud='undefined'
                 if(typeof o.procedure !==ud) json={procedure: o.procedure, rows: json}; 
                 if(typeof o.parentId !==ud) json.parentId= o.parentId
                 return json;
-            };            
+            };              
         }            
         ,__setPageCtrl              : function(o,url,data,pTable){
             var tr = data.returnValue;
@@ -2544,7 +2543,6 @@ var  ud='undefined'
             }
         }
         ,__tableObjectsHistory      : []
-
         ,bs                         : {
              ctrl                   : function(o){
                 var l_tag="input";
@@ -2653,7 +2651,7 @@ var  ud='undefined'
                 ,dataType : "json"
                 ,success : o.onComplete
             });
-        }           
+        }     
         ,config                     : {}
         ,control                    : {}
         ,form                       : {
@@ -3073,17 +3071,7 @@ var  ud='undefined'
                    l_dp.css("z-index",zsi.getHighestZindex() + 1);
               });
            }
-        }            
-        ,initInputTypesAndFormats   : function(){
-           $(".numeric").keypress(function(event){
-              return zsi.form.checkNumber(event,'.,');
-           });
-            
-           $(".format-decimal").blur(function(){
-              var obj= this;
-              zsi.form.checkNumberFormat(this);
-           });
-        }
+        }   
         ,initURLParameters          : function(){
           this.urlParam = {};
           var parts = window.location.search.substr(1).split("&");
@@ -3091,7 +3079,7 @@ var  ud='undefined'
                         var temp = parts[i].split("=");
                         this.urlParam[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
           }     
-        }    
+        }          
         ,json                       : {
             groupByColumnIndex      : function(data,column_index){
                var _result ={};
@@ -3139,37 +3127,49 @@ var  ud='undefined'
             }                 
 
         }
-        ,replaceIllegalId : function(p){
-            return (typeof p ==="number" ? p : p.replace(/^[^a-z]+|[^\w:.-]+/gi, "__"));
-        }
-        ,setValIfNull               : function(data,colName,defaultValue){
-            var _d = (typeof defaultValue !== ud ? defaultValue : "" );   
-            return (data ? (typeof data[colName]  !== ud ? data[colName] :  _d ) : _d);
-        }
-        ,ShowHideProgressWindow     : function (isShow){
-            var pw = $(".progressWindow");
-           if(isShow){
-              pw.centerWidth();
-              pw.css("display","block");
-           }
-           else{
-              pw.hide();      
-           }
-         }
-        ,ShowErrorWindow            : function(){
-            var pw = $(".errorWindow");
-            pw.centerWidth();
-            pw.css("display","block");
-            pw.css("z-index",zsi.getHighestZindex() + 1);
-            setTimeout(function(){
-                    pw.hide("slow");      
-            },5000);   
-         }
-        ,strExist                   : function(source,value){
-          var _result=false;
-          var i = source.toLowerCase().indexOf(value.toLowerCase());
-          if (i>-1) _result=true;
-          return _result;
+        ,url                        : {
+            getQueryValue          : function (source,keyname) {
+               source = source.toString().toLowerCase(); 
+               keyname = keyname.toLowerCase();
+               var qLoc =  source.indexOf("?");   
+               if(qLoc>-1) source=source.substr(qLoc+1);
+               if (source.indexOf("&") > -1){ 
+                  var vars = source.split("&");
+                  for (var i=0;i<vars.length;i++) {
+                     var pair = vars[i].split("=");
+                     if (pair[0] == keyname) {
+            
+                        return pair[1];
+                     }
+                  }
+               }
+               else{
+                  var pair = source.split("=");
+                  if (pair[0] == keyname) {
+                     return pair[1];
+                  }      
+               }   
+               return ""
+            }
+            ,removeQueryItem        : function (source,keyname) {
+               source = source.toString().toLowerCase(); 
+               keyname = keyname + "".toLowerCase();
+               var qLoc =  source.indexOf("?");   
+               if(qLoc>-1) source=source.substr(qLoc+1);
+               var result = "";
+            
+               if (source.indexOf("&") > -1){ 
+                  var pairs = source.split("&");
+                  for (var i=0;i<pairs.length;i++) {
+                      var l_keyname = pairs[i].split("=")[0];         
+                     if(l_keyname !=keyname){ 
+                        if(result)  result +="&"; 
+                        result += pairs[i];
+                     }
+                  }
+               }
+               return result;
+            }
         }
         ,table                      : {
              __pageParameters       : ""
@@ -3233,8 +3233,7 @@ var  ud='undefined'
           return data;
         }
         ,toggleExtraRow             : function(o){
-            o.parentId= zsi.replaceIllegalId(o.parentId); 
-            
+            o.parentId = zsi.replaceIllegalId(o.parentId);
             var _cpId = "#childPanel";
             var $span = $(o.object).find("span");
             var $cp = $(_cpId + o.parentId);
@@ -3256,51 +3255,48 @@ var  ud='undefined'
             }
         
         }
-        ,url                        : {
-            getQueryValue          : function (source,keyname) {
-               source = source.toString().toLowerCase(); 
-               keyname = keyname.toLowerCase();
-               var qLoc =  source.indexOf("?");   
-               if(qLoc>-1) source=source.substr(qLoc+1);
-               if (source.indexOf("&") > -1){ 
-                  var vars = source.split("&");
-                  for (var i=0;i<vars.length;i++) {
-                     var pair = vars[i].split("=");
-                     if (pair[0] == keyname) {
-            
-                        return pair[1];
-                     }
-                  }
-               }
-               else{
-                  var pair = source.split("=");
-                  if (pair[0] == keyname) {
-                     return pair[1];
-                  }      
-               }   
-               return ""
-            }
-            ,removeQueryItem        : function (source,keyname) {
-               source = source.toString().toLowerCase(); 
-               keyname = keyname + "".toLowerCase();
-               var qLoc =  source.indexOf("?");   
-               if(qLoc>-1) source=source.substr(qLoc+1);
-               var result = "";
-            
-               if (source.indexOf("&") > -1){ 
-                  var pairs = source.split("&");
-                  for (var i=0;i<pairs.length;i++) {
-                      var l_keyname = pairs[i].split("=")[0];         
-                     if(l_keyname !=keyname){ 
-                        if(result)  result +="&"; 
-                        result += pairs[i];
-                     }
-                  }
-               }
-               return result;
-            }
+        ,replaceIllegalId : function(p){
+            return (typeof p ==="number" ? p : p.replace(/^[^a-z]+|[^\w:.-]+/gi, "__"));
         }
-
+        ,setValIfNull               : function(data,colName,defaultValue){
+            var _d = (typeof defaultValue !== ud ? defaultValue : "" );   
+            return (data ? (typeof data[colName]  !== ud ? data[colName] :  _d ) : _d);
+        }
+        ,ShowHideProgressWindow     : function (isShow){
+            var pw = $(".progressWindow");
+           if(isShow){
+              pw.centerWidth();
+              pw.css("display","block");
+           }
+           else{
+              pw.hide();      
+           }
+         }
+        ,ShowErrorWindow            : function(){
+            var pw = $(".errorWindow");
+            pw.centerWidth();
+            pw.css("display","block");
+            pw.css("z-index",zsi.getHighestZindex() + 1);
+            setTimeout(function(){
+                    pw.hide("slow");      
+            },5000);   
+         }
+        ,initInputTypesAndFormats   : function(){
+           $(".numeric").keypress(function(event){
+              return zsi.form.checkNumber(event,'.,');
+           });
+            
+           $(".format-decimal").blur(function(){
+              var obj= this;
+              zsi.form.checkNumberFormat(this);
+           });
+        }
+        ,strExist                   : function(source,value){
+          var _result=false;
+          var i = source.toLowerCase().indexOf(value.toLowerCase());
+          if (i>-1) _result=true;
+          return _result;
+        }
     }
     ,isValidDate = function(l_date){
         var ts=Date.parse(l_date);
@@ -3315,4 +3311,4 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
-                                                                                                                                                                                                                 
+                                
