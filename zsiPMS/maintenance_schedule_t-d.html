@@ -17,8 +17,7 @@
     <link rel="stylesheet" href="css/mdb.min.css">
 	
 	<!-- My Style -->
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/full-slider.css">
+	<link rel="stylesheet" href="css/style.css">	
 	<link rel="stylesheet" href="css/zTable.css">
 	
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
@@ -37,6 +36,32 @@
 	.dash{
 		padding-top:5px;
 	}
+	div.green {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: green; 
+		border: 0px;
+	}
+	div.yellow {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: yellow; 
+		border: 0px;
+	}
+	div.red {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: red; 
+		border: 0px;
+	}
+	div.legend p{
+		margin-bottom:0rem;
+		
+	}
+	div.legend{font-size:8pt; !important}
 	</style>
 </head>
 
@@ -132,65 +157,84 @@
 		<span>MACHINE & MAINTENANCE SCHEDULE LIST</span>
 		</div>
 	</div>
-	<div class="row">			
+	<div class="row ">			
 		<div class="col-md-2"></div>
-		<div class="col-md-8">
+		<div class="col-md-8 zPanel">
 			<div class="zTable">
 				<table>
 					<thead>
 						<tr class="tag-tr ">
-							<th class="tag-th " style="width:180px">MACHINE CODE</th>
-							<th class="tag-th " style="width:250px">MACHINE NAME</th>
-							<th class="tag-th " style="width:100px">LOCATION</th>
-							<th class="tag-th " style="width:150px">DATE OF INSTALLATION</th>
-							<th class="tag-th " style="width:100px">MODE OF MAINTENANCE</th>
-							<th class="tag-th " style="width:100px">MAINTENANCE DATE</th>
-							<th class="tag-th " style="width:150px">ALARM COUNTDOWN</th>
+							<th class="tag-th " style="width:140px; text-align:left"	>MACHINE CODE</th>
+							<th class="tag-th " style="width:240px; text-align:left"	>MACHINE NAME</th>
+							<th class="tag-th " style="width:130px; text-align:center"	>LOCATION</th>
+							<th class="tag-th " style="width:240px; text-align:center"	>DATE OF INSTALLATION</th>
+							<th class="tag-th " style="width:240px; text-align:center"	>MODE OF MAINTENANCE</th>
+							<th class="tag-th " style="width:180px; text-align:center"	>MAINTENANCE DATE</th>
+							<th class="tag-th " style="width:190px; text-align:center"	>ALARM COUNTDOWN</th>
 						</tr>
 						
 					</thead>
 					<tbody">
 						<tr class="tag-tr odd">
-							<td class="tag-td " style="width:180px">AC1001</th>
-							<td class="tag-td " style="width:250px">Room Air Conditioner</td>
-							<td class="tag-td " style="width:100px">Rm101</td>
-							<td class="tag-td " style="width:150px">01-12-2017</td>
-							<td class="tag-td " style="width:100px">Cleaning</td>
-							<td class="tag-td " style="width:100px">02-12-2017</td>							
-							<td class="tag-td " style="width:150px">02:22:45</td>							
+							<td class="tag-td " style="width:140px; text-align:left"	>AC1001</th>
+							<td class="tag-td " style="width:240px; text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px; text-align:center"	>Rm101</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px; text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px; text-align:center"	>02:22:45</td>							
 						</tr>
 						<tr class="tag-tr even">
-							<td class="tag-td " style="width:180px">AC1002</th>
-							<td class="tag-td " style="width:250px">Room Air Conditioner</td>
-							<td class="tag-td " style="width:100px">Rm102</td>
-							<td class="tag-td " style="width:150px">01-12-2017</td>
-							<td class="tag-td " style="width:100px">Cleaning</td>
-							<td class="tag-td " style="width:100px">02-12-2017</td>							
-							<td class="tag-td " style="width:150px">03:22:45</td>							
+							<td class="tag-td " style="width:140px; text-align:left"	>AC1002</th>
+							<td class="tag-td " style="width:240px; text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px; text-align:center"	>Rm102</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px; text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px; text-align:center"	>03:22:45</td>							
 						</tr>
 						<tr class="tag-tr odd">
-							<td class="tag-td " style="width:180px">AC1003</th>
-							<td class="tag-td " style="width:250px">Room Air Conditioner</td>
-							<td class="tag-td " style="width:100px">Rm103</td>
-							<td class="tag-td " style="width:150px">01-12-2017</td>
-							<td class="tag-td " style="width:100px">Cleaning</td>
-							<td class="tag-td " style="width:100px">02-12-2017</td>							
-							<td class="tag-td " style="width:150px">04:22:45</td>							
+							<td class="tag-td " style="width:140px;  text-align:left"	>AC1003</th>
+							<td class="tag-td " style="width:240px;  text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px;  text-align:center"	>Rm103</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px;  text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px;  text-align:center"	>04:22:45</td>							
 						</tr>
 						<tr class="tag-tr even">
-							<td class="tag-td " style="width:180px">AC1004</th>
-							<td class="tag-td " style="width:250px">Room Air Conditioner</td>
-							<td class="tag-td " style="width:100px">Rm104</td>
-							<td class="tag-td " style="width:150px">01-12-2017</td>
-							<td class="tag-td " style="width:100px">Cleaning</td>
-							<td class="tag-td " style="width:100px">02-12-2017</td>							
-							<td class="tag-td " style="width:150px">05:22:45</td>							
+							<td class="tag-td " style="width:140px;  text-align:left"	>AC1004</th>
+							<td class="tag-td " style="width:240px;  text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px;  text-align:center"	>Rm104</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px;  text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px;  text-align:center"	>05:22:45</td>							
 						</tr>
 					</tbody>
 				</table>
 				
 			</div>
-				
+			<div class="row">
+				<div class="col-md-6 ">
+					<div class="col-md-1 ">
+					LEGEND:
+					</div>
+					<div class="col-md-9 " >
+						<div class="legend" >
+							<p ><div class="green" >	</div> Below 15 days</p>
+							<p ><div class="yellow" >	</div> Below  7 days</p>					
+							<p ><div class="red" >		</div> Below  3 days</p>					
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="pull-right" style="margin-top:20pt;">
+						<button class="btn btn-primary" type="submit"><i class="fa fa-print"></i></button>
+						<button class="btn btn-primary" type="submit"><i class="fa fa-download"></i></button>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="col-md-2"></div>
 	</div>		

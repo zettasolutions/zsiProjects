@@ -12,6 +12,7 @@ body{
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+	
 }
 .pageHeader {
     background-color: #000000;
@@ -314,4 +315,13 @@ color:#fff;
 transform:translate(50%, -50%) rotate(180deg);
 background:rgba(0,0,0,1);
 text-decoration:none;
+}
+div.zPanel {
+    -webkit-box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.58);
+    -moz-box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.58);
+    box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.58);
+    background-color: #fff;
+    padding: 5px;
+    margin-bottom: 15px;
+    border-radius: 3px;
 }
