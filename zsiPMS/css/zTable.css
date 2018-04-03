@@ -1,0 +1,73 @@
+div.zTable {
+    overflow : hidden;
+    border-collapse: collapse;
+}
+
+.noSelect, div.zTable.noSelect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+div.zTable table {
+    border-collapse: collapse;
+}
+
+div.zTable table thead {
+    background-color : #DA160A;
+    overflow: hidden;
+    display: block;
+    color: #fff;
+	font-weight: bold;
+	overflow: hidden;
+}
+
+div.zTable table thead tr th {
+	border-right: 1pt solid #d6d8d8;
+	font-size:8pt;
+}
+div.zTable table tbody tr td {
+	border-right: 1pt solid #d6d8d8;
+	font-size:8pt;
+}
+
+div.zTable table tbody {
+    overflow: auto;
+    display: block;
+}
+
+div.zTable table tbody tr:nth-child(even) {
+    background-color: #e3e4e5;
+}
+
+div.zTable table th
+,div.zTable table td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+div.zTable .crPanel {
+    position : absolute;  
+}
+
+div.zTable .cr {
+    position : absolute;
+    cursor : w-resize;
+    top : 0;
+    width : 2px;
+    border : none;
+}
+
+div.zTable .cr.active {
+    border-left : 1pt solid;
+    border-left-style: dotted;
+}
+
+div.zTable .cr.hidden {
+    display : none;
+}
+
