@@ -19,21 +19,20 @@
 	
 	<!-- My Style -->
 	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/full-slider.css">
-	<link rel="stylesheet" href="css/gallery.css">
 	
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 	<style>
 	ul li i.fa{
-	font-size:13pt !important;	
+		font-size:13pt !important;	
 	}
 	.side-nav .collapsible .fa{
-	margin-left:-5px;
-	margin-right:5px;
-	
+		margin-left:-5px;
+		margin-right:5px;	
 	}
-	
+	textarea.md-textarea {
+            height: 12rem !important;
+        }
 	</style>
 </head>
 
@@ -41,57 +40,67 @@
 
     <!--Main Navigation-->
 	<div class="pageHeader wrapper">
-            <!-- Sidebar Holder -->
-        <nav id="sidebar">
-    <header>
-        <!-- Sidebar navigation -->
-        <ul id="slide-out" class="side-nav fixed custom-scrollbar bg" style="background-image: url(images/gears.jpg);">
-            <!-- Logo -->
-				<li class="logo-sn waves-effect">
-					<div class=" text-center">
-						<a href="#" class="pl-0"><img src="images/pms.jpg" class=""></a>
-					</div>
+	<!-- Sidebar Holder -->
+	<nav id="sidebar">
+		<header>
+			<!-- Sidebar navigation -->
+			<ul id="slide-out" class="side-nav fixed custom-scrollbar bg" style="background-image: url(images/gears.jpg);">
+				<!-- Logo -->
+					<li class="logo-sn waves-effect">
+						<div class=" text-center">
+							<a href="#" class="pl-0"><img src="images/pms.jpg" class=""></a>
+						</div>
+					</li>
+				<!--/. Logo -->
+
+				<!-- Side navigation links -->
+				<li>
+					<ul class="collapsible collapsible-accordion">
+						<li><a class="collapsible-header waves-effect arrow-r" href="index.html">					
+							<i class="fa fa-home"></i> PMS HOME</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r " href="maintenance_schedule_t-d.html">
+							<i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="schedule_alert.html">
+							<i class="fa fa-qq"></i> SCHEDULE ALERT</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r active" href="inspection_request.html">
+							<i class="fa fa-wrench"></i> INSPECTION REQUEST</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="maintenance_report.html">
+							<i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="messages.html">
+							<i class="fa fa-envelope"></i> MESSAGES</a>
+						</li>						
+					</ul>
 				</li>
-            <!--/. Logo -->
-
-            <!-- Side navigation links -->
-            <li>
-                <ul class="collapsible collapsible-accordion">
-                    <li><a class="collapsible-header waves-effect arrow-r" href="index.html"><i class="fa fa-home"></i> PMS HOME</a></li>
-					<li><a class="collapsible-header waves-effect arrow-r" href="maintenance_schedule_t-d.html"><i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a></li>
-                    <li><a class="collapsible-header waves-effect arrow-r" href="schedule_alert.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT</a></li>
-                    <li><a class="collapsible-header waves-effect arrow-r active" href="inspection_request.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST</i></a></li>
-	                <li><a class="collapsible-header waves-effect arrow-r" href="maintenance_report.html"><i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a></li>
-					<li><a class="collapsible-header waves-effect arrow-r" href="messages.html"><i class="fa fa-envelope"></i> MESSAGES</a></li>
-					
-                </ul>
-            </li>
-			<!--Search Form-->
-            <li>
-                <form class="search-form" role="search">
-                    <div class="form-group waves-effect">
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                </form>
-            </li>
-            <!--/.Search Form-->
-            <!--/. Side navigation links -->
-            <div class="sidenav-bg mask-strong"></div>
-        </ul>
-        <!--/. Sidebar navigation -->
-
-        <!-- Navbar top-->
-        <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
-            <!-- SideNav slide-out button -->
-            <div class="float-left">
-                <a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fa fa-bars"></i></a>
-            </div>
-            <!-- Breadcrumb-->
-            <div class="breadcrumb-dn mr-auto">
-                <p>Preventive & Maintenance System</p>
-            </div>
-			<!--Circle Image-->
-			<div class="dropdown">
+				<!--Search Form-->
+				<li>
+					<form class="search-form" role="search">
+						<div class="form-group waves-effect">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+					</form>
+				</li>
+				<!--/.Search Form-->
+				<!--/. Side navigation links -->
+				<div class="sidenav-bg mask-strong"></div>
+			</ul>
+			<!--/. Sidebar navigation -->
+			<!-- Navbar top-->
+			<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+				<!-- SideNav slide-out button -->
+				<div class="float-left">
+					<a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fa fa-bars"></i></a>
+				</div>				
+				<!-- Breadcrumb-->
+				<div class="breadcrumb-dn mr-auto">
+					<p>Preventive & Maintenance System</p>
+				</div>
+				<!--Circle Image-->
+				<div class="dropdown">
 			  <a href="#" data-toggle="dropdown">
 				<img src="images/male-circle.png" class="rounded-circle" style="width: 30px; float: right;">
 			  </a>
@@ -102,74 +111,59 @@
 				<li><a href="#">JavaScript</a></li>
 			  </ul>
 			</div>
-        </nav>
-        <!-- /.Navbar -->
-
-    </header>
+			</nav>
+			<!-- /.Navbar -->	
+		</header>
 	</nav>		
-	</div>
+	
+		<div class="col-md-3 dash pull-right">
+			Operator's Dashboard <br>			
+			WELCOME, <i style="color:red">Jaypee</i>			
+		</div>
+	
+</div>
 	<div class="container-fluid page">
 		<div class="row">			
 			<div class="pageTitle">
-			<span>MACHINE & MAINTENANCE SCHEDULE LIST</span>
+			<span>INSPECTION SERVICE REQUEST</span>
 			</div>
 		</div>
 		<div class="row">			
 			<div class="col-md-2"></div>
-			<div class="col-md-8">
-					<!--Table-->
-				<table class="table table-striped">
-
-					<!--Table head-->
-					<thead>
-						<tr>
-							<th>MACHINE CODE</th>
-							<th>MACHINE NAME</th>
-							<th>LOCATION</th>
-							<th>DATE OF INSTALLATION</th>
-							<th>MODE OF MAINTENANCE</th>
-							<th>MAINTENANCE DATE</th>
-							<th>ALARM COUNTDOWN</th>
-						</tr>
-					</thead>
-					<!--Table head-->
-
-					<!--Table body-->
-					<tbody>
-						<tr>
-							<th scope="row">AC1001</th>
-							<td>Room Air Conditioner</td>
-							<td>Rm101</td>
-							<td>01-12-2017</td>
-							<td>Cleaning</td>
-							<td>02-12-2017</td>							
-							<td>02:22:45</td>							
-						</tr>
-						<tr>
-							<th scope="row">AC1002</th>
-							<td>Room Air Conditioner</td>
-							<td>Rm102</td>
-							<td>01-12-2017</td>
-							<td>Cleaning</td>
-							<td>02-12-2017</td>							
-							<td>03:22:45</td>							
-						</tr>
-						<tr>
-							<th scope="row">AC1003</th>
-							<td>Room Air Conditioner</td>
-							<td>Rm103</td>
-							<td>01-12-2017</td>
-							<td>Cleaning</td>
-							<td>02-12-2017</td>							
-							<td>04:22:45</td>							
-						</tr>
-					</tbody>
-					<!--Table body-->
-
-				</table>
-				<!--Table-->
+			<div class="col-md-8 zPanel">
+				<form action="" method="post">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<input type="text" name="to_email" placeholder="To:">										
+						</div>
+						<div class="form-group">						
+							<input type="text" name="from_email" placeholder="From:">
+						</div>
+						<div class="form-group">						
+							<input type="text" name="subject" placeholder="Subject:">
+						</div>
+						<div class="form-group">						
+							<textarea class="md-textarea" rows="4" name="message" cols="30" max-length="6000"></textarea>
+						</div>
+					</div>
+					
+				<div class="row">
+					<div class="col-md-6 ">						
+						<button class="btn btn-primary" type="submit">Send</button>
+					</div>					
+					<div class="col-md-6">
+						<div class="pull-right">
+							<button class="btn btn-primary" type="submit"><i class="fa fa-print"></i></button>
+							<button class="btn btn-primary" type="submit"><i class="fa fa-trash"></i></button>
+						</div>
+					</div>					
+				</div>
+					
+				</form>
+				
 			</div>
 			<div class="col-md-2"></div>
+			
 		</div>		
 	</div>
 	
