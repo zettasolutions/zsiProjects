@@ -624,6 +624,7 @@ var  ud='undefined'
                 var x, y, top, left, down;
                 var _$self = $(this); //scroll Area
                 var _$zp = _$self.children(".zoomPanel");
+                
                 _$self.data("isDraggable", true);
                 _$self.mousedown(function (e) {
                     e.preventDefault();
@@ -636,13 +637,6 @@ var  ud='undefined'
                 _$self.mouseleave(function (e) {
                     down = false;
                 });
-                
-                _$self.mousemove(function (e) {
-                    var _bcr = (_$self.data("bcr") === undefined) ? _$self.data("bcr", this.getBoundingClientRect()) : _$self.data("bcr");
-                    if ((_bcr.width - 20) < Math.abs(_bcr.x - e.pageX) || (_bcr.height - 20) < Math.abs(_bcr.y - e.pageY)) {
-                        _$self.css("overflow","scroll");
-                    } else { _$self.css("overflow","hidden"); }
-                });    
                 
                 $("body").mousemove(function (e) {
                     if(!_$self.data("isDraggable")) return;
@@ -662,31 +656,46 @@ var  ud='undefined'
                     var evt=window.event || e;
                     var delta=evt.detail? evt.detail*(-120) : evt.wheelDelta; 
                     if( delta > 0 ) _$self.find("#zoomIn").click(); 
-                        else {
-                            var _e = evt.target;
-                            if(evt.target.tagName.toLowerCase() !== "img") _e = $(_e).find("#targetImg").get(0);
+                    else {
+                        var _e = evt.target;
+                        if(evt.target.tagName.toLowerCase() !== "img") _e = $(_e).find("#targetImg").get(0);
 
-                            if( _e.getBoundingClientRect().width > (_$self.width() / 2) ) _$self.find("#zoomOut").click();
+                        if( _e.getBoundingClientRect().width > (_$self.width() / 2) ) _$self.find("#zoomOut").click();
                     }
                 });
             
                 if(o.isZoom || o.isZoom === true) _$zp.createZoomCtrl({});
+                
+                _$self.autoHideScroll({ isHoverBR : true });
+                
+                return _$self;
             };
             $.fn.createZoomCtrl     = function(o){
                 var _clsFrame = ".imgFrame";
                 var self = this;
                 var _$frm = self.closest(_clsFrame);
-                this.zmVal  = 1.0;
-                this.inVal = 0.1;
+                this.inVal = 0.03;
                  _$zp = self;
+                var _getScaleValue =  function(transformValues){
+                    var _r = 0;
+                    var _t = transformValues;
+                    if(_t.length > 0){
+                        var a = _t[0];
+                        var b = _t[1];
+                        _r= Math.sqrt(a*a + b*b);
+                    }
+                    return _r;
+                } 
+                 
                 var _onZoom = function(isIn){
                     var getVal  =   function(){
+                        var _curVal = _getScaleValue(self.getCssTransformValue());
                         if(isIn){
-                            self.zmVal +=  self.inVal;
+                            _curVal +=  self.inVal;
                         }else {
-                            self.zmVal  -= self.inVal;
+                            _curVal  -= self.inVal;
                         }            
-                        return self.zmVal;
+                        return _curVal;
                     };
                     self.css({transform : "scale(" + getVal() + ")"});
                     
@@ -1492,6 +1501,16 @@ var  ud='undefined'
                 }
                 return _r;    
             };            
+            $.fn.getCssTransformValue = function(){
+                var _t = this.css('transform');
+                var _v = [];
+                if(_t != "none"){
+                    _v = _t.split('(')[1];
+                    _v = _v.split(')')[0];
+                    _v = _v.split(',');
+                }
+                return _v;
+            }
             $.fn.jsonSubmit         = function(o) {
                 var p = {
                     type: 'POST'
@@ -3311,3 +3330,4 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
+                                 
