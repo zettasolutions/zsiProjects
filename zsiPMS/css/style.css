@@ -59,6 +59,7 @@ body{
 
 .navbar.scrolling-navbar{
 	z-index: 101;
+	background: linear-gradient(to right, #000000, #b29f94 );
 }
 
 .breadcrumb-dn, .float-left .fa{

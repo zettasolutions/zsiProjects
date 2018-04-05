@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	
+   <title>Technician Dashboard</title>
+	
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+	
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="css/mdb.min.css">
+	
+	<!-- My Style -->
+	<link rel="stylesheet" href="css/style.css">	
+	<link rel="stylesheet" href="css/zTable.css">
+	
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+	<style>
+	ul li i.fa{
+	font-size:13pt !important;	
+	}
+	.side-nav .collapsible .fa{
+	margin-left:-5px;
+	margin-right:5px;	
+	}	
+	table thead tr th{
+	font-weight:bold;
+	}
+	.dash{
+		padding-top:5px;
+	}
+	div.green {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: green; 
+		border: 0px;
+	}
+	div.yellow {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: yellow; 
+		border: 0px;
+	}
+	div.red {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: red; 
+		border: 0px;
+	}
+	div.legend p{
+		margin-bottom:0rem;
+		
+	}
+	div.legend{font-size:8pt; !important}
+	</style>
+</head>
+
+<body class="fixed-sn black-skin">
+
+<!--Main Navigation-->
+<div class="pageHeader wrapper">
+	<!-- Sidebar Holder -->
+	<nav id="sidebar">
+		<header>
+			<!-- Sidebar navigation -->
+			<ul id="slide-out" class="side-nav fixed custom-scrollbar bg" style="background-image: url(images/gears.jpg);">
+				<!-- Logo -->
+					<li class="logo-sn waves-effect">
+						<div class=" text-center">
+							<a href="#" class="pl-0"><img src="images/pms.jpg" class=""></a>
+						</div>
+					</li>
+				<!--/. Logo -->
+
+				<!-- Side navigation links -->
+				<li>
+					<ul class="collapsible collapsible-accordion">
+						<li><a class="collapsible-header waves-effect arrow-r" href="index.html">					
+							<i class="fa fa-home"></i> PMS HOME</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r active" href="/technician/maintenance_schedule_t-d.html">
+							<i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="/technician/schedule_alert-tech.html">
+							<i class="fa fa-qq"></i> SCHEDULE ALERT</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="/technician/inspection_request-tech.html">
+							<i class="fa fa-wrench"></i> INSPECTION REQUEST</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="/technician/maintenance_report-tech.html">
+							<i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a>
+						</li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="/technician/messages-tech.html">
+							<i class="fa fa-envelope"></i> MESSAGES</a>
+						</li>						
+					</ul>
+				</li>
+				<!--Search Form-->
+				<li>
+					<form class="search-form" role="search">
+						<div class="form-group waves-effect">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+					</form>
+				</li>
+				<!--/.Search Form-->
+				<!--/. Side navigation links -->
+				<div class="sidenav-bg mask-strong"></div>
+			</ul>
+			<!--/. Sidebar navigation -->
+			<!-- Navbar top-->
+			<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+				<!-- SideNav slide-out button -->
+				<div class="float-left">
+					<a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fa fa-bars"></i></a>
+				</div>				
+				<!-- Breadcrumb-->
+				<div class="breadcrumb-dn mr-auto">
+					<p>Preventive & Maintenance System</p>
+				</div>
+				<!--Circle Image-->
+				<div class="dropdown">
+			  <a href="#" data-toggle="dropdown">
+				<img src="images/male-circle.png" class="rounded-circle" style="width: 30px; float: right;">
+			  </a>
+			  
+			  <ul class="dropdown-menu">
+				<li><a href="#">HTML</a></li>
+				<li><a href="#">CSS</a></li>
+				<li><a href="#">JavaScript</a></li>
+			  </ul>
+			</div>
+			</nav>
+			<!-- /.Navbar -->	
+		</header>
+	</nav>		
+	
+		<div class="col-md-3 dash pull-right">
+			Technician's Dashboard <br>			
+			WELCOME, <i style="color:red">Jaypee</i>			
+		</div>
+	
+</div>
+<div class="container-fluid page">
+	<div class="row">			
+		<div class="pageTitle">
+		<span>MACHINE & MAINTENANCE SCHEDULE LIST</span>
+		</div>
+	</div>
+	<div class="row ">			
+		<div class="col-md-2"></div>
+		<div class="col-md-8 zPanel">
+			<div class="zTable">
+				<table>
+					<thead>
+						<tr class="tag-tr ">
+							<th class="tag-th " style="width:140px; text-align:left"	>MACHINE CODE</th>
+							<th class="tag-th " style="width:240px; text-align:left"	>MACHINE NAME</th>
+							<th class="tag-th " style="width:130px; text-align:center"	>LOCATION</th>
+							<th class="tag-th " style="width:240px; text-align:center"	>DATE OF INSTALLATION</th>
+							<th class="tag-th " style="width:240px; text-align:center"	>MODE OF MAINTENANCE</th>
+							<th class="tag-th " style="width:180px; text-align:center"	>MAINTENANCE DATE</th>
+							<th class="tag-th " style="width:190px; text-align:center"	>ALARM COUNTDOWN</th>
+						</tr>
+						
+					</thead>
+					<tbody">
+						<tr class="tag-tr odd">
+							<td class="tag-td " style="width:140px; text-align:left"	>AC1001</th>
+							<td class="tag-td " style="width:240px; text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px; text-align:center"	>Rm101</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px; text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px; text-align:center"	>02:22:45</td>							
+						</tr>
+						<tr class="tag-tr even">
+							<td class="tag-td " style="width:140px; text-align:left"	>AC1002</th>
+							<td class="tag-td " style="width:240px; text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px; text-align:center"	>Rm102</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px; text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px; text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px; text-align:center"	>03:22:45</td>							
+						</tr>
+						<tr class="tag-tr odd">
+							<td class="tag-td " style="width:140px;  text-align:left"	>AC1003</th>
+							<td class="tag-td " style="width:240px;  text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px;  text-align:center"	>Rm103</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px;  text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px;  text-align:center"	>04:22:45</td>							
+						</tr>
+						<tr class="tag-tr even">
+							<td class="tag-td " style="width:140px;  text-align:left"	>AC1004</th>
+							<td class="tag-td " style="width:240px;  text-align:left"	>Room Air Conditioner</td>
+							<td class="tag-td " style="width:130px;  text-align:center"	>Rm104</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>01-12-2017</td>
+							<td class="tag-td " style="width:240px;  text-align:center"	>Cleaning</td>
+							<td class="tag-td " style="width:180px;  text-align:center"	>02-12-2017</td>							
+							<td class="tag-td " style="width:190px;  text-align:center"	>05:22:45</td>							
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+			<div class="row">
+				<div class="col-md-6 ">
+					<div class="col-md-1 ">
+					LEGEND:
+					</div>
+					<div class="col-md-9 " >
+						<div class="legend" >
+							<p ><div class="green" >	</div> Below 15 days</p>
+							<p ><div class="yellow" >	</div> Below  7 days</p>					
+							<p ><div class="red" >		</div> Below  3 days</p>					
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="pull-right" style="margin-top:20pt;">
+						<button class="btn btn-primary" type="submit"><i class="fa fa-print"></i></button>
+						<button class="btn btn-primary" type="submit"><i class="fa fa-download"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+	</div>		
+</div>
+
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="js/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="js/mdb.min.js"></script>
+<!--Custom scripts-->
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/gallery-modal.js"></script>
+	
+<script>
+        // SideNav Initialization
+        $(".button-collapse").sideNav();
+
+        var container = document.getElementById('slide-out');
+        Ps.initialize(container, {
+            wheelSpeed: 2,
+            wheelPropagation: d,
+            minScrollbarLength: 50
+        });
+	
+</script>
+</body>
+
+</html>
