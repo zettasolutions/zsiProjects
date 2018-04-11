@@ -19,6 +19,7 @@
 	
 	<!-- My Style -->
 	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/zTable.css">
 	
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
@@ -30,10 +31,9 @@
 		margin-left:-5px;
 		margin-right:5px;	
 	}
-	textarea.md-textarea {
-            height: 12rem !important;
+	textarea.md-textarea {        height: 12rem !important;
         }
-		.user-dash{line-height: 18px;margin-right: 15px;}
+	.user-dash{line-height: 18px;margin-right: 15px;}
 	</style>
 </head>
 
@@ -59,11 +59,12 @@
 					<ul class="collapsible collapsible-accordion">
 						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/index.html"><i class="fa fa-home"></i> PMS HOME</a></li>
 						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/maintenance_schedule-tech.html"><i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a></li>
-						<li><a class="collapsible-header waves-effect arrow-r active" href="../technician/schedule_alert-tech.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT <span class="badge badge-danger"> 2</span></a></li>
-						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/inspection_request-tech.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST <span class="badge badge-danger"> 2</span></i></a></li>
-						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/inspection_report_list-tech.html"><i class="fa fa-wrench"></i> INSPECTION REPORT </a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/schedule_alert-tech.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT <span class="badge badge-danger"> 2</span></a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/inspection_request-tech.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST <span class="badge badge-danger"> 2</span></a></li>
+						<li><a class="collapsible-header waves-effect arrow-r active" href="../technician/inspection_report_list-tech.html"><i class="fa fa-wrench"></i> INSPECTION REPORT </a></li>
 						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/maintenance_report-tech.html"><i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a></li>
-						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/messages-tech.html"><i class="fa fa-envelope"></i> MESSAGES <span class="badge badge-danger"> 3</span></a></li>						
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/messages-tech.html"><i class="fa fa-envelope"></i> MESSAGES <span class="badge badge-danger"> 3</span></a></li>
+						
 					</ul>
 				</li>
 				<!--Search Form-->
@@ -116,19 +117,47 @@
 	<div class="container-fluid page">
 		<div class="row">			
 			<div class="pageTitle">
-			<span>SCHEDULE ALERT</span>
+			<span>INSPECTION REPORT LIST</span>
 			</div>
 		</div>
 		<div class="row">			
 			<div class="col-md-2"></div>
-			<div class="col-md-8 zPanel">				
+			<div class="col-md-8 zPanel">
+				<div class="zTable">
+				<table>
+					<thead>
+						<tr class="tag-tr ">
+							<th class="tag-th " style="width:140px; text-align:left"	>INSPECTION REPORT ID</th>
+							<th class="tag-th " style="width:250px; text-align:left"	>INSPECTION REPORT TITLE</th>
+							<th class="tag-th " style="width:200px; text-align:center"	>LOCATION/DEPARTMENT</th>
+							<th class="tag-th " style="width:300px; text-align:center"	>COMPLIANT/PROBLEM DESCRIPTION</th>							
+							<th class="tag-th " style="width:180px; text-align:center"	>REPORT DATE</th>
+						</tr>						
+					</thead>
+					<tbody">
+						<tr class="tag-tr odd">
+							<td class="tag-td " style="width:140px; text-align:left"	>03252018</th>
+							<td class="tag-td " style="width:250px; text-align:left"	>Air conditioner freeze</td>
+							<td class="tag-td " style="width:200px; text-align:center"	>Rm101</td>
+							<td class="tag-td " style="width:300px; text-align:center"	>Frozen Aircon</td>
+							<td class="tag-td " style="width:100px; text-align:center"	></td>
+							
+						</tr>
+						<tr class="tag-tr even">
+							<td class="tag-td " style="width:140px; text-align:left"	>03242018</th>
+							<td class="tag-td " style="width:250px; text-align:left"	>Canteen photocopier machine</td>
+							<td class="tag-td " style="width:200px; text-align:center"	>Canteen1</td>
+							<td class="tag-td " style="width:300px; text-align:center"	>Computer</td>							
+							<td class="tag-td " style="width:180px; text-align:center"	></td>														
+						</tr>
+					</tbody>
+				</table>
 				
 			</div>
-			<div class="col-md-2"></div>
-			
+			</div>
+			<div class="col-md-2"></div>			
 		</div>		
 	</div>
-	
 
     <!-- SCRIPTS -->
     <!-- JQuery -->
