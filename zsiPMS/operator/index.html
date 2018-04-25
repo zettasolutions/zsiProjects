@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 	
-    <title>PMS-Home Page</title>
+   <title>Technician Dashboard</title>
 	
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 	
     <!-- Material Design Bootstrap -->
-    <link rel="stylesheet" href="css/mdb.min.css">
+    <link rel="stylesheet" href="../css/mdb.min.css">
 	
 	<!-- My Style -->
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/full-slider.css">
-	<link rel="stylesheet" href="css/gallery.css">
+	<link rel="stylesheet" href="../css/style.css">	
+	<link rel="stylesheet" href="../css/zTable.css">
 	
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
@@ -30,75 +28,106 @@
 	}
 	.side-nav .collapsible .fa{
 	margin-left:-5px;
-	margin-right:5px;
+	margin-right:5px;	
+	}	
+	table thead tr th{
+	font-weight:bold;
 	}
-	.sideNavbg{}
-	<!-- .bg{ -->
-	<!-- background: #74ebd5;  /* fallback for old browsers */ -->
-<!-- background: -webkit-linear-gradient(to right, #ACB6E5, #74ebd5);  /* Chrome 10-25, Safari 5.1-6 */ -->
-<!-- background: linear-gradient(to right, #ACB6E5, #74ebd5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ -->
-
-	<!-- } -->
+	.dash{
+		padding-top:5px;
+	}
+	div.green {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: green; 
+		border: 0px;
+	}
+	div.yellow {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: yellow; 
+		border: 0px;
+	}
+	div.red {
+		display:inline-block;
+		width: 15px; 
+		height: 15px; 
+		background-color: red; 
+		border: 0px;
+	}
+	div.legend p{
+		margin-bottom:0rem;
+		
+	}
+	div.legend{font-size:8pt; !important}
+	.user-dash{line-height: 18px;margin-right: 15px;}
 	</style>
 </head>
 
 <body class="fixed-sn black-skin">
 
-    <!--Main Navigation-->
-	<div class="pageHeader wrapper">
-            <!-- Sidebar Holder -->
-            <nav id="sidebar">
-    <header>
-        <!-- Sidebar navigation -->
-        <ul id="slide-out" class="side-nav fixed custom-scrollbar bg" style="background-image: url(images/gears.jpg);">
-            <!-- Logo -->
-				<li class="logo-sn waves-effect">
-					<div class=" text-center">
-						<a href="#" class="pl-0"><img src="images/pms.jpg" class=""></a>
-					</div>
+<!--Main Navigation-->
+<div class="pageHeader wrapper">
+	<!-- Sidebar Holder -->
+	<nav id="sidebar">
+		<header>
+			<!-- Sidebar navigation -->
+			<ul id="slide-out" class="side-nav fixed custom-scrollbar bg" style="background-image: url(../images/gears.jpg);">
+				<!-- Logo -->
+					<li class="logo-sn waves-effect">
+						<div class=" text-center">
+							<a href="#" class="pl-0"><img src="../images/pms.jpg" class=""></a>
+						</div>
+					</li>
+				<!--/. Logo -->
+
+				<!-- Side navigation links -->
+				<li>
+					<ul class="collapsible collapsible-accordion">
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/index.html"><i class="fa fa-home"></i> PMS HOME</a></li>
+						<li><a class="collapsible-header waves-effect arrow-r active" href="../technician/maintenance_schedule-tech.html"><i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/schedule_alert-tech.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT  <span class="badge badge-danger"> 2</span></a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/inspection_request-tech.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST</i></a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/inspection_report_list-tech.html"><i class="fa fa-wrench"></i> INSPECTION REPORT </a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/maintenance_report-tech.html"><i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/messages-tech.html"><i class="fa fa-envelope"></i> MESSAGES <span class="badge badge-danger"> 5</span></a></li>
+						
+					</ul>
 				</li>
-            <!--/. Logo -->
-
-            <!-- Side navigation links -->
-            <li>
-                <ul class="collapsible collapsible-accordion">
-                    <li><a class="collapsible-header waves-effect arrow-r active" href="index.html"><i class="fa fa-home"></i> PMS HOME</a></li>
-					<li><a class="collapsible-header waves-effect arrow-r" href="technician/maintenance_schedule-tech.html"><i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a></li>
-                    <li><a class="collapsible-header waves-effect arrow-r" href="technician/schedule_alert-tech.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT</a></li>
-                    <li><a class="collapsible-header waves-effect arrow-r" href="technician/inspection_request-tech.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST</i></a></li>
-	                <li><a class="collapsible-header waves-effect arrow-r" href="technician/maintenance_report-tech.html"><i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a></li>
-					<li><a class="collapsible-header waves-effect arrow-r" href="technician/messages-tech.html"><i class="fa fa-envelope"></i> MESSAGES</a></li>
+				<!--Search Form-->
+				<li>
+					<form class="search-form" role="search">
+						<div class="form-group waves-effect">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+					</form>
+				</li>
+				<!--/.Search Form-->
+				<!--/. Side navigation links -->
+				<div class="sidenav-bg mask-strong"></div>
+			</ul>
+			<!--/. Sidebar navigation -->
+			<!-- Navbar top-->
+			<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+				<!-- SideNav slide-out button -->
+				<div class="float-left">
+					<a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fa fa-bars"></i></a>
+				</div>				
+				<!-- Breadcrumb-->
+				<div class="breadcrumb-dn mr-auto">
+					<p>Preventive & Maintenance System</p>
 					
-                </ul>
-            </li>
-			<!--Search Form-->
-            <li>
-                <form class="search-form" role="search">
-                    <div class="form-group waves-effect">
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                </form>
-            </li>
-            <!--/.Search Form-->
-            <!--/. Side navigation links -->
-            <div class="sidenav-bg mask-strong"></div>
-        </ul>
-        <!--/. Sidebar navigation -->
-
-        <!-- Navbar top-->
-        <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
-            <!-- SideNav slide-out button -->
-            <div class="float-left">
-                <a href="#" data-activates="slide-out" class="button-collapse black-text"><i class="fa fa-bars"></i></a>
-            </div>
-            <!-- Breadcrumb-->
-            <div class="breadcrumb-dn mr-auto">
-                <p>Preventive & Maintenance System</p>
-            </div>
-			<!--Circle Image-->
-			<div class="dropdown">
+				</div>
+				<div class="user-dash">
+					Technician's Dashboard <br>
+					WELCOME, <i style="color:red">Jaypee</i>
+				</div>
+				<!--Circle Image-->
+				<div class="dropdown">
 			  <a href="#" data-toggle="dropdown">
-				<img src="images/male-circle.png" class="rounded-circle" style="width: 30px; float: right;">
+				<img src="../images/male-circle.png" class="rounded-circle" style="width: 30px; float: right;">
 			  </a>
 			  
 			  <ul class="dropdown-menu">
@@ -107,69 +136,42 @@
 				<li><a href="#">JavaScript</a></li>
 			  </ul>
 			</div>
-        </nav>
-        <!-- /.Navbar -->
-
-    </header>
-	</nav>
+			</nav>
+			<!-- /.Navbar -->	
+		</header>
+	</nav>		
+</div>
+<div class="container-fluid page">
+	<div class="row">			
+		<div class="pageTitle">
+		<span>Technician Dashboard Page</span>
+		</div>
 	</div>
-	
-	<!-- CAROUSEL -->
-	<header>
-      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner" role="listbox">
-          <div class="carousel-item active" style="background-image: url('images/bg1.png')">
-            <div class="carousel-caption d-none d-md-block">
-              <!-- <h3>Jollibee</h3> -->
-              <!-- <p>Bida ang saya</p> -->
-            </div>
-          </div>
-          <div class="carousel-item" style="background-image: url('images/bg2.jpg')">
-            <div class="carousel-caption d-none d-md-block">
-              <!-- <h3>Jollibee in Mez2</h3> -->
-              <!-- <p>Bida ang saya</p> -->
-            </div>
-          </div>
-          <div class="carousel-item" style="background-image: url('images/bg3.jpg')">
-            <div class="carousel-caption d-none d-md-block">
-              <!-- <h3>Jollibe in Gaisano Island Mall</h3> -->
-              <!-- <p>Bida ang saya</p> -->
-            </div>
-          </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-    </header> 
-		
-    <!-- SCRIPTS -->
-    <!-- JQuery -->
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="js/popper.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="js/bootstrap.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="js/mdb.min.js"></script>
-    <!--Custom scripts-->
-	<script src="js/bootstrap.bundle.min.js"></script>
-	<script src="js/gallery-modal.js"></script>
+	<div class="row ">			
+		<div class="col-md-2"></div>
+		<div class="col-md-8 zPanel">				
+		Needs Technician Dashboard Home page design
+		</div>
+		<div class="col-md-2"></div>
+	</div>		
+</div>
+
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script src="../js/jquery-3.2.1.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="../js/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="../js/bootstrap.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="../js/mdb.min.js"></script>
+<!--Custom scripts-->
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/gallery-modal.js"></script>
 	
 <script>
         // SideNav Initialization
         $(".button-collapse").sideNav();
-
         var container = document.getElementById('slide-out');
         Ps.initialize(container, {
             wheelSpeed: 2,

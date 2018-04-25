@@ -12,16 +12,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 	
     <!-- Material Design Bootstrap -->
-    <link rel="stylesheet" href="css/mdb.min.css">
+    <link rel="stylesheet" href="../css/mdb.min.css">
 	
 	<!-- My Style -->
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/full-slider.css">
-	<link rel="stylesheet" href="css/gallery.css">
-	
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/zTable.css">
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 	<style>
@@ -30,10 +28,9 @@
 	}
 	.side-nav .collapsible .fa{
 	margin-left:-5px;
-	margin-right:5px;
-	
+	margin-right:5px;	
 	}
-	
+	.user-dash{line-height: 18px;margin-right: 15px;}
 	</style>
 </head>
 
@@ -45,26 +42,26 @@
         <nav id="sidebar">
     <header>
         <!-- Sidebar navigation -->
-        <ul id="slide-out" class="side-nav fixed custom-scrollbar bg" style="background-image: url(images/gears.jpg);">
+        <ul id="slide-out" class="side-nav fixed custom-scrollbar bg" style="background-image: url(../images/gears.jpg);">
             <!-- Logo -->
 				<li class="logo-sn waves-effect">
 					<div class=" text-center">
-						<a href="#" class="pl-0"><img src="images/pms.jpg" class=""></a>
+						<a href="#" class="pl-0"><img src="../images/pms.jpg" class=""></a>
 					</div>
 				</li>
             <!--/. Logo -->
 
             <!-- Side navigation links -->
             <li>
-                <ul class="collapsible collapsible-accordion">
-                    <li><a class="collapsible-header waves-effect arrow-r" href="index.html"><i class="fa fa-home"></i> PMS HOME</a></li>
-					<li><a class="collapsible-header waves-effect arrow-r" href="maintenance_schedule_t-d.html"><i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a></li>
-                    <li><a class="collapsible-header waves-effect arrow-r" href="schedule_alert.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT</a></li>
-                    <li><a class="collapsible-header waves-effect arrow-r" href="inspection_request.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST</i></a></li>
-	                <li><a class="collapsible-header waves-effect arrow-r active" href="maintenance_report.html"><i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a></li>
-					<li><a class="collapsible-header waves-effect arrow-r" href="messages.html"><i class="fa fa-envelope"></i> MESSAGES</a></li>
-					
-                </ul>
+					<ul class="collapsible collapsible-accordion">
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/index.html"><i class="fa fa-home"></i> PMS HOME</a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/maintenance_schedule-tech.html"><i class="fa fa-gears"></i>  MAINTENANCE SCHEDULE</a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/schedule_alert-tech.html"><i class="fa fa-qq"></i> </i> SCHEDULE ALERT <span class="badge badge-danger"> 2</span></a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/inspection_request_list-tech.html"><i class="fa fa-wrench"></i> INSPECTION REQUEST <span class="badge badge-danger"> 2</span></i></a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/inspection_report_list-tech.html"><i class="fa fa-wrench"></i> INSPECTION REPORT </a></li>
+						<li><a class="collapsible-header waves-effect arrow-r active" href="../technician/maintenance_report-tech.html"><i class="fa fa-calendar"></i> MAINTENANCE REPORTS</a></li>
+						<li><a class="collapsible-header waves-effect arrow-r" href="../technician/messages-tech.html"><i class="fa fa-envelope"></i> MESSAGES <span class="badge badge-danger"> 3</span></a></li>						
+					</ul>
             </li>
 			<!--Search Form-->
             <li>
@@ -90,10 +87,14 @@
             <div class="breadcrumb-dn mr-auto">
                 <p>Preventive & Maintenance System</p>
             </div>
+			<div class="user-dash">
+					Technician's Dashboard <br>
+					WELCOME, <i style="color:red">Jaypee</i>
+				</div>
 			<!--Circle Image-->
 			<div class="dropdown">
 			  <a href="#" data-toggle="dropdown">
-				<img src="images/male-circle.png" class="rounded-circle" style="width: 30px; float: right;">
+				<img src="../images/male-circle.png" class="rounded-circle" style="width: 30px; float: right;">
 			  </a>
 			  
 			  <ul class="dropdown-menu">
@@ -107,67 +108,51 @@
 
     </header>
 	</nav>		
+		
 	</div>
 	<div class="container-fluid page">
 		<div class="row">			
 			<div class="pageTitle">
-			<span>MACHINE & MAINTENANCE SCHEDULE LIST</span>
+			<span>MAINTENANCE REPORT LIST</span>
 			</div>
 		</div>
 		<div class="row">			
 			<div class="col-md-2"></div>
-			<div class="col-md-8">
-					<!--Table-->
-				<table class="table table-striped">
-
-					<!--Table head-->
-					<thead>
-						<tr>
-							<th>MACHINE CODE</th>
-							<th>MACHINE NAME</th>
-							<th>LOCATION</th>
-							<th>DATE OF INSTALLATION</th>
-							<th>MODE OF MAINTENANCE</th>
-							<th>MAINTENANCE DATE</th>
-							<th>ALARM COUNTDOWN</th>
-						</tr>
-					</thead>
-					<!--Table head-->
-
-					<!--Table body-->
-					<tbody>
-						<tr>
-							<th scope="row">AC1001</th>
-							<td>Room Air Conditioner</td>
-							<td>Rm101</td>
-							<td>01-12-2017</td>
-							<td>Cleaning</td>
-							<td>02-12-2017</td>							
-							<td>02:22:45</td>							
-						</tr>
-						<tr>
-							<th scope="row">AC1002</th>
-							<td>Room Air Conditioner</td>
-							<td>Rm102</td>
-							<td>01-12-2017</td>
-							<td>Cleaning</td>
-							<td>02-12-2017</td>							
-							<td>03:22:45</td>							
-						</tr>
-						<tr>
-							<th scope="row">AC1003</th>
-							<td>Room Air Conditioner</td>
-							<td>Rm103</td>
-							<td>01-12-2017</td>
-							<td>Cleaning</td>
-							<td>02-12-2017</td>							
-							<td>04:22:45</td>							
-						</tr>
-					</tbody>
-					<!--Table body-->
-
-				</table>
-				<!--Table-->
+			<div class="col-md-8 zPanel">
+				<div class="zTable">
+					<table>
+						<thead>
+							<tr class="tag-tr ">
+								<th class="tag-th " style="width:140px; text-align:left"	>MAINTENANCE REPORT ID</th>
+								<th class="tag-th " style="width:350px; text-align:left"	>MAINTENANCE REPORT TITLE</th>								
+								<th class="tag-th " style="width:100px; text-align:center"	>REPORT DATE</th>
+							</tr>						
+						</thead>
+						<tbody">
+							<tr class="tag-tr odd">
+								<td class="tag-td " style="width:140px; text-align:left"	>03252018</th>
+								<td class="tag-td " style="width:350px; text-align:left"	>Air conditioner freeze</td>
+								<td class="tag-td " style="width:100px; text-align:center"	></td>
+							</tr>
+							<tr class="tag-tr even">
+								<td class="tag-td " style="width:140px; text-align:left"	>03242018</th>
+								<td class="tag-td " style="width:350px; text-align:left"	>Canteen photocopier machine</td>
+								<td class="tag-td " style="width:100px; text-align:center"	></td>								
+							</tr>
+						</tbody>
+					</table>					
+				</div>
+				<div class="row">
+					<div class="col-md-6 ">
+						
+					</div>
+					<div class="col-md-6">
+						<div class="pull-right" style="margin-top:20pt;">
+							<button class="btn btn-primary" type="submit"><i class="fa fa-print"></i></button>
+							<button class="btn btn-primary" type="submit"><i class="fa fa-download"></i></button>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-2"></div>
 		</div>		
@@ -176,16 +161,16 @@
 
     <!-- SCRIPTS -->
     <!-- JQuery -->
-    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="../js/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="../js/popper.min.js"></script>
     <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.js"></script>
     <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script type="text/javascript" src="../js/mdb.min.js"></script>
     <!--Custom scripts-->
-	<script src="js/bootstrap.bundle.min.js"></script>
-	<script src="js/gallery-modal.js"></script>
+	<script src="../js/bootstrap.bundle.min.js"></script>
+	<script src="../js/gallery-modal.js"></script>
 	
 <script>
         // SideNav Initialization
