@@ -272,7 +272,7 @@ var  ud='undefined'
                                         
                                     for (let _ctr = 1; _ctr <= _cs; _ctr++) {
                                         _index++;
-                                        _temp[(_index - 1)] = _$th;
+                                        _temp[(_index - 1)] = _$td;
                                     }
                                         
                                     //if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
@@ -455,10 +455,19 @@ var  ud='undefined'
                             }
                         });
                     }
+                    
+                    o.cache = cache;
+                    if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                 }
                 
                 return __obj;
             };
+            $.fn.addCover           = function(){
+                if( ! this.hasClass("zCover")) this.append('<div class="zCover active"></div>');
+                $.fn.removeCover = function(){
+                    this.removeClass('active');
+                }            
+            }            
             $.fn.addScrollbar       = function(o) {
                 var __obj   = this;
                 if ( ! __obj.length) { console.error("Target not found."); return false; }
@@ -500,27 +509,31 @@ var  ud='undefined'
                     var _this       = this[i];
                     var _$target    = $(_this);
                     var _offset     = _$target.offset();
-                    var _offW       = _this.offsetWidth;
-                    var _offH       = _this.offsetHeight;
+                    var _cW         = _this.clientWidth;
+                    var _cH         = _this.clientHeight;
                     
-                    if ((_offW || _offH) && _$target.css("overflow")) {
+                    if ( ! isUD(_$target.data("autoHide"))) continue;
+                    
+                    if ((_cW || _cH) && (_$target.css("overflow") === "hidden" || _$target.css("overflow") === "auto")) {
+                        _$target.scrollTop(0).scrollLeft(0);
                         if ( ! o.isHoverBR ) {
-                            _$target.mouseover(function() { this.style.overflow = "auto"; })
-                            .mouseout(function() { this.style.overflow = "hidden"; });
+                            _$target.off("mouseover, mouseout").on("mouseover", function() { this.style.overflow = "scroll"; })
+                            .mouseout(function() { this.style.overflow = "auto"; });
                         } else {
-                            $(window).mousemove(function (e) {
+                            _$target.off("mousemove, mouseout").on("mousemove", function(e) {
                                 var _x = e.pageX - _offset.left;
                                 var _y = e.pageY - _offset.top;
-                                if ((_offW - 17 < _x && _offW > _x) || (_offH - 17 < _y && _offH > _y)) {
+                                if ((_cW - 17 <= _x && _cW >= _x) || (_cH - 17 <= _y && _cH >= _y)) {
                                     _this.style.overflow = "auto";
                                 } else { _this.style.overflow = "hidden"; }
-                            });
+                            }).mouseout(function() { _this.style.overflow = "hidden"; });
                         }
-                    } else { alert("Style height, width, and overfow are undefined."); }
+                        _$target.data("autoHide",true);
+                    } else { console.error("%o style height, width, and overflow are undefined.", _$target); }
                 }
                 
                 return this;
-            };
+            }; 
             $.fn.addClickHighlight  = function(){
                 var $tr = this.find("tbody > tr");
                 $tr.unbind("click");
@@ -1901,7 +1914,6 @@ var  ud='undefined'
                                 // Set table initiated.
                                 zsi.__getTableObject(__obj).isInitiated = true;
                                 
-                                if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                                 if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:data});
                                 __obj.addScrollbar(o); // This must be after onComplete()
                             }          
@@ -1930,7 +1942,6 @@ var  ud='undefined'
                             createTr(this);
                         });
                         
-                        if(o.rowColSpan) __obj.rowColSpan(o.rowColSpan);
                         if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:o});
                         __obj.addScrollbar(o); // This must be after onComplete()
                     }
@@ -1948,76 +1959,149 @@ var  ud='undefined'
                 _$imagePanel.scrollTop(0).scrollLeft(0);
             };
             $.fn.rowColSpan         = function(o){
-                var  _$tbl = this
-                    ,_cls  = "hasDuplicate"
-                    ,_cls2 = "toBeRemove"
-                    ,_isAllCols=(o.columns ? false : true )
+                var _$tbl           = this
+                    ,_$thead        = _$tbl.children("thead")
+                    ,_$tbody        = _$tbl.children("tbody")
+                    ,_cls           = "hasDuplicate"
+                    ,_cls2          = "toBeRemove"
+                    ,_isAllCols     = ( ! isUD(o.columns) ? false : true )
+                    
+                    ,_isGroupBy     = ( ! isUD(o.groupBy) ? true : false )
+                    ,_colIndex      = (_isGroupBy ? o.groupBy.columnIndex : null )
+                    ,_notInclude    = (_isGroupBy ? o.groupBy.notInclude : null )
+                    ,_targets       = (_isGroupBy ? o.groupBy.targets : null )
                 ;
-                var _markElements = function(els,spanType){
+                
+                // To get number of columns in a row
+                var _totalColumns = 0;
+                _$thead.find("tr:first-child th").each(function() {
+                    var colspan = $(this).attr("colspan");
+                    if ( ! isUD(colspan)) { _totalColumns += parseInt(colspan, 10); }
+                    else { _totalColumns++; }
+                });
+                
+                var _markElements = function(els,spanType) {
                     //create list of elements
-                    var list=[];
-                    var lastEl=null;
-                    var lastElExist=null;
-                    for(var x=0;x<els.length;x++){
-                        var curEl = els[x];
-                        var nextEl = els[x+1];
-                        var curVsNext = (nextEl ? (curEl.innerText == nextEl.innerText? true : false ) : false); 
-                        var curVsLast = (lastEl ? (curEl.innerText == lastEl.innerText? true : false ) : false);
-                        if(curVsNext  || curVsLast) {
-                            var searchKey=lastElExist;
-                            if(lastElExist === null ||  (curVsNext && ! curVsLast) ){
-                                searchKey = curEl;  
+                    var list        = [];
+                    var lastEl      = null;
+                    var lastRefText = null;
+                    var lastElExist = null; // For span with group by
+                    var lastElExist2 = null; // For regular span
+                    
+                    loopEls : 
+                    for (var x = 0; x < els.length; x++) {
+                        var curEl       = els[x];
+                        var $culEl      = $(curEl);
+                        var isNotInclude = false;
+                        
+                        if (_isGroupBy) {
+                            // Check if the current column is the same as notInclude array
+                            loopNotInclude : 
+                            for (var i = 0; i < _notInclude.length; i++) {
+                                var _index = _notInclude[i];
+                                if ($culEl.index() === _index) {
+                                    isNotInclude = true;
+                                    break loopNotInclude;
+                                }
                             }
-                            var _indexes = list.findIndexes( {keyName:"key",  value: searchKey } );
-                            if(_indexes.length === 0){
-                                lastElExist= curEl;
-                                list.push({key: curEl, items:[curEl]});
-                            }else{
-                                var _i = _indexes[0];
-                                var item = list[_i];
-                                item.items.push(curEl);
-                            }
-
-                        }else{
-                            lastElExist =null;
+                            // If element is the same index of columnIndex parameter
+                            if ($culEl.index() === _colIndex) isNotInclude;
                         }
                         
-                        lastEl = curEl;
-                    }                    
+                        if ( ! isNotInclude && _isGroupBy) {
+                            var $siblings   = $culEl.parent().find("td");
+                            var curRefText  = $siblings[_colIndex].innerText;
+                            var searchKey   = (lastElExist !== null) ? lastElExist : curEl;
+                            var indexes     = list.findIndexes({ keyName:"key" , value:searchKey });
+                            
+                            if (lastRefText !== curRefText) {
+                                lastElExist = curEl;
+                                list.push({ key:curEl , items:[curEl] });
+                            } else {
+                                var _i      = indexes[0];
+                                var item    = list[_i];
+                                var isTarget = false;
+                                
+                                loopTargets : 
+                                for (var i = 0; i < _targets.length; i++) {
+                                    var _index = _targets[i];
+                                    if ($culEl.index() === _index) {
+                                        isTarget = true;
+                                        break loopTargets;
+                                    }
+                                }
+                                
+                                if (isTarget) {
+                                    lastElExist = curEl;
+                                    list.push({ key:curEl , items:[curEl] });
+                                } else {
+                                    item.items.push(curEl);
+                                }
+                            }
+                            
+                            lastRefText = curRefText;
+                        } else {
+                            var nextEl      = els[x + 1];
+                            var curVsNext   = (nextEl ? (curEl.innerText == nextEl.innerText? true : false ) : false); // Applicable to 1st row until 2nd to the last row
+                            var curVsLast   = (lastEl ? (curEl.innerText == lastEl.innerText? true : false ) : false); // Applicable to last row until 2nd row
+                            
+                            if (curVsNext || curVsLast) {
+                                var searchKey = lastElExist2;
+                                if (lastElExist2 === null || (curVsNext && ! curVsLast)) {
+                                    searchKey = curEl;
+                                }
+                                
+                                var indexes = list.findIndexes({ keyName:"key" , value:searchKey });
+                                if (indexes.length === 0) {
+                                    // If curEl is not found in the list add it to list array
+                                    lastElExist2 = curEl;
+                                    list.push({ key:curEl , items:[curEl] });
+                                } else {
+                                    // Else use the found index and push the current found element
+                                    var _i      = indexes[0];
+                                    var item    = list[_i];
+                                    item.items.push(curEl);
+                                }
+                            } else {
+                                lastElExist2 = null;
+                            }
+                            
+                            lastEl = curEl;    
+                        }
+                    }
+                    
                     //add class, add rowspan on 1st found element.
                     $.each(list, function(i) {
                         var attr = {};
-                        attr[spanType] = this.items.length;
-                        $(this.items[0]).addClass(_cls).attr(attr);
-                   });
-                     
-                   //start tagging elements - to be remove.     
-                   $.each(list, function(i) {
-                       $.each(this.items, function(i) {
-                           if( ! $(this).hasClass(_cls) ){
-                             $(this).addClass(_cls2);
-                           }
-                       });        
-                   });                    
-                }; 
-
+                        var items = this.items;
+                        attr[spanType] = items.length;
+                        $(items[0]).addClass(_cls).attr(attr);
+                        
+                        //start tagging elements - to be remove.
+                        $.each(items, function(i) {
+                            if ( ! $(this).hasClass(_cls) ) {
+                                $(this).addClass(_cls2);
+                            }
+                        });
+                    });
+                };
+                
                 //rowspan
-                if(o.type=="row"){
-                    $.each((o.columns ? o.columns : _$tbl.find("th")) ,function(i){
-                        var index = this;
-                        var thCellLength    = _$tbl.find("th").length ;
+                if (o.type=="row") {
+                    for (var i = 0; i < (_isAllCols ? _totalColumns : o.columns.length); i++) {
+                        var index = (_isAllCols) ? i : o.columns[i];
                         var colElements = [];
-                        $.each( _$tbl.find("tbody > tr") ,function(){
-                             var trCellLength = $(this).find("td").length;
-                             var extraCells = thCellLength - trCellLength;
-                             colElements.push(  ( $(this).find("td").eq(( _isAllCols ? i : index) - extraCells )).get(0));
+                        
+                        $.each(_$tbl.find("tbody > tr"), function() {
+                            var $self = $(this);
+                            var trCellLength = $self.find("td").length;
+                            var extraCells = _totalColumns - trCellLength;
                             
+                            colElements.push( $self.find("td").get(index - extraCells) );
                         });
                         _markElements(colElements,"rowspan");
-                       
-                    }); 
+                    }
                 }
-                
                 
                 //colspan
                 if(o.type=="column"){
@@ -2029,7 +2113,7 @@ var  ud='undefined'
                         else{
                             var _$arr=$([]);
                             $.each(o.columns,function(i){
-                                 _$arr.push(_$tr.find("td")[this]);
+                                _$arr.push(_$tr.find("td")[this]);
                             });
                             _markElements(_$arr,"colspan");
                         }
@@ -2038,8 +2122,7 @@ var  ud='undefined'
                 
                 //remove elements.
                 _$tbl.find("." + _cls2).remove();
-               
-            };       
+            };
             $.fn.serializeExclude   = function(p_arr_exclude) {
               var _arr =  this.serializeArray();
                var str = '';
@@ -2242,6 +2325,7 @@ var  ud='undefined'
                                     +'</div>');
             
                 $p = this.find(_pId);
+                if( ! isUD(o.isAddCover) && o.isAddCover === true ) $p.addCover();
                 $p.css({
                      "visibility"   : "visible"
                     ,"opacity"      : 1
@@ -2512,7 +2596,37 @@ var  ud='undefined'
                 });
                 return r;
             };
-            
+            Array.prototype.groupBy = function(colNames){
+                var _groups = [];
+                var _setItem = function(name,value){
+                     var _r=null;
+                        $.each(_groups, function() { 
+                            if(this.name === name) {
+                                _r=this;
+                                return false; 
+                            }
+                        });
+                    if(_r){
+                        _r.items.push(value);
+                    }
+                    else{
+                        var _item = {name:name,items:[]};
+                        _item.items.push(value);
+                         _groups.push(_item);
+                    }
+                };
+                
+                $.each(this,function(){
+                    var _self = this;
+                    var _group ="";
+                    $.each(colNames,function(){
+                        if(_group !=="") _group += "_";
+                        _group +=_self[this];
+                    });
+                    _setItem(_group,this);
+                });
+                return _groups;
+            };
             Array.prototype.isExists = function(o){
                 var r =false;
                 $.each(this,function(){
@@ -3330,4 +3444,3 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
-                                 
