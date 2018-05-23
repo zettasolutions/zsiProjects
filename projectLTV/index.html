@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LTV | Home</title>
+	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="public/css/fontawesome.css">
+	<link rel="stylesheet" type="text/css" href="public/css/style.css">
+	<link rel="stylesheet" type="text/css" href="public/css/jquery-ui.css">
+
+	<link rel="icon" href="public/images/logo_krn_icon.ico">
+</head>
+<body>
+	<nav>
+		<div class="nav-fade"></div>
+		<a href="#"><img src="public/images/logo.png" class="nav-logo"></a>
+		<div class="row fullWidth">
+			<div class="col-md-9 left-nav">
+				<div class="left-nav-menu">
+					<div class="item link"><a class="" href="#">LOG IN</a></div>
+					<div class="separator"></div>
+				    <div class="item link"><a class="" href="#">SIGN UP</a></div>
+				    <div class="separator"></div>
+				    <div class="item link"><a class="" href="#">CATEGORIES</a></div>
+				</div>
+			</div>
+			<div class="col-md-3 right-nav">
+				<div class="row">
+					<div class="col-md-9  mt-2 no-padding">
+						<input type="text" class="ltv-input" placeholder=" SEARCH HERE...">
+					</div>
+					<div class="col-md-2 mt-2">
+						<button class="btn btn-sm btn-default"><i class="fas fa-search"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="col-md-12">
+		<div class="row" id="sub-adv">
+			<div class="col-md-12" style="height:45px;"></div>
+			<div class="col-md-12" style="height:470px;padding:0px;">
+				<img src="public/images/big-adv5.jpg" id="sub-adv-img">
+				<button onclick="mainAdvLoop('next')" class="sub-adv-img-btn btn btn-danger" style=""><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+				<button onclick="mainAdvLoop('prev')" class="sub-adv-img-btn btn btn-danger" style="right: 10px;"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+			</div>
+			<div id="sub-adv" class="col-md-4">
+				<button class="btn btn-danger" style="border-radius:unset;width:100%;margin:3px;">CATEGORIES</button>
+				<div class="sub-adv-item" style="position:relative;cursor:pointer;width:400px;height:128px;overflow:hidden;">
+					<img src="public/images/women.jpg" class="shopby-img">
+					<div style="width:inherit;height:124px;position:absolute;bottom:0;left:-100%;background-color:#ececec;transition:left 800ms ease;">
+						<div style="width:80%;margin:0 auto;">
+							<div class="row">
+								<div class="col-md-6" style="margin-top:10px;">
+									<ul class="cat-list">
+										<li><span style="height:10px;" class="link2"><a href="">BLOUSES</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">TOPS & TEES</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">DRESSES</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">SHOES</a></span></li>
+									</ul>
+								</div>
+								<div class="col-md-6" style="margin-top:10px;">
+									<ul class="cat-list">
+										<li><span style="height:10px;" class="link2"><a href="">WATCHES</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">HANDBAGS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">UNDIES</a></span></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sub-adv-item" style="position:relative;cursor:pointer;width:400px;height:128px;overflow:hidden;">
+					<img src="public/images/men.jpg" class="shopby-img">
+					<div style="width:inherit;height:124px;position:absolute;bottom:0;left:-100%;background-color:#ececec;transition:left 800ms ease;">
+						<div style="width:80%;margin:0 auto;">
+							<div class="row">
+								<div class="col-md-6" style="margin-top:10px;">
+									<ul class="cat-list">
+										<li><span style="height:10px;" class="link2"><a href="">TEES</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">POLOS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">JEANS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">TRACK WEAR</a></span></li>
+									</ul>
+								</div>
+								<div class="col-md-6" style="margin-top:10px;">
+									<ul class="cat-list">
+										<li><span style="height:10px;" class="link2"><a href="">FORMAL SHIRTS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">SUITS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">WATCHES</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">WALLETS</a></span></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sub-adv-item" style="position:relative;cursor:pointer;width:400px;height:128px;overflow:hidden;">
+					<img src="public/images/kid.webp" class="shopby-img">
+					<div style="width:inherit;height:124px;position:absolute;bottom:0;left:-100%;background-color:#ececec;transition:left 800ms ease;">
+						<div style="width:80%;margin:0 auto;">
+							<div class="row">
+								<div class="col-md-6" style="margin-top:10px;">
+									<ul class="cat-list">
+										<li><span style="height:10px;" class="link2"><a href="">T-SHIRTS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">SHORTS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">3/4THS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">INFANT</a></span></li>
+									</ul>
+								</div>
+								<div class="col-md-6" style="margin-top:10px;">
+									<ul class="cat-list">
+										<li><span style="height:10px;" class="link2"><a href="">SNEAKERS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">JUMPSUITS</a></span></li>
+										<li><span style="height:10px;" class="link2"><a href="">INNERWEAR</a></span></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8" id="shopbybrand">
+				<button class="btn btn-danger" style="border-radius:unset;width: 100%;margin:3px;">SHOP BY FEATURED BRANDS</button>
+			</div>
+			<div class="col-md-12"><hr><button class="btn btn-danger" style="border-radius:unset;width:100%;margin:3px;">TOP SELLERS</button></div>
+			<div class="col-md-12" id="top-sellers" style="overflow:hidden;">
+				<div class="top-seller-card">
+					<img src="public/images/topseller1.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> BLUE JACKET</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller2.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> WHITE SHIRT</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller3.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> GREEN SHIRT</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller4.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> BLACK SHIRT</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller5.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ASIAN WOMAN FOR SALE</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller6.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> RED DRESS</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller7.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> BLUE DRESS</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller8.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> LIGHT BLUE DRESS</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller9.jpg">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> BLACK DRESS</button>
+				</div>
+				<div class="top-seller-card">
+					<img src="public/images/topseller11.jpg" style="position:relative;width:155%;left:-77px;top:-48px;">
+					<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> BUY ME PLS</button>
+				</div>
+			</div>
+			<div class="col-md-12" style="height:45px;"></div>
+		</div>
+	</div>
+	<footer>
+		<div class="nav-fade" style="height:100%;"></div>
+	</footer>
+</body>
+	<script type="text/javascript" src="public/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="public/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="public/js/jquery-ui.min.js"></script>
+	<script type="text/javascript">
+		var a = 1,
+			b = 1;
+
+		$(document).ready(function(){
+			$("#sub-adv").on("mouseover",".sub-adv-item", function(){
+				$(this).find('div').get(0).style.left = '0';
+			});
+
+			$("#sub-adv").on("mouseleave",".sub-adv-item", function(){
+				$(this).find('div').get(0).style.left = '-100%';
+			});
+
+			//document.getElementById('mainvideo').play();
+			mainAdvLoop();
+			loadBrandThumbnails();
+		});
+		function loadBrandThumbnails(){
+			if(b < 13){
+				setTimeout(function(){
+					var thumbnail = '<div class="shop-by-brand-card" id="sbbc-'+b+'"><img src="public/images/featuredbrand'+b+'.jpg" width="100px" height="100px" style="vertical-align:unset;"></div>';
+					$("#shopbybrand").append(thumbnail);
+					$("#sbbc"+b).css("width","0px").animate({width:'toggle'},350);
+					b++;
+					loadBrandThumbnails();
+				}, 150);
+			}
+		}
+
+		function mainAdvLoop(opt){
+			if(opt === "next"){
+				a === 5 ? a = 1 : a++;
+				document.getElementById('sub-adv-img').setAttribute("src","public/images/big-adv" + a + ".jpg");
+			}else if(opt === "prev"){
+				a === 1 ? a = 5 : a--;
+				document.getElementById('sub-adv-img').setAttribute("src","public/images/big-adv" + a + ".jpg");
+			}else{
+				a === 5 ? a = 1 : a++;
+				setTimeout(function(){
+					document.getElementById('sub-adv-img').setAttribute("src","public/images/big-adv" + a + ".jpg");
+					mainAdvLoop();
+				}, 5000);
+			}
+		}
+	</script>
+</html>
