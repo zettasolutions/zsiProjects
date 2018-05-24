@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LTV | Products</title>
+	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="public/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="public/css/style.css">
+	<link rel="stylesheet" type="text/css" href="public/css/jquery-ui.css">
+
+	<link rel="icon" href="public/images/logo_krn_icon.ico">
+</head>
+<body>
+	<nav>
+		<div class="nav-fade"></div>
+		<a href="index.html"><img src="public/images/logo.png" class="nav-logo"></a>
+		<div class="row fullWidth">
+			<div class="col-md-9 left-nav">
+				<div class="left-nav-menu">
+					<div class="item link"><a class="" href="login.html">LOG IN</a></div>
+					<div class="separator"></div>
+				    <div class="item link"><a class="" href="#">SIGN UP</a></div>
+				    <div class="separator"></div>
+				    <div class="item link"><a class="" href="products.html">PRODUCTS</a></div>
+				</div>
+			</div>
+			<div class="col-md-3 right-nav">
+				<div class="row">
+				    <div class="col-md-7  mt-2 no-padding">
+				        <input type="text" class="ltv-input" placeholder=" SEARCH HERE...">
+				    </div>
+				    <div class="col-md-2 mt-2">
+				        <button class="btn btn-sm btn-default" style="position: absolute;right: 28px;bottom: 3px;background-color: transparent;color: white;
+				  border-bottom:2px solid white;"><i class="fa fa-search" aria-hidden="true"></i></button>
+				    </div>
+				    <div class="col-md-2 mt-2">
+				        <button class="btn btn-sm btn-default"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="sidepanel">
+		<div id="sidepanel-btn"><center><h4><i id="sidepanel-filter" class="fa fa-cog" aria-hidden="true"></i></h4></center></div>
+		<div class="col-md-12" style="margin-top:50%;">
+			<h5>Filter By</h5>
+			<button style="float-right;position: absolute;right: 15px;top: -5px;" class="btn btn-default">Clear All</button>
+			<hr>
+			<div class="form-group">
+				<small>Sort By: </small>
+				<select class="form-control">
+					<option>Default</option>
+					<option>Price</option>
+					<option>Rating</option>
+					<option>Date Arrived</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<small>Category: </small>
+				<select class="form-control">
+					<option>All</option>
+					<option>Men</option>
+					<option>Women</option>
+					<option>Kids</option>
+					<option>Unisex</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<small>Apparel: </small>
+				<select class="form-control">
+					<option>All</option>
+					<option>Dress</option>
+					<option>Skirts</option>
+					<option>Jeans</option>
+					<option>Shoes</option>
+					<option>Wallets</option>
+					<option>Shirts</option>
+					<option>Bags</option>
+					<option>Hats/Caps</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<small>Size: </small>
+				<select class="form-control">
+					<option>All</option>
+					<option>XS</option>
+					<option>S</option>
+					<option>L</option>
+					<option>XL</option>
+					<option>XXL</option>
+					<option>Yo mama so fat when she walked past the tv, I missed 3 seasons of the walking dead. </option>
+				</select>
+			</div>
+			<div class="form-group">
+				<small>Color: </small>
+				<div class="filter-color-picker">
+					<ul class="list-group">
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox white"></div>White</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox red"></div>Red</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox orange"></div>Orange</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox yellow"></div>Yellow</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox green"></div>Green</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox blue"></div>Blue</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox indigo"></div>Indigo</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox purple"></div>Purple</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox violet"></div>Violet</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox gray"></div>Gray</li>
+					  <li class="list-group-item" style="text-align:right;"><div class="filter-colorbox black"></div>Black</li>
+					</ul>
+				</div>
+			</div>
+			<div class="form-group">
+				<small>Price: </small>
+				<div class="row">
+					<div class="col-md-6">
+						<input type="text" class="sliderValue form-control" data-index="0" value="10" />	
+					</div>
+					<div class="col-md-6">
+						<input type="text" class="sliderValue form-control" data-index="1" value="90" />
+					</div>
+					<div class="col-md-12 mt-3">
+						<div id="slider"></div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				 <button id="btnfilter" class="btn btn-danger float-right col-md-12"><i class="fa fa-filter"></i> Filter</button>
+			</div>
+		</div>
+	</div>
+	<div style="height:55px;"></div>
+	<div class="col-md-12" id="top-sellers" style="overflow:hidden;">
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">5 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller1.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">5 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller2.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">5 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller3.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">5 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller4.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">5 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller5.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">3 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller6.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">1 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller7.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">5 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller8.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<span class="rating">2 <i class="fa fa-star" style="color:gold;" aria-hidden="true"></i></span>
+			<img src="public/images/topseller9.jpg">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+		<div class="top-seller-card">
+			<div class="circle"></div>
+			<img src="public/images/topseller11.jpg" style="position:relative;width:155%;left:-77px;top:-48px;">
+			<button class="btn btn-dark top-seller-btn"><i class="fa fa-cart-plus"></i> ADD TO CART</button>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="public/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="public/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="public/js/jquery-ui.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#slider").slider({
+		        min: 0,
+		        max: 100,
+		        step: 1,
+		        values: [10, 90],
+		        slide: function(event, ui) {
+		            for (var i = 0; i < ui.values.length; ++i) {
+		                $("input.sliderValue[data-index=" + i + "]").val(ui.values[i]);
+		            }
+		        }
+		    });
+
+		    $("input.sliderValue").change(function() {
+		        var $this = $(this);
+		        $("#slider").slider("values", $this.data("index"), $this.val());
+		    });
+		});
+		$("#btnfilter").click(function(){
+			var elem 	= document.querySelector(".sidepanel");
+	      	document.getElementById("sidepanel-btn").flag = false;
+			elem.style.left = "";
+		});
+		$("#sidepanel-btn").click(function(){
+			var elem 	= document.querySelector(".sidepanel");
+			if(!this.flag){
+				this.flag = true;
+				elem.style.left = "0px";
+			}else{
+				this.flag = false;
+				elem.style.left = "";
+			}
+		});
+		$(document).click(function(evt){    
+		       	if(evt.target.classList == "sidepanel")
+		          return;
+		       	if($(evt.target).closest('.sidepanel').length)
+		          return;
+		      	var elem 	= document.querySelector(".sidepanel");
+		      	document.getElementById("sidepanel-btn").flag = false;
+				elem.style.left = "";
+		});
+
+		$(".filter-color-picker").find(".list-group-item").click(function(){
+			if(!$(this).hasClass("active")) $(this).addClass("active");
+			else $(this).removeClass("active");
+		});
+	</script>
+</html>

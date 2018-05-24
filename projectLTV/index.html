@@ -3,7 +3,7 @@
 <head>
 	<title>LTV | Home</title>
 	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
-	<link rel="stylesheet" href="public/css/fontawesome.css">
+	<link rel="stylesheet" href="public/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="public/css/style.css">
 	<link rel="stylesheet" type="text/css" href="public/css/jquery-ui.css">
 
@@ -12,25 +12,29 @@
 <body>
 	<nav>
 		<div class="nav-fade"></div>
-		<a href="#"><img src="public/images/logo.png" class="nav-logo"></a>
+		<a href="index.html"><img src="public/images/logo.png" class="nav-logo"></a>
 		<div class="row fullWidth">
 			<div class="col-md-9 left-nav">
 				<div class="left-nav-menu">
-					<div class="item link"><a class="" href="#">LOG IN</a></div>
+					<div class="item link"><a class="" href="login.html">LOG IN</a></div>
 					<div class="separator"></div>
 				    <div class="item link"><a class="" href="#">SIGN UP</a></div>
 				    <div class="separator"></div>
-				    <div class="item link"><a class="" href="#">CATEGORIES</a></div>
+				    <div class="item link"><a class="" href="products.html">PRODUCTS</a></div>
 				</div>
 			</div>
 			<div class="col-md-3 right-nav">
 				<div class="row">
-					<div class="col-md-9  mt-2 no-padding">
-						<input type="text" class="ltv-input" placeholder=" SEARCH HERE...">
-					</div>
-					<div class="col-md-2 mt-2">
-						<button class="btn btn-sm btn-default"><i class="fas fa-search"></i></button>
-					</div>
+				    <div class="col-md-7  mt-2 no-padding">
+				        <input type="text" class="ltv-input" placeholder=" SEARCH HERE...">
+				    </div>
+				    <div class="col-md-2 mt-2">
+				        <button class="btn btn-sm btn-default" style="position: absolute;right: 28px;bottom: 3px;background-color: transparent;color: white;
+				  border-bottom:2px solid white;"><i class="fa fa-search" aria-hidden="true"></i></button>
+				    </div>
+				    <div class="col-md-2 mt-2">
+				        <button class="btn btn-sm btn-default"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+				    </div>
 				</div>
 			</div>
 		</div>

@@ -3,24 +3,32 @@
 <head>
 	<title>LTV | Login</title>
 	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
-	<link rel="stylesheet" href="public/css/fontawesome.css">
+	<link rel="stylesheet" href="public/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="public/css/style.css">
 	<link rel="stylesheet" type="text/css" href="public/css/jquery-ui.css">
 
 	<link rel="icon" href="public/images/logo_krn_icon.ico">
 </head>
-<body>
+<body style="">
 	<div class="login-card">
-		<a href="#"><img src="public/images/logo.png" class="nav-logo"></a>
-		<div style="width:50%;margin:0 auto;" style="margin-top:3rem;">
-			<div class="form-group" style="">
-				<input type="text" name="username" style="width:100%;border:0px;border-bottom: 2.5px solid #23272b;background-color:transparent;" id="username" placeholder="Username">
+		<a href="index.html"><img src="public/images/logo.png" class="nav-logo"></a>
+		<div class="col-md-12" style="height:70px;"></div>
+		<div style="width:50%;margin:auto;">
+			<div class="col-md-12">
+				<div class="form-group" style="">
+					<small>Email Address: </small>
+					<input type="text" name="email" style="width:100%;border:0px;border-bottom: 2.5px solid #23272b;background-color:transparent;" id="email">
+				</div>
+				<div class="form-group" style="">
+					<small>Password: </small>
+					<input type="text" name="password" style="width:100%;border:0px;border-bottom: 2.5px solid #23272b;background-color:transparent;" id="password">
+				</div>
+				<button class="btn btn-dark btn-login"> LOGIN</button>
+				<a href="#" style="float:right;">Forgot your password?</a>
 			</div>
-			<div class="form-group" style="">
-				<input type="text" name="password" style="width:100%;border:0px;border-bottom: 2.5px solid #23272b;background-color:transparent;" id="password" placeholder="Password">
-			</div>
-			<button class="btn btn-dark btn-login"> LOGIN</button>
 		</div>
+		<a href="#"><div class="chip" style="right:95px;bottom:0px;"><center><h4><i class="fa fa-google-plus" aria-hidden="true"></i></h4></center></div></a>
+		<a href="#"><div class="chip" style="right:35px;bottom:0px;"><center><h4><i class="fa fa-facebook" aria-hidden="true"></i></h4></center></div></a>
 	</div>
 </body>
 	<script type="text/javascript" src="public/js/jquery-3.3.1.min.js"></script>
