@@ -328,7 +328,9 @@ var  ud='undefined'
                     } else {
                         $.each(colWidth, function(i,w) {
                             var _nth = i + 1;
-                            $ztable.find("th:nth-child(" + _nth + ") , td:nth-child(" + _nth + ")").css({ "width" : w ,"min-width" : w });
+                            $ztable.find("th:nth-child(" + _nth + ") , td:nth-child(" + _nth + ")")
+                            .attr({ "colindex" : i })
+                            .css({ "width" : w ,"min-width" : w });
                         });
                     }
                     
@@ -421,8 +423,7 @@ var  ud='undefined'
                                         }
                                     }
                                 } else {
-                                    var _nth = _crIndex + 1;
-                                    $ztable.find("th:nth-child(" + _nth + ") , td:nth-child(" + _nth + ")").css({ "width" : _newW ,"min-width" : _newW });
+                                    $ztable.find("th[colindex="+_crIndex+"] , td[colindex="+_crIndex+"]").css({ "width" : _newW ,"min-width" : _newW });
                                 }
                                 
                                 // Adjust the cr position
