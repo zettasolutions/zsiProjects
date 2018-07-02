@@ -46,7 +46,7 @@ namespace zsi.web.Controllers
                   if (param1 != devURL && param1 != "signin")
                 {
 
-                    if(this.CurrentUser.roleId == 0 )
+                    if(this.CurrentUser.isDeveloper == "Y" )
                     {
                         if ( ! this.isAuthorizedUser() )
                             return Redirect(Url.Content("~/") + "page/name/" + devURL);

@@ -6,10 +6,9 @@ namespace zsi.web.Models
     public class user {
         public int userId { get; set; }
         public string userName { get; set; }
-        public int roleId { get; set; }
-        public string isAdmin { get; set; }
         public string userFullName { get; set; }
         public string password { get; set; }
+        public string isDeveloper { get; set; }
 
         public SqlDataReader SqlDataReader
         {
@@ -24,13 +23,9 @@ namespace zsi.web.Models
                 {
                     this.userName = (string)reader["logon"];
                 }
-                if (reader["role_id"] != DBNull.Value)
+                if (reader["is_developer"] != DBNull.Value)
                 {
-                    this.roleId = (int)reader["role_id"];
-                }
-                if (reader["is_admin"] != DBNull.Value)
-                {
-                    this.isAdmin = (string)reader["is_admin"];
+                    this.isDeveloper = (string)reader["is_developer"];
                 }
                 if (reader["userFullName"] != DBNull.Value)
                 {
