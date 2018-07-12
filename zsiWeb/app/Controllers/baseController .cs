@@ -115,12 +115,11 @@ namespace zsi.web.Controllers
             return result;
         }
 
-        public void setPageLinks(string pageName)
+        public void setPageLinks(string pageName,string isPublic="N")
         {
             string defaultPage = "_layout";
             dcPageData dc;
             PageData d;
-
 
             dc = new dcPageData();
             d = dc.GetData(pageName,this.CurrentUser.userId );
@@ -133,7 +132,7 @@ namespace zsi.web.Controllers
                     ViewBag.pageName = pageName;
                     ViewBag.pageTitle = d.page_title;
                     ViewBag.template = replaceIncludedScripts(d.pt_content);
-                    ViewBag.layoutPage = string.Format("~/Views/Shared/{0}.cshtml", (d.master_page_name == null ? defaultPage : d.master_page_name));
+                    ViewBag.layoutPage = string.Format("~/Views/Shared/{0}.cshtml", (isPublic =="Y" ? "_Public" : (d.master_page_name == null ? defaultPage : d.master_page_name)));
 
                     if (d.page_js_rev_no != 0)
                         ViewBag.pageJSLink = string.Format("<script src='{0}javascript/name/{1}?rev={2}'></script>", Url.Content("~/"), pageName, d.page_js_rev_no);
@@ -142,7 +141,7 @@ namespace zsi.web.Controllers
                 {
                     ViewBag.masterPage = defaultPage;
                     ViewBag.template = "<div class='pageNotFound'>Page Not Found.</div>";
-                    ViewBag.layoutPage = string.Format("~/Views/Shared/{0}.cshtml", defaultPage);
+                    ViewBag.layoutPage = string.Format("~/Views/Shared/{0}.cshtml", (isPublic == "Y" ? "_Public" : defaultPage) );
 
                 }
             
