@@ -20,9 +20,25 @@ footer {
     font-size: 10px;
 }
 
+/* --------------- FORM STYLE --------------- */
 
 div.z-form-con {
-	padding-bottom: 0.5rem;
+	position: relative;
+	margin: 15px 0 5px 0;
+}
+
+div.z-form-con label {
+	font-size: 10pt;
+	padding: 0 0 0 5px;
+	position: absolute;
+	top: -20px;
+}
+
+div.z-form-con i {
+	font-size: inherit;
+	position: absolute;
+	left: 8px;
+	top: 11px;
 }
 
 .z-form
@@ -32,32 +48,48 @@ div.z-form-con {
 	outline: none;
 	width: 100%;
 	color: inherit;
-	padding: 0.50rem;
+	box-shadow: none;
 }
 
 div.z-form-con input.z-form {
 	background-color: transparent;
-	border-bottom: 1px solid rgba(240, 240, 240, 0.5);
+	border: 1px solid rgba(240, 240, 240, 0.5);
+	padding: 0.30rem;
 }
 
-div.z-form-con button.z-form {
+button.z-form {
 	background: #56CCF2;  /* fallback for old browsers */
 	background: -webkit-linear-gradient(to left, #2F80ED 40%, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to left, #2F80ED 40%, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	border-radius: 0;
+	padding: 0.30rem;
 }
 
-div.z-form-con.has-icon i {
-	float: left;
-	width: 20px;
-	padding-top: 0.70rem;
-	padding-bottom : 0.80rem;
-	border-bottom: 1px solid rgba(240, 240, 240, 0.5);
+div.z-form-con select.z-form {
+	background-color: transparent;
+	padding: 0.30rem;
+	border: 1px solid rgba(240, 240, 240, 0.5);
+}
+
+div.z-form-con textarea.z-form {
+	background-color: transparent;
+	padding: 0.30rem;
+	border: 1px solid rgba(240, 240, 240, 0.5);
 }
 
 div.z-form-con.has-icon input.z-form {
-	float: left;
-	width: calc(100% - 20px);
+	padding: 0.30rem 0.30rem 0.30rem 30px;
 }
+
+div.z-form-con.has-icon select.z-form {
+	padding: 0.30rem 0.30rem 0.30rem 30px;
+}
+
+div.z-form-con.has-icon textarea.z-form {
+	padding: 0.30rem 0.30rem 0.30rem 30px;
+}
+
+/* --------------- END OF FORM STYLE --------------- */
 
 .z-bg {
 	background: #141E30;  /* fallback for old browsers */
