@@ -1,10 +1,9 @@
-(function() {
-    var bs = zsi.bs.ctrl
-        ,svn = zsi.setValIfNull
-    ;
-    
+zsi.ready(function(){
     displayRecords();
-    
+    if (gUser.is_admin === "Y") {
+        $("#button-div").html('<button type="button" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnSave"><i class="fa fa-save"></i> Save</button> <button type="button" class="btn btn-primary btn-sm col-12 col-md-auto" id="btnDelete"><i class="fa fa-trash-alt"></i> Delete</button>' );
+    }
+
     function displayRecords(){   
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
@@ -29,7 +28,7 @@
             }  
         });    
     }
-    
+
     $("#btnSave").click(function() {
         $("#grid").jsonSubmit({
             procedure: "categories_upd"
@@ -40,7 +39,7 @@
             }
         });
     });
-    
+
     $("#btnDelete").click(function(){
         zsi.form.deleteData({
              code       : "ref-0003"
@@ -49,4 +48,6 @@
                         }
         });      
     });
-})(); 
+});
+
+  
