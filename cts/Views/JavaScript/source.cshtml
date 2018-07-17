@@ -1,23 +1,17 @@
 @{
     Layout = "~/Views/Shared/_Source.cshtml";   
 }
-
-<div class="row">
-    <div class="col-12">
-        <div class="pageTitle">JavaScript Source: @ViewBag.pageTitle</div>
-        <form id="frm">
-            <div class="form-horizontal">
-                <input type="hidden" id="js_id" name="js_id" value="@ViewBag.jsId">
-                <input type="hidden" id="page_id" name="page_id" value="@ViewBag.pageId">
-                <input type="hidden" id="js_content" name="js_content">
-                <div class="form-group">
-                    <pre id="editor">@ViewBag.jsContent </pre>
-                </div>
-            </div>
-        </form>
+<div class="pageTitle">JavaScript Source: @ViewBag.pageTitle </div>
+<form id="frm">
+    <div class="form-horizontal">
+        <input type="hidden" id="js_id" name="js_id" value="@ViewBag.jsId">
+        <input type="hidden" id="page_id" name="page_id" value="@ViewBag.pageId">
+        <input type="hidden" id="js_content" name="js_content">
+        <div class="form-group  ">
+            <pre id="editor">@ViewBag.jsContent </pre>
+        </div>
     </div>
-</div>
-
+</form>
 <script>
     var js_id = '@ViewBag.jsId';
     var editor = null;
@@ -29,15 +23,16 @@
             e.preventDefault();
             return false;
         }
+
     });
 
     $(document).ready(function () {
-		$("#editor").dblclick(function(){ submit();});
+		$(".pageTitle").dblclick(function(){ submit();});
         initAceEditor();
     });
 
     function initAceEditor() {
-        $("#editor").css({height:  $(window).height() - 42 });
+        $("#editor").css({height:  $(window).height() - 71 });
         ace.require("ace/ext/language_tools");
         editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
@@ -50,15 +45,17 @@
             enableLiveAutocompletion: false,
             fontSize: "10pt"
         });
-    }
 
+    }
     function submit() {
+
         $("#js_content").val(editor.getSession().getValue());
         var data = $("#frm").serializeArray();
         $.post(base_url + "javascript/update", data, function (d) {
             $("#js_id").val(d.js_id);
-            zsi.form.showAlert("savedWindow");
+            zsi.form.showAlert("alert");
         });
+
     }
 </script>
 
