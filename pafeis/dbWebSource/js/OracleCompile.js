@@ -21,7 +21,7 @@ function initAceEditor(){
     ace.require("ace/ext/language_tools");
     editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/html");
+    editor.session.setMode("ace/mode/sql");
     editor.setAutoScrollEditorIntoView(true);
 
     editor.setOptions({
@@ -72,4 +72,4 @@ function checkResponse(){
         }
         if(!responseLoaded) checkResponse();        
     });
-}   
+}    

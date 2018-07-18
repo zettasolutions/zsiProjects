@@ -25,7 +25,7 @@ user_id	INT IDENTITY(1,1)	NOT NULL
 ,civil_status	CHAR(1)	NULL
 ,is_employee	CHAR(1)	NULL
 ,position_id	INT	NULL
-,is_zsi	CHAR(1)	NULL
+,is_developer	CHAR(1)	NULL
 ,warehouse_id	INT	NULL
 ,is_pilot	CHAR(1)	NULL
 ,last_activity_dt	DATETIME	NULL)

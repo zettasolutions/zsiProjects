@@ -13,20 +13,21 @@ BEGIN
   DECLARE @stmt           VARCHAR(4000);  
   DECLARE @order          VARCHAR(4000);  
   CREATE TABLE #tt (  
-       user_id     INT  
+    user_id     INT  
    ,userFullName VARCHAR(50)  
    ,logon       VARCHAR(20)  
    ,password    nvarchar(200)  
    ,is_admin    CHAR(1)  
-   ,role_id     INT  
+   ,role_id     int
+   ,is_developer CHAR(1)
    ,rankDesc    VARCHAR(50)  
    ,position    VARCHAR(50)  
    ,organizationName  VARCHAR(50)  
   )  
   
     
-  SET @stmt = 'SELECT user_id, userFullName, logon, password,  is_admin, role_id, rankDesc, position, organizationName  FROM user_role_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + '''';   
-  SET @stmt = @stmt + ' UNION SELECT user_id, userFullName, logon, password, is_admin, role_id, rankDesc, position, organizationName  FROM zsi_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + '''';  
+  SET @stmt = 'SELECT user_id, userFullName, logon, password,  is_admin, role_id, is_developer, rankDesc, position, organizationName  FROM user_role_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + '''';   
+  SET @stmt = @stmt + ' UNION SELECT user_id, userFullName, logon, password, is_admin, role_id, is_developer, rankDesc, position, organizationName  FROM zsi_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + '''';  
   
   INSERT INTO #tt EXEC(@stmt);  
   
@@ -59,5 +60,7 @@ END;
   
   
   
+
+
 
 

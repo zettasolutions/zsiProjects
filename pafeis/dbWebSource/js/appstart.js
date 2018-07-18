@@ -92,7 +92,7 @@ function loadPublicTemplates(){
         var _name ="publicTemplates";
         var _tmpls = localStorage.getItem(_name);
         if(_tmpls === null)
-            $.get(base_url + "page/name/tmplPublic", function(html){
+            $.get(base_url + "page/tmplPublic", function(html){
                 if(html.indexOf("</html>") < 0) localStorage.setItem(_name, html);
             });  
     }
@@ -132,7 +132,7 @@ function loadChild(data,menu_id){
             var target = (data[x].page_name==="help"?"target=\"_blank\"":"");
             var params  = (typeof data[x].parameters!== ud ? (  data[x].parameters!=="" ?  "?" + data[x].parameters : "") : "" );
             h+= "<li class='dropdown'>"
-            + "<a " + target + " href='"+  ( hc===true ? "#" : (data[x].page_name!=="" ? base_url + "page/name/" + data[x].page_name + params :"#" ) )  + "' class='dropdown-toggle' " + ( hc===true ?"data-toggle='dropdown'":"")  + ">" 
+            + "<a " + target + " href='"+  ( hc===true ? "#" : (data[x].page_name!=="" ? base_url + "page/" + data[x].page_name + params :"#" ) )  + "' class='dropdown-toggle' " + ( hc===true ?"data-toggle='dropdown'":"")  + ">" 
                 + data[x].menu_name + ( hc===true ? ' <span class="caret"></span>':'') 
             +  "</a>" 
             + createMenuItems(data,data[x].menu_id) 
@@ -230,7 +230,7 @@ function getProjectAccess(callBack){
 
 
 function getPageURL(pageName){
-    return base_url + "page/name/" + pageName;
+    return base_url + "page/" + pageName;
 }
 
 function getImageURL(fileName){
@@ -276,4 +276,4 @@ function readCookie(name) {
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
-                             
+                              

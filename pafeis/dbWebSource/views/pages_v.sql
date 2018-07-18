@@ -1,8 +1,6 @@
-
-CREATE VIEW [dbo].[pages_v]
+CREATE  VIEW dbo.pages_v
 AS
-SELECT        dbo.pages.page_id, dbo.pages.page_name, dbo.pages.page_title, dbo.master_pages.master_page_id, dbo.master_pages.master_page_name,dbo.countPageProcesses(dbo.pages.page_id) AS ProcessCount
-FROM            dbo.pages INNER JOIN
-                         dbo.master_pages ON dbo.pages.master_page_id = dbo.master_pages.master_page_id
-
+SELECT        p.page_id, p.page_name, p.page_title,p.is_public, mp.master_page_id, mp.master_page_name
+FROM            dbo.pages p INNER JOIN
+                         dbo.master_pages mp ON p.master_page_id = mp.master_page_id
 
