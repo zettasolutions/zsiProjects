@@ -122,7 +122,7 @@ namespace zsi.web.Controllers
             PageData d;
 
             dc = new dcPageData();
-            d = dc.GetData(pageName,this.CurrentUser.userId );
+            d = dc.GetData(pageName,this.CurrentUser.userId, isPublic);
             ViewBag.role = (d.role != null ? d.role :"");
             ViewBag.GetScriptLinkCurrentVersion = new Func<string, string>(GetScriptLinkCurrentVersion);
 
