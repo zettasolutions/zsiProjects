@@ -21,7 +21,47 @@ namespace zsi.web.Controllers
             }
         }
 
-        public ActionResult name(string param1)
+        public ActionResult name(string pageName)
+        {
+            pageName = pageName.ToLower();
+            pageName = (pageName != null ? pageName : "");
+            if (CurrentUser.userName == null)
+            {
+                setRequestedURL();
+                return Redirect(Url.Content("~/"));
+            }
+            else
+            {
+                string devURL = "zsiuserlogin";
+                if (pageName == "signin")
+                {
+                    Session["zsi_login"] = "N";
+                    Session["authNo"] = null;
+                    Response.Cookies["zsi_login"].Expires = DateTime.Now.AddDays(-2);
+                    Response.Cookies["username"].Expires = DateTime.Now.AddDays(-2);
+                    Response.Cookies["isMenuItemsSaved"].Expires = DateTime.Now.AddDays(-2);
+                    Session.Abandon();
+                    return Redirect(Url.Content("~/"));
+                }
+                if (pageName != devURL && pageName != "signin")
+                {
+
+                    if (this.CurrentUser.isDeveloper == "Y")
+                    {
+                        if (!this.isAuthorizedUser())
+                            return Redirect(Url.Content("~/") + "page/name/" + devURL);
+                    }
+
+                }
+                if (this.AppConfig.system_pages.ToLower().Contains(pageName.ToLower()) && !this.isAuthorizedUser()) return Redirect(Url.Content("~/"));
+
+                setPageLinks(pageName);
+                return View();
+            }
+        }
+
+
+        public ActionResult namex(string param1)
         {
             param1 = param1.ToLower();
             param1 = (param1 != null ? param1 : "");
@@ -43,23 +83,22 @@ namespace zsi.web.Controllers
                     Session.Abandon();
                     return Redirect(Url.Content("~/"));
                 }
-                  if (param1 != devURL && param1 != "signin")
+                if (param1 != devURL && param1 != "signin")
                 {
 
-                    if(this.CurrentUser.isDeveloper == "Y" )
+                    if (this.CurrentUser.isDeveloper == "Y")
                     {
-                        if ( ! this.isAuthorizedUser() )
+                        if (!this.isAuthorizedUser())
                             return Redirect(Url.Content("~/") + "page/name/" + devURL);
                     }
 
                 }
-                if ( this.AppConfig.system_pages.ToLower().Contains(param1.ToLower())  && ! this.isAuthorizedUser() ) return Redirect(Url.Content("~/"));
+                if (this.AppConfig.system_pages.ToLower().Contains(param1.ToLower()) && !this.isAuthorizedUser()) return Redirect(Url.Content("~/"));
 
                 setPageLinks(param1);
                 return View();
             }
         }
-
 
         [HttpPost]
         public ActionResult loginAdmin()

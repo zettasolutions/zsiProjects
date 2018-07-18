@@ -11,12 +11,12 @@ namespace zsi.web.Controllers
             return View();
         }
 
-        public ActionResult name(string param1)
+        public ActionResult name(string pageName)
         {
-            param1 = param1.ToLower();
-            param1 = (param1 != null ? param1 : "");
+            pageName = pageName.ToLower();
+            pageName = (pageName != null ? pageName : "");
 
-            setPageLinks(param1,"Y");
+            setPageLinks(pageName, "Y");
             return View();
            
         }

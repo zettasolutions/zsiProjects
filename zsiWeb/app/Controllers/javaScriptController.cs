@@ -25,7 +25,7 @@ namespace zsi.web.Controllers
             }
         }
 
-        public ActionResult source(string param1)
+        public ActionResult source(string pageName)
         {
             if (CurrentUser.userName == null)
                 return Redirect(Url.Content("~/"));
@@ -35,7 +35,7 @@ namespace zsi.web.Controllers
                     return this.ShowNotAllowedPage();
                 else
                 {
-                    javascript_v d = new dcJavaScript().GetInfo(param1);
+                    javascript_v d = new dcJavaScript().GetInfo(pageName);
                     ViewBag.jsId = d.js_id;
                     ViewBag.pageId = d.page_id;
                     ViewBag.pageTitle = d.page_title;
@@ -46,13 +46,13 @@ namespace zsi.web.Controllers
             }
         }
 
-        public ActionResult name(string param1)
+        public ActionResult name(string pageName)
         {
             if (CurrentUser.userName == null)
                 return Redirect(Url.Content("~/"));
             else
             {
-                var r = new dcJavaScript().GetInfo(param1).js_content;
+                var r = new dcJavaScript().GetInfo(pageName).js_content;
                 if(this.AppConfig.is_source_minified =="Y") r = JsMinify(r);
                 return Content(r, "application/javascript");
             }

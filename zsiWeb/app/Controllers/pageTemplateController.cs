@@ -26,11 +26,11 @@ namespace zsi.web.Controllers
 
         }
 
-        public ActionResult source(string param1)
+        public ActionResult source(string pageName)
         {
             if (this.isAuthorizedUser())
             {
-                page_template_v d = new dcPageTemplate().GetInfo(param1);
+                page_template_v d = new dcPageTemplate().GetInfo(pageName);
                 ViewBag.ptId = d.pt_id; ;
                 ViewBag.pageId = d.page_id;
                 ViewBag.pageTitle = d.page_title;

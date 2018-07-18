@@ -13,18 +13,43 @@ namespace zsi.smagerUp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{param1}/{param2}/{param3}/{param4}/{param5}",
-                defaults: new {
-                    controller = "Home"
-                    , action = "Index"
-                    , param1 = UrlParameter.Optional
-                    , param2 = UrlParameter.Optional
-                    , param3 = UrlParameter.Optional
-                    , param4 = UrlParameter.Optional
-                    , param5 = UrlParameter.Optional
-                }
+                name: "get-page",
+                url: "page/{pageName}",
+                defaults: new { controller = "page", action = "name" }
+                ,constraints: new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) }
+
             );
+
+
+            routes.MapRoute(
+                name: "get-public-page",
+                url: "public/{pageName}",
+                defaults: new { controller = "public", action = "name" }
+                , constraints: new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) }
+            );
+
+            routes.MapRoute(
+                name: "get-javascript-source",
+                url: "javascript/{pageName}",
+                defaults: new { controller = "javascript", action = "name" }
+                ,constraints: new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) }
+
+            );
+
+            routes.MapRoute(
+                name: "get-selectoption",
+                url: "selectOption/code/{param1}/{param2}",
+                defaults: new { controller = "selectOption", action = "code", param1 = UrlParameter.Optional, param2 = UrlParameter.Optional }
+                ,constraints: new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) }
+
+            );
+
+            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{pageName}",
+                defaults: new { controller = "Home",action = "Index", pageName = UrlParameter.Optional }
+            );
+
 
         }
     }
