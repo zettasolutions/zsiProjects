@@ -49,7 +49,7 @@ namespace zsi.web.Controllers
                     if (this.CurrentUser.isDeveloper == "Y")
                     {
                         if (!this.isAuthorizedUser())
-                            return Redirect(Url.Content("~/") + "page/name/" + devURL);
+                            return Redirect(Url.Content("~/") + "page/" + devURL);
                     }
 
                 }
@@ -61,45 +61,6 @@ namespace zsi.web.Controllers
         }
 
 
-        public ActionResult namex(string param1)
-        {
-            param1 = param1.ToLower();
-            param1 = (param1 != null ? param1 : "");
-            if (CurrentUser.userName == null)
-            {
-                setRequestedURL();
-                return Redirect(Url.Content("~/"));
-            }
-            else
-            {
-                string devURL = "zsiuserlogin";
-                if (param1 == "signin")
-                {
-                    Session["zsi_login"] = "N";
-                    Session["authNo"] = null;
-                    Response.Cookies["zsi_login"].Expires = DateTime.Now.AddDays(-2);
-                    Response.Cookies["username"].Expires = DateTime.Now.AddDays(-2);
-                    Response.Cookies["isMenuItemsSaved"].Expires = DateTime.Now.AddDays(-2);
-                    Session.Abandon();
-                    return Redirect(Url.Content("~/"));
-                }
-                if (param1 != devURL && param1 != "signin")
-                {
-
-                    if (this.CurrentUser.isDeveloper == "Y")
-                    {
-                        if (!this.isAuthorizedUser())
-                            return Redirect(Url.Content("~/") + "page/name/" + devURL);
-                    }
-
-                }
-                if (this.AppConfig.system_pages.ToLower().Contains(param1.ToLower()) && !this.isAuthorizedUser()) return Redirect(Url.Content("~/"));
-
-                setPageLinks(param1);
-                return View();
-            }
-        }
-
         [HttpPost]
         public ActionResult loginAdmin()
         {
@@ -108,11 +69,11 @@ namespace zsi.web.Controllers
                 Session["zsi_login"] = "Y";
                 Response.Cookies["zsi_login"].Value = "Y";
                 Response.Cookies["zsi_login"].Expires = DateTime.Now.AddDays(1);
-                return Redirect(gePriorityURL(Url.Content("~/") + "page/name/" + this.AppConfig.default_page));
+                return Redirect(gePriorityURL(Url.Content("~/") + "page/" + this.AppConfig.default_page));
             }
             else {
                 Session["zsi_login"] ="N";
-                return Redirect(Url.Content("~/") + "page/name/zsiUserLogin");
+                return Redirect(Url.Content("~/") + "page/zsiUserLogin");
             }
             
 
