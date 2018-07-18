@@ -1,0 +1,44 @@
+<style>
+    #grid{
+        width: 100%;
+    }
+    .zGrid .item .title {
+        height: 22px;
+        line-height: 19px;
+    }
+    .filter{
+        padding-bottom: 5px;
+    }
+    
+</style>
+<div class="zPanel"> 
+    <div class="form-group filter">
+            <label class="col-xs-4 col-sm-3 col-md-1 col-lg-1 control-label">Column:</label>
+        <div class="col-xs-8 col-sm-3 col-md-2 col-lg-2" > 
+            <select name="column" id="column" class="form-control input-sm">
+                <option value=""></option>
+                <option value="part_no">Part No.</option>
+                <option value="national_stock_no">National Stock No.</option>
+                <option value="item_name">Nomenclature Name</option>
+            </select>
+        </div>
+            <label class="col-xs-4 col-sm-3 col-md-1 col-lg-1 control-label">Keyword:</label>
+        <div class="col-xs-8 col-sm-3 col-md-2 col-lg-2" > 
+            <input type="text" name="keyword" id="keyword" class="form-control input-sm">
+        </div>
+        <div class="form-group">
+            <label class="col-xs-4 col-sm-3 col-md-1 col-lg-1">&nbsp;</label>
+            <div class="zButtons"  style="padding-left:5px;padding-top:2px;">
+                <button type="button" class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-filter"></span></button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnClear">clear</button>
+            </div>
+        </div>
+
+        <div id="grid" class="zGrid"></div>
+        <div class="buttonGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+            </button>
+        </div>
+    </div>
+</div>

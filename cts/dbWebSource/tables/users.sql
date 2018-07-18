@@ -1,0 +1,23 @@
+CREATE TABLE users(
+user_id	INT IDENTITY(1,1)	NOT NULL
+,client_id	INT	NULL
+,is_developer	CHAR(1)	NULL
+,last_name	NVARCHAR(200)	NULL
+,first_name	NVARCHAR(200)	NULL
+,middle_name	NVARCHAR(200)	NULL
+,name_suffix	NVARCHAR(20)	NULL
+,email_add	NVARCHAR(600)	NULL
+,landline_no	VARCHAR(50)	NULL
+,mobile_no1	VARCHAR(50)	NULL
+,mobile_no2	VARCHAR(50)	NULL
+,img_filename	VARCHAR(200)	NULL
+,logon	NVARCHAR(40)	NULL
+,password	NVARCHAR(400)	NULL
+,is_add	CHAR(1)	NULL
+,is_active	VARCHAR(1)	NULL
+,is_admin	VARCHAR(1)	NULL
+,created_by	INT	NULL
+,created_date	DATETIMEOFFSET	NULL
+,updated_by	INT	NULL
+,updated_date	DATETIMEOFFSET	NULL
+,last_activity_dt	DATETIME	NULL)
