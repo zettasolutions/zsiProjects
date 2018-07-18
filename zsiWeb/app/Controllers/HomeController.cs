@@ -12,7 +12,7 @@ namespace zsi.web.Controllers
                 dcAppProfile dc = new dcAppProfile();
                 appProfile info = dc.GetInfoByCurrentUser();
                 SessionHandler.AppConfig = info;
-                return Redirect(Url.Content("~/") + "page/name/" + info.default_page);
+                return Redirect(Url.Content("~/") + "page/" + info.default_page);
               
             }
             else
