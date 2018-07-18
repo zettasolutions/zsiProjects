@@ -2,6 +2,7 @@ CREATE PROCEDURE [dbo].[page_data_sel]
 (
    @user_id	   int
   ,@page_name  varchar(50)
+  ,@is_public  char(1) = 'N'
 )
 
 AS
@@ -14,7 +15,8 @@ BEGIN
 		,@page_js_rev_no int
 		,@zsi_lib_rev_no int
 		,@app_start_js_rev_no int
-		,@master_page_name varchar(50);
+		,@master_page_name varchar(50)
+		,@db_is_public char(1);
 
 	select 
 		 @pt_content=pt.pt_content
@@ -22,9 +24,15 @@ BEGIN
 		,@page_id=p.page_id
 		,@page_title=p.page_title 
 		,@master_page_name = p.master_page_name	
+		,@db_is_public =p.is_public
 	from dbo.pages_v p 
 	left join dbo.page_templates pt on pt.page_id = p.page_id
 	where lower(p.page_name) =lower(@page_name)
+
+	if(@db_is_public='N' AND @is_public ='Y') 
+	BEGIN
+		 SET @page_id=0;
+	END
 
 	--get latest revision no. of Page js
 	select @page_js_rev_no=js.rev_no from dbo.pages p inner join dbo.javascripts js on js.page_id = p.page_id
@@ -55,4 +63,5 @@ END
  
 
  
+
 
