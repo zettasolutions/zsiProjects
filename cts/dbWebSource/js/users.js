@@ -19,7 +19,7 @@ zsi.ready(function() {
         }
         
         _$grid.dataBind({
-    	     url            : execURL + "users_sel"
+    	     url            : procURL + "users_sel"
             ,width          : _gridWidth
     	    ,height         : _gridHeight
             ,blankRowsLimit : 5
@@ -65,8 +65,6 @@ zsi.ready(function() {
                     var _rowData = o.data.rows[_$self.closest('.zRow').index()];
                     displayUserRoles(_rowData);
                 });
-               
-                _this.find('.add-roles').css({'cursor': 'pointer'});
             }
         });
         
@@ -147,4 +145,4 @@ zsi.ready(function() {
             });
         });
     }
-});     
+});       
