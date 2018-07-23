@@ -7,6 +7,13 @@ namespace zsi.web.Controllers
 
     public class AccountController : baseController
     {
+        private  ContentResult setMsg(string message,bool isSuccess)
+        {
+            return Content(
+
+                "{\"isSuccess\":\"" + isSuccess.ToString().ToLower()  + "\",\"msg\":\"" + message + "\"}", "application/json"); 
+        }
+
         [HttpPost]
         public ActionResult validate()
         {
@@ -44,6 +51,39 @@ namespace zsi.web.Controllers
                 return Content(ex.Message + link);
             }
         }
+
+        [HttpPost]
+        public ActionResult validate2()
+        {
+            try
+            {
+                Cryptography crypt = new Cryptography();
+                string userName = Request["username"];
+                string userPassword = Request["password"];
+                user _user = new dcUser().getUserInfo(userName);
+                if (_user.userName == null)
+                {
+
+                    return setMsg("Username does not exist.",false);
+                }
+                else if (crypt.Decrypt(_user.password) == userPassword)
+                {
+                    Session["isAuthenticated"] = "Y";
+                    HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
+                    SessionHandler.CurrentUser = _user;
+                    return setMsg("access granted.",true); 
+                }
+                else
+                {
+                    return setMsg("Invalid Access.",false);
+                }
+            }
+            catch (Exception ex)
+            {
+                return setMsg(ex.Message,false);
+            }
+        }
+
 
         public ActionResult setupDatabase(string dbName)
         {
