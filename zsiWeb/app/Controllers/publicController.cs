@@ -13,25 +13,26 @@ namespace zsi.web.Controllers
 
         public ActionResult name(string pageName)
         {
-            pageName = pageName.ToLower();
-            pageName = (pageName != null ? pageName : "");
-
-            setPageLinks(pageName, "Y");
-            return View();
-           
-        }
-
-        public ContentResult enCrypt(string text)
-        {
             try
             {
-                return Content(new Cryptography().Encrypt(text));
+                pageName = pageName.ToLower();
+                pageName = (pageName != null ? pageName : "");
+
+                if (pageName == "encrypt")
+                {
+                    return Content(new Cryptography().Encrypt(Request["text"]));
+
+                }
+
+                setPageLinks(pageName, "Y");
+                return View();
             }
             catch (Exception ex)
             {
                 return Content(ex.Message);
             }
         }
+
 
 
     }
