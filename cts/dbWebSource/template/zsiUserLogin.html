@@ -1,0 +1,25 @@
+<style>
+    #loginDiv {
+        width:300px;
+    }
+</style>
+
+<div id="loginDiv" class="col-12">
+    <form id="frm" method="post">
+        <input type="hidden" name="project_id" id="project_id">
+        <h3 id="sysTitle" class="text-center pb-2">Developers Login</h3>
+        <div class="row no-gutters">
+            <div class="col-12 z-form-con has-icon">
+                <i class="fas fa-user fa-lg"></i>
+                <input id="user_name" type="text" name="user_name" placeholder="Username" class="z-form">
+            </div>
+            <div class="col-12 z-form-con has-icon">
+                <i class="fas fa-lock fa-lg"></i>
+                <input id="user_pwd" type="password" name="user_pwd" placeholder="Password" class="z-form">
+            </div>
+            <div class="col-12 z-form-con">
+                <button id="btnSave" type="submit" class="z-form">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
