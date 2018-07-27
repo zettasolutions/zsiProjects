@@ -1,0 +1,81 @@
+<style>
+
+</style>
+
+<div id="grid-request-div" class="row">
+    <div class="col-12">
+        <div id="grid-request" class="zGrid"></div>
+    </div>
+</div>
+
+<div id="request-details-div" style="display:none;">
+    <form id="request-form" accept-charset="utf-8">
+        <div class="row">
+            <div class="col-12">
+                <h2></h2>
+                <input type="hidden" id="request_id" name="request_id">
+                <input type="hidden" id="request_no" name="request_no">
+                <input type="hidden" id="client_id" name="client_id">
+                <input type="hidden" id="process_id" name="process_id">
+            </div>
+            
+            <div class="col-12 col-md-4">
+                <div class="form-group z-form-con">
+                    <label for="process_title">Process Title : </label>
+                    <input type="text" name="process_title" id="process_title" class="form-control z-form" required/>
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-4">
+                <div class="form-group z-form-con">
+                    <label for="app_id">Support for : </label>
+                    <select id="app_id" name="app_id" class="form-control z-form" required></select>
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-4">
+                <div class="form-group z-form-con">
+                    <label for="status_name">Status : </label>
+                    <input type="text" name="status_name" id="status_name" class="form-control z-form" required/>
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div class="form-group z-form-con">
+                    <label for="request_desc">Description : </label>
+                    <textarea id="request_desc" name="request_desc" class="form-control z-form" placeholder="Write description here." rows="3" required></textarea>
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+            
+            <input type="hidden" id="priority_level" name="priority_level">
+            
+            <div class="col-12">
+                <div class="form-group z-form-con">
+                    <label for="remarks">Remarks : </label>
+                    <textarea id="remarks" name="remarks" class="form-control z-form" placeholder="Write remarks here." rows="3"></textarea>
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div class="form-group">
+                    <div style="height:30px;">
+                        <input id="attachments" name="attachments" type="file" class="form-control z-form" multiple style="opacity:0;visibility:hidden;height:0;padding:0;" />
+                        <a class="add-attachment" href="#"><i class="fas fa-plus"></i></a><span> Attachment(s)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div id="attachments-grid" class="zGrid"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="button-div" class="col-12 mt-2">
+            </div>
+        </div>
+    </form>
+</div>
