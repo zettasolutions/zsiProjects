@@ -1,0 +1,174 @@
+<style>
+    #registration-div {
+        width: 300px;
+    }
+    
+    @media (min-width: 768px) {
+        #registration-div {
+            width: 60%;
+        }
+    }
+</style>
+
+<div id="registration-div" class="z-center p-1">
+    <nav>
+        <div id="registration-tab" class="nav nav-tabs" role="tablist">
+            <a id="first-tab" class="nav-item nav-link active" data-toggle="tab" href="#first-pane" role="tab" aria-controls="first-pane" aria-selected="true">Company</a>
+            <a id="second-tab" class="nav-item nav-link disabled" data-toggle="tab" href="#second-pane" role="tab" aria-controls="second-pane" aria-selected="false">Admin User</a>
+        </div>
+    </nav>
+    <div id="registration-tabContent" class="tab-content">
+        <div id="first-pane" class="tab-pane show active p-3" role="tabpanel" aria-labelledby="first-tab">
+            <form id="registration1-form" accept-charset="utf-8">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="zform-group">
+                            <label for="client_name"><i class="fas fa-users fa-lg"></i> Company name</label>
+                            <input type="text" class="validate" id="client_name" name="client_name" tabindex="0" required>
+                            <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="zform-group">
+                            <label for="address"><i class="fas fa-map-marker-alt fa-lg"></i> Company address</label>
+                            <input type="text" class="validate" id="address" name="address" tabindex="0" required>
+                            <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="zform-group">
+                            <label for="client_number"><i class="fas fa-phone fa-lg"></i> Company contact no.</label>
+                            <input type="text" class="validate" id="client_number" tabindex="0" name="client_number" required>
+                            <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="zform-group">
+                            <label for="contact_name"><i class="fas fa-user fa-lg"></i> Name</label>
+                            <input type="text" class="validate" id="contact_name" tabindex="0" name="contact_name" required>
+                            <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="zform-group">
+                            <label for="mobile_no"><i class="fas fa-mobile-alt fa-lg"></i> Mobile number</label>
+                            <input type="text" class="validate" id="mobile_no" tabindex="0" name="mobile_no" required>
+                            <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary col-12" id="btnNext" disabled="disabled">Next</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="second-pane" class="tab-pane p-3" role="tabpanel" aria-labelledby="second-tab">
+            <form id="registration2-form" accept-charset="utf-8">
+                <div class="row">
+                    <input type="hidden" id="app_user_id" name="app_user_id">
+                    <input type="hidden" id="is_edited" name="is_edited" value="N">
+                    <input type="hidden" id="client_id" name="client_id">
+                    
+                    <div class="col-12 col-md-6">
+                        <div class="form-row">
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="last_name">Last name</label>
+                                    <input type="text" class="validate" id="last_name" name="last_name" placeholder="" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="first_name">First name</label>
+                                    <input type="text" class="validate" id="first_name" name="first_name" placeholder="" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="middle_name">Middle name</label>
+                                    <input type="text" class="" id="middle_name" name="middle_name" tabindex="0" placeholder="">
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="name_suffix">Suffix</label>
+                                    <input type="text" class="" id="name_suffix" name="name_suffix" tabindex="0" placeholder="">
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="email_add"><i class="fas fa-at fa-lg"></i> Email</label>
+                                    <input type="text" class="validate" id="email_add" name="email_add" placeholder="" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-row">
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="landline_no"><i class="fas fa-phone fa-lg"></i> Landline no.</label>
+                                    <input type="text" class="validate" id="landline_no" name="landline_no" placeholder="" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="mobile_no1"><i class="fas fa-mobile-alt fa-lg"></i> Mobile number</label>
+                                    <input type="text" class="validate" id="mobile_no1" name="mobile_no1" placeholder="" maxlength="13" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" id="mobile_no2" name="mobile_no2" value="">
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="logon"><i class="fas fa-user fa-lg"></i> Username</label>
+                                    <input type="text" class="validate" id="logon" name="logon" placeholder="" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="password"><i class="fas fa-lock fa-lg"></i> Password</label>
+                                    <input type="password" class="validate" id="password" name="password" placeholder="" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="zform-group">
+                                    <label for="cpassword"><i class="fas fa-lock fa-lg"></i> Confirm password</label>
+                                    <input type="password" class="validate" id="cpassword" placeholder="" tabindex="0" required>
+                                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" id="is_developer" name="is_developer" value="N">
+                            <input type="hidden" id="is_add" name="is_add" value="Y">
+                            <input type="hidden" id="is_admin" name="is_admin" value="Y">
+                            <input type="hidden" id="is_active" name="is_active" value="Y">
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary col-12" id="btnSignup" disabled="disabled">Sign up</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
