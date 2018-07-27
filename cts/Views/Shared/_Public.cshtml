@@ -1,100 +1,107 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <!-- LAYOUT -->
     <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="@Url.Content("~/")favicon.png" type="image/x-icon">
-    
-    <title>@ViewBag.pageTitle </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
+
+    <title>ZSI STS | @ViewBag.pageTitle</title>
     
     <script src='@Url.Content("~/")Scripts/jquery-1.12.0.min.js'></script>
-    <script src='@Url.Content("~/")Scripts/handlebars-v3.0.0.js'></script>
-    <script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>	
-    <link href='@Url.Content("~/")Content/bootstrap.css' rel="stylesheet" />
-    <link href='@Url.Content("~/")Content/bootstrap-theme.min.css' rel="stylesheet" />
-    <link href='@Url.Content("~/")Content/site.css' rel="stylesheet" />    
-    <link href='@Url.Content("~/")Content/zGrid.css' rel="stylesheet" />
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
+    @{
+        string userId = "";
+        if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
 
+        string role = (ViewBag.role == null ? "No Role" :  ViewBag.role );
+    } 
     <script>
         var base_url = '@Url.Content("~/")';
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+        @userId
     </script>
+    <script src='@Url.Content("~/")Scripts/handlebars-v3.0.0.js'></script>
 
-	<style>
-	 img.appLogo{
-			margin-top: -14px;
-			position: relative;
-			z-index: 100;
-			width: 133px;
-	 }
-    .appTitle {
-        color: #fff;
-        font-size: 28px;
-        margin-top: 7px;
-        font-weight: bold;
-        margin-left: 30px;
-    }
-	</style>
-	
+    <!-- Bootstrap CSS -->
+    <link href='@Url.Content("~/")Content/bootstrap.css' rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link href='@Url.Content("~/")Content/zGrid.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")Content/zTable.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")Content/zPopup.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")Content/style.css' rel="stylesheet" />
 </head>
 <body>
-    <div class="progressWindow">
-        <div class="loadingImg"></div>
-        <div class="loadingText">Loading...Please wait</div>
-    </div>
-    <div class="errorWindow">
-        Some processe(s) encountered a problem.
-        <br> Please Contact System Administrator.
-    </div>
-    <div class="pageHeader">
-        <div class="container-fluid">
-            <div class="row zBanner">
-                <div class="col-xs-1 pull-left">
-                    <a href="@Url.Content("~/")" class="navbar-brand"><img class="appLogo" src="@Url.Content("~/")images/logo.png"  ></a>
+    <div id="mainDiv" class="container-fluid z-bg z-txt-white">
+        <div class="progressWindow">
+            <div class="z-center">
+                <div class="cube-container">
+                    <div class="cube">
+                        <div class="side side1"></div>
+                        <div class="side side2"></div>
+                        <div class="side side3"></div>
+                        <div class="side side4"></div>
+                        <div class="side side5"></div>
+                        <div class="side side6"></div>
+                    </div>
                 </div>
-                <div class="col-xs-9 col-xs-offset-2 col-sm-10 col-sm-offset-0">
-					<h1 class="appTitle" >Demo</h1>
-                </div> 
+                <div class="loading-text z-txt-white" style="float: left;padding-left: 15px;">Loading...Please wait</div>
             </div>
         </div>
-    </div>
+        <div class="errorWindow alert alert-danger z-center">
+            <div style="font-size:13px;">Some processe(s) encountered a problem.<br> Please Contact System Administrator.</div>
+        </div>
+        <div class="savedWindow alert alert-success m-0 z-center">
+            <div>Data has been saved.</div>
+        </div>
 
-    <div class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                
-                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+        @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))
+        <div id="main-content" class="row" style="overflow:auto;">
+            <div class="col-12">
+                @RenderBody()
             </div>
         </div>
-    </div>
-    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))   
-    <div class="container-fluid page">
-        @RenderBody()
-    </div>
 
- 
-    <footer style="position: fixed; right: 0; left: 0; bottom: -10px;">
-        <p>&copy; @DateTime.Now.Year - Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a></p>
-    </footer>
+        <footer class="fixed-bottom">
+            <p>
+                &copy; @DateTime.Now.Year - Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a>
+            </p>
+            @{
+                if (Session["zsi_login"].ToString() == "Y")
+                {
+                    <div class="debugPanel noprint fixed-bottom">     
+                      <a href='@Url.Content("~/")pagetemplate/source/@ViewBag.pageName' target="_blank">Edit Page Template</a> 
+                    | <a href='@Url.Content("~/")javascript/source/@ViewBag.pageName' target="_blank">Edit Javascript</a> 
+                    | <a href='@Url.Content("~/")page' target="_blank">Pages</a>         
+                    | <a href='@Url.Content("~/")pagetemplate' target="_blank">Page Templates</a>
+                    | <a href='@Url.Content("~/")javascript' target="_blank">JavaScripts</a>
+                    | <a href='@Url.Content("~/")sql' target="_blank">SQL Console</a>
+                    </div> 
+                }
+            }
+        </footer>
+    </div>
+    
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src='@Url.Content("~/")Scripts/popper.min.js'></script>
 <script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
+<script src='@Url.Content("~/")Scripts/velocity.min.js'></script>
+<script src='@Url.Content("~/")Scripts/velocity.ui.min.js'></script>
+<script src='@Url.Content("~/")Scripts/forms.js'></script>
+<script src='@Url.Content("~/")Scripts/handlebars-v3.0.0.js'></script>
 <script src='@Url.Content("~/")javascript/name/easyJsTemplateWriter'></script>
-<div class="alert alert-success">
-    <p>Data has been saved.</p>
-</div>
+
+<script>
+    // Main ui resizing
+    var gWHeight = $(window).outerHeight();
+    $("#mainDiv").height(gWHeight);
+    $("#main-content, #menu-nav").height(gWHeight - ($("nav").outerHeight() + 15));
+
+    var gUser;
+    $.get(procURL + "users_sel", function(d) {
+        gUser = d.rows[0];
+    });
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-

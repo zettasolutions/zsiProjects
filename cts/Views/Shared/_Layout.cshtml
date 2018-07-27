@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
 
-    <title>ZSI CTS | @ViewBag.pageTitle</title>
+    <title>ZSI STS | @ViewBag.pageTitle</title>
     
     <script src='@Url.Content("~/")Scripts/jquery-1.12.0.min.js'></script>
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
@@ -107,8 +107,8 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav-toggler" aria-controls="main-nav-toggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand d-none d-md-block" href="#">Customer Ticketing System</a>
-            <a class="navbar-brand d-block d-md-none" href="#">CTS</a>
+            <a class="navbar-brand d-none d-md-block" href="/cts/">Support Ticketing System</a>
+            <a class="navbar-brand d-block d-md-none" href="/cts/">STS</a>
             
             <div class="collapse navbar-collapse" id="main-nav-toggler">
                 <ul class="navbar-nav ml-auto">
@@ -171,6 +171,7 @@
 <script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.ui.min.js'></script>
+<script src='@Url.Content("~/")Scripts/forms.js'></script>
 <script src='@Url.Content("~/")Scripts/handlebars-v3.0.0.js'></script>
 <script src='@Url.Content("~/")javascript/name/easyJsTemplateWriter'></script>
 
@@ -179,6 +180,49 @@
     var gWHeight = $(window).outerHeight();
     $("#mainDiv").height(gWHeight);
     $("#main-content, #menu-nav").height(gWHeight - ($("nav").outerHeight() + 15));
+    $(".pageTitle").remove();
+
+    $(document).ready(function() {
+        displayMenus();
+        
+        function displayMenus() {
+            $.get(procURL + "user_menus_sel", function(d) {
+                var _menuData = d.rows;
+                var _$menuNav = $("#menu-nav");
+                var _html = '<div class="row no-gutters pr-3 border-bottom">';
+                
+                console.log(_menuData);
+                
+                _menuData.forEach(function(v) {
+                    _html +=  '<div class="col-12"><div class="menu text-left" data-pagename="'+v.page_name+'" data-status-id="'+v.status_id+'" data-process-id="'+v.process_id+'">'
+                            + '<i class="fas fa-'+v.icon+' menu-icon"></i><span class="menu-name" style="display: none; opacity: 0;">'+v.menu_text+'</span>'
+                            + '</div></div>';
+                });
+                _$menuNav.append(_html += '</div>');
+                
+                var _$menuName = _$menuNav.find(".menu-name");
+                _$menuNav.mouseenter(function() {
+                    _$menuNav.velocity("finish").velocity({ width:[250,50] },{ duration : 150 });
+                    _$menuName.velocity("finish").velocity({opacity : 1},{ display : "inline", delay : 300 });
+                }).mouseleave(function() {
+                    _$menuName.velocity("finish").velocity({opacity : 0},{display : "none", duration : 0});
+                    _$menuNav.velocity("finish").velocity({ width:[50,250] },{ duration : 100 });
+                });
+                
+                _$menuNav.find(".menu").click(function() {
+                    _$menuNav.find(".menu.active").removeClass("active");
+                    var _pagename = $(this).addClass("active").attr("data-pagename");
+                    if (_pagename !== '') {
+                        console.log(_pagename);
+                        
+                        $.get(base_url + 'page/name/' + _pagename + '', function(d) {
+                            $("#pageoutput-panel").html(d);
+                        }); 
+                    }
+                });
+            });
+        }
+    });    
 </script>
 </body>
 </html>
