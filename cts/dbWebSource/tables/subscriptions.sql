@@ -1,6 +1,7 @@
 CREATE TABLE subscriptions(
 subscription_id	INT IDENTITY(1,1)	NOT NULL
 ,subscription_date	DATE	NULL
+,no_months	INT	NULL
 ,expiry_date	DATE	NULL
 ,app_id	INT	NOT NULL
 ,client_id	INT	NOT NULL

@@ -13,7 +13,7 @@ BEGIN
    SET NOCOUNT ON
    DECLARE @client_id INT
    SELECT @client_id=client_id FROM dbo.users WHERE user_id=@user_id;
-   IF ISNULL(@request_id,0) =0
+   IF ISNULL(@request_id,0) =0 OR @process_id=1
       SELECT * FROM dbo.process_statuses_v where is_default='Y' and client_id=@client_id;
    ELSE
       SELECT * FROM dbo.process_statuses_v where process_id = @process_id and process_id IN

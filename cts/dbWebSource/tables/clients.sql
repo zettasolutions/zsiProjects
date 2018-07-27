@@ -8,7 +8,7 @@ client_Id	INT IDENTITY(1,1)	NOT NULL
 ,client_number	NVARCHAR(100)	NULL
 ,is_active	CHAR(1)	NULL
 ,request_no	INT	NULL
-,client_logo	IMAGE(2147483647)	NULL
+,client_image	NVARCHAR(200)	NULL
 ,parent_client_id	INT	NULL
 ,style_css	NVARCHAR(MAX)	NULL
 ,contact_name	NVARCHAR(100)	NULL

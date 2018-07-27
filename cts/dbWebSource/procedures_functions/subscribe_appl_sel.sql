@@ -1,7 +1,8 @@
 
 CREATE PROCEDURE [dbo].[subscribe_appl_sel]
 (
-   @client_id int
+    @client_id int
+   ,@user_id int
 )
 AS
 BEGIN

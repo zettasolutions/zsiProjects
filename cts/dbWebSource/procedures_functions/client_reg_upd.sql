@@ -6,9 +6,7 @@ CREATE PROCEDURE [dbo].[client_reg_upd] (
  ,@city_code      nvarchar(50) = null
  ,@address        nvarchar(500)
  ,@client_number  nvarchar(100)
- ,@client_logo    image = null
  ,@parent_client_id int = null
- ,@style_css       nvarchar(max)=null
  ,@contact_name    nvarchar(50)
  ,@mobile_no       nvarchar(50)
  ,@user_id         int=null
@@ -24,9 +22,7 @@ BEGIN
   ,city_code   
   ,address     
   ,client_number
-  ,client_logo
   ,parent_client_id
-  ,style_css
   ,contact_name 
   ,mobile_no
   ,created_by
@@ -39,15 +35,16 @@ BEGIN
    ,@city_code   
    ,@address     
    ,@client_number
-   ,@client_logo
    ,@parent_client_id
-   ,@style_css
    ,@contact_name
    ,@mobile_no
    ,@user_id
    ,GETDATE()
   )
   SET @id = @@IDENTITY
+  EXECUTE dbo.createClientRequestTable @client_id=@id;
+  EXECUTE dbo.createClientRequestRoutingTable @client_id=@id;
+  EXECUTE dbo.createClientRequestAttachmentsTable @client_id=@id;
   INSERT INTO dbo.processes (seq_no, client_id, icon, process_title,is_default,is_active,created_date) 
                      VALUES (1,@id,'plus','Compose','Y','Y',GETDATE())
 
