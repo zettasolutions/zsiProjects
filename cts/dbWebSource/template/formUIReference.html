@@ -1,0 +1,370 @@
+<style>
+    .zform-group {
+        position: relative;
+        border: 1px solid #406693;
+        border-radius: 5px;
+        padding: 5px 10px;
+        height: 50px;
+        color: #ffffff;
+        margin: 0 0 5px 0;
+        transition: border  0.3s cubic-bezier(.25,.8,.25,1);
+        transform: translateZ(0);
+    }
+    
+    .zform-group.textarea {
+        height: 165px;
+    }
+    
+    .zform-group > label {
+        position: absolute;
+        top: 10px;
+        margin: 0;
+        color: inherit;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 95%;
+        transition: top 0.3s cubic-bezier(.25,.8,.25,1);
+        transform: translateZ(0);
+    }
+    
+    .zform-group > label > i {
+        margin: 0 5px 0 0;
+        color: inherit;
+    }
+    
+    .zform-group > input
+    ,.zform-group > select
+    ,.zform-group > textarea {
+        display: block;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        margin: 14px 0 0 0;
+        color: inherit;
+        width: 100%;
+    }
+    
+    .zform-group > .error-feedback {
+        display: none;
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        padding: 0 0 0 5px;
+        border: 1px solid #c80000;
+        background-color: #ffffff;
+        color: #c80000;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    
+    .zform-group > .error-feedback > i {
+        padding: 0 5px;
+    }
+    
+    /* ---------- active ---------- */
+    
+    .zform-group.active > label {
+        top: 0px;
+        font-size: 9pt;
+    }
+    
+    .zform-group.active > input
+    ,.zform-group.active > select 
+    .zform-group.active > textarea {
+        display: inline;
+    }
+    
+    /* ---------- focused ---------- */
+    
+    .zform-group.focused {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+    }
+    
+    /* ---------- error ---------- */
+    
+    .zform-group.error > .error-feedback {
+        display: block;
+    }
+    
+    /* ---------- no-label-icon ---------- */
+    
+    .zform-group.no-label-icon input
+    ,.zform-group.no-label-icon select {
+        margin: 5px 0 0 0;
+    }
+    
+    .zform-group.textarea.no-label-icon textarea {
+        margin: 0;
+    }
+</style>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <h6>Full</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group">
+                    <label for="text"><i class="fas fa-user"></i>Text</label>
+                    <input type="text" name="text" id="text" value="" tabindex="0" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group active error">
+                    <label for="text"><i class="fas fa-user"></i>Text</label>
+                    <input type="text" name="text" id="text" value="" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>Has label but no icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group">
+                    <label for="text">Text</label>
+                    <input type="text" name="text" id="text" value="" tabindex="0" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group active error">
+                    <label for="text">Text</label>
+                    <input type="text" name="text" id="text" value="" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>No label but has icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group">
+                    <label for="text"><i class="fas fa-user"></i></label>
+                    <input type="text" name="text" id="text" value="" tabindex="0" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group active error">
+                    <label for="text"><i class="fas fa-user"></i></label>
+                    <input type="text" name="text" id="text" value="" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>No label and icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group no-label-icon">
+                    <input type="text" name="text" id="text" value="" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group no-label-icon active error">
+                    <input type="text" name="text" id="text" value="" />
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>Full</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group">
+                    <label for="text"><i class="fas fa-user"></i>Text</label>
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group active error">
+                    <label for="text"><i class="fas fa-user"></i>Text</label>
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>Has label but no icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group">
+                    <label for="text">Text</label>
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group active error">
+                    <label for="text">Text</label>
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>No labal but has icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group">
+                    <label for="text"><i class="fas fa-user"></i></label>
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group active error">
+                    <label for="text"><i class="fas fa-user"></i></label>
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>No label and icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group no-label-icon">
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group no-label-icon active error">
+                    <select>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>C</option>
+                    </select>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>Full</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea">
+                    <label for="text"><i class="fas fa-user"></i>Text</label>
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea active error">
+                    <label for="text"><i class="fas fa-user"></i>Text</label>
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>Has label but no icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea">
+                    <label for="text">Text</label>
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea active error">
+                    <label for="text">Text</label>
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>No labal but has icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea">
+                    <label for="text"><i class="fas fa-user"></i></label>
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea active error">
+                    <label for="text"><i class="fas fa-user"></i></label>
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <h6>No label and icon</h6>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea no-label-icon">
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="zform-group textarea no-label-icon active error">
+                    <textarea name="asd" id="asd" rows="5"></textarea>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
