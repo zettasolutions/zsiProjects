@@ -1,4 +1,4 @@
-(function() {
+$(document).ready(function() {
     var bs = zsi.bs.ctrl
         ,svn = zsi.setValIfNull
     ;
@@ -6,6 +6,7 @@
     displayRecords();
     
     function displayRecords(){   
+        console.log($("#main-content").height());
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
     	     url            : execURL + "menus_sel"
@@ -54,5 +55,5 @@
                             displayRecords();
                         }
         });      
-    });
-})(); 
+    }); 
+});
