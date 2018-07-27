@@ -164,14 +164,14 @@
 }
 .zGrid  .zPageFooter {
 	background-color: #bcbcbc;
-    background-image: linear-gradient(to bottom, #bcbcbc 0px, #9c9d9e 100%);
-    height: 27px;
-    overflow: visible;
-    padding-left: 5px;
-    padding-right: 5px;
-	clear:left;
+	background-image: linear-gradient(to bottom, #bcbcbc 0px, #9c9d9e 100%);
+	height: 37px;
+	overflow: visible;
+	padding-left: 5px;
+	padding-right: 5px;
+	clear: both;
 	position: relative;
-    z-index: 1;
+	z-index: 1;
 }
 .zGrid  .zPageFooter .pagestatus {
     float: left;
@@ -276,4 +276,5 @@
 ,.zGrid .zHeaders  .zSort  > .desc > .sPane{
     line-height:10px
 }
-/*end of sort*/
+/*end of sort*/
+

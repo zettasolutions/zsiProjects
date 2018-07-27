@@ -20,7 +20,11 @@ footer {
     font-size: 10px;
 }
 
-/* --------------- FORM STYLE --------------- */
+option {
+	color: black;
+}
+
+/* --------------- z-form-con STYLE --------------- */
 
 div.z-form-con {
 	position: relative;
@@ -63,6 +67,7 @@ button.z-form {
 	background: linear-gradient(to left, #2F80ED 40%, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 	border-radius: 0;
 	padding: 0.30rem;
+	cursor: pointer;
 }
 
 div.z-form-con select.z-form {
@@ -228,4 +233,133 @@ div.z-form-con.has-icon textarea.z-form {
 	97%,100%{
 		transform:rotateX(360deg) rotateY(360deg);
 	}
+}
+
+/* ------------------ zform-group ------------------------- */
+
+.zform-group {
+    position: relative;
+    border: 1px solid #406693;
+    border-radius: 5px;
+    padding: 5px 10px;
+    height: 50px;
+    color: #ffffff;
+    margin: 0 0 5px 0;
+    transition: border  0.3s cubic-bezier(.25,.8,.25,1);
+    transform: translateZ(0);
+}
+
+.zform-group.textarea {
+    height: 165px;
+}
+
+.zform-group > label {
+    position: absolute;
+    top: 10px;
+    margin: 0;
+    color: inherit;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 95%;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    transform: translateZ(0);
+}
+
+.zform-group > label > i {
+    margin: 0 5px 0 0;
+    color: inherit;
+}
+
+.zform-group > input {
+    display: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin: 14px 0 0 0;
+    color: inherit;
+    width: 100%;
+}
+
+.zform-group > select {
+    display: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin: 14px 0 0 0;
+    color: inherit;
+    width: 100%;
+}
+
+.zform-group > textarea {
+    display: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin: 14px 0 0 0;
+    color: inherit;
+    width: 100%;
+}
+
+.zform-group > .error-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    padding: 0 0 0 5px;
+    border: 1px solid #c80000;
+    background-color: #ffffff;
+    color: #c80000;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.zform-group > .error-feedback > i {
+    padding: 0 5px;
+}
+
+/* ---------- active ---------- */
+
+.zform-group.active > label {
+    top: 0px;
+    font-size: 9pt;
+}
+
+.zform-group.active > input {
+    display: inline;
+}
+
+.zform-group.active > select {
+    display: inline;
+}
+
+.zform-group.active > textarea {
+    display: inline;
+}
+
+/* ---------- active ---------- */
+
+.zform-group.focused {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
+
+/* ---------- error ---------- */
+
+.zform-group.error > .error-feedback {
+    display: block;
+}
+
+/* ---------- no-label-icon ---------- */
+
+.zform-group.no-label-icon input {
+    margin: 5px 0 0 0;
+}
+
+.zform-group.no-label-icon select {
+    margin: 5px 0 0 0;
+}
+
+.zform-group.textarea.no-label-icon textarea {
+    margin: 0;
 }
