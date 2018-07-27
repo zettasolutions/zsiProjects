@@ -9,29 +9,58 @@ String.prototype.toDate = function () {
 };  
  
 zsi.ready(function(){
+    setSearch();
     displayRecords();
+    getTemplate();
     if (gUser.is_admin === "Y") {
         $("#button-div").html('<button type="button" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnSave"><i class="fa fa-save"></i> Save</button>' );
     }    
     
-    $("select[name='company_filter']").dataBind({
-        url: procURL + "dd_subscribe_client_sel" 
-        , text : "client_name"
-        , value: "client_id"
-        , onComplete: function() {
-            $("#company_filter").change(function(){
-                if(this.value){
-                    displayRecords();
-                } 
-            });
+    function getTemplate() {
+        $.get(base_url + "templates/bsDialogBox.txt",function(d){
+            var template = Handlebars.compile(d);
+            $("#main-content > .col-12").append(template( { 
+                  id    : 'modalAdd'
+                , title : 'Client Registration'
+                , body  :    '<div id="register_new" class="row">'
+                            +    '</div>'
+                            +'</div>'
+                })
+            );   
+        });
+        
+        $.get(base_url + 'page/name/clientRegistration'
+        ,function(data){
+            $('#modalAdd').find('.modal-body').html(data);
         }
-    });
+    ); 
+    }    
 
-    function displayRecords(){   
-        var cId = $("#company_filter").val();
+    function setSearch(){
+        new zsi.search({
+            tableCode: "ref-0006"
+            ,colNames : ["client_name"] 
+            ,displayNames : ["Client Name"]  
+            ,searchColumn :"client_name"
+            ,input:"input[name=company_name]"
+            ,url : execURL + "searchData"
+            ,onSelectedItem: function(currentObject,data,i){ 
+                currentObject.value=data.client_name;
+                $("#client_id").val(data.client_Id);
+                displayRecords(data.client_Id);
+           }
+        });        
+    }
+
+   $("input[name=company_name]").on("keyup change", function(){
+        if(this.value === ""){
+            displayRecords();
+        }
+   });
+    function displayRecords(cId){   
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
-    	     url            : procURL + "subscriptions_sel @app_client_id=" + (cId ? cId : null)  
+    	     url            : procURL + "subscriptions_sel @client_id=" + (cId ? cId : null)  
     	    ,width          : $("#main-content").width() - 40
     	    ,height         : $("#main-content").height() - 150
     	    ,selectorType   : "checkbox"
@@ -60,11 +89,8 @@ zsi.ready(function(){
              		,{text  : "Is Active?"              , name  : "is_active"           , type  : "yesno"    , width : 80     , style : "text-align:left;"  ,defaultValue:"Y"}
     	    ]
     	     ,onComplete: function(o){
-    	         _dRows = o.data.rows;
-    	         console.log(_dRows);
     	         zsi.initDatePicker();
     	         $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-    	         //$("#grid input[name='subscription_date']").val(_dRows[0].subscription_date);
     	    }  
         });    
     }
@@ -80,4 +106,4 @@ zsi.ready(function(){
             }
         });
     });
-});
+}); 
