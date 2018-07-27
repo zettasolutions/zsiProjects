@@ -6,17 +6,20 @@ namespace zsi.web.Controllers
     {
         public ActionResult Index()
         {
+            dcAppProfile dc = new dcAppProfile();
 
             if (Session["isAuthenticated"] != null)
             {
-                dcAppProfile dc = new dcAppProfile();
                 appProfile info = dc.GetInfoByCurrentUser();
                 SessionHandler.AppConfig = info;
                 return Redirect(Url.Content("~/") + "page/" + info.default_page);
-              
+
             }
             else
-                return View();  
+            {
+                if(SessionHandler.AppConfig ==null) SessionHandler.AppConfig = dc.GetInfo();
+                return View();
+            }
         }
         public ActionResult SignIn()
         {

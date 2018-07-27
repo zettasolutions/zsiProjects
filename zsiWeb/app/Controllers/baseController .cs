@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace zsi.web.Controllers
 {
-    public class baseController : Controller
+    public class BaseController : Controller
     {
      
 
@@ -92,10 +92,10 @@ namespace zsi.web.Controllers
             }
 
         }
-        public ContentResult toJSON(string sql, bool isProcedure)
+        public ContentResult ToJSON(string sql, bool isProcedure)
         {
 
-            return Content(DataHelper.toJSON(sql, isProcedure), "application/json");
+            return Content(DataHelper.ToJSON(sql, isProcedure), "application/json");
         }
 
         private string replaceIncludedScripts(string content) {

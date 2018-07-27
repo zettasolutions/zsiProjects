@@ -4,11 +4,11 @@ using zsi.web.Models;
 
 namespace zsi.web.Controllers
 {
-    public class selectOptionController : baseController
+    public class SelectOptionController : BaseController
     {
-        public ContentResult code(string param1,string param2="")
+        public ContentResult Code(string param1,string param2="")
         {
-            return this.toJSON("dbo.select_options_sel " + param1 + " " + param2,false);
+            return this.ToJSON("dbo.select_options_sel " + param1 + " " + param2,false);
         }
 
     }

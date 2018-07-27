@@ -8,7 +8,7 @@ using zsi.Framework.Common;
 
 namespace zsi.web.Controllers
 {
-    public class pageTemplateController : baseController
+    public class PageTemplateController : BaseController
     {
 
         public ActionResult Index()

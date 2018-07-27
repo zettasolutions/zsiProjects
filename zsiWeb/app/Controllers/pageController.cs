@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using zsi.web.Models;
 namespace zsi.web.Controllers
 {
-    public class pageController : baseController
+    public class PageController : BaseController
     {
         // GET: Page
         public ActionResult Index()

@@ -14,7 +14,7 @@ namespace zsi.web
     {
         public DataHelper() { }
         #region "private static"
-        private static string toJSON(SqlDataReader rdr)
+        private static string ToJSON(SqlDataReader rdr)
         {
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
@@ -46,7 +46,7 @@ namespace zsi.web
 
             return sb.ToString();
         }
-        private static string createMessageJSONStr(Message message )
+        private static string CreateMessageJSONStr(Message message )
         {
             return "{\"isSuccess\":" + message.isSuccess.ToString().ToLower()
                 + ",\"recordsAffected\":" + message.recordsAffected
@@ -54,8 +54,7 @@ namespace zsi.web
                 +",\"rows\":" + message.rows
                 + ",\"errMsg\":\"" + message.errMsg + "\"}";
         }
-
-        private static void serializeURLParameters(SqlCommand command, string sqlQuery)
+        private static void SerializeURLParameters(SqlCommand command, string sqlQuery)
         {
 
             int start = sqlQuery.IndexOf("@");
@@ -84,18 +83,7 @@ namespace zsi.web
             }
 
         }
-        #endregion
-
-        public static Message dataTableUpdate(string procedureName, DataTable dt, string parentId)
-        {
-            return _dataTableUpdate(procedureName, dt, parentId);
-
-        }
-        public static Message dataTableUpdate(string procedureName, DataTable dt)
-        {
-            return _dataTableUpdate(procedureName, dt, "");
-        }
-        private static Message _dataTableUpdate(string procedureName,DataTable dt,string parentId)
+        private static Message _DataTableUpdate(string procedureName, DataTable dt, string parentId)
         {
             Message m = new Message();
             try
@@ -107,7 +95,7 @@ namespace zsi.web
                     cmd.CommandType = CommandType.StoredProcedure;
                     SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
                     cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
-                    if(parentId!="") cmd.Parameters.AddWithValue("@parent_id", parentId);
+                    if (parentId != "") cmd.Parameters.AddWithValue("@parent_id", parentId);
                     tvparam.SqlDbType = SqlDbType.Structured;
                     SqlParameter retval = new SqlParameter();
                     retval.ParameterName = "@return_value";
@@ -124,16 +112,45 @@ namespace zsi.web
             }
             catch (SqlException ex)
             {
-                m.errNumber= ex.ErrorCode;
+                m.errNumber = ex.ErrorCode;
                 m.errMsg = ex.Message;
-                logError(ex.ErrorCode, procedureName + ",params:" + DataTableToJSON(dt), ex.Message, "E");
+                LogError(ex.ErrorCode, procedureName + ",params:" + DataTableToJSON(dt), ex.Message, "E");
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 m.errMsg = ex.Message;
-                logError(null, procedureName + ",params:" + DataTableToJSON(dt), ex.Message, "E");
+                LogError(null, procedureName + ",params:" + DataTableToJSON(dt), ex.Message, "E");
             }
             return m;
 
+        }
+        private static JObject HttpReqStreamToJObject(HttpRequestBase req) {
+            req.InputStream.Seek(0, SeekOrigin.Begin);
+            return JObject.Parse(new StreamReader(req.InputStream).ReadToEnd());
+        }
+        #endregion
+
+        public static DataTable GetDataTable(string sql)
+        {
+            SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            conn.Open();
+            var dr = cmd.ExecuteReader();
+            var dt = new DataTable();
+            dt.Load(dr);
+            conn.Close();
+            dt.Dispose();
+            dr.Dispose();
+            return dt;
+        }
+        public static Message DataTableUpdate(string procedureName, DataTable dt, string parentId)
+        {
+            return _DataTableUpdate(procedureName, dt, parentId);
+
+        }
+        public static Message DataTableUpdate(string procedureName, DataTable dt)
+        {
+            return _DataTableUpdate(procedureName, dt, "");
         }
         public static string DataTableToJSON(DataTable table)
         {
@@ -141,7 +158,7 @@ namespace zsi.web
             JSONString =  JsonConvert.SerializeObject(table);
             return JSONString;
         }
-        public static void logError(int? errNumber, string procedure, string errMessage, string type) {
+        public static void LogError(int? errNumber, string procedure, string errMessage, string type) {
 
             SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
             using (conn)
@@ -160,7 +177,7 @@ namespace zsi.web
             conn.Dispose();
 
         }
-        public static string getDbValue(string sql) {
+        public static string GetDbValue(string sql) {
             SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
             SqlCommand cmd = new SqlCommand(sql, conn);
             string returnValue = "";
@@ -170,7 +187,7 @@ namespace zsi.web
             conn.Close();
             return returnValue;
         }
-        public static string getGetRecordsByJsonObject(JObject json)
+        public static string GetGetRecordsByJsonObject(JObject json)
         {
 
             String _json = "";
@@ -181,10 +198,22 @@ namespace zsi.web
                 conn = new SqlConnection(dbConnection.ConnectionString);
                 using (conn)
                 {
-                    if (json["procedure"] == null)
-                        throw new Exception("sql procedure is required.");
-                    SqlCommand cmd = new SqlCommand(json["procedure"].ToString(), conn);
-                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    if (json["sqlCode"] == null)
+                        throw new Exception("sql code is required.");
+                    string sqlCode = json["sqlCode"].ToString();
+                    SqlCommands sc = new dcSQLCommands().GetInfo(sqlCode);
+
+                    if (sc.isPublic == true && SessionHandler.CurrentUser.userId == 0) {
+                        throw new Exception("db permission is required.");
+                    }
+
+                    SqlCommand cmd = new SqlCommand(sc.text, conn);
+                    if (sc.IsProcedure)
+                        cmd.CommandType = CommandType.StoredProcedure;
+                    else
+                        cmd.CommandType = CommandType.Text;
+
                     if (json["rows"] != null)
                     {
                         DataTable dt = new DataTable();
@@ -205,12 +234,11 @@ namespace zsi.web
                         JObject obj = (JObject)json["parameters"];
                         foreach (var pair in obj)
                         {
+                            if (pair.Value.ToString() == "''") continue;
                             cmd.Parameters.AddWithValue("@" + pair.Key, pair.Value.ToString());
                         }
                     }
                     cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
-
-                    StringBuilder allJSONs = new StringBuilder();
                     conn.Open();
                     cmd.CommandTimeout = 3600;
                     SqlParameter retval = new SqlParameter();
@@ -220,10 +248,10 @@ namespace zsi.web
                     cmd.Parameters.Add(retval);
 
                     rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                    _json = toJSON(rdr);
+                    _json = ToJSON(rdr);
                     rdr.Close();
 
-                    _json = createMessageJSONStr(new Message
+                    _json = CreateMessageJSONStr(new Message
                     {
                         isSuccess = true,
                         recordsAffected = rdr.RecordsAffected,
@@ -235,7 +263,7 @@ namespace zsi.web
             }
             catch (SqlException sqlException)
             {
-                _json = createMessageJSONStr(new Message
+                _json = CreateMessageJSONStr(new Message
                 {
                     isSuccess = false,
                     recordsAffected = -1,
@@ -250,10 +278,10 @@ namespace zsi.web
             return _json;
 
         }
-        public static void execute(string sql, bool isProcedure) {
-            toJSON(sql, isProcedure);
+        public static void Execute(string sql, bool isProcedure) {
+            ToJSON(sql, isProcedure);
         }
-        public static string toJSON(string sql, bool isProcedure)
+        public static string ToJSON(string sql, bool isProcedure)
         {
             SqlDataReader rdr = null;
             SqlConnection conn = null;
@@ -265,12 +293,10 @@ namespace zsi.web
                 conn = new SqlConnection(dbConnection.ConnectionString);
                 command = new SqlCommand(sql, conn);
                 if (isProcedure){
-                    serializeURLParameters(command, sql);
+                    SerializeURLParameters(command, sql);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
                 }
-
-                StringBuilder allJSONs = new StringBuilder();
                 conn.Open();
                 command.CommandTimeout = 3600;
                 SqlParameter retval = new SqlParameter();
@@ -280,17 +306,17 @@ namespace zsi.web
                 command.Parameters.Add(retval);
                
                 rdr = command.ExecuteReader(CommandBehavior.CloseConnection);
-                json = toJSON(rdr);
+                json = ToJSON(rdr);
                 rdr.Close();
 
                 if (json == "[]" && rdr.RecordsAffected > 0)
-                    json = createMessageJSONStr(new Message {
+                    json = CreateMessageJSONStr(new Message {
                         isSuccess = true
                         , recordsAffected = rdr.RecordsAffected
                         , rows = "[]"
                     });
                 else
-                    json = createMessageJSONStr(new Message {
+                    json = CreateMessageJSONStr(new Message {
                         isSuccess = true
                         , recordsAffected = rdr.RecordsAffected
                         , rows = json
@@ -300,7 +326,7 @@ namespace zsi.web
             }
             catch (SqlException sqlException)
             {
-                json = createMessageJSONStr(new Message {
+                json = CreateMessageJSONStr(new Message {
                      isSuccess = false
                     , recordsAffected = -1
                     , errMsg = sqlException.ToString()
@@ -313,7 +339,7 @@ namespace zsi.web
             }
             return json;
         }
-        public static string toJSON(SqlCommand cmd)
+        public static string ToJSON(SqlCommand cmd)
         {
             SqlDataReader rdr = null;
             SqlConnection conn = null;
@@ -323,12 +349,10 @@ namespace zsi.web
             {
                 conn = new SqlConnection(dbConnection.ConnectionString);
                 cmd.Connection = conn;
-
-                StringBuilder allJSONs = new StringBuilder();
                 conn.Open();
                 cmd.CommandTimeout = 3600;
                 rdr = cmd.ExecuteReader();
-                json = toJSON(rdr);
+                json = ToJSON(rdr);
                 rdr.Close();
             }
             catch (SqlException sqlException)
@@ -341,26 +365,22 @@ namespace zsi.web
             }
             return json;
         }
-        public static Message processPostData( HttpRequestBase request) {
-            request.InputStream.Seek(0, SeekOrigin.Begin);
-            string jsonString = new StreamReader(request.InputStream).ReadToEnd();
-            JObject json = JObject.Parse(jsonString);
-            DataTable dt = JsonConvert.DeserializeObject<DataTable>(json["rows"].ToString());
+        public static Message ProcessPostData( HttpRequestBase request) {
+            JObject json = HttpReqStreamToJObject(request);
+           DataTable dt = JsonConvert.DeserializeObject<DataTable>(json["rows"].ToString());
             string parentId = (json["parentId"] ==null ? "" :  json["parentId"].ToString());
-            return dataTableUpdate(json["procedure"].ToString(), dt, parentId);
+            return DataTableUpdate(json["procedure"].ToString(), dt, parentId);
         }
         public static string GetJSONData(HttpRequestBase request)
         {
             try
             {
-                request.InputStream.Seek(0, SeekOrigin.Begin);
-                string jsonString = new StreamReader(request.InputStream).ReadToEnd();
-                JObject json = JObject.Parse(jsonString);
-                return getGetRecordsByJsonObject(json);
+                JObject json = HttpReqStreamToJObject(request);
+                return GetGetRecordsByJsonObject(json);
             }
             catch (Exception ex) {
 
-                return createMessageJSONStr(new Message
+                return CreateMessageJSONStr(new Message
                 {
                      isSuccess = false
                     ,recordsAffected = -1

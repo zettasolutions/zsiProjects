@@ -2,7 +2,7 @@
 
 namespace zsi.web.Controllers
 {
-    public class sqlController : baseController
+    public class SqlController : BaseController
     {
         public ActionResult Index()
         {
@@ -14,18 +14,18 @@ namespace zsi.web.Controllers
 
         public ContentResult Exec()
         {
-               return this.toJSON(Request["p"],false); 
+               return this.ToJSON(Request["p"],false); 
         }
 
         public ContentResult Proc()
         {
-                return this.toJSON(Request["p"], true);
+                return this.ToJSON(Request["p"], true);
             
         }
 
         public ContentResult LogError()
         {
-                return this.toJSON(Request["p"],true);
+                return this.ToJSON(Request["p"],true);
             
         }
 

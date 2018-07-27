@@ -8,7 +8,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace zsi.web.Controllers
 {
-    public class javaScriptController : baseController
+    public class JavaScriptController : BaseController
     {
 
         public ActionResult Index()
@@ -48,11 +48,12 @@ namespace zsi.web.Controllers
 
         public ActionResult name(string pageName)
         {
-            if (CurrentUser.userName == null)
+            var js = new dcJavaScript().GetInfo(pageName);
+            if (CurrentUser.userName == null && js.is_public=="N")
                 return Redirect(Url.Content("~/"));
             else
             {
-                var r = new dcJavaScript().GetInfo(pageName).js_content;
+                var r = js.js_content;
                 if(this.AppConfig.is_source_minified =="Y") r = JsMinify(r);
                 return Content(r, "application/javascript");
             }

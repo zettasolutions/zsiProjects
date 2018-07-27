@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using zsi.Framework.Security;
 namespace zsi.web.Controllers
 {
-    public class publicController : baseController
+    public class PublicController : BaseController
     {
         // GET: Page
         public ActionResult Index()

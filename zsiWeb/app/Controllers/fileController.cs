@@ -13,10 +13,10 @@ using System.Data.OleDb;
 
 namespace zsi.web.Controllers
 {
-    public class fileController : baseController
+    public class FileController : BaseController
     {
 
-        public fileController()
+        public FileController()
         {
             this.tempPath = AppSettings.BaseDirectory + @"temp\";
             if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
@@ -81,9 +81,9 @@ namespace zsi.web.Controllers
                     var fileName = Path.GetFileName(file.FileName);
                     fullPath = Path.Combine(tempPath, fileName);
                     file.SaveAs(fullPath);
-                    DataHelper.execute("temp_data_del @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
+                    DataHelper.Execute("temp_data_del @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
                     MigrateExcelFile(fullPath, colRange, tmpTable, extraColumns);
-                    DataHelper.execute("temp_data_upd @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
+                    DataHelper.Execute("temp_data_upd @table_name='" + tmpTable + "',@user_id=" + this.CurrentUser.userId, false);
 
                 }
             }
@@ -98,15 +98,21 @@ namespace zsi.web.Controllers
         public ActionResult viewImage(string fileName, string isThumbNail = "n")
         {
 
-            var path = this.tempPath;
-            var fullPath = path;
-            if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
-            if (isThumbNail.ToLower() == "y") path = path + "thumbnails\\";
-            fullPath = Path.Combine(path, fileName);
-            if (!System.IO.File.Exists(fullPath))
-                fullPath = "/images/no-image.jpg";
 
-            return base.File(fullPath, "image/jpeg");
+            try
+            {
+                var path = this.tempPath;
+                var fullPath = path;
+                if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
+                if (isThumbNail.ToLower() == "y") path = path + "thumbnails\\";
+                fullPath = Path.Combine(path, fileName);
+                if (!System.IO.File.Exists(fullPath))
+                    fullPath = "/images/no-image.jpg";
+                return base.File(fullPath, "image/jpeg");
+            }
+            catch {
+                return base.File("/images/no-image.jpg", "image/jpeg");
+            }
 
         }
 

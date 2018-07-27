@@ -5,7 +5,7 @@ namespace zsi.web.Controllers
     using zsi.Framework.Security;
     using System;
 
-    public class AccountController : baseController
+    public class AccountController : BaseController
     {
         private  ContentResult setMsg(string message,bool isSuccess)
         {
