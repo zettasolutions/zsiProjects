@@ -1311,7 +1311,7 @@ var  ud='undefined'
                     if(o.isNew===true) clearTables();
                 } 
                 
-                if(o.url || o.procedure){
+                if(o.url || o.sqlCode){
                     if( (o.isAsync && __obj.curPageNo === 1) ||  ! o.isAsync ) clearTables();
                     var params ={
                        dataType: "json"
@@ -1359,13 +1359,15 @@ var  ud='undefined'
                             }          
                     };
                     
-                    if(typeof o.procedure!==ud)  {
+                    if(typeof o.sqlCode!==ud)  {
+                        console.log("o",o);
+                        console.log("o.sqlCode",o.sqlCode);
                         if(typeof zsi.config.getDataURL===ud){
                             alert("zsi.config.getDataURL is not defined in AppStart JS.");
                             return;
                         }
                         params.url = zsi.config.getDataURL ;
-                        params.data = JSON.stringify({procedure :o.procedure,parameters:o.parameters});
+                        params.data = JSON.stringify({sqlCode :o.sqlCode,parameters:o.parameters});
                         params.type = "POST";
                     }
                     else params.url = o.url + ( isUD(o.rowsPerPage) ? "" : ",@rpp=" +  o.rowsPerPage  )
@@ -3445,3 +3447,4 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
+                                        

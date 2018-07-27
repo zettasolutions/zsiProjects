@@ -1,0 +1,36 @@
+<button onclick='sendMessage();'> Send text Message</button>
+
+<script>
+function sendMessage(){
+        
+      var _param =  { outboundSMSMessageRequest : 
+                		{
+                			 senderAddress : "tel:21584301"
+                			,outboundSMSTextMessage : { message : "Welcome to smager app - This is a test message" }
+                			,address : ["tel:+639178280064"] 
+                			
+                		}
+                    };
+
+      $.ajax({
+        //url: "https://devapi.globelabs.com.ph/smsmessaging/v1/outbound/21584301/requests?access_token=-iPlg6qZ5YOGFoBarUNBEvwpzcbKNx_OPMxmdWMnjSY"
+        url: "https://devapi.globelabs.com.ph/smsmessaging/v1/outbound/21584301/requests?access_token=OfHC2tY4FvWc54Vef7gFuH0LJFMdkkPbrsus-FHyn_8"
+        ,type: 'POST'
+        //,crossDomain: true
+        ,beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "*");
+            request.setRequestHeader("Content-Type", "application/json"); 
+        }
+        ,success: completeHandler = function(data) {
+           console.log(data);
+        }
+        ,error: errorHandler = function() {
+            console.log("error");
+        }
+        ,data:JSON.stringify( _param)
+        //,data:_param
+    }, 'json');  
+        
+}
+</script>
+
