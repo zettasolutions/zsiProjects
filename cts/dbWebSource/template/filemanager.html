@@ -1,0 +1,89 @@
+<style>
+ul#locations {
+    list-style-type: none;
+    margin: 0 0 0 5px;
+    padding: 0;
+}
+
+ul#locations li {
+    float: left;
+    margin-right: 5px;
+}
+
+ul#locations li a {
+    color: #ffffff;
+}
+
+ul#folders
+, ul#files {
+    background-color: #f9f9f9;
+    list-style-type: none;
+    margin: 10px 0 0 5px;
+    padding: 5px; 
+}
+
+ul#folders li
+, ul#files li
+, ul#folders li a
+, ul#files li a {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.btn-group {
+    clear: left;
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+#editorPane {
+    background-color: #fff;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    display:none;
+}
+
+#editorPane .zPopup .panel {
+    margin-top: 13px;
+}
+
+#editorPane > .zPopup > .panel > .header {
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.zPopup > .panel > .header > .close {
+    float: left;
+    margin-left: 9px;
+    margin-top: -18px;
+}
+
+.zPopup h2 {
+    font-size: 10pt;
+    font-weight: bold;
+    margin: 0 0 0 35px;
+}
+
+</style>
+
+<div class="row">
+    <div class="col-12">
+        <ul id="locations"></ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-md-4">
+        <ul id="folders" class="w-100"></ul>
+    </div>
+    <div class="col-12 col-md-4">
+        <ul id="files" class="w-100"></ul>
+    </div>
+</div>
+
+<script src="/ace/src-noconflict/ace.js"></script>
+<script src="/ace/src-noconflict/ext-language_tools.js"></script>
