@@ -19,8 +19,7 @@ DECLARE @stmt NVARCHAR(MAX)
 	IF ISNULL(@request_attachment_id,0) <> 0
 	BEGIN
 		SET @stmt = 'UPDATE ' + @table + '_request_attachments ' + 
-		   'SET attachment_name=''' + @attachment_name + ''' ,file_name=''' + @file_name + '''' +
-		   ' WHERE request_attachment_id=' + CAST(@request_attachment_id AS NVARCHAR(100)) + '';
+		   'SET attachment_name=''' + @attachment_name + ''' WHERE request_attachment_id=' + CAST(@request_attachment_id AS NVARCHAR(100)) + '';
 		EXEC(@stmt);
 	END
 	ELSE

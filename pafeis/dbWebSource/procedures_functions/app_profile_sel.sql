@@ -20,3 +20,4 @@ select top 1
 	,ap.is_source_minified
 	,'selectoption,masterpages,table,filemanager,tablelayout,errors,appprofile' system_pages 
 from dbo.app_profile ap
+

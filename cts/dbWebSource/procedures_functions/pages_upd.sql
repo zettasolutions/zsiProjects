@@ -1,5 +1,4 @@
-
-CREATE PROCEDURE [dbo].[pages_upd]
+create PROCEDURE [dbo].[pages_upd]
 (
     @tt    pages_tt READONLY
    ,@user_id int
@@ -50,4 +49,3 @@ END
 
 
 
- select * from pages

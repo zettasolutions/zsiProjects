@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[sql_commands_upd](
 	@sqlcmd_id int=null
 	,@sqlcmd_code nvarchar(50)
-	,@sqlcmd_text nvarchar(max)
+	,@sqlcmd_text nvarchar(max)=null
 	,@is_public char(1)
 	,@user_id int
 )
@@ -40,3 +40,6 @@ ELSE
 		)
 	END
 END
+
+
+
