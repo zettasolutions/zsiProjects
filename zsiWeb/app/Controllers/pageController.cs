@@ -6,6 +6,7 @@ namespace zsi.web.Controllers
 {
     public class PageController : BaseController
     {
+        const string defaultCtrl = "page/";
         // GET: Page
         public ActionResult Index()
         {
@@ -58,7 +59,7 @@ namespace zsi.web.Controllers
                         if (this.CurrentUser.isDeveloper == "Y")
                         {
                             if (!this.isAuthorizedUser())
-                                return Redirect(Url.Content("~/") + "page/" + devURL);
+                                return Redirect(Url.Content("~/") + defaultCtrl + devURL);
                         }
 
                     }
@@ -83,12 +84,12 @@ namespace zsi.web.Controllers
                     Session["zsi_login"] = "Y";
                     Response.Cookies["zsi_login"].Value = "Y";
                     Response.Cookies["zsi_login"].Expires = DateTime.Now.AddDays(1);
-                    return Redirect(gePriorityURL(Url.Content("~/") + "page/" + this.AppConfig.default_page));
+                    return Redirect(gePriorityURL(Url.Content("~/") + defaultCtrl + this.AppConfig.default_page));
                 }
                 else
                 {
                     Session["zsi_login"] = "N";
-                    return Redirect(Url.Content("~/") + "page/zsiUserLogin");
+                    return Redirect(Url.Content("~/") + defaultCtrl + "zsiUserLogin");
                 }
             }
             catch (Exception ex)

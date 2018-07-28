@@ -23,7 +23,7 @@ namespace zsi.smagerUp
 
             routes.MapRoute(
                 name: "get-public-page",
-                url: "public/{pageName}",
+                url: "pub/{pageName}",
                 defaults: new { controller = "public", action = "name" }
                 , constraints: new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) }
             );

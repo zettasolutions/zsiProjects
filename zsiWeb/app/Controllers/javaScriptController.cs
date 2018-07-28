@@ -54,7 +54,11 @@ namespace zsi.web.Controllers
             else
             {
                 var r = js.js_content;
-                if(this.AppConfig.is_source_minified =="Y") r = JsMinify(r);
+                var _isDev = Session["zsi_login"].ToString() == "Y" ? true : false;
+                if ( !_isDev)
+                    r = JsMinify(r);
+                else if ( !_isDev && (this.AppConfig.is_source_minified == "Y" || js.is_public == "Y"))
+                        r = JsMinify(r);
                 return Content(r, "application/javascript");
             }
         }

@@ -133,8 +133,7 @@ namespace zsi.web.Controllers
                     ViewBag.pageTitle = d.page_title;
                     ViewBag.template = replaceIncludedScripts(d.pt_content);
                     ViewBag.layoutPage = string.Format("~/Views/Shared/{0}.cshtml", (isPublic =="Y" ? "_Public" : (d.master_page_name == null ? defaultPage : d.master_page_name)));
-
-                    if (d.page_js_rev_no != 0)
+                if (d.page_js_rev_no != 0)
                         ViewBag.pageJSLink = string.Format("<script src='{0}javascript/name/{1}?rev={2}'></script>", Url.Content("~/"), pageName, d.page_js_rev_no);
                 }
                 else
