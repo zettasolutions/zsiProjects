@@ -2,6 +2,8 @@ var  projectAccess = {}
     ,procURL = base_url + "sql/proc?p=" 
     ,execURL = base_url + "sql/exec?p="
     ,optionsURL  = base_url + "selectoption/code/" 
+    ,bs = zsi.bs.ctrl
+    ,svn = zsi.setValIfNull
 ; 
 
 //initialize Settings.
@@ -276,4 +278,4 @@ function readCookie(name) {
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
-                              
+                                 

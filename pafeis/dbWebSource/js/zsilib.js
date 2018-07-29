@@ -850,6 +850,7 @@ var  ud='undefined'
                return this;
             }; 
             $.fn.dataBindGrid       = function(o){
+                if ( ! isUD(o.ver) ) { if(o.ver===2) return this.dataBindGrid2(o); }
                 this.arrowUp ="<span class=\"arrow-up\"></span>",
                 this.arrowDown ="<span class=\"arrow-down\"></span>",
                 this.arrows = this.arrowUp + this.arrowDown;   
@@ -1360,8 +1361,6 @@ var  ud='undefined'
                     };
                     
                     if(typeof o.sqlCode!==ud)  {
-                        console.log("o",o);
-                        console.log("o.sqlCode",o.sqlCode);
                         if(typeof zsi.config.getDataURL===ud){
                             alert("zsi.config.getDataURL is not defined in AppStart JS.");
                             return;
@@ -1395,6 +1394,548 @@ var  ud='undefined'
                     rowsCompleted();                  
                     __obj.onRequestDone({params:o});
 
+                }
+                
+            };
+            $.fn.dataBindGrid2      = function(o){
+                this.arrowUp ="<span class=\"arrow-up\"></span>",
+                this.arrowDown ="<span class=\"arrow-down\"></span>",
+                this.arrows = this.arrowUp + this.arrowDown;   
+                this.clsPanelR = ".right";
+                this.clsPanelL = ".left";
+                this.setPageCtrl = function(o,data){
+                    var _self = $(this);
+                    var _$pageNo;
+                  
+                    var _createPageList = function(_rows,_pages){
+                        var opt ="";
+                        for(var x=1;x<=_pages;x++){
+                            opt += "<option value='" + x + "'>" + x + "</option>";
+                        }
+                        _$pageNo = _self.find("#pageNo").html(opt);
+                        _self.find("#recordsNum").html(_rows.length);
+                        _self.find("#of").html("of " + _pages);
+                    };
+                    
+                    _createPageList(data.rows,data.returnValue);
+                     
+                    _$pageNo.change(function(){
+                         o.parameters.pno = this.value;
+                        _obj.dataBindGrid2(_obj.params);
+                    });
+                    
+                    _self.find("#rpp").keyup(function(e){
+                        var k = (e.keyCode ? e.keyCode : e.which);
+                    	if(k == '13'){
+                            o.parameters.rpp = this.value;
+                            _obj.params.callBack = function(o){
+                                _createPageList(o.data.rows,o.data.returnValue);
+                                _obj.params.callBack = null;
+                            };
+                            _obj.dataBindGrid2(_obj.params);
+                    	}
+                    });  
+            
+                };
+                this.onRequestDone = function(o){
+                    var  _Pnl =".zGridPanel"
+                        ,_PL  =  _Pnl  + ".left"
+                        ,_PR  =  _Pnl  + ".right"
+                        ,_row = ".zRows"
+                        ,_$pl =  this.children(_PL)
+                        ,_$pr =  this.children(_PR)
+                    ;
+                    
+                    this.left = { panel :_$pl, rows: _$pl.find(_row)}; 
+                    this.right  = { panel :_$pr, rows: _$pr.find(_row)}; 
+                    
+                    if(o.params.onComplete){
+                        this._onComplete = o.params.onComplete;
+                        this._onComplete(o);
+                    }
+                    if(o.params.callBack) o.params.callBack(o);
+                };
+                this.setColumnResize = function(){
+                    var  _self      = this
+                        ,_clsGrp0   = "group0"
+                        ,_grpItem   = "groupItem"
+                    ;
+                    
+                    if( ! isUD(_self.params.resizable)  &&  _self.params.resizable===false) return;
+                    $(".zHeaders .item .cr").unbind("mousedown").on('mousedown', function (e) {
+                        var _curCol = $(e.target).parent();
+                        
+                        // if group0 found get last column element.
+                        if(_curCol.hasClass(_clsGrp0)) {
+                            var _gis =  _curCol.find("." + _grpItem);
+                              _curCol = $(_gis[_gis.length-1]);
+                        } 
+                        //console.log(  _curCol.parent() );
+                        zsi.tableResize = { 
+                             curCol         : _curCol
+                            ,curLastWidth   : parseFloat(_curCol.css("width"))
+                            ,hdrLastWidth   : parseFloat(_curCol.closest(".zHeaders").css("width")) 
+                            ,tblLastWidth   : parseFloat(_curCol.closest(".zGridPanel").find("#table").css("width"))
+                            ,nextLastWidth  : parseFloat(_curCol.next().css("width"))
+                            ,lastX          : e.clientX
+                        };
+                    });
+                    
+                    $(document).on('mousemove', function (e) {
+                         if (typeof zsi.tableResize === ud || zsi.tableResize === null ) return;
+                        var _tr = zsi.tableResize;
+                        if( ! _self.is( _tr.curCol.closest(".zGrid")) ) return;  //check if zGrid object is the same.
+                        
+                        //find current column index
+                        var  _groupIndex = -1
+                            ,_grp0  =  _tr.curCol.closest("." + _clsGrp0);
+                        if(_grp0.length > 0){
+                            var  _zHeaders = _grp0.parent()
+                                ,_gItems = _zHeaders.find("." + _grpItem);
+                            for( var x=0; x < _gItems.length;x++){
+                                if( ! $(_gItems[x]).hasClass(_clsGrp0)){
+                                  _groupIndex++;
+                                  if(_tr.curCol.is(_gItems[x]) ) break;
+                                }  
+                            }
+                        }    
+            
+                        var  _cIndex = (_grp0.length > 0 ? _groupIndex : _tr.curCol.index() )
+                            ,_ew     = (e.clientX  - _tr.lastX) //extra width
+                            ,_rows   = _tr.curCol.closest(".zGridPanel").find(".zRows").eq(0)
+                            ,_dr     = _self.params.dataRows
+                            ,_cls    = "#table > .zRow > .zCell:nth-child"
+                            ,_getCurrentCell = function(j){
+                                var _r = [];
+                                for(var x=0;x<j.length;x++){
+                                    if( $(j[x]).closest(".zRows").is(_rows) )  _r.push(j[x]);
+                                }
+                                return $(_r);
+                            };
+                        
+                        if( _tr.curLastWidth + _ew  < 25  )   return;
+                        
+                        _tr.curCol.css({width: _tr.curLastWidth + _ew });
+                        if(_ew > 0)
+                            _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
+                            
+                        var _zCell1 =  _getCurrentCell(_rows.find(_cls + "(" +  ( _cIndex +  1) + ")"));
+                        _zCell1.css({width: _tr.curLastWidth + _ew });
+                        _zCell1.parent().parent().css({width: _tr.tblLastWidth + _ew});
+                        
+                        if(_dr[ _cIndex]    ) _dr[_cIndex].width =  (_tr.curLastWidth + _ew);
+                    }).on('mouseup', function (e) {
+                        zsi.tableResize = null;
+                    });            
+                };
+            
+                var _obj                = this
+                    ,_o                 = o
+                    ,num_rows           = 0
+                    ,ctr                = 0  
+                    ,_gridWidth         = 0
+                    ,_gridWidthLeft     = 0
+                    ,_gridWidthRight    = 0
+                    ,_ch                = o.dataRows
+                    ,_chRight           = []
+                    ,_chLeft            = []                    
+                    ,_headers
+                    ,_tbl
+                    ,_tableRight
+                    //,dataRows
+                    ,_styles            = []
+                    ,_isGroup           = false
+                    ,bs                 = zsi.bs.ctrl
+                    ,svn                = zsi.setValIfNull
+                    ,clearTables        = function(){
+                         _obj.find("div[id='table']").html("");
+                    }
+                    ,createColumnHeader = function(o){
+                        if(o.headers.length===0) return;
+                        o.headers.html(getdataRows(o.dataTable,o.startGroupId));
+                        if(_isGroup) o.headers.append("<div>&nbsp;</div");
+                        o.headers.find(".item .zSort a").click(function(){
+                            var  $a = $(this)
+                                ,_colNo = $a.attr("sortColNo")
+                                ,_orderNo =0
+                                ,_oldClass = $a.attr("class")
+                            ;
+                            _obj.left=_tableRight.offset().left - _gridWidthLeft;
+                            _obj.find(".sPane").html(_obj.arrows);
+                            
+                            _obj.find(".zSort a").removeAttr("class");
+                            $a.addClass(_oldClass);
+                            
+                            if(typeof $a.attr("class") === ud) $a.addClass("desc");
+                            var className = $a.attr("class");
+                            if(className.indexOf("asc") > -1){
+                                $a.removeClass("asc");
+                                $a.addClass("desc");
+                                $a.find(".sPane").html(_obj.arrowDown);
+                                _orderNo=1;
+                            }
+                            else{
+                                $a.removeClass("desc");
+                                $a.addClass("asc");
+                                $a.find(".sPane").html(_obj.arrowUp);
+                                _orderNo=0;
+                            }
+                            _o.parameters.col_no = _colNo;
+                            _o.parameters.order_no=_orderNo;
+                            if(o.onSortClick) 
+                                o.onSortClick(_colNo,_orderNo);
+                            else 
+                                _obj.dataBindGrid2(_obj.params);
+                        });
+                        if(_isGroup || o.width > _o.width ) o.headers.css("width",(o.width + 20 ) + "px");
+                        if (_o.width) o.table.css("width",(o.width + 1 )  + "px");
+                    }
+                    ,trItem             = function(o){
+                        if(o.panelType === "Y" && _chLeft.length > 0) return; 
+                        var _dt =  (o.panelType ==="R"? _chRight : _chLeft ); 
+                        var _table =  (o.panelType ==="R"? _obj.find(_obj.clsPanelR).find("#table") : _obj.find(_obj.clsPanelL).find("#table") ); 
+                        
+                        var r       = "";
+                        
+                        r +="<div rowObj class='zRow "  + o.rowClass + "'>";
+                            for(var x=0;x<_dt.length;x++){
+                                var _content = "", _attr = "", _style = "", _class = "",_nd= (o.data===null ? " no-data ":"");
+                                var _info = _dt[x]; 
+                                if(o.data) {
+                                    o.data.td = {};
+                                    o.data.recordIndex = o.index;
+                                }
+                                if(_info.onRender)
+                                    _content = _info.onRender(o.data);
+                                else{
+                                    if(typeof _info.type === ud)
+                                        _content = "<span class='text'>" + svn(o.data,_info.name)  + "</span>";
+                                    else{ 
+                                        
+                                        if(typeof _info.displayText!==ud){
+                                            _content = bs({    name         : _info.name  
+                                                                ,style      : _info.style 
+                                                                ,type       : _info.type  
+                                                                ,value      : svn(o.data ,_info.name ,_info.defaultValue ) 
+                                                                ,displayText: svn(o.data  ,_info.displayText) 
+                                                        });
+                                        }
+                                        else {
+                                            _content = bs({name:_info.name , style:_info.style ,type:_info.type  ,value: svn(o.data  ,_info.name  ,_info.defaultValue )});
+                                        }
+                                    }
+                                     
+                                    if(x===0 || x ===_o.selectorIndex ){
+                                      if(typeof _o.selectorType !==ud) 
+                                            _content += (o.data !==null ? bs({name: (_o.selectorType ==="checkbox" ? "cb" :  (_o.selectorType==="radio" ? "rad" : "ctrl" )  ),type:_o.selectorType}) : "" );
+                                    }
+                                }
+                                
+                                if(o.data){
+                                    _attr  = (typeof o.data.td.attr  === ud ? "" : " " + o.data.td.attr);
+                                    _class = (typeof o.data.td.class === ud ? "" : " " + o.data.td.class );
+                                    _style = (typeof o.data.td.style === ud ? "" : " style=\"" + o.data.td.style + "\"" );
+                                }
+                                _class +=  (typeof _info.class !== ud ? " " +  _info.class : "");
+                                
+            
+                                if( (typeof _info.groupId !== ud ?_info.groupId : 0)  > 0 || _info.onRender || _isGroup === false)
+                                    r +="<div class=\"zCell" + _nd +  _class + "\"  " + _attr  + " style=\"width:" + (_dt[x].width ) +  "px;"  + _dt[x].style + "\" >" + _content + "</div>";
+                            }
+                        r +="</div>";               
+            
+                        if( o.panelType ==="R" && ! isUD(_o.toggleMasterKey) ){
+                            r +="<div id=\"childPanel" + zsi.replaceIllegalId(svn(o.data,_o.toggleMasterKey)) +   "\" class=\"zExtraRow\"><div class=\"zGrid\"></div></div>";                           
+                        }
+                        
+                        _table.append(r);
+                        var _row=$("div[rowObj]");_row.removeAttr("rowObj");
+                        if ( ! isUD(_o.onEachComplete) ) {
+                            _row._onEachComplete =_o.onEachComplete;
+                            _row._onEachComplete(o);
+                        }                        
+                        
+                    }
+                    ,setRowClickEvent   = function(){
+                        
+                        var $rows = _obj.find(".zRow");
+                        $rows.click(function(){
+                            var _i = $(this).index();
+                            $rows.removeClass("active");
+                             _obj.find(".zRow:nth-child("  + (_i + 1) +  ")").addClass("active");
+                        });
+                        
+                        //check on input change if current row is edited.
+                        $rows.find("select, input").on("keyup change", function(){
+                                var $zRow = $(this).closest(".zRow");
+                                $zRow.find("#is_edited").val("Y");
+                        });   
+                        
+                        
+                    }
+                    ,setScrollBars      = function(){
+                        _tableRight.parent().scroll(function() {
+                            var _left = _tableRight.offset().left;
+                            var _top = _tableRight.offset().top;
+                            var _headers = $(_tableRight.closest(".right").find(".zHeaders")[0]);
+                            var _tblLeft = $(this).closest(".right").prev().find("#table");
+                            _headers.offset({left:_left});
+                            _tblLeft.offset({top:_top});
+                        });                         
+                    }
+                    ,getdataRows= function(d, id){
+                        var  hasChild = function (d,id){
+                            for(var x=0; x<d.length;x++ ){
+                                if(d[x].groupId===id) return true;
+                            }
+                            return false;
+                        };
+                        var loadChild = function (d,id){
+                            var h=""; 
+                            for(var x=0; x<d.length;x++ ){
+                                if(typeof d[x].groupId === ud ||  d[x].groupId==id ) {
+                                    var _hasSort = (typeof d[x].sortColNo !== ud ? true:false);
+                                    var _minusSortWidth  = ( _hasSort ? 15:0);
+                                    var _style = "",_styleTitle="";
+                                    var _level = (typeof d[x].groupId !==ud ? " group" + d[x].groupId : "" );
+                                    var _class = (typeof d[x].class !==ud ? " " + d[x].class : "" );
+                                    var _id = (typeof d[x].id !==ud ? "id=\"" + d[x].id + "\"" : "" );
+                                    var _titleId = (typeof d[x].id !==ud ? "id=\"title" + d[x].id + "\"" : "" );
+                                    var _groupItem = (_isGroup ? " groupItem" : "" );
+                                    if(typeof d[x].width !==ud){
+                                        _style = "style=\"width:" +  d[x].width  + "px;"  + d[x].style + "\"";
+                                       // _styleTitle = "style=\"width:" +  (d[x].width -  _minusSortWidth) + "px;"  + d[x].style + "\"";
+                                        _styleTitle = "style=\""  + d[x].style + "\"";
+                                    }
+                                    
+                                    h+= "<div " + _id + " class='item" + _groupItem + _level + _class + "' " + _style + ">";
+                                    h+= "<div " + _titleId + " class='title" + ( _hasSort ? " hasSort":"") + "' " + _styleTitle + " ><span class=\"text\">" + d[x].text +  "</span></div>"; 
+                                    if( isUD(o.resizable)  ||  o.resizable===true) h+= "<div class='cr'></div>";
+                                    if(typeof d[x].groupId !== ud ) 
+                                        h+= getdataRows(d,d[x].id) ;
+                                    h+=getSortHeader(d[x].sortColNo);
+                                    h+= "</div>";
+                                   
+                                }
+                            }
+                            return h;
+                        };
+                        
+            
+                        return loadChild(d,id);
+            
+                    }
+                    ,getSortHeader   = function(sortColNo){
+             
+                        if(typeof sortColNo !== ud )
+                            return  "<div class=\"zSort\">"
+                                    + "<a href=\"javascript:void(0);\" sortColNo=\"" + sortColNo + "\" >"
+                                        + "<span class=\"sPane\">" + _obj.arrows + "</span>"
+                                    + "</a>"
+                                    + "</div>";
+                        else return "";
+                    }
+                    ,isFreezeItem       = function(o){
+                        return  ( ((typeof o.isFreeze === ud) ||  o.isFreeze ===false) ? false:true ); 
+                    }
+                    ,createBlankRows =  function(o){
+                        if(typeof o.blankRowsLimit !==ud ){
+                            for(var x=0; x < o.blankRowsLimit;x++){
+                                var _cls = zsi.getOddEven();
+                                trItem({data:null,panelType:"L",rowClass:_cls,index:x}); 
+                                trItem({data:null,panelType:"R",rowClass:_cls,index:x});
+                            }
+                        } 
+                    }
+                    ,rowsCompleted = function(){
+                        //setRowsKeyUpChange();
+                        createBlankRows(o);
+                        setRowClickEvent();
+                        setScrollBars();
+                        _obj.addClickHighlight(); 
+                        _obj.setColumnResize();
+                    }
+                ;
+            
+                $.each(o.dataRows,function(){
+                    if(this.groupId > 0 || typeof this.groupId ===ud){ 
+                        if(typeof this.groupId !==ud){ if(_isGroup===false) {_isGroup=true;}}
+                        _styles.push(this);
+                    }
+                    
+                    if( isFreezeItem(this) )
+                        _chLeft.push(this);
+                    else
+                        _chRight.push(this);
+                });
+                
+            
+            
+                if(typeof this.isInitiated === ud){
+                   var _rpp = isUD(o.parameters.rpp) ? 0  : o.parameters.rpp;
+            
+                    var _footer =  "<div class=\"zPageFooter\"><div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> 0 </i></div>"
+                                +  "<div class='pagectrl'>" + ( _rpp===0 ? "" : "<label> No. of Rows: </label> <input id='rpp' name='rpp' type='text' value='" + _rpp  + "'>" ) 
+                                +  "<label id='page'> Page </label> <select id='pageNo'></select>"
+                                +  "<label id='of'> of 0 </label></div></div>"
+                       ,_head = "";
+                    
+                    if(_chLeft.length > 0)
+                        _head +="<div class=\"zGridPanel left\">"
+                                    +"<div class=\"zHeaders\"></div>"
+                                    +"<div class=\"zRows\">"
+                                        +"<div id=\"table\"  ></div>"
+                                    +"</div>"
+                                    +"<div class=\"zFooter\"></div>"                
+                                   +"</div>"
+                               +"</div>"
+                        
+                    _head +="<div class=\"zGridPanel right\">"
+                                +"<div class=\"zHeaders\"></div>"
+                                +"<div class=\"zRows\">"
+                                    +"<div id=\"table\" ></div>"
+                                +"</div>"
+                                +"<div class=\"zFooter\"></div>"                
+                                +"</div>"
+                            +"</div>"                                
+                    this.params = o;
+                    this.url = o.url;
+                    this.isInitiated = true;
+                    this.html( _head + (typeof o.isPaging !==ud ?  (o.isPaging===true ? _footer :"") :"") );
+                    
+                    o.isAsync = (typeof o.isAsync !== ud ? o.isAsync : false);
+                    _obj.curPageNo = (o.isAsync ===true?1:0);
+                    
+                    var _panelRight = this.find(_obj.clsPanelR);
+                    var _panelLeft = this.find(_obj.clsPanelL);
+                    var _top =  "top:" + ((o.columnHeight / 2)-8) + "px;";
+                    
+                    for(i=0; i <_styles.length;i++){
+                        _gridWidth += _styles[i].width;
+                        
+                        if(isFreezeItem(_styles[i]))   
+                            _gridWidthLeft += _styles[i].width;
+                        else
+                            _gridWidthRight += _styles[i].width;
+                    }
+                    if(typeof o.startGroupId === ud) o.startGroupId=0;
+                    
+                    _tableRight =  _panelRight.find("#table");
+                    _tableLeft  =  _panelLeft.find("#table");
+                    this.css("overflow","hidden").css("width", o.width + "px");
+                    _obj.find(".zRows").css("height", o.height + "px");
+                    _panelLeft.css("width", _gridWidthLeft + "px");
+                    _panelRight.css("width", (o.width - _gridWidthLeft -4  )  + "px");
+                   
+                    if(_chLeft.length > 0)
+                        createColumnHeader({ 
+                              headers       : _panelLeft.find(".zHeaders")
+                             ,table         : _tableLeft
+                             ,dataTable     : _chLeft
+                             ,width         : _gridWidthLeft
+                             ,startGroupId  : o.startGroupId
+                        });
+                     
+                    createColumnHeader({
+                          headers    : _panelRight.find(".zHeaders")
+                         ,table      : _tableRight
+                         ,dataTable  : _chRight
+                         ,width      : _gridWidthRight
+                         ,startGroupId  : o.startGroupId
+                    });
+                    
+                    
+                }
+                else{
+                    _panelLeft = this.find(".left").find("#table");
+                    _tableRight = this.find(".right").find("#table");
+                }
+            
+                if(typeof o.isNew !== ud){
+                    if(o.isNew===true) clearTables();
+                } 
+                
+                if(o.url || o.sqlCode){
+                    if( (o.isAsync && _obj.curPageNo === 1) ||  ! o.isAsync ) clearTables();
+                    var params ={
+                       dataType: "json"
+                      ,cache: false
+                      ,success: function(data){
+                                    var _noOfPage   = (data.returnValue > 0 ? data.returnValue : 0);
+                                    var _ch,i,_trs;
+                                    num_rows = data.rows.length;
+                                    
+                                    $.each(data.rows, function (i) {
+                                        var _cls = zsi.getOddEven();
+                                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
+                                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});
+                                    });
+                                    
+                                    if(o.isAsync && _obj.curPageNo < _noOfPage ){
+                                            //fire onAsyncComplete
+                                            data.pageNo = _obj.curPageNo
+                                            if(o.onAsyncComplete) o.onAsyncComplete(data);
+                                            //loop page numbers
+                                             _obj.curPageNo++;
+                                            _o.parameters.pno = _obj.curPageNo; 
+                                            setScrollBars();
+                                            _obj.dataBindGrid2(_obj.params);
+                                    }
+                                    else{
+                                        rowsCompleted();
+                                        _obj.find("#recordsNum").html(num_rows);
+                                         if(typeof _obj.isPageInitiated === ud){
+                                            _obj.setPageCtrl(o,data);
+                                            _obj.isPageInitiated=true;
+                                         }
+                                        
+                                        if(_obj.left) _tableRight.parent().scrollLeft(Math.abs(_obj.left ));
+                                        
+                                        if(o.isAsync && o.onAsyncComplete) {
+                                            data.pageNo = _obj.curPageNo;
+                                            o.onAsyncComplete(data);
+                                        }
+                                        _obj.onRequestDone({params:o,data:data});
+                                    }
+                                   
+                                   
+                            }          
+                    };
+                    
+                    if(typeof o.sqlCode!==ud)  {
+                        if(typeof zsi.config.getDataURL===ud){
+                            alert("zsi.config.getDataURL is not defined in AppStart JS.");
+                            return;
+                        }
+                        params.url = zsi.config.getDataURL + "?ts=" + new Date().getTime();
+                        params.data = JSON.stringify({sqlCode :o.sqlCode,parameters:o.parameters});
+                        params.type = "POST";
+                    }
+                    else params.url = o.url + ( isUD(o.rowsPerPage) ? "" : ",@rpp=" +  o.rowsPerPage  )
+            
+                    _obj.bind('refresh',function() {
+                        if(zsi.tmr) clearTimeout(zsi.tmr);
+                        zsi.tmr =setTimeout(function(){              
+                            _obj.dataBindGrid2(o);
+                        }, 1);   
+                    });
+            
+                    $.ajax(params);
+                }
+                else if(typeof o.rows !== ud){
+                    $.each(o.rows, function(i) {
+                        var _cls = zsi.getOddEven();
+                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
+                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});                            
+                    });
+                    rowsCompleted();
+                    _obj.onRequestDone({params:o,data:o.rows});
+                }  
+                else{
+                    if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
+                    rowsCompleted();                  
+                    _obj.onRequestDone({params:o});
+            
                 }
                 
             };
@@ -3447,4 +3988,4 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
-                                        
+                                               
