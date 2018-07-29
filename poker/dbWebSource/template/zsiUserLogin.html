@@ -1,0 +1,55 @@
+<style>
+
+    .page {
+    background: #D4D5D6 none repeat scroll 0 0;
+    border: 1pt solid #e5e5e5;
+    min-height: auto;
+    padding-top: 10px;
+    overflow: auto;
+}
+.outerBody{
+    height:119px;
+    padding-right:5px
+}
+
+.innerBody{
+    background-color:#fff;
+    padding-top:5px;
+    margin-bottom:5px;
+    margin-left:5px;
+    height:inherit;
+}
+</style>
+
+<form id="frm" method="post" >
+    <div class="row outerBody form-horizontal" >
+        <div class="col-xs-12 innerBody"> 
+            <input type="hidden" name="project_id" id="project_id" >
+            <div class="form-group  ">  
+                <label class="col-xs-4 col-sm-3 col-md-3 col-lg-2  control-label">User Name</label>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
+                     <input type="text" name="user_name" id="user_name" class="form-control input-sm" >
+                </div>  
+            </div>  
+
+            <div class="form-group  ">  
+                <label class="col-xs-4 col-sm-3 col-md-3 col-lg-2 control-label">Password</label>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
+                    <input type="password" name="user_pwd" id="user_pwd" class="form-control input-sm" >
+                </div>  
+            </div>  
+
+            <div class="form-group  ">  
+                <label class="col-xs-4 col-sm-3 col-md-3 col-lg-2 control-label">&nbsp;</label>
+                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2" style="margin-top:10px;">
+                    <button type="submit" class="btn btn-primary btn-sm" id="btnSave"><span class="glyphicon glyphicon-user"></span> Login</button>
+                </div>
+            </div>                             
+                
+        </div>    
+    </div>
+</form> 
+
+<script>
+    $("#frm").attr("action", base_url + "page/loginAdmin");
+</script>
