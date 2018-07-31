@@ -3,7 +3,7 @@
     using System;
     using System.Data;
     using System.Data.SqlClient;
-    public class SqlCommands
+    public class SqlCmd
     {
         public string code { get; set; }
         public string text { get; set; }
@@ -37,27 +37,26 @@
     }
 
 
-    public class dcSQLCommands : SqlCommands,IDisposable
+    public class dcSqlCmd : SqlCmd, IDisposable
     {
-        public dcSQLCommands() { }
-        public dcSQLCommands(SqlDataReader reader)
+        public dcSqlCmd() { }
+        public dcSqlCmd(SqlDataReader reader)
         {
             this.SqlDataReader = reader;
         }
         public void Dispose() {
             SqlDataReader = null;
         }
-        public SqlCommands GetInfo(string code)
+        public dcSqlCmd GetInfo(string code)
         {
             try
             {
                 SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
                 string sql = string.Format("select sqlcmd_code,sqlcmd_text,is_procedure,is_public from sql_commands where sqlcmd_code='{0}'", code);
                 SqlCommand command = new SqlCommand(sql, dbConn);
-                //command.CommandType = CommandType.Text;
                 dbConn.Open();
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-                SqlCommands _info = new SqlCommands();
+                dcSqlCmd _info = new dcSqlCmd();
                 while (reader.Read())
                 {
                     _info.SqlDataReader = reader;

@@ -12,6 +12,10 @@ namespace zsi.web
 {
     public class DataHelper
     {
+        public enum ExecutionType {
+             NonQuery = 0
+            ,Reader   = 1
+        }
         public DataHelper() { }
         #region "private static"
         private static string ToJSON(SqlDataReader rdr)
@@ -51,7 +55,7 @@ namespace zsi.web
             return "{\"isSuccess\":" + message.isSuccess.ToString().ToLower()
                 + ",\"recordsAffected\":" + message.recordsAffected
                 + ",\"returnValue\":" + message.returnValue
-                +",\"rows\":" + message.rows
+                +  (message.rows != null ? ",\"rows\":" + message.rows :"")
                 + ",\"errMsg\":\"" + message.errMsg + "\"}";
         }
         private static void SerializeURLParameters(SqlCommand command, string sqlQuery)
@@ -83,53 +87,34 @@ namespace zsi.web
             }
 
         }
-        private static Message _DataTableUpdate(string procedureName, DataTable dt, string parentId)
-        {
-            Message m = new Message();
-            try
-            {
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
-                using (conn)
-                {
-                    SqlCommand cmd = new SqlCommand(procedureName, conn);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
-                    cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
-                    if (parentId != "") cmd.Parameters.AddWithValue("@parent_id", parentId);
-                    tvparam.SqlDbType = SqlDbType.Structured;
-                    SqlParameter retval = new SqlParameter();
-                    retval.ParameterName = "@return_value";
-                    retval.SqlDbType = SqlDbType.Int;
-                    retval.Direction = ParameterDirection.ReturnValue;
-                    cmd.Parameters.Add(retval);
-                    conn.Open();
-                    m.recordsAffected = cmd.ExecuteNonQuery();
-                    m.returnValue = Convert.ToString(retval.Value);
-                    conn.Close();
-                }
-                conn.Dispose();
-                m.isSuccess = true;
-            }
-            catch (SqlException ex)
-            {
-                m.errNumber = ex.ErrorCode;
-                m.errMsg = ex.Message;
-                LogError(ex.ErrorCode, procedureName + ",params:" + DataTableToJSON(dt), ex.Message, "E");
-            }
-            catch (Exception ex)
-            {
-                m.errMsg = ex.Message;
-                LogError(null, procedureName + ",params:" + DataTableToJSON(dt), ex.Message, "E");
-            }
-            return m;
 
-        }
         private static JObject HttpReqStreamToJObject(HttpRequestBase req) {
             req.InputStream.Seek(0, SeekOrigin.Begin);
             return JObject.Parse(new StreamReader(req.InputStream).ReadToEnd());
         }
-        #endregion
+        private static dcSqlCmd getProcedure(JObject jo)
+        {
+            dcSqlCmd sc = new dcSqlCmd();
+            if (jo["procedure"] != null)
+            {
+                sc.text = jo["procedure"].ToString();
+                sc.IsProcedure=true;
+            }
+            else
+            {
+                if (jo["sqlCode"] == null)
+                    throw new Exception("sql code is required.");
+                string sqlCode = jo["sqlCode"].ToString();
+                sc = new dcSqlCmd().GetInfo(sqlCode);
 
+                if (sc.isPublic == true && SessionHandler.CurrentUser.userId == 0)
+                {
+                    throw new Exception("db permission is required.");
+                }
+            }
+            return sc;
+        }
+        #endregion
         public static DataTable GetDataTable(string sql)
         {
             SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
@@ -142,15 +127,6 @@ namespace zsi.web
             dt.Dispose();
             dr.Dispose();
             return dt;
-        }
-        public static Message DataTableUpdate(string procedureName, DataTable dt, string parentId)
-        {
-            return _DataTableUpdate(procedureName, dt, parentId);
-
-        }
-        public static Message DataTableUpdate(string procedureName, DataTable dt)
-        {
-            return _DataTableUpdate(procedureName, dt, "");
         }
         public static string DataTableToJSON(DataTable table)
         {
@@ -186,97 +162,6 @@ namespace zsi.web
             returnValue = Convert.ToString(cmd.ExecuteScalar());
             conn.Close();
             return returnValue;
-        }
-        public static string GetGetRecordsByJsonObject(JObject json)
-        {
-
-            String _json = "";
-            SqlDataReader rdr = null;
-            SqlConnection conn = null;
-            try
-            {
-                conn = new SqlConnection(dbConnection.ConnectionString);
-                using (conn)
-                {
-
-                    if (json["sqlCode"] == null)
-                        throw new Exception("sql code is required.");
-                    string sqlCode = json["sqlCode"].ToString();
-                    SqlCommands sc = new dcSQLCommands().GetInfo(sqlCode);
-
-                    if (sc.isPublic == true && SessionHandler.CurrentUser.userId == 0) {
-                        throw new Exception("db permission is required.");
-                    }
-
-                    SqlCommand cmd = new SqlCommand(sc.text, conn);
-                    if (sc.IsProcedure)
-                        cmd.CommandType = CommandType.StoredProcedure;
-                    else
-                        cmd.CommandType = CommandType.Text;
-
-                    if (json["rows"] != null)
-                    {
-                        DataTable dt = new DataTable();
-                        string _jRowStr = "";
-                        _jRowStr = json["rows"].ToString();
-
-                        if (_jRowStr == "" || _jRowStr.ToCharArray()[0] != '[')
-                            throw new Exception("rows parameter must be array.");
-                        dt = JsonConvert.DeserializeObject<DataTable>(_jRowStr);
-                        if (dt.Rows.Count > 0)
-                        {
-                            SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
-                            tvparam.SqlDbType = SqlDbType.Structured;
-                        }
-                    }
-                    if (json["parameters"] != null)
-                    {
-                        JObject obj = (JObject)json["parameters"];
-                        foreach (var pair in obj)
-                        {
-                            if (pair.Value.ToString() == "''") continue;
-                            cmd.Parameters.AddWithValue("@" + pair.Key, pair.Value.ToString());
-                        }
-                    }
-                    cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
-                    conn.Open();
-                    cmd.CommandTimeout = 3600;
-                    SqlParameter retval = new SqlParameter();
-                    retval.ParameterName = "@return_value";
-                    retval.SqlDbType = SqlDbType.Int;
-                    retval.Direction = ParameterDirection.ReturnValue;
-                    cmd.Parameters.Add(retval);
-
-                    rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                    _json = ToJSON(rdr);
-                    rdr.Close();
-
-                    _json = CreateMessageJSONStr(new Message
-                    {
-                        isSuccess = true,
-                        recordsAffected = rdr.RecordsAffected,
-                        rows = _json,
-                        returnValue = Convert.ToString(retval.Value)
-                    });
-
-                }
-            }
-            catch (SqlException sqlException)
-            {
-                _json = CreateMessageJSONStr(new Message
-                {
-                    isSuccess = false,
-                    recordsAffected = -1,
-                    errMsg = sqlException.ToString()
-                });
-
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return _json;
-
         }
         public static void Execute(string sql, bool isProcedure) {
             ToJSON(sql, isProcedure);
@@ -365,28 +250,105 @@ namespace zsi.web
             }
             return json;
         }
-        public static Message ProcessPostData( HttpRequestBase request) {
-            JObject json = HttpReqStreamToJObject(request);
-           DataTable dt = JsonConvert.DeserializeObject<DataTable>(json["rows"].ToString());
-            string parentId = (json["parentId"] ==null ? "" :  json["parentId"].ToString());
-            return DataTableUpdate(json["procedure"].ToString(), dt, parentId);
-        }
-        public static string GetJSONData(HttpRequestBase request)
+     
+        public static string ProcessRequest(HttpRequestBase request, ExecutionType executionType)
         {
+            String _json = "";
+            SqlDataReader rdr = null;
+            SqlConnection conn = null;
             try
             {
-                JObject json = HttpReqStreamToJObject(request);
-                return GetGetRecordsByJsonObject(json);
-            }
-            catch (Exception ex) {
-
-                return CreateMessageJSONStr(new Message
+                JObject jo = HttpReqStreamToJObject(request);
+                conn = new SqlConnection(dbConnection.ConnectionString);
+                using (conn)
                 {
-                     isSuccess = false
-                    ,recordsAffected = -1
-                    ,errMsg = ex.Message
-                });
+
+                    dcSqlCmd sc = getProcedure(jo);
+                    SqlCommand cmd = new SqlCommand(sc.text, conn);
+                    if (sc.IsProcedure)
+                        cmd.CommandType = CommandType.StoredProcedure;
+                    else
+                        cmd.CommandType = CommandType.Text;
+
+                    if (jo["rows"] != null)
+                    {
+                        DataTable dt = new DataTable();
+                        string _jRowStr = "";
+                        _jRowStr = jo["rows"].ToString();
+
+                        if (_jRowStr == "" || _jRowStr.ToCharArray()[0] != '[')
+                            throw new Exception("rows parameter must be array.");
+                        dt = JsonConvert.DeserializeObject<DataTable>(_jRowStr);
+                        if (dt.Rows.Count > 0)
+                        {
+                            SqlParameter tvparam = cmd.Parameters.AddWithValue("@tt", dt);
+                            tvparam.SqlDbType = SqlDbType.Structured;
+                        }
+                    }
+                    if (jo["parameters"] != null)
+                    {
+                        JObject obj = (JObject)jo["parameters"];
+                        foreach (var pair in obj)
+                        {
+                            if (pair.Value.ToString() == "''") continue;
+                            cmd.Parameters.AddWithValue("@" + pair.Key, pair.Value.ToString());
+                        }
+                    }
+                    cmd.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
+                    if (jo["parentId"] != null) cmd.Parameters.AddWithValue("@parent_id", jo["parentId"].ToString());
+
+                    conn.Open();
+                    cmd.CommandTimeout = 3600;
+                    SqlParameter retval = new SqlParameter();
+                    retval.ParameterName = "@return_value";
+                    retval.SqlDbType = SqlDbType.Int;
+                    retval.Direction = ParameterDirection.ReturnValue;
+                    cmd.Parameters.Add(retval);
+
+                    if (executionType == ExecutionType.Reader)
+                    {
+                        rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                        _json = ToJSON(rdr);
+                        rdr.Close();
+
+                        _json = CreateMessageJSONStr(new Message
+                        {
+                            isSuccess = true,
+                            recordsAffected = rdr.RecordsAffected,
+                            rows = _json,
+                            returnValue = Convert.ToString(retval.Value)
+                        });
+
+                    }
+                    else
+                    {
+                        _json = CreateMessageJSONStr(new Message
+                        {
+                            isSuccess = true,
+                            recordsAffected = cmd.ExecuteNonQuery(),
+                            returnValue = Convert.ToString(retval.Value)
+                        });
+                    }
+
+
+                }
             }
+            catch (SqlException sqlException)
+            {
+                _json = CreateMessageJSONStr(new Message
+                {
+                    isSuccess = false,
+                    recordsAffected = -1,
+                    errMsg = sqlException.ToString()
+                });
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return _json;
+
         }
     }
 }
