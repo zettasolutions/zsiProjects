@@ -12,6 +12,7 @@ zsi.ready(function(){
     setSearch();
     displayRecords();
     getTemplate();
+
     if (gUser.is_admin === "Y") {
         $("#button-div").html('<button type="button" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnSave"><i class="fa fa-save"></i> Save</button>' );
     }    
@@ -30,10 +31,10 @@ zsi.ready(function(){
         });
         
         $.get(base_url + 'page/name/clientRegistration'
-        ,function(data){
-            $('#modalAdd').find('.modal-body').html(data);
-        }
-    ); 
+            ,function(data){
+                $('#modalAdd').find('.modal-body').html(data);
+            }
+        ); 
     }    
 
     function setSearch(){
@@ -52,11 +53,12 @@ zsi.ready(function(){
         });        
     }
 
-   $("input[name=company_name]").on("keyup change", function(){
+    $("input[name=company_name]").on("keyup change", function(){
         if(this.value === ""){
             displayRecords();
         }
-   });
+    });
+
     function displayRecords(cId){   
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
@@ -66,35 +68,55 @@ zsi.ready(function(){
     	    ,selectorType   : "checkbox"
             ,blankRowsLimit : 5
             ,dataRows : [
-                    { text : cb , type : "hidden" , width : 25 , style : "text-align:left;"       
-            		    , onRender : function(d) {
+                   {text  : "Application Name"    , width : 300    , style : "text-align:left;"
+                        ,onRender : function(d){ 
                     	    return bs({name:"subscription_id",type:"hidden",value: svn(d,"subscription_id")})
                     	        + bs({name:"is_edited",type:"hidden",value: svn(d,"is_edited")})
-                    	        + bs({name:"app_id",type:"hidden",value: svn(d,"app_id")})
-                    	        + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
-                        }
+                    	        + bs({name:"app_id",type:"hidden",value: svn(d,"app_id")})                            
+                                + svn(d,"app_name")}
                     }
-                    ,{text  : "Application Name"    , width : 300    , style : "text-align:left;"
-                        ,onRender : function(d){ return svn(d,"app_name")}
-                    }
-                    ,{text  : "Subscription Date"       , type : "input"    , width : 150    , style : "text-align:left;"
+                    ,{text  : "Start Date"       , type : "input"    , width : 150    , style : "text-align:left;"
                         ,onRender : function(d){ 
                             return "<input name='subscription_date' type='date' value='"  +  svn(d,"subscription_date").toDate() +"' class='form-control' style='padding:0'>";
                         }
                     }
-                    ,{text  : "No. of Months"           , name : "no_months"            , type : "input"     , width : 150    , style : "text-align:left;"}
+                    ,{text  : "No. of Months"           , name : "no_months"    , type : "input"    , width : 150    , style : "text-align:left;" ,class : "numeric"}
                     ,{text  : "Expiry Date"             , width : 150    , style : "text-align:left;"
-                         ,onRender : function(d){ return svn(d,"expiry_date").toDateFormat()}
+                         ,onRender : function(d){ return "<input name='expiry_date' type='text' value='"  +  svn(d,"expiry_date").toDateFormat() +"' class='form-control' style='padding:0' readonly>";
+                         }
                     }
              		,{text  : "Is Active?"              , name  : "is_active"           , type  : "yesno"    , width : 80     , style : "text-align:left;"  ,defaultValue:"Y"}
     	    ]
     	     ,onComplete: function(o){
-    	         zsi.initDatePicker();
-    	         $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+    	        zsi.initDatePicker();
+    	        zsi.initInputTypesAndFormats();
+    	        
+    	        var _$zRow = $(this).closest(".zRow");
+                var _noMonths = parseInt(_$zRow.find("[name='no_months']").val());
+                var _sDate = _$zRow.find("[name='subscription_date']").val();
+                var _eDate = new Date(_sDate); // pass start date here
+    
+                _eDate.setMonth(_eDate.getMonth() + _noMonths);
+                _$zRow.find("[name='expiry_date']").val( (_eDate.getMonth() + 1)+ '/' + _eDate.getDate() + '/' + _eDate.getFullYear() );
+                
+                $(this).find("input[name=no_months]").on("keyup", function(){
+                    var __$zRow = $(this).closest(".zRow");
+                    if (__$zRow.find("[name='no_months']").val() === "" || __$zRow.find("[name='subscription_date']").val() === "" ){
+                    __$zRow.find("[name='expiry_date']").val("");
+                    }else{
+                        var _this = parseInt(this.value);
+                        var __sDate =  __$zRow.find("[name='subscription_date']").val();
+                        var __eDate = new Date(__sDate); // pass start date here
+                        __eDate.setMonth(__eDate.getMonth() + _this);
+                        __$zRow.find("[name='expiry_date']").val( (__eDate.getMonth() + 1)+ '/' + __eDate.getDate() + '/' + __eDate.getFullYear() );
+                    }
+                });
+
+ 
     	    }  
         });    
     }
-
+    
     $("#btnSave").click(function() {
         $("#grid").jsonSubmit({
             procedure: "subscriptions_upd"
@@ -106,4 +128,4 @@ zsi.ready(function(){
             }
         });
     });
-}); 
+});     
