@@ -1,3 +1,5 @@
+var gClientId = "";
+
 String.prototype.toDate = function () {
     if(!isValidDate(this)) return "";
     var _date=new Date( Date.parse(this) );
@@ -48,6 +50,7 @@ zsi.ready(function(){
             ,onSelectedItem: function(currentObject,data,i){ 
                 currentObject.value=data.client_name;
                 $("#client_id").val(data.client_Id);
+                gClientId = data.client_Id;
                 displayRecords(data.client_Id);
            }
         });        
@@ -82,7 +85,7 @@ zsi.ready(function(){
                     }
                     ,{text  : "No. of Months"           , name : "no_months"    , type : "input"    , width : 150    , style : "text-align:left;" ,class : "numeric"}
                     ,{text  : "Expiry Date"             , width : 150    , style : "text-align:left;"
-                         ,onRender : function(d){ return "<input name='expiry_date' type='text' value='"  +  svn(d,"expiry_date").toDateFormat() +"' class='form-control' style='padding:0' readonly>";
+                         ,onRender : function(d){ return "<input id='expiry_date' name='expiry_date' type='text' value='"  +  svn(d,"expiry_date").toDateFormat() +"' class='form-control' style='padding:0' readonly>";
                          }
                     }
              		,{text  : "Is Active?"              , name  : "is_active"           , type  : "yesno"    , width : 80     , style : "text-align:left;"  ,defaultValue:"Y"}
@@ -101,14 +104,28 @@ zsi.ready(function(){
                 
                 $(this).find("input[name=no_months]").on("keyup", function(){
                     var __$zRow = $(this).closest(".zRow");
-                    if (__$zRow.find("[name='no_months']").val() === "" || __$zRow.find("[name='subscription_date']").val() === "" ){
+                    var _this = this.value;
+                    if ( _this === "" ){
                     __$zRow.find("[name='expiry_date']").val("");
                     }else{
-                        var _this = parseInt(this.value);
+                        var __this = parseInt(_this);
                         var __sDate =  __$zRow.find("[name='subscription_date']").val();
                         var __eDate = new Date(__sDate); // pass start date here
-                        __eDate.setMonth(__eDate.getMonth() + _this);
+                        __eDate.setMonth(__eDate.getMonth() + __this);
                         __$zRow.find("[name='expiry_date']").val( (__eDate.getMonth() + 1)+ '/' + __eDate.getDate() + '/' + __eDate.getFullYear() );
+                    }
+                });
+                
+                $(this).find("input[name=subscription_date]").on("change", function(){
+                    var __$zRow = $(this).closest(".zRow");
+                    var _this = this.value;
+                    if(_this === ""){
+                         __$zRow.find("[name='expiry_date']").val("");
+                    }else{
+                        var _nMonth =  parseInt(__$zRow.find("[name='no_months']").val());
+                        var __eDate = new Date(_this); // pass start date here
+                        __eDate.setMonth(__eDate.getMonth() + _nMonth);
+                        __$zRow.find("[name='expiry_date']").val( (__eDate.getMonth() + 1)+ '/' + __eDate.getDate() + '/' + __eDate.getFullYear() );                        
                     }
                 });
 
@@ -124,8 +141,8 @@ zsi.ready(function(){
             ,notInclude: "#expiry_date"
             ,onComplete: function (data) {
                 $("#grid").clearGrid(); 
-                displayRecords();
+                displayRecords(gClientId);
             }
         });
     });
-});     
+});      
