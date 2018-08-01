@@ -2068,11 +2068,23 @@ var  ud='undefined'
                 }
                 return _v;
             }
-            $.fn.jsonSubmit         = function(o) {
+            $.fn.jsonSubmit = function(o) {
+                var _param;
+               if( typeof o.isSingleEntry != ud && o.isSingleEntry===true ){ 
+                    var _arr = this.serializeArray();
+                    o.parameters = {};
+                    for (var x = 0; x < _arr.length; x++) {
+                        o.parameters[_arr[x].name]=_arr[x].value;
+                    }
+                    _param=o;
+                }
+                else {
+                    _param = this.hasClass("zGrid") > 0 ? this.toJSON2(o) :this.toJSON(o);
+                }
                 var p = {
                     type: 'POST'
                   , url: (typeof o.url!==ud?o.url:base_url + "data/update")
-                  , data: JSON.stringify(  this.hasClass("zGrid") > 0 ? this.toJSON2(o) :this.toJSON(o) )
+                  , data: JSON.stringify( _param)
                   , contentType: 'application/json'
                 };
             
@@ -2080,6 +2092,7 @@ var  ud='undefined'
                 if (typeof o.onComplete !== 'undefined') p.success = o.onComplete;
                 $.ajax(p);
             };
+
             $.fn.loadData           = function(o){
                 var __obj = this;
                 zsi.__setTableObjectsHistory(__obj,o);
@@ -2983,6 +2996,7 @@ var  ud='undefined'
                     x = x + (objNames.length - 1);
                 }
                 if(typeof o.procedure !==ud) json={procedure: o.procedure, rows: json}; 
+                if(typeof o.sqlCode !==ud) json={sqlCode: o.sqlCode, rows: json}; 
                 return json;
             };
             $.fn.toJSON2            = function(o) { //for multiple data only
@@ -3042,6 +3056,7 @@ var  ud='undefined'
                 });
                 json=_finalData;
                 if(typeof o.procedure !==ud) json={procedure: o.procedure, rows: json}; 
+                if(typeof o.sqlCode !==ud) json={sqlCode: o.sqlCode, rows: json}; 
                 if(typeof o.parentId !==ud) json.parentId= o.parentId
                 return json;
             };              
@@ -3989,4 +4004,4 @@ zsi.__setExtendedJqFunctions();
 $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
-});      
+});        

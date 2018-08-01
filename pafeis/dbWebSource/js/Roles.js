@@ -95,7 +95,7 @@ function clearGrid(){
 }
  $("#btnSave").click(function () {
     $("#grid").jsonSubmit({
-            procedure: "roles_upd"
+            sqlCode: "R181"
             ,optionalItems: ["is_export_excel","is_export_pdf","is_import_excel","is_add","is_edit","is_delete"]
             , onComplete: function (data) {
                 $("#grid").clearGrid();
@@ -299,4 +299,4 @@ $("#btnDelete").click(function(){
 });      
 
     
-                                                                                           
+                                                                                              
