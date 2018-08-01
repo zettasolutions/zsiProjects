@@ -25,8 +25,14 @@ zsi.ready(function(){
              		,{text  : "Is Active"       , name  : "is_active"           , type  : "yesno"    , width : 80     , style : "text-align:left;"  ,defaultValue:"Y"}
     	    ]
     	     ,onComplete: function(){
-    	         $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-    	         $("select[name='category_id']").dataBind("categories");
+    	        $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+    	         
+    	        $("select[name='category_id']").dataBind({
+                    url: procURL + "dd_categories_sel "
+                    , text: "category_desc"
+                    , value: "category_id"
+                    , required :false
+                });  
             }  
         });    
     }
@@ -52,4 +58,4 @@ zsi.ready(function(){
     });
 });    
     
- 
+  
