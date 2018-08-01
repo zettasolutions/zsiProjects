@@ -22,6 +22,5 @@ zsi.smagerUp/app/ace/*
 zsi.smagerUp/.vs/*
 poker/createCodeBackup.exe.config
 cts/createCodeBackup.exe.config
-*.js
 cts/dbWebSource/template/tmplmanageStatus.html
 cts/dbWebSource/template/tmplManageSubscription.html
