@@ -106,11 +106,10 @@ namespace zsi.web
                     throw new Exception("sql code is required.");
                 string sqlCode = jo["sqlCode"].ToString();
                 sc = new dcSqlCmd().GetInfo(sqlCode);
-
-                if (sc.isPublic == true && SessionHandler.CurrentUser.userId == 0)
-                {
-                    throw new Exception("db permission is required.");
-                }
+               // if (sc.isPublic == true && SessionHandler.CurrentUser.userId == 0)
+               // {
+               //     throw new Exception("db permission is required.");
+               // }
             }
             return sc;
         }
