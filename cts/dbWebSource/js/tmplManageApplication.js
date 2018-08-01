@@ -22,13 +22,21 @@ zsi.ready(function(){
                                   + (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                     }
                 }
-            	,{ text  : "Application Name"                , name  : "app_name"     , type  : "input"         , width : 250       , style : "text-align:left;" }
-            	,{ text  : "Application Description"         , name  : "app_desc"     , type  : "input"         , width : 450       , style : "text-align:left;" }
-            	,{ text  : "Active?"                         , name  : "is_active"    , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"Y"                 }
+            	,{ text  : "Application Name"           , name  : "app_name"     , type  : "input"         , width : 250       , style : "text-align:left;" }
+            	,{ text  : "Application Description"    , name  : "app_desc"     , type  : "input"         , width : 450       , style : "text-align:left;" }
+            	,{ text  : "Support Type"               , name  : "type_id"      , type  : "select"        , width : 450       , style : "text-align:left;" }
+            	,{ text  : "Active?"                    , name  : "is_active"    , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"Y"                 }
             ]
             ,onComplete: function(){
                 markMandatory();
                 $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                
+                $("select[name='type_id']").dataBind({
+                    url: procURL + "dd_types_sel "
+                    , text: "type_desc"
+                    , value: "type_id"
+                    , required :false
+                });  
             }
         });
     }
@@ -68,4 +76,4 @@ zsi.ready(function(){
                         }
         });      
     });
-});
+});  
