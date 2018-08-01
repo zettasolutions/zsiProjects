@@ -1,3 +1,5 @@
+var gType_id = null;
+
 zsi.ready(function(){
     var  _gridWidth =  $("#main-content").width() - 40
         ,_gridHeight = $("#main-content").height() - 150
@@ -9,6 +11,25 @@ zsi.ready(function(){
         $("#button-div1, #button-div2").html('<button type="button" class="col-12 col-md-auto btn btn-primary btn-sm" id="btnSave"><span class="fa fa-save"></span> Save</button>');
     }
     
+    
+    $("#type_id").dataBind({
+        url: procURL + "dd_types_sel "
+        , text: "type_desc"
+        , value: "type_id"
+        , required :false
+        , onComplete: function(){
+            //gType_id = $("select#type_id option:selected").val();
+            $("select#type_id").change(function(){
+                //gType_id = null;
+                console.log("this",this.value);
+                if(this.value)
+                    gType_id = this.value;
+                    console.log("gType_id",gType_id);
+                    displayProcesses(gType_id);
+            });
+        }
+    });  
+    
     displayProcesses();
     
     function displayProcesses() {
@@ -16,25 +37,30 @@ zsi.ready(function(){
         	/* The JSON keys must be in the same order in TT */
             var _$grid = $("#grid-manage-process");
         	_$grid.dataBind({
-        		url 			: procURL + 'processes_sel'
+        		url 			: procURL + 'processes_sel @type_id=' + (gType_id ? gType_id : 0)  
         		,blankRowsLimit : 10
         		,width 			: _gridWidth
         		,height 		: _gridHeight
         		,dataRows 		: [
-        							{ text : 'Seq #' , width : 50 , style : 'text-align:center;' 
+        							{ text : 'Seq #' , width : 70 , style : 'text-align:center;' 
         								, onRender : function(d) {
         				                    return 	bs({ name : "process_id" , type : "hidden" , value : svn(d,"process_id") })
         				                    		+ bs({ name : "is_edited" , type : "hidden" })
         				                    		+ bs({ name : "seq_no" , type : "input" , value : svn(d,"seq_no") });
         				                }
         							}
-        							,{ text : 'Title' , name : 'process_title' , width : 200 , type : 'input' , style : 'text-align:left;' }
-        							,{ text : 'Icon' , name : 'icon' , width : 70 , type : 'input' , style : 'text-align:left;' }
-        							,{ text : 'Description' , name : 'process_desc' , type : 'input' , width : 200 , style : 'text-align:left;' }
-        							,{ text : 'Category' , name : 'category_id' , type : 'select' , width : 100 , style : 'text-align:left;' }
-        							,{ text : 'Type' , name : 'type_id' , type : 'select' , width : 100 , style : 'text-align:left;' }
-        							,{ text : 'Is Active?' , name : 'is_active' , type : 'yesno' , width : 100 , style : 'text-align:left;' , defaultValue : 'Y' }
-                                    ,{ text : 'Actions' , width : 100 , style : 'text-align:center;'
+        							,{ text : 'Title'           , name : 'process_title'    , type : 'input'    , width : 200       , style : 'text-align:left;' }
+        							,{ text : 'Icon'            , name : 'icon'             , type : 'input'    , width : 70        , style : 'text-align:left;' }
+        							,{ text : 'Description'     , name : 'process_desc'     , type : 'input'    , width : 200       , style : 'text-align:left;' }
+        							,{ text : 'Category'        , width : 100       , style : 'text-align:left;' 
+        							    ,onRender: function(d){
+        							        return 	bs({ name : "category_id" , type : "select"  })
+        							              + bs({ name : "type_id" , type : "hidden" });
+        							    }
+        							}
+        						//	,{ text : 'Type'            , name : 'type_id'          , type : 'select'   , width : 100       , style : 'text-align:left;' }
+        							,{ text : 'Is Active?'      , name : 'is_active'        , type : 'yesno'    , width : 100       , style : 'text-align:left;' , defaultValue : 'Y' }
+                                    ,{ text : 'Actions'         , width : 100 , style : 'text-align:center;'
                                         ,onRender : function(d) {
                                             return (d !== null && svn(d,"process_id") !== '' ? '<div class="add-status">'+ d.countProcessStatuses +'</div>' : '');
                                         }
@@ -54,7 +80,7 @@ zsi.ready(function(){
                      procedure  : "processes_upd"
                     ,onComplete : function(data) {
                         if (data.isSuccess === true) zsi.form.showAlert("savedWindow");
-                        displayProcesses();
+                        displayProcesses(gType_id);
                     }
                 });
             });
@@ -114,4 +140,4 @@ zsi.ready(function(){
     }
 });
 
-    
+      
