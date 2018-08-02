@@ -50,13 +50,14 @@ namespace zsi.web
 
             return sb.ToString();
         }
-        private static string CreateMessageJSONStr(Message message )
+        private static string CreateMessageJSONStr(Message m )
         {
-            return "{\"isSuccess\":" + message.isSuccess.ToString().ToLower()
-                + ",\"recordsAffected\":" + message.recordsAffected
-                + ",\"returnValue\":" + message.returnValue
-                +  (message.rows != null ? ",\"rows\":" + message.rows :"")
-                + ",\"errMsg\":\"" + message.errMsg + "\"}";
+            return "{\"isSuccess\":" + m.isSuccess.ToString().ToLower()
+                + (m.recordsAffected != 0 ? ",\"recordsAffected\":" + m.recordsAffected : "")
+                + (m.returnValue != null ? ",\"returnValue\":" + m.returnValue : "")
+                + (m.rows != null ? ",\"rows\":" + m.rows :"")
+                + (m.errMsg != null ? ",\"errMsg\":\"" + m.errMsg + "\"" : "")
+                + "}";
         }
         private static void SerializeURLParameters(SqlCommand command, string sqlQuery)
         {
@@ -88,9 +89,10 @@ namespace zsi.web
 
         }
 
-        private static JObject HttpReqStreamToJObject(HttpRequestBase req) {
+        private static string HttpReqStreamToJString(HttpRequestBase req)
+        {
             req.InputStream.Seek(0, SeekOrigin.Begin);
-            return JObject.Parse(new StreamReader(req.InputStream).ReadToEnd());
+            return new StreamReader(req.InputStream).ReadToEnd();
         }
         private static dcSqlCmd getProcedure(JObject jo)
         {
@@ -257,11 +259,13 @@ namespace zsi.web
             SqlConnection conn = null;
             try
             {
-                JObject jo = HttpReqStreamToJObject(request);
+
+                var _strReq = HttpReqStreamToJString(request);
+                if(_strReq.Trim() ==string.Empty) return CreateMessageJSONStr(new Message{isSuccess = false });
+                JObject jo = JObject.Parse(_strReq);
                 conn = new SqlConnection(dbConnection.ConnectionString);
                 using (conn)
                 {
-
                     dcSqlCmd sc = getProcedure(jo);
                     SqlCommand cmd = new SqlCommand(sc.text, conn);
                     if (sc.IsProcedure)
@@ -344,7 +348,7 @@ namespace zsi.web
             }
             finally
             {
-                conn.Close();
+                if(conn != null) conn.Close();
             }
             return _json;
 
