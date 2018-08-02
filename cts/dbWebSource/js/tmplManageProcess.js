@@ -42,25 +42,24 @@ zsi.ready(function(){
         		,width 			: _gridWidth
         		,height 		: _gridHeight
         		,dataRows 		: [
-        							{ text : 'Seq #' , width : 70 , style : 'text-align:center;' 
+        							{ text : 'Seq #'            , width : 70                , style : 'text-align:center;' 
         								, onRender : function(d) {
-        				                    return 	bs({ name : "process_id" , type : "hidden" , value : svn(d,"process_id") })
-        				                    		+ bs({ name : "is_edited" , type : "hidden" })
-        				                    		+ bs({ name : "seq_no" , type : "input" , value : svn(d,"seq_no") });
+        				                         return   bs({ name : "process_id"          , type : "hidden"   , value : svn(d,"process_id") })
+        				                         		+ bs({ name : "is_edited"           , type : "hidden" })
+        				                         		+ bs({ name : "seq_no"              , type : "input"    , value : svn(d,"seq_no") });
         				                }
         							}
-        							,{ text : 'Title'           , name : 'process_title'    , type : 'input'    , width : 200       , style : 'text-align:left;' }
+        							,{ text : 'Title'           , name : 'process_title'    , type : 'input'    , width : 300       , style : 'text-align:left;' }
         							,{ text : 'Icon'            , name : 'icon'             , type : 'input'    , width : 70        , style : 'text-align:left;' }
-        							,{ text : 'Description'     , name : 'process_desc'     , type : 'input'    , width : 200       , style : 'text-align:left;' }
-        							,{ text : 'Category'        , width : 100       , style : 'text-align:left;' 
+        							,{ text : 'Description'     , name : 'process_desc'     , type : 'input'    , width : 450       , style : 'text-align:left;' }
+        							,{ text : 'Category'        , width : 100               , style : 'text-align:left;' 
         							    ,onRender: function(d){
-        							        return 	bs({ name : "category_id" , type : "select"  })
-        							              + bs({ name : "type_id" , type : "hidden" });
+        							             return   bs({ name : "category_id"         , type : "select" })
+        							                    + bs({ name : "type_id"             , type : "hidden" });
         							    }
         							}
-        						//	,{ text : 'Type'            , name : 'type_id'          , type : 'select'   , width : 100       , style : 'text-align:left;' }
         							,{ text : 'Is Active?'      , name : 'is_active'        , type : 'yesno'    , width : 100       , style : 'text-align:left;' , defaultValue : 'Y' }
-                                    ,{ text : 'Actions'         , width : 100 , style : 'text-align:center;'
+                                    ,{ text : 'Actions'         , width : 100               , style : 'text-align:center;'
                                         ,onRender : function(d) {
                                             return (d !== null && svn(d,"process_id") !== '' ? '<div class="add-status">'+ d.countProcessStatuses +'</div>' : '');
                                         }
@@ -99,20 +98,21 @@ zsi.ready(function(){
             ,width          : _gridWidth
             ,height         : _gridHeight - 100
             ,dataRows       : [
-                                { text : 'Seq #' , width : 50 , style : 'text-align:center;' 
+                                { text : 'Seq #'            , width : 50            , style : 'text-align:center;' 
                                     , onRender : function(d) {
-                                        return  bs({ name : "process_status_id" , type : "hidden" , value : svn (d,"process_status_id") })
-                                                + bs({ name : "process_id" , type : "hidden" , value : svn (d,"process_id") })
-                                                + bs({ name : "is_edited" , type : "hidden" })
-                                                + bs({ name : "seq_no" , type : "input" , value : svn (d,"seq_no") });
+                                        return    bs({ name : "process_status_id"   , type : "hidden"   , value : svn (d,"process_status_id") })
+                                                + bs({ name : "process_id"          , type : "hidden"   , value : svn (d,"process_id") })
+                                                + bs({ name : "is_edited"           , type : "hidden" })
+                                                + bs({ name : "seq_no"              , type : "input"    , value : svn (d,"seq_no") });
                                     }
                                 }
-                                ,{ text : "Status" , name : "status_id" , width:150 , type:"select" , style:"text-align:left;" }
-                                ,{ text : 'Button Text' , name : 'button_text' , width : 100 , type : 'input' , style : 'text-align:left;' }
-                                ,{ text : 'Next Process' , name : 'next_process_id' , width : 150 , type : 'select' , style : 'text-align:left;' }
-                                ,{ text : 'Is Active' , name : 'is_active' , type : 'yesno' , width : 100 , style : 'text-align:left;' , defaultValue : 'Y' }
-                              ]
+                                ,{ text : "Status"          , name : "status_id"        , width : 150       , type :"select"    , style:"text-align:left;"   }
+                                ,{ text : 'Button Text'     , name : 'button_text'      , width : 250       , type : 'input'    , style : 'text-align:left;' }
+                                ,{ text : 'Next Process'    , name : 'next_process_id'  , width : 350       , type : 'select'   , style : 'text-align:left;' }
+                                ,{ text : 'Is Active'       , name : 'is_active'        , width : 100       , type : 'yesno'    , style : 'text-align:left;' , defaultValue : 'Y' }
+                              ] 
             ,onComplete : function() {
+                console.log("agi");
                 _$grid.find("select[name='status_id']").dataBind({
                     url: getOptionsURL("status")
                 });
@@ -140,4 +140,4 @@ zsi.ready(function(){
     }
 });
 
-      
+       
