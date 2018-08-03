@@ -1756,7 +1756,7 @@ var  ud='undefined'
             
             
                 if(typeof this.isInitiated === ud){
-                   var _rpp = isUD(o.parameters.rpp) ? 0  : o.parameters.rpp;
+                    var _rpp =  ( isUD(o.parameters) ? 0 : isUD(o.parameters.rpp) ? 0  : o.parameters.rpp);
             
                     var _footer =  "<div class=\"zPageFooter\"><div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> 0 </i></div>"
                                 +  "<div class='pagectrl'>" + ( _rpp===0 ? "" : "<label> No. of Rows: </label> <input id='rpp' name='rpp' type='text' value='" + _rpp  + "'>" ) 
@@ -3784,4 +3784,4 @@ zsi.__setExtendedJqFunctions();
 $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
-});          
+});           
