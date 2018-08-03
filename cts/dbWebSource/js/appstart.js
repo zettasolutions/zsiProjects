@@ -1,3 +1,11 @@
+zsi.init({
+      baseURL : base_url
+     ,errorUpdateURL    :  base_url + "sql/logerror"
+     ,sqlConsoleName    :  "runsql"
+     ,excludeAjaxWatch  :  ["checkDataExist","searchdata"]
+     ,getDataURL        :  base_url + "data/getRecords"
+});
+
 var  projectAccess = {}
     ,procURL = base_url + "sql/proc?p=" 
     ,execURL = base_url + "sql/exec?p="
@@ -7,8 +15,9 @@ var  projectAccess = {}
     ,gUser
 ;
 
-$.get(procURL + "users_sel", function(d) {
+zsi.getData("U82" , function(d) {
     gUser = d.rows[0];
+    console.log("gUser",gUser);
 });
 
 //initialize Settings.
@@ -43,13 +52,6 @@ $.fn.dateTimePicker=function(o){
     return  this.datetimepicker(o);
 };
  
-zsi.init({
-      baseURL : base_url
-     ,errorUpdateURL    :  base_url + "sql/logerror"
-     ,sqlConsoleName    :  "runsql"
-     ,excludeAjaxWatch  :  ["checkDataExist","searchdata"]
-     ,getDataURL        :  base_url + "data/getRecords"
-});
 
 var isMenuItemsSaved = readCookie("isMenuItemsSaved");
 
@@ -282,4 +284,4 @@ function readCookie(name) {
 }
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-} 
+}  
