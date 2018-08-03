@@ -67,7 +67,7 @@ zsi.ready(function(){
             	,{ text  : "Is Active?"                 , name  : "is_active"    , type  : "yesno"         , width:75          , style : "text-align:left;"   ,defaultValue:"Y"                 }
                 ,{ text  : 'Subcriptions'               , width : 120            , style : 'text-align:center;'
                     ,onRender : function(d) {
-                        return (d !== null && svn(d,"app_id") !== '' ? '<div class="add-status">'+ d.countAppSubscribers +'</div>' : '');
+                        return (d !== null && svn(d,"app_id") !== '' ? '<div class="add-status "><span class="badge badge-dark">'+ d.countAppSubscribers +'</span></div>' : '');
                     }
                 }
             ]
@@ -235,4 +235,4 @@ zsi.ready(function(){
     }
     
 
-});     
+});      
