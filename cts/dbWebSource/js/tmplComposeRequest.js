@@ -1,32 +1,48 @@
+
+
 $(document).ready(function() {
     var _files = [];
+    var gTypeId = 0;
     
     $("#composeRequest-div").height($("#main-content").height());
     
     // Display client apps in dropdown
-    $.get(procURL + 'dd_client_apps_sel', function(d) {
+    $.get(procURL + 'dd_types_sel', function(d) {
         var _data = d.rows;
         var _html = '<option></option>';
         _data.forEach(function(v) {
-            _html += '<option value="'+v.app_id+'">'+v.app_name+'</option>';
+            _html += '<option value="'+v.type_id+'">'+v.type_desc+'</option>';
         });
-        
-        $("#app_id").html(_html);
+        $("#type_id").html(_html);
     });
     
-    // Create and display dynamic buttonsattachmentDiv
-    $.get(procURL + 'request_processes_statuses_sel', function(d) {
-        var _html = '';
-        d.rows.forEach(function(v) {
-            _html   += '<button type="button" class="btn btn-primary mr-1 btn-next-process" id="btn' + v.process_status_id + '" '
-                    + 'data-process-status-id="'+ v.process_status_id +'" '
-                    + 'data-process-id="'+ v.process_id +'" '
-                    + 'data-status-id="'+ v.status_id +'" '
-                    + 'data-next-process-id="'+ v.next_process_id +'" '
-                    + 'data-client-id="'+ v.client_id +'">'
-                    + v.button_text + '</button>';
+    $("#composeRequest-div").find("#type_id").on("change", function(){
+        gTypeId = this.value;
+        $.get(procURL + 'dd_client_apps_sel @type_id=' + gTypeId, function(d) {
+            var _data = d.rows;
+            var _html = '<option></option>';
+            _data.forEach(function(v) {
+                _html += '<option value="'+v.app_id+'">'+v.app_name+'</option>';
+            });
+            
+            $("#app_id").html(_html);
         });
-        $("#button-div").html(_html);
+
+        // Create and display dynamic buttonsattachmentDiv
+        $.get(procURL + 'request_processes_statuses_sel @type_id=' + gTypeId, function(d) {
+            var _html = '';
+            d.rows.forEach(function(v) {
+                _html   += '<button type="button" class="btn btn-primary mr-1 btn-next-process" id="btn' + v.process_status_id + '" '
+                        + 'data-process-status-id="'+ v.process_status_id +'" '
+                        + 'data-process-id="'+ v.process_id +'" '
+                        + 'data-status-id="'+ v.status_id +'" '
+                        + 'data-next-process-id="'+ v.next_process_id +'" '
+                        + 'data-client-id="'+ v.client_id +'">'
+                        + v.button_text + '</button>';
+            });
+            $("#button-div").html(_html);
+        });
+
     });
     
     // Dynamic button click event listener
@@ -141,4 +157,4 @@ $(document).ready(function() {
             }
         });
     }
-});       
+});        
