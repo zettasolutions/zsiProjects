@@ -19,7 +19,7 @@
                 <input type="hidden" id="process_id" name="process_id">
             </div>
             
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <div class="form-group z-form-con">
                     <label for="process_title">Process Title : </label>
                     <input type="text" name="process_title" id="process_title" class="form-control z-form" required/>
@@ -27,15 +27,23 @@
                 </div>
             </div>
             
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <div class="form-group z-form-con">
-                    <label for="app_id">Support for : </label>
+                    <label for="type_id">Support type : </label>
+                    <select id="type_id" name="type_id" class="form-control z-form" required></select>
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="form-group z-form-con">
+                    <label for="app_id">Application : </label>
                     <select id="app_id" name="app_id" class="form-control z-form" required></select>
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
             
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <div class="form-group z-form-con">
                     <label for="status_name">Status : </label>
                     <input type="text" name="status_name" id="status_name" class="form-control z-form" required/>

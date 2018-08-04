@@ -1,10 +1,11 @@
-$(document).ready(function() {
+zsi.ready(function() {
     var _$activeMenu = $("#menu-nav .menu.active");
     var _$mc = $("#main-content");
     var _$grid = $("#grid-request");
     var _$gr = $("#grid-request-div");
     var _$rd = $("#request-details-div");
     var _files = [];
+    var _rData = "";
     
     // Note that this process-id is for the list not in form
     _$grid.dataBind({
@@ -26,6 +27,7 @@ $(document).ready(function() {
     	    .off("click", ".zRow")
     	    .on("click", ".zRow", function() {
     	        var _rowData = o.data.rows[$(this).index()];
+    	        _rData = _rowData;
     	        _$gr.hide();
     	        _$rd.show();
     	        
@@ -40,21 +42,6 @@ $(document).ready(function() {
     	        _$rd.find("#remarks").val(_rowData.remarks);
     	        _$rd.find("#status_name").val(_rowData.status_name);
     	        
-    	        // Create and display dynamic buttons
-                $.get(procURL + 'request_processes_statuses_sel @request_id='+ _rowData.request_id +',@process_id='+ _rowData.process_id +'', function(d) {
-                    var _html = '';
-                    d.rows.forEach(function(v) {
-                        _html   += '<button type="button" class="btn btn-primary mr-1 btn-next-process" id="btn' + v.process_status_id + '" '
-                                + 'data-process-status-id="'+ v.process_status_id +'" '
-                                + 'data-process-id="'+ v.process_id +'" '
-                                + 'data-status-id="'+ v.status_id +'" '
-                                + 'data-next-process-id="'+ v.next_process_id +'" '
-                                + 'data-client-id="'+ v.client_id +'">'
-                                + v.button_text + '</button>';
-                    });
-                    $("#button-div").html(_html);
-                });
-                
                 $.get(procURL + 'request_attachments_sel @request_id='+_rowData.request_id+',@client_id='+gUser.client_id, function(d) {
                     _files = d.rows;
                     displayAttachments();
@@ -72,14 +59,15 @@ $(document).ready(function() {
                         $.post( procURL + "request_upd"
                             + " @request_id="          + $("#request_id").val() + ""
                             + ",@client_id="           + _$self.attr("data-client-id") + ""
+                            + ",@type_id="             + $("#type_id").val() + ""
                             + ",@app_id="              + $("#app_id").val() + ""
-                            + ",@request_desc='"        + $("#request_desc").val() + "'"
+                            + ",@request_desc='"       + $("#request_desc").val() + "'"
                             + ",@priority_level="      + '' + ""
                             + ",@process_id="          + _$self.attr("data-process-id") + ""
                             + ",@process_status_id="   + _$self.attr("data-process-status-id") + ""
                             + ",@status_id="           + _$self.attr("data-status-id") + ""
                             + ",@next_process_id="     + _$self.attr("data-next-process-id") + ""
-                            + ",@remarks='"             + $("#remarks").val() + "'"
+                            + ",@remarks='"            + $("#remarks").val() + "'"
                             ,function(data){
                                 if(data.isSuccess===true) { 
                                     zsi.form.showAlert("progressWindow");
@@ -98,11 +86,11 @@ $(document).ready(function() {
                             }
                         ); 
                     }
-                });
+                    //});
+    	        });
     	    });
-    	}
+        }
     });
-    
     // Trigger the hidden input type="file" when the "+"" button is clicked
     $(".add-attachment").click(function() {
         $(this).prev().click();
@@ -120,16 +108,46 @@ $(document).ready(function() {
         }
         displayAttachments();
     });
-    
-    // Display client apps in dropdown
-    $.get(procURL + 'dd_client_apps_sel', function(d) {
+
+    // Display support types in dropdown
+    $.get(procURL + 'dd_types_sel', function(d) {
         var _data = d.rows;
         var _html = '<option></option>';
         _data.forEach(function(v) {
-            _html += '<option value="'+v.app_id+'">'+v.app_name+'</option>';
+            _html += '<option value="'+v.type_id+'">'+v.type_desc+'</option>';
         });
+        $("#type_id").html(_html);
+    });
+   
+    $("#request-details-div").find("#type_id").on("change", function(){
+        gTypeId = this.value;
         
-        $("#app_id").html(_html);
+        // Display client apps in dropdown
+        $.get(procURL + 'dd_client_apps_sel @type_id=' + gTypeId, function(d) {
+            var _data = d.rows;
+            var _html = '<option></option>';
+            _data.forEach(function(v) {
+                _html += '<option value="'+v.app_id+'">'+v.app_name+'</option>';
+            });
+            
+            $("#app_id").html(_html);
+        });
+
+       // Create and display dynamic buttons
+        $.get(procURL + 'request_processes_statuses_sel @type_id=' + gTypeId + ',@request_id='+ _rData.request_id +',@process_id='+ _rData.process_id +'', function(d) {
+            var _html = '';
+            d.rows.forEach(function(v) {
+                _html   += '<button type="button" class="btn btn-primary mr-1 btn-next-process" id="btn' + v.process_status_id + '" '
+                        + 'data-process-status-id="'+ v.process_status_id +'" '
+                        + 'data-process-id="'+ v.process_id +'" '
+                        + 'data-status-id="'+ v.status_id +'" '
+                        + 'data-next-process-id="'+ v.next_process_id +'" '
+                        + 'data-client-id="'+ v.client_id +'">'
+                        + v.button_text + '</button>';
+            });
+            $("#button-div").html(_html);
+        });
+
     });
     
     // Check validation
@@ -181,4 +199,5 @@ $(document).ready(function() {
             }
         });
     }
-});    
+});  
+ 
