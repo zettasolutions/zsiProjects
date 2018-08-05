@@ -15,10 +15,7 @@ var  projectAccess = {}
     ,gUser
 ;
 
-zsi.getData("U82" , function(d) {
-    gUser = d.rows[0];
-    console.log("gUser",gUser);
-});
+
 
 //initialize Settings.
 zsi.initDatePicker  = function(){
@@ -220,23 +217,6 @@ function highlightCurrentMenu(){
     });
 }
 
-function getProjectAccess(callBack){
-    if(typeof projectId !== ud){
-        $.get(
-             base_url + "sql/exec?p=user_project_access " + projectId
-            ,function(data){
-                projectAccess = data.rows[0];
-                if(typeof callBack !== ud) {
-                    callBack(projectAccess);
-                }
-                return;
-            }
-        );
-    }
-    else
-        if(typeof callBack !== ud)  callBack();
-}
-
 
 function getPageURL(pageName){
     return base_url + "page/" + pageName;
@@ -257,7 +237,12 @@ function getOptionsURL(code){
 
 zsi.ready = function(callBack){
    $(document).ready(function(){
-        getProjectAccess(callBack);
+        //write extra code here and call the callback function.
+    zsi.getData("U82" , function(d) {
+        gUser = d.rows[0];
+        callBack(d.rows[0]);
+    });
+
    });
 };
 
@@ -284,4 +269,4 @@ function readCookie(name) {
 }
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}  
+}   
