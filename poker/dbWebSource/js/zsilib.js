@@ -1,20 +1,7 @@
 var  ud='undefined'
     ,isUD=function(o){return (typeof o === ud);}
     ,zsi= {
-         __getTableObject           : function(o){
-            var arr = zsi.__tableObjectsHistory;
-        	var r={};
-        	if( o.attr("id") ){
-                for(var x=0;x<arr.length;x++){
-                   if(arr[x].tableName.toLowerCase()===o.attr("id").toLowerCase()  ){
-                       r=arr[x];
-                       break;
-                   }
-                }
-        	}
-            return r.value;
-        }
-        ,__monitorAjaxResponse      : function(){
+         __monitorAjaxResponse      : function(){
             $(document).ajaxStart(function(){});      
             $( document ).ajaxSend(function(event,request,settings) {
                 if(typeof zsi_request_count === ud) zsi_request_count=0;
@@ -1756,7 +1743,8 @@ var  ud='undefined'
             
             
                 if(typeof this.isInitiated === ud){
-                    var _rpp =  ( isUD(o.parameters) ? 0 : isUD(o.parameters.rpp) ? 0  : o.parameters.rpp);            
+                   var _rpp = isUD(o.parameters.rpp) ? 0  : o.parameters.rpp;
+            
                     var _footer =  "<div class=\"zPageFooter\"><div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> 0 </i></div>"
                                 +  "<div class='pagectrl'>" + ( _rpp===0 ? "" : "<label> No. of Rows: </label> <input id='rpp' name='rpp' type='text' value='" + _rpp  + "'>" ) 
                                 +  "<label id='page'> Page </label> <select id='pageNo'></select>"
@@ -2077,223 +2065,252 @@ var  ud='undefined'
             };
             $.fn.loadTable          = function(o) {
                 var __obj   = this;
-                if ( ! __obj.length) { console.error("Target not found."); return false; }
-                if ( ! __obj.parent().hasClass("zTable")) { console.error("zTable div parent is not found."); return false; }
-                else {
-                    zsi.__setTableObjectsHistory(__obj,o);
-                    __obj.onComplete = o.onComplete;
-                    
-                    var isOnEC  = ( ! isUD(o.onEachComplete));
-                    if (isOnEC){    
-                        var _strFunc = o.onEachComplete.toString();
-                        var _args = _strFunc
-                        .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
-                        .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
-                        .split(/,/);
-                        if (_args.length < 1) console.warn("You must implement these parameters: tr,data");
-                    }
-                    
-                    if ( ! __obj.find("thead").length) __obj.append("<thead/>"); 
-                    if ( ! __obj.find("tbody").length) __obj.append("<tbody/>"); 
-                    
-                    // Initialize object parameters
-                    var width           = o.width
-                        ,height         = o.height
-                        ,dataRows       = o.dataRows
-                        ,dRowsLength    = dataRows.length
-                        ,blankRowsLimit = o.blankRowsLimit
-                    
-                    // Initialize DOM objects
-                        ,$ztable        = __obj.closest(".zTable")
-                        ,$thead         = __obj.find("thead")
-                        ,$ths           = $thead.find("th")
-                        ,$tbody         = __obj.find("tbody")
-                    
-                    // Initialize variables 
-                        ,tw             = new zsi.easyJsTemplateWriter()
-                        ,bs             = zsi.bs.ctrl
-                        ,svn            = zsi.setValIfNull
-                    ;
-                    
-                    // Set table width and height
-                    $ztable.css({
-                        width : width
-                        ,height : height
-                    });
-                    
-                    // Create table headers
-                    if ($ths.length === 0) {
-                        tw.tr().in();
-                        for (var i = 0; i < dRowsLength; i++) {
-                            var _dr = dataRows[i];
-                            tw.th({ 
-                                value : _dr.text 
-                                ,style : _dr.style + "min-width:" + _dr.width + "px;width:" + _dr.width + "px;"
-                            });
+                this.setPageCtrl = function(o,data){
+                    var _self = $(this);
+                    var _$pageNo;
+                  
+                    var _createPageList = function(_rows,_pages){
+                        var opt ="";
+                        for(var x=1;x<=_pages;x++){
+                            opt += "<option value='" + x + "'>" + x + "</option>";
                         }
-                        $thead.html(tw.html());   
-                        $ths = $thead.find("th");
-                    }
-                    
-                    // Add sorting functions
-                    if (typeof o.sortIndexes !== ud && zsi.__getTableObject(__obj).isInitiated === false) {
-                        var indexes     = o.sortIndexes
-                            ,arrowUp    = "<span class='arrow-up'></span>"
-                            ,arrowDown  = "<span class='arrow-down'></span>"
-                            ,arrows     = arrowUp + arrowDown
-                        ;
-                        
-                        for (var x = 0; x < indexes.length; x++) {
-                            $($ths[indexes[x]]).append(
-                                tw.new().span({ class : "zSort" })
-                                .in().a({ href : "javascript:void(0);" })
-                                .in().span({ class : "sPane" , value : arrows }).html()
-                            );
-                        }
-                        
-                        var aObj    = __obj.find(".zSort a");
-                        var url     = o.url; 
-                        
-                        aObj.click(function() {
-                            var _$self  = $(this);
-                            var i       = aObj.index(this);
-                            zsi.table.sort.colNo = indexes[i];
-                            
-                            $(".sPane").html(arrows);
-                            
-                            var className = _$self.attr("class");
-                            
-                            if (typeof className === ud) { 
-                                aObj.removeAttr("class");
-                                _$self.addClass("asc").find(".sPane").html(arrowUp);
-                            } else {
-                                if (className.indexOf("asc") > -1) {
-                                    _$self.removeClass("asc").addClass("desc").find(".sPane").html(arrowDown);
-                                    zsi.table.sort.orderNo = 1;
-                                } else {
-                                    _$self.removeClass("desc").addClass("asc").find(".sPane").html(arrowUp);
-                                    zsi.table.sort.orderNo = 0;
-                                }
-                            }
-                            
-                            zsi.table.__sortParameters = "@col_no=" + zsi.table.sort.colNo + ",@order_no=" + zsi.table.sort.orderNo; 
-                            
-                            o.url = (url.indexOf("@") < 0 ? url + " " : url + "," ) + zsi.table.__sortParameters + (zsi.table.__pageParameters === "" ? "" : "," + zsi.table.__pageParameters);
-                            __obj.loadTable(o);
-                        });
-                    }
-                    
-                    // Create table data
-                    var createTr = function(data) {
-                        tw.new().tr({ class : zsi.getOddEven() }).in()
-                        .custom(function() {
-                            for (var i = 0; i < dRowsLength; i++) {
-                                var _info = dataRows[i];
-                                var _td = {
-                                    style : _info.style + "min-width:" + _info.width + "px;width:" + _info.width + "px;"
-                                    ,attr : 'colindex="' + i + '"'
-                                };
-                                
-                                if ( ! isUD(_info.attr)) _td.attr += _info.attr;
-                                if ( ! isUD(_info.class)) _td.class = _info.class;
-                                if (_info.onRender) {
-                                    _td.value = _info.onRender(data);
-                                } else {
-                                    if (isUD(_info.type)) {
-                                        _td.value = data[_info.name];
-                                    } else {
-                                        if ( ! isUD(_info.displayText)) {
-                                            _td.value = bs({ name        : _info.name  
-                                                            ,style       : _info.style 
-                                                            ,type        : _info.type  
-                                                            ,value       : svn(data , _info.name , _info.defaultValue) 
-                                                            ,displayText : svn(data , _info.displayText) 
-                                                        });
-                                        } else {
-                                            _td.value = bs({name : _info.name , style : _info.style , type : _info.type , value : svn(data , _info.name , _info.defaultValue )});
-                                        }
-                                    }
-                                     
-                                    if (i === 0 || i === o.selectorIndex) {
-                                        if ( ! isUD(o.selectorType)) {
-                                            _td.value += (data !== null ? bs({name: (o.selectorType==="checkbox" ? "cb" : (o.selectorType==="radio" ? "rad" : "ctrl" )),type:o.selectorType}) : "" );
-                                        }
-                                    }
-                                }
-                                this.td(_td);
-                            }
-                            return this;
-                        });
-                        
-                        $tbody.append(tw.html());
-                        if (isOnEC) {
-                            o.onEachComplete($tbody.find("tr:last-child"),data);
-                        }
+                        _$pageNo = _self.find("#pageNo").html(opt);
+                        _self.find("#recordsNum").html(_rows.length);
+                        _self.find("#of").html("of " + _pages);
                     };
                     
-                    if (typeof o.isNew !== ud) { if (o.isNew == true) __obj.clearGrid(); } 
-                    __obj.children("tbody").html("");
+                    _createPageList(data.rows,data.returnValue);
+                     
+                    _$pageNo.change(function(){
+                         o.parameters.pno = this.value;
+                        _obj.loadTable(_obj.params);
+                    });
                     
-                    if (o.url || o.data) {
-                        if ($thead.length > 0) __obj.clearGrid(); 
-                        var params = {
-                            dataType : "json"
-                            ,cache : false
-                            ,success : function(data) {
-                                var _num_rows = data.rows.length;
-                                var _$recordsNum = __obj.find("#recordsNum");
-                                
-                                if (dRowsLength) {
-                                    $.each(data.rows, function() {
-                                        createTr(this);
-                                    });
-                                }
-                                
-                                // Set pagination
-                                if (_$recordsNum.length) {
-                                    __obj.find("#recordsNum").html(_num_rows);
-                                    if (typeof zsi.page.__pageNo === ud || zsi.page.__pageNo === null) {
-                                        zsi.page.__pageNo = 1;
-                                        //zsi.__setPageCtrl(o, o.url, data, __obj);
-                                    }
-                                }
-                                
-                                // Set table initiated.
-                                zsi.__getTableObject(__obj).isInitiated = true;
-                                
-                                if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:data});
-                                __obj.addScrollbar(o); // This must be after onComplete()
-                            }          
-                        };
-                        
-                        if (typeof o.data !== ud) {
-                            if(typeof zsi.config.getDataURL === ud) {
-                                alert("zsi.config.getDataURL is not defined in AppStart JS.");
-                                return;
-                            }
-                            params.url = zsi.config.getDataURL;
-                            params.data = JSON.stringify(o.data);
-                            params.type = "POST";
-                        } else params.url = o.url;
+                    _self.find("#rpp").keyup(function(e){
+                        var k = (e.keyCode ? e.keyCode : e.which);
+                    	if(k == '13'){
+                            o.parameters.rpp = this.value;
+                            _obj.params.callBack = function(o){
+                                _createPageList(o.data.rows,o.data.returnValue);
+                                _obj.params.callBack = null;
+                            };
+                            _obj.loadTable(_obj.params);
+                    	}
+                    });                     
+                }
+
+                if ( ! __obj.length) { console.error("Target not found."); return false; }
+                if ( ! __obj.parent().hasClass("zTable")) { console.error("zTable div parent is not found."); return false; }
                 
-                        __obj.bind('refresh', function() {
-                            if (zsi.tmr) clearTimeout(zsi.tmr);
-                            zsi.tmr = setTimeout(function() {
-                                __obj.loadTable(o);
-                            }, 1);   
-                        });
-                        
-                        $.ajax(params);
-                    } else if (o.rows.length && dRowsLength) {
-                        $.each(o.rows, function() {
-                            createTr(this);
-                        });
-                        
-                        if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:o});
-                        __obj.addScrollbar(o); // This must be after onComplete()
-                    }
+                __obj.onComplete = o.onComplete;
+                var isOnEC  = ( ! isUD(o.onEachComplete));
+                if (isOnEC){    
+                    var _strFunc = o.onEachComplete.toString();
+                    var _args = _strFunc
+                    .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
+                    .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
+                    .split(/,/);
+                    if (_args.length < 1) console.warn("You must implement these parameters: tr,data");
                 }
                 
+                if ( ! __obj.find("thead").length) __obj.append("<thead/>"); 
+                if ( ! __obj.find("tbody").length) __obj.append("<tbody/>"); 
+                
+                // Initialize object parameters
+                var width           = o.width
+                    ,height         = o.height
+                    ,dataRows       = o.dataRows
+                    ,dRowsLength    = dataRows.length
+                    ,blankRowsLimit = o.blankRowsLimit
+                
+                // Initialize DOM objects
+                    ,$ztable        = __obj.closest(".zTable")
+                    ,$thead         = __obj.find("thead")
+                    ,$ths           = $thead.find("th")
+                    ,$tbody         = __obj.find("tbody")
+                
+                // Initialize variables 
+                    ,tw             = new zsi.easyJsTemplateWriter()
+                    ,bs             = zsi.bs.ctrl
+                    ,svn            = zsi.setValIfNull
+                ;
+                
+                // Set table width and height
+                $ztable.css({
+                    width : width
+                    ,height : height
+                });
+                
+                // Create table headers
+                if ($ths.length === 0) {
+                    tw.tr().in();
+                    for (var i = 0; i < dRowsLength; i++) {
+                        var _dr = dataRows[i];
+                        tw.th({ 
+                            value : _dr.text 
+                            ,style : _dr.style + "min-width:" + _dr.width + "px;width:" + _dr.width + "px;"
+                        });
+                    }
+                    $thead.html(tw.html());   
+                    $ths = $thead.find("th");
+                }
+                
+                if(typeof o.sortIndexes !== ud && typeof this.isInitiated === ud){    
+                    // Add sorting functions
+                    var indexes     = o.sortIndexes
+                        ,arrowUp    = "<span class='arrow-up'></span>"
+                        ,arrowDown  = "<span class='arrow-down'></span>"
+                        ,arrows     = arrowUp + arrowDown
+                    ;
+                    
+                    for (var x = 0; x < indexes.length; x++) {
+                        $($ths[indexes[x]]).append(
+                            tw.new().span({ class : "zSort" })
+                            .in().a({ href : "javascript:void(0);" })
+                            .in().span({ class : "sPane" , value : arrows }).html()
+                        );
+                    }
+                    
+                    var aObj    = __obj.find(".zSort a");
+                    var url     = o.url; 
+                    
+                    aObj.click(function() {
+                       if (typeof  o.parameters  === ud)   o.parameters = {};  
+                        var _$self  = $(this);
+                        var i       = aObj.index(this);
+                        var _colNo = indexes[i];
+
+                        $(".sPane").html(arrows);
+                        
+                        var className = _$self.attr("class");
+                        
+                        if (typeof className === ud) { 
+                            aObj.removeAttr("class");
+                            _$self.addClass("asc").find(".sPane").html(arrowUp);
+                        } else {
+                            if (className.indexOf("asc") > -1) {
+                                _$self.removeClass("asc").addClass("desc").find(".sPane").html(arrowDown);
+                                o.parameters.order_no = 1;
+                            } else {
+                                _$self.removeClass("desc").addClass("asc").find(".sPane").html(arrowUp);
+                                o.parameters.order_no = 0;
+                            }
+                        }
+                        o.parameters.col_no = _colNo;
+                        o.parameters.order_no=_orderNo;
+                        __obj.loadTable(o);
+                    });
+                    
+                    this.isInitiated = true;
+                }
+                
+                // Create table data
+                var createTr = function(data) {
+                    tw.new().tr({ class : zsi.getOddEven() }).in()
+                    .custom(function() {
+                        for (var i = 0; i < dRowsLength; i++) {
+                            var _info = dataRows[i];
+                            var _td = {
+                                style : _info.style + "min-width:" + _info.width + "px;width:" + _info.width + "px;"
+                                ,attr : 'colindex="' + i + '"'
+                            };
+                            
+                            if ( ! isUD(_info.attr)) _td.attr += _info.attr;
+                            if ( ! isUD(_info.class)) _td.class = _info.class;
+                            if (_info.onRender) {
+                                _td.value = _info.onRender(data);
+                            } else {
+                                if (isUD(_info.type)) {
+                                    _td.value = data[_info.name];
+                                } else {
+                                    if ( ! isUD(_info.displayText)) {
+                                        _td.value = bs({ name        : _info.name  
+                                                        ,style       : _info.style 
+                                                        ,type        : _info.type  
+                                                        ,value       : svn(data , _info.name , _info.defaultValue) 
+                                                        ,displayText : svn(data , _info.displayText) 
+                                                    });
+                                    } else {
+                                        _td.value = bs({name : _info.name , style : _info.style , type : _info.type , value : svn(data , _info.name , _info.defaultValue )});
+                                    }
+                                }
+                                 
+                                if (i === 0 || i === o.selectorIndex) {
+                                    if ( ! isUD(o.selectorType)) {
+                                        _td.value += (data !== null ? bs({name: (o.selectorType==="checkbox" ? "cb" : (o.selectorType==="radio" ? "rad" : "ctrl" )),type:o.selectorType}) : "" );
+                                    }
+                                }
+                            }
+                            this.td(_td);
+                        }
+                        return this;
+                    });
+                    
+                    $tbody.append(tw.html());
+                    if (isOnEC) {
+                        o.onEachComplete($tbody.find("tr:last-child"),data);
+                    }
+                };
+                
+                if (typeof o.isNew !== ud) { if (o.isNew == true) __obj.clearGrid(); } 
+                __obj.children("tbody").html("");
+                
+                if (o.url || o.data) {
+                    if ($thead.length > 0) __obj.clearGrid(); 
+                    var params = {
+                        dataType : "json"
+                        ,cache : false
+                        ,success : function(data) {
+                            var _num_rows = data.rows.length;
+                            var _$recordsNum = __obj.find("#recordsNum");
+                            
+                            if (dRowsLength) {
+                                $.each(data.rows, function() {
+                                    createTr(this);
+                                });
+                            }
+                            
+                            // Set pagination
+                            if (_$recordsNum.length) {
+                                _obj.find("#recordsNum").html(num_rows);
+                                 if(typeof _obj.isPageInitiated === ud){
+                                    _obj.setPageCtrl(o,data);
+                                    _obj.isPageInitiated=true;
+                                 }
+                                
+                            }
+
+                            if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:data});
+                            __obj.addScrollbar(o); // This must be after onComplete()
+                        }          
+                    };
+                    
+                    if (typeof o.data !== ud) {
+                        if(typeof zsi.config.getDataURL === ud) {
+                            alert("zsi.config.getDataURL is not defined in AppStart JS.");
+                            return;
+                        }
+                        params.url = zsi.config.getDataURL;
+                        params.data = JSON.stringify(o.data);
+                        params.type = "POST";
+                    } else params.url = o.url;
+            
+                    __obj.bind('refresh', function() {
+                        if (zsi.tmr) clearTimeout(zsi.tmr);
+                        zsi.tmr = setTimeout(function() {
+                            __obj.loadTable(o);
+                        }, 1);   
+                    });
+                    
+                    $.ajax(params);
+                } else if (o.rows.length && dRowsLength) {
+                    $.each(o.rows, function() {
+                        createTr(this);
+                    });
+                    
+                    if ( ! isUD(__obj.onComplete)) __obj.onComplete({params:o,data:o});
+                    __obj.addScrollbar(o); // This must be after onComplete()
+                }
                 return __obj;
             };
             $.fn.resetDragScroll    = function() {
@@ -2851,30 +2868,6 @@ var  ud='undefined'
                 return json;
             };              
         }            
-        ,__setPageCtrl              : function(o,url,data,pTable){
-            var tr = data.returnValue;
-          
-            var opt ="";
-            for(var x=1;x<=tr;x++){
-                opt += "<option value='" + x + "'>" + x + "</option>";
-            }
-            
-            var h = "<div class='pagestatus'>Number of records in a current page : <i id='recordsNum'> " + data.rows.length + " </i></div>";
-            h +="<div class='pagectrl'><label id='page'> Page </label> <select id='pageNo'>" + opt + "</select>";
-            h +="<label id='of'> of " + tr + " </label></div>";
-            
-        
-            pTable.find(".pageholder").html(h);
-            
-            var select = pTable.find(".pagectrl #pageNo");
-        
-            select.change(function(){
-                zsi.table.__pageParameters = "@pno=" + this.value;
-                o.url = url + (url.indexOf("@") >-1 ? ",":"" ) + (zsi.table.__sortParameters===""?"":zsi.table.__sortParameters +",")  + zsi.table.__pageParameters;
-                //pTable.loadData(o);
-            });
-            
-        }
         ,__setPrototypes            : function(){
             //note: date prototype has a problem in Google Chrome.
             String.prototype.isValidDate = function () {
@@ -3005,26 +2998,6 @@ var  ud='undefined'
 
              
         }
-        ,__setTableObjectsHistory   : function(objTable, o){
-            var arr = zsi.__tableObjectsHistory;
-            var isFound=false;
-            if(objTable.length!==0){
-                for(var x=0;x<arr.length;x++){
-                   if(arr[x].tableName.toLowerCase()===objTable.attr("id").toLowerCase()  ){
-                       isFound=true;
-                       break;
-                   }
-                }
-            
-                if(!isFound) {
-                    o.isInitiated = false;
-                    arr.push({tableName:objTable.attr("id"),value:o});
-                }
-            }else{
-                console.log("table not defined. url:" + o.url);
-            }
-        }
-        ,__tableObjectsHistory      : []
         ,bs                         : {
              ctrl                   : function(o){
                 var l_tag="input";
@@ -3135,7 +3108,6 @@ var  ud='undefined'
             });
         }     
         ,config                     : {}
-        ,control                    : {}
         ,form                       : {
              __checkMandatory : function(oGroupN, oGroupT,groupIndex){
             var e = oGroupN.names;
@@ -3568,38 +3540,8 @@ var  ud='undefined'
                return _result;
             }  
         }
-        ,page                       : {
-            __object : null
-            ,__PageNo : null
-            ,__tURL   : null
-            ,clearPaging            : function(){
-                zsi.page.__pageNo=null;    
-            }
-            ,DisplayRecordPage      : function(p_page_no,p_rows,p_numrec){
-               var l_max_rows       =25;
-               var l_last_page    = Math.ceil(p_rows/l_max_rows);
-               var l_record_from    = (l_max_rows * (p_page_no-1)) + 1;
-               var l_record_to      = parseInt(l_record_from) + parseInt(p_numrec) - 1;
-               var l_select         = $("select[name=p_page_no]");
-               l_select.clearSelect();
-               for(var x=0;x<l_last_page;x++){
-                  var l_option;
-                   if (p_page_no==x+1){
-                         l_select.append("<option selected value='" +  (x+1) + "'>"+ (x+1) +"</option>");
-                    }
-                    else{
-                         l_select.append("<option value='" +  (x+1) + "'>"+ (x+1) +"</option>");
-                    }
-               }
-            
-               $("#of").html(' of ' + l_last_page );
-               $(".pagestatus").html("Showing records from <i>" + l_record_from + "</i> to <i>" + l_record_to + "</i>");
-            
-            }                 
-
-        }
         ,url                        : {
-            getQueryValue          : function (source,keyname) {
+             getQueryValue          : function (source,keyname) {
                source = source.toString().toLowerCase(); 
                keyname = keyname.toLowerCase();
                var qLoc =  source.indexOf("?");   
@@ -3643,9 +3585,7 @@ var  ud='undefined'
             }
         }
         ,table                      : {
-             __pageParameters       : ""
-            ,__sortParameters       : ""
-            ,getCheckBoxesValues    : function(){
+             getCheckBoxesValues    : function(){
                 var args = arguments;
                 var result=null;
                 var _hidden= "input[type=hidden]";
@@ -3692,10 +3632,6 @@ var  ud='undefined'
                   else{
                         _input.val("");
                   }
-            }
-            ,sort:{
-                 colNo:1
-                ,orderNo:0
             }
         }
         ,tmr                        : null
@@ -3782,4 +3718,4 @@ $(document).ready(function(){
     zsi.initDatePicker();
     zsi.initInputTypesAndFormats();
 });
-                                         
+                                          
