@@ -1,31 +1,32 @@
 var gType_id = null;
 
 zsi.ready(function(){
-    var  _gridWidth =  $("#main-content").width() - 40
+    var  _gridWidth = $("#main-content").width() - 40
         ,_gridHeight = $("#main-content").height() - 150
         ,_$mcProcess = $("#menu-content-process")
         ,_$mcProcessStatuses = $("#menu-content-processstatuses").hide()    
     ;
     
     if (gUser.is_admin === "Y") {
-        $("#button-div1, #button-div2").html('<button type="button" class="col-12 col-md-auto btn btn-primary btn-sm" id="btnSave"><span class="fa fa-save"></span> Save</button>');
+        $("#button-div1, #button-div2").html('<button type="button" class="col-12 col-md-auto btn btn-primary btn-sm" id="btnSave" disabled><span class="fa fa-save"></span> Save</button>');
     }
-    
     
     $("#type_id").dataBind({
         url: procURL + "dd_types_sel "
         , text: "type_desc"
         , value: "type_id"
-        , required :false
+        , required : false
         , onComplete: function(){
-            //gType_id = $("select#type_id option:selected").val();
             $("select#type_id").change(function(){
-                //gType_id = null;
-                console.log("this",this.value);
-                if(this.value)
+                if (this.value !== "") {
                     gType_id = this.value;
-                    console.log("gType_id",gType_id);
                     displayProcesses(gType_id);
+                    _$mcProcess.find("#btnSave").removeAttr("disabled");
+                } else {
+                    gType_id = null;
+                    displayProcesses(null);
+                    _$mcProcess.find("#btnSave").attr("disabled","disabled");
+                }
             });
         }
     });  
@@ -51,11 +52,11 @@ zsi.ready(function(){
         							}
         							,{ text : 'Title'           , name : 'process_title'    , type : 'input'    , width : 300       , style : 'text-align:left;' }
         							,{ text : 'Icon'            , name : 'icon'             , type : 'input'    , width : 70        , style : 'text-align:left;' }
-        							,{ text : 'Description'     , name : 'process_desc'     , type : 'input'    , width : 450       , style : 'text-align:left;' }
-        							,{ text : 'Category'        , width : 100               , style : 'text-align:left;' 
+        							/*,{ text : 'Description'     , name : 'process_desc'     , type : 'input'    , width : 450       , style : 'text-align:left;' }*/
+        							,{ text : 'Description'        , width : 450               , style : 'text-align:left;' 
         							    ,onRender: function(d){
-        							             return   bs({ name : "category_id"         , type : "select" })
-        							                    + bs({ name : "type_id"             , type : "hidden" });
+        							             return   bs({ name : "process_desc" , type : "input" , value : svn(d,"process_desc") })
+        							                    + bs({ name : "type_id"      , type : "hidden" , value : svn(d,"type_id") });
         							    }
         							}
         							,{ text : 'Is Active?'      , name : 'is_active'        , type : 'yesno'    , width : 100       , style : 'text-align:left;' , defaultValue : 'Y' }
@@ -112,13 +113,19 @@ zsi.ready(function(){
                                 ,{ text : 'Is Active'       , name : 'is_active'        , width : 100       , type : 'yesno'    , style : 'text-align:left;' , defaultValue : 'Y' }
                               ] 
             ,onComplete : function() {
-                console.log("agi");
                 _$grid.find("select[name='status_id']").dataBind({
                     url: getOptionsURL("status")
                 });
                 _$grid.find("select[name='next_process_id']").dataBind({
                     url: getOptionsURL("process")
                 });
+                
+                _$grid.find("select[name='next_process_id']").dataBind({
+                    url: execURL + "dd_next_processes_sel @type_id=" + rowData.type_id + " ,@process_id=" + rowData.process_id
+                    , text: "process_title"
+                    , value: "process_id"
+                    , required :false
+                });  
                 _$grid.find("input[name='process_id']").val(rowData.process_id);
             }
         });
@@ -140,4 +147,4 @@ zsi.ready(function(){
     }
 });
 
-       
+          
