@@ -10,7 +10,7 @@ zsi.ready(function(){
     
     if (gUser.is_admin === "Y") {
         $("#button-div1").html('<button type="button" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnSaveApplication"><i class="fa fa-save"></i> Save</button> <button type="button" class="btn btn-primary btn-sm col-12 col-md-auto" id="btnDelete"><i class="fa fa-trash-alt"></i> Delete</button>' );
-        $("#button-div2").html('<button type="button" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnSaveSubscription"><i class="fa fa-save"></i> Save</button> <button type="button" data-toggle="modal" data-target="#modalAdd" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnAdd"><i class="fas fa-user-plus"></i> Add Subscription</button>' );
+        $("#button-div2").html('<button type="button" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnSaveSubscription"><i class="fa fa-save"></i> Save</button> <button type="button" data-toggle="modal" data-target="#modalAdd" class="btn btn-primary btn-sm col-12 col-md-auto mb-1 mb-md-0" id="btnAdd"><i class="fas fa-user-plus"></i> Register Client </button>' );
     }
     
     String.prototype.toDate = function () {
@@ -117,7 +117,7 @@ zsi.ready(function(){
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         _$mcApplication.hide();
         _$mcSubscription.show();
-        $("#processTitle").text(rowData.process_title);
+        $("#processTitle").text(rowData.app_desc);
         var _$grid = $("#gridSubscription");
         _$grid.dataBind({
     	     url            : procURL + "subscriptions_sel @app_id=" + rowData.app_id  
@@ -128,10 +128,10 @@ zsi.ready(function(){
             ,dataRows : [
                    {text  : "Client Name"    , width : 300    , style : "text-align:left;"
                         ,onRender : function(d){ 
-                    	    return bs({name:"subscription_id"   ,type:"hidden"      ,value: svn(d,"subscription_id")})
-                    	         + bs({name:"is_edited"         ,type:"hidden"      ,value: svn(d,"is_edited")})
-                    	         + bs({name:"app_id"            ,type:"hidden"      ,value: svn(d,"app_id")})                            
-                                 + bs({name:"client_id"         ,type:"select"});
+                    	    return bs({name:"subscription_id"   ,type:"hidden"  ,value: svn(d,"subscription_id")})
+                    	         + bs({name:"is_edited"         ,type:"hidden"  ,value: svn(d,"is_edited")})
+                    	         + bs({name:"app_id"            ,type:"hidden"  ,value: rowData.app_id})                            
+                                 + bs({name:"client_id"         ,type:"select"  ,value: svn(d,"client_id")});
                         }
                     }
                     ,{text  : "Start Date"       , type : "input"    , width : 150    , style : "text-align:left;"
@@ -209,10 +209,11 @@ zsi.ready(function(){
             _$grid.jsonSubmit({
                  procedure      : "subscriptions_upd"
                 ,optionalItems  : ["is_active"]
-                ,notInclude     : "#expiry_date, #client_id"
+                ,notInclude     : "#expiry_date"
                 ,onComplete     : function(data) {
                     if (data.isSuccess === true) zsi.form.showAlert("savedWindow");
                     displaySubscriptionRecords(rowData);
+                    displayApplicationRecords();
                 }
             });
         });
@@ -235,4 +236,4 @@ zsi.ready(function(){
     }
     
 
-});       
+});        
