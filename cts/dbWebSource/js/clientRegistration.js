@@ -235,37 +235,49 @@ zsi.ready(function() {
             else
                 _$btnSignup.attr("disabled","disabled");
         }
-        
+
         $(document).ready(function() {
+            function validatePassword() {
+                if($("#password").val() === $("#cpassword").val()){
+                    $("#registration1-form").jsonSubmit({
+                         sqlCode : "C11"
+                        ,isSingleEntry : true
+                        ,onComplete : function(d) {
+                            _$form2.find("#client_id").val(d.returnValue);
+                            
+                            $.get(base_url+ 'pub/encrypt?text='+_$form2.find("#password").val()+'', function(d) {
+                                _$form2.find("#password").val(d);
+                                $("#registration2-form").jsonSubmit({
+                                     sqlCode: "C8"
+                                    ,onComplete : function (data) {
+                                        if(data.isSuccess===true) {
+                                            zsi.form.showAlert("progressWindow");
+                                            $('#registration-tab a[href="#third-pane"]').removeClass("disabled").tab('show');
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    });
+                  
+                }else{
+                    alert("Enter Confirm Password Same as Password");
+                }
+            }    
+            
             $("#btnNext").click(function() {
                 $('#registration-tab a[href="#second-pane"]').tab('show');
                 gForm1Data = $("#registration1-form").serializeArray();
             });
             
             _$btnSignup.click(function(e) {
-                $.ajax({
-                    type: 'POST'
-                    ,url: procURL + "client_reg_upd @client_name='"+_form1Data[0].value+"',@address='"+_form1Data[1].value+"',@client_number='"+_form1Data[2].value+"',@contact_name='"+_form1Data[3].value+"',@mobile_no='"+_form1Data[4].value+"'"
-                    ,contentType: 'application/json'
-                    ,success : function(d) {
-                        _$form2.find("#client_id").val(d.returnValue);
-                        
-                        $.get(base_url+ 'public/encrypt?text='+_$form2.find("#password").val()+'', function(d) {
-                            _$form2.find("#password").val(d);
-                            $("#registration2-form").jsonSubmit({
-                                 procedure  : "client_admin_upd"
-                                ,onComplete : function (data) {
-                                    if(data.isSuccess===true) zsi.form.showAlert("progressWindow");
-                                }
-                            });
-                        });
-                    }
-                });
-                
+
+                validatePassword();
                 e.preventDefault();
                 e.stopPropagation();
                 return false;
+
             });
         });
     })(); 
-});
+});      

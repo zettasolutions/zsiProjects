@@ -1,0 +1,63 @@
+ <style>
+    #validate-div
+    ,#success-div {
+        width: 300px;
+    }
+    
+    @media (min-width: 768px) {
+        #validate-div
+        ,#success-div {
+            width: 25%;
+            min-width: 300px;
+        }
+    }
+    
+    #main-content {
+        height: 600px;
+    }
+</style>
+
+<div id="validate-div" class="z-center">
+    <form id="validate-form" accept-charset="utf-8">
+        <div class="row">
+            <div class="col-12 text-center mb-2">
+                <h2>Set Password</h2>
+            </div>
+            <div class="col-12 mb-1">
+                <div class="zform-group">
+                    <label for="password"><i class="fas fa-lock fa-lg"></i> Password</label>
+                    <input type="password" class="validate" id="password" name="password" tabindex="0" required>
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-12 mb-1">
+                <div class="zform-group">
+                    <label for="cpassword"><i class="fas fa-lock fa-lg" ></i> Confirm Password</label>
+                    <input type="password" class="validate" id="cpassword" name="cpassword" tabindex="0" required >
+                    <div class="error-feedback"><span>Error message.</span><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-primary col-12" id="btnSubmit" >Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="success-div" class="z-center" style="display:none;">
+    <div class="row">
+        <div class="col-12 text-center">
+            <i class="far fa-check-circle mt-3 mb-2" style="font-size:6rem;"></i>
+            <h3>Success!</h3>
+            <h5>Your account has been verified.</h5>
+            <p>Click the button below to sign in.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="/" class="btn btn-primary col-12" id="btnDirectSignin">Sign in</a>
+        </div>
+    </div>
+</div>
