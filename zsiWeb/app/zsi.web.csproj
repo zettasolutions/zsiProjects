@@ -134,6 +134,7 @@
     <Compile Include="App_Start\SessionHandler.cs" />
     <Compile Include="App_Start\CollectionHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\PublicController.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Controllers\JavaScriptController.cs" />
     <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Models\appProfile.cs" />
+    <Compile Include="Models\EmailSettings.cs" />
     <Compile Include="Models\SqlCommands.cs" />
     <Compile Include="Models\message.cs" />
     <Compile Include="Models\PageData.cs" />
