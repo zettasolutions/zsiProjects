@@ -24,3 +24,5 @@ poker/createCodeBackup.exe.config
 cts/createCodeBackup.exe.config
 cts/dbWebSource/template/tmplmanageStatus.html
 cts/dbWebSource/template/tmplManageSubscription.html
+zsiWeb/.vs/*
+ 
