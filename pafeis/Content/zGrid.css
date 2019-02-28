@@ -1,5 +1,6 @@
 .zGrid{
     border: 1pt solid #d6d8d8;
+    float:left;
 }
 .zCell a{
     text-decoration:underline;
@@ -148,22 +149,20 @@
 	position:relative;	 
 }   
     
-.zRows  #table  .even {
 
-
+.zRows .zRow {
+    transition: background 0.2s ease-in;
+}
+.zRows .zRow:nth-child(even) {
+    background-color: #e3e4e5;
 }
 
-.zRows  #table .odd {
-
-  background-color:#e3e4e5;
-}
-
-.zRows  #table  .zRow:hover  {
+.zRows .zRow:hover {
     background-color: #b8b8b8;
-    color: #000;
+     color: #000;
 }
 
-.zRows #table .zRow.active  {
+.zRows #table .zRow.active {
     background-color: #333333;
     color: #fff;
 }
@@ -355,3 +354,5 @@
 
 
 
+
+

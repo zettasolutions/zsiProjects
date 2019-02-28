@@ -151,33 +151,32 @@ var  ud='undefined'
                             ,lastI      = 0
                         ;
                         
-                        for (let i = 0; i < theadTrL; i++) {
-                            let _$ths       = $theadTr.eq(i).find("th")
+                        for (var i = 0; i < theadTrL; i++) {
+                            var _$ths       = $theadTr.eq(i).find("th")
                                 ,_thL       = _$ths.length
                                 ,_temp      = {}
                                 ,_temp2     = []
                                 ,_index     = 0
                             ;
                             
-                            for (let _i = 0; _i < _thL; _i++) {
-                                let _$th    = _$ths.eq(_i)
+                            for (var _i = 0; _i < _thL; _i++) {
+                                var _$th    = _$ths.eq(_i)
                                     ,_newW  = 0;
                                 
                                 if ( ! isUD(_$th.attr("colspan"))) {
-                                    let _cs         = parseInt(_$th.attr("colspan"), 10)
+                                    var _cs         = parseInt(_$th.attr("colspan"), 10)
                                         ,_csMinus1  = _cs - 1;
                                         
-                                    for (let _ctr = 1; _ctr <= _cs; _ctr++) {
+                                    for (var _ctr = 1; _ctr <= _cs; _ctr++) {
                                         _index++;
                                         _temp[(_index - 1)] = _$th;
                                     }
                                     
-                                    //if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
-                                    for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                    for (var x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
                                         if (lastI !== i) {
-                                            for (let rowI = 0; rowI < rowspan.length; rowI++) {
-                                                for (let a = 0; a < rowspan[rowI].length; a++) {
-                                                    let _b = rowspan[rowI][a];
+                                            for (var rowI = 0; rowI < rowspan.length; rowI++) {
+                                                for (var a = 0; a < rowspan[rowI].length; a++) {
+                                                    var _b = rowspan[rowI][a];
                                                     if (_b.i == y && _b.rowspan > 0) {
                                                         _b.rowspan--;
                                                         if ((_index + 1) - 1 < colWidthL) _index++;
@@ -189,7 +188,7 @@ var  ud='undefined'
                                     }
                                     
                                     if ( ! isUD(_$th.attr("rowspan"))) {
-                                        for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                        for (var x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
                                             _temp2.push({ i : y , rowspan : parseInt(_$th.attr("rowspan"), 10) - 1 });
                                         }
                                     }
@@ -197,9 +196,9 @@ var  ud='undefined'
                                     if ((_index + 1) - 1 < colWidthL) { _index++; }
                                     
                                     if (lastI !== i) {
-                                        for (let rowI = 0; rowI < rowspan.length; rowI++) {
-                                            for (let a = 0; a < rowspan[rowI].length; a++) {
-                                                let _b = rowspan[rowI][a];
+                                        for (var rowI = 0; rowI < rowspan.length; rowI++) {
+                                            for (var a = 0; a < rowspan[rowI].length; a++) {
+                                                var _b = rowspan[rowI][a];
                                                 if (_b.i == (_index - 1) && _b.rowspan > 0) {
                                                     _b.rowspan--;
                                                     if ((_index + 1) - 1 < colWidthL) _index++;
@@ -225,33 +224,33 @@ var  ud='undefined'
                         /* ----------------------------------- TBODY ----------------------------------- */
                         rowspan    = [];
                         lastI      = 0;
-                        for (let i = 0; i < tbodyTrL; i++) {
-                            let _$tds       = $tbodyTr.eq(i).find("td")
+                        for (var i = 0; i < tbodyTrL; i++) {
+                            var _$tds       = $tbodyTr.eq(i).find("td")
                                 ,_tdL       = _$tds.length
                                 ,_temp      = {}
                                 ,_temp2     = []
                                 ,_index     = 0
                             ;
                             
-                            for (let _i = 0; _i < _tdL; _i++) {
-                                let _$td    = _$tds.eq(_i)
+                            for (var _i = 0; _i < _tdL; _i++) {
+                                var _$td    = _$tds.eq(_i)
                                     ,_newW  = 0;
                                 
                                 if ( ! isUD(_$td.attr("colspan"))) {
-                                    let _cs         = parseInt(_$td.attr("colspan"), 10)
+                                    var _cs         = parseInt(_$td.attr("colspan"), 10)
                                         ,_csMinus1  = _cs - 1;
                                         
-                                    for (let _ctr = 1; _ctr <= _cs; _ctr++) {
+                                    for (var _ctr = 1; _ctr <= _cs; _ctr++) {
                                         _index++;
                                         _temp[(_index - 1)] = _$td;
                                     }
                                         
                                     //if ((_index + _cs) - 1 < colWidthL) { _index += _cs; }
-                                    for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                    for (var x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
                                         if (lastI !== i) {
-                                            for (let rowI = 0; rowI < rowspan.length; rowI++) {
-                                                for (let a = 0; a < rowspan[rowI].length; a++) {
-                                                    let _b = rowspan[rowI][a];
+                                            for (var rowI = 0; rowI < rowspan.length; rowI++) {
+                                                for (var a = 0; a < rowspan[rowI].length; a++) {
+                                                    var _b = rowspan[rowI][a];
                                                     if (_b.i == y && _b.rowspan > 0) {
                                                         _b.rowspan--;
                                                         if ((_index + 1) - 1 < colWidthL) _index++;
@@ -263,7 +262,7 @@ var  ud='undefined'
                                     }
                                     
                                     if ( ! isUD(_$td.attr("rowspan"))) {
-                                        for (let x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
+                                        for (var x = _csMinus1, y = (_index - 1) - _csMinus1; x >= 0 && y < colWidthL; x--, y++) {
                                             _temp2.push({ i : y , rowspan : parseInt(_$td.attr("rowspan"), 10) - 1 });
                                         }
                                     }
@@ -271,9 +270,9 @@ var  ud='undefined'
                                     if ((_index + 1) - 1 < colWidthL) { _index++; }
                                     
                                     if (lastI !== i) {
-                                        for (let rowI = 0; rowI < rowspan.length; rowI++) {
-                                            for (let a = 0; a < rowspan[rowI].length; a++) {
-                                                let _b = rowspan[rowI][a];
+                                        for (var rowI = 0; rowI < rowspan.length; rowI++) {
+                                            for (var a = 0; a < rowspan[rowI].length; a++) {
+                                                var _b = rowspan[rowI][a];
                                                 if (_b.i == (_index - 1) && _b.rowspan > 0) {
                                                     _b.rowspan--;
                                                     if ((_index + 1) - 1 < colWidthL) _index++;
@@ -385,7 +384,7 @@ var  ud='undefined'
                                 __cr.width = _newW;
                                 
                                 if (hasSpan) {
-                                    for (let i = 0; i < cache.length; i++) {
+                                    for (var i = 0; i < cache.length; i++) {
                                         var _c = cache[i];
                                         for (var key in _c) {
                                             if (_crIndex === parseInt(key)) { 
@@ -477,7 +476,7 @@ var  ud='undefined'
                 o = o || {};
                 o.isHoverBR = o.isHoverBR || false;
                 
-                for (let i = 0; i < this.length; i++) {
+                for (var i = 0; i < this.length; i++) {
                     var _this       = this[i];
                     var _$target    = $(_this);
                     var _offset     = _$target.offset();
@@ -941,9 +940,9 @@ var  ud='undefined'
                         if( _tr.curLastWidth + _ew  < 25  )   return;
                         
                         _tr.curCol.css({width: _tr.curLastWidth + _ew });
-                        if(_ew > 0)
-                            _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
-                            
+                        if(o.width){  
+                            if(_ew > 0) _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
+                        }
                         var _zCell1 =  _getCurrentCell(_rows.find(_cls + "(" +  ( _cIndex +  1) + ")"));
                         _zCell1.css({width: _tr.curLastWidth + _ew });
                         _zCell1.parent().parent().css({width: _tr.tblLastWidth + _ew});
@@ -1014,7 +1013,7 @@ var  ud='undefined'
                                 __obj.dataBindGrid(__obj.params);
                             
                         });
-                        if(_isGroup || o.width > __o.width ) o.headers.css("width",(o.width + 20 ) + "px");
+                        if(_isGroup || o.width > __o.width ) o.headers.css({width:(o.width + 20 )});
                         if (__o.width) o.table.css("width",(o.width + 1 )  + "px");
                     }
                     ,trItem             = function(o){
@@ -1024,7 +1023,7 @@ var  ud='undefined'
                         
                         var r       = "";
                         
-                        r +="<div rowObj class='zRow "  + o.rowClass + "'>";
+                        r +="<div rowObj class='zRow'>";
                             for(var x=0;x<_dt.length;x++){
                                 var _content = "", _attr = "", _style = "", _class = "",_nd= (o.data===null ? " no-data ":"");
                                 var _info = _dt[x]; 
@@ -1168,9 +1167,8 @@ var  ud='undefined'
                     ,createBlankRows =  function(o){
                         if(typeof o.blankRowsLimit !==ud ){
                             for(var x=0; x < o.blankRowsLimit;x++){
-                                var _cls = zsi.getOddEven();
-                                trItem({data:null,panelType:"L",rowClass:_cls,index:x}); 
-                                trItem({data:null,panelType:"R",rowClass:_cls,index:x});
+                                trItem({data:null,panelType:"L",index:x}); 
+                                trItem({data:null,panelType:"R",index:x});
                             }
                         } 
                     }
@@ -1250,7 +1248,6 @@ var  ud='undefined'
                     
                     _tableRight =  _panelRight.find("#table");
                     _tableLeft  =  _panelLeft.find("#table");
-                    this.css("overflow","hidden").css("width", o.width + "px");
                     __obj.find(".zRows").css("height", o.height + "px");
                     _panelLeft.css("width", _gridWidthLeft + "px");
                     _panelRight.css("width", (o.width - _gridWidthLeft -4  )  + "px");
@@ -1292,11 +1289,9 @@ var  ud='undefined'
                                     var _noOfPage   = (data.returnValue > 0 ? data.returnValue : 0);
                                     var _ch,i,_trs;
                                     num_rows = data.rows.length;
-                                    
                                     $.each(data.rows, function (i) {
-                                        var _cls = zsi.getOddEven();
-                                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
-                                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});
+                                        trItem({data:this,panelType:"L",index:i}); 
+                                        trItem({data:this,panelType:"R",index:i});
                                     });
                                     
                                     if(o.isAsync && __obj.curPageNo < _noOfPage ){
@@ -1353,9 +1348,8 @@ var  ud='undefined'
                 }
                 else if(typeof o.rows !== ud){
                     $.each(o.rows, function(i) {
-                        var _cls = zsi.getOddEven();
-                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
-                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});                            
+                        trItem({data:this,panelType:"L",index:i}); 
+                        trItem({data:this,panelType:"R",index:i});                            
                     });
                     rowsCompleted();
                     __obj.onRequestDone({params:o,data:o.rows});
@@ -1487,9 +1481,10 @@ var  ud='undefined'
                         if( _tr.curLastWidth + _ew  < 25  )   return;
                         
                         _tr.curCol.css({width: _tr.curLastWidth + _ew });
-                        if(_ew > 0)
-                            _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
-                            
+                        
+                        if(o.width){
+                            if(_ew > 0) _tr.curCol.closest(".zHeaders").css({width: _tr.hdrLastWidth + _ew});
+                        }    
                         var _zCell1 =  _getCurrentCell(_rows.find(_cls + "(" +  ( _cIndex +  1) + ")"));
                         _zCell1.css({width: _tr.curLastWidth + _ew });
                         _zCell1.parent().parent().css({width: _tr.tblLastWidth + _ew});
@@ -1558,7 +1553,7 @@ var  ud='undefined'
                             else 
                                 _obj.dataBindGrid2(_obj.params);
                         });
-                        if(_isGroup || o.width > _o.width ) o.headers.css("width",(o.width + 20 ) + "px");
+                        if(_isGroup || o.width > _o.width ) o.headers.css({width:(o.width + 20 )});
                         if (_o.width) o.table.css("width",(o.width + 1 )  + "px");
                     }
                     ,trItem             = function(o){
@@ -1568,7 +1563,7 @@ var  ud='undefined'
                         
                         var r       = "";
                         
-                        r +="<div rowObj class='zRow "  + o.rowClass + "'>";
+                        r +="<div rowObj class='zRow'>";
                             for(var x=0;x<_dt.length;x++){
                                 var _content = "", _attr = "", _style = "", _class = "",_nd= (o.data===null ? " no-data ":"");
                                 var _info = _dt[x]; 
@@ -1712,9 +1707,8 @@ var  ud='undefined'
                     ,createBlankRows =  function(o){
                         if(typeof o.blankRowsLimit !==ud ){
                             for(var x=0; x < o.blankRowsLimit;x++){
-                                var _cls = zsi.getOddEven();
-                                trItem({data:null,panelType:"L",rowClass:_cls,index:x}); 
-                                trItem({data:null,panelType:"R",rowClass:_cls,index:x});
+                                trItem({data:null,panelType:"L",index:x}); 
+                                trItem({data:null,panelType:"R",index:x});
                             }
                         } 
                     }
@@ -1793,7 +1787,6 @@ var  ud='undefined'
                     
                     _tableRight =  _panelRight.find("#table");
                     _tableLeft  =  _panelLeft.find("#table");
-                    this.css("overflow","hidden").css("width", o.width + "px");
                     _obj.find(".zRows").css("height", o.height + "px");
                     _panelLeft.css("width", _gridWidthLeft + "px");
                     _panelRight.css("width", (o.width - _gridWidthLeft -4  )  + "px");
@@ -1837,9 +1830,8 @@ var  ud='undefined'
                                     num_rows = data.rows.length;
                                     
                                     $.each(data.rows, function (i) {
-                                        var _cls = zsi.getOddEven();
-                                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
-                                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});
+                                        trItem({data:this,panelType:"L",index:i}); 
+                                        trItem({data:this,panelType:"R",index:i});
                                     });
                                     
                                     if(o.isAsync && _obj.curPageNo < _noOfPage ){
@@ -1895,9 +1887,8 @@ var  ud='undefined'
                 }
                 else if(typeof o.rows !== ud){
                     $.each(o.rows, function(i) {
-                        var _cls = zsi.getOddEven();
-                        trItem({data:this,panelType:"L",rowClass:_cls,index:i}); 
-                        trItem({data:this,panelType:"R",rowClass:_cls,index:i});                            
+                        trItem({data:this,panelType:"L",index:i}); 
+                        trItem({data:this,panelType:"R",index:i});                            
                     });
                     rowsCompleted();
                     _obj.onRequestDone({params:o,data:o.rows});
@@ -2206,7 +2197,7 @@ var  ud='undefined'
                 
                 // Create table data
                 var createTr = function(data) {
-                    tw.new().tr({ class : zsi.getOddEven() }).in()
+                    tw.new().tr().in()
                     .custom(function() {
                         for (var i = 0; i < dRowsLength; i++) {
                             var _info = dataRows[i];
@@ -2873,7 +2864,6 @@ var  ud='undefined'
             String.prototype.isValidDate = function () {
                 return isValidDate(this)
             };  
-            
             String.prototype.toShortDate = function () {
                 if(!isValidDate(this)) return "";
                 var _date=new Date( Date.parse(this) );
@@ -2883,7 +2873,6 @@ var  ud='undefined'
                 d = (d.length==1? "0" +d:d);
                 return m + '/' + d + '/' +  _date.getFullYear();
             };  
-            
             String.prototype.toShortDateTime = function () {
               if(!isValidDate(this)) return "";
               var _date=new Date( Date.parse(this) );
@@ -2896,12 +2885,9 @@ var  ud='undefined'
               var strTime = h + ':' + m + ' ' + ampm;
               return _date.getMonth()+1 + "/" + _date.getDate() + "/" + _date.getFullYear() + " " + strTime;
             };
- 
-
             String.prototype.toDateFormat = function () {
                 return this.toShortDate();
             };
-            
             //military date time format
             String.prototype.toMDateTimeFormat = function () {
                 var ts=Date.parse(this);
@@ -2912,7 +2898,6 @@ var  ud='undefined'
                 }
                 return  this.toShortDate() + " " + digit(d.getHours()) + ":" + digit(d.getMinutes()) + ":" + digit(d.getSeconds());
             }; 
-            
             String.prototype.toMoney = function(){
                 var res = "";
                 if(isNaN(this)===false) res = parseFloat(this).toMoney();
@@ -2926,7 +2911,6 @@ var  ud='undefined'
             String.prototype.nl2br = function(){
                 return this.replace(/\n/g, "<br />");
             };
-            
             //Array Prototypes : 
             Array.prototype.findIndexes = function(o){
                 var r =[];
@@ -2979,25 +2963,20 @@ var  ud='undefined'
                 });
                 return r;
             };
-            
             Array.prototype.createNewCopy = function(){
                 return $.extend(true,{}, this);
             };
-            
             Array.prototype.removeAttr = function(name){
                     $.each(this,function(){
                         delete this[name]; 
                     });
                 
             };
-            
             //Number Prototypes : 
             Number.prototype.toMoney = function(){
                 return this.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
             };
-
-             
-        }
+       }
         ,bs                         : {
              ctrl                   : function(o){
                 var l_tag="input";
@@ -3419,12 +3398,6 @@ var  ud='undefined'
             );      
             return _max;
         }
-        ,getOddEven                 : function(){
-            var _o="odd";
-            if(typeof zsi.__oe ===ud) zsi.__oe=_o;
-            zsi.__oe = (zsi.__oe ===_o?"even": _o);
-            return zsi.__oe;
-        }
         ,getTableLayoutsObjects     : function(code,callBack){
             var removeEmptyValues=function(info){
                 var _r={};
@@ -3720,4 +3693,4 @@ $(document).ready(function(){
 });
                                                   
                                                   
-   
+        
