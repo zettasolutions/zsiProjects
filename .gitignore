@@ -17,10 +17,12 @@ zsi.smagerUp/app/obj/*
 zsi.smagerUp/app/ace/*
 zsi.smagerUp/packages/*
 zsi.smagerUp/.vs/*
+zsi.smagerUp/app/amcharts4/*
+zsi.smagerUp/app/webfonts/*
 pafeis/createCodeBackup.exe.config
 pafeis/ace/*
 poker/createCodeBackup.exe.config
 cts/createCodeBackup.exe.config
 cts/dbWebSource/template/tmplmanageStatus.html
 cts/dbWebSource/template/tmplManageSubscription.html
- 
+

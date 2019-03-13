@@ -148,7 +148,48 @@ namespace zsi.web.Controllers
 
         }
 
-        public FileResult loadFile(string fileName)
+
+        [HttpPost]
+        public JsonResult UploadImageDb(HttpPostedFileBase file, int? image_id,string sqlCode)
+        {
+
+            try
+            {
+                var content = new byte[file.ContentLength];
+                file.InputStream.Read(content, 0, file.ContentLength);
+                
+                int returnId = new dcDbImages().Update(sqlCode, new dbImages {
+                    file = content,
+                    image_id = Convert.ToInt32(image_id),
+                    image_name = file.FileName,
+                    content_type = file.ContentType,
+                });
+                return Json(new { isSuccess = true, msg = "ok", image_id = returnId });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+        }
+
+        public ActionResult viewImageDb(string sqlCode, string imageId)
+        {
+            try
+            {
+                var dc = new dcDbImages();
+                dbImages info =  dc.GetInfo(sqlCode, Convert.ToInt32(imageId));
+
+                return base.File(info.file,  info.content_type);
+            }
+            catch
+            {
+                return base.File("/images/no-image.jpg", "image/jpeg");
+            }
+        }
+
+
+            public FileResult loadFile(string fileName)
         {
 
             var path = this.tempPath;

@@ -148,6 +148,7 @@
     <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Models\appProfile.cs" />
     <Compile Include="Models\EmailSettings.cs" />
+    <Compile Include="Models\dbImages.cs" />
     <Compile Include="Models\SqlCommands.cs" />
     <Compile Include="Models\message.cs" />
     <Compile Include="Models\PageData.cs" />
