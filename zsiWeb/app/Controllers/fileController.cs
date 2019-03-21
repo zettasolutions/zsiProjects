@@ -26,7 +26,6 @@ namespace zsi.web.Controllers
         private string excelConnectionString;
         private string tempPath { get; set; }
  
-        
 
         private void MigrateExcelFile(string fileName, string excel_column_range, string tempTable, string extraColumns)
         {
@@ -60,7 +59,24 @@ namespace zsi.web.Controllers
 
 
         }
+        private void createProjectZipFile(string zipFileName, string[] folders)
+        {
+            if (System.IO.File.Exists(zipFileName)) System.IO.File.Delete(zipFileName);
+            ZipArchive zip = ZipFile.Open(zipFileName, ZipArchiveMode.Create);
+            foreach (string folder in folders)
+            {
+                var _folders = folder.Split('\\');
+                var _folderName = _folders[_folders.Count() - 1];
 
+                var _files = Directory.GetFiles(folder, "*.*");
+                foreach (string file in _files)
+                {
+                    zip.CreateEntryFromFile(file, _folderName + @"\" + Path.GetFileName(file), CompressionLevel.Optimal);
+
+                }
+            }
+            zip.Dispose();
+        }
         #endregion
 
         [HttpPost]
@@ -188,8 +204,7 @@ namespace zsi.web.Controllers
             }
         }
 
-
-            public FileResult loadFile(string fileName)
+        public FileResult loadFile(string fileName)
         {
 
             var path = this.tempPath;
@@ -493,6 +508,125 @@ namespace zsi.web.Controllers
             }
 
             return Json(new { isSuccess = true, files = _fileNames.ToArray() });
+        }
+
+
+        public ActionResult downloadAppCodes(string isSelfBackup = "N", string dbFolders = "")
+        {
+           // using (new impersonate())
+           // {
+                try
+                {
+                    var _isSelfBackup = (isSelfBackup == "Y");
+                    var _user = SessionHandler.CurrentUser.userName;
+
+                    JavaScriptController.generateBackup(_isSelfBackup);
+                    PageTemplateController.generateBackup(_isSelfBackup);
+
+                    string root = AppSettings.dbWebSource;
+                    string zipFileName = string.Format("{0}-app-codes.zip", _user);
+                    string fullZipFileName = Path.Combine(root, zipFileName);
+
+                    List<string> folderCollections = new List<string>();
+
+                    if (_isSelfBackup)
+                        folderCollections.AddRange(Directory.GetDirectories(root + @"\" + _user).ToArray());
+                    else
+                        folderCollections.AddRange(new string[] { root + "js", root + "template" });
+
+
+                    string[] _dbFolders = dbFolders.Split(',');
+                    foreach (var folder in _dbFolders)
+                    {
+                        if (folder != "")
+                        {
+                            SqlController.CreateBackupDbSqlScripts(folder);
+                            folderCollections.Add(root + folder);
+                        }
+                    }
+
+                    createProjectZipFile(fullZipFileName, folderCollections.ToArray());
+                    return File(fullZipFileName, "application/zip", zipFileName);
+                }
+                catch (Exception e)
+                {
+
+                    return Content(e.Message, "text/plain");
+                }
+
+            //}
+
+        }
+
+        [HttpPost]
+        public JsonResult uploadAppCodes(HttpPostedFileBase file)
+        {
+            //using (new impersonate())
+           // {
+                try
+                {
+                    var path = AppSettings.dbWebSource;
+                    var fullPath = path;
+                    var filename = "";
+
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        filename = Path.GetFileName(file.FileName);
+                        fullPath = Path.Combine(path, filename);
+                        file.SaveAs(fullPath);
+                        updateWebCodes(fullPath);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    return Json(new { isSuccess = false, errMsg = ex.Message });
+                }
+
+                return Json(new { isSuccess = true, msg = "ok" });
+            //}
+
+        }
+
+
+        private void updateWebCodes(string zipPath)
+        {
+            //zipPath = @"C:\temp\webcodes\gfuentes-app-codes.zip";
+            using ( ZipArchive archive = ZipFile.OpenRead(zipPath))
+            {
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    Stream _stream = entry.Open();
+                    StreamReader reader = new StreamReader(_stream);
+                    var _content = reader.ReadToEnd();
+                    var _ext = Path.GetExtension(entry.FullName);
+                    var _fileName = Path.GetFileNameWithoutExtension(entry.FullName);
+                    if (_content.Trim().Length == 0) continue;
+                    switch (_ext)
+                    {
+                        case ".js":
+                            dcJavaScript dcs = new dcJavaScript();
+                            zsi.DataAccess.Provider.SQLServer.SProcParameters ps = dcs.UpdateParameters;
+                            ps.Add("js_name", _fileName);
+                            ps.Add("js_content", _content);
+                            dcs.Execute(zsi.DataAccess.SQLCommandType.Update);
+                            break;
+                        case ".html":
+                            dcPageTemplate dct = new dcPageTemplate();
+                            zsi.DataAccess.Provider.SQLServer.SProcParameters pt = dct.UpdateParameters;
+                            pt.Add("pt_name", _fileName);
+                            pt.Add("pt_content", _content);
+                            dct.Execute(zsi.DataAccess.SQLCommandType.Update);
+                            break;
+
+                        default: break;
+                    }
+
+                }
+            }
+            //return Json(new { isSuccess = true, msg = "ok" });
+
         }
 
     }

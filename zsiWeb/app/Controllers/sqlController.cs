@@ -29,5 +29,38 @@ namespace zsi.web.Controllers
             
         }
 
+        public static string CreateBackupDbSqlScripts(string typeName)
+        {
+            string r = "";
+            var dbObj = new Models.dcDbObjects();
+            switch (typeName)
+            {
+                case "tables":
+                    r = writeFiles(dbObj.getTables(), "tables", "Tables");
+                    break;
+                case "procedures":
+                    r = writeFiles(dbObj.getProcedures(), "procedures_functions", "Procedures and Functions");
+                    break;
+                case "views":
+                    r = writeFiles(dbObj.getViews(), "views", "Views");
+                    break;
+                case "tabletypes":
+                    r = writeFiles(dbObj.getTableTypes(), "table_types", "Table Types");
+                    break;
+
+                default: break;
+
+            }
+            return r;
+        }
+
+        private static string writeFiles(System.Collections.Generic.List<Models.fileModel> list, string subFolder, string Title)
+        {
+            foreach (Models.fileModel info in list)
+            {
+                AppSettings.WriteFile(subFolder + "\\", info.fileName + ".sql", info.content);
+            }
+            return list.Count + "  " + Title + " files created/affected.";
+        }
     }
 }

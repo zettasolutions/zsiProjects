@@ -104,7 +104,7 @@ namespace zsi.web.Controllers
                 return Json(new { status = "ok" });
 
         }
-        private void generateBackup(bool selfBackup) {
+        public static void generateBackup(bool selfBackup) {
 
             dcJavaScript dc = new dcJavaScript();
             List<javascript_v> list = dc.CreateBackup(selfBackup);

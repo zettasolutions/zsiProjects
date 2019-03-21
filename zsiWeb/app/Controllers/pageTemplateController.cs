@@ -76,7 +76,7 @@ namespace zsi.web.Controllers
 
         }
 
-        private void generateBackup(bool selfBackup)
+        public static void generateBackup(bool selfBackup)
         {
 
             dcPageTemplate dc = new dcPageTemplate();
