@@ -6,7 +6,30 @@ body{
 	margin:0;
 	padding:0;
 }
+	@media (min-width: 576px) { }
 
+	/* Medium devices (tablets, 768px and up)*/
+	@media (min-width: 768px) { }
+
+	/* Large devices (desktops, 992px and up)*/
+	@media (min-width: 992px) { }
+
+	/* Extra large devices (large desktops, 1200px and up)*/
+	
+	@media (min-width: 1200px) {}
+	
+	@media (min-width: 1679px) { 
+	
+
+		.flipbook-viewport .flipbook{
+			width:1422px !important;
+			height:900px !important;
+			left:-561px !important;
+			top:-465px !important;
+		}
+
+	}
+	
 .flipbook-viewport{
 	overflow:hidden;
 	width:100%;
