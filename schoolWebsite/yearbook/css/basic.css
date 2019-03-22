@@ -71,6 +71,8 @@ body{
 .grad-address h4{margin-top:-1rem;color:#FFFFFF;}
 .first-page, h1{font-weight:bold !important; color:#D902A8;}
 .second-page {font-weight:bold !important; color:#D902A8;}
+.grad-img img{width:25%;  padding:5px; padding-right:15px; border-radius:5px;}
+.float-right{display: flow-root; }
 .addrss{margin-top:-1rem;}
 .back-cover{
 	text-align:center;
