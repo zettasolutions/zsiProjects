@@ -29,7 +29,9 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/full-slider.css">
 	<link rel="stylesheet" href="css/gallery.css">
+	<style>
 	
+	</style>
 		
 </head>
 
@@ -307,19 +309,55 @@
 	Page.init();
 </script>
 <script type="text/javascript">
-
 function loadApp() {
 
 	// Create the flipbook
+	var winWidth = $(window).width();
+	
+	var _width = 0;
+	var _height = 0;
+	//var height: "";
+	
+	if (winWidth >= 576) {
+		_width = 0;
+		_height = 600;
+	}
+	
+	//tablets
+	if (winWidth >= 768) {
+		_width = 0;
+		_height = 600;
+	}
+	
+	//desktops
+	if (winWidth >= 992) {
+		_width = 0;
+		_height = 600;
+	}
+	
+	//large devices 
+	if (winWidth >= 1200){
+		_width = 922;
+		_height = 600;
+	}
+	
+	if (winWidth >= 1679) {
+		_width = 1422;
+		_height = 900;
+	}
+	
+	console.log(winWidth);
+	console.log(_width);
+	console.log(_height);
 
 	$('.flipbook').turn({
 			// Width
 
-			width:922,
+			width: _width,
 			
 			// Height
 
-			height:600,
+			height: _height,
 
 			// Elevation
 
