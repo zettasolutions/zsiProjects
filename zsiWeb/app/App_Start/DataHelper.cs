@@ -293,7 +293,8 @@ namespace zsi.web
                         JObject obj = (JObject)jo["parameters"];
                         foreach (var pair in obj)
                         {
-                            if (pair.Value.ToString() == "''") continue;
+                            if (pair.Value.ToString() == "''" ) continue;
+                            if (pair.Value.Type == JTokenType.Null) continue;
                             cmd.Parameters.AddWithValue("@" + pair.Key, pair.Value.ToString());
                         }
                     }
