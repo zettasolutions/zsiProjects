@@ -29,6 +29,16 @@ namespace zsi.web.Controllers
             
         }
 
+        public ContentResult CreateBackupDbOjects(string typeName)
+        {
+            string r = "";
+           // using (new impersonate())
+           // {
+                r = CreateBackupDbSqlScripts(typeName);
+          //  }
+            return Content(r);
+        }
+
         public static string CreateBackupDbSqlScripts(string typeName)
         {
             string r = "";
@@ -36,16 +46,16 @@ namespace zsi.web.Controllers
             switch (typeName)
             {
                 case "tables":
-                    r = writeFiles(dbObj.getTables(), "tables", "Tables");
+                    r = writeFiles(dbObj.getTables(), typeName, "Tables");
                     break;
-                case "procedures":
-                    r = writeFiles(dbObj.getProcedures(), "procedures_functions", "Procedures and Functions");
+                case "procedures_functions":
+                    r = writeFiles(dbObj.getProcedures(), typeName, "Procedures and Functions");
                     break;
                 case "views":
-                    r = writeFiles(dbObj.getViews(), "views", "Views");
+                    r = writeFiles(dbObj.getViews(), typeName, "Views");
                     break;
-                case "tabletypes":
-                    r = writeFiles(dbObj.getTableTypes(), "table_types", "Table Types");
+                case "table_types":
+                    r = writeFiles(dbObj.getTableTypes(), typeName, "Table Types");
                     break;
 
                 default: break;

@@ -84,7 +84,12 @@ namespace zsi.web.Controllers
             foreach (page_template_v info in list)
             {
                 if (info.page_name != "")
-                    AppSettings.WriteFile("template\\", info.page_name + ".html", info.pt_content);
+                {
+                    var user_folder = "";
+                    if (selfBackup) user_folder = SessionHandler.CurrentUser.userName + @"\";
+                    AppSettings.WriteFile(user_folder + @"template\", info.page_name + ".html", info.pt_content);
+                }
+
             }
            
         }

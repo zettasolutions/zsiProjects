@@ -111,8 +111,11 @@ namespace zsi.web.Controllers
             foreach (javascript_v info in list)
             {
                 if (info.page_name != "")
-                    AppSettings.WriteFile("js\\", info.page_name + ".js", info.js_content);
-
+                {
+                    var user_folder = "";
+                    if (selfBackup) user_folder = SessionHandler.CurrentUser.userName + @"\";
+                    AppSettings.WriteFile(user_folder + @"js\", info.page_name + ".js", info.js_content);
+                }
             }
            
         }

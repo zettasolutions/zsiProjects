@@ -18,8 +18,9 @@ namespace zsi.web.Models
         }
 
         public List<javascript_v> CreateBackup(bool selfBackup) {
-            if(selfBackup) this.SelectParameters.Add("self_backup", 1);
-           return this.GetDataSource();
+            this.SelectParameters.Add("user_id", SessionHandler.CurrentUser.userId );
+            this.SelectParameters.Add("self_backup", selfBackup == true ? 1 : 0);
+            return this.GetDataSource();
         }
 
 

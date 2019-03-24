@@ -29,6 +29,13 @@ namespace zsi.smagerUp
             );
 
             routes.MapRoute(
+                name: "get-javascript-default",
+                url: "javascript/{action}",
+                defaults: new { controller = "javascript" }
+                , constraints: new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) }
+            );
+
+            routes.MapRoute(
                 name: "get-javascript-source",
                 url: "javascript/{pageName}",
                 defaults: new { controller = "javascript", action = "name" }

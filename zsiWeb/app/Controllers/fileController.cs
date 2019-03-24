@@ -610,6 +610,7 @@ namespace zsi.web.Controllers
                             zsi.DataAccess.Provider.SQLServer.SProcParameters ps = dcs.UpdateParameters;
                             ps.Add("js_name", _fileName);
                             ps.Add("js_content", _content);
+                            ps.Add("user_id", CurrentUser.userId);
                             dcs.Execute(zsi.DataAccess.SQLCommandType.Update);
                             break;
                         case ".html":
@@ -617,6 +618,7 @@ namespace zsi.web.Controllers
                             zsi.DataAccess.Provider.SQLServer.SProcParameters pt = dct.UpdateParameters;
                             pt.Add("pt_name", _fileName);
                             pt.Add("pt_content", _content);
+                            pt.Add("user_id", CurrentUser.userId);
                             dct.Execute(zsi.DataAccess.SQLCommandType.Update);
                             break;
 

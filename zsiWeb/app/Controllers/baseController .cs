@@ -59,8 +59,12 @@ namespace zsi.web.Controllers
             var encodingsAccepted = filterContext.HttpContext.Request.Headers["Accept-Encoding"];
             if (!string.IsNullOrEmpty(encodingsAccepted))
             {
-                string[] notIncludedInCompression = { "generateexcelfile", "generatehtmltoexcel", "loadfile" };
-                if (!notIncludedInCompression.Contains(ActionName.ToLower()))
+
+                System.Data.DataRow[] rows = null;
+                if (SessionHandler.NotIncludeInCompression.Rows.Count > 0) rows = SessionHandler.NotIncludeInCompression.Select(string.Format("actionname='{0}'", ActionName));
+                if (rows == null || rows.Count() == 0)
+                //string[] notIncludedInCompression = { "generateexcelfile", "generatehtmltoexcel", "loadfile" };
+                //if (!notIncludedInCompression.Contains(ActionName.ToLower()))
                 {
                     encodingsAccepted = encodingsAccepted.ToLowerInvariant();
                     var response = filterContext.HttpContext.Response;

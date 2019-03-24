@@ -31,6 +31,7 @@ namespace zsi.web.Controllers
                     Session["isAuthenticated"] = "Y";
                     HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
                     SessionHandler.CurrentUser = _user;
+                    SessionHandler.NotIncludeInCompression = DataHelper.GetDataTable(string.Format("dbo.zNoCompressionActions_sel"));
                     return Redirect(gePriorityURL(Url.Content("~/")));
                 }
                 else

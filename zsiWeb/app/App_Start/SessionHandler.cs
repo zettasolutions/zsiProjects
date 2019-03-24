@@ -19,6 +19,19 @@ namespace zsi.web
 
         }
 
+        public static System.Data.DataTable NotIncludeInCompression
+        {
+            get
+            {
+                if (HttpContext.Current.Session["NotIncludeInCompression"] == null)
+                { return new System.Data.DataTable(); }
+                else
+                { return (System.Data.DataTable)HttpContext.Current.Session["NotIncludeInCompression"]; }
+            }
+            set
+            { HttpContext.Current.Session["NotIncludeInCompression"] = value; }
+
+        }
 
         public static appProfile AppConfig
         {

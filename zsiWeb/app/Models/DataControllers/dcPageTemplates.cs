@@ -19,7 +19,8 @@ namespace zsi.web.Models
 
         public List<page_template_v> CreateBackup(bool selfBackup)
         {
-            if (selfBackup) this.SelectParameters.Add("self_backup", 1);
+            this.SelectParameters.Add("self_backup", selfBackup == true ? 1 : 0 );
+            this.SelectParameters.Add("user_id", SessionHandler.CurrentUser.userId );
             return this.GetDataSource();
         }
 
