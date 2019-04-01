@@ -30,12 +30,11 @@
 	<link rel="stylesheet" href="css/full-slider.css">
 	<link rel="stylesheet" href="css/gallery.css">
 	<style>
-	
 	</style>
 		
 </head>
 
-<body class="fixed-sn white-skin body">
+<body class="fixed-sn white-skin body" onresize="testResize()">
 
     <!--Main Navigation-->
 	<div class="pageHeader">
@@ -342,7 +341,7 @@ function loadApp() {
 	}
 	
 	if (winWidth >= 1679) {
-		_width = 1422;
+		_width = 1650;
 		_height = 900;
 	}
 	
@@ -383,6 +382,10 @@ yepnope({
 	both: ['css/basic.css'],
 	complete: loadApp
 });
+function testResize(){
+    console.log('height',$(window).height());
+    console.log('width',$(window).width());    
+}
 
 </script>
 

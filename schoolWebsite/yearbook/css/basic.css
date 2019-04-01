@@ -22,9 +22,11 @@ body{
 	
 
 		.flipbook-viewport .flipbook{
-			width:1422px !important;
+                    /*	width:1422px !important;*/
+                        width:1650px !important
 			height:900px !important;
-			left:-561px !important;
+			/*left:-561px !important;*/
+                        left:-720px !important;
 			top:-465px !important;
 		}
 
