@@ -9,6 +9,7 @@ namespace zsi.web.Models
         public string userFullName { get; set; }
         public string password { get; set; }
         public string isDeveloper { get; set; }
+        public string domain { get; set; }
 
         public SqlDataReader SqlDataReader
         {

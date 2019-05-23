@@ -152,6 +152,7 @@
     <Compile Include="Models\dbModel\fileModel.cs" />
     <Compile Include="Models\EmailSettings.cs" />
     <Compile Include="Models\dbImages.cs" />
+    <Compile Include="Models\impersonate.cs" />
     <Compile Include="Models\SqlCommands.cs" />
     <Compile Include="Models\message.cs" />
     <Compile Include="Models\PageData.cs" />
