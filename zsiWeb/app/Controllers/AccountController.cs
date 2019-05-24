@@ -20,36 +20,40 @@ namespace zsi.web.Controllers
             try
             {
                 Cryptography crypt = new Cryptography();
+                user _user = null;
                 string userName = Request["username"];
                 string userPassword = Request["password"];
-                user _user = new dcUser().getUserInfo(userName);
-                if (_user.userName == null){
-                    return Redirect(Url.Content("~/") + "?access=Username not exist.");
-                }
-                else if (crypt.Decrypt(_user.password) == userPassword)
+                using (new impersonate(userName, userPassword))
                 {
+                    _user = new dcUser().getUserInfo(userName);
+                
+                    if (_user.userName == null){
+                        return Redirect(Url.Content("~/") + "?access=Username not exist.");
+                    }
+               
                     Session["isAuthenticated"] = "Y";
                     HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
                     SessionHandler.CurrentUser = _user;
+                    SessionHandler.CurrentUser.password = userPassword;
                     SessionHandler.NotIncludeInCompression = DataHelper.GetDataTable(string.Format("dbo.zNoCompressionActions_sel"));
                     return Redirect(gePriorityURL(Url.Content("~/")));
-                }
-                else
-                {
-                    return Redirect(Url.Content("~/") + "?access=Invalid Access.");
+                    
                 }
             }
             catch (Exception ex)
             {
-                string link = "";
                 if (ex.Message.ToLower().Contains("cannot open database"))
                 {
+                    string link = "";
                     System.Text.RegularExpressions.MatchCollection mc = System.Text.RegularExpressions.Regex.Matches(ex.Message, "\"(.*?)\"");
                     string dbParam = Url.Content("~/") + "account/setupDatabase?dbName=" +
                                      mc[0].Value.Replace("\"", "");
                     link = "<br />Do you want to setup a database? Click <a href=\"" + dbParam + "\">Yes";
-                }                
-                return Content(ex.Message + link);
+                    return Content(ex.Message + link);
+                }
+
+                return Redirect(Url.Content("~/") + "?access=invalid&msg=" + ex.Message);
+
             }
         }
 
@@ -91,8 +95,11 @@ namespace zsi.web.Controllers
             string msg = "";
             try
             {
-                DataBaseSetup.restorBackup(dbName);
-                return Redirect(Url.Content("~/"));
+                using (new impersonate())
+                {
+                    DataBaseSetup.restorBackup(dbName);
+                    return Redirect(Url.Content("~/"));
+                }
             }
             catch (Exception ex)
             {
@@ -106,18 +113,21 @@ namespace zsi.web.Controllers
         {
             try
             {
-                Cryptography crypt = new Cryptography();
-                string oldPassword = Request["old_password"];
-                string newPassword = crypt.Encrypt(Request["new_password"]);
-                user _user = new dcUser().getUserInfo(this.CurrentUser.userName);
-                if (crypt.Decrypt(_user.password) == oldPassword)
+                using (new impersonate())
                 {
-                    new dcUser().changePassword(newPassword);
-                    return Redirect(gePriorityURL(Url.Content("~/")));
-                }
-                else
-                {
-                    return Redirect(Url.Content("~/") + "page/name/changepassword?msg=invalid");
+                    Cryptography crypt = new Cryptography();
+                    string oldPassword = Request["old_password"];
+                    string newPassword = crypt.Encrypt(Request["new_password"]);
+                    user _user = new dcUser().getUserInfo(this.CurrentUser.userName);
+                    if (crypt.Decrypt(_user.password) == oldPassword)
+                    {
+                        new dcUser().changePassword(newPassword);
+                        return Redirect(gePriorityURL(Url.Content("~/")));
+                    }
+                    else
+                    {
+                        return Redirect(Url.Content("~/") + "page/name/changepassword?msg=invalid");
+                    }
                 }
             }
             catch (Exception ex)

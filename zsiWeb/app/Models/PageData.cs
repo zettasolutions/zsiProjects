@@ -20,11 +20,12 @@ namespace zsi.web.Models
             this.Procedures.Add(new Procedure("dbo.page_data_sel"), SQLCommandType.SingleRecord);
 
         }
+
         public PageData GetData(string pageName,int userId,string isPublic = "N") {
-            if (pageName !=null)
+            if (pageName != null)
             {
                 this.SelectInfoParameters.Add("page_name", pageName);
-                this.SelectInfoParameters.Add("user_id",   userId);
+                this.SelectInfoParameters.Add("user_id", userId);
                 this.SelectInfoParameters.Add("is_public", isPublic);
 
                 return this.GetInfo();

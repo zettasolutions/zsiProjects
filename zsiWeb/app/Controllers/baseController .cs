@@ -5,16 +5,47 @@ using zsi.web.Models;
 using zsi.Framework.Security.SecurityProvider;
 using System.IO.Compression;
 using System.Linq;
+using System.Configuration;
 
 namespace zsi.web.Controllers
 {
     public class BaseController : Controller
     {
-     
+        #region "Private"
+        private string replaceIncludedScripts(string content)
+        {
+            return content
+                    .Replace("src=\"/", "src=\"" + Url.Content("~/"))
+                    .Replace("src='/", "src='" + Url.Content("~/"))
+                    .Replace("href=\"/", "href=\"" + Url.Content("~/"))
+                    .Replace("href='/", "href='" + Url.Content("~/"))
+            ;
+        }
+        private string GetScriptLinkCurrentVersion(string name)
+        {
+            javascript _d = new dcJavaScript().GetInfo(name);
+            string result = "";
+            if (_d.js_id != null) result = string.Format("<script src='{0}javascript/name/{1}?rev={2}'></script>", Url.Content("~/"), name, _d.rev_no);
+            return result;
+        }
+        private void CheckActionLogOn(ActionExecutingContext filterContext, string CurrentActionName, string[] ExceptionedActions)
+        {
+
+            if (!Array.Exists(ExceptionedActions, e => e.Equals(CurrentActionName)))
+            {
+
+                /*if (CurrentUser.UserId == 0)
+                {
+                    FormAuth.AbandonUserSession();
+                    filterContext.Result = new RedirectResult("/");
+                }*/
+            }
+
+        }
+        #endregion
 
         public user CurrentUser { get { return SessionHandler.CurrentUser; } }
         public appProfile AppConfig { get { return SessionHandler.AppConfig; } }
-
         public IBasicFormAuth _FormAuth;
         public IBasicFormAuth FormAuth
         {
@@ -31,7 +62,6 @@ namespace zsi.web.Controllers
                 _FormAuth = (BasicFormAuth)value;
             }
         }
-
         public ActionResult ShowNotAllowedPage()
         {
             return PartialView("~/Views/Shared/_NotAllowed.cshtml");
@@ -44,7 +74,6 @@ namespace zsi.web.Controllers
             if (Session[sn].ToString() != "Y") return f;
             return true;
         }
-
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {
             return new JsonNetResult(data, contentType, contentEncoding, JsonRequestBehavior.AllowGet);
@@ -60,63 +89,37 @@ namespace zsi.web.Controllers
             if (!string.IsNullOrEmpty(encodingsAccepted))
             {
 
-                System.Data.DataRow[] rows = null;
-                if (SessionHandler.NotIncludeInCompression.Rows.Count > 0) rows = SessionHandler.NotIncludeInCompression.Select(string.Format("actionname='{0}'", ActionName));
-                if (rows == null || rows.Count() == 0)
-                //string[] notIncludedInCompression = { "generateexcelfile", "generatehtmltoexcel", "loadfile" };
-                //if (!notIncludedInCompression.Contains(ActionName.ToLower()))
+                var RCompression = Boolean.Parse(ConfigurationManager.AppSettings["ResponseCompression"]);
+                if (RCompression)
                 {
-                    encodingsAccepted = encodingsAccepted.ToLowerInvariant();
-                    var response = filterContext.HttpContext.Response;
-                    if (encodingsAccepted.Contains("deflate"))
+                    System.Data.DataRow[] rows = null;
+                    if (SessionHandler.NotIncludeInCompression.Rows.Count > 0) rows = SessionHandler.NotIncludeInCompression.Select(string.Format("actionname='{0}'", ActionName));
+                    if (rows == null || rows.Count() == 0)
                     {
-                        response.AppendHeader("Content-encoding", "deflate");
-                        response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
-                    }
-                    else if (encodingsAccepted.Contains("gzip"))
-                    {
-                        response.AppendHeader("Content-encoding", "gzip");
-                        response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
+                        encodingsAccepted = encodingsAccepted.ToLowerInvariant();
+                        var response = filterContext.HttpContext.Response;
+                        if (encodingsAccepted.Contains("deflate"))
+                        {
+                            response.AppendHeader("Content-encoding", "deflate");
+                            response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+                        }
+                        else if (encodingsAccepted.Contains("gzip"))
+                        {
+                            response.AppendHeader("Content-encoding", "gzip");
+                            response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
+                        }
                     }
                 }
             }
             base.OnActionExecuting(filterContext);
         }
-        private void CheckActionLogOn(ActionExecutingContext filterContext, string CurrentActionName, string[] ExceptionedActions)
-        {
-
-            if (!Array.Exists(ExceptionedActions, e => e.Equals(CurrentActionName)))
-            {
-
-                /*if (CurrentUser.UserId == 0)
-                {
-                    FormAuth.AbandonUserSession();
-                    filterContext.Result = new RedirectResult("/");
-                }*/
-            }
-
-        }
         public ContentResult ToJSON(string sql, bool isProcedure)
         {
+            using (new impersonate())
+            {
 
-            return Content(DataHelper.ToJSON(sql, isProcedure), "application/json");
-        }
-
-        private string replaceIncludedScripts(string content) {
-            return content
-                    .Replace("src=\"/", "src=\"" + Url.Content("~/"))
-                    .Replace("src='/", "src='" + Url.Content("~/"))
-                    .Replace("href=\"/", "href=\"" + Url.Content("~/"))
-                    .Replace("href='/", "href='" + Url.Content("~/"))
-            ;
-        }
-
-        private string GetScriptLinkCurrentVersion(string name)
-        {
-            javascript _d = new dcJavaScript().GetInfo(name);
-            string result = "";
-            if (_d.js_id != null) result = string.Format("<script src='{0}javascript/name/{1}?rev={2}'></script>", Url.Content("~/"), name, _d.rev_no);
-            return result;
+                return Content(DataHelper.ToJSON(sql, isProcedure), "application/json");
+            }
         }
 
         public void setPageLinks(string pageName,string isPublic="N")
@@ -149,12 +152,10 @@ namespace zsi.web.Controllers
                 }
             
         }
-
         public void setRequestedURL()
         {
             Session["requestedURL"] = Request.Url.AbsoluteUri;
         }
-
         public string gePriorityURL(string currentPage)
         {
 

@@ -26,9 +26,14 @@ namespace zsi.web.Models
             ImpersonateValidUser(domainName, userName, password);
         }
 
+        public impersonate(string userName, string password)
+        {
+            ImpersonateValidUser(ConfigurationManager.AppSettings["domain"], userName, password);
+        }
         public impersonate()
         {
-            ImpersonateValidUser(ConfigurationManager.AppSettings["domain"], SessionHandler.CurrentUser.userName, SessionHandler.CurrentUser.password);
+            user u = SessionHandler.CurrentUser;
+            ImpersonateValidUser(ConfigurationManager.AppSettings["domain"], u.userName, u.password);
         }
         // ------------------------------------------------------------------
         #endregion
@@ -87,6 +92,7 @@ namespace zsi.web.Models
         private void ImpersonateValidUser(string domain, string userName, string password)
         {
             if (userName == null) return;
+            if ( ConfigurationManager.AppSettings["domain"] =="" || ConfigurationManager.AppSettings["domain"] == null) return;
             WindowsIdentity tempWindowsIdentity = null;
             IntPtr token = IntPtr.Zero;
             IntPtr tokenDuplicate = IntPtr.Zero;

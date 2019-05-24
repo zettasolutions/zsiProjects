@@ -16,8 +16,11 @@ namespace zsi.web.Models
 
         public page_v GetPageByName(string page_name)
         {
-            this.SelectInfoParameters.Add("page_name", page_name);
-            return this.GetInfo();
+            using (new impersonate())
+            {
+                this.SelectInfoParameters.Add("page_name", page_name);
+                return this.GetInfo();
+            }
         }
     }
 }

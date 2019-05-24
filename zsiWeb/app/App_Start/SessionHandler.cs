@@ -9,7 +9,7 @@ namespace zsi.web
         {
             get
             {
-                if (HttpContext.Current.Session["User"] == null)
+                if(HttpContext.Current.Session == null || HttpContext.Current.Session["User"] == null)
                 { return new user(); }
                 else
                 { return (user)HttpContext.Current.Session["User"]; }

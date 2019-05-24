@@ -76,7 +76,7 @@
             try
             {
                 SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
-                SqlCommand cmd = new SqlCommand( new dcSqlCmd().GetInfo(sqlCode).text , dbConn);
+                SqlCommand cmd = new SqlCommand(new dcSqlCmd().GetInfo(sqlCode).text, dbConn);
                 int returnValue = 0;
                 dbConn.Open();
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -86,7 +86,7 @@
                 p.AddWithValue("@image_name", info.image_name);
                 p.AddWithValue("@content_type", info.content_type);
                 p.AddWithValue("@image_file", info.file);
-                p.AddWithValue("@user_id", SessionHandler.CurrentUser.userId );
+                p.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
                 SqlParameter retval = new SqlParameter();
                 retval.ParameterName = "@return_value";
                 retval.SqlDbType = SqlDbType.Int;

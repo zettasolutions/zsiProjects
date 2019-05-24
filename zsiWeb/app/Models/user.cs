@@ -51,6 +51,7 @@ namespace zsi.web.Models
         {
             try
             {
+     
                 SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
                 SqlCommand command = new SqlCommand("users_sel", dbConn);
                 command.CommandType = CommandType.StoredProcedure;
@@ -65,6 +66,7 @@ namespace zsi.web.Models
                 reader.Close();
                 dbConn.Close();
                 return _info;
+
             }
             catch (Exception ex)
             {
