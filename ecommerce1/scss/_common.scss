@@ -1,0 +1,81 @@
+@media (min-width: 1240px) {
+    .container {
+      max-width: 1200px;
+    }
+  }
+  
+  body {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  a {
+    color: #000;
+    text-decoration: none;
+    &:hover {
+      color: #6eb2fb;
+      text-decoration: none;
+    }
+  }
+  
+  .page {
+    background: #D4D5D6 none repeat scroll 0 0;
+    min-height: 500px;
+  }
+  
+  .highlight-color {
+    color: #f62f5e;
+  }
+  
+  .top-left a {
+    color: #f62f5e;
+    &:hover {
+      color: #6eb2fb;
+    }
+  }
+  
+  .badge {
+    background-color: #ffffff;
+    color: #f62f5e;
+    position: relative;
+    left: -14px;
+    top: -9px;
+    margin-right: -11px;
+    border-radius: 100px;
+    height: 25px;
+    width: 25px;
+    font-size: 12pt;
+  }
+  
+  .leftPane {
+    width: 100%;
+    height: 835px;
+    background-color: blue;
+  }
+  
+  .rightPane {
+    float: left;
+    background-color: red;
+  }
+  
+  .content-wrapper {
+    width: 100%;
+    color: #fff;
+    line-height: 1em;
+  }
+  
+  .banner-contents {
+    position: absolute;
+  }
+  
+  .pt-6 {
+    padding-top: 4rem !important;
+  }
+  
+  .pl-6 {
+    padding-left: 6rem !important;
+  }
+  
+  .pl-10 {
+    padding-left: 10px;
+    width: 250px;
+  }

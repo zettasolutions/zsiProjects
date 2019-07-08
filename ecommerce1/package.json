@@ -1,0 +1,23 @@
+{
+  "name": "gf-turing-uiux",
+  "version": "1.0.0",
+  "description": "gfuentes - turing-uiux",
+  "main": "index.html",
+  "author": "German M. Fuentes",
+  "license": "",
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "components-font-awesome": "^5.9.0",
+    "handlebars": "^4.1.2",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
+  }
+}

@@ -1,0 +1,11 @@
+Images/*
+node_modules/*
+webfonts/*
+scripts/bootstrap.min.js
+scripts/handlebars.min.js
+scripts/jquery.min.js
+css/app.min.css.map
+css/app.min.css
+package-lock.json
+yarn.lock
+backup/*

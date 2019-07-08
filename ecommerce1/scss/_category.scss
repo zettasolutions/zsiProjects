@@ -1,0 +1,138 @@
+#header-top {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 1em;
+    ul {
+      list-style: none;
+      li {
+        display: inline;
+        margin-left: 20px;
+      }
+    }
+    .top-right {
+      .lang {
+        float: left;
+        .flag, .text {}
+      }
+      .cart {
+        float: left;
+        margin-left: 15px;
+        .icon-bag {}
+        .badge {
+          background-color: #f62f5e;
+          color: #fff;
+          position: relative;
+          left: -14px;
+          top: -9px;
+          margin-right: -11px;
+          border-radius: 100px;
+          height: 25px;
+          width: 25px;
+          font-size: 12pt;
+          &:hover {
+            background-color: #000;
+          }
+        }
+        .text {}
+      }
+    }
+  
+}
+  
+#header-menu {
+    background-color: #2e2e2e;
+    color: #fff;
+    height: 87px;
+    line-height: 2.4;
+    padding-left: 12px;
+    ul {
+      list-style: none;
+      li {
+        display: inline;
+        margin-left: 20px;
+      }
+    }
+    a {
+      color: #fff;
+      font-weight: bold;
+      &:hover {
+        color: #6eb2fb;
+      }
+    }
+    .search {
+      background-color: #969696;
+      border-radius: 19px;
+      /*margin-top: 19px;*/
+      padding: .3rem;
+      margin-left: 1rem;
+      z-index: 1;
+      input {
+        background-color: transparent;
+        border: none;
+      }
+    }
+    input {
+      color: #fff;
+      &:focus {
+        color: #fff;
+      }
+    }
+    .top-right .cart {
+      float: left;
+      margin-left: 15px;
+      .icon-bag {}
+      .badge {
+        background-color: #f62f5e;
+        color: #fff;
+        position: relative;
+        left: -14px;
+        top: -9px;
+        margin-right: -11px;
+        border-radius: 100px;
+        height: 25px;
+        width: 25px;
+        font-size: 12pt;
+        &:hover {
+          background-color: #000;
+        }
+      }
+      .text {}
+    }
+
+    ::-webkit-input-placeholder {
+        /* Edge */
+        color: white !important;
+      }
+      :-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: white !important;
+      }
+      ::placeholder {
+        color: white !important;
+      }
+        /*#header-menu */
+    .collapse.show {
+        display: block;
+        z-index: 1;
+        background-color: #2E2E2E;
+    }
+    .brand-name {
+        font-size: 1.9em;
+        font-weight: bold;
+        letter-spacing: 0.18em;
+    }
+    .navbar-brand {
+        padding-top: unset !important;
+        padding-bottom: unset !important;
+        margin-right: 1rem;
+        font-size: unset !important;
+        line-height: inherit;
+    }
+    i.fas {
+        &.fa-search.p-2, &.fa-times.p-2 {
+          font-size: large;
+          margin-top: 2px;
+        }
+    }
+}
+  
