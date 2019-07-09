@@ -61,12 +61,13 @@
     width: 100%;
     color: #fff;
     line-height: 1em;
-    overflow: hidden;
+    z-index: 1;
+    
   }
   
   .banner-contents {
     position: absolute;
-  }
+    }
   
   .pt-6 {
     padding-top: 4rem !important;
