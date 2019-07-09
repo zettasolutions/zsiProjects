@@ -13,7 +13,7 @@
 </head>
 <body>
 <header>   
-    <div class="container mainBackground">
+    <div class="container bgLightGray">
        <div id="header-top" class="row">
            <div class="top-left col-sm">
                Hi! <a href="#">Sign in</a> or <a href="#">Register</a>
@@ -44,9 +44,8 @@
                 </div>
             </div>
         </div>
-    
-       <div id="header-menu" class="row bg-white">
-            <nav class="navbar navbar-expand-lg bg-white navbar-light col-12">
+       <div id="header-menu" class="row bgWhite">
+            <nav class="navbar navbar-expand-lg bgWhite navbar-light col-12">
                 <div class="clearfix floathead">
                     <a class="navbar-brand float-left" href="#"><div class="brand-name col-sm highlight-color">SHOPMATE</div></a>
                 
@@ -61,103 +60,26 @@
         </div>
     </div>
 </header>
-<div class="container container-margin mainBackground">
-    <main id="mainContent">
-        <div id="itemProperty">
-            <div class="clearfix">
-                <div class="col-12 col-md-6 col-lg-6 col-lx-6 float-left">
-                    <div class="text-center">
-                        <img src="images/im-feeling-good-today.png" class="itemMainImage img-fluid" alt="...">
-                    </div>
-                    <div class="itemThumbnailForm">
-                        <div class="text-center">
-                            <img class="itemThumbnailSelected" src="images/images-shirt1.png" />
-                            <img class="itemThumbnail" src="images/images-shirt1.png" />
-                            <img class="itemThumbnail" src="images/images-shirt1.png" />
-                            <img class="itemThumbnail" src="images/images-shirt1.png" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-6 col-lx-6 float-right">
-                    <p class="breadCrumbs">Home All &#x2022; Categories &#x2022; Men's Clothing & Accessories</p>
-                    <p class="ratings"><span class="fas fa-star rated"></span><span class="fas fa-star rated"></span><span class="fas fa-star rated"></span><span class="fas fa-star rated"></span><span class="fas fa-star"></span></p>
-                    <h1 class="itemTitle">Super Oversized T-shirt With Raw Sleeves in Brown</h1>
-                    <p class="itemPrice">&#163; 13.99</p>
-                    <form method="POST">
-                        <label class="itemLabel labelColor">Color</label><br />
-                            <input type="radio" name="color" class="colorSelection" />
-                            <input type="radio" name="color" class="colorSelection" />
-                            <input type="radio" name="color" class="colorSelection" />
-                            <input type="radio" name="color" class="colorSelection" />
-                            <input type="radio" name="color" class="colorSelection" />
-                            <input type="radio" name="color" class="colorSelection" />
-                            <input type="radio" name="color" class="colorSelection" /><br />
-                        <label class="itemLabel labelSize">Size</label><br />
-                            <input type="button" name="size" value="a" />
-                            <input type="button" name="size" value="a" />
-                            <input type="button" name="size" value="a" />
-                            <input type="button" name="size" value="a" />
-                            <input type="button" name="size" value="a" />
-                            <input type="button" name="size" value="a" /><br />
-                        <label class="itemLabel labelQuantity">Quantity</label><br />
-                            <!-- <button type="button" name="btnminus" class="btn btn-secondary btnminus"><i class="fas fa-minus"></i></button>
-                            <input class="txtquantity" type="text" name="txtquantity" value="1" />
-                            <button type="button" name="btnadd" class="btn btn-secondary btnadd"><i class="fas fa-plus"></i></button> -->
-                            <button name="btnminus" class="btn btn-secondary btnminus">+</button>
-                            <input class="txtquantity" type="text" name="txtquantity" value="1" />
-                            <button name="btnadd" class="btn btn-secondary btnadd">-</button><br />
-                            <button class="btnAddCart">Add to cart</button><button class="btnAddCart">Add to Wish List</button>
-                    </form>
+<main class="container bgLightGray">
+    <div class="containerBody bgWhite">
+        <div class="itemHeader clearfix">
+            <div class="col-12 col-md-6 col-lg-6 col-lx-6 float-left removePadding leftPanel">
+                <div class="text-center">
+                    <!-- <img src="im" alt="" /> -->
+                    main image area
                 </div>
             </div>
+            <div class="col-12 col-md-6 col-lg-6 col-lx-6 float-right removePadding rightPanel">Right section</div>
         </div>
-        <div id="itemBody">
-            <h2 class="titleProductReview">Product reviews</h2>
-            <div class="clearfix reviewForm">
-                <div class="col-12 col-3 col-md-3 col-lg-3 col-lx-3 float-left" style="/*border:solid 1px black*/">
-                    <p class="ratingsReview">
-                        <span class="fas fa-star rated"></span>
-                        <span class="fas fa-star rated"></span>
-                        <span class="fas fa-star rated"></span>
-                        <span class="fas fa-star rated"></span>
-                        <span class="fas fa-star"></span>
-                    </p>
-                    <p class="reviewersName">Pablo Permins</p>
-                    <p class="reviewersLog">one hour ago</p>
-                </div>
-                <div class="col-12 col-9 col-md-9 col-lg-9 col-lx-9 float-right" style="/*border:solid 1px black*/">
-                    <p class="reviewComment">Got this through the post the other day and right from opening the packet I knew this was quality, put it on and I was right! Well done</p>
-                </div>
-            </div>
-            <h2 class="titleProductReview marginTopHeader">Add a review</h2>
-            <form name="frmAddReview" method="POST">
-                <div class="clearfix addReviewForm">
-                    <div class="col-12 col-3 col-md-3 col-lg-3 col-lx-3 float-left">
-                        <p class="labelBody">Choose a nickname</p>
-                    </div>
-                    <div class="col-12 col-9 col-md-9 col-lg-9 col-lx-9 float-right"><input type="text" /></div>
-                </div>
-                <div class="clearfix addReviewForm">
-                        <div class="col-12 col-3 col-md-3 col-lg-3 col-lx-3 float-left">
-                            <p class="labelBody">Your review</p>
-                        </div>
-                        <div class="col-12 col-9 col-md-9 col-lg-9 col-lx-9 float-right">
-                            <textarea class="form-control" rows="3"></textarea>
-                        </div>
-                </div>
-                <div class="clearfix addReviewForm">
-                        <div class="col-12 col-3 col-md-3 col-lg-3 col-lx-3 float-left">
-                            <p class="labelBody">Overall rating</p>
-                        </div>
-                        <div class="col-12 col-9 col-md-9 col-lg-9 col-lx-9 float-right"l><input type="text" /></div>
-                </div>
-            </form>
-        </div>
-        <div id="itemSuggestion">
-            <h2>You may also like</h2>
-        </div>
-    </main>
-</div>
+        <div class="itemBody">abcdefghijk</div>
+    </div>
+    <div class="itemFooter">abcdefghijk</div>
+</main>
+<footer>
+
+</footer>
+
+
 <footer>
 <p>Women Men Kids Shoes Brands</p>
 </footer>
