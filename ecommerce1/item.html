@@ -7,14 +7,10 @@
     <link rel="icon" href="favicon.png">
     <title>Item</title>
     <link href="css/app.min.css" rel="stylesheet">
-<style>
-
-</style>
 </head>
 <body>
-<p class="floathead">a</p>
 <header>   
-    <div class="container">
+    <div class="container mainBackground">
        <div id="header-top" class="row">
            <div class="top-left col-sm">
                Hi! <a href="#">Sign in</a> or <a href="#">Register</a>
@@ -46,29 +42,40 @@
             </div>
         </div>
     
-       <div id="header-menu" class="row">
-            <nav class="navbar navbar-expand-lg  navbar-dark col-12">
+       <div id="header-menu" class="row bg-white">
+            <nav class="navbar navbar-expand-lg bg-white navbar-light col-12">
                 <div class="clearfix floathead">
                     <a class="navbar-brand float-left" href="#"><div class="brand-name col-sm highlight-color">SHOPMATE</div></a>
                 
-                <!-- <button id="menuToggler" class="float-right" type="button" style="display:inline-block;">
+                <button id="menuToggler" class="float-right" type="button" style="display:inline-block;">
                     <span class="navbar-toggler-icon"></span>
-                </button> -->
+                </button>
                </div>
                <div class="collapse" id="navbarSupportedContent">
                     
                </div>
-                
             </nav>
-           
         </div>
     </div>
 </header>
+<div class="container container-margin mainBackground">
+    <main id="mainContent">
+        <div id="itemProperty">1</div>
+        <div id="itemBody">2</div>
+        <div id="iteSuggestion">3</div>
+    </main>
+</div>
 
 <script src="scripts/jquery.min.js"></script>
 <script src="scripts/bootstrap.min.js"></script>
 <script>
 //$("#menuToggler").css("display","inline");
+$(document).ready(function(){
+  $("#flip").click(function(){
+    $("#panel").slideToggle("slow");
+  });
+});
+
 </script>   
 </body>
 </html>
