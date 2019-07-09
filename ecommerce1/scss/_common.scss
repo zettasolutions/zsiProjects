@@ -45,33 +45,12 @@
     width: 25px;
     font-size: 12pt;
   }
-  
-  .leftPane {
-    width: 100%;
-    min-height: 835px;
-    //background-color: #fff;
     
-    
-  }
-  
-  .rightPane {
-  width: 100%; 
-  // background-color:#000; 
-  
-    
-  }
-  
   .content-wrapper {
     width: 100%;
     color: #fff;
-    line-height: 1em;
-    z-index: 1;
-    
+    line-height: 1em; 
   }
-  
-  .banner-contents {
-    position: absolute;
-    }
   
   .pt-6 {
     padding-top: 4rem !important;
@@ -85,3 +64,8 @@
     padding-left: 10px;
     width: 250px;
   }
+
+ .img-thumbnail{
+   border:none !important;
+   width: 100%;
+}
