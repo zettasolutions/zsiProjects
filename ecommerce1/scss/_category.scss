@@ -208,10 +208,10 @@ footer{
   width: 100%;
 
   a{
-    color: #bfffff;
-  }
-   a:hover{
-    color: white;
+    color: #fff;
+    &:hover{
+    color:#f62f5e;
+    }
   }
   
 }
