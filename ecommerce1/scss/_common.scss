@@ -69,3 +69,17 @@
    border:none !important;
    width: 100%;
 }
+
+.btn-round {
+  border-radius: 19px;
+  padding: .6rem;
+  font-weight: 500;
+
+}
+
+.btn-round:hover{
+  -webkit-box-shadow: 0px 0px 8px 3px #908c8c;
+  -moz-box-shadow: 0px 0px 8px 3px #908c8c;
+  box-shadow: 0px 0px 8px 3px#908c8c;
+
+}
