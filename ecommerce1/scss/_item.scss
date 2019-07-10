@@ -1,11 +1,13 @@
 $transparent: transparent;
 $white: #ffffff;
 $lightGray: #EFEFEF;
+$lightGray2: #fafafa;
 $pink: #f62f5e;
 $yellow: #ffc94f;
 
 $bgTransparent: $transparent;
 $bgLightGray: $lightGray;
+$bgLightGray2: $lightGray2;
 $bgWhite: $white;
 $bgPink: $pink;
 
@@ -37,11 +39,10 @@ main.container{
 	.itemBody{
 		border-left:solid 1px #ededed;
 		border-right:solid 1px #f0f0f0;
-		border-bottom:solid 2px #d7d7d7;
 		background: $bgWhite;
 		margin:0 30px 30px 30px;
 		.leftHeadPanel{
-			border: solid 1px black;
+			// border: solid 1px black;
 			.itemMainImage{
 				margin-top:20px;
 				max-height:500px !important;
@@ -65,7 +66,7 @@ main.container{
 		}
 		.rightHeadPanel{
 			padding-top:20px;
-			border: solid 1px black;
+			// border: solid 1px black;
 			.breadCrumb, .breadCrumb a{
 				color:#a4a4a4;
 				font-size:15px;
@@ -101,6 +102,22 @@ main.container{
 					font-size:20px;
 					font-weight: bold;
 					color:#b4b4b4;
+				}
+			}
+		}
+		.itemBodySub{
+			border-top:solid 1px #e5e5e5;
+			border-bottom:solid 2px #d7d7d7;
+			background-color: $bgLightGray2;
+			padding:65px 95px;
+			// background-color:red;
+			.reviewHeader{
+				font-size: 36px;
+				font-weight: bold;
+			}
+			.itemReview{
+				.rightPanelReview, .leftPanelReview{
+					border: solid 1px black;
 				}
 			}
 		}
