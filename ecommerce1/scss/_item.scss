@@ -2,6 +2,7 @@ $transparent: transparent;
 $white: #ffffff;
 $lightGray: #EFEFEF;
 $pink: #f62f5e;
+$yellow: #ffc94f;
 
 $bgTransparent: $transparent;
 $bgLightGray: $lightGray;
@@ -14,7 +15,6 @@ header{
 			background-color: $bgLightGray;	
 		}
 		#header-menu{
-		background-color: $white !important;	
 		height: 89px !important;
 				.floathead{
 					width: inherit;
@@ -70,11 +70,26 @@ main.container{
 				color:#a4a4a4;
 				font-size:15px;
 				padding-bottom:0px;
-				margin-bottom:0px;
+				margin-bottom:20px;
+			}
+			.productRatings{
+				padding:0;
+				margin: 0;
+				font-size:25px;
+				color: $lightGray;
+				margin-bottom:5px;
+			}
+			.itemName{
+				padding:0;
+				margin: 0;
+				text-align: left;
+				font-size:36px;
+				font-weight: bold;
+				line-height: 55px;
 			}
 		}
 	}
 }
-.removePadding{
-	padding: 0;
+.rated{
+	color:$yellow;
 }
