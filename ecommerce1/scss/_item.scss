@@ -36,6 +36,7 @@ main.container{
 	background-color: $bgLightGray;
 	padding: 0;
 	padding-top:30px;
+	padding-bottom:30px;
 	.itemBody{
 		border-left:solid 1px #ededed;
 		border-right:solid 1px #f0f0f0;
@@ -176,10 +177,9 @@ main.container{
 	}
 	.itemSuggestions{
 		margin:30px;
+		margin-bottom:0;
 		.itemSuggested{
-			[class^='col']{
-				border:solid 1px black;
-			}
+			
 		}
 	}
 }
@@ -203,4 +203,10 @@ main.container{
 	font-weight: bold;
 	margin-top:30px;
 	margin-bottom: 30px;
+}
+.hScroll{
+	height: 6px;
+	width: 100%;
+	background-color: #e7e7e7;
+	// border:solid 1px black;
 }
