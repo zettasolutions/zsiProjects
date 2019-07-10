@@ -29,13 +29,22 @@ header{
 }
 
 main.container{
-	border:solid 1px black;
+	border-left:solid 1px #ededed;
+	border-right:solid 1px #f0f0f0;
+	border-bottom:solid 2px #d7d7d7;
 	background-color: $bgLightGray;
 	padding: 0;
 	.itemBody{
 		padding:36px;
 		.itemHead{
-			
+			background-color:$bgWhite;
+			padding-top:20px;
+			.leftPaneHead{
+				border:solid 1px black;
+			}
+			.rightPaneHead{
+				border:solid 1px black;
+			}
 		}
 		.itemBodySub{
 				
