@@ -29,25 +29,43 @@ header{
 }
 
 main.container{
-	border-left:solid 1px #ededed;
-	border-right:solid 1px #f0f0f0;
-	border-bottom:solid 2px #d7d7d7;
 	background-color: $bgLightGray;
 	padding: 0;
+	padding-top:30px;
 	.itemBody{
-		padding:36px;
-		.itemHead{
-			background-color:$bgWhite;
-			padding-top:20px;
-			.leftPaneHead{
-				border:solid 1px black;
+		border-left:solid 1px #ededed;
+		border-right:solid 1px #f0f0f0;
+		border-bottom:solid 2px #d7d7d7;
+		background: $bgWhite;
+		margin:0 30px 30px 30px;
+		.leftHeadPanel{
+			border: solid 1px black;
+			.itemMainImage{
+				margin-top:20px;
+				max-height:500px !important;
+				width: auto;
 			}
-			.rightPaneHead{
-				border:solid 1px black;
+			.itemThumbNailsHolder{
+				margin-top:30px;
+				margin-bottom:30px;
+				.itemThumbnail, .itemThumbnailSelected{
+					padding: 0;
+					margin: 0;
+					max-height:90px !important;
+					min-height:90px !important;
+					margin-left:5px;
+					margin-right:5px;
+				}
+				.itemThumbnailSelected{
+					border:solid 1px #f62f5e;
+				}
 			}
 		}
-		.itemBodySub{
-				
+		.rightHeadPanel{
+			border: solid 1px black;
 		}
 	}
+}
+.removePadding{
+	padding: 0;
 }
