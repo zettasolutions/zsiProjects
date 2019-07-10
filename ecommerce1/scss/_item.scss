@@ -14,7 +14,7 @@ $bgPink: $pink;
 
 header{
 		#header-top{
-			background-color: $bgLightGray;	
+			background-color: $bgLightGray;
 		}
 		#header-menu{
 		height: 89px !important;
@@ -109,20 +109,97 @@ main.container{
 			border-top:solid 1px #e5e5e5;
 			border-bottom:solid 2px #d7d7d7;
 			background-color: $bgLightGray2;
-			padding:65px 95px;
+			padding:30px 95px;
 			// background-color:red;
 			.reviewHeader{
 				font-size: 36px;
 				font-weight: bold;
+				margin-top:30px;
+				margin-bottom: 30px;
 			}
 			.itemReview{
+				padding-top: 30px;
+				padding-bottom: 38px;
+				border-bottom:2px solid #eaeaea;
 				.rightPanelReview, .leftPanelReview{
-					border: solid 1px black;
+					/* border: solid 1px black;*/
 				}
+				.rightPanelReview{
+					.ratingsReview{
+						padding:0;
+						margin: 0;
+						font-size:25px;
+						color: $lightGray;
+						margin-bottom:5px;
+					}
+					.reviewersName{
+						font-weight: bold;
+						padding:0;
+						margin: 0;
+					}
+					.reviewersLog{
+						padding:0;
+						margin: 0;
+						color:#bebebe;
+						font-size: 12px;
+					}
+				}
+				.leftPanelReview{
+					
+				}
+			}
+			.itemAddReview{
+				margin-top:20px;
+				.rightPanelAddReview, .leftPanelAddReview{
+					/*border:1px solid black;*/
+				}
+				.rightPanelAddReview{
+					.labelReview{
+						font-weight: bold;
+					}
+				}
+				.leftPanelAddReview{
+					#txtAddReview{
+						margin-bottom:5px;
+					}
+					.ratingsAddReview{
+						padding:0;
+						margin: 0;
+						font-size:25px;
+						color: $lightGray;
+						margin-bottom:30px;
+					}
+				}
+			}
+		}
+	}
+	.itemSuggestions{
+		margin:30px;
+		.itemSuggested{
+			[class^='col']{
+				border:solid 1px black;
 			}
 		}
 	}
 }
 .rated{
 	color:$yellow;
+}
+.note{
+	margin: 0;
+	padding: 0;
+	color:#a8a8a8;
+	font-size: 12px;
+}
+.colorPink{
+	color: $pink;
+}
+.buttonPinkSubmit{
+	background-color: #f62f5e;
+}
+.headers2{
+	font-size: 36px;
+	font-weight: bold;
+	margin-top:30px;
+	margin-bottom: 30px;
 }
