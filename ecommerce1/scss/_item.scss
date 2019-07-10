@@ -46,9 +46,10 @@ main.container{
 			// border: solid 1px black;
 			.itemMainImage{
 				margin-top:20px;
-				min-height: 500px !important;
-				max-height:500px !important;
-				width: auto;
+				// min-height: 500px !important;
+				// max-height:500px !important;
+				//width: auto;
+				height:500px !important;
 			}
 			.itemThumbNailsHolder{
 				margin-top:30px;
