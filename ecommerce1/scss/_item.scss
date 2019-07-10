@@ -1,10 +1,12 @@
 $transparent: transparent;
 $white: #ffffff;
 $lightGray: #EFEFEF;
+$pink: #f62f5e;
 
 $bgTransparent: $transparent;
 $bgLightGray: $lightGray;
 $bgWhite: $white;
+$bgPink: $pink;
 
 
 header{
@@ -12,7 +14,7 @@ header{
 			background-color: $bgLightGray;	
 		}
 		#header-menu{
-		background-color: $white;	
+		background-color: $white !important;	
 		height: 89px !important;
 				.floathead{
 					width: inherit;
@@ -57,12 +59,19 @@ main.container{
 					margin-right:5px;
 				}
 				.itemThumbnailSelected{
-					border:solid 1px #f62f5e;
+					border:solid 1px $pink;
 				}
 			}
 		}
 		.rightHeadPanel{
+			padding-top:20px;
 			border: solid 1px black;
+			.breadCrumb, .breadCrumb a{
+				color:#a4a4a4;
+				font-size:15px;
+				padding-bottom:0px;
+				margin-bottom:0px;
+			}
 		}
 	}
 }
