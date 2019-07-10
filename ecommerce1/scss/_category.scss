@@ -138,6 +138,8 @@
  
 .banner-pane{
   width: 100%;
+  padding-left: 6px;
+  padding-right: 6px;
   position: relative;
   img{
     width: 100%;
@@ -147,8 +149,13 @@
     top: 0;
   } 
 }
+.m-1 {
+  margin: .1rem !important;
+}
 .banner-pane-bottom{
   width: 100%;
+  padding-left: 6px;
+  padding-right: 6px;
   position: relative;
   img{
     width: 100%;
