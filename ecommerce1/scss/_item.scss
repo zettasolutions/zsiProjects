@@ -1,55 +1,44 @@
-$background_color_1: transparent;
-$background_color_2: #ffffff;
-$background_color_3: #EFEFEF;
-$border_color_1: transparent;
+$transparent: transparent;
+$white: #ffffff;
+$lightGray: #EFEFEF;
 
-header {
-	#header-menu {
-		.navbar {
-			#menuToggler {
-				margin-top: 2px;
-				background-color: $background_color_1;
-				border-width: 1px;
-				border-color: $border_color_1;
-				font-size: 25px;
-			}
+$bgTransparent: $transparent;
+$bgLightGray: $lightGray;
+$bgWhite: $white;
+
+
+header{
+		#header-top{
+			background-color: $bgLightGray;	
 		}
-	}
-	.container {
-		#header-menu {
-			height: 89px !important;
-			.navbar {
-				.clearfix {
+		#header-menu{
+		background-color: $white;	
+		height: 89px !important;
+				.floathead{
 					width: inherit;
 					height: inherit;
 				}
-			}
+				#menuToggler{
+					margin-top: 2px;
+					background-color: $bgTransparent;
+					border-width: 1px;
+					border-color: $transparent;
+					font-size: 25px;
+				}
+		} 
+}
+
+main.container{
+	border:solid 1px black;
+	background-color: $bgLightGray;
+	padding: 0;
+	.itemBody{
+		padding:36px;
+		.itemHead{
+			
 		}
-	}
-}
-.bgWhite {
-	background-color: $background_color_2 !important;
-}
-.bgLightGray {
-	background-color: $background_color_3;
-}
-.removePadding {
-	padding: 0px;
-}
-main.container {
-	padding: 20px 0 0 0;
-	.containerBody {
-		margin-left: 20px;
-		margin-right: 20px;
-		border-left: solid 1px #ededed;
-		border-right: solid 1px #f0f0f0;
-		border-bottom: solid 2px #d7d7d7;
-	}
-}
-main {
-	.containerBody {
-		.itemHeader {
-			border: solid 1px black;
+		.itemBodySub{
+				
 		}
 	}
 }
