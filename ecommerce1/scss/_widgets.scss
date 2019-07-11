@@ -25,6 +25,14 @@ $bg-yellow-green: $yellow-green;
 $bg-violet: $violet;
 $bg-white: $white;
 
+.light-blue{ background-color: $bg-light-blue;}
+.cyan { background-color: $bg-cyan; }
+.pink { background-color: $bg-pink; }
+.orange { background-color: $bg-orange; }
+.yellow2{ background-color: $bg-yellow2; }
+.yellow-green { background-color: $bg-yellow-green; }
+.violet{ background-color: $bg-violet; }    
+
 .color-selection > {
     .item {
       height: 22px !important;
@@ -46,14 +54,16 @@ $bg-white: $white;
       -moz-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
       box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
     }
+}
 
-    .light-blue{ background-color: $bg-light-blue;}
-    .cyan { background-color: $bg-cyan; }
-    .pink { background-color: $bg-pink; }
-    .orange { background-color: $bg-orange; }
-    .yellow{ background-color: $bg-yellow2; }
-    .yellow-green { background-color: $bg-yellow-green; }
-    .violet{ background-color: $bg-violet; }    
+/*size selection*/
+.size-selection > {
+    .item{
+
+    }
+    .active{
+
+    }
 }
 
 
