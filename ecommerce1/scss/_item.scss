@@ -195,6 +195,26 @@ main.container{
 		}
 	}
 }
+/*Footer override properties since footer is copied from index*/
+.footerMain{
+	margin-left:0 !important;
+	margin-right:0 !important;
+}
+.footerColorOW{
+	color: #2e2e2e !important;
+	&:hover{
+		color:#f62f5e !important;
+	}
+}
+.footerSocialOW{
+	color: #eaeaea !important;
+	&:hover{
+		color:#f62f5e !important;
+	}
+}
+
+
+/*small style*/
 .rated{
 	color:$yellow;
 }
@@ -207,6 +227,7 @@ main.container{
 .colorPink{
 	color: $pink;
 }
+
 .buttonPinkSubmit{
 	background-color: #f62f5e;
 }
