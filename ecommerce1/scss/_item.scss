@@ -58,8 +58,6 @@ main.container{
 			.product-ratings{
 				padding:0;
 				margin: 0;
-				font-size:25px;
-				color: $light-gray;
 				margin-bottom:5px;
 			}
 			.item-name{
@@ -124,19 +122,19 @@ main.container{
 				padding-bottom: 38px;
 				border-bottom:2px solid #eaeaea;
 				.right-panel-review{
-					.ratingsReview{
+					.ratings-review{
 						padding:0;
 						margin: 0;
 						font-size:25px;
 						color: $light-gray;
 						margin-bottom:5px;
 					}
-					.reviewersName{
+					.reviewers-name{
 						font-weight: bold;
 						padding:0;
 						margin: 0;
 					}
-					.reviewersLog{
+					.reviewers-log{
 						padding:0;
 						margin: 0;
 						color:#bebebe;
