@@ -240,12 +240,12 @@ $bgViolet: $violet;
       font-weight: bold;
       color:#b4b4b4;
     }
-    .colorsSelection, .colorLighBlue, .colorCyan, .colorPink, .colorOrange, .colorYellow2, .colorYellowGreen, .colorViolet{
-      height:22px !important;
+    .color-selection > {
+      .item { height:22px !important;
       width: 22px !important;
-     
+      }
     }
-    .sizeSelection, .sizeSelectionSelected{     
+    .size-selection, .size-selection-active{     
       width: 55px;
      
   }
