@@ -131,13 +131,13 @@ main.container{
 				box-shadow: 0px 0px 0px 2px rgba(231,231,231,0);
 				cursor: pointer;
 			}
-			.colorLighBlue{ background-color: $bgLighBlue;}
-			.colorCyan{ background-color: $bgCyan; }
-			.colorPink{ background-color: $bgPink; }
-			.colorOrange{ background-color: $bgOrange; }
-			.colorYellow2{ background-color: $bgYellow2; }
-			.colorYellowGreen{ background-color: $bgYellowGreen; }
-			.colorViolet{ background-color: $bgViolet; }
+			.colorbgLighBlue{ background-color: $bgLighBlue;}
+			.colorbgCyan{ background-color: $bgCyan; }
+			.colorbgPink{ background-color: $bgPink; }
+			.colorbgOrange{ background-color: $bgOrange; }
+			.colorbgYellow2{ background-color: $bgYellow2; }
+			.colorbgYellowGreen{ background-color: $bgYellowGreen; }
+			.colorbgViolet{ background-color: $bgViolet; }
 			.colorsSelection {
 				&:hover {
 					-webkit-box-shadow: 0px 0px 0px 2px rgba(231,231,231,1);
@@ -188,10 +188,21 @@ main.container{
 				//border:solid 1px black;
 				// border-color:none;
 				background-color: none;
-				border-collapse: collapse;
 				-webkit-appearance: none;
 				-moz-appearance: none;
 				appearance: none !important;
+			}
+			.btnAddCart, .btnAddWishList{
+				text-align: center !important;
+				font-size:15px;
+				line-height: 50px;
+				border-radius: 40px;
+				margin-right:10px;
+				margin-bottom:20px;
+			}
+			.btnAddWishList{
+				background-color:unset !important;
+				color: #6c6c6c;
 			}
 		}
 		.itemBodySub{
