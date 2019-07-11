@@ -23,6 +23,7 @@ $bg-cyan: $cyan;
 $bg-orange: $orange;
 $bg-yellow-green: $yellow-green;
 $bg-violet: $violet;
+$bg-white: $white;
 
 .color-selection > {
     .item {
@@ -59,7 +60,7 @@ $bg-violet: $violet;
 
 
 /*size selection*/
-.sizeSelection, .sizeSelectionSelected{
+.size-selection, .size-selection-active{
     background-color: $bg-light-gray2;
     color:#6c6c6c;
     margin-top:5px;
@@ -73,7 +74,7 @@ $bg-violet: $violet;
         color:#6c6c6c !important;
     }
 }
-.sizeSelectionSelected{
+.size-selection-active{
     background-color: $bg-pink !important;
     color:white !important;
     &:hover{
@@ -82,7 +83,7 @@ $bg-violet: $violet;
 }
 
 /*call to action buttons*/
-.btnAddCart, .btnAddWishList{
+.btn-add-cart, .btn-add-wish-list{
     text-align: center !important;
     font-size:15px;
     line-height: 50px;
@@ -90,7 +91,7 @@ $bg-violet: $violet;
     margin-right:10px;
     margin-bottom:20px;
 }
-.btnAddWishList{
+.btn-add-wish-list{
     background-color:unset !important;
     color: #6c6c6c;
     &:hover{

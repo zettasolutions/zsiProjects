@@ -8,7 +8,7 @@ header{
 					width: inherit;
 					height: inherit;
 				}
-				#menuToggler{
+				#menu-toggler{
 					margin-top: 2px;
 					background-color: $bg-transparent;
 					border-width: 1px;
@@ -28,9 +28,9 @@ main.container{
 		border-right:solid 1px #f0f0f0;
 		background: $bg-white;
 		margin:0 30px 30px 30px;
-		.leftHeadPanel{
+		.left-head-panel{
 			// border: solid 1px black;
-			.itemMainImage{
+			.item-main-image{
 				margin-top:20px;
 				// min-height: 500px !important;
 				// max-height:500px !important;
@@ -39,10 +39,10 @@ main.container{
 				width: 100%;
   				height: auto;
 			}
-			.itemThumbNailsHolder{
+			.item-thumbnails-holder{
 				margin-top:30px;
 				margin-bottom:30px;
-				.itemThumbnail, .itemThumbnailSelected{
+				.item-thumbnail, .item-thumbnail-active{
 					padding: 0;
 					margin: 0;
 					max-height:90px !important;
@@ -50,28 +50,28 @@ main.container{
 					margin-left:5px;
 					margin-right:5px;
 				}
-				.itemThumbnailSelected{
+				.item-thumbnail-active{
 					border:solid 1px $pink;
 				}
 			}
 		}
-		.rightHeadPanel{
+		.right-head-panel{
 			padding-top:20px;
 			// border: solid 1px black;
-			.breadCrumb, .breadCrumb a{
+			.bread-crumb, .bread-crumb a{
 				color:#a4a4a4;
 				font-size:15px;
 				padding-bottom:0px;
 				margin-bottom:20px;
 			}
-			.productRatings{
+			.product-ratings{
 				padding:0;
 				margin: 0;
 				font-size:25px;
 				color: $light-gray;
 				margin-bottom:5px;
 			}
-			.itemName{
+			.item-name{
 				padding:0;
 				margin: 0;
 				margin-bottom:20px;
@@ -80,22 +80,22 @@ main.container{
 				font-weight: bold;
 				line-height: 55px;
 			}
-			.itemPrice{
+			.item-price{
 				padding:0px;
 				margin: 0;
 				color: $pink;
 				font-size: 36px;
 				font-weight: bold;
 			}
-			.itemColor, .itemSize, .itemQuantity, .itemAction{
+			.item-color, .item-size, .item-quantity, .item-action{
 				margin-top:20px;
 			}
-			.itemLabel{
+			.item-label{
 				font-size:20px;
 				font-weight: bold;
 				color:#b4b4b4;
 			}
-			.btnPM{
+			.btn-pm{
 				line-height: 42px;
 				width: 42px;
 				border-radius: 20px;
@@ -104,7 +104,7 @@ main.container{
 				background-color: $bg-light-gray;
 				font-size: 17px;
 			}
-			.txtQuantity{
+			.txtquantity{
 				height:42px;
 				width:60px;
 				border-radius: 20px;
@@ -121,26 +121,26 @@ main.container{
 				appearance: none !important;
 			}
 		}
-		.itemBodySub{
+		.item-body-sub{
 			border-top:solid 1px #e5e5e5;
 			border-bottom:solid 2px #d7d7d7;
 			background-color: $bg-light-gray2;
 			padding:30px 95px;
 			// background-color:red;
-			.reviewHeader{
+			.review-header{
 				font-size: 36px;
 				font-weight: bold;
 				margin-top:30px;
 				margin-bottom: 30px;
 			}
-			.itemReview{
+			.item-review{
 				padding-top: 30px;
 				padding-bottom: 38px;
 				border-bottom:2px solid #eaeaea;
-				.rightPanelReview, .leftPanelReview{
+				.right-panel-review, .left-panel-review{
 					/* border: solid 1px black;*/
 				}
-				.rightPanelReview{
+				.right-panel-review{
 					.ratingsReview{
 						padding:0;
 						margin: 0;
@@ -160,25 +160,25 @@ main.container{
 						font-size: 12px;
 					}
 				}
-				.leftPanelReview{
+				.left-panel-review{
 					
 				}
 			}
-			.itemAddReview{
+			.item-add-review{
 				margin-top:20px;
-				.rightPanelAddReview, .leftPanelAddReview{
+				.right-panel-add-review, .left-panel-add-review{
 					/*border:1px solid black;*/
 				}
-				.rightPanelAddReview{
+				.right-panel-add-review{
 					.labelReview{
 						font-weight: bold;
 					}
 				}
-				.leftPanelAddReview{
-					#txtAddReview{
+				.left-panel-add-review{
+					#txtadd-review{
 						margin-bottom:5px;
 					}
-					.ratingsAddReview{
+					.ratings-add-review{
 						padding:0;
 						margin: 0;
 						font-size:25px;
@@ -189,7 +189,7 @@ main.container{
 			}
 		}
 	}
-	.itemSuggestions{
+	.item-suggestions{
 		margin:30px;
 		margin-bottom:0;
 		.itemSuggested{
@@ -198,17 +198,17 @@ main.container{
 	}
 }
 /*Footer override properties since footer is copied from index*/
-.footerMain{
+.footer-main{
 	margin-left:0 !important;
 	margin-right:0 !important;
 }
-.footerColorOW{
+.footer-color-ow{
 	color: #2e2e2e !important;
 	&:hover{
 		color:#f62f5e !important;
 	}
 }
-.footerSocialOW{
+.footer-social-ow{
 	color: #eaeaea !important;
 	&:hover{
 		color:#f62f5e !important;
@@ -217,12 +217,12 @@ main.container{
 
 
 /*small style*/
-.iconHeart{
+.icon-heart{
 	background-image: url("/images/Icon/icons-heart-red.png");
 	background-repeat:no-repeat;
 	background-position: 20px center;
 }
-.iconHeart2{
+.icon-heart2{
 	height: inherit;
 	width: inherit;
 	border:solid 1px red;
@@ -237,11 +237,11 @@ main.container{
 	color:#a8a8a8;
 	font-size: 12px;
 }
-.colorPink{
+.color-pink{
 	color: $pink;
 }
 
-.buttonPinkSubmit{
+.button-pink-submit{
 	background-color: #f62f5e;
 }
 .headers2{
@@ -250,13 +250,13 @@ main.container{
 	margin-top:30px;
 	margin-bottom: 30px;
 }
-.hScroll{
+.hscroll{
 	height: 6px;
 	width: 100%;
 	background-color: #e7e7e7;
 	// border:solid 1px black;
 }
-.btnLove, .btnComment{
+.btn-love, .btn-comment{
 	text-align: left;
 	line-height: 42px !important;
 	// border-radius: 10px;
