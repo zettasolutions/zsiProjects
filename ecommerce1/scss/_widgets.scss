@@ -67,6 +67,7 @@ $bg-white: $white;
         line-height: 30px;
         text-align: center;
         border-radius: 3px;
+        float:left;
         &:hover{
             background-color: $bg-light-gray;
             color:#6c6c6c !important;
