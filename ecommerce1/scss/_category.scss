@@ -14,12 +14,10 @@
     .top-right {
       .lang {
         float: left;
-        .flag, .text {}
       }
       .cart {
         float: left;
         margin-left: 15px;
-        .icon-bag {}
         .badge {
           background-color: $pink;
           color: #fff;
@@ -35,7 +33,6 @@
             background-color: #000;
           }
         }
-        .text {}
       }
     }
   
@@ -197,11 +194,9 @@
 #options-panel {  
   .box{
     background-color: #fff;
-    min-height: 207px;
+    min-height: 165px;
     border: solid 1pt #c5c4c4;
-    border-radius: 3px;
-    min-width: 272px;
-    
+    border-radius: 3px; 
   }
   #filter-view{
     background-color: #FAFAFA;
