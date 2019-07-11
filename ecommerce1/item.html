@@ -86,34 +86,42 @@
                 <p class="itemPrice">&#163; 13.99</p>
                 <div class="itemColor">
                     <label class="itemLabel">Color</label><br />
-                        <div class="clearfix">
-                            <div class="colorLighBlue colorSelected float-left"></div>
-                            <div class="colorCyan float-left"></div>
-                            <div class="colorPink float-left"></div>
-                            <div class="colorOrange float-left"></div>
-                            <div class="colorYellow2 float-left"></div>
-                            <div class="colorYellowGreen float-left"></div>
-                            <div class="colorViolet float-left"></div>
-                        </div>
+                    <div class="clearfix">
+                        <div class="colorsSelection colorLighBlue colorSelected float-left"></div>
+                        <div class="colorsSelection colorCyan float-left"></div>
+                        <div class="colorsSelection colorPink float-left"></div>
+                        <div class="colorsSelection colorOrange float-left"></div>
+                        <div class="colorsSelection colorYellow2 float-left"></div>
+                        <div class="colorsSelection colorYellowGreen float-left"></div>
+                        <div class="colorsSelection colorViolet float-left"></div>
+                    </div>
                 </div>
                 <div class="itemSize">
                     <label class="itemLabel">Size</label><br />
-                        <a class="sizeSelection" href="">XS</a>
-                        <a class="sizeSelection" href="">S</a>
-                        <a class="sizeSelection" href="">M</a>
-                        <a class="sizeSelection" href="">L</a>
-                        <a class="sizeSelection" href="">XL</a>
-                        <a class="sizeSelection" href="">XXL</a>
+                    <div class="clearfix">
+                        <a href="" class="sizeSelection float-left" href="">XS</a>
+                        <a href="" class="sizeSelection sizeSelectionSelected float-left" href="">S</a>
+                        <a href="" class="sizeSelection float-left" href="">M</a>
+                        <a href="" class="sizeSelection float-left" href="">L</a>
+                        <a href="" class="sizeSelection float-left" href="">XL</a>
+                        <a href="" class="sizeSelection float-left" href="">XXL</a>
+                    </div>
                 </div>        
                 <div class="itemQuantity">
                     <label class="itemLabel">Quantity</label><br />
-                    <button name="btnMinus" class="btnMinus">+</button>
-                        <input type="text" name="txtQuantity"/>
-                    <button name="btnMinus" class="btnMinus">-</button>
+                    <div class="clearfix">
+                        <a href="" class="btnPM float-left"><i class="fas fa-minus"></i></a>
+                        <input class="float-left txtQuantity" type="text" name="txtQuantity" value="1"/>
+                        <a href="" class="btnPM float-left"><i class="fas fa-plus"></i></a>
+                    </div>
                 </div>
                 <div class="itemAction">
-                        <button name="btnAddCart" class="btnAddCart">Add to Cart</button>
-                        <button name="btnAddWishList" class="btnAddWishList">Add to Wish List</button>
+                    <div class="clearfix">
+                        <a href="#" class="btn-round btn btn-primary float-left col-3"> Add to cart</a>
+                        <a href="#" class="btn-round btn btn-primary float-left col-1"> Test</a>
+                        <!-- <button name="btnAddCart" class="btnAddCart">Add to Cart</button>
+                        <button name="btnAddWishList" class="btnAddWishList">Add to Wish List</button> -->
+                    </div>
                 </div>
             </div>
         </div>
