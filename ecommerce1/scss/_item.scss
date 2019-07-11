@@ -222,3 +222,12 @@ main.container{
 	background-color: #e7e7e7;
 	// border:solid 1px black;
 }
+.btnLove, .btnComment{
+	text-align: left;
+	line-height: 42px !important;
+	// border-radius: 10px;
+	// border:solid 1px black;
+}
+.far .fa-heart{
+	background-color: none;
+}
