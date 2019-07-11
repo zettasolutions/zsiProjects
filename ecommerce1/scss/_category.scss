@@ -250,8 +250,21 @@ $bgViolet: $violet;
      
   }
   }
-  .products-view{
+  #products-view{
     
+  }
+  .btn-text{    
+      border-radius: 19px;
+      padding: .6rem;
+      font-weight: 500;
+      min-width: 110px;
+      color: #F62F5E  
+  }
+  .btn-txt{
+    display: inline-block;
+    font-weight: 500;    
+    text-align: center;
+    vertical-align: middle;
   }
 }
 
