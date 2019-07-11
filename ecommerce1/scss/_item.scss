@@ -1,6 +1,6 @@
 header{
 		#header-top{
-			/*background-color: $bgLightGray;*/
+			/*background-color: $bg-light-gray;*/
 		}
 		#header-menu{
 		height: 89px !important;
@@ -10,7 +10,7 @@ header{
 				}
 				#menuToggler{
 					margin-top: 2px;
-					background-color: $bgTransparent;
+					background-color: $bg-transparent;
 					border-width: 1px;
 					border-color: $transparent;
 					font-size: 25px;
@@ -19,14 +19,14 @@ header{
 }
 
 main.container{
-	background-color: $bgLightGray;
+	background-color: $bg-light-gray;
 	padding: 0;
 	padding-top:30px;
 	padding-bottom:30px;
-	.itemBody{
+	.item-body{
 		border-left:solid 1px #ededed;
 		border-right:solid 1px #f0f0f0;
-		background: $bgWhite;
+		background: $bg-white;
 		margin:0 30px 30px 30px;
 		.leftHeadPanel{
 			// border: solid 1px black;
@@ -35,7 +35,9 @@ main.container{
 				// min-height: 500px !important;
 				// max-height:500px !important;
 				//width: auto;
-				height:500px !important;
+				// height:500px !important;
+				width: 100%;
+  				height: auto;
 			}
 			.itemThumbNailsHolder{
 				margin-top:30px;
@@ -66,7 +68,7 @@ main.container{
 				padding:0;
 				margin: 0;
 				font-size:25px;
-				color: $lightGray;
+				color: $light-gray;
 				margin-bottom:5px;
 			}
 			.itemName{
@@ -99,7 +101,7 @@ main.container{
 				border-radius: 20px;
 				text-align: center;
 				/*border: 1px solid #000000;*/
-				background-color: $bgLightGray;
+				background-color: $bg-light-gray;
 				font-size: 17px;
 			}
 			.txtQuantity{
@@ -122,7 +124,7 @@ main.container{
 		.itemBodySub{
 			border-top:solid 1px #e5e5e5;
 			border-bottom:solid 2px #d7d7d7;
-			background-color: $bgLightGray2;
+			background-color: $bg-light-gray2;
 			padding:30px 95px;
 			// background-color:red;
 			.reviewHeader{
@@ -143,7 +145,7 @@ main.container{
 						padding:0;
 						margin: 0;
 						font-size:25px;
-						color: $lightGray;
+						color: $light-gray;
 						margin-bottom:5px;
 					}
 					.reviewersName{
@@ -180,7 +182,7 @@ main.container{
 						padding:0;
 						margin: 0;
 						font-size:25px;
-						color: $lightGray;
+						color: $light-gray;
 						margin-bottom:30px;
 					}
 				}
@@ -215,6 +217,17 @@ main.container{
 
 
 /*small style*/
+.iconHeart{
+	background-image: url("/images/Icon/icons-heart-red.png");
+	background-repeat:no-repeat;
+	background-position: 20px center;
+}
+.iconHeart2{
+	height: inherit;
+	width: inherit;
+	border:solid 1px red;
+	background-color: red;
+}
 .rated{
 	color:$yellow;
 }
@@ -248,7 +261,4 @@ main.container{
 	line-height: 42px !important;
 	// border-radius: 10px;
 	// border:solid 1px black;
-}
-.far .fa-heart{
-	background-color: none;
 }

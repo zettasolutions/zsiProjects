@@ -12,57 +12,91 @@
 </style>
 </head>
 <body>
-<header>   
-    <div class="container">
-       <div id="header-top" class="row">
-           <div class="top-left col-sm">
-               Hi! <a href="#">Sign in</a> or <a href="#">Register</a>
-           </div>
-           <ul class="top-middle col-sm d-none d-md-block">
-                <li><a href="#"> Daily Deals</a></li>
-                <li><a href="#"> Sell</a></li>
-                <li><a href="#"> Help &amp; Contact</a></li>
-           </ul>
-           <div class="top-right col-sm">
-               <div class="lang"> 
-                    <a href="#">
-                        <span class="flag">
-                         <img src="images/icon/gbr.png"/>
+    <header>   
+        <div class="container">
+            <div id="header-top" class="row">
+                <div class="top-left col-sm">
+                    Hi! <a href="#">Sign in</a> or <a href="#">Register</a>
+                </div>
+                <ul class="top-middle col-sm d-none d-md-block">
+                    <li><a href="#"> Daily Deals</a></li>
+                    <li><a href="#"> Sell</a></li>
+                    <li><a href="#"> Help &amp; Contact</a></li>
+                </ul>
+                <div class="top-right col-sm">
+                    <div class="lang"> 
+                        <a href="#">
+                            <span class="flag">
+                                <img src="images/icon/gbr.png">
+                            </span>
+                            <span class="text"> £ GBP</span>
+                        </a>
+                    </div>
+                    
+                    <div class="cart">
+                        <span class="icon-bag">
+                                <img src="images/icon/icons-bag.png">
                         </span>
-                        <span class="text"> &pound; GBP</span>
-                    </a>
-               </div>
-                
-                <div class="cart">
-                    <span class="icon-bag">
-                         <img src="images/icon/icons-bag.png"/>
-                    </span>
-                    <a href="#">
-                        <span class="badge">6</span>
-                    </a>
-                    <span class="text">Your bag: &pound;3.99</span>
+                        <a href="#">
+                            <span class="badge">6</span>
+                        </a>
+                        <span class="text">Your bag: £3.99</span>
+                    </div>
                 </div>
             </div>
-        </div>
-       <div id="header-menu" class="row" style="background-color:#ffffff !important">
-            <nav class="navbar navbar-expand-lg navbar-light col-12">
-                <div class="clearfix floathead">
-                    <a class="navbar-brand float-left" href="#"><div class="brand-name col-sm highlight-color">SHOPMATE</div></a>
+        
+            <div id="header-menu" class="row">
+                <nav class="navbar navbar-expand-lg navbar-dark col-12">
+                    <a class="navbar-brand" href="#"><div class="brand-name col-sm highlight-color">SHOPMATE</div></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                    </span>
+                    </button>
                 
-                <button id="menuToggler" class="float-right" type="button" style="display:inline-block;">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-               </div>
-               <div class="collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item ">
+                                <a class="" href="#">Women</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#"> Men</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#"> Kids</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#"> Shoes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#"> Brands</a>
+                            </li>
+                        </ul>
+                        <div class="search col-10 col-sm-10 col-lg-4 col-mb-4 ">
+                            <div class="input-group">
+                                <i class="fas fa-search p-2"></i>
+                                <input type="text" class="form-control" placeholder="search anything">
+                                <i class="fas fa-times p-2"></i>
+                                
+                            </div>    
+                        </div>
+                        <div class="cart d-none d-lg-block">
+                            <span class="icon-bag">
+                                    <img src="images/icon/icons-bag-white.png">
+                            </span>
+                            <a href="#">
+                                <span class="badge">6</span>
+                            </a>
+                        </div>    
+                    </div>
                     
-               </div>
-            </nav>
+                </nav>
+                
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 <main class="container">
-    <div class="itemBody">
-        <div class="itemHead clearfix">
+    <div class="item-body">
+        <div class="item-head clearfix">
             <div class="col-12 col-md-6 col-lg-6 col-lx-6 float-left leftHeadPanel">
                 <div class="text-center">
                     <img alt="..." src="images/images-shirt13.png" class="itemMainImage img-fluid" >
@@ -84,16 +118,16 @@
                 </p>
                 <h1 class="itemName">Super Oversized T-Shirt With Raw Sleeves In Brown</h1>
                 <p class="itemPrice">&#163; 13.99</p>
-                <div class="itemColor">
+                <div class="color-selection">
                     <label class="itemLabel">Color</label><br />
-                    <div class="clearfix">
-                        <a class="colorsSelection colorbgLighBlue colorSelected float-left"></a>
-                        <a class="colorsSelection colorbgCyan float-left"></a>
-                        <a class="colorsSelection colorbgPink float-left"></a>
-                        <a class="colorsSelection colorbgOrange float-left"></a>
-                        <a class="colorsSelection colorbgYellow2 float-left"></a>
-                        <a class="colorsSelection colorbgYellowGreen float-left"></a>
-                        <a class="colorsSelection colorbgViolet float-left"></a>
+                    <div class="color-selection clearfix">
+                        <a class="item light-blue active"></a>
+                        <a class="item cyan"></a>
+                        <a class="item pink"></a>
+                        <a class="item orange "></a>
+                        <a class="item yellow "></a>
+                        <a class="item yellow-green"></a>
+                        <a class="item violet "></a>
                     </div>
                 </div>
                 <div class="itemSize">
@@ -118,7 +152,7 @@
                 <div class="itemAction">
                     <div class="clearfix">
                         <a href="#" class="btn-round btn-lg btn-primary float-left btnAddCart col-12 col-md-12 col-lg-5 col-xl-5"> Add to cart</a>
-                        <a href="#" class="btn-round btn-lg btn-primary float-left btnAddWishList col-12 col-md-12 col-lg-5 col-xl-5"><i class="far fa-heart colorPink"></i>Add to Wish List</a>
+                        <a href="#" class="btn-round btn-lg btn-primary float-left btnAddWishList iconHeart col-12 col-md-12 col-lg-5 col-xl-5"><!--<i class="far fa-heart colorPink"></i>-->Add to Wish List</a>
                         <!-- <a href="#" class="btn-round btn btn-primary float-left col-1"> Test</a> -->
                         <!-- <button name="btnAddCart" class="btnAddCart">Add to Cart</button>
                         <button name="btnAddWishList" class="btnAddWishList">Add to Wish List</button> -->
@@ -226,7 +260,6 @@
                     <li><a href="#" class="footerColorOW">Brands</a></li>
                 </ul>
             </div>
-
         </div>
         <div class="col-12 text-center pt-3 bg-white">
             <div class="social-icons">

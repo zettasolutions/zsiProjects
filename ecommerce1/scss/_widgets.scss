@@ -1,65 +1,66 @@
 /*Color for text*/
 $transparent: transparent;
 $white: #ffffff;
-$lightGray: #EFEFEF;
-$lightGray2: #fafafa;
+$light-gray: #EFEFEF;
+$light-gray2: #fafafa;
 $pink: #f62f5e;
 $yellow: #ffc94f;
-$lighBlue: #6eb2fb;
+$light-blue: #6eb2fb;
 $cyan: #00d3ca;
 $orange: #fe5c07;
 $yellow2: #f8e71c;
-$yellowGreen: #7ed321;
+$yellow-green: #7ed321;
 $violet: #9013fe;
 
 /*color for background*/
-$bgTransparent: $transparent;
-$bgLightGray: $lightGray;
-$bgLightGray2: $lightGray2;
-$bgWhite: $white;
-$bgPink: $pink;
-$bgYellow2: $yellow2;
-$bgLighBlue: $lighBlue;
-$bgCyan: $cyan;
-$bgOrange: $orange;
-$bgYellowGreen: $yellowGreen;
-$bgViolet: $violet;
+$bg-transparent: $transparent;
+$bg-light-gray: $light-gray;
+$bg-light-gray2: $light-gray2;
+$bg-pink: $pink;
+$bg-yellow2: $yellow2;
+$bg-light-blue: $light-blue;
+$bg-cyan: $cyan;
+$bg-orange: $orange;
+$bg-yellow-green: $yellow-green;
+$bg-violet: $violet;
 
-/*color selection*/
-.colorsSelection, .colorLighBlue, .colorCyan, .colorPink, .colorOrange, .colorYellow2, .colorYellowGreen, .colorViolet{
-    height:26px !important;
-    width: 26px !important;
-    border-radius: 18px;
-    margin-right: 5px;
-    border:4px solid white;
-    -webkit-box-shadow: 0px 0px 0px 2px rgba(231,231,231,0);
-    -moz-box-shadow: 0px 0px 0px 2px rgba(231,231,231,0);
-    box-shadow: 0px 0px 0px 2px rgba(231,231,231,0);
-    cursor: pointer;
-}
-.colorbgLighBlue{ background-color: $bgLighBlue;}
-.colorbgCyan{ background-color: $bgCyan; }
-.colorbgPink{ background-color: $bgPink; }
-.colorbgOrange{ background-color: $bgOrange; }
-.colorbgYellow2{ background-color: $bgYellow2; }
-.colorbgYellowGreen{ background-color: $bgYellowGreen; }
-.colorbgViolet{ background-color: $bgViolet; }
-.colorsSelection {
-    &:hover {
-        -webkit-box-shadow: 0px 0px 0px 2px rgba(231,231,231,1);
-        -moz-box-shadow: 0px 0px 0px 2px rgba(231,231,231,1);
-        box-shadow: 0px 0px 0px 2px rgba(231,231,231,1);
+.color-selection > {
+    .item {
+      height: 22px !important;
+      width: 22px !important;
+      border-radius: 18px;
+      margin-right: 5px;
+      border: 4px solid white;
+      cursor: pointer;
+      float: left;
+      &:hover{
+        -webkit-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+        -moz-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+        box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+      }
     }
+   
+    .active {
+      -webkit-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+      -moz-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+      box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+    }
+
+    .light-blue{ background-color: $bg-light-blue;}
+    .cyan { background-color: $bg-cyan; }
+    .pink { background-color: $bg-pink; }
+    .orange { background-color: $bg-orange; }
+    .yellow{ background-color: $bg-yellow2; }
+    .yellow-green { background-color: $bg-yellow-green; }
+    .violet{ background-color: $bg-violet; }    
 }
-.colorSelected{
-    -webkit-box-shadow: 0px 0px 0px 2px rgba(231,231,231,1);
-    -moz-box-shadow: 0px 0px 0px 2px rgba(231,231,231,1);
-    box-shadow: 0px 0px 0px 2px rgba(231,231,231,1);
-}
+
+
+
 
 /*size selection*/
 .sizeSelection, .sizeSelectionSelected{
-    background-color: $bgLightGray2;
+    background-color: $bg-light-gray2;
     color:#6c6c6c;
     margin-top:5px;
     margin-left: 5px;
@@ -68,12 +69,12 @@ $bgViolet: $violet;
     text-align: center;
     border-radius: 3px;
     &:hover{
-        background-color: $bgLightGray;
+        background-color: $bg-light-gray;
         color:#6c6c6c !important;
     }
 }
 .sizeSelectionSelected{
-    background-color: $bgPink !important;
+    background-color: $bg-pink !important;
     color:white !important;
     &:hover{
         color:white !important;
