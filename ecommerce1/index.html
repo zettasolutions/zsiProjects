@@ -130,7 +130,7 @@
     </div>
     <div class="row">                
         <div class="col-sm-12 col-md-4 col-lg-3 mb-3">                     
-            <div id="options-panel" style="">
+            <div id="options-panel" >
                 <div id="filter-view" class="box">
                     <div class="mt-4 ml-4 mb-3">                            
                         <h4 class="font-weight-bold">Filter 486 Items</h4>
@@ -147,25 +147,27 @@
                     <div class="mt-4 ml-4 mb-4">
                             <label class="itemLabel mb-3">Color</label>
                             <div class="color-selection clearfix">
-                                    <a class="item light-blue active"></a>
-                                    <a class="item cyan"></a>
-                                    <a class="item pink"></a>
-                                    <a class="item orange "></a>
-                                    <a class="item yellow2 "></a>
-                                    <a class="item yellow-green"></a>
-                                    <a class="item violet "></a>
+                                    <a class="item bg-light-blue active"></a>
+                                    <a class="item bg-cyan"></a>
+                                    <a class="item bg-pink"></a>
+                                    <a class="item bg-orange "></a>
+                                    <a class="item bg-yellow2 "></a>
+                                    <a class="item bg-yellow-green"></a>
+                                    <a class="item bg-violet "></a>
                             </div>
                     </div>        
                     <div class="mt-4 ml-4">
-                            <label class="itemLabel">Size</label>
-                            <div class="clearfix">
-                                    <a href="" class="size-selection float-left" href="">XS</a>
-                                    <a href="" class="size-selection size-selection-active float-left" href="">S</a>
-                                    <a href="" class="size-selection float-left" href="">M</a>
-                                    <a href="" class="size-selection float-left" href="">L</a>
-                                    <a href="" class="size-selection float-left" href="">XL</a>
-                                    <a href="" class="size-selection float-left" href="">XXL</a>
+                        <div class="item-size">
+                            <label class="item-label">Size</label><br />
+                            <div class="size-selection clearfix">
+                                <a href="#" class="item">XS</a>
+                                <a href="#" class="item active" >S</a>
+                                <a href="#" class="item">M</a>
+                                <a href="#" class="item">L</a>
+                                <a href="#" class="item">XL</a>
+                                <a href="#" class="item">XXL</a>
                             </div>
+                        </div>     
                     </div>             
                     
                     <div class="mt-3 ml-4 ">
@@ -234,7 +236,6 @@
             <!-- end of products -->
 
         </div>
-        
     </div>   
     <div id="other-items" class="row">
         <div class="col-12 ">
@@ -306,7 +307,7 @@
         </div>
     </div>
     <div class="row">
-        <div id="footer" class="col-12">
+        <div id="footer" class="col-12 bg-gray">
             <div class="col-12 text-center pt-5">
                 <div class="f-links">
                     <ul>
@@ -343,5 +344,6 @@
 </div>     
 <script src="scripts/jquery.min.js"></script>
 <script src="scripts/bootstrap.min.js"></script>   
+<script src="scripts/category.js"></script>   
 </body>
 </html>

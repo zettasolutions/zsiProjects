@@ -1,28 +1,3 @@
-$transparent: transparent;
-$white: #ffffff;
-$lightGray: #EFEFEF;
-$lightGray2: #fafafa;
-$pink: #f62f5e;
-$yellow: #ffc94f;
-$lighBlue: #6eb2fb;
-$cyan: #00d3ca;
-$orange: #fe5c07;
-$yellow2: #f8e71c;
-$yellowGreen: #7ed321;
-$violet: #9013fe;
-
-$bgTransparent: $transparent;
-$bgLightGray: $lightGray;
-$bgLightGray2: $lightGray2;
-$bgWhite: $white;
-$bgPink: $pink;
-$bgYellow2: $yellow2;
-$bgLighBlue: $lighBlue;
-$bgCyan: $cyan;
-$bgOrange: $orange;
-$bgYellowGreen: $yellowGreen;
-$bgViolet: $violet;
-
 #header-top {
     font-size: 12pt;
     font-weight: bold;
@@ -37,12 +12,10 @@ $bgViolet: $violet;
     .top-right {
       .lang {
         float: left;
-        .flag, .text {}
       }
       .cart {
         float: left;
         margin-left: 15px;
-        .icon-bag {}
         .badge {
           background-color: $pink;
           color: #fff;
@@ -58,10 +31,9 @@ $bgViolet: $violet;
             background-color: #000;
           }
         }
-        .text {}
+         
       }
     }
-  
 }
 #header-menu {
   background-color: #2e2e2e  !important;
@@ -245,13 +217,7 @@ $bgViolet: $violet;
       width: 22px !important;
       }
     }
-    .size-selection, .size-selection-active{     
-      width: 55px;
-     
-  }
-  }
-  #products-view{
-    
+
   }
   .btn-text{    
       border-radius: 19px;
@@ -283,7 +249,6 @@ $bgViolet: $violet;
   i.fas.fa-times.p-2{font-size: larger;}  
 }
 #footer{
-  background-color: #2e2e2e;
   color: white;
   width: 100%;
   a{
@@ -338,5 +303,4 @@ $bgViolet: $violet;
   }
 }
 
- 
  

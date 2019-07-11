@@ -1,38 +1,3 @@
-/*Color for text*/
-$transparent: transparent;
-$white: #ffffff;
-$light-gray: #EFEFEF;
-$light-gray2: #fafafa;
-$pink: #f62f5e;
-$yellow: #ffc94f;
-$light-blue: #6eb2fb;
-$cyan: #00d3ca;
-$orange: #fe5c07;
-$yellow2: #f8e71c;
-$yellow-green: #7ed321;
-$violet: #9013fe;
-
-/*color for background*/
-$bg-transparent: $transparent;
-$bg-light-gray: $light-gray;
-$bg-light-gray2: $light-gray2;
-$bg-pink: $pink;
-$bg-yellow2: $yellow2;
-$bg-light-blue: $light-blue;
-$bg-cyan: $cyan;
-$bg-orange: $orange;
-$bg-yellow-green: $yellow-green;
-$bg-violet: $violet;
-$bg-white: $white;
-
-.light-blue{ background-color: $bg-light-blue;}
-.cyan { background-color: $bg-cyan; }
-.pink { background-color: $bg-pink; }
-.orange { background-color: $bg-orange; }
-.yellow2{ background-color: $bg-yellow2; }
-.yellow-green { background-color: $bg-yellow-green; }
-.violet{ background-color: $bg-violet; }    
-
 .color-selection > {
     .item {
       height: 22px !important;
@@ -59,7 +24,7 @@ $bg-white: $white;
 /*size selection*/
 .size-selection > {
     .item{
-        background-color: $bg-light-gray2;
+        background-color: $light-gray2;
         color:#6c6c6c;
         margin-top:5px;
         margin-left: 5px;
@@ -69,12 +34,12 @@ $bg-white: $white;
         border-radius: 3px;
         float:left;
         &:hover{
-            background-color: $bg-light-gray;
+            background-color: $light-gray;
             color:#6c6c6c !important;
         }
     }
     .active{
-        background-color: $bg-pink !important;
+        background-color: $pink !important;
         color:white !important;
         &:hover{
             color:white !important;

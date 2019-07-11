@@ -1,3 +1,28 @@
+/*variables */
+$transparent: transparent;
+$white: #ffffff;
+$light-gray: #EFEFEF;
+$light-gray2: #fafafa;
+$pink: #f62f5e;
+$yellow: #ffc94f;
+$light-blue: #6eb2fb;
+$cyan: #00d3ca;
+$orange: #fe5c07;
+$yellow2: #f8e71c;
+$yellow-green: #7ed321;
+$violet: #9013fe;
+$gray: #2e2e2e;
+
+.bg-light-blue{ background-color: $light-blue;}
+.bg-cyan { background-color: $cyan; }
+.bg-pink { background-color: $pink; }
+.bg-orange { background-color: $orange; }
+.bg-yellow2{ background-color: $yellow2; }
+.bg-yellow-green { background-color: $yellow-green; }
+.bg-violet{ background-color: $violet; }    
+.bg-gray{ background-color: $gray; }    
+
+
 @media (min-width: 1240px) {
     .container {
       max-width: 1200px;

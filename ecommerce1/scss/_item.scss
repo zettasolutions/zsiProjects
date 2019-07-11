@@ -1,7 +1,4 @@
 header{
-		#header-top{
-			/*background-color: $bg-light-gray;*/
-		}
 		#header-menu{
 		height: 89px !important;
 				.floathead{
@@ -10,7 +7,7 @@ header{
 				}
 				#menu-toggler{
 					margin-top: 2px;
-					background-color: $bg-transparent;
+					background-color: $transparent;
 					border-width: 1px;
 					border-color: $transparent;
 					font-size: 25px;
@@ -19,23 +16,18 @@ header{
 }
 
 main.container{
-	background-color: $bg-light-gray;
+	background-color: $light-gray;
 	padding: 0;
 	padding-top:30px;
 	padding-bottom:30px;
 	.item-body{
 		border-left:solid 1px #ededed;
 		border-right:solid 1px #f0f0f0;
-		background: $bg-white;
+		background: $white;
 		margin:0 30px 30px 30px;
 		.left-head-panel{
-			// border: solid 1px black;
 			.item-main-image{
 				margin-top:20px;
-				// min-height: 500px !important;
-				// max-height:500px !important;
-				//width: auto;
-				// height:500px !important;
 				width: 100%;
   				height: auto;
 			}
@@ -57,7 +49,6 @@ main.container{
 		}
 		.right-head-panel{
 			padding-top:20px;
-			// border: solid 1px black;
 			.bread-crumb, .bread-crumb a{
 				color:#a4a4a4;
 				font-size:15px;
@@ -100,8 +91,7 @@ main.container{
 				width: 42px;
 				border-radius: 20px;
 				text-align: center;
-				/*border: 1px solid #000000;*/
-				background-color: $bg-light-gray;
+				background-color: $light-gray;
 				font-size: 17px;
 			}
 			.txtquantity{
@@ -112,9 +102,6 @@ main.container{
 				outline: none;
 				text-align: center;
 				font-size:19px;
-				// border:none;
-				//border:solid 1px black;
-				// border-color:none;
 				background-color: none;
 				-webkit-appearance: none;
 				-moz-appearance: none;
@@ -124,9 +111,8 @@ main.container{
 		.item-body-sub{
 			border-top:solid 1px #e5e5e5;
 			border-bottom:solid 2px #d7d7d7;
-			background-color: $bg-light-gray2;
+			background-color: $light-gray2;
 			padding:30px 95px;
-			// background-color:red;
 			.review-header{
 				font-size: 36px;
 				font-weight: bold;
@@ -137,9 +123,6 @@ main.container{
 				padding-top: 30px;
 				padding-bottom: 38px;
 				border-bottom:2px solid #eaeaea;
-				.right-panel-review, .left-panel-review{
-					/* border: solid 1px black;*/
-				}
 				.right-panel-review{
 					.ratingsReview{
 						padding:0;
@@ -160,15 +143,9 @@ main.container{
 						font-size: 12px;
 					}
 				}
-				.left-panel-review{
-					
-				}
 			}
 			.item-add-review{
 				margin-top:20px;
-				.right-panel-add-review, .left-panel-add-review{
-					/*border:1px solid black;*/
-				}
 				.right-panel-add-review{
 					.labelReview{
 						font-weight: bold;
@@ -192,9 +169,6 @@ main.container{
 	.item-suggestions{
 		margin:30px;
 		margin-bottom:0;
-		.itemSuggested{
-			
-		}
 	}
 }
 /*Footer override properties since footer is copied from index and item page had a different footer and header colors*/
@@ -227,10 +201,9 @@ main.container{
 	} 
 }
 
-
 /*small style*/
 .bg-pink{
-	background-color: $bg-pink;
+	background-color: $pink;
 }
 .color-pink{
 	color: $pink;
@@ -271,11 +244,8 @@ main.container{
 	height: 6px;
 	width: 100%;
 	background-color: #e7e7e7;
-	// border:solid 1px black;
 }
 .btn-love, .btn-comment{
 	text-align: left;
 	line-height: 42px !important;
-	// border-radius: 10px;
-	// border:solid 1px black;
 }
