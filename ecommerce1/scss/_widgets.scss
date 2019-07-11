@@ -59,38 +59,28 @@ $bg-white: $white;
 /*size selection*/
 .size-selection > {
     .item{
-
+        background-color: $bg-light-gray2;
+        color:#6c6c6c;
+        margin-top:5px;
+        margin-left: 5px;
+        width: 65px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 3px;
+        &:hover{
+            background-color: $bg-light-gray;
+            color:#6c6c6c !important;
+        }
     }
     .active{
-
-    }
-}
-
-
-
-
-/*size selection*/
-.size-selection, .size-selection-active{
-    background-color: $bg-light-gray2;
-    color:#6c6c6c;
-    margin-top:5px;
-    margin-left: 5px;
-    width: 65px;
-    line-height: 30px;
-    text-align: center;
-    border-radius: 3px;
-    &:hover{
-        background-color: $bg-light-gray;
-        color:#6c6c6c !important;
-    }
-}
-.size-selection-active{
-    background-color: $bg-pink !important;
-    color:white !important;
-    &:hover{
+        background-color: $bg-pink !important;
         color:white !important;
+        &:hover{
+            color:white !important;
+        }
     }
 }
+
 
 /*call to action buttons*/
 .btn-add-cart, .btn-add-wish-list{
