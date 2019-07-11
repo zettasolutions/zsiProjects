@@ -1,0 +1,28 @@
+#header-menu.bg-white {
+    background-color: #fff !important; 
+}
+#header-menu.link a {
+    color: #000;
+    font-weight: bold;
+}
+.badge.shopping-cart {
+    background-color: #f62f5e;
+    color: #fff;
+ 
+}
+
+#footer.shopping-cart{
+    background-color: #fff;
+    color: #000;
+    width: 100%;
+}
+#footer.shopping-cart.f-links ul li a {
+    font-size: 2em;
+    font-weight: 500;
+}
+#footer.shopping-cart a:hover {
+    color: #f62f5e;
+}
+#footer.shopping-cart a {
+    color: #000;
+}
