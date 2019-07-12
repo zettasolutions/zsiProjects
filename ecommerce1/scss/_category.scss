@@ -112,25 +112,27 @@
       color: #fff;
     }
   }
-  .top-right .cart {
-    float: left;
-    margin-left: 15px;
-    .badge {
-      background-color: $pink;
-      color: #fff;
-      position: relative;
-      left: -14px;
-      top: -9px;
-      margin-right: -11px;
-      border-radius: 100px;
-      height: 25px;
-      width: 25px;
-      font-size: 12pt;
-      &:hover {
-        background-color: #000;
-      }
+}
+.top-right .cart {
+  float: left;
+  margin-left: 15px;  
+  .badge {
+    background-color: #fff;
+    color: $pink;
+    position: relative;
+    left: -14px;
+    top: -9px;
+    margin-right: -11px;
+    border-radius: 100px;
+    height: 25px;
+    width: 25px;
+    font-size: 12pt;
+    &:hover {
+      background-color: $pink !important;
+      color:#fff !important;
     }
   }
+  
   ::-webkit-input-placeholder {
       /* Edge */
       color: white !important;
