@@ -159,18 +159,25 @@
 
 
 /*call to action buttons*/
-.btn-add-cart, .btn-add-wish-list{
-    text-align: center !important;
-    font-size:15px;
-    line-height: 50px;
-    border-radius: 40px;
-    margin-right:10px;
-    margin-bottom:20px;
-}
-.btn-add-wish-list{
-    background-color:unset !important;
-    color: #6c6c6c;
-    &:hover{
+/*must optional or required class btn-round btn-lg btn-primary inorder to inherit the styles*/
+.btn-call-to-action > {
+    .item{
+        text-align: center !important;
+        font-size:15px;
+        line-height: 50px;
+        border-radius: 40px;
+        margin-right:10px;
+        margin-bottom:20px;
+
+    }
+    .add-wish-list{
+        background-color:unset !important;
+        background-image: url("/images/Icon/icons-heart-red.png");
+        background-repeat:no-repeat;
+        background-position: 20px center;
         color: #6c6c6c;
+        &:hover{
+            color: #6c6c6c;
+        }   
     }
 }
