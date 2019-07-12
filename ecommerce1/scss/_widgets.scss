@@ -59,6 +59,26 @@
     }
 }
 
+/*txt quantity */
+.txtquantity{
+    height: 42px;
+    width: 60px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 19px;
+    border: solid thin $light-gray;
+}
+
+/*plus minus buttons*/
+.btn-pm{
+    line-height: 42px;
+    width: 42px;
+    border-radius: 20px;
+    text-align: center;
+    background-color: $light-gray;
+    font-size: 17px;
+}
+
 /*call to action buttons*/
 .btn-add-cart, .btn-add-wish-list{
     text-align: center !important;
