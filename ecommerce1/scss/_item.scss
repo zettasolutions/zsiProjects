@@ -93,17 +93,12 @@ main.container{
 				font-size: 17px;
 			}
 			.txtquantity{
-				height:42px;
-				width:60px;
+				height: 42px;
+				width: 60px;
 				border-radius: 20px;
-				border-width:1px;
-				outline: none;
 				text-align: center;
-				font-size:19px;
-				background-color: none;
-				-webkit-appearance: none;
-				-moz-appearance: none;
-				appearance: none !important;
+				font-size: 19px;
+				border: solid thin $light-gray;
 			}
 		}
 		.item-body-sub{
