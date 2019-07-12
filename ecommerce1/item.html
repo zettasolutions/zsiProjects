@@ -97,10 +97,10 @@
             <div class="col-12 col-md-6 col-lg-6 col-lx-6 float-left left-head-panel">
                 <div class="text-center">
                     <img alt="..." src="images/images-shirt13.png" class="item-main-image img-fluid" >
-                    <div class="item-thumbnails-holder">
-                        <img class="item-thumbnail-active" src="images/images-shirt1.png" />
-                        <img class="item-thumbnail" src="images/images-shirt1.png" />
-                        <img class="item-thumbnail" src="images/images-shirt1.png" />
+                    <div class="item-thumbnails">
+                         <a href="#" ><img class="item active" src="images/images-shirt1.png" /></a>
+                         <a href="#" ><img class="item" src="images/images-shirt1.png" /></a>
+                         <a href="#" ><img class="item" src="images/images-shirt1.png" /></a>
                     </div>
                 </div>
             </div>
@@ -143,15 +143,17 @@
                 <div class="item-quantity">
                     <label class="item-label">Quantity</label><br />
                     <div class="btn-quantity clearfix">
-                        <a href="" class="btn-pm float-left"><i class="fas fa-minus"></i></a>
-                        <input class="float-left txtquantity" type="text" name="txtquantity" value="2">
-                        <a href="" class="btn-pm float-left"><i class="fas fa-plus"></i></a>
+                        <a href="" id="btn-minus" class="btn-pm float-left"><i class="fas fa-minus"></i></a>
+                        <input class="float-left txtquantity" type="text" id="txtquantity"   name="txtquantity" value="2">
+                        <a href="" id="btn-plus" class="btn-pm float-left"><i class="fas fa-plus"></i></a>
                     </div>
                 </div>
                 <div class="item-action">
                     <div class="btn-call-to-action clearfix">
                         <a href="#" class="item btn-round btn-lg btn-primary float-left col-12 col-md-12 col-lg-5 col-xl-5"> Add to cart</a>
-                        <a href="#" class="item btn-round btn-lg btn-primary float-left add-wish-list col-12 col-md-12 col-lg-5 col-xl-5"><!--<i class="far fa-heart color-pink"></i>-->Add to Wish List</a>
+                        <a href="#" class="item btn-round btn-lg btn-primary float-left add-wish-list col-12 col-md-12 col-lg-5 col-xl-5">
+                            <i class="far fa-heart color-pink"></i> &nbsp;Add to Wish List
+                        </a>
                     </div>
                 </div>
             </div>
@@ -284,6 +286,6 @@
 </div>
 <script src="scripts/jquery.min.js"></script>
 <script src="scripts/bootstrap.min.js"></script>
-<script src="scripts/item.js"></script>   
+<script src="scripts/app.js"></script>   
 </body>
 </html>
