@@ -53,9 +53,15 @@
     .item{
         font-size:25px;
         color: $light-gray;
+        &:hover{
+            color: #e8e8e8;
+        }
     }
     .active{
         color:$yellow;
+        &:hover{
+            color:$yellow;
+        }
     }
 }
 
