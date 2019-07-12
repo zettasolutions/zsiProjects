@@ -187,16 +187,16 @@ main.container{
 	}
 }
 
-.nav-ow > {
-	.nav-item{
-		a{
+/*override color navigation*/
+.nav-ow {
+	>.nav-item {
+		>a {
 			color: #2e2e2e !important;
-			
+			&:hover {
+				color: $pink !important;
+			}
 		}
-		&:hover{
-			color:#007bff !important;
-		}
-	} 
+	}
 }
 
 /*small style*/
