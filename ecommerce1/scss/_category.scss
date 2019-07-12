@@ -3,6 +3,27 @@
     font-weight: bold;
     color: #b4b4b4;
 }
+.btn-pm {
+  line-height: 42px;
+  width: 42px;
+  border-radius: 20px;
+  text-align: center;
+  background-color: #EFEFEF;
+  font-size: 17px;
+}
+.txtquantity {
+  height: 42px;
+  width: 60px;
+  border-radius: 20px;
+  border-width: 1px;
+  outline: none;
+  text-align: center;
+  font-size: 19px;
+  background-color: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none !important;
+}
 
 #header-top {
     font-size: 12pt;
@@ -213,7 +234,7 @@
   }
 
   #color-view{
-    .itemLabel{
+    .item-label{
       font-size:20px;
       font-weight: bold;
       color:#b4b4b4;
