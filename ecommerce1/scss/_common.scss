@@ -21,11 +21,7 @@ $gray: #2e2e2e;
 .bg-violet{ background-color: $violet; }    
 .bg-gray{ background-color: $gray; }    
 
-.badge:hover{
-  -webkit-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
-        -moz-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
-        box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
-}
+
 @media (min-width: 1240px) {
     .container {
       max-width: 1200px;
@@ -61,18 +57,18 @@ $gray: #2e2e2e;
     }
   }
   
-  .badge {
-    background-color: #ffffff;
-    color: #f62f5e;
-    position: relative;
-    left: -14px;
-    top: -9px;
-    margin-right: -11px;
-    border-radius: 100px;
-    height: 25px;
-    width: 25px;
-    font-size: 12pt;
-  }
+  // .badge {
+  //   background-color: #ffffff;
+  //   color: #f62f5e;
+  //   position: relative;
+  //   left: -14px;
+  //   top: -9px;
+  //   margin-right: -11px;
+  //   border-radius: 100px;
+  //   height: 25px;
+  //   width: 25px;
+  //   font-size: 12pt;
+  // }
     
   .content-wrapper {
     width: 100%;

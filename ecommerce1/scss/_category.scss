@@ -66,8 +66,12 @@ font-size: 17px;
         height: 25px;
         width: 25px;
         font-size: 12pt;
+        -webkit-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+        -moz-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+        box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
         &:hover {
-          background-color: #000;
+          background-color: #fff;
+          color: $pink;
         }
       }
        
@@ -112,12 +116,13 @@ input {
     color: #fff;
   }
 }
-.top-right .cart {
+
+.cart {
   float: left;
   margin-left: 15px;
   .badge {
-    background-color: $pink;
-    color: #fff;
+    background-color: white;
+    color: $pink;
     position: relative;
     left: -14px;
     top: -9px;
@@ -126,11 +131,16 @@ input {
     height: 25px;
     width: 25px;
     font-size: 12pt;
+    -webkit-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+    -moz-box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
+    box-shadow: 0px 0px 0px 2px rgba(231, 231, 231, 1);
     &:hover {
-      background-color: #000;
+      background-color: $pink;
+      color: #fff;
     }
   }
-}
+} 
+
 ::-webkit-input-placeholder {
     /* Edge */
     color: white !important;
