@@ -168,6 +168,64 @@
     }
 }
 
+/*btn-price-range*/
+
+.price-range{  
+  label{
+
+  } 
+  .gray-range{
+    background-color: #EFEFEF;
+    position: relative;
+    height: 6px;
+    border-radius:5px;
+    .color-range{
+      background-color: #f62f5e;
+      height: 6px;
+      border-radius: 5px;
+      position: absolute;
+      width: 113px;
+      left: 33px;
+    }
+    .l-knob{
+      top: -7px;
+      left: 29px;
+    }
+    .r-knob{
+      top: -7px;
+      left: 135px;
+    }
+    .knob {
+      background-color: $pink;
+      border:solid 3px white;
+      height: 20px;
+      width: 20px;
+      border-radius: 10px;
+      position: absolute;
+      z-index: 1;
+      cursor: pointer;
+    }
+  }
+  .status-panel{
+    .r-status{
+      text-align: left;
+    } 
+    .l-status{
+      text-align: right;
+    } 
+    .status{
+      line-height: 30px;
+      width:60px;
+      color:#707070;
+    }
+  }
+}  
+
+
+
+
+
+
 .item-thumbnails{
   margin-top:30px;
   margin-bottom:30px;
