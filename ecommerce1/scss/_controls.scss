@@ -176,9 +176,6 @@
 /*btn-price-range*/
 
 .price-range{  
-  label{
-
-  } 
   .gray-range{
     background-color: #EFEFEF;
     position: relative;
@@ -227,10 +224,6 @@
 }  
 
 
-
-
-
-
 .item-thumbnails{
   margin-top:30px;
   margin-bottom:30px;
@@ -251,3 +244,66 @@
     border-radius: 9px;
   }
 }
+
+.products-view{
+  .screen-panel {
+   /* transition: all .2s ease-in-out;*/
+   position: relative;
+   .screen-2{
+      position: absolute;
+      top: 1px;
+      width: 100%;
+      opacity: 0;
+      background-color: #fff;
+      min-height: 330px;
+      padding-top: 128px; 
+      div.icon {
+        font-size: 36px;
+      }
+    } 
+    &:hover{
+      .screen-2{
+        -webkit-animation: slide-in-elliptic-top-fwd 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                animation: slide-in-elliptic-top-fwd 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      }
+    }
+
+  }
+}
+
+
+
+ @-webkit-keyframes slide-in-elliptic-top-fwd {
+  0% {
+    -webkit-transform: translateY(-600px) rotateX(-30deg) scale(0);
+            transform: translateY(-600px) rotateX(-30deg) scale(0);
+    -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0) rotateX(0) scale(1);
+            transform: translateY(0) rotateX(0) scale(1);
+    -webkit-transform-origin: 50% 1400px;
+            transform-origin: 50% 1400px;
+    opacity: 1;
+  }
+}
+@keyframes slide-in-elliptic-top-fwd {
+  0% {
+    -webkit-transform: translateY(-600px) rotateX(-30deg) scale(0);
+            transform: translateY(-600px) rotateX(-30deg) scale(0);
+    -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0) rotateX(0) scale(1);
+            transform: translateY(0) rotateX(0) scale(1);
+    -webkit-transform-origin: 50% 1400px;
+            transform-origin: 50% 1400px;
+    opacity: 0.9;
+  }
+}
+
+ 
