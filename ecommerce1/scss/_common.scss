@@ -109,4 +109,23 @@ $gray: #2e2e2e;
 }
 
 
-
+.modal .modal-content .row {
+  margin-top: 8px;
+}
+.image-holder {
+  width: 100px;
+  float: left;
+  border: solid 1pt $light-gray;
+  margin-right: 5px;
+  line-height: 7;
+}
+.item-detail {
+  width: 250px;
+  a{
+    color: #8c8383;
+    font-size: 11pt;
+    i {
+      color: red;
+    }  
+  } 
+}

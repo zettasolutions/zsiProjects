@@ -67,23 +67,28 @@
 
  
 .btn-quantity {
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    vertical-align: middle;
+
     input {
     height: 42px;
-    width: 60px;
+    width: 45px;
     border-radius: 20px;
     text-align: center;
     font-size: 19px;
     border: solid thin #EFEFEF;
     }
     
-    a{
-    line-height: 42px;
-    width: 42px;
-    border-radius: 20px;
-    text-align: center;
-    background-color: #EFEFEF;
-    font-size: 17px;
-    } 
+    a {
+      width: 42px;
+      border-radius: 20px;
+      text-align: center;
+      background-color: #EFEFEF;
+      font-size: 17px;
+      padding: 11px 15px;
+   }
 }
 
 /*checkBox*/

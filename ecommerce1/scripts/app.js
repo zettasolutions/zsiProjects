@@ -5,7 +5,55 @@ $(document).ready(function(){
     $(".color-selection,.size-selection,.item-thumbnails").setClickSelectionEvent();
     $(".ratings").setClickRatingsEvent();
     $(".btn-quantity").setPlusMinusEvent();
+
+    $(".price-range").setPriceEvent();
 });
+
+$.fn.setPriceEvent = function(o){
+  var _$self = this;
+  _$self.isMouseDown = false;
+  _$self.currentKnowb = null;
+  _$self.grayRange = $(".gray-range");
+  _$self.colorRange = $(".color-range");
+  _$self.lowerBound = $(".lbound");
+  _$self.upperBound = $(".ubound");
+  _$self.offsetLeft =_$self.offset().left;
+  _$self.knobOffsetLeft = 0; 
+  this.find(".knob").unbind("mousedown").on('mousedown', function (e) {    
+      _$self.isMouseDown =true;
+      _$self.currentKnowb = $(e.target);    
+  });
+  
+  this.unbind('mousemove').on('mousemove', function (e) {
+    if( ! _$self.isMouseDown) return this;
+      var _offsetLeft =  _$self.offset().left + 8;
+      
+      if( e.clientX > _$self.grayRange.offset().left ){ 
+        var remainingVal =  parseInt(_$self.grayRange.css("width"))  -  parseInt($(e.target).css("left"));
+        if(remainingVal > 0 )  _$self.currentKnowb.css({left:e.clientX -  _offsetLeft  });
+      }
+      if( $(e.target).hasClass("l-knob" )){ 
+        var _colorRangeL1,_colorRangeL2;
+        var _colorRangeWidth = parseInt( _$self.colorRange.css("width") );  
+        _colorRangeL1= parseInt( _$self.colorRange.css("left") );
+        _$self.colorRange.css({left:  parseInt( $(e.target).css("left")) + 8 })
+        _colorRangeL2 = parseInt( _$self.colorRange.css("left") );
+        _$self.colorRange.css({width:  _colorRangeWidth + (_colorRangeL1 - _colorRangeL2) })
+
+        _$self.lowerBound.html( parseInt( $(e.target).css("left")) + 8  );
+      }
+  
+      if( $(e.target).hasClass("r-knob" )){ 
+        _$self.colorRange.css({width:  parseInt($(e.target).css("left")) - parseInt( _$self.find(".l-knob").css("left"))      })
+
+        _$self.upperBound.html( parseInt( $(e.target).css("left")) + 8  );
+      }    
+
+  }).unbind('mouseup').on('mouseup', function (e) {
+    _$self.isMouseDown = false;
+  });    
+ 
+};
 
 $.fn.setPlusMinusEvent = function(){
   this.setVoidZero();
