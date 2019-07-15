@@ -48,8 +48,7 @@ $.fn.setAddToCartEvent = function(){
       $("#animate-dynamic").html("");
         var _val = _$cartTarget.html();
         _val  = parseInt(_val) + 1;
-        _$cartTarget.html(_val);
-
+            $(".badge").html(_val);
     }, 700);
 
   })
