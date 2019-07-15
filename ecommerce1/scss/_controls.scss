@@ -247,16 +247,31 @@
 
 .products-view{
   .screen-panel {
-   /* transition: all .2s ease-in-out;*/
    position: relative;
    .screen-2{
       position: absolute;
       top: 1px;
       width: 100%;
-      opacity: 0;
-      background-color: #fff;
-      min-height: 330px;
-      padding-top: 128px; 
+      height: 82%;
+      opacity: 0; 
+      .fade-8{
+        height: 100%;
+        width: inherit;
+        position: absolute;
+        background-color: #fff;
+        opacity: 0.9;
+      }
+      .opaque {
+        position: absolute;
+        width: inherit;
+        height: inherit;
+        padding-top: 79px;
+        text-align: center;
+        font-weight: bold;
+      }
+      .hp-102{
+        height: 102%;
+      }
       div.icon {
         font-size: 36px;
       }
@@ -279,7 +294,7 @@
             transform: translateY(-600px) rotateX(-30deg) scale(0);
     -webkit-transform-origin: 50% 100%;
             transform-origin: 50% 100%;
-    opacity: 0;
+    opacity: 1;
   }
   100% {
     -webkit-transform: translateY(0) rotateX(0) scale(1);
@@ -302,7 +317,7 @@
             transform: translateY(0) rotateX(0) scale(1);
     -webkit-transform-origin: 50% 1400px;
             transform-origin: 50% 1400px;
-    opacity: 0.9;
+    opacity: 1;
   }
 }
 
