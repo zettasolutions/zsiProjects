@@ -138,4 +138,10 @@ $gray: #2e2e2e;
   }
 }
 
+.animate-item-to-cart{
+  position: absolute;
+  height: 262px;
+	-webkit-animation: roll-in-left 0.6s ease-out both;
+	        animation: roll-in-left 0.6s ease-out both;  
+}
 
