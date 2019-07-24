@@ -7,6 +7,7 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace zsi.web
 {
@@ -68,7 +69,7 @@ namespace zsi.web
                 string result = sqlQuery.Substring(start);
                 if (start > 0) command.CommandText = sqlQuery.Substring(0, start - 1);
 
-                string[] arr = result.Split(',');
+                string[] arr = Regex.Split(result, ",(?=(?:[^']*'[^']*')*[^']*$)");
                 var p = command.Parameters;
                 foreach (string item in arr)
                 {
