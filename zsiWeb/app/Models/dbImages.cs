@@ -3,6 +3,8 @@
     using System;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Collections.Generic;
+
     public class dbImages
     {
         public int image_id { get; set; }
@@ -44,6 +46,33 @@
         }
         public void Dispose() {
             SqlDataReader = null;
+        }
+
+        public IList<dbImages> GetAll (string sqlCode)
+        {
+            try
+            {
+                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlCommand cmd = new SqlCommand(new dcSqlCmd().GetInfo(sqlCode).text, dbConn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                var p = cmd.Parameters;
+                dbConn.Open();
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                IList<dbImages> list = new List<dbImages>(); 
+                while (reader.Read())
+                {
+                    dbImages _info = new dbImages();
+                    _info.SqlDataReader = reader;
+                    list.Add(_info);
+                }
+                reader.Close();
+                dbConn.Close();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         public dbImages GetInfo(string sqlCode, int imageId)
         {

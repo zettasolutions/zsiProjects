@@ -26,10 +26,24 @@ namespace zsi.web.Controllers
         }
 
         #region "Private Methods"
+        private bool ByteArrayToFile(string fileName, byte[] byteArray)
+        {
+            try
+            {
+                using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                {
+                    fs.Write(byteArray, 0, byteArray.Length);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception caught in process: {0}", ex);
+                return false;
+            }
+        }
         private string excelConnectionString;
         private string tempPath { get; set; }
- 
-
         private void MigrateExcelFile(string fileName, string excel_column_range, string tempTable, string extraColumns)
         {
             string virtualColumns = this.CurrentUser.userId + " as user_id" + extraColumns;
@@ -122,7 +136,6 @@ namespace zsi.web.Controllers
             }
 
         }
-
         #endregion
 
         [HttpPost]
@@ -263,6 +276,34 @@ namespace zsi.web.Controllers
                 return base.File("/images/no-image.jpg", "image/jpeg");
             }
         }
+
+        public ActionResult saveToFolder()
+        {
+            try
+            {
+                using (new impersonate())
+                {
+                    var path = AppSettings.BaseDirectory + @"images\dbimages\";
+                    if(!Directory.Exists(path)) Directory.CreateDirectory(path);
+
+                    var dc = new dcDbImages();
+                    IList<dbImages> list = new List<dbImages>();
+                    list = dc.GetAll("T83");
+                    foreach (dbImages info in list) {
+                        var fileName = string.Format("{0}{1}.{2}", path, info.image_id, info.image_name);
+                        ByteArrayToFile(fileName, info.file);
+
+                    };
+                    return Json(new { isSuccess = true, msg= "success"});
+                }
+            }
+            catch(Exception ex)
+            {
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+        }
+
+
 
         public FileResult loadFile(string fileName)
         {
