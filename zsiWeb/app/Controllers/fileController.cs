@@ -290,7 +290,7 @@ namespace zsi.web.Controllers
                     IList<dbImages> list = new List<dbImages>();
                     list = dc.GetAll("T83");
                     foreach (dbImages info in list) {
-                        var fileName = string.Format("{0}{1}.{2}", path, info.image_id, info.image_name);
+                        var fileName = string.Format("{0}{1}.{2}", path, info.image_id, Path.GetExtension(info.image_name));
                         ByteArrayToFile(fileName, info.file);
 
                     };
