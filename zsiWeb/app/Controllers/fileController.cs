@@ -238,16 +238,21 @@ namespace zsi.web.Controllers
                 using (new impersonate())
                 {
 
+                    var path = AppSettings.BaseDirectory + @"images\dbimages\";
+                    if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+
                     var content = new byte[file.ContentLength];
                     file.InputStream.Read(content, 0, file.ContentLength);
 
                     int returnId = new dcDbImages().Update(sqlCode, new dbImages
                     {
-                        file = content,
                         image_id = Convert.ToInt32(image_id),
                         image_name = file.FileName,
                         content_type = file.ContentType,
                     });
+
+                    var fileName = string.Format("{0}{1}{2}", path, returnId, Path.GetExtension(file.FileName));
+                    ByteArrayToFile(fileName, content);
                     return Json(new { isSuccess = true, msg = "ok", image_id = returnId });
                 }
             }

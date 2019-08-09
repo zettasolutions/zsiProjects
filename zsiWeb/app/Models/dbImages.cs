@@ -114,7 +114,6 @@
                 cmd.CommandTimeout = 3600;
                 p.AddWithValue("@image_name", info.image_name);
                 p.AddWithValue("@content_type", info.content_type);
-                p.AddWithValue("@image_file", info.file);
                 p.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
                 SqlParameter retval = new SqlParameter();
                 retval.ParameterName = "@return_value";
