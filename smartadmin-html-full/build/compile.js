@@ -103,18 +103,11 @@ module.exports = {
 					debug: config.debug
 				}));
 			})
-			/*.pipe(function () {
+			.pipe(function () {
 				return gulpif(config.autoprefixer, autoprefixer({
 					browsers: ['last 2 versions']
 				}));
 			})
-			*/
-			.pipe(
-				autoprefixer({
-				overrideBrowserslist: ['last 2 versions']
-				,cascade: false
-				})
-			 )
 			.pipe(function () {
 				return gulpif(config.cssSourcemaps, sourcemaps.write('./'));
 			});

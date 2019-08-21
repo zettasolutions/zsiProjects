@@ -1094,8 +1094,8 @@
 						"styles": "{$config.output}/css/themes/cust-theme-13.css"
 						
 					}
-				}
-				,"theme-14": {
+				},
+				"zsi-mdb": {
 					"src": {
 						"styles": [
 							"{$config.path.src}/scss/_themes/zsi-mdb.scss"
@@ -1106,10 +1106,6 @@
 						
 					}
 				}
-
-
-				
-				
 			}			
 		}			
 	}
