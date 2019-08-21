@@ -14,3 +14,349 @@ $color-primary:					red;
 #myapp-2 {
 	box-shadow: 0 0 0 3px #000000;
 }
+
+%nav-bg {
+	background-image: -webkit-linear-gradient(270deg, $nav-background-shade, transparent);
+	background-image: linear-gradient(270deg, $nav-background-shade, transparent); 
+	background-color: #000;
+}
+
+.nav-menu {
+	padding: 0;
+	list-style: none;
+	margin: 0;
+
+	a,
+	a > [class*='fa-'],
+	a > .#{$cust-icon-prefix} {
+		@include transition(0.3s,ease-out);
+	}
+
+
+	b.collapse-sign {
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		color: $primary-400;
+
+		> [class*='fa-'],
+		>.#{$cust-icon-prefix} {
+			font-size: $nav-collapse-sign-font-size;
+    	}
+	}
+
+	ul {
+		padding-left: 0;
+		list-style: none;
+		display:none;
+	}
+
+	li {
+		position: relative;
+
+		&.open {
+			> a {
+				@include text-contrast($nav-background);
+			}
+		}
+
+		&.active {
+
+			> a {
+				@include text-contrast($nav-background);
+				background-color: rgba($white,0.04);
+				@include box-shadow(inset 3px 0 0 $color-primary);
+				font-weight: 400;
+
+				&:hover {
+
+					>[class*='fa-'],
+					>.#{$cust-icon-prefix} {
+					    color: $nav-icon-hover-color;
+					}
+
+				}
+
+			}
+
+			> ul {
+				display: block;
+			}
+
+			/* arrow that appears next to active/selected items */
+			&:not(.open) > a:before {
+				content: '\f413';
+				font-family: 'nextgen-icons';
+				position: absolute;
+				top: calc(50% - 5px);
+				right: 11px;
+				font-size: 7px;
+				height: 10px;
+				width: auto;
+				color: #24b3a4;
+				display: flex;
+				align-content: center;
+				align-items: center;
+			}
+		}
+
+		a {
+			display: flex; /*new*/
+			align-items:center; /*new*/
+			outline: 0;
+			padding: $nav-padding-y $nav-padding-x;
+			font-size: rem($nav-font-link-size);
+			color: $nav-link-color;
+			font-weight: 400;
+			text-decoration: none;
+
+			position: relative; /* needed for mod-nav-hiarchiy*/
+
+			.dl-ref {
+				font-size: $nav-dl-font-size;
+				text-align: center;
+				min-width: $nav-dl-width;
+				display: inline-block;
+				border-radius: $border-radius;
+				letter-spacing: 0.5px;
+				margin-left: -$nav-dl-margin-left;
+				margin-right: $nav-dl-margin-right;
+				font-weight: 500;
+				overflow:hidden;
+				padding: 0 4px;
+				-webkit-font-smoothing: subpixel-antialiased;
+
+				&.label {
+					margin-left: 0;
+					margin-right: 0;
+					font-weight: 400;
+					color: rgba(255,255,255,0.7);
+				}
+			}
+
+			/*> .badge {
+
+				@extend %ping-badge;
+
+				& + [class*='fa-'],
+				& + .#{$cust-icon-prefix} {
+					display: none;
+				}
+
+			}*/
+
+			>[class*='fa-'],
+			>.#{$cust-icon-prefix} {
+				margin-right: $nav-icon-margin-right;
+				font-size: $nav-font-icon-size;
+				width: $nav-icon-width;
+			    color:$nav-icon-color;
+			} 
+
+			/*> [class*='fa-'] {
+				font-size: $nav-font-icon-size - 2;
+			}*/
+
+			/*> img {
+				background: $primary-500;
+				padding: 0.125rem;
+				width: 20px;
+				height: 20px;
+				margin-left: 5px;
+				margin-right: $nav-icon-margin-right + 0.1875rem;
+			}*/
+
+			> .nav-link-text {
+
+				flex: 1; /*new*/
+				display: inline-flex;
+				align-items:center;
+				line-height: normal;
+			}
+
+			/*> .badge:not(.clear-badge):first-child  {
+				position: static;
+				display: inline-block;
+				border-radius: 5px;
+				margin-right: 10px;
+				width: 28px;
+				height: auto;
+				padding: 4px 0;
+				font-size: rem($fs-base);
+			}*/
+
+			&.collapsed {
+				.nav-menu-btn-sub-collapse {
+					@include rotate(180);
+				}
+			}
+
+			&:hover {
+				@include text-contrast(rgba(lighten($nav-base-color, 1%), (80/100)))
+				text-decoration: none;
+				background-color: rgba($black, 0.1);
+
+				.badge {
+					color: $nav-badge-color;
+				}
+
+				>[class*='fa-'],
+				>.#{$cust-icon-prefix} {
+					color:$nav-icon-hover-color;
+				}
+
+				> .badge {
+					box-shadow: 0 0 0 1px rgba(lighten($nav-base-color, 1%), (80/100));
+					border: 1px solid rgba(lighten($nav-base-color, 1%), (80/100));
+				}
+			
+			}
+
+			&:focus {
+				@include text-contrast( rgba(darken($nav-base-color, 5% ), (50/100)) );
+
+				.badge {
+					color: $nav-badge-color;
+				}
+			}
+		} 
+
+		// Sub nav level 1
+		> ul {
+			background-color: rgba($black,0.1);
+			padding-top: 10px;
+			padding-bottom: 10px;
+
+			li {
+
+				a {
+					//color: darken($nav-link-color, 5%);
+					color: #ccb2b2;
+					padding: $nav-padding-y $nav-padding-x $nav-padding-y $nav-padding-x + $nav-icon-width + $nav-icon-margin-right;
+
+					b.collapse-sign {
+						>[class*='fa-'],
+						>.#{$cust-icon-prefix} {
+							font-size: $nav-collapse-sign-font-size - 2; 
+						}
+					}
+
+					>[class*='fa-'],
+					>.#{$cust-icon-prefix} {
+						margin-left: -2.1875rem;
+						margin-right: $nav-dl-margin-right;
+						color: $nav-icon-color;
+						font-size: $nav-font-icon-size-sub - 0.25rem;
+						width: $nav-dl-width;
+						text-align: center;
+					}
+
+					> .badge {
+						color: $nav-badge-color;
+						background-color: $nav-badge-bg-color;
+						border: 1px solid darken($color-fusion, 0%);
+
+					}
+					
+					&:hover {
+						@include text-contrast(rgba(($black), (10/100)));
+						background-color: rgba(($black), (10/100));
+
+						> .nav-link-text {
+							>[class*='fa-'],
+							>.#{$cust-icon-prefix} {
+							    color:$nav-icon-hover-color;
+							}
+						}
+					}
+				}
+
+				&.active {
+					
+					> a {
+						@include text-contrast(rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)))
+
+						background-color:transparent;
+						box-shadow:none;
+
+						font-weight: 400;
+
+						> .nav-link-text {
+							>[class*='fa-'],
+							>.#{$cust-icon-prefix} {
+							    @include text-contrast(rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)));
+							}
+						}	
+
+						&:hover {
+							> .nav-link-text {
+								>[class*='fa-'],
+								>.#{$cust-icon-prefix} {
+								    color:$nav-icon-hover-color;
+								}
+							}			
+						}
+					}
+				}
+
+				&:last-child {
+					> ul {
+						padding-bottom:0;
+					}
+				}
+
+				// Sub nav level 2
+				> ul {
+
+
+					li {
+
+						&.active {
+							> a {
+								@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (20/100)) )
+							}
+						}
+
+						a {
+							color: darken($nav-link-color, 7%);
+							padding: $nav-padding-y $nav-padding-x $nav-padding-y ($nav-padding-x + $nav-icon-width + $nav-icon-margin-right + 0.75rem);
+
+							.dl-ref {
+								margin-left: 0;
+								margin-right: $nav-icon-margin-right / 1.2;
+							}
+							
+							>[class*='fa-'],
+							>.#{$cust-icon-prefix} {
+								margin-left: 0;
+								margin-right: $nav-icon-margin-right / 1.2;
+							}
+							
+							&:hover {
+								
+								@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)) )
+							}
+
+							> .badge {
+								color: $nav-badge-color;
+								background-color: $nav-badge-bg-color;
+								border: 1px solid darken($color-fusion, 0%);
+							}
+
+						}
+					}
+				}
+			}
+		} 
+
+		&:last-child {
+			margin-bottom:0;
+		}
+	}
+
+	&:last-child {
+		margin-bottom:0;
+	}
+} 
