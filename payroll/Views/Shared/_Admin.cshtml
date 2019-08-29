@@ -4,141 +4,138 @@
     <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="@Url.Content("~/")favicon.png" type="image/x-icon">
-    <title>@ViewBag.Title</title>
-    <script src="@Url.Content("~/")Scripts/jquery-1.12.0.min.js"></script>
-    <link href="@Url.Content("~/")Content/bootstrap.css" rel="stylesheet" />
-    <link href="@Url.Content("~/")Content/bootstrap-theme.min.css" rel="stylesheet" />
-    <link href="@Url.Content("~/")Content/site.css" rel="stylesheet" />    
-    <link href="@Url.Content("~/")Content/zGrid.css" rel="stylesheet" />
+	<meta name="Developed By" content="zetta-solutions.net">
+    <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
+    <title>@ViewBag.pageTitle </title>
+    <script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>	
+    <script src='@Url.Content("~/")Scripts/IndexedDB-getAll-shim.js'></script>
+	<link href='@Url.Content("~/")css/app.min.css' rel="stylesheet" />
+	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
+	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLocalDb"))
+    @{
+        string userId = "";
+        if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
+    } 
     <script>
         var base_url = '@Url.Content("~/")';
-        var controller_url = base_url + '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()/';
+        var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+        @userId
     </script>
-    <script type="text/javascript" src="@Url.Content("~/")Scripts/zsiLib.js"></script>
-    <style>
-        .modal-dialog {
-            width: 95%;
-        }
-        .ace_editor {
-            min-height: 400px !important;
-        }
 
-        .ace_search.right {
-            position: fixed !important;
-        }
+	<style>
+		.ml-auto, .mx-auto {
+			margin-left: auto !important;
+			margin-right: 1.5rem;
+		}
+	
+	</style>
 
-        .ace_search_field {
-            color: #000 !important;
-            background-color: #fff !important;
-        }
-
-        .dhtmlx_wins_body_inner > div[ida='dhxMainCont'] {
-            overflow: auto !important;
-        }
-    </style>   
 </head>
-<body>
-<div class="progressWindow">
-    <div class="loadingImg"></div>
-    <div class="loadingText">Loading...Please wait</div>
-</div>
-<div class="errorWindow">
-    Some processe(s) encountered a problem.
-    <br> Please Contact System Administrator.
-</div>
- <div class="pageHeader">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-1 pull-left">
-                    <a href="@Url.Content("~/")" class="navbar-brand">
-                        <img style="float: left; margin-top: -15px;; position: relative; z-index: 100;width: 100px;border-radius: 20px;" 
-                        src="@Url.Content("~/")images/logo.png" style="float: left; margin-top: -16px; position: relative; z-index: 100;" >
-                    </a>
-                </div>
-							  <div class="col-xs-9">
-					<img src="@Url.Content("~/")images/new_banners.jpg" style="margin-left: -30px; width: 126%;; padding-top: 11px; height: 68px;"/>                   
-					<h1 style="color:#FFB20C; font-size: 28px;margin-top: -64px; padding-left: 5%;"><b style="font-weight:bold">PAYROLL SYSTEM</b></h1>
-                </div> 
-            </div>
-        </div>
+<body id="page-top">
+    <div class="progressWindow zPopup-system">
+        <div class="loadingImg"></div>
+        <div class="loadingText">Loading...Please wait</div>
     </div>
-	<!---
-    <div class="pageHeader">
-        <div class="container-fluid">
-            <div class="row">
-
-                <div class="col-xs-1 pull-left">
-                    <a href="@Url.Content("~/")" class="navbar-brand">
-                        <img style="float: left; margin-top: -16px; position: relative; z-index: 100; width: 71px; margin-top: -15px;" src="@Url.Content("~/")images/headerAirforce.png" >
-                    </a>
-                </div>
-                
-            </div>
-        </div>
-    </div>-->
-<div class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse" id="navbar-main">
-            <div id="menuPanel"> </div>
-            <ul class="nav navbar-nav navbar-right">
-                @{ string role = (ViewBag.role == null ? "(No Role)" : ViewBag.role); }
-				<li class="">
-						<a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<span class="glyphicon glyphicon-user"></span> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
-						<span class="caret"></span></a>
-
-						<ul class="dropdown-menu">
-						  <li class="dropdown">
-							<a href="@Url.Content("~/")page/name/signin"><span class="glyphicon glyphicon-off"></span> Logout </a>
-						  </li>
-						</ul>
-				  
+    <div class="errorWindow zPopup-system">
+        Some processe(s) encountered a problem.
+        <br> Please Contact System Administrator.
+    </div>
+	<!-- -----------------------------------MAIN MENU ------------------------------------- -->
+	<!-- MAIN MENU -->
+	<nav class="navbar-main navbar navbar-expand-md navbar-dark fixed-top bg-dark">	
+        <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto mr-0">
+				@{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }    
+                <li class="nav-item">
+                    <div class="form-inline my-1">
+                        <div class="input-group input-group-sm mx-md-2 ">
+                            <input type="text" class="form-control" id="search_criteria" placeholder="Quick search...">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" type="button" id="btn-search"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+			
+				<li class="nav-item">
+					<div class="form-inline my-1 btn-group">
+						  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Search...
+						  </button>
+						  <div class="dropdown-menu">
+							...
+						  </div>
+					</div>				
 				</li>
+				<li class="nav-item">
+					<div class="form-inline my-1 mx-md-2 btn-group">
+						<button type="button" class="btn btn-secondary btn-sm">New</button>						  
+					</div>				
+				</li>
+				
+				<li class="nav-item">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                   
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow-sm " aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@Url.Content("~/")page/signin">Log Out</a>
+                        <a class="dropdown-item" href="@Url.Content("~/")page/docs">User Manual</a>
+                    </div>
+                </li>
             </ul>
         </div>
-    </div>
-</div>
-@Html.Raw(ViewBag.appStartLink)
-<div class="container-fluid page">
-    @RenderBody()
-</div>
+    </nav>
+	<!--------------------------------------- SUB MENU -------------------------------------------------------->
+    <nav class="navbar-sub navbar navbar-expand-md fixed-top navbar-dark shadow-sm">
+        <button class="navbar-toggler p-1 border-0" type="button" data-toggle="collapse"
+            data-target="#navbarSubCollapse" aria-controls="navbarSubCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSubCollapse">
+            <div id="menuPanel"> </div>	
+        </div>
+    </nav>
+	
+    
+
+@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))
+<!-- <div class="container-fluid page"> -->
+<main role="main" class="w-100">
+	@RenderBody()
+</main>
+
 
 @{
-    if ( Session["zsi_login"].ToString() =="Y" )
+    if (Session["zsi_login"].ToString() == "Y")
     {
-        <div class='debugPanel noprint'>              
-              <a href="@Url.Content("~/")page" target="_blank">Pages</a>
-            | <a href="@Url.Content("~/")pagetemplate" target="_blank">Page Templates</a>
-            | <a href="@Url.Content("~/")javascript" target="_blank">JavaScripts</a>
-			| <a href="@Url.Content("~/")sql" target="_blank">SQL Console</a>			
-        </div> 
-        }
-}
-<footer class="noprint">
-	<p>&copy; @DateTime.Now.Year - Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a></p>
-</footer>
 
-<script src="@Url.Content("~/")ace/src-noconflict/ace.js"></script>
-<script src="@Url.Content("~/")ace/src-noconflict/ext-language_tools.js"></script>
-<script src="@Url.Content("~/")Scripts/bootstrap.min.js"></script>
-<div class="alert alert-success">
+    <div class='debugPanel noprint'>     
+          <a href='@Url.Content("~/")pagetemplate/source/@ViewBag.pageName' target="_blank">Edit Page Template</a> 
+        | <a href='@Url.Content("~/")javascript/source/@ViewBag.pageName' target="_blank">Edit Javascript</a> 
+        
+    </div> 
+    }
+ }
+
+<script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
+@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
+<div class="alert alert-success zPopup-system">
     <p>Data has been saved.</p>
 </div>
 </body>
 </html>
-
-
-
-
-
-
-

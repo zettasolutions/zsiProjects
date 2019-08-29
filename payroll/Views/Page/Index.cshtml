@@ -5,37 +5,41 @@
 }
 <div class="pageTitle">@ViewBag.Title </div>
 
-<div class="form-horizontal ">
-	<div class="form-group  ">
-		<div class="col-xs-12 col-lg-6">
-			<label class="col-xs-4 col-sm-3 col-md-2 col-lg-3 control-label">Search Page Name:</label>
-			<div class="col-xs-8 col-sm-4 col-md-2 col-lg-5">
-				<input type="text" name="filter_name" id="filter_name" class="form-control input-sm ">
-			</div>
+
+	
+	<div class="col-12">
+		<div class="form-group row">		
+			<label for="filter_name" class="col-2 col-form-label">Search Page Name:</label>
+			<div class="col-3">
+				<input type="text" name="filter_name" id="filter_name" class="form-control">
+			</div>		
 		</div>
 	</div>
-</div>
-	
-<div class="row">
-	<div class="zPanel">
+	<div class="col-12 zPanel">		
 		 <form method="post" id="frm"><div id="grid" class="zGrid"></div></form>
 		<div class="buttonGroup">
 			<button type="button" class="btn btn-primary btn-sm" id="btnSave">
-				<span class="glyphicon glyphicon-floppy-disk"></span> Save
+				<i class="fas fa-save"></i> Save
 			</button>
 			<button type="button" class="btn btn-primary btn-sm" id="btnDelete">
-				<span class="glyphicon glyphicon-trash"></span> Delete
+				<i class="fas fa-trash-alt"></i> Delete
 			</button>
 		</div>
 	</div>
-</div>
+
 <style>
 
  .iconEdit{
 	font-size: 12pt;
     color: #3878C4;
  }
-
+ .zGrid .zHeaders { 
+    font-size: .8rem;
+}
+.zHeaders .title .text input[type="checkbox"], .zHeaders .title .text input[type="radio"] {    
+    top: 5px;    
+}
+.zPanel{padding:5px !important;}
 </style>
 <script>
     var bs 		= zsi.bs.ctrl;
@@ -48,7 +52,8 @@
 
     $("#btnSave").click(function () {
         $("#frm").jsonSubmit({
-            procedure: "pages_upd"
+              procedure: "pages_upd"
+			, optionalItems: ["is_public"]
             , onComplete: function (data) {
 				zsi.form.showAlert("alert");
 				$("#grid").clearGrid();
@@ -62,8 +67,8 @@
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
          url			: base_url + "sql/exec?p=pages_sel" + params
-        ,width          : $(document).width()- 50
-	    ,height         : $(document).height()-275
+        ,width          : $(document).width()- 20
+	    ,height         : $(document).height()-220
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,dataRows       :[
@@ -71,28 +76,29 @@
        		 { text: cb           , width:25  , style:"text-align:center;", type:"hidden" , name:"page_id"}
     		,{ text:"Page Name"   , width:214 , style:"text-align:left;", type:"input"  , name:"page_name"}
     		,{ text:"Page Title"   , width:300 , style:"text-align:left;", type:"input" , name:"page_title"}
+			,{ text:"Public ?"      , width: 65, style: "text-align:center;", type: "yesno", name: "is_public", defaultValue: "N" }
     		,{ text:"Master Page"   , width:100 , style:"text-align:center;", type:"select" , name:"master_page_id"}
     		,{ text:"URL"
-				, width:37
+				, width:40
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit"  title="Open URL" target="_blank" href="' + base_url + 'page/name/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-globe"><span></a>';
+					return '<a class="iconEdit"  title="Open URL" target="_blank" href="' + base_url + 'page/' + svn(d,"page_name") + '"><i class="fas fa-globe-americas"></i></a>';
 				}
 
 			}
     		,{ text:"Template"
-				, width:70
+				, width:75
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit" title="Edit Source Code" target="_blank" href="' + base_url + 'pagetemplate/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>';
+					return '<a class="iconEdit" title="Edit Source Code" target="_blank" href="' + base_url + 'pagetemplate/source/' + svn(d,"page_name") + '"><i class="fas fa-edit"></i></a>';
 				}
 
 			}
     		,{ text:"JavaScript"
-				, width:75
+				, width:85
 				, style:"text-align:center;"
 				, onRender	: function(d){
-					return '<a class="iconEdit" title="Edit Source Code"  target="_blank" href="' + base_url + 'javascript/source/' + svn(d,"page_name") + '"><span class="glyphicon glyphicon-edit"><span></a>';
+					return '<a class="iconEdit" title="Edit Source Code"  target="_blank" href="' + base_url + 'javascript/source/' + svn(d,"page_name") + '"><i class="fas fa-edit"></i></a>';
 				}
 
 			}
@@ -123,4 +129,3 @@
 
 
 </script>
-
