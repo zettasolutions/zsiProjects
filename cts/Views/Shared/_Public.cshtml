@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <!-- LAYOUT -->
+    <!-- PUBLIC -->
     <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
@@ -9,7 +9,7 @@
 
     <title>ZSI STS | @ViewBag.pageTitle</title>
     
-    <script src='@Url.Content("~/")Scripts/jquery-1.12.0.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/jquery-3.3.1.min.js'></script>
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
     @{
         string userId = "";
@@ -31,6 +31,10 @@
     <link href='@Url.Content("~/")Content/zTable.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/zPopup.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/style.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")Content/vsForm.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")zWindow/zWindow.css' rel="stylesheet" />
+	
+	<script src='@Url.Content("~/")Scripts/vsForm.js'></script>
 </head>
 <body>
     <div id="mainDiv" class="container-fluid z-bg z-txt-white">
@@ -56,7 +60,7 @@
             <div>Data has been saved.</div>
         </div>
 
-        @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))
+        @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStartPub"))
         <div id="main-content" class="row" style="overflow:auto;">
             <div class="col-12">
                 @RenderBody()
@@ -88,7 +92,7 @@
 <script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.ui.min.js'></script>
-<script src='@Url.Content("~/")Scripts/forms.js'></script>
+<script src='@Url.Content("~/")zWindow/zWindow.js'></script>
 <script src='@Url.Content("~/")Scripts/handlebars-v3.0.0.js'></script>
 <script src='@Url.Content("~/")javascript/name/easyJsTemplateWriter'></script>
 
@@ -97,11 +101,6 @@
     var gWHeight = $(window).outerHeight();
     $("#mainDiv").height(gWHeight);
     $("#main-content, #menu-nav").height(gWHeight - ($("nav").outerHeight() + 15));
-
-    var gUser;
-    $.get(procURL + "users_sel", function(d) {
-        gUser = d.rows[0];
-    });
 </script>
 </body>
 </html>

@@ -9,7 +9,7 @@
     
     <title>@ViewBag.pageTitle</title>
     
-    <script src='@Url.Content("~/")Scripts/jquery-1.12.0.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/jquery-3.3.1.min.js'></script>
     <script src='@Url.Content("~/")Scripts/zsiLib.js'></script>
     
     <!-- Bootstrap CSS -->
@@ -19,7 +19,9 @@
     <link href='@Url.Content("~/")Content/zTable.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/zPopup.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/style.css' rel="stylesheet" />
-
+    <link href='@Url.Content("~/")Content/vsForm.css' rel="stylesheet" />
+	
+	<script src='@Url.Content("~/")Scripts/vsForm.js'></script>
     <script>
         var base_url = '@Url.Content("~/")';
         var controller_url = base_url + '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()/';

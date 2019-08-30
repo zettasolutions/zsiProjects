@@ -18,8 +18,9 @@
     user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 .zHeaders .title .text{
-	padding-left: 4px;
 	white-space: nowrap;
+	text-align: inherit;
+    width: 100%;
 }
 .zHeaders .title .text input[type="checkbox"], .zHeaders .title .text input[type="radio"]{
     left: 1px;
@@ -277,4 +278,5 @@
     line-height:10px
 }
 /*end of sort*/
+
 

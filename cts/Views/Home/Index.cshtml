@@ -29,7 +29,7 @@
                     </div>
                 </div>
 				<div id="signUpLink" class="col-12">
-					<p class="text-right" style="font-size:0.8rem;">Don't have an account? <a href="@Url.Content("~/")public/clientRegistration">Click here</a> to Sign up.</p>
+					<p class="text-right" style="font-size:0.8rem;">Don't have an account? <a href="@Url.Content("~/")pub/clientRegistration">Click here</a> to Sign up.</p>
 				</div>
             </form>
         </div>
@@ -41,13 +41,14 @@
 </div>
 
 <script>
+
     $("#mainDiv").height($(window).outerHeight());
     
     $(document).ready(function() {
         $("#sysTitle").velocity('transition.slideUpBigIn');
         $(".z-form-con").velocity("transition.slideLeftIn", { stagger: 250 });
 		$("#signUpLink").velocity("transition.fadeIn", { duration : 2000 });
-		
+        
         var _msg = zsi.getUrlParamValue("access");
         var _username = readCookie("username");
        
@@ -113,3 +114,5 @@
 		}
 	});
 </script>
+
+

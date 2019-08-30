@@ -9,7 +9,7 @@
 
     <title>ZSI STS | @ViewBag.pageTitle</title>
     
-    <script src='@Url.Content("~/")Scripts/jquery-1.12.0.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/jquery-3.3.1.min.js'></script>
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
     @{
         string userId = "";
@@ -30,6 +30,10 @@
     <link href='@Url.Content("~/")Content/zTable.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/zPopup.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/style.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")Content/vsForm.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")zWindow/zWindow.css' rel="stylesheet" />
+	
+	<script src='@Url.Content("~/")Scripts/vsForm.js'></script>
 </head>
 <body>
     <div class="progressWindow">
@@ -59,8 +63,8 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav-toggler" aria-controls="main-nav-toggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand d-none d-md-block" href="/cts/">Support Ticketing System</a>
-            <a class="navbar-brand d-block d-md-none" href="/cts/">STS</a>
+            <a class="navbar-brand d-none d-md-block" href="/sts/">Support Ticketing System</a>
+            <a class="navbar-brand d-block d-md-none" href="/sts/">STS</a>
             
             <div class="collapse navbar-collapse" id="main-nav-toggler">
                 <ul class="navbar-nav ml-auto">
@@ -110,7 +114,7 @@
 <script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.ui.min.js'></script>
-<script src='@Url.Content("~/")Scripts/forms.js'></script>
+<script src='@Url.Content("~/")zWindow/zWindow.js'></script>
 
 <script>
     // Main ui resizing

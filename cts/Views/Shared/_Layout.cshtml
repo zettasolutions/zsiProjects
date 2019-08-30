@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <!-- LAYOUT -->
@@ -9,7 +9,7 @@
 
     <title>ZSI STS | @ViewBag.pageTitle</title>
     
-    <script src='@Url.Content("~/")Scripts/jquery-1.12.0.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/jquery-3.3.1.min.js'></script>
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
     @{
         string userId = "";
@@ -31,13 +31,18 @@
     <link href='@Url.Content("~/")Content/zTable.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/zPopup.css' rel="stylesheet" />
     <link href='@Url.Content("~/")Content/style.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")Content/vsForm.css' rel="stylesheet" />
+    <link href='@Url.Content("~/")zWindow/zWindow.css' rel="stylesheet" />
+	
+	
+	<script src='@Url.Content("~/")Scripts/vsForm.js'></script>
     <style>
         /* --------------------- MENU ---------------------- */
         
         #menu-nav .menu {
             cursor: pointer;
             border-radius: 0 20px 20px 0;
-            padding: 8px;
+            padding: 8px 0 8px 12px;
             color: rgba(0, 0, 0, 0.7);
             -webkit-transition : background-color 0.3s cubic-bezier(.25,.8,.25,1);
             -o-transition : background-color 0.3s cubic-bezier(.25,.8,.25,1);
@@ -49,7 +54,7 @@
             left: 0;
             background-color: #ffffff;
             z-index: 1030;
-            width: 50px;
+            width: 45px;
             transform: translate3d(0,0,0);
             -webkit-transform: translate3d(0,0,0);
         }
@@ -107,8 +112,8 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav-toggler" aria-controls="main-nav-toggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand d-none d-md-block" href="/cts/">Support Ticketing System</a>
-            <a class="navbar-brand d-block d-md-none" href="/cts/">STS</a>
+            <a class="navbar-brand d-none d-md-block" href="/sts/">Support Ticketing System</a>
+            <a class="navbar-brand d-block d-md-none" href="/sts/">STS</a>
             
             <div class="collapse navbar-collapse" id="main-nav-toggler">
                 <ul class="navbar-nav ml-auto">
@@ -127,6 +132,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dd-account" data-toggle="dropdown"><i class="fas fa-user"></i></a>
                         <div class="dropdown-menu dropdown-menu-right p-0">
+                            <a href='@Url.Content("~/")page/maindashboard' class="dropdown-item p-2">My Dashboard</a>
                             <a href='@Url.Content("~/")page/name/changepassword' class="dropdown-item p-2">Change Password</a>
                             <a href='@Url.Content("~/")page/name/signin' class="dropdown-item p-2">Log-out</a>
                         </div>
@@ -171,7 +177,7 @@
 <script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.min.js'></script>
 <script src='@Url.Content("~/")Scripts/velocity.ui.min.js'></script>
-<script src='@Url.Content("~/")Scripts/forms.js'></script>
+<script src='@Url.Content("~/")zWindow/zWindow.js'></script>
 <script src='@Url.Content("~/")Scripts/handlebars-v3.0.0.js'></script>
 <script src='@Url.Content("~/")javascript/name/easyJsTemplateWriter'></script>
 
@@ -189,7 +195,7 @@
             $.get(procURL + "user_menus_sel", function(d) {
                 var _menuData = d.rows;
                 var _$menuNav = $("#menu-nav");
-                var _html = '<div class="row no-gutters pr-3 border-bottom">';
+                var _html = '<div class="row no-gutters pr-1 border-bottom">';
                 
                 console.log(_menuData);
                 
@@ -202,11 +208,11 @@
                 
                 var _$menuName = _$menuNav.find(".menu-name");
                 _$menuNav.mouseenter(function() {
-                    _$menuNav.velocity("finish").velocity({ width:[250,50] },{ duration : 150 });
+                    _$menuNav.velocity("finish").velocity({ width:[250,45] },{ duration : 150 });
                     _$menuName.velocity("finish").velocity({opacity : 1},{ display : "inline", delay : 300 });
                 }).mouseleave(function() {
                     _$menuName.velocity("finish").velocity({opacity : 0},{display : "none", duration : 0});
-                    _$menuNav.velocity("finish").velocity({ width:[50,250] },{ duration : 100 });
+                    _$menuNav.velocity("finish").velocity({ width:[45,250] },{ duration : 100 });
                 });
                 
                 _$menuNav.find(".menu").click(function() {

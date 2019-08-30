@@ -1,0 +1,195 @@
+/*MIT License
+
+Copyright (c) 2018 Vincent L. Solon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.*/
+
+/* --------------------------------------- drag --------------------------------------- */
+*[zdrag=true] {
+    top: 0;
+    left: 0;
+    overflow : hidden;
+}
+
+/* --------------------------------------- Resizers --------------------------------------- */
+*[zresize=true] {
+    overflow: hidden;
+}
+
+*[zresize=true] > .resizer {
+    position : absolute;
+}
+
+*[zresize=true] > .resizer.resizer-w {
+    cursor : ew-resize;
+    height : 100%;
+    width : 2px;
+}
+
+*[zresize=true] > .resizer.resizer-h {
+    cursor : ns-resize;
+    height : 2px;
+    width : 100%;
+}
+
+*[zresize=true] > .resizer.resizer-wha {
+    cursor : nesw-resize;
+    height : 5px;
+    width : 5px;
+}
+
+*[zresize=true] > .resizer.resizer-whb {
+    cursor : nwse-resize;
+    height : 5px;
+    width : 5px;
+}
+
+*[zresize=true] > .resizer.top {
+    top : 0;
+}
+
+*[zresize=true] > .resizer.bottom {
+    bottom : 0;
+}
+
+*[zresize=true] > .resizer.left {
+    left : 0;
+}
+
+*[zresize=true] > .resizer.right {
+    right : 0;
+}
+
+
+
+
+
+/* --------------------------------------- zWindow --------------------------------------- */
+/* --------------------------------------- Main --------------------------------------- */
+.zWindow {
+    z-index : 1000;
+    top : 0px;
+    left : 0px;
+    overflow : hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-radius: 3px;
+}
+
+.zWindow .zw-header {
+    position : relative;
+    width : 100%;
+    height : 20px;
+    background: #00c6ff;
+}
+
+.zWindow .zw-header > .zw-title {
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: inherit;
+    width: -webkit-calc(100% - 40px);
+    width: expression(100% - 40px);
+    width: -moz-calc(100% - 40px);
+    width: -o-calc(100% - 40px);
+    width: calc(100% - 40px);
+    color: #ffffff;
+    font-weight: bold;
+    line-height: 20px;
+    padding-left: 5px;
+}
+
+.zWindow .zw-header > .zw-toolbar {
+    float: left;
+    overflow: hidden;
+    height: inherit;
+    width: 40px;
+}
+
+.zWindow .zw-button {
+    float: left;
+    height: inherit;
+    width: 20px;
+    padding: 3px 5px 0 5px;
+	position: relative;
+}
+
+.zWindow .zw-button:hover {
+    background-color: #ffffff;
+}
+
+.zWindow .zw-button svg {
+    position: absolute;
+}
+
+.zWindow .zw-body {
+    position : relative;
+    background-color : #ffffff;
+    overflow: auto;
+    width : 100%;
+    height: -webkit-calc(100% - 20px);
+    height: expression(100% - 20px);
+    height: -moz-calc(100% - 20px);
+    height: -o-calc(100% - 20px);
+    height: calc(100% - 20px);
+    border : 1px solid transparent;
+}
+
+/* --------------------------------------- State --------------------------------------- */
+.zWindow.active {
+    z-index : 2000;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22) !important;
+}
+
+.zWindow.last-active {
+    z-index : 1500;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.zWindow.active .zw-header > .zw-title {
+    cursor : move;
+}
+
+/* Max/Restore */
+.zWindow.maxed {
+    top : 0px !important;
+    left : 0px !important;
+    width : 100% !important;
+    height : 100% !important;
+}
+
+.zWindow.maxed > .zw-header .zw-button:not(.zw-restore):not(.zw-close)
+,.zWindow .zw-restore {
+    display: none;
+}
+
+.zWindow.maxed .zw-restore {
+    display: block;
+}
+
+/* Pinned/Unpinned */
+.zWindow .zw-unpin
+,.zWindow.pinned .zw-pin {
+    display: none;
+}
+
+.zWindow .zw-pin
+,.zWindow.pinned .zw-unpin {
+    display: block;
+}

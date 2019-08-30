@@ -44,6 +44,7 @@
     $("#btnSave").click(function () {
         $("#frm").jsonSubmit({
             procedure: "pages_upd"
+            , optionalItems: ["is_public"]
             , onComplete: function (data) {
 				zsi.form.showAlert("savedWindow");
 				$("#grid").clearGrid();
@@ -67,13 +68,13 @@
 	       		 { text: cb           , width:25  , style:"text-align:center;", type:"hidden" , name:"page_id"}
 	    		,{ text:"Page Name"   , width:214 , style:"text-align:left;", type:"input"  , name:"page_name"}
 	    		,{ text:"Page Title"   , width:300 , style:"text-align:left;", type:"input" , name:"page_title"}
+	    		,{ text:"Public ?"      , width: 60, style: "text-align:center;", type: "yesno", name: "is_public", defaultValue: "N" }
 	    		,{ text:"Master Page"   , width:100 , style:"text-align:center;", type:"select" , name:"master_page_id"}
 	    		,{ text:"URL"
 					, width:37
 					, style:"text-align:center;"
 					, onRender	: function(d){
-						return '<a class="iconEdit"  title="Open URL" target="_blank" href="' + base_url + 'page/name/' + svn(d,"page_name") + '"><i class="fas fa-globe"></i></a>'
-						+ '<input type="hidden" id="is_public" name="is_public" />';
+						return '<a class="iconEdit"  title="Open URL" target="_blank" href="' + base_url + 'page/name/' + svn(d,"page_name") + '"><i class="fas fa-globe"></i></a>';
 					}
 				}
 	    		,{ text:"Template"
