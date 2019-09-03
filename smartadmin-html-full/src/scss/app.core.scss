@@ -112,3 +112,11 @@
 /* #OVERRIDE - You can override any of the variables through this file
 ========================================================================== */ 
 @import '_modules/_overrides';
+
+
+//import - zsi default themes
+@import '_zsi/_zcore';
+@import '_zsi/_zgrid';
+@import '_zsi/_zpanel';
+@import '_zsi/_zsearch';
+@import '_zsi/_ztable';

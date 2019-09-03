@@ -136,17 +136,6 @@ $color-primary:					red;
 				}
 			}
 
-			/*> .badge {
-
-				@extend %ping-badge;
-
-				& + [class*='fa-'],
-				& + .#{$cust-icon-prefix} {
-					display: none;
-				}
-
-			}*/
-
 			>[class*='fa-'],
 			>.#{$cust-icon-prefix} {
 				margin-right: $nav-icon-margin-right;
@@ -154,19 +143,6 @@ $color-primary:					red;
 				width: $nav-icon-width;
 			    color:$nav-icon-color;
 			} 
-
-			/*> [class*='fa-'] {
-				font-size: $nav-font-icon-size - 2;
-			}*/
-
-			/*> img {
-				background: $primary-500;
-				padding: 0.125rem;
-				width: 20px;
-				height: 20px;
-				margin-left: 5px;
-				margin-right: $nav-icon-margin-right + 0.1875rem;
-			}*/
 
 			> .nav-link-text {
 
@@ -176,17 +152,6 @@ $color-primary:					red;
 				line-height: normal;
 			}
 
-			/*> .badge:not(.clear-badge):first-child  {
-				position: static;
-				display: inline-block;
-				border-radius: 5px;
-				margin-right: 10px;
-				width: 28px;
-				height: auto;
-				padding: 4px 0;
-				font-size: rem($fs-base);
-			}*/
-
 			&.collapsed {
 				.nav-menu-btn-sub-collapse {
 					@include rotate(180);
@@ -194,7 +159,7 @@ $color-primary:					red;
 			}
 
 			&:hover {
-				@include text-contrast(rgba(lighten($nav-base-color, 1%), (80/100)))
+				@include text-contrast(rgba(lighten($nav-base-color, 1%), (80/100)));
 				text-decoration: none;
 				background-color: rgba($black, 0.1);
 
@@ -276,7 +241,7 @@ $color-primary:					red;
 				&.active {
 					
 					> a {
-						@include text-contrast(rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)))
+						@include text-contrast(rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)));
 
 						background-color:transparent;
 						box-shadow:none;
