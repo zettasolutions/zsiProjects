@@ -24,15 +24,46 @@
     </script>
 
 	<style>
+	html{
+		right:1px;
+		}
 		.ml-auto, .mx-auto {
 			margin-left: auto !important;
 			margin-right: 1.5rem;
 		}
-	
+		.w-100{
+			background: linear-gradient(to right, #243B55 40%, #141E30); 
+		}
+		.pageTitle{
+			display: none;
+		}
+		main {
+			position: absolute;
+			top: 44px;
+			 
+			overflow: auto !important;
+			background: linear-gradient(to right, #243B55 40%, #141E30);
+		}
+		.navbar-sub {
+			position: fixed;
+			top: 40px;
+			z-index: 1020;
+			display: -ms-flexbox;
+			display: -webkit-box;
+			display: flex;
+			-ms-flex-wrap: nowrap;
+			flex-wrap: nowrap;
+			min-height: 29px !important;
+			color: rgba(255,255,255,0.75);
+			text-align: center;
+			white-space: nowrap;
+			-webkit-overflow-scrolling: touch;
+			background: linear-gradient(to right, #243B55 40%, #141E30); 
+		}
 	</style>
 
 </head>
-<body id="page-top">
+<body >
     <div class="progressWindow zPopup-system">
         <div class="loadingImg"></div>
         <div class="loadingText">Loading...Please wait</div>
@@ -48,14 +79,17 @@
 				<li class="nav-item dropdown no-arrow">
 					<a class="dropdown-toggle" href="javascript:void(0);" onclick="toggleMenu();"   >
 						<button class="btn btn-link btn-sm text-white">
-							<i class="fas fa-bars"></i>
+							<!--<i class="fas fa-bars"></i>-->
 						</button>
 					</a>
-					<div id="topMainMenu" class="tt-menu dropdown-menu dropdown-menu-left" > </div>
+					<!--<div id="topMainMenu" class="tt-menu dropdown-menu dropdown-menu-left" > </div>-->
 				</li>
 			</ul>
 		</div>
-        <a class="navbar-brand" href='@Url.Content("~/")'><i class="ttool lear-logo"></i> Material Database</a>
+        <a class="navbar-brand" href='@Url.Content("~/")img/logo'>
+			<img src='@Url.Content("~/")logo.png' aria-roledescription="logo"></img> ZSI Payroll
+		</a>
+		
         <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
