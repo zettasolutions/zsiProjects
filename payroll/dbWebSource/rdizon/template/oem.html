@@ -1,0 +1,86 @@
+<style type="text/css" media="all">
+    #frm_modalOEM .modal-body div nav #nav-tab .nav-link{
+        color:black;
+    }
+    #frm_modalOEM .modal-body div nav #nav-tab .nav-link:hover{
+        color: #fff !important;
+    }
+    #frm_modalOEM .modal-body div nav #nav-tab .nav-link.active {
+        background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%) !important;
+        color: #fff !important;
+    }
+    #frm_modalOEM .modal-body div nav #nav-tab .nav-link:hover {
+    background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);
+    color: #fff;
+}
+</style>
+
+<div class="zContainer">
+        <div class="row">
+            <div class="col-12 ">     
+                <div id="grid" class="zGrid mb-2"></div>
+            </div>
+            <div class="col-2">     
+                <button type="button" class="btn btn-primary " id="btnSave">
+                    <i class="far fa-save"></i> Save
+                </button>
+                <button type="button" onclick="return checkDelete();" class="btn btn-primary " id="btnDelete">
+                	<i class="fas fa-trash-alt"></i> Delete
+                </button>    
+            </div>
+            
+        </div>
+    </div>
+
+<div class="modal" id="modalOEM" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full" role="document">
+        <div class="modal-content">
+            <form id="frm_modalOEM" >
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalOEMLabel"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    
+                </div>
+                <div class="modal-body p-4">
+                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                        <nav>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link"        data-toggle="tab" href="#nav-p" role="tab" aria-controls="nav-p"> Programs </a>
+                            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-bp" role="tab" aria-controls="nav-bp"> Build Phase </a>
+                          </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <div role="tabpanel" class="tab-pane fade"   id="nav-p">
+                                <div class="row">
+                                    <div id="grid-P" class="zGrid"> </div>
+                                </div>
+                                <button type="button" onclick="submitDataPrograms(this,'P');" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade show active" id="nav-bp">
+                                <div class="row">
+                                    <div id="grid-BP" class="zGrid"> </div>
+                                </div>
+                                <button type="button" onclick="submitDataBuildPhase(this,'BP');" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+                          </div>
+                
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ul id="localTemplates">
+    <li name="modalBodyProgParts">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <div id="{{grid}}" class="zGrid row"> </div>
+                <button type="button" id="btnSave1" onclick="{{onClickSaveProgramParts}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+            </div>
+        </div>
+    </li>
+</ul>
+

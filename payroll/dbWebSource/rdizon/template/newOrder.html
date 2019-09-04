@@ -1,0 +1,150 @@
+<style type="text/css" media="all">
+    .col-form-label {
+        padding-top: calc(.1rem + 1px);
+        padding-bottom: calc(.1rem + 1px);
+        margin-bottom: 0;
+        font-size: inherit;
+        line-height: 1.5;
+        white-space: nowrap;
+    }    
+    .buttonGroup {
+        margin-top: 10px;
+        margin-right: 0px; 
+        padding-left: 6px;
+        margin-bottom: 5px;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+        margin-bottom: 3px;
+        margin-top: 20px;
+    }    
+    
+</style>
+
+<div class="col-22 zContainer1">
+    <form style="margin-top: 10px; text-align: -webkit-right; margin-right: 10%;">
+        <div class="form-group">
+            <label for="customer" class="col-2 col-form-label">Customer:</label>
+            <div class="col-2">
+                <select type="text" class="form-control" id="customer" name="customer" required></select>
+            </div>
+                <label for="po_no" class="col-2 col-form-label">PO #:</label>
+            <div class="col-2">
+                <input type="text" class="form-control" id="po_no"  name="po_no" required>
+            </div>      
+            <label for="model_yr" class="col-2 col-form-label">Model Year:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="model_yr" name="model_yr" required>
+            </div>
+        </div>
+    
+        <div class="form-group row">
+            <label for="cust_site_code" class="col-2 col-form-label">Customer Site Code:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="cust_site_code" name="cust_site_code" required></select>
+            </div>
+            <label for="po_issue_date" class="col-2 col-form-label">PO Issue Date:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="po_issue_date" name="po_issue_date" required>
+            </div>
+            <label for="prefix" class="col-2 col-form-label">Prefix:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="prefix" name="prefix" required></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="cust_contact" class="col-2 col-form-label">Customer Contact:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="cust_contact" name="cust_contact" required></select>
+            </div>
+            <label for="order_type" class="col-2 col-form-label">Order Type:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="order_type" name="order_type" required></select>
+            </div>
+            <label for="base" class="col-2 col-form-label">Base:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="base" name="base" required></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="program" class="col-2 col-form-label">Program:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="program" name="program" required></select>
+            </div>
+            <label for="build_phase" class="col-2 col-form-label">Build Phase:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="build_phase" name="build_phase" required></select>
+            </div>
+            <label for="suffix" class="col-2 col-form-label">Suffix:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="suffix" name="suffix" required></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="plant" class="col-2 col-form-label">Lear Plant:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="plant" name="plant" required></select>
+            </div>
+            <label for="rate_flow" class="col-2 col-form-label">Rate and Flow:</label>
+            <div class="col-2">
+                <select class="form-control" id="rate_flow" name="rate_flow" required>
+                    <option value="N">No</option><option value="Y" selected="selected" >Yes</option>
+                </select>
+            </div>
+            <label for="cust_part_no" class="col-2 col-form-label">Customer Part Number:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="cust_part_no" name="cust_part_no" required></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="warehouse" class="col-2 col-form-label">Lear Warehouse: </label>
+            <div class="col-2">
+                <input type=text class="form-control" id="warehouse" name="warehouse" required>
+            </div>
+            <label for="mrd" class="col-2 col-form-label">Customer MRD:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="mrd" name="mrd" required></select>
+            </div>
+            <label for="oem_part_no" class="col-2 col-form-label">OEM Part Number:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="oem_part_no" name="oem_part_no" required></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="car_leader" class="col-2 col-form-label">Car Leader:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="car_leader" name="car_leader" required></select>
+            </div>
+            <label for="qty_on_po" class="col-2 col-form-label">Quantity on PO:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="qty_on_po" name="qty_on_po" required></select>
+            </div>
+            <label for="description" class="col-2 col-form-label">Part Description:</label>
+            <div class="col-2">
+                <select type=text class="form-control" id="description" name="description" required></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="comments" class="col-2 col-form-label">Comments:</label>
+            <div class="col-10">
+                <textArea type=text class="form-control" id="comments" name="comments" rows="6"></textArea>
+            </div>
+        </div>
+
+
+        <div class="buttonGroup ">
+            <button type="button" class="btn btn-primary btn-sm pull-right" id="btnReset">
+            	<span class="fas fa-redo"></span> Reset
+            </button>
+            <button type="button" class="btn btn-primary btn-sm pull-right" id="btnSave">
+            	<span class="fas fa-save"></span> Save
+            </button>        
+            <button type="button" class="btn btn-primary btn-sm pull-right" id="btnCancel">
+            	<span class="fas fa-ban"></span> Cancel
+            </button>        
+        </div>    
+
+    </form>
+</div>
+

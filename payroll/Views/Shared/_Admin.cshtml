@@ -1,29 +1,22 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- ADMIN -->
     <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="Developed By" content="zetta-solutions.net">
     <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
-	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+    <title>@ViewBag.pageTitle </title>
+    <script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
     <script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
-    <script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>	
-    <script src='@Url.Content("~/")Scripts/IndexedDB-getAll-shim.js'></script>
+    <script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>	    
 	<link href='@Url.Content("~/")css/app.min.css' rel="stylesheet" />
-	
-	
-	<script src='@Url.Content("~/")Scripts/jquery-3.3.1.min.js'></script>
-    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
+	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
 	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLocalDb"))
     @{
         string userId = "";
         if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
-		 
     } 
-	 
     <script>
         var base_url = '@Url.Content("~/")';
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
@@ -31,127 +24,69 @@
     </script>
 
 	<style>
-	html{
-		right:1px;
-	}
-		
 		.ml-auto, .mx-auto {
 			margin-left: auto !important;
 			margin-right: 1.5rem;
 		}
-		.navbar-sub{
-			background-color:#06306ed4;
-			min-height: 44px !important;
-			top:0px;
-		}
-		.zGrid .zHeaders{
-			background-image: linear-gradient(to bottom, #06306ed4 0px, #06306ed4 100%);
-			
-		}
-		main {
-			position: absolute;
-			top: 44px;
-			height: calc(100vh - 60px); 
-			overflow: auto !important;
-			background: linear-gradient(to right, #243B55 40%, #141E30);
-		}
-		.pageTitle{
-			display: none;
-		}
-		.navbar-sub .nav-link {
-			padding: .1rem 1rem !important;
-			color: #fff !important;
-			font-size: .8rem;
-			font-weight: 500;
-			text-transform: uppercase;
-			margin-top: 8px;
-		}
-		.form-group {
-			margin-bottom: 1rem;
-			margin-top: 15px;
-		}
-		.form-control {
-			font-size: 0.75rem;
-		}
-		.col-form-label { 
-			color: #fff;
-		}
-		.btn-primary{
-			background: linear-gradient(to bottom, #508BD1 0px, #1D64B6 100%);
-		}
-		.dropdown-item {
-			 
-			padding: 3px !important;
-			 
-		}
-		 
-
+	
 	</style>
 
-   <!-- Bootstrap CSS -->
-     
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <link href='@Url.Content("~/")Content/zGrid.css' rel="stylesheet" />
-    <link href='@Url.Content("~/")Content/zTable.css' rel="stylesheet" />
-    <link href='@Url.Content("~/")Content/zPopup.css' rel="stylesheet" /> 
-    <link href='@Url.Content("~/")Content/vsForm.css' rel="stylesheet" />
-    <link href='@Url.Content("~/")zWindow/zWindow.css' rel="stylesheet" />
-	<link href='@Url.Content("~/")Content/style.css' rel="stylesheet" />
-	<script src='@Url.Content("~/")Scripts/vsForm.js'></script>
 </head>
-<style>
-	
-</style>
-<body>
-   <div class="progressWindow zPopup-system">
+<body id="page-top">
+    <div class="progressWindow zPopup-system">
         <div class="loadingImg"></div>
-        <div class="loadingText" >Loading...Please wait</div>
+        <div class="loadingText">Loading...Please wait</div>
     </div>
     <div class="errorWindow zPopup-system">
         Some processe(s) encountered a problem.
         <br> Please Contact System Administrator.
-    </div>    
-	
-        <nav class="navbar navbar-expand-md navbar-dark p-0"> 
-            <div class="collapse navbar-collapse" id="navbarCollapse"> 
-				<nav class="navbar-sub navbar navbar-expand-md fixed-top navbar-dark shadow-sm">
-					<button class="navbar-toggler p-1 border-0" type="button" data-toggle="collapse"
-						data-target="#navbarSubCollapse" aria-controls="navbarSubCollapse" aria-expanded="false"
-						aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button> 
-					<div class="collapse navbar-collapse" id="navbarSubCollapse">
-						<div id="menuPanel"> </div>	
-					</div>
-					<ul class="navbar-nav ml-auto">
-						@{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }  
-						<li class="">
-							<div class="form-inline my-1">
-								<div class="input-group input-group-sm mx-md-2">
-									<input type="text" class="form-control" id="search_criteria" placeholder="Search">
-									<div class="input-group-append">
-										<button class="btn btn-light" type="button" id="btn-search"><i class="fas fa-search"></i></button>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li class=" dropdown ">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fas fa-user-circle"></i> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
-							</a>
-							<div class="dropdown-menu dropdown-menu-right shadow-sm px-3 " aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="@Url.Content("~/")page/signin">Log Out</a>
-								<a class="dropdown-item" href="@Url.Content("~/")page/docs">User Manual</a>
-							</div>
-						</li>
-					</ul>
-				</nav> 
-            </div>
-        </nav> 
-	 
+    </div>
+	<!-- -----------------------------------MAIN MENU ------------------------------------- -->
+	<nav class="navbar-main navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<div class="navbar-expand">
+			<ul class="navbar-nav m-0">
+				<li class="nav-item dropdown no-arrow">
+					<a class="dropdown-toggle" href="javascript:void(0);" onclick="toggleMenu();"   >
+						<button class="btn btn-link btn-sm text-white">
+							<i class="fas fa-bars"></i>
+						</button>
+					</a>
+					<div id="topMainMenu" class="tt-menu dropdown-menu dropdown-menu-left" > </div>
+				</li>
+			</ul>
+		</div>
+        <a class="navbar-brand" href='@Url.Content("~/")'><i class="ttool lear-logo"></i> Material Database</a>
+        <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto mr-0">
+				@{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow-sm px-3" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item mb-1" href="@Url.Content("~/")page/name/signin">Log Out</a>
+                        <a class="dropdown-item mb-1" href="@Url.Content("~/")page/name/docs">User Manual</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
 	<!--------------------------------------- SUB MENU -------------------------------------------------------->
-   
+    <nav class="navbar-sub navbar navbar-expand-md fixed-top navbar-dark shadow-sm">
+        <button class="navbar-toggler p-1 border-0" type="button" data-toggle="collapse"
+            data-target="#navbarSubCollapse" aria-controls="navbarSubCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+       <!--  <div class="collapse navbar-collapse" id="navbarSubCollapse">
+            <div id="menuPanel"> </div>	
+        </div> -->
+    </nav>
 	
     
 
@@ -178,19 +113,6 @@
 @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
 <div class="alert alert-success zPopup-system">
     <p>Data has been saved.</p>
-</div> 
-    
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src='@Url.Content("~/")Scripts/popper.min.js'></script>
-<script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
-<script src='@Url.Content("~/")Scripts/velocity.min.js'></script>
-<script src='@Url.Content("~/")Scripts/velocity.ui.min.js'></script>
-<script src='@Url.Content("~/")zWindow/zWindow.js'></script>
-
-<script>
-    // Main ui resizing
-    $("#mainDiv").height($(window).outerHeight());
-    $("#main-content, #menu-nav").height($(window).outerHeight() - ($("nav").outerHeight() + 15));
-</script>
+</div>
 </body>
 </html>
