@@ -580,7 +580,7 @@ function displayRecords(user_id){
     $("#grid").dataBind({
          url    : execURL + "users_sel @searchOption='"+ gSearchOption +"',@searchValue='"+ gSearchValue +"',@role_id='"+ gRoleId +"'"
          //url    : procURL + "users_sel @user_id=" + (typeof user_id !==ud ? user_id : "") + (isNew ? ",@is_new='Y'" : "")
- 	    ,width          : $(document).width()-15
+ 	    //,width          : $(document).width()-15
 	    ,height         : $(document).height()-255 
 	    ,selectorType   : "checkbox"
        // ,blankRowsLimit : 5
@@ -766,4 +766,4 @@ function setEditedRow(){
     $(".zDdlBtn").on("click", function(){
         $(this).closest(".zRow").find("#is_edited").val("Y");
     });
-}       
+}        

@@ -69,7 +69,7 @@ function displayRecords(){
     var cb = bs({name:"cbFilter1",type:"checkbox"});
          $("#grid").dataBind({
 	     url            : execURL + "menus_sel"
-	   // ,width          : $(document).width() - 200
+	    ,width          : $(document).width() - 310
 	    ,height         : $(document).height() - 180
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit:5
@@ -82,9 +82,9 @@ function displayRecords(){
                             }
             }	 
         		,{text  : "Menu Name"                , name  : "pmenu_id"                   , type  : "select"        , width : 180       , style : "text-align:left;"}
-        		,{text  : "Parent Menu"              , name  : "menu_name"                  , type  : "input"         , width : 220       , style : "text-align:left;"}
-        		,{text  : "Page Name"                , name  : "page_id"                    , type  : "select"        , width : 220       , style : "text-align:left;"}
-        		,{text  : "Parameters"               , name  : "parameters"                 , type  : "input"         , width : 200       , style : "text-align:left;"}
+        		,{text  : "Parent Menu"              , name  : "menu_name"                  , type  : "input"         , width : 200       , style : "text-align:left;"}
+        		,{text  : "Page Name"                , name  : "page_id"                    , type  : "select"        , width : 200       , style : "text-align:left;"}
+        		,{text  : "Parameters"               , name  : "parameters"                 , type  : "input"         , width : 120       , style : "text-align:left;"}
         		,{text  : "Seq #"                    , name  : "seq_no"                     , type  : "input"         , width : 80        , style : "text-align:left;"}
         		,{text  : "Default"                  , name  : "is_default"                 , type  : "yesno"         , width : 80        , style : "text-align:left;"}
         		,{text  : "Process"                  , width : 80                           , style : "text-align:center;"      
@@ -114,4 +114,4 @@ $("#btnDelete").click(function(){
                       }
     });      
 });
-               
+                  
