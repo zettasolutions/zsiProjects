@@ -172,15 +172,15 @@
     }
     .zRows #table {
       position: relative;
+      .zRow.even{
+        background-color: #e3e4e5;
+      }
     }
   }
-  
+
   .zRows {
     .zRow {
       transition: background 0.2s ease-in;
-      &:nth-child(even) {
-        background-color: #e3e4e5;
-      }
       &:hover {
         background-color: #b8b8b8;
         color: #000;
