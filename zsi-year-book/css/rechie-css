@@ -1,0 +1,25 @@
+ 
+	.page-content-wrapper{
+		background: linear-gradient(to right, #243B55 40%, #141E30); 
+	}
+	.p-color-white{
+		color: white;
+	}
+	.bg-brand-dark{
+		background-color: #f1efef;
+		color: #160202;
+	}
+	#btnLogIn{
+		 background: linear-gradient(to left, #2F80ED 40%, #56CCF2);
+	}
+	.btn-lear {
+		color: #fff; 
+		border-color: black;
+	}
+	.color-red{
+		color: #126eb8b5;
+	}
+	.color-red:hover{
+		color: white;
+	}
+ 

@@ -1,0 +1,100 @@
+
+	.page-content-wrapper{
+		background: linear-gradient(to right, #243B55 40%, #141E30); 
+	}
+	.p-color-white{
+		color: white;
+	}
+	.bg-brand-dark{
+		background-color: #f1efef;
+		color: #160202;
+	}
+	#btnLogIn{
+		 background: linear-gradient(to left, #2F80ED 40%, #56CCF2);
+		 border-color: black;
+	}
+	.btn-lear {
+		color: #fff; 
+		border-color: black;
+	}
+	.color-red{
+		color: #126eb8b5;
+	}
+	.color-red:hover{
+		color: white;
+	}
+	
+	
+	body{
+			padding: 0;
+			margin: 0;
+		}
+		.bg-brand-red{
+			background-color: #ED1806;
+		}
+		.bg-brand-dark{
+			background-color: #212121;
+			color: #ffffff;
+		}
+		.bg-color-red{
+			color: #212121;
+		}
+		.mdb{
+			font-family: 'zsi-trendtool';
+			speak: none;
+			font-style: normal;
+			font-weight: normal;
+			font-variant: normal;
+			text-transform: none;
+			line-height: 1;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		} 
+		
+		.lear-logo {
+			color: #FFFFFF;
+			font-size: 1.5rem;
+			margin-left: 20px;
+			margin-right: 10px;
+			position: relative;
+			top: 3px;
+		}
+		.btn-lear {
+			color: #fff;
+			background-color: #F11716;
+			border-color: #F11716;
+		}
+		.btn:hover {
+			color: #bdbbbb;;
+			text-decoration: none;
+			
+		}
+	
+		.col-form-label {
+			color: #666666;
+		}
+		 .iconEdit{
+			font-size: 12pt;
+			color: #3878C4;
+		 }
+		 .zGrid .zHeaders { 
+			font-size: .8rem;
+			
+		}
+		.zHeaders .title .text input[type="checkbox"], .zHeaders .title .text input[type="radio"] {    
+			top: 5px;    
+		} 
+		 
+		.zGrid .zHeaders { 
+			font-size: 0.8rem;
+			background: linear-gradient(to right, rgb(75, 133, 199) 40%, rgb(17, 75, 181)) !important;
+			color: #fff;
+			font-weight: bold;
+			overflow: hidden;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		} 
+		

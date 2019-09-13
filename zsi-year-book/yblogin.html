@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- HOME -->
+    <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
+    
+    <title>YEAR BOOK | Log in</title>
+    
+    <script src="Scripts/jquery-1.12.0.min.js"></script>
+    <script src="Scripts/zsiLib.js"></script>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="Content/bootstrap.css">
+	<link rel="stylesheet" href="Content/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">    
+	
+	<style>
+    /* ------------------------------------ SPECIFIC STYLES ------------------------------------ */
+
+    #loginDiv {
+        width:300px;
+    }
+</style>
+</head>
+<body>
+
+<div id="mainDiv" class="container-fluid z-bg z-txt-white">
+    <div class="row no-gutters">
+        <div id="loginDiv" class="col-12 z-center">
+            <form id="frmLogin" method="post" action="@Url.Content("~/")account/validate">
+                <h3 id="sysTitle" class="text-center pb-2">Sotero B. Cabahug Forum For Learning</h3>
+                <div id="loginForm" class="row no-gutters">
+                    <div class="col-12 z-form-con has-icon">
+                        <i class="fas fa-user fa-lg"></i>
+                        <input id="username" type="text" name="username" placeholder="Username" class="z-form">
+                    </div>
+                    <div class="col-12 z-form-con has-icon">
+                        <i class="fas fa-lock fa-lg"></i>
+                        <input id="password" type="password" name="password" placeholder="Password" class="z-form">
+                    </div>
+                    <div class="col-12 z-form-con">
+                        <a href="../yearbook2/yearbook/index.html" id="" type="submit" class="btn btn-primary z-form">Sign in</a>
+                    </div>
+                </div>
+				<div id="signUpLink" class="col-12">
+					<p class="text-right" style="font-size:0.8rem;">Don't have an account? <a href="#">Click here</a> to Sign up.</p>
+				</div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="fixed-bottom">
+        Powered By <a href="http://zetta-solutions.net/">ZettaSolutions, Inc. </a>
+    </footer>
+</div>
+
+<script>
+    $("#mainDiv").height($(window).outerHeight());
+    
+    $(document).ready(function() {
+        $("#sysTitle").velocity('transition.slideUpBigIn');
+        $(".z-form-con").velocity("transition.slideLeftIn", { stagger: 250 });
+		$("#signUpLink").velocity("transition.fadeIn", { duration : 2000 });
+		
+        var _msg = zsi.getUrlParamValue("access");
+        var _username = readCookie("username");
+       
+        if (_username) {
+            if (_msg !== "") {
+                $("#username").val(_username);
+                $("#password").val( readCookie("userpwd"));
+                $("#isremember").prop('checked',true);
+                $("#frmLogin").submit();
+            }
+            else {
+                clearCookies();
+            }
+        }
+        else {
+            if (_msg) alert( unescape(_msg) + " Please try again.");
+        }
+
+		$("#frmLogin").submit(function () {
+			if ($("#username").val() === "") { alert("Please enter username."); return false; }
+			if ($("#password").val() === "") { alert("Please enter password."); return false; }
+			checkRememberSignin();
+		});
+
+		function clearCookies(){
+			createCookie("username","",0);
+			createCookie("userpwd","",0);
+			$("#isremember").prop('checked',false);
+		}
+
+		function checkRememberSignin(){
+			if ( $("#isremember").is(':checked') ) {
+				createCookie("username",$("#username").val(),1);
+				createCookie("userpwd",$("#password").val(),1);
+			}
+			else { 
+				clearCookies();
+			}
+		}
+
+		function createCookie(name,value,days) {
+			var _expires;
+			if (days) {
+				var _date = new Date();
+				_date.setTime(_date.getTime() + (days*24*60*60*1000));
+				_expires = "; expires=" + _date.toGMTString();
+			}
+			else {
+				_expires = "";
+			}
+			document.cookie = name + "=" + value + _expires + "; path=/";
+		}
+
+		function readCookie(name) {
+			var _nameEQ = name + "=";
+			var _ca = document.cookie.split(';');
+			for (var i = 0; i < _ca.length; i++) {
+				var _c = _ca[i];
+				while (_c.charAt(0) == ' ') _c = _c.substring(1, _c.length);
+				if (_c.indexOf(_nameEQ) === 0) return _c.substring(_nameEQ.length, _c.length);
+			}
+			return null;
+		}
+	});
+</script>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src='Scripts/popper.min.js'></script>
+    <script src='Scripts/bootstrap.min.js'></script>
+    <script src='Scripts/velocity.min.js'></script>
+    <script src='Scripts/velocity.ui.min.js'></script>
+    <script src='Scripts/forms.js'></script>
+    
+</body>
+</html>
+
+
