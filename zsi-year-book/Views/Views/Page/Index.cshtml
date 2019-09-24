@@ -4,26 +4,27 @@
 }
 <div class="pageTitle">@ViewBag.Title </div>
 	
-	<div class="row">
-		<label for="filter_name" class="col-md-2 col-sm-6 col-12 col-form-label">Search Page Name:</label>
-		<div class="col-md-3 col-sm-6 col-12">
-			<input type="search" name="filter_name" id="filter_name"col-md-7 col-xs-12 class="form-control form-control-sm p-2">
-		</div>		
+<div class="row">
+	<label for="filter_name" class="col-md-2 col-sm-6 col-12 col-form-label">Search Page Name:</label>
+	<div class="col-md-3 col-sm-6 col-12">
+		<input type="search" name="filter_name" id="filter_name"col-md-7 col-xs-12 class="form-control form-control-sm p-2">
+	</div>		
+</div>
+
+<div class="row">
+	<div class="col-md-8 col-sm-12 col-12">		
+	 <form method="post" id="frm"><div id="grid" class="zGrid"></div></form>
 	</div>
-	<div class="clearfix"></div>
-	<div class="row col-md-12 col-sm-12 col-xs-12">
-		<div class="col-md-8 col-sm-12 col-12">		
-		 <form method="post" id="frm"><div id="grid" class="zGrid"></div></form>
-		</div>
-		<div class="button-group col-md-12 col-sm-12 col-12">
-			<button type="button" class="btn btn-primary btn-sm" id="btnSave">
-				<i class="fas fa-save"></i> Save
-			</button>
-			<button type="button" class="btn btn-primary btn-sm" id="btnDelete">
-				<i class="fas fa-trash-alt"></i> Delete
-			</button>
-		</div>
+	<div class="button-group col-md-12 col-sm-12 col-12">
+		<button type="button" class="btn btn-primary btn-sm" id="btnSave">
+			<i class="fas fa-save"></i> Save
+		</button>
+		<button type="button" class="btn btn-primary btn-sm" id="btnDelete">
+			<i class="fas fa-trash-alt"></i> Delete
+		</button>
 	</div>
+</div>
+
 <style>
 
  .iconEdit{

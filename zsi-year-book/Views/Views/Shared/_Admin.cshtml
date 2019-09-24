@@ -1,34 +1,34 @@
-﻿<!DOCTYPE html>
+ 
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="Developed By" content="zetta-solutions.net">
+    <meta name="Developed By" content="zetta-solutions.net">
     <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
-    <title>@ViewBag.pageTitle - Material Databased </title>
-	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
-	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
-	<script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>
-	
+    <title>@ViewBag.pageTitle - ZSI Year Book</title>
+    <script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
+    <script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>
+    
    <!-- Call App Mode on ios devices -->
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<!-- Remove Tap Highlight on Windows Phone IE -->
-	<meta name="msapplication-tap-highlight" content="no">
-	<!-- base css -->
-	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/vendors.bundle.css'>
-	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/app.bundle.css'>
-	
-	<!-- Place favicon.ico in the root directory --
-	<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">-->
-	<link rel="mask-icon" href='@Url.Content("~/")img/favicon/safari-pinned-tab.svg' color="#5bbad5">
-	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/reactions/reactions.css'>
-	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/fullcalendar/fullcalendar.bundle.css'>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- base css -->
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/vendors.bundle.css'>
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/app.bundle.css'>
+	<!-- <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/rechie-css.css'> -->
+    <!-- Place favicon.ico in the root directory --
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">-->
+    <link rel="mask-icon" href='@Url.Content("~/")img/favicon/safari-pinned-tab.svg' color="#5bbad5">
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/reactions/reactions.css'>
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/fullcalendar/fullcalendar.bundle.css'>
     <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/jqvmap/jqvmap.bundle.css'>
-    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/select2/select2.bundle.css'>
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
-	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLocalDb"))
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLocalDb"))
     @{
         string userId = "";
         if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
@@ -39,24 +39,24 @@
         @userId
     </script>
  
-	<style>
-		.ml-auto, .mx-auto {
-			margin-left: auto !important;
-			margin-right: 1.5rem;
-		}
-		.debugPanel {
-		background-color: #fff;
-		border: 0.1em solid #b7b2b2;
-		border-radius: 0 0 3px 3px;
-		font-size: 8pt;
-		height: 20px;
-		margin-left: 10px;
-		padding-left: 10px;
-		padding-right: 10px;
-		position: fixed;
-		right: 16px;
-		bottom: 2px;
-		z-index: 1000;
+    <style>
+        .ml-auto, .mx-auto {
+            margin-left: auto !important;
+            margin-right: 1.5rem;
+        }
+        .debugPanel {
+        background-color: #fff;
+        border: 0.1em solid #b7b2b2;
+        border-radius: 0 0 3px 3px;
+        font-size: 8pt;
+        height: 20px;
+        margin-left: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: fixed;
+        right: 16px;
+        bottom: 2px;
+        z-index: 1000;
     }
     .page-content{
         background-color: #f2f2f2;
@@ -64,15 +64,13 @@
     .hide{
         display:none;
     }
-	.modal-dialog.modal-full {
+    .modal-dialog.modal-full {
     max-width: none;
 }
-.form-control {    
-		padding: unset;   
-	}	
-	
-	
-	</style>
+    .form-control {    
+        padding: unset;   
+    }
+    </style>
 </head>
 <body class="mod-bg-1 ">   
     <!--<div class="progressWindow zPopup-system">
@@ -83,12 +81,12 @@
         Some processe(s) encountered a problem.
         <br> Please Contact System Administrator.
     </div>
-	
-	<!-- DOC: script to save and load page settings -->
+    
+    <!-- DOC: script to save and load page settings -->
         <script>
             /**
-             *	This script should be placed right after the body tag for fast execution 
-             *	Note: the script is written in pure javascript and does not depend on thirdparty library
+             *  This script should be placed right after the body tag for fast execution 
+             *  Note: the script is written in pure javascript and does not depend on thirdparty library
              **/
             'use strict';
 
@@ -144,10 +142,10 @@
             }
 
         </script>
-	
-	
+    
+    
 
-	     <!--BEGIN Page Wrapper -->
+         <!--BEGIN Page Wrapper -->
         <div class="page-wrapper">
             <div class="page-inner">
                 <!-- BEGIN Left Aside -->
@@ -155,7 +153,7 @@
                     <div class="page-logo">
                         <a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
                             <img src='@Url.Content("~/")img/logo.png' alt="Lear Logo" aria-roledescription="logo">
-                            <span class="page-logo-text mr-1">Material Database</span>
+                            <span class="page-logo-text mr-1">ZSI Year Book</span>
                             <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
                             <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
                         </a>
@@ -175,17 +173,19 @@
                             <div class="info-card-text">
                                 <a href="#" class="d-flex align-items-center text-white">
                                     <span class="text-truncate text-truncate-sm d-inline-block">
-                                        Dr. @zsi.web.SessionHandler.CurrentUser.userFullName.ToUpper()
+                                        Dr. Codex Lantern
                                     </span>
                                 </a>
-                                <span class="d-inline-block text-truncate text-truncate-sm">Cebu City</span>
+                                <span class="d-inline-block text-truncate text-truncate-sm">Toronto, Canada</span>
                             </div>
                             <img src='@Url.Content("~/")img/card-backgrounds/cover-2-lg.png' class="cover" alt="cover">
                             <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
                                 <i class="fal fa-angle-down"></i>
                             </a>
                         </div>
-                        <ul id="js-nav-menu" class="nav-menu"></ul>
+                        <ul id="js-nav-menu" class="nav-menu">
+                            
+                        </ul>
                         <div class="filter-message js-filter-message bg-success-600"></div>
                     </nav>
                     <!-- END PRIMARY NAVIGATION -->
@@ -253,7 +253,7 @@
                         </div>
                         <div class="search">
                             <form class="app-forms hidden-xs-down" role="search" action="page_search.html" autocomplete="off">
-                                <input type="text" id="search-field" placeholder="Search for anything" class="form-control" tabindex="1">
+                                <input type="text" id="search-field" name="filter_name" placeholder="Search for anything" class="form-control" tabindex="1">
                                 <a href="#" onclick="return false;" class="btn-danger btn-search-close js-waves-off d-none" data-action="toggle" data-class="mobile-search-on">
                                     <i class="fal fa-times"></i>
                                 </a>
@@ -807,8 +807,8 @@
                                 <a href="#" data-toggle="dropdown" title="drlantern@gotbootstrap.com" class="header-icon d-flex align-items-center justify-content-center ml-2">
                                     <img src="@Url.Content("~/")img/demo/avatars/avatar-admin.png" class="profile-image rounded-circle" alt="Dr. Codex Lantern">
                                     <!-- you can also add username next to the avatar with the codes below:
-									<span class="ml-1 mr-1 text-truncate text-truncate-header hidden-xs-down">Me</span>
-									<i class="ni ni-chevron-down hidden-xs-down"></i> -->
+                                    <span class="ml-1 mr-1 text-truncate text-truncate-header hidden-xs-down">Me</span>
+                                    <i class="ni ni-chevron-down hidden-xs-down"></i> -->
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
                                     <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
@@ -817,7 +817,7 @@
                                                 <img src="@Url.Content("~/")img/demo/avatars/avatar-admin.png" class="rounded-circle profile-image" alt="Dr. Codex Lantern">
                                             </span>
                                             <div class="info-card-text">
-                                                <div class="fs-lg text-truncate text-truncate-lg">@zsi.web.SessionHandler.CurrentUser.userFullName.ToUpper()</div>
+                                                <div class="fs-lg text-truncate text-truncate-lg">@zsi.web.SessionHandler.CurrentUser.userName.ToUpper()</div>
                                                 <span class="text-truncate text-truncate-md opacity-80">(@role)</span>
                                             </div>
                                         </div>
@@ -862,11 +862,11 @@
                     </header>
                     <!-- END Page Header -->
                     <!-- BEGIN Page Content -->
-					 <!-- the #js-page-content id is needed for some plugins to initialize -->
-					@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))
-					<main id="js-page-content" role="main" class="page-content">							
-						@RenderBody()
-					</main>
+                     <!-- the #js-page-content id is needed for some plugins to initialize -->
+                    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))
+                    <main id="js-page-content" role="main" class="page-content">                            
+                        @RenderBody()
+                    </main>
 <!-- this overlay is activated only when mobile menu is triggered -->
                     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div> <!-- END Page Content -->
                     <!-- BEGIN Page Footer 
@@ -954,7 +954,7 @@
             <a href="#" class="menu-item btn" data-action="app-print" data-toggle="tooltip" data-placement="left" title="Print page">
                 <i class="fal fa-print"></i>
             </a>
-           <!--  <a href="#" class="menu-item btn" data-action="app-voice" data-toggle="tooltip" data-placement="left" title="Voice command">
+            <!-- <a href="#" class="menu-item btn" data-action="app-voice" data-toggle="tooltip" data-placement="left" title="Voice command">
                 <i class="fal fa-microphone"></i>
             </a> -->
         </nav>
@@ -1496,18 +1496,18 @@
         </div> <!-- END Page Settings -->
 
 <!-- base vendor bundle: 
-			 DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
-						+ pace.js (recommended)
-						+ jquery.js (core)
-						+ jquery-ui-cust.js (core)
-						+ popper.js (core)
-						+ bootstrap.js (core)
-						+ slimscroll.js (extension)
-						+ app.navigation.js (core)
-						+ ba-throttle-debounce.js (core)
-						+ waves.js (extension)
-						+ smartpanels.js (extension)
-						+ src/../jquery-snippets.js (core) -->
+             DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
+                        + pace.js (recommended)
+                        + jquery.js (core)
+                        + jquery-ui-cust.js (core)
+                        + popper.js (core)
+                        + bootstrap.js (core)
+                        + slimscroll.js (extension)
+                        + app.navigation.js (core)
+                        + ba-throttle-debounce.js (core)
+                        + waves.js (extension)
+                        + smartpanels.js (extension)
+                        + src/../jquery-snippets.js (core) -->
         <script src='@Url.Content("~/")js/vendors.bundle.js'></script>
         <script src='@Url.Content("~/")js/app.bundle.js'></script>
         <script type="text/javascript">
@@ -1869,11 +1869,11 @@
                     onRegionClick: function(element, code, region)
                     {
                         /*var message = 'You clicked "'
-						+ region
-						+ '" which has the code: '
-						+ code.toLowerCase();
-			 
-					console.log(message);*/
+                        + region
+                        + '" which has the code: '
+                        + code.toLowerCase();
+             
+                    console.log(message);*/
 
                         var randomNumber = Math.floor(Math.random() * 10000000);
                         var arrow;
@@ -2159,23 +2159,30 @@
             });
 
         </script>
-			@{
-		if (Session["zsi_login"].ToString() == "Y")
-		{
-		<div class='debugPanel noprint'>
-			  <a href='@Url.Content("~/")pagetemplate/source/@ViewBag.pageName' target="_blank">Edit Page Template</a>
-			| <a href='@Url.Content("~/")javascript/source/@ViewBag.pageName' target="_blank">Edit Javascript</a>
-			
-		</div>
-		}
-	}
+   
 	
-	
-	
-<script src='@Url.Content("~/")js/formplugins/select2/select2.bundle.js'></script>
-<script src='@Url.Content("~/")Scripts/popper.min.js'></script>
+
+@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))
+<!-- <div class="container-fluid page"> -->
+ 
+
+
+@{
+    if (Session["zsi_login"].ToString() == "Y")
+    {
+
+    <div class='debugPanel noprint'>     
+          <a href='@Url.Content("~/")pagetemplate/source/@ViewBag.pageName' target="_blank">Edit Page Template</a> 
+        | <a href='@Url.Content("~/")javascript/source/@ViewBag.pageName' target="_blank">Edit Javascript</a> 
+        
+    </div> 
+    }
+ }
+
 <script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
 @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
-
-    </body>
+<div class="alert alert-success zPopup-system">
+    <p>Data has been saved.</p>
+</div>
+</body>
 </html>
