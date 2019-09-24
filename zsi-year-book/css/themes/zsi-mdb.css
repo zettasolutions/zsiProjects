@@ -340,7 +340,7 @@ html body {
   color: #666666; }
   .header-icon:not(.btn) > [class*='fa-']:first-child,
   .header-icon:not(.btn) > .ni:first-child {
-    color: #000000; }
+    color: #ff2727 ; }
   .header-icon:not(.btn):hover > [class*='fa-']:only-child,
   .header-icon:not(.btn):hover > .ni {
     color: #404040; }
@@ -461,6 +461,11 @@ html body {
   background-color: rgba(0, 0, 0, 0.1); }
   .nav-menu li > ul li a {
     color: #575757; }
+    .nav-menu li ul li a > [class*='fa-']{
+        margin-right: 0.25rem;
+        font-size: 1.125rem;
+        width: 1.75rem;
+        color: #f30000 !important; }
     .nav-menu li > ul li a > [class*='fa-'],
     .nav-menu li > ul li a > .ni {
       color: #454545; }
@@ -545,7 +550,7 @@ html body {
               box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.13); }
       .nav-function-top .page-header .header-icon:not(.btn) > [class*='fa-']:first-child,
       .nav-function-top .page-header .header-icon:not(.btn) > .ni:first-child {
-        color: #1a1a1a; }
+        color: #ff2727; }
         .nav-function-top .page-header .header-icon:not(.btn) > [class*='fa-']:first-child:hover,
         .nav-function-top .page-header .header-icon:not(.btn) > .ni:first-child:hover {
           color: #333333; }
@@ -2375,6 +2380,8 @@ a.text-dark:hover, a.text-dark:focus {
         font-size: 1.125rem;
         width: 1.75rem;
         color: #f30000 !important; }
+        .nav-menu ul li a > [class*='fa-']{
+        color: #f30000 !important; }
       .nav-menu li a > .nav-link-text {
         -webkit-box-flex: 1;
             -ms-flex: 1;
@@ -2414,6 +2421,10 @@ a.text-dark:hover, a.text-dark:focus {
       .nav-menu li > ul li a {
         color: #ccb2b2;
         padding: 0.8125rem 2rem 0.8125rem 4rem; }
+        .nav-menu li a i{
+          color: #f30000 !important;}
+        .page-sidebar .primary-nav .nav-menu > li a i {
+          color: #f30000 !important; }
         .nav-menu li > ul li a b.collapse-sign > [class*='fa-'],
         .nav-menu li > ul li a b.collapse-sign > .ni {
           font-size: inherit-2; }

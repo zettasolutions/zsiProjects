@@ -6129,10 +6129,8 @@ input[type="checkbox"]:checked + .custom-control-label {
     background: #7976b3; }
   .settings-panel .expanded.theme-colors #myapp-13 {
     background: #55ce5f; }
-  .settings-panel .expanded.theme-colors #myapp-14 {
-    background: #5c4581; }
-  .settings-panel .expanded.theme-colors #myapp-15 {
-    background: #5c4581; }
+  .settings-panel .expanded.theme-colors #zsi-mdb {
+    background: #000000; }
 
 .settings-panel:first-child h5 {
   margin-top: 0;
@@ -7991,12 +7989,12 @@ input[type='radio'] {
 
 .zGrid .zRows #table {
   position: relative; }
+  .zGrid .zRows #table .zRow.even {
+    background-color: #e3e4e5; }
 
 .zRows .zRow {
   -webkit-transition: background 0.2s ease-in;
   transition: background 0.2s ease-in; }
-  .zRows .zRow:nth-child(even) {
-    background-color: #e3e4e5; }
   .zRows .zRow:hover {
     background-color: #b8b8b8;
     color: #000; }

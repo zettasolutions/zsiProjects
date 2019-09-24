@@ -1161,58 +1161,6 @@ code {
       border: 1px solid #ffb20e;
       color: #1b1b1b; } }
 
-.settings-panel .expanded.theme-colors {
-  display: block;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  border: 0;
-  background: transparent;
-  /*@include theme-button-color ($theme-1-fusion, $theme-1-primary, $theme-1-info, $theme-1-success, $theme-1-warning, $theme-1-danger)*/ }
-  .settings-panel .expanded.theme-colors > ul {
-    height: auto; }
-    .settings-panel .expanded.theme-colors > ul > li [data-action] {
-      width: 36px;
-      height: 36px;
-      margin-right: 4px;
-      margin-bottom: 4px;
-      border-radius: 4px; }
-      .settings-panel .expanded.theme-colors > ul > li [data-action]:hover {
-        opacity: 1; }
-    .settings-panel .expanded.theme-colors > ul:last-child {
-      margin-right: 0; }
-  .settings-panel .expanded.theme-colors #myapp-0 {
-    background: #886ab5;
-    -webkit-box-shadow: inset 0 0 0 3px #2ba1ff;
-            box-shadow: inset 0 0 0 3px #2ba1ff; }
-  .settings-panel .expanded.theme-colors #myapp-1 {
-    background: #b56a9f; }
-  .settings-panel .expanded.theme-colors #myapp-2 {
-    background: #9fcb3d; }
-  .settings-panel .expanded.theme-colors #myapp-3 {
-    background: #4679cc; }
-  .settings-panel .expanded.theme-colors #myapp-4 {
-    background: #2198F3; }
-  .settings-panel .expanded.theme-colors #myapp-5 {
-    background: #6ab5b4; }
-  .settings-panel .expanded.theme-colors #myapp-6 {
-    background: #dd5293; }
-  .settings-panel .expanded.theme-colors #myapp-7 {
-    background: #868e96; }
-  .settings-panel .expanded.theme-colors #myapp-8 {
-    background: #7c91df; }
-  .settings-panel .expanded.theme-colors #myapp-9 {
-    background: #e59c6c; }
-  .settings-panel .expanded.theme-colors #myapp-10 {
-    background: #778c85; }
-  .settings-panel .expanded.theme-colors #myapp-11 {
-    background: #a2b077; }
-  .settings-panel .expanded.theme-colors #myapp-12 {
-    background: #7976b3; }
-  .settings-panel .expanded.theme-colors #myapp-13 {
-    background: #55ce5f; }
-  .settings-panel .expanded.theme-colors #zsi-mdb {
-    background: #000000 !important; }
-
 /* Hierarchical Navigation */
 .mod-nav-link:not(.nav-function-top):not(.nav-function-minify):not(.mod-hide-nav-icons) ul.nav-menu:not(.nav-menu-compact) > li > ul {
   /* addressing all second, third children */ }
