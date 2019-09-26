@@ -26,7 +26,7 @@
 
 					>[class*='fa-'],
 					>.#{$cust-icon-prefix} {
-					    color: $nav-icon-hover-color;
+					    color: $nav-icon-hover-color !important;
 					}
 
 				}
@@ -64,7 +64,7 @@
 			}
 
 			&:hover {
-				@include text-contrast(rgba(lighten($nav-base-color, 1%), (80/100)))
+				@include text-contrast(rgba(lighten($nav-base-color, 1%), (80/100)));
 				background-color: rgba($black, 0.1);
 
 				.badge {
@@ -122,16 +122,20 @@
 						> .nav-link-text {
 							>[class*='fa-'],
 							>.#{$cust-icon-prefix} {
-							    color:$nav-icon-hover-color;
+							    color: darken($nav-link-color, 10%);
 							}
 						}
+					}
+
+					i {
+						color: darken($nav-link-color, 5%);
 					}
 				}
 
 				&.active {
 					
 					> a {
-						@include text-contrast(rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)))
+						@include text-contrast(rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)));
 						background-color:transparent;
 
 						> .nav-link-text {
@@ -145,7 +149,7 @@
 							> .nav-link-text {
 								>[class*='fa-'],
 								>.#{$cust-icon-prefix} {
-								    color:$nav-icon-hover-color;
+									color: darken($nav-link-color, 10%) !important;
 								}
 							}			
 						}
@@ -166,8 +170,17 @@
 						a {
 							color: darken($nav-link-color, 7%);
 							
+							i {
+								color: darken($nav-link-color, 7%);
+							}
+
 							&:hover {
-								@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)) )
+								@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)) );
+								
+								i {
+									color: darken($nav-link-color, 10%);
+								}
+								
 							}
 
 							> .badge {

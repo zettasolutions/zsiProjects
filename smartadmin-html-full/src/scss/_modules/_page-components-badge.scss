@@ -1,7 +1,7 @@
 .badge.badge-icon {
 	position: absolute;
 	display: inline-block;
-	background-color: $nav-badge-bg-color;
+	background-color: #000000;
 	color: $nav-badge-color;	
 	@include box-shadow(0 0 0 1px $header-bg);
 	cursor: default;

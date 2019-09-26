@@ -1,6 +1,6 @@
 /* #THEME COLOR (variable overrides)
 ========================================================================== */
-$color-primary:					red;
+$color-primary:	#000000 !default;
 
 /* #GLOBAL IMPORTS
 ========================================================================== */
@@ -11,8 +11,8 @@ $color-primary:					red;
 #myapp-0 {
 	box-shadow: none !important;
 }
-#myapp-2 {
-	box-shadow: 0 0 0 3px #000000;
+#zsi-mdb {
+	box-shadow: 0 0 0 3px #ff0000;
 }
 
 %nav-bg {

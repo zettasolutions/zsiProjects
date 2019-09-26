@@ -93,7 +93,7 @@ $nav-function-top-menu-item-bg: $primary-500;
 
 			.header-icon:not(.btn) > [class*='fa-']:first-child, 
 			.header-icon:not(.btn) > .ni:first-child {
-				color:  lighten($header-link-color, 10%);
+				color:  rgb(255, 0, 0);
 
 				&:hover {
 					color:  lighten($header-link-color, 20%);
@@ -218,7 +218,7 @@ $nav-function-top-menu-item-bg: $primary-500;
 								display: flex !important;					
 								align-items: center;
 								justify-content: left;
-								color: inherit;
+								color: rgb(255, 0, 0);
 							}
 
 							> .nav-link-text {
@@ -275,6 +275,10 @@ $nav-function-top-menu-item-bg: $primary-500;
 						a {
 							font-size: .9rem;
 							color: $nav-background;
+
+							i {
+								color: rgb(245, 0, 0);
+							}
 						}
 
 						> ul {
@@ -314,7 +318,12 @@ $nav-function-top-menu-item-bg: $primary-500;
 										}
 									}
 
+									&:hover {
 
+										i {
+											color: rgb(90, 0, 0);
+										}
+									}
 								}
 
 								ul {

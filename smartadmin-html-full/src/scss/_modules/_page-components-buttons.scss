@@ -88,8 +88,8 @@
 	@extend %header-btn;
 
 	&[data-class='mobile-nav-on'] {
-		border-color: $danger-700;
-		@include gradient-img($start: $danger-600,$stop: $danger-800);
+		border-color: $primary-400;
+		@include gradient-img($start: $primary-400,$stop: $primary-400);
 		color:$white;
 		width: $header-btn-width + 0.625rem;
 	}
