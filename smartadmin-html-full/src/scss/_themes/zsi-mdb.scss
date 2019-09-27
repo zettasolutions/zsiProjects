@@ -1,10 +1,11 @@
 /* #THEME COLOR (variable overrides)
 ========================================================================== */
-$color-primary:					rgb(0, 0, 0);
+$color-primary:				$lear-red;
 
 /* #GLOBAL IMPORTS
 ========================================================================== */
 @import './src/scss/_imports/_theme-modules-import';
+@import './src/scss/_imports/_zsi-themes-imports/_zsi-mdb/_zGrid';
 
 /* #Reset userselect
 ========================================================================== */
