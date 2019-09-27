@@ -1,11 +1,11 @@
 /*  THEME COLORs
 ========================================================================== */
 /* Looks good on chrome default color profile */
-$color-primary:						#886ab5;
-$color-success:						#1dc9b7;
-$color-info:						#2196F3;
-$color-warning:						#ffc241;
-$color-danger:						#fd3995;
+$color-primary:						#000000 !default;
+$color-success:						#1dc9b7 !default;
+$color-info:						#2196F3 !default;
+$color-warning:						#ffc241 !default;
+$color-danger:						#ff0000 !default;
 $color-fusion:						darken(desaturate(adjust-hue($color-primary, 5), 80%), 25%); 
 
 /* looks good in sRGB but washed up on chrome default 
@@ -568,7 +568,7 @@ $header-inner-padding-y:				0 !default;
 /* logo */
 $header-logo-border-bottom:				rgba(darken($primary-700, 10%), (30/100)) !default;
 $header-logo-width:						auto !default; 										  /* try not to go beywond the width of $main_nav_width value */
-$header-logo-height:					auto !default 										    /* you may need to change this depending on your logo design */
+$header-logo-height:					auto !default; 										    /* you may need to change this depending on your logo design */
 $header-logo-text-align:				center; 												      /* adjust this as you see fit : left, right, center */
 
 /* icon font size (not button) */

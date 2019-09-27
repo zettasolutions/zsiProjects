@@ -79,11 +79,7 @@
 
 					>[class*='fa-'],
 					>.#{$cust-icon-prefix} {
-					    color: rgb(94, 0, 0);
-					}
-
-					i {
-						color: rgb(94, 0, 0) !important;
+					    color: lighten($nav-link-color, 20%);
 					}
 
 				}
@@ -117,7 +113,7 @@
 			outline: 0;
 			padding: $nav-padding-y $nav-padding-x;
 			font-size: rem($nav-font-link-size);
-			color: $nav-link-color;
+			color: lighten($nav-link-color, 20%);
 			font-weight: 400;
 			text-decoration: none;
 
@@ -213,7 +209,7 @@
 
 				>[class*='fa-'],
 				>.#{$cust-icon-prefix} {
-					color:rgb(82, 0, 0);
+					color: lighten($nav-link-color, 20%);
 				}
 
 				> .badge {
@@ -241,7 +237,7 @@
 			li {
 
 				a {
-					color: darken($nav-link-color, 5%);
+					color: lighten($nav-link-color, 20%);
 
 					padding: $nav-padding-y $nav-padding-x $nav-padding-y $nav-padding-x + $nav-icon-width + $nav-icon-margin-right;
 
@@ -250,7 +246,7 @@
 						@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)) );
 
 						i {
-							color: rgb(82, 0, 0);
+							color: lighten($nav-link-color, 20%);
 						}
 					}
 
@@ -288,7 +284,7 @@
 						> .nav-link-text {
 							>[class*='fa-'],
 							>.#{$cust-icon-prefix} {
-							    color:rgb(82, 0, 0);
+							    color: lighten($nav-link-color, 20%);
 							}
 						}
 					}
@@ -307,7 +303,7 @@
 						> .nav-link-text {
 							>[class*='fa-'],
 							>.#{$cust-icon-prefix} {
-							    color:rgb(255, 0, 0);
+							    color: lighten($nav-link-color, 80%);
 							}
 						}	
 
@@ -341,7 +337,7 @@
 						}
 
 						a {
-							color: darken($nav-link-color, 7%);
+							color: darken($nav-link-color, 1%);
 							padding: $nav-padding-y $nav-padding-x $nav-padding-y ($nav-padding-x + $nav-icon-width + $nav-icon-margin-right + 0.75rem);
 
 							.dl-ref {
@@ -362,7 +358,7 @@
 								@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)) );
 
 								i {
-									color: rgb(82, 0, 0);
+									color: lighten($nav-link-color, 20%);
 								}
 							}
 							> .badge {
