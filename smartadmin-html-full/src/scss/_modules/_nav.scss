@@ -79,7 +79,7 @@
 
 					>[class*='fa-'],
 					>.#{$cust-icon-prefix} {
-					    color: lighten($nav-link-color, 20%);
+					    color: lighten($nav-link-color, 40%);
 					}
 
 				}
@@ -113,7 +113,7 @@
 			outline: 0;
 			padding: $nav-padding-y $nav-padding-x;
 			font-size: rem($nav-font-link-size);
-			color: lighten($nav-link-color, 20%);
+			color: lighten($nav-link-color, 40%);
 			font-weight: 400;
 			text-decoration: none;
 
@@ -209,7 +209,7 @@
 
 				>[class*='fa-'],
 				>.#{$cust-icon-prefix} {
-					color: lighten($nav-link-color, 20%);
+					color: lighten($nav-link-color, 40%);
 				}
 
 				> .badge {
@@ -237,7 +237,7 @@
 			li {
 
 				a {
-					color: lighten($nav-link-color, 20%);
+					color: lighten($nav-link-color, 40%);
 
 					padding: $nav-padding-y $nav-padding-x $nav-padding-y $nav-padding-x + $nav-icon-width + $nav-icon-margin-right;
 
@@ -246,7 +246,7 @@
 						@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)) );
 
 						i {
-							color: lighten($nav-link-color, 20%);
+							color: lighten($nav-link-color, 40%);
 						}
 					}
 
@@ -284,7 +284,7 @@
 						> .nav-link-text {
 							>[class*='fa-'],
 							>.#{$cust-icon-prefix} {
-							    color: lighten($nav-link-color, 20%);
+							    color: lighten($nav-link-color, 40%);
 							}
 						}
 					}
@@ -311,7 +311,7 @@
 							> .nav-link-text {
 								>[class*='fa-'],
 								>.#{$cust-icon-prefix} {
-								    color:$nav-icon-hover-color;
+								    color: lighten($nav-link-color, 40%);
 								}
 							}			
 						}
@@ -358,7 +358,7 @@
 								@include text-contrast( rgba(lighten(darken($nav-base-color, 11%), 5%), (45/100)) );
 
 								i {
-									color: lighten($nav-link-color, 20%);
+									color: lighten($nav-link-color, 40%);
 								}
 							}
 							> .badge {
