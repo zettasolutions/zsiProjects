@@ -421,7 +421,7 @@ html body {
             box-shadow: inset 3px 0 0 #778c85; }
     .nav-menu li.active > a:hover > [class*='fa-'],
     .nav-menu li.active > a:hover > .ni {
-      color: #9b9b9b; }
+      color: #9b9b9b !important; }
   .nav-menu li.active > ul {
     display: block; }
   .nav-menu li.active:not(.open) > a:before {
@@ -472,7 +472,9 @@ html body {
       background-color: rgba(0, 0, 0, 0.1); }
       .nav-menu li > ul li a:hover > .nav-link-text > [class*='fa-'],
       .nav-menu li > ul li a:hover > .nav-link-text > .ni {
-        color: #9b9b9b; }
+        color: #979a99; }
+    .nav-menu li > ul li a i {
+      color: #a4a6a6; }
   .nav-menu li > ul li.active > a {
     color: white;
     background-color: transparent; }
@@ -481,13 +483,17 @@ html body {
       color: white; }
     .nav-menu li > ul li.active > a:hover > .nav-link-text > [class*='fa-'],
     .nav-menu li > ul li.active > a:hover > .nav-link-text > .ni {
-      color: #9b9b9b; }
+      color: #979a99 !important; }
   .nav-menu li > ul li > ul li.active > a {
     color: white; }
   .nav-menu li > ul li > ul li a {
     color: #9fa1a1; }
+    .nav-menu li > ul li > ul li a i {
+      color: #9fa1a1; }
     .nav-menu li > ul li > ul li a:hover {
       color: white; }
+      .nav-menu li > ul li > ul li a:hover i {
+        color: #979a99; }
     .nav-menu li > ul li > ul li a > .badge {
       color: #fff;
       background-color: #af37ff;
@@ -569,6 +575,10 @@ html body {
         background: #5f6261; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a {
           color: #b1b3b2; }
+          .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a i {
+            color: #a4a6a6; }
+          .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a:hover i {
+            color: #979a99; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li ul {
           background: #5f6261; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li:hover > a {
@@ -2204,6 +2214,10 @@ a.text-light:hover, a.text-light:focus {
 
 a.text-dark:hover, a.text-dark:focus {
   color: #1c1c1c !important; }
+
+.zGrid .zHeaders {
+  background-image: linear-gradient(to bottom, #778c85 0px, #60756e 100%);
+  color: #fff; }
 
 /* #Reset userselect
 ========================================================================== */

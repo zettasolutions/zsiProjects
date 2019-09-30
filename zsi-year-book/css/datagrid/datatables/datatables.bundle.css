@@ -1152,10 +1152,10 @@ table.dataTable > tbody > tr.child ul.dtr-details {
 .sorting_asc,
 .sorting_desc,
 .even .sorting_1 {
-  background-color: rgba(136, 106, 181, 0.03); }
+  background-color: rgba(0, 0, 0, 0.03); }
 
 .odd .sorting_1 {
-  background-color: rgba(136, 106, 181, 0.04); }
+  background-color: rgba(0, 0, 0, 0.04); }
 
 .table-dark .sorting_asc,
 .table-dark .sorting_desc,
@@ -1198,7 +1198,7 @@ table.dataTable.dtr-column > tbody > tr > th.control:before {
   border-radius: 0;
   border: 0;
   margin: 0;
-  background-color: #886ab5; }
+  background-color: #000000; }
 
 table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before,
@@ -1227,7 +1227,7 @@ table.dataTable thead .sorting_desc_disabled:after {
   font-family: 'Font Awesome 5 Pro'; }
 
 .dataTables_empty {
-  color: #fd3995;
+  color: #ff0000;
   font-size: 2rem;
   padding-top: 2.5rem !important;
   padding-bottom: 2.5rem !important; }
@@ -1318,12 +1318,12 @@ div.dt-autofill-background {
   padding-right: 2rem !important; }
 
 div.dt-autofill-handle {
-  background: #886ab5;
+  background: #000000;
   height: 0.875rem;
   width: 0.875rem; }
 
 div.dt-autofill-select {
-  background-color: #886ab5; }
+  background-color: #000000; }
 
 /* FixedColumns */
 .DTFC_LeftHeadWrapper:before,
@@ -1335,7 +1335,7 @@ div.dt-autofill-select {
   top: 1px;
   bottom: 0px;
   width: 1px;
-  background: #fd3995;
+  background: #ff0000;
   z-index: 1;
   -webkit-box-shadow: -4px 0px 4px rgba(0, 0, 0, 0.4);
           box-shadow: -4px 0px 4px rgba(0, 0, 0, 0.4); }
@@ -1348,9 +1348,9 @@ div.dt-autofill-select {
 /* KeyTable */
 table.dataTable tbody th.focus,
 table.dataTable tbody td.focus {
-  -webkit-box-shadow: inset 0 0 0px 1px #886ab5;
-          box-shadow: inset 0 0 0px 1px #886ab5;
-  background: rgba(136, 106, 181, 0.1);
+  -webkit-box-shadow: inset 0 0 0px 1px #000000;
+          box-shadow: inset 0 0 0px 1px #000000;
+  background: rgba(0, 0, 0, 0.1);
   font-weight: 500; }
 
 /* RowGroup */
@@ -1379,7 +1379,7 @@ tr.dt-rowReorder-moving {
   outline-offset: -2px; }
 
 table.dt-rowReorder-float {
-  outline: 2px solid #886ab5;
+  outline: 2px solid #000000;
   outline-offset: -2px; }
 
 /* w-100 bug for some tables */
@@ -1401,9 +1401,9 @@ table.dataTable.table-bordered td.selected {
 
 table.dataTable tbody > tr.selected,
 table.dataTable tbody > tr > .selected {
-  -webkit-box-shadow: inset 0 0 0px 1px #886ab5;
-          box-shadow: inset 0 0 0px 1px #886ab5;
-  background: rgba(136, 106, 181, 0.1);
+  -webkit-box-shadow: inset 0 0 0px 1px #000000;
+          box-shadow: inset 0 0 0px 1px #000000;
+  background: rgba(0, 0, 0, 0.1);
   font-weight: 500;
   color: inherit; }
 

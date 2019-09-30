@@ -548,7 +548,7 @@ aside.page-sidebar ($nav-width, $nav-background)
 
 .dropzone.dz-drag-hover {
   border-style: dashed;
-  border-color: #886ab5; }
+  border-color: #000000; }
 
 .dropzone .dz-preview.dz-file-preview .dz-image {
   border-radius: 4px; }

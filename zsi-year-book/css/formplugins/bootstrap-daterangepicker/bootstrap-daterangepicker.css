@@ -618,9 +618,9 @@ h6 small,
 
 /* text-gradient */
 .text-gradient {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #6e4e9e), color-stop(50%, #62468d), color-stop(75%, #0c7cd5), to(#0960a5));
-  background: linear-gradient(180deg, #6e4e9e 25%, #62468d 50%, #0c7cd5 75%, #0960a5 100%);
-  color: #886ab5;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, black), color-stop(50%, black), color-stop(75%, #0c7cd5), to(#0960a5));
+  background: linear-gradient(180deg, black 25%, black 50%, #0c7cd5 75%, #0960a5 100%);
+  color: #000000;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -701,7 +701,7 @@ RESULT:
 
 .daterangepicker table tr td.old,
 .daterangepicker table tr td.new {
-  color: darkgray; }
+  color: #595959; }
 
 .daterangepicker table tr td.active:active,
 .daterangepicker table tr td.active.highlighted:active,
@@ -711,7 +711,7 @@ RESULT:
 .daterangepicker table tr td.selected.highlighted,
 .daterangepicker table tr td span.active.active,
 .daterangepicker table tr td span.focused {
-  background-color: #967bbd;
+  background-color: #0d0d0d;
   color: #fff; }
 
 .daterangepicker table tr td.active:active:hover,
@@ -740,7 +740,7 @@ RESULT:
 .daterangepicker table tr td.selected.highlighted.active.focus,
 .daterangepicker table tr td.selected:hover,
 .daterangepicker table tr td.selected.highlighted:hover {
-  background-color: #7a59ad;
+  background-color: black;
   color: #fff; }
 
 .daterangepicker .calendar-table .next,
@@ -786,6 +786,6 @@ RESULT:
   font-size: 0.8125rem;
   padding: 0.75rem 1rem; }
   .daterangepicker .ranges li.active {
-    background-color: #886ab5; }
+    background-color: #000000; }
 
 /*# sourceMappingURL=bootstrap-daterangepicker.css.map */
