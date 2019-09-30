@@ -421,7 +421,7 @@ html body {
             box-shadow: inset 3px 0 0 #9fcb3d; }
     .nav-menu li.active > a:hover > [class*='fa-'],
     .nav-menu li.active > a:hover > .ni {
-      color: #a8b982; }
+      color: #a8b982 !important; }
   .nav-menu li.active > ul {
     display: block; }
   .nav-menu li.active:not(.open) > a:before {
@@ -472,7 +472,9 @@ html body {
       background-color: rgba(0, 0, 0, 0.1); }
       .nav-menu li > ul li a:hover > .nav-link-text > [class*='fa-'],
       .nav-menu li > ul li a:hover > .nav-link-text > .ni {
-        color: #a8b982; }
+        color: #aece68; }
+    .nav-menu li > ul li a i {
+      color: #b9d47b; }
   .nav-menu li > ul li.active > a {
     color: white;
     background-color: transparent; }
@@ -481,13 +483,17 @@ html body {
       color: white; }
     .nav-menu li > ul li.active > a:hover > .nav-link-text > [class*='fa-'],
     .nav-menu li > ul li.active > a:hover > .nav-link-text > .ni {
-      color: #a8b982; }
+      color: #aece68 !important; }
   .nav-menu li > ul li > ul li.active > a {
     color: white; }
   .nav-menu li > ul li > ul li a {
     color: #b4d174; }
+    .nav-menu li > ul li > ul li a i {
+      color: #b4d174; }
     .nav-menu li > ul li > ul li a:hover {
       color: white; }
+      .nav-menu li > ul li > ul li a:hover i {
+        color: #aece68; }
     .nav-menu li > ul li > ul li a > .badge {
       color: #fff;
       background-color: #fd3995;
@@ -569,6 +575,10 @@ html body {
         background: #769531; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a {
           color: #c3da8f; }
+          .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a i {
+            color: #b9d47b; }
+          .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a:hover i {
+            color: #aece68; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li ul {
           background: #769531; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li:hover > a {
@@ -2205,6 +2215,10 @@ a.text-light:hover, a.text-light:focus {
 a.text-dark:hover, a.text-dark:focus {
   color: #1e1e1e !important; }
 
+.zGrid .zHeaders {
+  background-image: linear-gradient(to bottom, #9fcb3d 0px, #87ad33 100%);
+  color: #fff; }
+
 /* #Reset userselect
 ========================================================================== */
 #myapp-0 {
@@ -2214,5 +2228,99 @@ a.text-dark:hover, a.text-dark:focus {
 #myapp-2 {
   -webkit-box-shadow: 0 0 0 3px #000000;
           box-shadow: 0 0 0 3px #000000; }
+
+/*start of z*/
+table.zTableReport {
+  -webkit-box-shadow: 2px 3px 10px -1px rgba(0, 0, 0, 0.58);
+  box-shadow: 2px 3px 10px -1px rgba(0, 0, 0, 0.58);
+  margin-bottom: 15px; }
+  table.zTableReport .align-l {
+    text-align: left; }
+  table.zTableReport .align-r {
+    text-align: right; }
+  table.zTableReport .align-c {
+    text-align: center; }
+  table.zTableReport tr.total td {
+    background-image: linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);
+    padding-bottom: 4px;
+    padding-top: 4px;
+    color: #000000;
+    font-weight: bold; }
+  table.zTableReport tr th {
+    vertical-align: inherit;
+    background-color: #508BD1;
+    background-image: linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);
+    padding-bottom: 4px;
+    padding-top: 4px;
+    color: #000000;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 23px; }
+  table.zTableReport tr td {
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 23px; }
+  table.zTableReport tr th.title1 {
+    background-image: linear-gradient(to bottom, #b9313c 0px, #7f142a 100%);
+    color: #fff; }
+  table.zTableReport tr th.title2 {
+    background-image: linear-gradient(to bottom, #9b072c 0px, #941f31 100%);
+    border-top: solid 1pt #B82E38;
+    color: #fff; }
+  table.zTableReport tbody tr.even td {
+    background-color: #E3E4E5; }
+  table.zTableReport tbody tr.odd td {
+    background-color: #fff; }
+  table.zTableReport tbody tr:hover td {
+    background-image: linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);
+    background-color: #BCBCBC;
+    color: #000; }
+
+table.zTableTop tr.extraRow div.zPanel tbody tr.active td {
+  background-color: #333333 !important;
+  color: #fff; }
+
+table.zTableTop tr.extraRow div.zPanel tbody tr:hover td {
+  background-color: #B8B8B8 !important;
+  color: #000; }
+  table.zTableTop tr.extraRow div.zPanel tbody tr:hover td a {
+    background-color: #B8B8B8 !important;
+    color: #000; }
+
+table.zTableReport tr.total td {
+  background-image: linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);
+  padding-bottom: 4px;
+  padding-top: 4px;
+  color: #000000; }
+
+table.zTableReport tr th {
+  background-color: #508BD1;
+  background-image: linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);
+  color: #000000; }
+
+table.zTableReport tr td {
+  padding-left: 5px;
+  padding-right: 5px;
+  height: 23px; }
+
+table.zTableReport tr th.title1 {
+  background-image: linear-gradient(to bottom, #b9313c 0px, #7f142a 100%);
+  color: #fff; }
+
+table.zTableReport tr th.title2 {
+  background-image: linear-gradient(to bottom, #9b072c 0px, #941f31 100%);
+  border-top: solid 1pt #B82E38;
+  color: #fff; }
+
+table.zTableReport tbody tr.even td {
+  background-color: #E3E4E5; }
+
+table.zTableReport tbody tr.odd td {
+  background-color: #fff; }
+
+table.zTableReport tbody tr:hover td {
+  background-image: linear-gradient(to bottom, #BCBCBC 0px, #9C9D9E 100%);
+  background-color: #BCBCBC;
+  color: #000; }
 
 /*# sourceMappingURL=cust-theme-2.css.map */

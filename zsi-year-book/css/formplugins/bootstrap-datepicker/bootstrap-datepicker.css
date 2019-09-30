@@ -977,9 +977,9 @@ h6 small,
 
 /* text-gradient */
 .text-gradient {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #6e4e9e), color-stop(50%, #62468d), color-stop(75%, #0c7cd5), to(#0960a5));
-  background: linear-gradient(180deg, #6e4e9e 25%, #62468d 50%, #0c7cd5 75%, #0960a5 100%);
-  color: #886ab5;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, black), color-stop(50%, black), color-stop(75%, #0c7cd5), to(#0960a5));
+  background: linear-gradient(180deg, black 25%, black 50%, #0c7cd5 75%, #0960a5 100%);
+  color: #000000;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -1060,7 +1060,7 @@ RESULT:
 
 .datepicker table tr td.old,
 .datepicker table tr td.new {
-  color: darkgray; }
+  color: #595959; }
 
 .datepicker table tr td.active:active,
 .datepicker table tr td.active.highlighted:active,
@@ -1070,8 +1070,8 @@ RESULT:
 .datepicker table tr td.selected.highlighted,
 .datepicker table tr td span.active.active,
 .datepicker table tr td span.focused {
-  background-color: #967bbd;
-  border-color: #886ab5;
+  background-color: #0d0d0d;
+  border-color: #000000;
   color: #fff; }
 
 .datepicker table tr td.active:active:hover,
@@ -1100,8 +1100,8 @@ RESULT:
 .datepicker table tr td.selected.highlighted.active.focus,
 .datepicker table tr td.selected:hover,
 .datepicker table tr td.selected.highlighted:hover {
-  background-color: #7a59ad;
-  border-color: #6e4e9e;
+  background-color: black;
+  border-color: black;
   color: #fff; }
 
 .datepicker table {

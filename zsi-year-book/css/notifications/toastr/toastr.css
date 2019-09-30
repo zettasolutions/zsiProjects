@@ -384,7 +384,7 @@ aside.page-sidebar ($nav-width, $nav-background)
 ========================================================================== */
 /* ACCESSIBILITIES */
 .toast {
-  background-color: #886ab5;
+  background-color: #000000;
   background-image: none !important; }
   .toast:before {
     content: "\f05a";
@@ -407,7 +407,7 @@ aside.page-sidebar ($nav-width, $nav-background)
     content: "\f2f7"; }
 
 .toast-error {
-  background-color: #fd3995; }
+  background-color: #ff0000; }
   .toast-error:before {
     content: "\f2f0"; }
 
