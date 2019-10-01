@@ -28,6 +28,128 @@
 
 }
 
+//ZSI Animations --- START
+.zsi-btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+
+  &::after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -10px;
+    transition: 0.5s;
+  }
+
+  &:hover {
+    padding-right: 15px;
+  }
+}
+.zsi-btn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+.pulse:active, 
+.pulse:focus {
+  animation: pulse 1s;
+  box-shadow: 0 0 0 2em rgba(#fff,0);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 var(--active); }
+}
+
+.raise:hover,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+}
+
+$colors: (
+  fill: #a972cb,
+  pulse: #ef6eae, 
+  close: #ff7f82, 
+  raise: #000000, 
+  up: #e4cb58, 
+  slide: #8fc866, 
+  offset: #19bc8b
+);
+@each $button, $color in $colors {
+  .#{$button} {
+    --color: #{$color};
+    --active: #{adjust-hue($color, 45deg)};
+    --hover: #{adjust-hue($color, 45deg)};
+  }
+}
+.btn-primary {
+  background-color: #CA1F14;
+  border-color: #CA1F14;
+}
+
+
+
+.swing-top {
+	        animation: swing-top 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@keyframes swing-top {
+  0% {
+    -webkit-transform: rotateX(0);
+            transform: rotateX(0);
+    -webkit-transform-origin: top;
+            transform-origin: top;
+  }
+  100% {
+    -webkit-transform: rotateX(180deg);
+            transform: rotateX(180deg);
+    -webkit-transform-origin: top;
+            transform-origin: top;
+  }
+}
+.modal {
+	-webkit-animation: modal 0.5s linear both;
+	        animation: modal 0.5s linear both;
+}
+
+@-webkit-keyframes modal {
+  0% {
+    -webkit-transform: scale(1) rotateX(0);
+            transform: scale(1) rotateX(0);
+  }
+  50% {
+    -webkit-transform: scale(2.5) rotateX(-90deg);
+            transform: scale(2.5) rotateX(-90deg);
+  }
+  50% {
+    -webkit-transform: scale(1) rotateX(-180deg);
+            transform: scale(1) rotateX(-180deg);
+  }
+}
+
+@keyframes modal {
+  0% {
+    -webkit-transform: scale(1) rotateX(0);
+            transform: scale(1) rotateX(0);
+  }
+  50% {
+    -webkit-transform: scale(2.5) rotateX(-90deg);
+            transform: scale(2.5) rotateX(-90deg);
+  }
+  50% {
+    -webkit-transform: scale(1) rotateX(-180deg);
+            transform: scale(1) rotateX(-180deg);
+  }
+}
+.close {
+  transition:all .5s ease-in-out;
+}
+//ZSI Animations --- END
+
+
+
+
   .zGrid .zHeaders {
     background-image: linear-gradient(to bottom, $lear-red 0px, #CA1F14 100%);
     color: #fff;
