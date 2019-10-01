@@ -957,9 +957,9 @@ h6 small,
 
 /* text-gradient */
 .text-gradient {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #6e4e9e), color-stop(50%, #62468d), color-stop(75%, #0c7cd5), to(#0960a5));
-  background: linear-gradient(180deg, #6e4e9e 25%, #62468d 50%, #0c7cd5 75%, #0960a5 100%);
-  color: #886ab5;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, black), color-stop(50%, black), color-stop(75%, #0c7cd5), to(#0960a5));
+  background: linear-gradient(180deg, black 25%, black 50%, #0c7cd5 75%, #0960a5 100%);
+  color: #000000;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;
