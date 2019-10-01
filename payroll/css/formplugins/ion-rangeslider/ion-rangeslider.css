@@ -987,9 +987,9 @@ h6 small,
 
 /* text-gradient */
 .text-gradient {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #6e4e9e), color-stop(50%, #62468d), color-stop(75%, #0c7cd5), to(#0960a5));
-  background: linear-gradient(180deg, #6e4e9e 25%, #62468d 50%, #0c7cd5 75%, #0960a5 100%);
-  color: #886ab5;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, black), color-stop(50%, black), color-stop(75%, #0c7cd5), to(#0960a5));
+  background: linear-gradient(180deg, black 25%, black 50%, #0c7cd5 75%, #0960a5 100%);
+  color: #000000;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -1068,7 +1068,7 @@ RESULT:
 .irs--flat .irs-to,
 .irs--flat .irs-single,
 .irs--flat .irs-handle > i:first-child {
-  background-color: #886ab5; }
+  background-color: #000000; }
 
 .irs--flat .irs-from,
 .irs--flat .irs-to,
@@ -1078,22 +1078,22 @@ RESULT:
 .irs--flat .irs-from:before,
 .irs--flat .irs-to:before,
 .irs--flat .irs-single:before {
-  border-top-color: #886ab5; }
+  border-top-color: #000000; }
 
 .irs--flat .irs-handle.state_hover > i:first-child,
 .irs--flat .irs-handle:hover > i:first-child {
-  background-color: #7a59ad; }
+  background-color: black; }
 
 .irs--big .irs-bar {
-  background-color: #a38cc6;
-  border-color: #886ab5;
-  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(30%, #a38cc6), to(#886ab5));
-  background: linear-gradient(to bottom, #ffffff 0%, #a38cc6 30%, #886ab5 100%); }
+  background-color: #1a1a1a;
+  border-color: #000000;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(30%, #1a1a1a), to(#000000));
+  background: linear-gradient(to bottom, #ffffff 0%, #1a1a1a 30%, #000000 100%); }
 
 .irs--big .irs-from,
 .irs--big .irs-to,
 .irs--big .irs-single {
-  background: #886ab5; }
+  background: #000000; }
 
 .irs--modern .irs-bar {
   background: #1ab3a3;
@@ -1119,17 +1119,17 @@ RESULT:
 .irs--sharp .irs-from,
 .irs--sharp .irs-to,
 .irs--sharp .irs-single {
-  background-color: #fd3995; }
+  background-color: #ff0000; }
 
 .irs--sharp .irs-handle > i:first-child,
 .irs--sharp .irs-from:before,
 .irs--sharp .irs-to:before,
 .irs--sharp .irs-single:before {
-  border-top-color: #fd3995; }
+  border-top-color: #ff0000; }
 
 .irs--sharp .irs-min,
 .irs--sharp .irs-max {
-  background-color: #e7026e; }
+  background-color: #b30000; }
 
 .irs--round .irs-handle {
   border-color: #2196F3; }

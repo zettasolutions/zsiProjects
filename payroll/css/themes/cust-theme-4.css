@@ -421,7 +421,7 @@ html body {
             box-shadow: inset 3px 0 0 #2198F3; }
     .nav-menu li.active > a:hover > [class*='fa-'],
     .nav-menu li.active > a:hover > .ni {
-      color: #6dabda; }
+      color: #6dabda !important; }
   .nav-menu li.active > ul {
     display: block; }
   .nav-menu li.active:not(.open) > a:before {
@@ -472,7 +472,9 @@ html body {
       background-color: rgba(0, 0, 0, 0.1); }
       .nav-menu li > ul li a:hover > .nav-link-text > [class*='fa-'],
       .nav-menu li > ul li a:hover > .nav-link-text > .ni {
-        color: #6dabda; }
+        color: #53abef; }
+    .nav-menu li > ul li a i {
+      color: #6ab7f1; }
   .nav-menu li > ul li.active > a {
     color: white;
     background-color: transparent; }
@@ -481,13 +483,17 @@ html body {
       color: white; }
     .nav-menu li > ul li.active > a:hover > .nav-link-text > [class*='fa-'],
     .nav-menu li > ul li.active > a:hover > .nav-link-text > .ni {
-      color: #6dabda; }
+      color: #53abef !important; }
   .nav-menu li > ul li > ul li.active > a {
     color: white; }
   .nav-menu li > ul li > ul li a {
     color: #61b2f0; }
+    .nav-menu li > ul li > ul li a i {
+      color: #61b2f0; }
     .nav-menu li > ul li > ul li a:hover {
       color: white; }
+      .nav-menu li > ul li > ul li a:hover i {
+        color: #53abef; }
     .nav-menu li > ul li > ul li a > .badge {
       color: #fff;
       background-color: #FC1349;
@@ -569,6 +575,10 @@ html body {
         background: #1274c0; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a {
           color: #82c2f3; }
+          .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a i {
+            color: #6ab7f1; }
+          .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li a:hover i {
+            color: #53abef; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li ul {
           background: #1274c0; }
         .nav-function-top .page-sidebar .primary-nav .nav-menu > li > ul li:hover > a {
@@ -2204,6 +2214,20 @@ a.text-light:hover, a.text-light:focus {
 
 a.text-dark:hover, a.text-dark:focus {
   color: #202428 !important; }
+
+.zGrid .zHeaders {
+  background-image: linear-gradient(to bottom, #2198F3 0px, #1986da 100%);
+  color: #fff; }
+
+.modal-body div nav #nav-tab .nav-link {
+  color: #000000;
+  margin-left: 2px; }
+  .modal-body div nav #nav-tab .nav-link.active {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #2198F3 0px, #1986da 100%); }
+  .modal-body div nav #nav-tab .nav-link:hover {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #2198F3 0px, #1986da 100%); }
 
 /* #Reset userselect
 ========================================================================== */
