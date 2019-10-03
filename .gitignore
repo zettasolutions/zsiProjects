@@ -31,3 +31,14 @@ cts/dbWebSource/template/tmplManageSubscription.html
 /schoolWebsite/yearbook/nbproject/private/
 zsi.smagerUp/app/images/dbimages/*
 smartadmin-html-full/package-lock.json
+zsi.smagerUp2/packages/*
+zsi.smagerUp2/.vs/*
+zsi.smagerUp2/app/bin/*
+zsi.smagerUp2/app/css/*
+zsi.smagerUp2/app/fonts/*
+zsi.smagerUp2/app/images/*
+zsi.smagerUp2/app/img/*
+zsi.smagerUp2/app/js/*
+zsi.smagerUp2/app/media/*
+zsi.smagerUp2/app/obj/*
+zsi.smagerUp2/app/webfonts/*

@@ -1,0 +1,331 @@
+[
+    {
+        "id": "1",
+        "name": "Manage",
+        "subMenus": [
+            {
+                "id": "18",
+                "name": "Page One",
+                "url": "page/name/PageOne",
+                "menu_type_id": "1"
+            },
+            {
+                "id": "15",
+                "name": "Supplies",
+                "url": "page/name/supplies",
+                "menu_type_id": "1"
+            },
+            {
+                "id": "8",
+                "name": "Store Franchise",
+                "url": "page/name/stores",
+                "menu_type_id": "1"
+            },
+            {
+                "id": "10",
+                "name": "Warehouse Locations",
+                "url": "page/name/locations",
+                "menu_type_id": "1"
+            },
+            {
+                "id": "9",
+                "name": "Store Banches",
+                "url": "page/name/store_loc",
+                "menu_type_id": "1"
+            },
+            {
+                "id": "11",
+                "name": "Employees",
+                "url": "page/name/employees",
+                "menu_type_id": "1"
+            },
+            {
+                "id": "1",
+                "name": "Bank Accounts",
+                "url": "page/name/bank_ref",
+                "menu_type_id": "1"
+            },
+            {
+                "id": "43",
+                "name": "Events",
+                "url": "page/name/events",
+                "menu_type_id": "1"
+            }           
+        ]
+    },
+    {
+        "id": "2",
+        "name": "Transaction",
+        "subMenus": [
+            {
+                "id": "26",
+                "name": "Purchase Order",
+                "url": "page/name/purchase_order",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "27",
+                "name": "Receiving (Supplier Deliveries)",
+                "url": "page/name/receiving",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "19",
+                "name": "Daily Stock Prep. - Issuance",
+                "url": "page/name/supply_is",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "20",
+                "name": "Daily Supplies Out/Used",
+                "url": "page/name/supply_out",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "13",
+                "name": "Daily Cash Box Prep.",
+                "url": "page/name/store_daily_cash",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "33",
+                "name": "Store Daily Expenses",
+                "url": "page/name/store_daily_expenses",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "34",
+                "name": "Daily Cash Remittance",
+                "url": "page/name/store_daily_cash/sales",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "22",
+                "name": "Bank Deposits",
+                "url": "page/name/bank_deposits",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "41",
+                "name": "Stock Transfer",
+                "url": "page/name/stock_transfer",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "37",
+                "name": "Physical Count (Stocks)",
+                "url": "page/name/loc_pc",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "44",
+                "name": "Stock Adjustment",
+                "url": "page/name/stock_adjustment",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "38",
+                "name": "Employee Violations",
+                "url": "page/name/emp_violations",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "39",
+                "name": "Employee Loans",
+                "url": "page/name/emp_loans",
+                "menu_type_id": "2"
+            },
+            {
+                "id": "32",
+                "name": "Payroll",
+                "url": "page/name/payroll",
+                "menu_type_id": "2"
+            }
+        ]
+    },
+    {
+        "id": "3",
+        "name": "Inquiry / Reports",
+        "subMenus": [
+            {
+                "id": "50",
+                "name": "Purchase Order Status",
+                "url": "page/name/rep_po_status",
+                "menu_type_id": "3"
+            },
+            {
+                "id": "51",
+                "name": "Receiving Supplier Deliveries",
+                "url": "page/name/rep_receiving_orders",
+                "menu_type_id": "3"
+            },
+            {
+                "id": "49",
+                "name": "Available Stocks per Area",
+                "url": "page/name/rep_loc_stocks_for_reorder",
+                "menu_type_id": "3"
+            },
+            {
+                "id": "35",
+                "name": "Daily Store Cash Box",
+                "url": "page/name/rep_daily_store_cashbox",
+                "menu_type_id": "3"
+            },
+            {
+                "id": "42",
+                "name": "Daily Store Stocks",
+                "url": "page/name/rep_daily_store_stocks",
+                "menu_type_id": "3"
+            },
+            {
+                "id": "36",
+                "name": "Daily Stock Prep. Issuances ",
+                "url": "page/name/rep_daily_loc_stock_is",
+                "menu_type_id": "3"
+            },
+            {
+                "id": "47",
+                "name": "Sales per Locations",
+                "url": "page/name/rep_sales_loc_inq",
+                "menu_type_id": "3"
+            },
+            {
+                "id": "48",
+                "name": "Bank Deposits per Store",
+                "url": "page/name/rep_store_loc_bank_depo",
+                "menu_type_id": "3"
+            }
+        ]
+    },
+    {
+        "id": "4",
+        "name": "Batch Posting",
+        "subMenus": []
+    },
+    {
+        "id": "5",
+        "name": "Reference Files",
+        "subMenus": [
+            {
+                "id": "7",
+                "name": "Cash Denominations",
+                "url": "page/name/denomination_ref",
+                "menu_type_id": "5"
+            },
+            {
+                "id": "12",
+                "name": "Positions",
+                "url": "page/name/positions",
+                "menu_type_id": "5"
+            },
+            {
+                "id": "28",
+                "name": "Brands",
+                "url": "page/name/brands",
+                "menu_type_id": "5"
+            },
+            {
+                "id": "14",
+                "name": "Supply Types",
+                "url": "page/name/supply_types",
+                "menu_type_id": "5"
+            },
+            {
+                "id": "16",
+                "name": "Units",
+                "url": "page/name/units",
+                "menu_type_id": "5"
+            },
+            {
+                "id": "17",
+                "name": "Unit Conversion",
+                "url": "page/name/conv_units",
+                "menu_type_id": "5"
+            },
+            {
+                "id": "45",
+                "name": "Adjustments Reference",
+                "url": "page/name/adjustments_ref",
+                "menu_type_id": "5"
+            },
+            {
+                "id": "40",
+                "name": "Standard Deductions",
+                "url": "page/name/deductions_ref",
+                "menu_type_id": "5"
+            }
+        ]
+    },
+    {
+        "id": "6",
+        "name": "System",
+        "subMenus": [
+            {
+                "id": "2",
+                "name": "Systems",
+                "url": "page/name/systems",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "3",
+                "name": "Menu Types",
+                "url": "page/name/menu_types",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "4",
+                "name": "Menu ",
+                "url": "page/name/menu",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "5",
+                "name": "Roles",
+                "url": "page/name/roles",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "6",
+                "name": "Users",
+                "url": "page/name/users",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "29",
+                "name": "Select Options",
+                "url": "selectoption",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "31",
+                "name": "Page Templates",
+                "url": "pagetemplate",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "46",
+                "name": "JavaScripts",
+                "url": "javascript",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "57",
+                "name": "Error List",
+                "url": "page/name/systems/error_list",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "54",
+                "name": "Change Password",
+                "url": "page/name/users/changepwd",
+                "menu_type_id": "6"
+            },
+            {
+                "id": "24",
+                "name": "Log Out",
+                "url": "page/name/users/logout",
+                "menu_type_id": "6"
+            }
+        ]
+    }
+]
