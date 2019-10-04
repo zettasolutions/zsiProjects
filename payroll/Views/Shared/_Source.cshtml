@@ -8,7 +8,8 @@
     <link rel="shortcut icon" href="@Url.Content("~/")favicon.png" type="image/x-icon">
     <title>@ViewBag.pageTitle </title>
 	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
-    <link href='@Url.Content("~/")css/app.min.css' rel="stylesheet" />
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/vendors.bundle.css'>
+	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/app.bundle.css'>
 	<script>
         var base_url = '@Url.Content("~/")';
         var controller_url = base_url + '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()/';

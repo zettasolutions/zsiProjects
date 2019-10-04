@@ -4,29 +4,24 @@
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 <div class="pageTitle">@ViewBag.Title </div>
-
-
+	<div class="row">		
+		<label for="filter_name" class="col-12 col-xl-2 col-md-3 col-sm-6 col-form-label">Search Page Name:</label>
+		<div class="col-12 col-xl-3 col-md-5 col-sm-8">
+			<input type="text" name="filter_name" id="filter_name" class="form-control form-control-sm p-2">
+		</div>		
+	</div>
 	
-	<div class="col-12">
-		<div class="form-group row">		
-			<label for="filter_name" class="col-2 col-form-label">Search Page Name:</label>
-			<div class="col-3">
-				<input type="text" name="filter_name" id="filter_name" class="form-control">
-			</div>		
-		</div>
-	</div>
-	<div class="col-12 zPanel">		
-		 <form method="post" id="frm"><div id="grid" class="zGrid"></div></form>
-		<div class="buttonGroup">
-			<button type="button" class="btn btn-primary btn-sm" id="btnSave">
-				<i class="fas fa-save"></i> Save
+	<div class="row">		
+		 <form method="post" id="frm" class="col-12 col-xl-12 col-md-12 com-sm-12"><div id="grid" class="zGrid"></div></form>
+		<div class="button-group col-12 col-xl-12 col-md-12 com-sm-12">
+			<button type="button" class="btn btn-primary btn-sm hvr-icon-pulse" id="btnSave">
+				<i class="fa fa-save hvr-icon"></i> Save
 			</button>
-			<button type="button" class="btn btn-primary btn-sm" id="btnDelete">
-				<i class="fas fa-trash-alt"></i> Delete
+			<button type="button" class="btn btn-primary btn-sm hvr-icon-drop" id="btnDelete">
+				<i class="fas fa-trash-alt hvr-icon"></i> Delete
 			</button>
 		</div>
 	</div>
-
 <style>
 
  .iconEdit{
@@ -67,8 +62,8 @@
         var cb = bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
          url			: base_url + "sql/exec?p=pages_sel" + params
-        ,width          : $(document).width()- 20
-	    ,height         : $(document).height()-220
+        ,width          : $(document).width("auto")
+	    ,height         : $(document).height()-240
 	    ,selectorType   : "checkbox"
         ,blankRowsLimit :5
         ,dataRows       :[

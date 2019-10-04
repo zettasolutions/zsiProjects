@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="Developed By" content="zetta-solutions.net">
     <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
-    <title>@ViewBag.pageTitle - ZSI Payroll </title>
+    <title>@ViewBag.pageTitle - Material Databased </title>
 	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
 	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
-	<script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>
-	
    <!-- Call App Mode on ios devices -->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<!-- Remove Tap Highlight on Windows Phone IE -->
@@ -18,15 +16,14 @@
 	<!-- base css -->
 	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/vendors.bundle.css'>
 	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/app.bundle.css'>
-	<!-- Place favicon.ico in the root directory --
-	<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">-->
 	<link rel="mask-icon" href='@Url.Content("~/")img/favicon/safari-pinned-tab.svg' color="#5bbad5">
 	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/reactions/reactions.css'>
 	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/fullcalendar/fullcalendar.bundle.css'>
     <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/jqvmap/jqvmap.bundle.css'>
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/select2/select2.bundle.css'>
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
-	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLocalDb"))
     @{
         string userId = "";
         if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
@@ -56,9 +53,6 @@
 		bottom: 2px;
 		z-index: 1000;
     }
-    .page-content{
-        background-color: #f2f2f2;
-    }
     .hide{
         display:none;
     }
@@ -68,10 +62,12 @@
 .form-control {    
 		padding: unset;   
 	}	
+	
+	
 	</style>
 </head>
 <body class="mod-bg-1 ">   
-    <!--<div class="progressWindow zPopup-system">
+    <div class="progressWindow zPopup-system">
         <div class="loadingImg"></div>
         <div class="loadingText">Loading...Please wait</div>
     </div>
@@ -149,8 +145,8 @@
                 <!-- BEGIN Left Aside -->
                 <aside class="page-sidebar">
                     <div class="page-logo">
-                        <a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
-                            <img src='@Url.Content("~/")img/logo.png' alt="Lear Logo" aria-roledescription="logo">
+                        <a href="/" class="page-logo-link press-scale-down d-flex align-items-center position-relative">
+                            <img src='@Url.Content("~/")img/logo.png' alt="ZSI Payroll" aria-roledescription="logo">
                             <span class="page-logo-text mr-1">ZSI Payroll</span>
                             <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
                             <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
@@ -171,19 +167,17 @@
                             <div class="info-card-text">
                                 <a href="#" class="d-flex align-items-center text-white">
                                     <span class="text-truncate text-truncate-sm d-inline-block">
-                                        Dr. Codex Lantern
+                                        @zsi.web.SessionHandler.CurrentUser.userFullName.ToUpper()
                                     </span>
                                 </a>
-                                <span class="d-inline-block text-truncate text-truncate-sm">Toronto, Canada</span>
+                                <span class="d-inline-block text-truncate text-truncate-sm">Cebu City</span>
                             </div>
                             <img src='@Url.Content("~/")img/card-backgrounds/cover-2-lg.png' class="cover" alt="cover">
-                            <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
-                                <i class="fal fa-angle-down"></i>
-                            </a>
+                            <!-- <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input"> -->
+                                <!-- <i class="fal fa-angle-down"></i> -->
+                            <!-- </a> -->
                         </div>
-                        <ul id="js-nav-menu" class="nav-menu">
-                            
-                        </ul>
+                        <ul id="js-nav-menu" class="nav-menu"></ul>
                         <div class="filter-message js-filter-message bg-success-600"></div>
                     </nav>
                     <!-- END PRIMARY NAVIGATION -->
@@ -218,9 +212,9 @@
                     <header class="page-header" role="banner">
                         <!-- we need this logo when user switches to nav-function-top -->
                         <div class="page-logo">
-                            <a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
-                                <img src='@Url.Content("~/")img/logo.png' alt="Material Database" aria-roledescription="logo">
-                                <span class="page-logo-text mr-1">Material Database</span>
+                            <a href="/" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
+                                <img src='@Url.Content("~/")img/logo.png' alt="ZSI Payroll" aria-roledescription="logo">
+                                <span class="page-logo-text mr-1">ZSI Payroll</span>
                                 <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
                                 <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
                             </a>
@@ -249,13 +243,8 @@
                                 <i class="ni ni-menu"></i>
                             </a>
                         </div>
-                        <div class="search">
-                            <form class="app-forms hidden-xs-down" role="search" action="page_search.html" autocomplete="off">
-                                <input type="text" id="search-field" placeholder="Search for anything" class="form-control" tabindex="1">
-                                <a href="#" onclick="return false;" class="btn-danger btn-search-close js-waves-off d-none" data-action="toggle" data-class="mobile-search-on">
-                                    <i class="fal fa-times"></i>
-                                </a>
-                            </form>
+                        <div class="mt-2 font-weight-bold">
+                            <h1 class="page-title zpage-title">@ViewBag.pageTitle</h1>
                         </div>
                         <div class="ml-auto d-flex">
                             <!-- activate app search icon (mobile) -->
@@ -270,178 +259,6 @@
                                     <i class="fal fa-cog"></i>
                                 </a>
                             </div>
-                            <!-- app shortcuts -->
-                            <div>
-                                <a href="#" class="header-icon" data-toggle="dropdown" title="My Apps">
-                                    <i class="fal fa-cube"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-animated w-auto h-auto">
-                                    <div class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top">
-                                        <h4 class="m-0 text-center color-white">
-                                            Quick Shortcut
-                                            <small class="mb-0 opacity-80">User Applications & Addons</small>
-                                        </h4>
-                                    </div>
-                                    <div class="custom-scroll h-100">
-                                        <ul class="app-list">
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-2 icon-stack-3x color-primary-600"></i>
-                                                        <i class="base-3 icon-stack-2x color-primary-700"></i>
-                                                        <i class="ni ni-settings icon-stack-1x text-white fs-lg"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Services
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-2 icon-stack-3x color-primary-400"></i>
-                                                        <i class="base-10 text-white icon-stack-1x"></i>
-                                                        <i class="ni md-profile color-primary-800 icon-stack-2x"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Account
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-9 icon-stack-3x color-success-400"></i>
-                                                        <i class="base-2 icon-stack-2x color-success-500"></i>
-                                                        <i class="ni ni-shield icon-stack-1x text-white"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Security
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-18 icon-stack-3x color-info-700"></i>
-                                                        <span class="position-absolute pos-top pos-left pos-right color-white fs-md mt-2 fw-400">28</span>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Calendar
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-7 icon-stack-3x color-info-500"></i>
-                                                        <i class="base-7 icon-stack-2x color-info-700"></i>
-                                                        <i class="ni ni-graph icon-stack-1x text-white"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Stats
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-4 icon-stack-3x color-danger-500"></i>
-                                                        <i class="base-4 icon-stack-1x color-danger-400"></i>
-                                                        <i class="ni ni-envelope icon-stack-1x text-white"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Messages
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-4 icon-stack-3x color-fusion-400"></i>
-                                                        <i class="base-5 icon-stack-2x color-fusion-200"></i>
-                                                        <i class="base-5 icon-stack-1x color-fusion-100"></i>
-                                                        <i class="fal fa-keyboard icon-stack-1x color-info-50"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Notes
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-16 icon-stack-3x color-fusion-500"></i>
-                                                        <i class="base-10 icon-stack-1x color-primary-50 opacity-30"></i>
-                                                        <i class="base-10 icon-stack-1x fs-xl color-primary-50 opacity-20"></i>
-                                                        <i class="fal fa-dot-circle icon-stack-1x text-white opacity-85"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Photos
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-19 icon-stack-3x color-primary-400"></i>
-                                                        <i class="base-7 icon-stack-2x color-primary-300"></i>
-                                                        <i class="base-7 icon-stack-1x fs-xxl color-primary-200"></i>
-                                                        <i class="base-7 icon-stack-1x color-primary-500"></i>
-                                                        <i class="fal fa-globe icon-stack-1x text-white opacity-85"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Maps
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-5 icon-stack-3x color-success-700 opacity-80"></i>
-                                                        <i class="base-12 icon-stack-2x color-success-700 opacity-30"></i>
-                                                        <i class="fal fa-comment-alt icon-stack-1x text-white"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Chat
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-5 icon-stack-3x color-warning-600"></i>
-                                                        <i class="base-7 icon-stack-2x color-warning-800 opacity-50"></i>
-                                                        <i class="fal fa-phone icon-stack-1x text-white"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Phone
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="app-list-item hover-white">
-                                                    <span class="icon-stack">
-                                                        <i class="base-6 icon-stack-3x color-danger-600"></i>
-                                                        <i class="fal fa-chart-line icon-stack-1x text-white"></i>
-                                                    </span>
-                                                    <span class="app-list-name">
-                                                        Projects
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li class="w-100">
-                                                <a href="#" class="btn btn-default mt-4 mb-2 pr-5 pl-5"> Add more apps </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- app message -->
-                            <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-messenger">
-                                <i class="fal fa-globe"></i>
-                                <span class="badge badge-icon">!</span>
-                            </a>
                             <!-- app notification -->
                             <div>
                                 <a href="#" class="header-icon" data-toggle="dropdown" title="You got 11 notifications">
@@ -456,9 +273,6 @@
                                         </h4>
                                     </div>
                                     <ul class="nav nav-tabs nav-tabs-clean" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-messages" data-i18n="drpdwn.messages">Messages</a>
-                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-feeds" data-i18n="drpdwn.feeds">Feeds</a>
                                         </li>
@@ -477,98 +291,6 @@
                                                     <a href="#">settings page</a>
                                                 </small>
                                             </h5>
-                                        </div>
-                                        <div class="tab-pane" id="tab-messages" role="tabpanel">
-                                            <div class="custom-scroll h-100">
-                                                <ul class="notification">
-                                                    <li class="unread">
-                                                        <a href="#" class="d-flex align-items-center">
-                                                            <span class="status mr-2">
-                                                                <span class="profile-image rounded-circle d-inline-block" style="background-image:url('@Url.Content("~/")img/demo/avatars/avatar-c.png')"></span>
-                                                            </span>
-                                                            <span class="d-flex flex-column flex-1 ml-1">
-                                                                <span class="name">Melissa Ayre <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-1">INBOX</span></span>
-                                                                <span class="msg-a fs-sm">Re: New security codes</span>
-                                                                <span class="msg-b fs-xs">Hello again and thanks for being part...</span>
-                                                                <span class="fs-nano text-muted mt-1">56 seconds ago</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="unread">
-                                                        <a href="#" class="d-flex align-items-center">
-                                                            <span class="status mr-2">
-                                                                <span class="profile-image rounded-circle d-inline-block" style="background-image:url('@Url.Content("~/")img/demo/avatars/avatar-a.png')"></span>
-                                                            </span>
-                                                            <span class="d-flex flex-column flex-1 ml-1">
-                                                                <span class="name">Adison Lee</span>
-                                                                <span class="msg-a fs-sm">Msed quia non numquam eius</span>
-                                                                <span class="fs-nano text-muted mt-1">2 minutes ago</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="d-flex align-items-center">
-                                                            <span class="status status-success mr-2">
-                                                                <span class="profile-image rounded-circle d-inline-block" style="background-image:url('@Url.Content("~/")img/demo/avatars/avatar-b.png')"></span>
-                                                            </span>
-                                                            <span class="d-flex flex-column flex-1 ml-1">
-                                                                <span class="name">Oliver Kopyuv</span>
-                                                                <span class="msg-a fs-sm">Msed quia non numquam eius</span>
-                                                                <span class="fs-nano text-muted mt-1">3 days ago</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="d-flex align-items-center">
-                                                            <span class="status status-warning mr-2">
-                                                                <span class="profile-image rounded-circle d-inline-block" style="background-image:url('@Url.Content("~/")img/demo/avatars/avatar-e.png')"></span>
-                                                            </span>
-                                                            <span class="d-flex flex-column flex-1 ml-1">
-                                                                <span class="name">Dr. John Cook PhD</span>
-                                                                <span class="msg-a fs-sm">Msed quia non numquam eius</span>
-                                                                <span class="fs-nano text-muted mt-1">2 weeks ago</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="d-flex align-items-center">
-                                                            <span class="status status-success mr-2">
-                                                                <!-- <img src="img/demo/avatars/avatar-m.png" data-src="img/demo/avatars/avatar-h.png" class="profile-image rounded-circle" alt="Sarah McBrook" /> -->
-                                                                <span class="profile-image rounded-circle d-inline-block" style="background-image:url('@Url.Content("~/")img/demo/avatars/avatar-h.png')"></span>
-                                                            </span>
-                                                            <span class="d-flex flex-column flex-1 ml-1">
-                                                                <span class="name">Sarah McBrook</span>
-                                                                <span class="msg-a fs-sm">Msed quia non numquam eius</span>
-                                                                <span class="fs-nano text-muted mt-1">3 weeks ago</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="d-flex align-items-center">
-                                                            <span class="status status-success mr-2">
-                                                                <span class="profile-image rounded-circle d-inline-block" style="background-image:url('@Url.Content("~/")img/demo/avatars/avatar-m.png')"></span>
-                                                            </span>
-                                                            <span class="d-flex flex-column flex-1 ml-1">
-                                                                <span class="name">Anothony Bezyeth</span>
-                                                                <span class="msg-a fs-sm">Msed quia non numquam eius</span>
-                                                                <span class="fs-nano text-muted mt-1">one month ago</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="d-flex align-items-center">
-                                                            <span class="status status-danger mr-2">
-                                                                <span class="profile-image rounded-circle d-inline-block" style="background-image:url('@Url.Content("~/")img/demo/avatars/avatar-j.png')"></span>
-                                                            </span>
-                                                            <span class="d-flex flex-column flex-1 ml-1">
-                                                                <span class="name">Lisa Hatchensen</span>
-                                                                <span class="msg-a fs-sm">Msed quia non numquam eius</span>
-                                                                <span class="fs-nano text-muted mt-1">one year ago</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
                                         </div>
                                         <div class="tab-pane" id="tab-feeds" role="tabpanel">
                                             <div class="custom-scroll h-100">
@@ -815,7 +537,7 @@
                                                 <img src="@Url.Content("~/")img/demo/avatars/avatar-admin.png" class="rounded-circle profile-image" alt="Dr. Codex Lantern">
                                             </span>
                                             <div class="info-card-text">
-                                                <div class="fs-lg text-truncate text-truncate-lg">@zsi.web.SessionHandler.CurrentUser.userName.ToUpper()</div>
+                                                <div class="fs-lg text-truncate text-truncate-lg">@zsi.web.SessionHandler.CurrentUser.userFullName.ToUpper()</div>
                                                 <span class="text-truncate text-truncate-md opacity-80">(@role)</span>
                                             </div>
                                         </div>
@@ -850,8 +572,8 @@
                                         </div>
                                     </div>
                                     <div class="dropdown-divider m-0"></div>
-                                    <a class="dropdown-item fw-500 pt-3 pb-3" href="@Url.Content("~/")page/signin">
-                                        <span data-i18n="drpdwn.page-logout">Logout</span>
+                                    <a class="dropdown-item fw-500 pt-3 pb-3" href="@Url.Content("~/")page/signout">
+                                        <span>Logout</span>
                                         <span class="float-right fw-n">&commat;@zsi.web.SessionHandler.CurrentUser.userName.ToUpper()</span>
                                     </a>
                                 </div>
@@ -885,49 +607,7 @@
                     <!-- BEGIN Shortcuts -->
                     <!-- modal shortcut -->
                     <div class="modal fade modal-backdrop-transparent" id="modal-shortcut" tabindex="-1" role="dialog" aria-labelledby="modal-shortcut" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-top modal-transparent" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <ul class="app-list w-auto h-auto p-0 text-left">
-                                        <li>
-                                            <a href="intel_introduction.html" class="app-list-item text-white border-0 m-0">
-                                                <div class="icon-stack">
-                                                    <i class="base base-7 icon-stack-3x opacity-100 color-primary-500 "></i>
-                                                    <i class="base base-7 icon-stack-2x opacity-100 color-primary-300 "></i>
-                                                    <i class="fal fa-home icon-stack-1x opacity-100 color-white"></i>
-                                                </div>
-                                                <span class="app-list-name">
-                                                    Home
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="page_inbox_general.html" class="app-list-item text-white border-0 m-0">
-                                                <div class="icon-stack">
-                                                    <i class="base base-7 icon-stack-3x opacity-100 color-success-500 "></i>
-                                                    <i class="base base-7 icon-stack-2x opacity-100 color-success-300 "></i>
-                                                    <i class="ni ni-envelope icon-stack-1x text-white"></i>
-                                                </div>
-                                                <span class="app-list-name">
-                                                    Inbox
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="intel_introduction.html" class="app-list-item text-white border-0 m-0">
-                                                <div class="icon-stack">
-                                                    <i class="base base-7 icon-stack-2x opacity-100 color-primary-300 "></i>
-                                                    <i class="fal fa-plus icon-stack-1x opacity-100 color-white"></i>
-                                                </div>
-                                                <span class="app-list-name">
-                                                    Add More
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div> <!-- END Shortcuts -->
                 </div>
             </div>
@@ -943,7 +623,7 @@
             <a href="#" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Scroll Top">
                 <i class="fal fa-arrow-up"></i>
             </a>
-            <a href="page_login-alt.html" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Logout">
+            <a href="@Url.Content("~/")page/signout" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Logout">
                 <i class="fal fa-sign-out"></i>
             </a>
             <a href="#" class="menu-item btn" data-action="app-fullscreen" data-toggle="tooltip" data-placement="left" title="Full Screen">
@@ -952,9 +632,9 @@
             <a href="#" class="menu-item btn" data-action="app-print" data-toggle="tooltip" data-placement="left" title="Print page">
                 <i class="fal fa-print"></i>
             </a>
-            <a href="#" class="menu-item btn" data-action="app-voice" data-toggle="tooltip" data-placement="left" title="Voice command">
+           <!--  <a href="#" class="menu-item btn" data-action="app-voice" data-toggle="tooltip" data-placement="left" title="Voice command">
                 <i class="fal fa-microphone"></i>
-            </a>
+            </a> -->
         </nav>
         <!-- END Quick Menu -->
         <!-- BEGIN Messenger -->
@@ -1458,7 +1138,7 @@
                             </div>
                             <div class="expanded theme-colors pl-5 pr-3">
                                 <ul class="m-0">
-                                    <li><a href="#" id="myapp-0" data-action="theme-update" data-themesave data-theme="" data-toggle="tooltip" data-placement="top" title="Wisteria (base css)" data-original-title="Wisteria (base css)"></a></li>
+                                    <li><a href="#" id="myapp-0" data-action="theme-update" data-themesave data-theme="" data-toggle="tooltip" data-placement="top" title="zsi-mdb (base css)" data-original-title="zsi-mdb (base css)"></a></li>
                                     <li><a href="#" id="myapp-1" data-action="theme-update" data-themesave data-theme="@Url.Content("~/")css/themes/cust-theme-1.css" data-toggle="tooltip" data-placement="top" title="Tapestry" data-original-title="Tapestry"></a></li>
                                     <li><a href="#" id="myapp-2" data-action="theme-update" data-themesave data-theme="@Url.Content("~/")css/themes/cust-theme-2.css" data-toggle="tooltip" data-placement="top" title="Atlantis" data-original-title="Atlantis"></a></li>
                                     <li><a href="#" id="myapp-3" data-action="theme-update" data-themesave data-theme="@Url.Content("~/")css/themes/cust-theme-3.css" data-toggle="tooltip" data-placement="top" title="Indigo" data-original-title="Indigo"></a></li>
@@ -1472,17 +1152,17 @@
                                     <li><a href="#" id="myapp-11" data-action="theme-update" data-themesave data-theme="@Url.Content("~/")css/themes/cust-theme-11.css" data-toggle="tooltip" data-placement="top" title="Green Smoke" data-original-title="Green Smoke"></a></li>
                                     <li><a href="#" id="myapp-12" data-action="theme-update" data-themesave data-theme="@Url.Content("~/")css/themes/cust-theme-12.css" data-toggle="tooltip" data-placement="top" title="Wild Blue Yonder" data-original-title="Wild Blue Yonder"></a></li>
                                     <li><a href="#" id="myapp-13" data-action="theme-update" data-themesave data-theme="@Url.Content("~/")css/themes/cust-theme-13.css" data-toggle="tooltip" data-placement="top" title="Emerald" data-original-title="Emerald"></a></li>
-                                    <li><a href="#" id="zsi-mdb" data-action="theme-update" data-themesave data-theme="@Url.Content("~/")css/themes/zsi-mdb.css" data-toggle="tooltip" data-placement="top" title="zsi-mdb" data-original-title="zsi-mdb"></a></li>
+
                                 </ul>
                             </div>
                             <hr class="mb-0 mt-4">
                             <div class="pl-5 pr-3 py-3 bg-faded">
                                 <div class="row no-gutters">
                                     <div class="col-6 pr-1">
-                                        <a href="#" class="btn btn-outline-danger fw-500 btn-block" data-action="app-reset">Reset Settings</a>
+                                        <a href="#" class="btn btn-outline-danger fw-500 btn-block pulse" data-action="app-reset"><span>Reset Settings</span></a>
                                     </div>
                                     <div class="col-6 pl-1">
-                                        <a href="#" class="btn btn-danger fw-500 btn-block" data-action="factory-reset">Factory Reset</a>
+                                        <a href="#" class="btn btn-primary fw-500 btn-block pulse" data-action="factory-reset"><span>Factory Reset</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -1493,7 +1173,21 @@
             </div>
         </div> <!-- END Page Settings -->
 
-<!-- base vendor bundle: 
+		@{
+            if (Session["zsi_login"].ToString() == "Y")
+            {
+            <div class='debugPanel noprint'>                
+				<a href="javascript:void(0);" onclick="app.editCode('html');">Edit Page Template</a> |
+				<a href="javascript:void(0);" onclick="app.editCode('js');"> Edit Javascript</a>  
+                
+            </div>
+            }
+	    }
+	
+        
+        @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
+        
+        <!-- base vendor bundle: 
 			 DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
 						+ pace.js (recommended)
 						+ jquery.js (core)
@@ -1508,671 +1202,11 @@
 						+ src/../jquery-snippets.js (core) -->
         <script src='@Url.Content("~/")js/vendors.bundle.js'></script>
         <script src='@Url.Content("~/")js/app.bundle.js'></script>
+        <script src='@Url.Content("~/")js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js'></script>
         <script type="text/javascript">
             /* Activate smart panels */
             $('#js-page-content').smartPanel();
 
         </script>
-        <!-- The order of scripts is irrelevant. Please check out the plugin pages for more details about these plugins below: -->
-        <script src='@Url.Content("~/")js/dependency/moment/moment.js'></script>
-        <script src='@Url.Content("~/")js/miscellaneous/fullcalendar/fullcalendar.bundle.js'></script>
-        <script src='@Url.Content("~/")js/statistics/sparkline/sparkline.bundle.js'></script>
-        <script src='@Url.Content("~/")js/statistics/easypiechart/easypiechart.bundle.js'></script>
-        <script src='@Url.Content("~/")js/statistics/flot/flot.bundle.js'></script>
-        <script>
-            $(document).ready(function()
-            {
-                //$('#js-page-content').smartPanel(); 
-
-                //
-                //
-                var dataSetPie = [
-                {
-                    label: "Asia",
-                    data: 4119630000,
-                    color: myapp_get_color.primary_500
-                },
-                {
-                    label: "Latin America",
-                    data: 590950000,
-                    color: myapp_get_color.info_500
-                },
-                {
-                    label: "Africa",
-                    data: 1012960000,
-                    color: myapp_get_color.warning_500
-                },
-                {
-                    label: "Oceania",
-                    data: 95100000,
-                    color: myapp_get_color.danger_500
-                },
-                {
-                    label: "Europe",
-                    data: 727080000,
-                    color: myapp_get_color.success_500
-                },
-                {
-                    label: "North America",
-                    data: 344120000,
-                    color: myapp_get_color.fusion_400
-                }];
-
-
-                $.plot($("#flotPie"), dataSetPie,
-                {
-                    series:
-                    {
-                        pie:
-                        {
-                            innerRadius: 0.5,
-                            show: true,
-                            radius: 1,
-                            label:
-                            {
-                                show: true,
-                                radius: 2 / 3,
-                                threshold: 0.1
-                            }
-                        }
-                    },
-                    legend:
-                    {
-                        show: false
-                    }
-                });
-
-
-                $.plot('#flotBar1', [
-                {
-                    data: [
-                        [1, 0],
-                        [2, 0],
-                        [3, 0],
-                        [4, 1],
-                        [5, 3],
-                        [6, 3],
-                        [7, 10],
-                        [8, 11],
-                        [9, 10],
-                        [10, 9],
-                        [11, 12],
-                        [12, 8],
-                        [13, 10],
-                        [14, 6],
-                        [15, 3]
-                    ],
-                    bars:
-                    {
-                        show: true,
-                        lineWidth: 0,
-                        fillColor: myapp_get_color.fusion_50,
-                        barWidth: .3,
-                        order: 'left'
-                    }
-                },
-                {
-                    data: [
-                        [1, 0],
-                        [2, 0],
-                        [3, 1],
-                        [4, 2],
-                        [5, 2],
-                        [6, 5],
-                        [7, 8],
-                        [8, 12],
-                        [9, 10],
-                        [10, 11],
-                        [11, 3]
-                    ],
-                    bars:
-                    {
-                        show: true,
-                        lineWidth: 0,
-                        fillColor: myapp_get_color.success_500,
-                        barWidth: .3,
-                        align: 'right'
-                    }
-                }],
-                {
-                    grid:
-                    {
-                        borderWidth: 0,
-                    },
-                    yaxis:
-                    {
-                        min: 0,
-                        max: 15,
-                        tickColor: '#F0F0F0',
-                        ticks: [
-                            [0, ''],
-                            [5, '$5000'],
-                            [10, '$25000'],
-                            [15, '$45000']
-                        ],
-                        font:
-                        {
-                            color: '#444',
-                            size: 10
-                        }
-                    },
-                    xaxis:
-                    {
-                        mode: 'categories',
-                        tickColor: '#F0F0F0',
-                        ticks: [
-                            [0, '3am'],
-                            [1, '4am'],
-                            [2, '5am'],
-                            [3, '6am'],
-                            [4, '7am'],
-                            [5, '8am'],
-                            [6, '9am'],
-                            [7, '10am'],
-                            [8, '11am'],
-                            [9, '12nn'],
-                            [10, '1pm'],
-                            [11, '2pm'],
-                            [12, '3pm'],
-                            [13, '4pm'],
-                            [14, '5pm']
-                        ],
-                        font:
-                        {
-                            color: '#999',
-                            size: 9
-                        }
-                    }
-                });
-
-
-                /*
-                 * VECTOR MAP
-                 */
-
-                var data_array = {
-                    "af": "16.63",
-                    "al": "0",
-                    "dz": "158.97",
-                    "ao": "85.81",
-                    "ag": "1.1",
-                    "ar": "351.02",
-                    "am": "8.83",
-                    "au": "1219.72",
-                    "at": "366.26",
-                    "az": "52.17",
-                    "bs": "7.54",
-                    "bh": "21.73",
-                    "bd": "105.4",
-                    "bb": "3.96",
-                    "by": "52.89",
-                    "be": "461.33",
-                    "bz": "1.43",
-                    "bj": "6.49",
-                    "bt": "1.4",
-                    "bo": "19.18",
-                    "ba": "16.2",
-                    "bw": "12.5",
-                    "br": "2023.53",
-                    "bn": "11.96",
-                    "bg": "44.84",
-                    "bf": "8.67",
-                    "bi": "1.47",
-                    "kh": "11.36",
-                    "cm": "21.88",
-                    "ca": "1563.66",
-                    "cv": "1.57",
-                    "cf": "2.11",
-                    "td": "7.59",
-                    "cl": "199.18",
-                    "cn": "5745.13",
-                    "co": "283.11",
-                    "km": "0.56",
-                    "cd": "12.6",
-                    "cg": "11.88",
-                    "cr": "35.02",
-                    "ci": "22.38",
-                    "hr": "59.92",
-                    "cy": "22.75",
-                    "cz": "195.23",
-                    "dk": "304.56",
-                    "dj": "1.14",
-                    "dm": "0.38",
-                    "do": "50.87",
-                    "ec": "61.49",
-                    "eg": "216.83",
-                    "sv": "21.8",
-                    "gq": "14.55",
-                    "er": "2.25",
-                    "ee": "19.22",
-                    "et": "30.94",
-                    "fj": "3.15",
-                    "fi": "231.98",
-                    "fr": "2555.44",
-                    "ga": "12.56",
-                    "gm": "1.04",
-                    "ge": "11.23",
-                    "de": "3305.9",
-                    "gh": "18.06",
-                    "gr": "305.01",
-                    "gd": "0.65",
-                    "gt": "40.77",
-                    "gn": "4.34",
-                    "gw": "0.83",
-                    "gy": "2.2",
-                    "ht": "6.5",
-                    "hn": "15.34",
-                    "hk": "226.49",
-                    "hu": "132.28",
-                    "is": "0",
-                    "in": "1430.02",
-                    "id": "695.06",
-                    "ir": "337.9",
-                    "iq": "84.14",
-                    "ie": "204.14",
-                    "il": "201.25",
-                    "it": "2036.69",
-                    "jm": "13.74",
-                    "jp": "5390.9",
-                    "jo": "27.13",
-                    "kz": "129.76",
-                    "ke": "32.42",
-                    "ki": "0.15",
-                    "kw": "117.32",
-                    "kg": "4.44",
-                    "la": "6.34",
-                    "lv": "23.39",
-                    "lb": "39.15",
-                    "ls": "1.8",
-                    "lr": "0.98",
-                    "lt": "35.73",
-                    "lu": "52.43",
-                    "mk": "9.58",
-                    "mg": "8.33",
-                    "mw": "5.04",
-                    "my": "218.95",
-                    "mv": "1.43",
-                    "ml": "9.08",
-                    "mt": "7.8",
-                    "mr": "3.49",
-                    "mu": "9.43",
-                    "mx": "1004.04",
-                    "md": "5.36",
-                    "rw": "5.69",
-                    "ws": "0.55",
-                    "st": "0.19",
-                    "sa": "434.44",
-                    "sn": "12.66",
-                    "rs": "38.92",
-                    "sc": "0.92",
-                    "sl": "1.9",
-                    "sg": "217.38",
-                    "sk": "86.26",
-                    "si": "46.44",
-                    "sb": "0.67",
-                    "za": "354.41",
-                    "es": "1374.78",
-                    "lk": "48.24",
-                    "kn": "0.56",
-                    "lc": "1",
-                    "vc": "0.58",
-                    "sd": "65.93",
-                    "sr": "3.3",
-                    "sz": "3.17",
-                    "se": "444.59",
-                    "ch": "522.44",
-                    "sy": "59.63",
-                    "tw": "426.98",
-                    "tj": "5.58",
-                    "tz": "22.43",
-                    "th": "312.61",
-                    "tl": "0.62",
-                    "tg": "3.07",
-                    "to": "0.3",
-                    "tt": "21.2",
-                    "tn": "43.86",
-                    "tr": "729.05",
-                    "tm": "0",
-                    "ug": "17.12",
-                    "ua": "136.56",
-                    "ae": "239.65",
-                    "gb": "2258.57",
-                    "us": "14624.18",
-                    "uy": "40.71",
-                    "uz": "37.72",
-                    "vu": "0.72",
-                    "ve": "285.21",
-                    "vn": "101.99",
-                    "ye": "30.02",
-                    "zm": "15.69",
-                    "zw": "0"
-                };
-
-                $('#vector-map').vectorMap(
-                {
-                    map: 'world_en',
-                    backgroundColor: 'transparent',
-                    color: myapp_get_color.warning_50,
-                    borderOpacity: 0.5,
-                    borderWidth: 1,
-                    hoverColor: myapp_get_color.success_300,
-                    hoverOpacity: null,
-                    selectedColor: myapp_get_color.success_500,
-                    selectedRegions: ['US'],
-                    enableZoom: true,
-                    showTooltip: true,
-                    scaleColors: [myapp_get_color.primary_400, myapp_get_color.primary_50],
-                    values: data_array,
-                    normalizeFunction: 'polynomial',
-                    onRegionClick: function(element, code, region)
-                    {
-                        /*var message = 'You clicked "'
-						+ region
-						+ '" which has the code: '
-						+ code.toLowerCase();
-			 
-					console.log(message);*/
-
-                        var randomNumber = Math.floor(Math.random() * 10000000);
-                        var arrow;
-
-                        if (Math.random() >= 0.5 == true)
-                        {
-                            arrow = '<div class="ml-2 d-inline-flex"><i class="fal fa-caret-up text-success fs-xs"></i></div>'
-                        }
-                        else
-                        {
-                            arrow = '<div class="ml-2 d-inline-flex"><i class="fal fa-caret-down text-danger fs-xs"></i></div>'
-                        }
-
-                       // $('.js-jqvmap-flag').attr('src', 'https://lipis.github.io/flag-icon-css/flags/4x3/' + code.toLowerCase() + '.svg');
-                      //$('.js-jqvmap-country').html(region + ' - ' + '$' + randomNumber.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + arrow);
-                    }
-                });
-
-
-                /* TAB 1: UPDATING CHART */
-                var data = [],
-                    totalPoints = 200;
-                var getRandomData = function()
-                {
-                    if (data.length > 0)
-                        data = data.slice(1);
-
-                    // do a random walk
-                    while (data.length < totalPoints)
-                    {
-                        var prev = data.length > 0 ? data[data.length - 1] : 50;
-                        var y = prev + Math.random() * 10 - 5;
-                        if (y < 0)
-                            y = 0;
-                        if (y > 100)
-                            y = 100;
-                        data.push(y);
-                    }
-
-                    // zip the generated y values with the x values
-                    var res = [];
-                    for (var i = 0; i < data.length; ++i)
-                        res.push([i, data[i]])
-                    return res;
-                }
-                // setup control widget
-                var updateInterval = 1500;
-                $("#updating-chart").val(updateInterval).change(function()
-                {
-
-                    var v = $(this).val();
-                    if (v && !isNaN(+v))
-                    {
-                        updateInterval = +v;
-                        $(this).val("" + updateInterval);
-                    }
-
-                });
-                // setup plot
-                var options = {
-                    colors: [myapp_get_color.primary_700],
-                    series:
-                    {
-                        lines:
-                        {
-                            show: true,
-                            lineWidth: 0.5,
-                            fill: 0.9,
-                            fillColor:
-                            {
-                                colors: [
-                                {
-                                    opacity: 0.6
-                                },
-                                {
-                                    opacity: 0
-                                }]
-                            },
-                        },
-
-                        shadowSize: 0 // Drawing is faster without shadows
-                    },
-                    grid:
-                    {
-                        borderColor: '#F0F0F0',
-                        borderWidth: 1,
-                        labelMargin: 5
-                    },
-                    xaxis:
-                    {
-                        color: '#F0F0F0',
-                        font:
-                        {
-                            size: 10,
-                            color: '#999'
-                        }
-                    },
-                    yaxis:
-                    {
-                        min: 0,
-                        max: 100,
-                        color: '#F0F0F0',
-                        font:
-                        {
-                            size: 10,
-                            color: '#999'
-                        }
-                    }
-                };
-                var plot = $.plot($("#updating-chart"), [getRandomData()], options);
-                /* live switch */
-                $('input[type="checkbox"]#start_interval').click(function()
-                {
-                    if ($(this).prop('checked'))
-                    {
-                        $on = true;
-                        updateInterval = 1500;
-                        update();
-                    }
-                    else
-                    {
-                        clearInterval(updateInterval);
-                        $on = false;
-                    }
-                });
-                var update = function()
-                {
-                    if ($on == true)
-                    {
-                        plot.setData([getRandomData()]);
-                        plot.draw();
-                        setTimeout(update, updateInterval);
-
-                    }
-                    else
-                    {
-                        clearInterval(updateInterval)
-                    }
-
-                }
-
-
-
-                /*calendar */
-                var todayDate = moment().startOf('day');
-                var YM = todayDate.format('YYYY-MM');
-                var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
-                var TODAY = todayDate.format('YYYY-MM-DD');
-                var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
-
-
-                var calendarEl = document.getElementById('calendar');
-
-                var calendar = new FullCalendar.Calendar(calendarEl,
-                {
-                    plugins: ['dayGrid', 'list', 'timeGrid', 'interaction', 'bootstrap'],
-                    themeSystem: 'bootstrap',
-                    timeZone: 'UTC',
-                    dateAlignment: "month", //week, month
-                    buttonText:
-                    {
-                        today: 'today',
-                        month: 'month',
-                        week: 'week',
-                        day: 'day',
-                        list: 'list'
-                    },
-                    eventTimeFormat:
-                    {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        meridiem: 'short'
-                    },
-                    navLinks: true,
-                    header:
-                    {
-                        left: 'title',
-                        center: '',
-                        right: 'today prev,next'
-                    },
-                    footer:
-                    {
-                        left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-                        center: '',
-                        right: ''
-                    },
-                    editable: true,
-                    eventLimit: true, // allow "more" link when too many events
-                    events: [
-                    {
-                        title: 'All Day Event',
-                        start: YM + '-01',
-                        description: 'This is a test description', //this is currently bugged: https://github.com/fullcalendar/fullcalendar/issues/1795
-                        className: "border-warning bg-warning text-dark"
-                    },
-                    {
-                        title: 'Reporting',
-                        start: YM + '-14T13:30:00',
-                        end: YM + '-14',
-                        className: "bg-white border-primary text-primary"
-                    },
-                    {
-                        title: 'Surgery oncall',
-                        start: YM + '-02',
-                        end: YM + '-03',
-                        className: "bg-primary border-primary text-white"
-                    },
-                    {
-                        title: 'NextGen Expo 2019 - Product Release',
-                        start: YM + '-03',
-                        end: YM + '-05',
-                        className: "bg-info border-info text-white"
-                    },
-                    {
-                        title: 'Dinner',
-                        start: YM + '-12',
-                        end: YM + '-10'
-                    },
-                    {
-                        id: 999,
-                        title: 'Repeating Event',
-                        start: YM + '-09T16:00:00',
-                        className: "bg-danger border-danger text-white"
-                    },
-                    {
-                        id: 1000,
-                        title: 'Repeating Event',
-                        start: YM + '-16T16:00:00'
-                    },
-                    {
-                        title: 'Conference',
-                        start: YESTERDAY,
-                        end: TOMORROW,
-                        className: "bg-success border-success text-white"
-                    },
-                    {
-                        title: 'Meeting',
-                        start: TODAY + 'T10:30:00',
-                        end: TODAY + 'T12:30:00',
-                        className: "bg-primary text-white border-primary"
-                    },
-                    {
-                        title: 'Lunch',
-                        start: TODAY + 'T12:00:00',
-                        className: "bg-info border-info"
-                    },
-                    {
-                        title: 'Meeting',
-                        start: TODAY + 'T14:30:00',
-                        className: "bg-warning text-dark border-warning"
-                    },
-                    {
-                        title: 'Happy Hour',
-                        start: TODAY + 'T17:30:00',
-                        className: "bg-success border-success text-white"
-                    },
-                    {
-                        title: 'Dinner',
-                        start: TODAY + 'T20:00:00',
-                        className: "bg-danger border-danger text-white"
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: TOMORROW + 'T07:00:00',
-                        className: "bg-primary text-white border-primary text-white"
-                    },
-                    {
-                        title: 'Gotbootstrap Meeting',
-                        url: 'http://gotbootstrap.com/',
-                        start: YM + '-28',
-                        className: "bg-info border-info text-white"
-                    }],
-                    viewSkeletonRender: function()
-                    {
-                        $('.fc-toolbar .btn-default').addClass('btn-sm');
-                        $('.fc-header-toolbar h2').addClass('fs-md');
-                        $('#calendar').addClass('fc-reset-order')
-                    },
-
-                });
-
-                calendar.render();
-            });
-
-        </script>
-			@{
-		if (Session["zsi_login"].ToString() == "Y")
-		{
-		<div class='debugPanel noprint'>
-			  <a href='@Url.Content("~/")pagetemplate/source/@ViewBag.pageName' target="_blank">Edit Page Template</a>
-			| <a href='@Url.Content("~/")javascript/source/@ViewBag.pageName' target="_blank">Edit Javascript</a>
-			
-		</div>
-		}
-	}
-	
-	
-	
-<script src='@Url.Content("~/")Scripts/popper.min.js'></script>
-<script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
-@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
-
     </body>
 </html>
