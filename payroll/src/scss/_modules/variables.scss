@@ -1,9 +1,9 @@
 /*  THEME COLORs
 ========================================================================== */
 /* Looks good on chrome default color profile */
-$color-primary:						#886ab5;
+$color-primary:						#2198F3;
 $color-success:						#1dc9b7;
-$color-info:						#2196F3;
+$color-info:						#886ab5;
 $color-warning:						#ffc241;
 $color-danger:						#fd3995;
 $color-fusion:						darken(desaturate(adjust-hue($color-primary, 5), 80%), 25%); 
