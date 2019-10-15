@@ -42,3 +42,7 @@ zsi.smagerUp2/app/js/*
 zsi.smagerUp2/app/media/*
 zsi.smagerUp2/app/obj/*
 zsi.smagerUp2/app/webfonts/*
+zsiWeb2/.vs/*
+zsiWeb2/app/bin/*
+zsiWeb2/app/obj/*
+zsiWeb2/packages/*
