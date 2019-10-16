@@ -9,8 +9,21 @@
     <title>@ViewBag.pageTitle - Material Databased </title>
 	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
 	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
-    <link href='@Url.Content("~/")css/app.min.css' rel="stylesheet" />
-    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))    
+   <!-- Call App Mode on ios devices -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<!-- Remove Tap Highlight on Windows Phone IE -->
+	<meta name="msapplication-tap-highlight" content="no">
+	<!-- base css -->
+	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/vendors.bundle.css'>
+	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/app.bundle.css'>
+	<link rel="mask-icon" href='@Url.Content("~/")img/favicon/safari-pinned-tab.svg' color="#5bbad5">
+	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/reactions/reactions.css'>
+	<link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/fullcalendar/fullcalendar.bundle.css'>
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/miscellaneous/jqvmap/jqvmap.bundle.css'>
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/select2/select2.bundle.css'>
+    <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))   
 	
     <script>
         var base_url = '@Url.Content("~/")';
@@ -43,11 +56,29 @@
         </div> 
     }
 }
-<script src="@Url.Content("~/")Scripts/bootstrap.min.js"></script>
-<script src='@Url.Content("~/")javascript/name/easyJsTemplateWriter'></script>
-<div class="alert alert-success zPopup-system">
-    <p>Data has been saved.</p>
-</div>
+        @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
+        
+        <!-- base vendor bundle: 
+			 DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
+						+ pace.js (recommended)
+						+ jquery.js (core)
+						+ jquery-ui-cust.js (core)
+						+ popper.js (core)
+						+ bootstrap.js (core)
+						+ slimscroll.js (extension)
+						+ app.navigation.js (core)
+						+ ba-throttle-debounce.js (core)
+						+ waves.js (extension)
+						+ smartpanels.js (extension)
+						+ src/../jquery-snippets.js (core) -->
+        <script src='@Url.Content("~/")js/vendors.bundle.js'></script>
+        <script src='@Url.Content("~/")js/app.bundle.js'></script>
+        <script src='@Url.Content("~/")js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js'></script>
+        <script type="text/javascript">
+            /* Activate smart panels */
+            $('#js-page-content').smartPanel();
+
+        </script>
 </body>
 </html>
 

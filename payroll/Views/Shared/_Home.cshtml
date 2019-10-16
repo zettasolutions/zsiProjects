@@ -15,65 +15,43 @@
         <link rel="stylesheet" media="screen, print" href="css/vendors.bundle.css">
         <link rel="stylesheet" media="screen, print" href="css/app.bundle.css">
         <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
-    <title>Home - Material Databased</title>
-    <script src='@Url.Content("~/")js/vendors.bundle.js'></script>
-    <script src='@Url.Content("~/")js/app.bundle.js'></script>
-	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
-	<script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>
-	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
-	<script src='@Url.Content("~/")Scripts/zsiLib.js'></script>
-
+    <title>Home - ZSI Payroll</title>
 	<style type="text/css">
 		body{
 			padding: 0;
 			margin: 0;
 		}
-		.bg-brand-red{
-			background-color: #ED1806;
+		.page-content-wrapper{
+		background: linear-gradient(to right, #243B55 40%, #141E30); 
+		}
+		.p-color-white{
+			color: white;
 		}
 		.bg-brand-dark{
-			background-color: #212121;
-			color: #ffffff;
+			background-color: #f1efef;
+			color: #160202;
 		}
-		.bg-color-red{
-			color: #212121;
-		}
-		.mdb{
-			font-family: 'zsi-trendtool';
-			speak: none;
-			font-style: normal;
-			font-weight: normal;
-			font-variant: normal;
-			text-transform: none;
-			line-height: 1;
-			-webkit-font-smoothing: antialiased;
-			-moz-osx-font-smoothing: grayscale;
-		} 
-		
-		.lear-logo {
-			color: #FFFFFF;
-			font-size: 1.5rem;
-			margin-left: 20px;
-			margin-right: 10px;
-			position: relative;
-			top: 3px;
+		#btnLogIn{
+			 background: linear-gradient(to left, #2F80ED 40%, #56CCF2);
 		}
 		.btn-lear {
-			color: #fff;
-			background-color: #F11716;
-			border-color: #F11716;
+			color: #fff; 
+			border-color: black;
 		}
-		.btn:hover {
-			color: #bdbbbb;;
-			text-decoration: none;
+		.color-red{
+			color: #126eb8b5;
+		}
+		.color-red:hover{
+			color: white;
 		}
 		.help-block{
 			color: #cac7c7 !important;
 		}
+		.zsi-home-color{color:#ffffff;}
 	</style>
 </head>
 <body>
+<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
 @RenderBody()
-<script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
 </body>
 </html>

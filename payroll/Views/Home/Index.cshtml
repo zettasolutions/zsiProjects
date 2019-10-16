@@ -10,8 +10,8 @@
                 <div class="d-flex align-items-center container p-0">
                     <div class="page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9">
                         <a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center navbar-brand text-white">
-                        	<i class="ttool lear-logo"></i>
-                        	 Material Database
+                        	<img src='@Url.Content("~/")images/logo.png' alt="Lear Logo" aria-roledescription="logo" class="mr-2">
+                        	 ZSI Payroll
                         </a>
                     </div>
                     <a href="#" class="btn-link text-white ml-auto">
@@ -22,7 +22,7 @@
             <div class="flex-1" style="background: url(img/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;">
                 <div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
                     <div class="row">
-                        <div class="col col-md-6 col-lg-7 hidden-sm-down bg-color-red">
+                        <div class="col col-md-6 col-lg-7 hidden-sm-down zsi-home-color">
                             <h2 class="fs-xxl fw-500 mt-4">
                                 The simplest UI toolkit for developers &amp; programmers
                                 <small class="h3 fw-300 mt-3 mb-5 opacity-60">
@@ -85,39 +85,65 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-	    var msg = zsi.getUrlParamValue("access");
-	    var _username = readCookie("username");
+$(document).ready(function () {
+    var msg = getUrlParamValue("access");
+    var _username = readCookie("username");
 
-		if(_username){
-			if (msg !== "") {
-				$("#username").val(_username);
-				$("#password").val( readCookie("userpwd"));
-				$("#isremember").prop('checked',true);
-				$("#frmLogin").submit();
-			}
-			else
-				clearCookies();
-		}
-		else {
-		    if (msg) alert( unescape(msg) + " Please try again.")
+    if(_username){
+        if (msg !== "") {
+            $("#username").val(_username);
+            $("#password").val( readCookie("userpwd"));
+            $("#isremember").prop('checked',true);
+            $("#frmLogin").submit();
         }
+        else
+            clearCookies();
+    }
+    else {
+        if (msg) alert( unescape(msg) + " Please try again.")
+    }
 
-        $('.carousel').carousel({
-            interval: 6000
-        })
-    });
+});
 
 $("#frmLogin").submit(function () {
 
     if ($("#username").val() === "") { alert("Please enter username."); return false; }
     if ($("#password").val() === "") { alert("Please enter password."); return false; }
 	checkRememberSignin();
+	localStorage.removeItem("menuItems");
 });
 
-$("#btnTest").click(function () {
-	checkRememberSignin();
-});
+
+function getUrlParamValue(variable) {
+    var source = window.location.href; 
+    variable = variable.toLowerCase();
+    var qLoc =  source.indexOf("?");
+    if (qLoc >-1){
+            var param = source.split("?");
+        var result = param[1];  //right parameters  
+        if (result.indexOf("&") > -1){ 
+        
+            var vars = result.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if (pair[0].toLowerCase() == variable.toLowerCase()) {
+    
+                    return pair[1];
+                }
+            }
+        }
+        else{
+            var pair = result.split("=");
+            if (pair[0].toLowerCase() == variable.toLowerCase()) {
+                return pair[1];
+            }
+    
+    
+        }
+    
+    }
+    return "";
+}
 
 function clearCookies(){
 	createCookie("username","",0);
@@ -132,32 +158,7 @@ function checkRememberSignin(){
 	}
 	else clearCookies();
 }
-
-var button = $("#example-one");
-button.on("click", function () {
-
-    var x = $(this);
-    if (x.text() == x.data("text-swap")) {
-        x.text(x.data("text-original"));
-    } else {
-        x.data("text-original", x.text());
-        x.text(x.data("text-swap"));
-    }
-
-});
-
-var button = $("#example-two");
-button.on("click", function () {
-
-    var x = $(this);
-    if (x.text() == x.data("text-swap")) {
-        x.text(x.data("text-original"));
-    } else {
-        x.data("text-original", x.text());
-        x.text(x.data("text-swap"));
-    }
-
-});
+ 
 
 function createCookie(name,value,days) {
     var expires;

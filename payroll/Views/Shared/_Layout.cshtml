@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="Developed By" content="zetta-solutions.net">
     <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
-    <title>@ViewBag.pageTitle - Material Databased </title>
+    <title>@ViewBag.pageTitle - ZSI Payroll </title>
 	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
 	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
    <!-- Call App Mode on ios devices -->
@@ -35,6 +35,9 @@
     </script>
  
 	<style>
+		 .autoCaps{
+	        text-transform: capitalize !important;
+	    }
 		.ml-auto, .mx-auto {
 			margin-left: auto !important;
 			margin-right: 1.5rem;
@@ -58,12 +61,10 @@
     }
 	.modal-dialog.modal-full {
     max-width: none;
-}
-.form-control {    
+	}
+	.form-control {    
 		padding: unset;   
 	}	
-	
-	
 	</style>
 </head>
 <body class="mod-bg-1 ">   
@@ -146,7 +147,7 @@
                 <aside class="page-sidebar">
                     <div class="page-logo">
                         <a href="/" class="page-logo-link press-scale-down d-flex align-items-center position-relative">
-                            <img src='@Url.Content("~/")img/logo.png' alt="ZSI Payroll" aria-roledescription="logo">
+                            <img src='@Url.Content("~/")img/logo.png' alt="ZSI Logo" aria-roledescription="logo">
                             <span class="page-logo-text mr-1">ZSI Payroll</span>
                             <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
                             <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
@@ -166,7 +167,7 @@
                             <img src='@Url.Content("~/")img/demo/avatars/avatar-admin.png' class="profile-image rounded-circle" alt="Dr. Codex Lantern">
                             <div class="info-card-text">
                                 <a href="#" class="d-flex align-items-center text-white">
-                                    <span class="text-truncate text-truncate-sm d-inline-block">
+                                    <span class="text-truncate text-truncate-sm d-inline-block autoCaps">
                                         @zsi.web.SessionHandler.CurrentUser.userFullName.ToUpper()
                                     </span>
                                 </a>
@@ -524,7 +525,7 @@
                             <!-- app user menu -->
                             <div>
                                  @{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }
-                                <a href="#" data-toggle="dropdown" title="drlantern@gotbootstrap.com" class="header-icon d-flex align-items-center justify-content-center ml-2">
+                                <a href="#" data-toggle="dropdown" title="zetta-solutions.net" class="header-icon d-flex align-items-center justify-content-center ml-2">
                                     <img src="@Url.Content("~/")img/demo/avatars/avatar-admin.png" class="profile-image rounded-circle" alt="Dr. Codex Lantern">
                                     <!-- you can also add username next to the avatar with the codes below:
 									<span class="ml-1 mr-1 text-truncate text-truncate-header hidden-xs-down">Me</span>
@@ -537,7 +538,7 @@
                                                 <img src="@Url.Content("~/")img/demo/avatars/avatar-admin.png" class="rounded-circle profile-image" alt="Dr. Codex Lantern">
                                             </span>
                                             <div class="info-card-text">
-                                                <div class="fs-lg text-truncate text-truncate-lg">@zsi.web.SessionHandler.CurrentUser.userFullName.ToUpper()</div>
+                                                <div class="fs-lg text-truncate text-truncate-lg autoCaps">@zsi.web.SessionHandler.CurrentUser.userFullName.ToUpper()</div>
                                                 <span class="text-truncate text-truncate-md opacity-80">(@role)</span>
                                             </div>
                                         </div>
@@ -572,7 +573,7 @@
                                         </div>
                                     </div>
                                     <div class="dropdown-divider m-0"></div>
-                                    <a class="dropdown-item fw-500 pt-3 pb-3" href="@Url.Content("~/")page/signout">
+                                    <a class="dropdown-item fw-500 pt-3 pb-3" href="@Url.Content("~/")page/signin">
                                         <span>Logout</span>
                                         <span class="float-right fw-n">&commat;@zsi.web.SessionHandler.CurrentUser.userName.ToUpper()</span>
                                     </a>
@@ -623,7 +624,7 @@
             <a href="#" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Scroll Top">
                 <i class="fal fa-arrow-up"></i>
             </a>
-            <a href="@Url.Content("~/")page/signout" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Logout">
+            <a href="@Url.Content("~/")page/signin" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Logout">
                 <i class="fal fa-sign-out"></i>
             </a>
             <a href="#" class="menu-item btn" data-action="app-fullscreen" data-toggle="tooltip" data-placement="left" title="Full Screen">
@@ -1176,7 +1177,9 @@
 		@{
             if (Session["zsi_login"].ToString() == "Y")
             {
-            <div class='debugPanel noprint'>                
+            <div class='debugPanel noprint'>
+                <!-- <a href='@Url.Content("~/")pagetemplate/source/@ViewBag.pageName' target="_blank">Edit Page Template</a> -->
+                <!-- <a href='@Url.Content("~/")javascript/source/@ViewBag.pageName' target="_blank">Edit Javascript</a> -->
 				<a href="javascript:void(0);" onclick="app.editCode('html');">Edit Page Template</a> |
 				<a href="javascript:void(0);" onclick="app.editCode('js');"> Edit Javascript</a>  
                 
