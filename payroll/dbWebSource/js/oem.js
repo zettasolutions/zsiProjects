@@ -253,12 +253,12 @@
             
             _public.showModalParts = function(oemId,progId,progCode) {
                 g$mdl = $("#" + gMdlProgParts);
-                g$mdl.find(".modal-title").html(" <div class='row'> Program » " + progCode + " Build Phase: " + ' <select class="form-control-sm " name="dd_program_bp" id="dd_program_bp"></select> ' + " Model Year: " + ' <select class="form-control-sm " name="dd_model_year" id="dd_model_year"></select></div>');
+                g$mdl.find(".modal-title").html(" <div class='row'> Program » " + progCode + " Build Phase: &nbsp " + '&nbsp <select class="form-control-sm " name="dd_program_bp" id="dd_program_bp"></select> ' + " Model Year: &nbsp" + '&nbsp <select class="form-control-sm " name="dd_model_year" id="dd_model_year"></select></div>');
                 g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
              //   g_model_year = $(<select type='text' class='autoCaps form-control form-control-sm' id='bp' name='bp' > </select>);
                 $("select[name='dd_program_bp']").dataBind({
                     url: app.execURL + "dd_program_bp_sel @program_id=" +progId
-                    , text: "buil_phase_abbrv"
+                    , text: "build_phase_abbrv"
                     , value: "build_phase_id"
                 });  
                 $("select[name='dd_model_year']").dataBind("inv_serial_status");
@@ -863,4 +863,4 @@
  })();
   
 
-                                                                        
+                                                                         

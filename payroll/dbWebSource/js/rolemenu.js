@@ -1,10 +1,9 @@
 var bs = zsi.bs.ctrl;
 var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-$(document).ready(function(){
+zsi.ready=function(){
     displayRecords();
-    
-});
+};
 
  $("#btnSave").click(function () {
     $("#frm").jsonSubmit({
@@ -17,17 +16,17 @@ $(document).ready(function(){
 });
     
 function displayRecords(){   
-     var cb = bs({name:"cbFilter1",type:"checkbox"});
+     var cb = app.bs({name:"cbFilter1",type:"checkbox"});
     $("#grid").dataBind({
-         url   : execURL + "role_menus_sel"
+         url            : app.execURL + "role_menus_sel"
         ,width          : $(document).width() - 35
 	    ,height         : $(document).height() - 250
         ,blankRowsLimit:5
         ,dataRows       :[     
             { text: cb             , width:25  , style:"text-align:left;"   
     		     ,onRender : function(d){
-                                return     bs({name:"role_menu_id",type:"hidden",value: svn(d,"role_menu_id") })
-                                        +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                                return     app.bs({name:"role_menu_id" ,type:"hidden"   ,value: svn(d,"role_menu_id") })
+                                        +  (d !==null ? app.bs({name:"cb"  ,type:"checkbox"}) : "" );
                             }             
     		 }
     		 
@@ -45,4 +44,4 @@ function displayRecords(){
           //  displayBlankRows();
         }
     });    
-}
+}  
