@@ -147,3 +147,7 @@
 .zPopup-modal{
    z-index: 1000;
 }
+
+ul[name="localTemplates"],ul[id="localTemplates"] {
+    display: none;
+}
