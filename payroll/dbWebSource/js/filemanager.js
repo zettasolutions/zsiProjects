@@ -28,11 +28,11 @@ $(window).bind('keydown', function (e) {
 
 loadFoldersAndFiles("","");
 
-$(document).ready(function(){
-
+zsi.ready = function(){
+    $(".page-title").html("File Manager");
     $(this.body).prepend("<div id=\"editorPane\"> </div>");
     getTemplate();
-});
+};
 
 
 function showUploadFileModal(){
@@ -253,4 +253,4 @@ var frm = $("#frm_" + modalFileUpload);
 
  
  
-                 
+                  

@@ -3,7 +3,8 @@
     var svn =  zsi.setValIfNull;
     
     zsi.ready = function(){
-     displaySSS();
+        $(".page-title").html("SSS");
+        displaySSS();
     };
     
     //save
@@ -32,8 +33,8 @@
     var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
     $("#sssGrid").dataBind({
              url            : app.procURL + "sss_table_sel"
-    	    ,width          : $(document).width() - 370
-    	    ,height         : $(document).height() - 200
+    	    ,width          : $(".zContainer").width()
+    	    ,height         : $(document).height() - 260
             ,blankRowsLimit : 5
             ,dataRows   : [
                              {text: cb                      ,width:25           ,style:"text-align:center"
@@ -57,4 +58,4 @@
     });
     
     }     
-})();
+})(); 

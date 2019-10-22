@@ -3,9 +3,9 @@ var svn =  zsi.setValIfNull;
 
 
 
-zsi.ready=function(){
+zsi.ready(function(){
     displayRecords();
-};
+});
 
 
 $("#btnSave").click(function () {
@@ -22,9 +22,9 @@ $("#btnSave").click(function () {
 });
     
 function displayRecords(){
-     var cb = app.bs({name:"cbFilter1",type:"checkbox"});
+     var cb = bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
-	     url            : app.execURL + "items_sel"
+	     url            : execURL + "items_sel"
 	    ,width          : $(document).width() - 35
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
@@ -33,8 +33,8 @@ function displayRecords(){
         ,dataRows : [
                  {text  : cb                                                           , width : 25        , style : "text-align:left;"       
         		    , onRender      :  function(d){ 
-                		                    return     app.bs({name:"item_id",type:"hidden",value: svn (d,"item_id")})
-                                                      +  (d !==null ? app.bs({name:"cb",type:"checkbox"}) : "" );
+                		                    return     bs({name:"item_id",type:"hidden",value: svn (d,"item_id")})
+                                                      +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
                             }
             }	 
         		,{text  : "Item Type"               , name  : "item_type_id"            , type  : "select"        , width : 200       , style : "text-align:left;"}
@@ -75,4 +75,4 @@ $("#btnDelete").click(function(){
     });       
 });
     
-                                        
+                                      

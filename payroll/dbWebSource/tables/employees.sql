@@ -7,6 +7,7 @@ id	INT IDENTITY(1,1)	NOT NULL
 ,name_suffix	NVARCHAR(100)	NULL
 ,gender	CHAR(1)	NULL
 ,civil_status_code	CHAR(1)	NULL
+,date_hired	DATE	NULL
 ,empl_type_code	CHAR(1)	NULL
 ,basic_pay	DECIMAL(20)	NULL
 ,pay_type_code	CHAR(1)	NULL

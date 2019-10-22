@@ -3,6 +3,7 @@
     var svn =  zsi.setValIfNull;
 
     zsi.ready = function(){
+         $(".page-title").html("Phil Health");
          displayPhilHealth();
     };
      
@@ -30,8 +31,8 @@
         var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
         $("#philHealth").dataBind({
                  url            : app.procURL + "philhealth_table_sel"
-        	    ,width          : $(document).width() - 370
-        	    ,height         : $(document).height() - 200
+        	    ,width          : $(".zContainer").width()
+        	    ,height         : $(document).height() - 260
                 ,blankRowsLimit : 5
                 ,dataRows   : [
                     {text: cb                      ,width:25           ,style:"text-align:center"
@@ -65,4 +66,4 @@
  
  
  
-       
+         

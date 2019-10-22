@@ -1,8 +1,7 @@
   //jquery objects events:
 $(document).ready(function(){
     displayAppProfile();
-    
-        $("#theme_id").dataBind("theme");
+    $("#theme_id").dataBind("theme");
    
 }); 
 
@@ -42,4 +41,4 @@ $("#btnSave").click(function(){
               
         }
     );
-});            
+});             
