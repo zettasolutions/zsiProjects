@@ -105,7 +105,7 @@ module.exports = {
 			})
 			.pipe(function () {
 				return gulpif(config.autoprefixer, autoprefixer({
-					browsers: ['last 2 versions']
+					overrideBrowserslist: ['last 2 versions']
 				}));
 			})
 			.pipe(function () {

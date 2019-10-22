@@ -1,11 +1,11 @@
 /*  THEME COLORs
 ========================================================================== */
 /* Looks good on chrome default color profile */
-$color-primary:						#2198F3;
+$color-primary:						#1a0dab;
 $color-success:						#1dc9b7;
 $color-info:						#886ab5;
 $color-warning:						#ffc241;
-$color-danger:						#fd3995;
+$color-danger:						#f30000;
 $color-fusion:						darken(desaturate(adjust-hue($color-primary, 5), 80%), 25%); 
 
 /* looks good in sRGB but washed up on chrome default 

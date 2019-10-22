@@ -1,34 +1,41 @@
 
 @{
-    ViewBag.Title = "Page List";
+    //ViewBag.Title = "Page List";
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 <div class="pageTitle">@ViewBag.Title </div>
-	
-	<div class="row">		
-		<label for="filter_name" class="col-12 col-xl-2 col-md-3 col-sm-6 col-form-label">Search Page Name:</label>
-		<div class="col-12 col-xl-3 col-md-5 col-sm-8">
-			<input type="text" name="filter_name" id="filter_name" class="form-control form-control-sm p-2">
-		</div>		
-	</div>
-	
-	<div class="row">		
-		 <form method="post" id="frm" class="col-12 col-xl-12 col-md-12 com-sm-12"><div id="grid" class="zGrid"></div></form>
-		<div class="button-group col-12 col-xl-12 col-md-12 com-sm-12">
-			<button type="button" class="btn btn-primary btn-sm raise" id="btnSave">
-				<span><i class="fas fa-save"></i> Save</span>
-			</button>
-			<button type="button" class="btn btn-primary btn-sm raise" id="btnDelete">
-				<span><i class="fas fa-trash-alt"></i> Delete</span>
-			</button>
+ <div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+             <div class="zContainer">	
+				<div class="row mb-1">		
+					<label for="filter_name" class="col-12 col-xl-2 col-md-3 col-sm-6 col-form-label">Search Page Name:</label>
+					<div class="col-12 col-xl-3 col-md-5 col-sm-8">
+						<input type="text" name="filter_name" id="filter_name" class="form-control form-control-sm p-2">
+					</div>		
+				</div>
+				
+				<div class="row">		
+					 <form method="post" id="frm" class="col-12 col-xl-12 col-md-12 com-sm-12 mb-1"><div id="grid" class="zGrid"></div></form>
+					<div class="button-group col-12 col-xl-12 col-md-12 com-sm-12">
+						<button type="button" class="btn btn-primary btn-sm" id="btnSave">
+							<span><i class="fas fa-save"></i> Save</span>
+						</button>
+						<button type="button" class="btn btn-primary btn-sm" id="btnDelete">
+							<span><i class="fas fa-trash-alt"></i> Delete</span>
+						</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-<style>
+
+	<style>
 
  .iconEdit{
 	font-size: 12pt;
     color: #3878C4;
- }
+}
  .zGrid .zHeaders { 
     font-size: .8rem;
 }
@@ -39,6 +46,7 @@
 </style>
 <script>
     zsi.ready = function(){ 
+    	$(".page-title").html("Pages");
 		var bs 		= zsi.bs.ctrl;
 		var svn  	=  zsi.setValIfNull;
 		var gArr = null;
@@ -61,8 +69,8 @@
 			var cb = bs({name:"cbFilter1",type:"checkbox"});
 			$("#grid").dataBind({
 			url			: base_url + "sql/exec?p=pages_sel" + params
-			,width          : $(document).width("auto")
-			,height         : $(document).height()-240
+			,width          : $(".zContainer").width()
+			,height         : $(document).height() - 260
 			,selectorType   : "checkbox"
 			,blankRowsLimit :5
 			,dataRows       :[
