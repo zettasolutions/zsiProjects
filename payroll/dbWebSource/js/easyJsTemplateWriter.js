@@ -85,7 +85,7 @@ zsi.easyJsTemplateWriter = (function(sn){
                         ,html       : _o.html()
                         ,template   : Handlebars.compile(_o.html())
                     };
-                    if ( ___etwTemplates.filter(x => x.name === _name).length === 0)  ___etwTemplates.push(_ctrl);
+                    if ( ___etwTemplates.filter(function(x){ x.name ===_name}).length === 0)  ___etwTemplates.push(_ctrl);
             });
         });
     };
@@ -112,4 +112,4 @@ zsi.easyJsTemplateWriter = (function(sn){
     
     return this;
 });  
-              
+               

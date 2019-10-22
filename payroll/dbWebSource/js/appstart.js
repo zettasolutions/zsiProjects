@@ -6,7 +6,91 @@ var app = (function() {
         ,optionsURL : base_url + "selectoption/code/" 
         ,bs         : zsi.bs.ctrl
         ,svn            : zsi.setValIfNull
-        ,currentHash:  { page:"",methods : []} 
+        ,currentHash:  { page:"",methods : []}
+        ,hash : {
+                 getPageParams      : function(keys){
+                    return app.currentHash.params.setParamKeys(keys) || {}; 
+                 }
+                ,getMethodParams    : function(name,keys){
+                    var _r={};
+                    var _m = app.currentHash.methods;
+                    for(var i=0; i < _m.length; i++){		 
+                        if (_m[i].n === name){
+                            _r = app.hash.create(_m[i].params,keys);
+                            break;
+                        }
+                    }
+                    return _r;
+                }
+                ,create             : function(params,keys){
+                    var _info = {};
+                    if(typeof params === "undefined") return;
+                    for(var i=0; i < keys.length; i++){		
+                        if(params[i]) _info[keys[i]]=params[i];
+                    }
+                    return _info;
+                
+                }
+                ,createPathState    : function(fname,params,option){
+                    /*
+                    0 or null or undefined = concatenated hash
+                    1 = replace all hash parameters;
+                    */
+                    var _a = params;
+                    var _hashOptions = option || 0;
+                    var _params ="";
+                    var _fn = fname; //_a.callee.name;
+                    var _hashPath="";
+                    var _hash = window.location.hash;
+                    var _hashItems = _hash.split('#').filter(function(x) { return x !==""});
+                    var _isHistoryReplace = false;
+                    var _checkParams = function(fname){
+                        var _params = "m/" + fname + "/" + params.join("/");
+                        for (var i=0; i <_hashItems.length ;i++){
+                            var _info = _hashItems[i];
+                            var _i = app.getURLMethod(_info);
+                            if( _i.n === fname ) {
+                              
+                                if( i === _hashItems.length -1 ) _isHistoryReplace = true;
+                              	if(_params !== _info) {
+                                	_hashItems[i] = _params;
+                                }
+                               return;
+                            }
+                        }
+                        _hashItems.push(_params);
+                    }; 
+
+                    var _writeParams = function(params){
+                        var _result="";
+                        
+                        for( var i=0;i< params.length; i++){
+                            if(_result!=="") _result +="/";
+                            _result +=params[i];
+                        }
+                        return _result;
+                    };
+                    
+                    _checkParams(_fn);
+
+                    _params = _writeParams(_a);
+                    switch(_hashOptions){
+                        case "undefined":
+                        case 0:
+                             _hashPath = "#" + _hashItems.join("#");
+                            break;
+                        case 1:
+                              _hashPath = "#m/" +_fn + "/" + _params;
+                            break;
+                        default: break;
+                    }
+                    if(_isHistoryReplace)
+                        history.replaceState(null, null,_hashPath );
+                    else 
+                        history.pushState(null, null,  _hashPath);
+            
+                }                
+        }
     }    
     
     ,_cookie         = {
@@ -80,7 +164,7 @@ var app = (function() {
             if(_info.type!==""){
                 _methods.push (_info);
                if(_info.type=="p") 
-                    app.currentHash = { page : _info.n , params: _info.params } ;
+                    app.currentHash = { page : _info.n , params: _info.params,methods:[]} ;
                 else 
                     app.currentHash.methods.push(_info);
 
@@ -136,22 +220,24 @@ var app = (function() {
         
         $.ajaxSetup({ cache: false });        
         app.getUserInfo(function(){
-           $(".profile-image").attr({src: base_url +  "file/loadFile?filename=" + app.userInfo.img_filename }); 
+            if(app.userInfo.img_filename !=="") $(".profile-image").attr({src: base_url +  "file/loadFile?filename=" + app.userInfo.img_filename }); 
         });
 
-        app.checkBrowser(function(isIE){
-            if(isIE) return true;
-            app.loadPublicTemplates(function(){
-                var menuItems = localStorage.getItem("menuItems");
-                if(menuItems){
-                    app.displayMenu( JSON.parse(menuItems));
-                }else{
-                    app.loadMenu(function(data){
-                        if(data.rows.length>0) app.saveLocalStorageAndDisplay(data);
-                    });
-                }
-            });
+        app.loadPublicTemplates(function(){
+            var menuItems = localStorage.getItem("menuItems");
+            if(menuItems){
+                app.displayMenu( JSON.parse(menuItems));
+            }else{
+                app.loadMenu(function(data){
+                    if(data.rows.length>0) app.saveLocalStorageAndDisplay(data);
+                });
+            }
         });
+      
+        app.checkBrowser(function(isIE){
+             if(isIE) return true;
+        });
+
 
         window.onpopstate = function(event) {
             _initPageLoad();
@@ -161,7 +247,6 @@ var app = (function() {
         _initPageLoad();
 
     };
-    
     _app.addManageMenu              = function(){
             var ul =  $(".fa-tasks").closest("li").find("ul");
             var createLI  = function(link, icon, text){
@@ -203,71 +288,6 @@ var app = (function() {
         console.log(typeof callBack);
         if( typeof callBack !=="undefined" ) callBack(false);
     };
-    _app.createHashPathState        = function(fn,params,option){
-        /*
-        0 or null or undefined = concatenated hash
-        1 = replace only hash parameters;
-        2 = replace all hash parameters;
-        */
-        var _a = params;
-        var _hashOptions = option || 0;
-        var _params ="";
-        var _fn = fn; //_a.callee.name;
-        var _hashPath="";
-        var _hash = window.location.hash;
-        var _hashItems = _hash.split('#').filter(function(x) { return x !==""});
-        var _isFunctionExist = function(name){
-        	var _r = false;
-            var _arr = _hashItems.filter(function(x){
-              var _i = app.getURLMethod(x);
-              return _i.n == name;
-            });
-        	if(_arr.length > 0) _r=true;
-            return _r;
-        }; 
-        var _writeParams = function(params){
-            var _result="";
-            
-            for( var i=0;i< params.length; i++){
-                if(_result!=="") _result +="/";
-                _result +=params[i];
-            }
-            return _result;
-        };
-        
-        if( _isFunctionExist(_fn)) return;
-    
-        _params = _writeParams(_a);
-        switch(_hashOptions){
-            case "undefined":
-            case 0:
-                 _hashPath = _hash + "#m/" +_fn + "/" + _params;
-                break;
-            case 1:
-                if(_hash==="")
-                    _hashPath = "#m/" +_fn + "/" + _params;
-                else{
-                    
-                    _hashPath = "#p/" + app.currentHash.page +  "/" + _writeParams(app.currentHash.params);
-                    app.currentHash.methods.forEach(function(info,i) {
-                        if(info.type=="m"){ 
-                           _hashPath +=   "#m/" + info.n + "/" +  _writeParams(info.params);
-                        }
-                    });
-            
-                    hashPath += "#m/" +_fn + "/" + _params;
-                }
-                break;
-            case 2:
-    
-                  _hashPath = "#m/" +_fn + "/" + _params;
-                break;
-            default: break;
-        }
-        history.pushState(null, null,  _hashPath);
-
-    };
-    
     _app.editCode                   = function(type){
         var _hash = window.location.hash;
         var _typePath = (type=="js" ? 'javascript' : 'pagetemplate' ) ;
@@ -339,26 +359,12 @@ var app = (function() {
              });
              if(_subH!=="")  _subH = "<ul>" + _subH + "</ul>";
              //PARENT MENUS HAS NO LINK. PUTTING LINK MAY CAUSE CHANGING THE COLOR OF THE PARENT MENUS.
-             _h += _tw.new().saParentMenuItem({icon: this.icon, title: this.menu_name,page_name: (_subH !=="" ? "#" : "#p/" + this.page_name) , subItems:_subH}).html();
+             _h += _tw.new().saParentMenuItem({icon: this.icon, title: this.menu_name,page_name: (_subH !=="" ? "#" :  ( this.page_name !== "" ? "#p/" + this.page_name : "#")) , subItems:_subH}).html();
              
         }); 
     
         if(_navMenu.length > 0 ) _navMenu.html(_h);
      };
-    _app.getCurrentHashParams       = function(keys){
-        var _info = {};
-        var _params = app.currentHash.params;
-        
-        if(typeof _params === "undefined") return;
-
-        if(_params.length > 0){
-            keys.forEach(function(v,i) {
-                if(_params[i]) _info[v]=_params[i];
-            });
-        } 
-        
-        return _info;        
-    };
     _app.getImageURL                = function(fileName){
         return base_url + "file/viewImage?fileName="  + fileName; 
     };
@@ -407,4 +413,4 @@ var app = (function() {
     return _app;
 
 })();
-      
+               

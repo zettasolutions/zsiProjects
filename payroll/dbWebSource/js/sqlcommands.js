@@ -1,38 +1,146 @@
-var gMdlId = "modalAdd";
-$(document).ready(function() {
-    var  _tw =  zsi.easyJsTemplateWriter
-        ,$modal
-        ,$is_procedure
-        ,$id
-        ,$code
-        ,$is_public
-        ,tbl = "#tblResult"
-        ,modalTemplate = { 
-                  id    : gMdlId
-                , title : 'Add SQL Command'
-                , body : new _tw().sqlCmdMdlBody().html()
-                , footer: '<button id="btnSave" type="button" class="btn btn-primary">Save</button><button id="btnRun" type="button" class="btn btn-primary">Run</button>' 
+(function(){
 
-    };
-    editor = null;
+   var sqlCommands = {
+     gMdlId         : "modalAdd"
+    ,editor         : null
+    ,_tw            :  zsi.easyJsTemplateWriter
+    ,$modal         : null
+    ,$is_procedure  : null
+    ,$id            : null
+    ,$code          : null
+    ,$is_public     : null
+    ,modalTemplate : function(){
+        return     { 
+          id    : this.gMdlId
+        , title : 'Add SQL Command'
+        , body : new this._tw().sqlCmdMdlBody().html()
+        , footer: '<button id="btnSave" type="button" class="btn btn-primary">Save</button><button id="btnRun" type="button" class="btn btn-primary">Run</button>' 
     
-    getTemplate(function() {
-        initAceEditor(false);
-    });
-    displaySqlCommands();
+        };
+    } 
+    ,getTemplate  : function(callBack) {
+                    $("#"+ this.gMdlId).remove();
+                    $("body").append( new this._tw().bsModalBox( this.modalTemplate() ).html() );
+                    $modal = $("#" + this.gMdlId);
+                    $is_procedure = $modal.find('#is_procedure');
+                    $id = $modal.find('#sqlcmd_id');
+                    $code = $modal.find('#sqlcmd_code');
+                    $is_public = $modal.find('#is_public');
+                    $modal.find("form").append('<pre id="editor"></pre>');
+                    if (typeof callBack === "function") callBack();
+                }
+    ,initAceEditor      : function(readonly) {
+        var options = {
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: false,
+            maxLines: Infinity,
+            fontSize: "10pt"
+        };
+        editor=null;
+        ace.require("ace/ext/language_tools");
+        editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/sql");
+        editor.setAutoScrollEditorIntoView(true);
+        
+        if (readonly) {
+            options.readOnly = true;
+            options.highlightActiveLine = false;
+            options.highlightGutterLine = false;
+            editor.renderer.$cursorLayer.element.style.opacity = 0;
+        }
     
-    $("#btnSync").click(function() {
-        $.get(procURL + "sql_commands_sync", function() {
-            displaySqlCommands(); 
+        editor.setOptions(options);
+    }
+    ,displaySqlCommands : function(callBack) {
+        $("#grid-SqlCommands").dataBind({
+             sqlCode:"S53"
+            ,parameters : { sort_index: 3 }
+            ,width: $(".zContainer").width() 
+            ,height: $(document).height() - 260
+            ,isPaging : true
+            ,rowsPerPage : 100
+            ,dataRows : [
+                            { text : "Code" , width : 100 , style : "text-align:center;"
+                                ,onRender: function(d) {
+                                    return app.bs({ type : 'hidden' , name : 'sqlcmd_id' })
+                                        +  app.bs({ type : 'input' , name : 'sqlcmd_code' , value : app.svn(d,'sqlcmd_code') });
+                                }
+                            }
+                            ,{ text : "Text" , width : 300 , style : "text-align:left;" ,name : 'sqlcmd_text'  }
+                            ,{ text : "Is Proc?" , width : 80 , style : "text-align:left;" ,name : 'is_procedure' }
+                            ,{ text : "Is Public?" , width : 80 , style : "text-align:left;" ,name : 'is_public' }
+                            ,{ text : "Action" , width : 100 , style : "text-align:center;"
+                                ,onRender : function(d) {
+                                    return '<a href="javascript:void(0);" class="edit-sqlcommand"><i class="fas fa-edit"></i></a>';
+                                }
+                            }
+                        ]
+            ,onComplete : function(d) {
+                this
+                .off('click','.edit-sqlcommand')
+                .on('click','.edit-sqlcommand', function() {
+                   
+                    var _rowInfo = d.data.rows[$(this).closest('.zRow').index()];
+                    
+                    sqlCommands.getTemplate(function() {
+                        $modal.modal('show');
+                        
+                        $is_procedure.val(_rowInfo.is_procedure);
+                        $id.val(_rowInfo.sqlcmd_id);
+                        $code.val(_rowInfo.sqlcmd_code);
+                        $is_public.val(_rowInfo.is_public);
+                        
+                        $modal.find("#editor").empty();
+                        $modal.find("#editor").html($('<div/>').text(_rowInfo.sqlcmd_text).html());
+                        
+                        sqlCommands.initAceEditor((_rowInfo.is_procedure === 'N' ? false : true));
+                    });
+                });
+                if(callBack) callBack();
+            }
         });
-    });
-    
-    $('#' + gMdlId).on('show.bs.modal', function (e) {
+    }
+    ,saveSqlCommand     : function() {
+        var _sqlcmd_id = $id.val();
+        var _sqlcmd_code = $code.val();
+        var _sqlcmd_text = editor.getValue();
+        var _is_public = $is_public.val();
+        
+        if (_sqlcmd_code === "") { alert("Please enter code"); return }
+        if (_sqlcmd_text === "") { alert("Please enter sql statement."); return }
+        
+        $.post(app.procURL + "sql_commands_upd @sqlcmd_id="+_sqlcmd_id+",@sqlcmd_code='"+_sqlcmd_code+"',@sqlcmd_text='"+_sqlcmd_text+",@is_public='"+_is_public+"'", function(d) {
+            zsi.form.showAlert("savedWindow");
+            displaySqlCommands();
+        });
+    }
+
+};     
+
+
+zsi.ready = function() {
+    $(".panel").css("height", $(".page-content").height()); 
+    $(".page-title").html("SQL Commands");
+    var sc = Object.create(sqlCommands);
+    sc.displaySqlCommands();
+
+    $("#btnSync").click(function() {
+        $.get(app.procURL + "sql_commands_sync", function() {
+            sc.displaySqlCommands(); 
+        });
+    });        
+
+    $('#' + sc.gMdlId).on('show.bs.modal', function (e) {
+        console.log("agi");
         $code.val("");
         $is_public.val("N");
-    });
+    });    
     
+ 
     $(document).on("click", "#btnRun", function () {
+        var tbl = "#tblResult";
         $(tbl).show();
         var text = editor.getSelectedText();
         if (text === "") { text = editor.getValue(); }
@@ -75,120 +183,20 @@ $(document).ready(function() {
         );
     });
     
-    $(document).on("click", "#btnSave", saveSqlCommand);
+    $(document).on("click", "#btnSave", sc.saveSqlCommand);
     
     $(window).bind('keydown', function (e) {
         var isCtrlS = (e.ctrlKey && e.which == 83);
         if (isCtrlS) {
-            saveSqlCommand();
+            sc.saveSqlCommand();
             e.preventDefault();
             return false;
         }
     });
     
-    function getTemplate(callBack) {
-        $("#"+ gMdlId).remove();
-        $(".container-fluid.page").append( new _tw().bsModalBox( modalTemplate).html() );
-        $modal = $("#" + gMdlId);
-        $is_procedure = $modal.find('#is_procedure');
-        $id = $modal.find('#sqlcmd_id');
-        $code = $modal.find('#sqlcmd_code');
-        $is_public = $modal.find('#is_public');
-        $modal.find("form").append('<pre id="editor"></pre>');
-        if (typeof callBack === "function") callBack();
-    }
+};  
+
     
-    function initAceEditor(readonly) {
-        var options = {
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: false,
-            maxLines: Infinity,
-            fontSize: "10pt"
-        };
-        editor=null;
-        ace.require("ace/ext/language_tools");
-        editor = ace.edit("editor");
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/sql");
-        editor.setAutoScrollEditorIntoView(true);
-        
-        if (readonly) {
-            options.readOnly = true;
-            options.highlightActiveLine = false;
-            options.highlightGutterLine = false;
-            editor.renderer.$cursorLayer.element.style.opacity = 0;
-        }
-        
-        editor.setOptions(options);
-    }
-    
-    function saveSqlCommand() {
-        var _sqlcmd_id = $id.val();
-        var _sqlcmd_code = $code.val();
-        var _sqlcmd_text = editor.getValue();
-        var _is_public = $is_public.val();
-        
-        if (_sqlcmd_code === "") { alert("Please enter code"); return }
-        if (_sqlcmd_text === "") { alert("Please enter sql statement."); return }
-        
-        /*$.post(procURL + "sql_commands_upd @sqlcmd_id="+_sqlcmd_id+",@sqlcmd_code='"+_sqlcmd_code+"'"+($is_procedure.val() === 'N' ? ",@sqlcmd_text='"+_sqlcmd_text: "") + ",@is_public='"+_is_public+"'", function(d) {
-            zsi.form.showAlert("savedWindow");
-            displaySqlCommands();
-        });*/
-        
-        $.post(procURL + "sql_commands_upd @sqlcmd_id="+_sqlcmd_id+",@sqlcmd_code='"+_sqlcmd_code+"',@sqlcmd_text='"+_sqlcmd_text+",@is_public='"+_is_public+"'", function(d) {
-            zsi.form.showAlert("savedWindow");
-            displaySqlCommands();
-        });
-    }
-    
-    function displaySqlCommands(callBack) {
-        $("#grid-SqlCommands").dataBind({
-             sqlCode:"S53"
-            ,parameters : { sort_index: 3 }
-            ,width: $(window).width() - 30
-            ,height: $(window).height()- 100
-            ,isPaging : true
-            ,rowsPerPage : 100
-            ,dataRows : [
-                            { text : "Code" , width : 200 , style : "text-align:center;"
-                                ,onRender: function(d) {
-                                    return bs({ type : 'hidden' , name : 'sqlcmd_id' })
-                                        +  bs({ type : 'input' , name : 'sqlcmd_code' , value : svn(d,'sqlcmd_code') });
-                                }
-                            }
-                            ,{ text : "Text" , width : 300 , style : "text-align:left;" ,name : 'sqlcmd_text'  }
-                            ,{ text : "Is Proc?" , width : 80 , style : "text-align:left;" ,name : 'is_procedure' }
-                            ,{ text : "Is Public?" , width : 80 , style : "text-align:left;" ,name : 'is_public' }
-                            ,{ text : "Action" , width : 80 , style : "text-align:center;"
-                                ,onRender : function(d) {
-                                    return '<a href="#" class="edit-sqlcommand"><i class="fas fa-edit"></i></a>';
-                                }
-                            }
-                        ]
-            ,onComplete : function(d) {
-                this
-                .off('click','.edit-sqlcommand')
-                .on('click','.edit-sqlcommand', function() {
-                    var _rowInfo = d.data.rows[$(this).closest('.zRow').index()];
-                    
-                    getTemplate(function() {
-                        $modal.modal('show');
-                        
-                        $is_procedure.val(_rowInfo.is_procedure);
-                        $id.val(_rowInfo.sqlcmd_id);
-                        $code.val(_rowInfo.sqlcmd_code);
-                        $is_public.val(_rowInfo.is_public);
-                        
-                        $modal.find("#editor").empty();
-                        $modal.find("#editor").html($('<div/>').text(_rowInfo.sqlcmd_text).html());
-                        
-                        initAceEditor((_rowInfo.is_procedure === 'N' ? false : true));
-                    });
-                });
-                if(callBack) callBack();
-            }
-        });
-    }
-});      
+})();
+
+       

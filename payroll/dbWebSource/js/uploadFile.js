@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $("#tmpData").dataBind({ url : execURL + "excel_upload_sel"});
+    $("#tmpData").dataBind({ url : app.execURL + "excel_upload_sel"});
 });
 
 function excelFileUpload(){
@@ -29,7 +29,7 @@ function excelFileUpload(){
                 alert(data.errMsg);
         },
         error: errorHandler = function() {
-            console.log("error")
+            console.log("error");
         },
         // Form data
         data: formData,
@@ -38,4 +38,4 @@ function excelFileUpload(){
         contentType: false,
         processData: false
     }, 'json');        
-}         
+}           
