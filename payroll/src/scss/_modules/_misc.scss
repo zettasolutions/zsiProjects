@@ -39,7 +39,7 @@ ul.list-verticle {
 .show {
 	& > .dropdown-menu-animated {
 		@include transform( scale(1) !important);
-		@include transform-origin( 29px -50px )
+		@include transform-origin( 29px -50px );
 		opacity: 1;
 		visibility: visible;
 	}
@@ -56,8 +56,8 @@ hr {
 
 
 .bg-trans-gradient {
-	background: -webkit-linear-gradient(250deg, desaturate($info-500, 25%), desaturate($primary-500, 10%));
-	background: linear-gradient(250deg, desaturate($info-500, 25%), desaturate($primary-500, 10%));
+	background: -webkit-linear-gradient(250deg, darken($primary-500, 20%), desaturate($primary-500, 10%));
+	background: linear-gradient(250deg, darken($primary-500, 20%), desaturate($primary-500, 10%));
 }
 
 .bg-brand-gradient {
