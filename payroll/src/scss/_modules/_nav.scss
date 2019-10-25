@@ -44,7 +44,7 @@
 		align-items: center;
 		justify-content: center;
 
-		color: #5249ff;
+		color: #fbfbfb;
 
 		> [class*='fa-'],
 		>.#{$cust-icon-prefix} {
@@ -113,7 +113,7 @@
 			outline: 0;
 			padding: $nav-padding-y $nav-padding-x;
 			font-size: rem($nav-font-link-size);
-			color: #ada8ff;
+			color: #91c6f3;
 			font-weight: 400;
 			text-decoration: none;
 
@@ -157,7 +157,7 @@
 				margin-right: $nav-icon-margin-right;
 				font-size: $nav-font-icon-size;
 				width: $nav-icon-width;
-			    color:#5249ff;
+			    color:#fbfbfb;
 			} 
 
 			/*> [class*='fa-'] {
@@ -237,7 +237,7 @@
 			li {
 
 				a {
-					color: #ada8ff;
+					color: #91c6f3;
 
 					padding: $nav-padding-y $nav-padding-x $nav-padding-y $nav-padding-x + $nav-icon-width + $nav-icon-margin-right;
 
@@ -252,14 +252,14 @@
 					>.#{$cust-icon-prefix} {
 						margin-left: -2.1875rem;
 						margin-right: $nav-dl-margin-right;
-						color: #5249ff;
+						color: #fbfbfb;
 						font-size: $nav-font-icon-size-sub - 0.25rem;
 						width: $nav-dl-width;
 						text-align: center;
 					}
 
 					i {
-						color: #5249ff;
+						color: #fbfbfb;
 					}
 
 					> .badge {

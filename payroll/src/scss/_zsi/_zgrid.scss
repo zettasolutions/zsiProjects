@@ -9,7 +9,11 @@
   .zCell a {
     text-decoration: underline;
   }
-  
+.zGrid, .zGridPanel {
+    width: inherit;
+    height: inherit;
+} 
+
 .modal-body div nav #nav-tab .nav-link{
 
   color : #000000;
