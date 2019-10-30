@@ -93,7 +93,7 @@ $nav-function-top-menu-item-bg: $primary-500;
 
 			.header-icon:not(.btn) > [class*='fa-']:first-child, 
 			.header-icon:not(.btn) > .ni:first-child {
-				color:  #5249ff;
+				color:  #3443ff;
 
 				&:hover {
 					color:  lighten($header-link-color, 40%);
@@ -218,7 +218,7 @@ $nav-function-top-menu-item-bg: $primary-500;
 								display: flex !important;					
 								align-items: center;
 								justify-content: left;
-								color: #5249ff;
+								color: #3700bb;
 							}
 
 							> .nav-link-text {
@@ -277,7 +277,7 @@ $nav-function-top-menu-item-bg: $primary-500;
 							color: $nav-background;
 
 							i {
-								color: #5249ff;
+								color: #fbfbfb;
 							}
 						}
 
@@ -300,7 +300,7 @@ $nav-function-top-menu-item-bg: $primary-500;
 								a {
 									padding: 0.65rem 1.25rem;
 									width: 100%;
-									color: #ada8ff;
+									color: #91c6f3;
 									max-height: none;
 									box-shadow: none;
 
@@ -324,7 +324,7 @@ $nav-function-top-menu-item-bg: $primary-500;
 										}
 									}
 									i {
-										color: #5249ff;
+										color: #fbfbfb;
 									}
 
 								}

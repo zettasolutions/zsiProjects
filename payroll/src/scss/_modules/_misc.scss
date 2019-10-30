@@ -56,8 +56,8 @@ hr {
 
 
 .bg-trans-gradient {
-	background: -webkit-linear-gradient(250deg, darken($primary-500, 20%), desaturate($primary-500, 10%));
-	background: linear-gradient(250deg, darken($primary-500, 20%), desaturate($primary-500, 10%));
+	background: -webkit-linear-gradient(250deg, darken($primary-500, 20%), darken($primary-500, 10%));
+	background: linear-gradient(250deg, darken($primary-500, 20%), darken($primary-500, 10%));
 }
 
 .bg-brand-gradient {

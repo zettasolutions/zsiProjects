@@ -23,13 +23,15 @@
   .zpage-title {
     color: #9fcb3d;
   }
+  .nav-function-top .zpage-title {
+    color : #212529;
+  }
   /* BACKGROUND TRANSITIONS */
   /* Fade */
   .hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
     background-color: #9fcb3d;
     color: white;
     }
-    
     /* Back Pulse */
     @-webkit-keyframes hvr-back-pulse {
     50% {
