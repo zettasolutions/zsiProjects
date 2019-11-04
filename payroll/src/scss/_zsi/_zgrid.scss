@@ -31,8 +31,11 @@
 
 }
 .btn-primary {
+  background-color: #1a0dab;
+  border-color: #1a0dab;
   &:hover {
     background-color: #0a007a;
+    border-color: #0a007a;
   }
 }
 .zpage-title {
