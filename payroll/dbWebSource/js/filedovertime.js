@@ -29,17 +29,17 @@
                     
                             }
                         } 
-                        ,{text:"OT Type"            ,type:"input"           ,name:"ot_type_id"             ,width:150       ,style:"text-align:left"} 
-                        ,{text:"Employee ID"        ,type:"input"           ,name:"employee_id"            ,width:150       ,style:"text-align:left"} 
-                        ,{text:"OT Date"            ,width:100       ,style:"text-align:left"
+                        ,{text:"OT Type"                ,type:"input"           ,name:"ot_type_id"             ,width:150       ,style:"text-align:left"} 
+                        ,{text:"Employee ID"            ,type:"input"           ,name:"employee_id"            ,width:150       ,style:"text-align:left"} 
+                        ,{text:"OT Date"                ,width:100              ,style:"text-align:left"
                              ,onRender: function(d){ 
-                                 return app.bs({type:"input"   ,name:"ot_date"    ,value: svn(d,"ot_date").toShortDate()}); 
+                                 return app.bs({type:"input"                    ,name:"ot_date"    ,value: svn(d,"ot_date").toShortDate()}); 
                             }
                         }
-                        ,{text:"Filed OT Hours"     ,type:"input"           ,name:"filed_ot_hours"         ,width:150       ,style:"text-align:left"}
-                        ,{text:"Approved_hours"     ,type:"input"           ,name:"approved_hours"         ,width:150       ,style:"text-align:left"}    
-                        ,{text:"Approved By"        ,type:"input"           ,name:"approved_by"            ,width:150       ,style:"text-align:left"}
-                        ,{text:"Approved Date"      ,width:100       ,style:"text-align:left"
+                        ,{text:"Filed OT Hours"         ,type:"input"           ,name:"filed_ot_hours"         ,width:150       ,style:"text-align:left"}
+                        ,{text:"Approved_hours"         ,type:"input"           ,name:"approved_hours"         ,width:150       ,style:"text-align:left"}    
+                        ,{text:"Approved By"            ,type:"input"           ,name:"approved_by"            ,width:150       ,style:"text-align:left"}
+                        ,{text:"Approved Date"          ,width:100       ,style:"text-align:left"
                             ,onRender: function(d){ 
                                  return app.bs({type:"input"   ,name:"approved_date"    ,value: svn(d,"approved_date").toShortDate()}); 
                             }
@@ -48,7 +48,7 @@
                         ,{text:"Approver Comment"   ,type:"input"           ,name:"approver_comment"      ,width:150       ,style:"text-align:left"} 
                     ] 
                     ,onComplete : function(d){
-                        this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");   
+                        this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");  
                         this.find("[name='ot_filed_date']").datepicker().attr("readonly",true); 
                         this.find("[name='ot_date']").datepicker().attr("readonly",true); 
                         this.find("[name='approved_date']").datepicker().attr("readonly",true); 
@@ -78,4 +78,4 @@
             });
 })();
 
-                 
+                       
