@@ -1,5 +1,18 @@
 
-CREATE PROCEDURE [dbo].[pay_types_sel]
+
+CREATE PROCEDURE [dbo].pay_types_sel
+( 
+    @user_id INT = NULL
+)
+AS
+BEGIN
+	DECLARE @stmt		VARCHAR(4000);
+ 	SET @stmt = 'SELECT * FROM dbo.pay_types WHERE 1=1 '; 
+ END;
+
+
+/**
+ALTER PROCEDURE [dbo].[pay_types_sel]
 (
     @pay_type_code NVARCHAR(10) = NULL
    ,@pay_type_desc NVARCHAR(50) = NULL
@@ -21,6 +34,6 @@ BEGIN
 	exec(@stmt);
  END;
 
-
+ **/
 
 
