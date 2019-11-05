@@ -1,7 +1,9 @@
 (function(){
+    
     var  bs    = zsi.bs.ctrl
         ,svn   = zsi.setValIfNull
     ;
+    
     zsi.ready = function(){
         $(".page-title").html("Employees");
         displayEmployees();
@@ -14,29 +16,29 @@
                                         ,{ text:"F"     ,value:"F"          }
                                     ]
                             
-            ,_civilStatusOptions =   [
+            /*,_civilStatusOptions =   [
                                          { text:"M"     ,value:"Married"    }
                                         ,{ text:"S"     ,value:"Single"     }
                                         ,{ text:"D"     ,value:"Divorced"   }
                                         ,{ text:"W"     ,value:"Widowed"    }
-                                    ]
+                                    ]*/
         
-            ,_employementOptions =   [
+           /* ,_employementOptions =   [
                                          { text:"E"     ,value:"Employed"   }
                                         ,{ text:"O"     ,value:"OJT"        }
                                         ,{ text:"R"     ,value:"Regular"    }
                                         
-                                    ]
+                                    ]*/
         
-            ,_inactiveTypeOptions =  [
-                                         {text:"A"      ,value:"A"          }
-                                        ,{text:"B"      ,value:"B"          }
-                                    ]
-                                    
-            ,_payTypeCode         =  [
+           ,_inactiveTypeOptions =  [
                                          {text:"A"      ,value:"A"          }
                                         ,{text:"B"      ,value:"B"          }
                                     ] 
+                                    
+          /*  ,_payTypeCode         =  [
+                                         {text:"A"      ,value:"A"          }
+                                        ,{text:"B"      ,value:"B"          }
+                                    ] */
         ;                           
         
     
@@ -57,11 +59,11 @@
                     ,{text:"Employee ID"            ,type:"input"       ,name:"employee_id"         ,width:105        ,style:"text-align:center"}
                     ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:150        ,style:"text-align:left"  }
                     ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:150        ,style:"text-align:left"  }
-                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75        ,style:"text-align:center"  }
+                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:center"}
                     ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:105        ,style:"text-align:left"  }
                     ,{text:"Gender"                 ,type:"select"      ,name:"gender"              ,width:50         ,style:"text-align:left"  }
-                    ,{text:"Civil Status Code"      ,type:"select"      ,name:"civil_status_code"   ,width:120        ,style:"text-align:left"  }
-                    ,{text:"Employement Type Code"  ,type:"select"      ,name:"empl_type_code"      ,width:160        ,style:"text-align:left"  }
+                    ,{text:"Civil Status Code"      ,type:"select"      ,name:"civil_status_code"   ,width:100        ,style:"text-align:left"  }
+                    ,{text:"Employement Type Code"  ,type:"select"      ,name:"empl_type_code"      ,width:140        ,style:"text-align:left"  }
                     ,{text:"Basic Pay"              ,type:"input"       ,name:"basic_pay"           ,width:105        ,style:"text-align:left"  }
                     ,{text:"Pay Type Code"          ,type:"select"      ,name:"pay_type_code"       ,width:105        ,style:"text-align:left"  }
                     ,{text:"SSS No."                ,type:"input"       ,name:"sss_no"              ,width:105        ,style:"text-align:left"  }
@@ -69,17 +71,17 @@
                     ,{text:"PhilHealth No."         ,type:"input"       ,name:"philhealth_no"       ,width:105        ,style:"text-align:left"  }
                     ,{text:"HMDF No."               ,type:"input"       ,name:"hmdf_no"             ,width:105        ,style:"text-align:left"  }
                     ,{text:"Account No."            ,type:"input"       ,name:"account_no"          ,width:105        ,style:"text-align:left"  }
-                    ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:85         ,style:"text-align:center"    ,defaultValue:"Y"}
-                    ,{text:"In Active Type Code"    ,type:"select"      ,name:"inactive_type_code"  ,width:160        ,style:"text-align:left"  }
+                    ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:50         ,style:"text-align:center"    ,defaultValue:"Y"}
+                    ,{text:"In Active Type Code"    ,type:"select"      ,name:"inactive_type_code"  ,width:130        ,style:"text-align:left"  }
                     ,{text:"Inactive Date"          ,type:"input"       ,name:"inactive_data"       ,width:120        ,style:"text-alignleft"   }
             ]
             ,onComplete: function(){
                 this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                this.find("select[name='gender']").fillSelect({data: _genderOptions});
-                this.find("select[name='civil_status_code']").fillSelect({data: _civilStatusOptions});
-                this.find("select[name='empl_type_code']").fillSelect({data: _employementOptions});
+                this.find("select[name='gender']").fillSelect({data: _genderOptions}); 
+                this.find("select[name='civil_status_code']").dataBind("civil_status");
+                this.find("select[name='empl_type_code']").dataBind("empl_types");
                 this.find("select[name='inactive_type_code']").fillSelect({data: _inactiveTypeOptions});
-                this.find("select[name='pay_type_code']").fillSelect({data: _payTypeCode});
+                this.find("select[name='pay_type_code']").dataBind("pay_types");
             }  
         });
     }  
@@ -102,6 +104,7 @@
             }
         });   
     });  
+    
 })();
 
-           
+                  
