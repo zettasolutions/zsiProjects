@@ -16,29 +16,29 @@
                                         ,{ text:"F"     ,value:"F"          }
                                     ]
                             
-            ,_civilStatusOptions =   [
+            /*,_civilStatusOptions =   [
                                          { text:"M"     ,value:"Married"    }
                                         ,{ text:"S"     ,value:"Single"     }
                                         ,{ text:"D"     ,value:"Divorced"   }
                                         ,{ text:"W"     ,value:"Widowed"    }
-                                    ]
+                                    ]*/
         
-            ,_employementOptions =   [
+           /* ,_employementOptions =   [
                                          { text:"E"     ,value:"Employed"   }
                                         ,{ text:"O"     ,value:"OJT"        }
                                         ,{ text:"R"     ,value:"Regular"    }
                                         
-                                    ]
+                                    ]*/
         
-            ,_inactiveTypeOptions =  [
-                                         {text:"A"      ,value:"A"          }
-                                        ,{text:"B"      ,value:"B"          }
-                                    ]
-                                    
-            ,_payTypeCode         =  [
+           ,_inactiveTypeOptions =  [
                                          {text:"A"      ,value:"A"          }
                                         ,{text:"B"      ,value:"B"          }
                                     ] 
+                                    
+          /*  ,_payTypeCode         =  [
+                                         {text:"A"      ,value:"A"          }
+                                        ,{text:"B"      ,value:"B"          }
+                                    ] */
         ;                           
         
     
@@ -74,14 +74,21 @@
                     ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:50         ,style:"text-align:center"    ,defaultValue:"Y"}
                     ,{text:"In Active Type Code"    ,type:"select"      ,name:"inactive_type_code"  ,width:130        ,style:"text-align:left"  }
                     ,{text:"Inactive Date"          ,type:"input"       ,name:"inactive_data"       ,width:120        ,style:"text-alignleft"   }
+                    ,{text:"Position"               ,type:"select"      ,name:"position_id"         ,width:120        ,style:"text-alignleft"   }
             ]
             ,onComplete: function(){
+                var _zRow = this.find(".zRow");
                 this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");
-                this.find("select[name='gender']").fillSelect({data: _genderOptions});
-                this.find("select[name='civil_status_code']").fillSelect({data: _civilStatusOptions});
-                this.find("select[name='empl_type_code']").fillSelect({data: _employementOptions});
+                this.find("select[name='gender']").fillSelect({data: _genderOptions}); 
+                this.find("select[name='civil_status_code']").dataBind("civil_status");
+                this.find("select[name='empl_type_code']").dataBind("empl_types");
                 this.find("select[name='inactive_type_code']").fillSelect({data: _inactiveTypeOptions});
-                this.find("select[name='pay_type_code']").fillSelect({data: _payTypeCode});
+                this.find("select[name='pay_type_code']").dataBind("pay_types");
+                _zRow.find("#position_id").dataBind({
+                     sqlCode      : "P201" //position_sel
+                    ,text         : "position_title"
+                    ,value        : "position_id"
+                });
             }  
         });
     }  
@@ -107,4 +114,4 @@
     
 })();
 
-              
+                   
