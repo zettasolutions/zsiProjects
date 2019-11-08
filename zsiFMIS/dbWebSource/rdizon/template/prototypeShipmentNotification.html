@@ -1,0 +1,150 @@
+<style type="text/css" media="all">
+    .pull-left {
+        float: left !important;
+    }
+</style>
+
+<div class="col-12 zContainer1" style="margin-top:40px;">
+    <form>
+        <div class="form-group row">
+            <label for="shipment_id" class="col-sm-2 col-form-label">Shipment ID:</label>
+            <div class="col-2">
+                <input type="text" class="form-control" id="shipment_id" placement="Auto Generated" name="shipment_id">
+            </div>
+            <label for="shipment_mode" class="col-sm-2 col-form-label">Shipment Mode:</label>
+            <div class="col-2">
+                <input type="text" class="form-control" id="shipment_mode" name="shipment_mode">
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label for="date_shipped" class="col-sm-2 col-form-label">Date Shipped:</label>
+            <div class="col-2">
+                <input type="text" class="form-control" id="date_shipped"  name="date_shipped">
+            </div>      
+            <label for="pta" class="col-sm-2 col-form-label">Acct. / PTA #:</label>
+            <div class="col-2">
+                <input type="text" class="form-control" id="pta"  name="pta">
+            </div>      
+        </div>
+        <div class="form-group row">
+            <label for="truck_number" class="col-sm-2 col-form-label">Truck Number:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="truck_number" name="truck_number">
+            </div>
+            <label for="ship_to_code" class="col-sm-2 col-form-label">Ship To Code:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="ship_to_code" name="ship_to_code">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="do_asn" class="col-sm-2 col-form-label">DO_ASN Shipper Packing Slip:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="do_asn" name="do_asn">
+            </div>
+            <label for="ship_to" class="col-sm-2 col-form-label">Ship To:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="street1" placeholder="Stree1" name="street1">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="no_boxes" class="col-sm-2 col-form-label">No. of Boxes:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="no_boxes" name="no_boxes">
+            </div>
+            <label for="ship_to" class="col-sm-2 col-form-label"></label>
+            <div class="col-2">
+                <input type=text class="form-control" id="street2" placeholder="Stree2" name="street2">
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label for="no_pallets" class="col-sm-2 col-form-label">No. of Pallets:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="no_pallets" name="no_pallets">
+            </div>
+            <label for="ship_to" class="col-sm-2 col-form-label"></label>
+            <div class="col-2 input-group">
+                <input type=text class="form-control" id="city" placeholder="City" name="city">
+                <input type=text class="form-control" id="city" placeholder="State" name="city">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="final_destination" class="col-sm-2 col-form-label">Project Date at Final Destination:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="final_destination" name="final_destination">
+            </div>
+            <label for="ship_to" class="col-sm-2 col-form-label"></label>
+            <div class="col-2 input-group">
+                <input type=text class="col-4 form-control" id="zip" placeholder="Zip" name="zip">
+                <input type=text class="form-control" id="country" placeholder="Country" name="country">
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label for="contact_if_misses" class="col-sm-2 col-form-label">Contact Name/No. If Misses:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="contact_if_misses" name="contact_if_misses">
+            </div>
+            <label for="attention_to" class="col-sm-2 col-form-label">Attention To:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="attention_to" name="attention_to">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="prog_mngr" class="col-sm-2 col-form-label">Program Manager:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="prog_mngr" placeholder="Name" name="prog_mngr">
+                <input type=text class="form-control" id="email" placeholder="Contact # / Email" name="email">
+            </div>
+            <label for="if_misses" class="col-sm-2 col-form-label">If Misses:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="if_misses" name="if_misses">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="shipper_no" class="col-sm-2 col-form-label">Shipper No.:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="shipper_no" name="shipper_no">
+            </div>
+            <div class="col-2 input-group mb-3">
+                <div class="input-group-prepend">
+                    <label for="asn" class="col-sm-12 col-form-label" style="margin-left: -15px;">ASN NECESSARY?</label>
+                    <div class="col-2">
+                        <input type="checkbox" id="asn" aria-label="Checkbox for following text input" style="margin-left: 16px;">
+                    </div>
+                    <label for="billable_to_customer" class="col-sm-8 col-form-label">Billable to Customer?</label>
+                    <div class="col">
+                        <input type="checkbox" id="billable_to_customer" aria-label="Checkbox for following text input">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label for="tracking_no" class="col-sm-2 col-form-label">Tracking No.:</label>
+            <div class="col-2">
+                <input type=text class="form-control" id="tracking_no" name="tracking_no">
+            </div>
+            <label for="updated_information" class="col-sm-2 col-form-label">Send updated information and tracking to:</label>
+            <div class="col-2">
+                <textarea type=text class="form-control" id="updated_information" name="updated_information"></textarea>
+            </div>
+        </div>
+    </form>
+
+    </div>
+    <div class="buttonGroup pull-left">
+        <button type="button" class="btn btn-primary btn-sm pull-right" id="btnCancel">
+        	<span ></span> Cancel
+        </button>
+        <button type="button" class="btn btn-primary btn-sm pull-right" id="btnSave">
+        	<span class="fas fa-save"></span> Save
+        </button>        
+
+</div>
+
+<div class="col-22 zPanel" style="margin-top:40px;">
+    <div id="grid" class="zGrid"></div>
+</div>
+

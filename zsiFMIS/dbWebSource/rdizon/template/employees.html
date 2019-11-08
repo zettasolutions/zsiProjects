@@ -1,0 +1,50 @@
+<style>
+    #grid{
+    width: 100%;
+}
+.zGrid .item .title {
+}
+.zGrid .zHeaders .zSort {
+}
+.zRows {
+    height: 100%;
+  
+}
+</style>
+<div class="col-22 zContainer1">
+    <form style="margin-top: 10px; text-align: -webkit-right; margin-right: 10%;">
+        <div class="form-group row">
+            <label class=" col-1 control-label">Area :</label>
+            <div class=" col-2"> 
+                <input name="logon_id_filter" id="logon_id_filter" type="hidden" class="form-control input-sm">
+                <input name="logon_name_filter" id="logon_name_filter" placeholder="Enter Area Name" class="form-control input-sm">
+            </div>
+             <label class=" col-1 control-label">Store :</label>
+            <div class=" col-2"> 
+                <input name="logon_id_filter" id="logon_id_filter" type="hidden" class="form-control input-sm">
+                <input name="logon_name_filter" id="logon_name_filter" placeholder="Enter Store Name" class="form-control input-sm">
+            </div>
+            <div class="col-1">
+                <button type="button"  class="btn btn-primary btn-sm" id="btnGo"><span class=" glyphicon glyphicon-folder-open"></span></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<form method="post" id="frm">
+    <div class="row">
+        <div id="grid" class="zGrid" style="margin-top:10px;"></div> 
+    </div>
+    <div class="row">
+        <div class="buttonGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+            	<span class="glyphicon glyphicon-floppy-disk"></span> Save
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnInactive">
+            	<span class="glyphicon glyphicon-ban-circle"></span> Inactive
+            </button>
+        </div>
+    </div>
+</form>
+
