@@ -11,14 +11,22 @@ using System.Text.RegularExpressions;
 
 namespace zsi.web
 {
+    public enum JsonRowsFormat
+    {
+         KeyValue = 0
+        ,Array = 1
+    }
     public class DataHelper
     {
         public enum ExecutionType {
              NonQuery = 0
             ,Reader   = 1
         }
+
         public DataHelper() { }
         #region "private static"
+
+        /*
         private static string ToJSON(SqlDataReader rdr)
         {
             StringBuilder sb = new StringBuilder();
@@ -51,13 +59,78 @@ namespace zsi.web
 
             return sb.ToString();
         }
+        */
+
+
+        private static string ToJSON(SqlDataReader rdr,JsonRowsFormat jsonRowsFormat = JsonRowsFormat.KeyValue)
+        {
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+            JsonWriter jsonWriter = new JsonTextWriter(sw);
+            jsonWriter.WriteStartArray();
+            string headers = "";
+            Boolean isHeaderInitiated = false;
+            while (rdr.Read())
+            {
+                int fieldcount = rdr.FieldCount; // count how many columns are in the row
+                object[] values = new object[fieldcount]; // storage for column values
+                rdr.GetValues(values); // extract the values in each column
+                jsonWriter.WriteStartObject();
+
+                if (jsonRowsFormat == JsonRowsFormat.Array)
+                {
+                    jsonWriter.WritePropertyName("row");
+                    jsonWriter.WriteStartArray();
+                }
+
+                for (int index = 0; index < fieldcount; index++)
+                {
+                    string colName = rdr.GetName(index);
+                    object value = values[index];
+
+                    if (jsonRowsFormat == JsonRowsFormat.Array)
+                    {
+                        if (isHeaderInitiated == false)
+                        {
+                            if (headers != "") headers += ",";
+                            headers += '"' + colName + '"';
+                        }
+                    }
+                    else
+                        jsonWriter.WritePropertyName(colName);
+
+                    if (value == DBNull.Value)
+                        value = "";
+                    else if (colName.Contains("date") && !colName.Contains("by"))
+                        value = String.Format("{0:MM/dd/yyyy HH:mm tt}", value);
+
+                    jsonWriter.WriteValue(value);
+                }
+
+                if (jsonRowsFormat == JsonRowsFormat.Array)
+                {
+                    jsonWriter.WriteEndArray();
+                    isHeaderInitiated = true;
+                }
+
+                jsonWriter.WriteEndObject();
+
+            }
+            jsonWriter.WriteEndArray();
+
+            return (jsonRowsFormat == JsonRowsFormat.Array) ? "\"columns\":[" +  headers + "],\"rows\":" + sb.ToString() : sb.ToString();
+        }
+
         private static string CreateMessageJSONStr(Message m )
         {
+
             return "{\"isSuccess\":" + m.isSuccess.ToString().ToLower()
-                + (m.recordsAffected != 0 ? ",\"recordsAffected\":" + m.recordsAffected : "")
-                + (m.returnValue != null ? ",\"returnValue\":" + m.returnValue : "")
+                + (m.recordsAffected > 0 ? ",\"recordsAffected\":" + m.recordsAffected : "")
+                + ((m.returnValue != null ) ? (m.returnValue != "" ? ",\"returnValue\":" + m.returnValue : "") : "")                                                           
                 + (m.rows != null ? ",\"rows\":" + m.rows :"")
+                + (m.columns != null ? ",\"columns\":" + m.columns : "")
                 + (m.errMsg != null ? ",\"errMsg\":\"" + m.errMsg + "\"" : "")
+                + (m.data != null ? "," + m.data : "")
                 + "}";
         }
         private static void SerializeURLParameters(SqlCommand command, string sqlQuery)
@@ -165,10 +238,10 @@ namespace zsi.web
             conn.Close();
             return returnValue;
         }
-        public static void Execute(string sql, bool isProcedure) {
-            ToJSON(sql, isProcedure);
+        public static void Execute(string sql, bool isProcedure, JsonRowsFormat jsonRowsFormat = JsonRowsFormat.KeyValue) {
+            ToJSON(sql, isProcedure, jsonRowsFormat);
         }
-        public static string ToJSON(string sql, bool isProcedure)
+        public static string ToJSON(string sql, bool isProcedure, JsonRowsFormat jsonRowsFormat = JsonRowsFormat.KeyValue)
         {
             SqlDataReader rdr = null;
             SqlConnection conn = null;
@@ -193,23 +266,22 @@ namespace zsi.web
                 command.Parameters.Add(retval);
                
                 rdr = command.ExecuteReader(CommandBehavior.CloseConnection);
-                json = ToJSON(rdr);
-                rdr.Close();
 
-                if (json == "[]" && rdr.RecordsAffected > 0)
-                    json = CreateMessageJSONStr(new Message {
-                        isSuccess = true
-                        , recordsAffected = rdr.RecordsAffected
-                        , rows = "[]"
-                    });
+                var _msg = new Message
+                {
+                    isSuccess = true
+                    ,recordsAffected = rdr.RecordsAffected
+                    ,returnValue = Convert.ToString(retval.Value)
+            };
+
+                if (jsonRowsFormat == JsonRowsFormat.Array) 
+                    _msg.data = ToJSON(rdr, jsonRowsFormat);
                 else
-                    json = CreateMessageJSONStr(new Message {
-                        isSuccess = true
-                        , recordsAffected = rdr.RecordsAffected
-                        , rows = json
-                        , returnValue = Convert.ToString(retval.Value)
-                    });
-                
+                    _msg.rows = ToJSON(rdr);
+
+                json = CreateMessageJSONStr(_msg);
+
+                rdr.Close();
             }
             catch (SqlException sqlException)
             {
@@ -226,7 +298,7 @@ namespace zsi.web
             }
             return json;
         }
-        public static string ToJSON(SqlCommand cmd)
+        public static string ToJSON(SqlCommand cmd, JsonRowsFormat jsonRowsFormat = JsonRowsFormat.KeyValue)
         {
             SqlDataReader rdr = null;
             SqlConnection conn = null;
@@ -239,7 +311,7 @@ namespace zsi.web
                 conn.Open();
                 cmd.CommandTimeout = 3600;
                 rdr = cmd.ExecuteReader();
-                json = ToJSON(rdr);
+                json = ToJSON(rdr, jsonRowsFormat);
                 rdr.Close();
             }
             catch (SqlException sqlException)
@@ -252,8 +324,7 @@ namespace zsi.web
             }
             return json;
         }
-     
-        public static string ProcessRequest(HttpRequestBase request, ExecutionType executionType)
+        public static string ProcessRequest(HttpRequestBase request, ExecutionType executionType,JsonRowsFormat jsonRowsFormat =JsonRowsFormat.KeyValue)
         {
             String _json = "";
             SqlDataReader rdr = null;
@@ -262,7 +333,7 @@ namespace zsi.web
             {
 
                 var _strReq = HttpReqStreamToJString(request);
-                if(_strReq.Trim() ==string.Empty) return CreateMessageJSONStr(new Message{isSuccess = false });
+                if (_strReq.Trim() == string.Empty) return CreateMessageJSONStr(new Message { isSuccess = false });
                 JObject jo = JObject.Parse(_strReq);
                 conn = new SqlConnection(dbConnection.ConnectionString);
                 using (conn)
@@ -294,7 +365,7 @@ namespace zsi.web
                         JObject obj = (JObject)jo["parameters"];
                         foreach (var pair in obj)
                         {
-                            if (pair.Value.ToString() == "''" ) continue;
+                            if (pair.Value.ToString() == "''") continue;
                             if (pair.Value.Type == JTokenType.Null) continue;
                             cmd.Parameters.AddWithValue("@" + pair.Key, pair.Value.ToString());
                         }
@@ -313,20 +384,25 @@ namespace zsi.web
                     if (executionType == ExecutionType.Reader)
                     {
                         rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                        _json = ToJSON(rdr);
-                        rdr.Close();
 
-                        _json = CreateMessageJSONStr(new Message
+                        var _msg = new Message
                         {
                             isSuccess = true,
                             recordsAffected = rdr.RecordsAffected,
-                            rows = _json,
                             returnValue = Convert.ToString(retval.Value)
-                        });
+                        };
 
+                        if(jsonRowsFormat == JsonRowsFormat.Array)
+                            _msg.data= ToJSON(rdr, jsonRowsFormat);
+                        else 
+                            _msg.rows = ToJSON(rdr);
+
+                        _json = CreateMessageJSONStr(_msg);
+                        rdr.Close();
                     }
                     else
                     {
+
                         _json = CreateMessageJSONStr(new Message
                         {
                             isSuccess = true,
@@ -350,10 +426,11 @@ namespace zsi.web
             }
             finally
             {
-                if(conn != null) conn.Close();
+                if (conn != null) conn.Close();
             }
             return _json;
 
         }
+
     }
 }

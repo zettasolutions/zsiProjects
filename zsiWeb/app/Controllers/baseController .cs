@@ -113,12 +113,12 @@ namespace zsi.web.Controllers
             }
             base.OnActionExecuting(filterContext);
         }
-        public ContentResult ToJSON(string sql, bool isProcedure)
+        public ContentResult ToJSON(string sql, bool isProcedure, JsonRowsFormat jsonRowsFormat = JsonRowsFormat.KeyValue)
         {
             using (new impersonate())
             {
 
-                return Content(DataHelper.ToJSON(sql, isProcedure), "application/json");
+                return Content(DataHelper.ToJSON(sql, isProcedure, jsonRowsFormat), "application/json");
             }
         }
 

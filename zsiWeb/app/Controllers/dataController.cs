@@ -38,5 +38,21 @@ namespace zsi.web.Controllers
                 return Content("{errMsg:'" + ex.Message + "'}", "application/json");
             }
         }
+
+        public ContentResult GetRecords2()
+        {
+            try
+            {
+                using (new impersonate())
+                {
+                    return Content(DataHelper.ProcessRequest(HttpContext.Request, DataHelper.ExecutionType.Reader, JsonRowsFormat.Array), "application/json");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Content("{errMsg:'" + ex.Message + "'}", "application/json");
+            }
+        }
+
     }
 }

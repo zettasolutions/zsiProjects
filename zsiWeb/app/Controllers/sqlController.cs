@@ -37,6 +37,17 @@ namespace zsi.web.Controllers
             } 
         }
 
+        public ContentResult Exec2()
+        {
+            using (new impersonate())
+            {
+
+                return this.ToJSON(Request["p"], false, JsonRowsFormat.Array);
+            }
+        }
+
+
+
         public ContentResult Proc()
         {
             using (new impersonate())
@@ -44,6 +55,15 @@ namespace zsi.web.Controllers
                 return this.ToJSON(Request["p"], true);
             }
         }
+
+        public ContentResult Proc2()
+        {
+            using (new impersonate())
+            {
+                return this.ToJSON(Request["p"], true,JsonRowsFormat.Array);
+            }
+        }
+
 
         public ContentResult LogError()
         {
