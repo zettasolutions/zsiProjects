@@ -899,7 +899,6 @@ var  ud='undefined'
                         var _dt =  (o.panelType ==="R"? _chRight : _chLeft ); 
                         var _table =  (o.panelType ==="R"? _obj.find(_obj.clsPanelR).find("#table") : _obj.find(_obj.clsPanelL).find("#table") ); 
                         var _$row =  $(new _tw().div({class:"zRow"}).html());
-                        var _$extraRow = null;
                         for(var x=0;x<_dt.length;x++){
                             var _info       = _dt[x] 
                                 ,_style     = 'width:' + (_dt[x].width ) +  'px;'  + _dt[x].style  
@@ -942,15 +941,12 @@ var  ud='undefined'
                                 _$row.append(_$cell);
                                 
                                 if( o.panelType ==="R" && ! isUD(_o.toggleMasterKey) ){
-
-                                    _$extraRow = $(new _tw().div({id:"childPanel" + zsi.replaceIllegalId(svn(o.data,_o.toggleMasterKey)), class:"zExtraRow", style:"display:none" }).in().div({class:"zGrid"}).html());
+                                    _$cell.append(new _tw().div({id:"childPanel" + zsi.replaceIllegalId(svn(o.data,_o.toggleMasterKey)), class:"zExtraRow" }).in().div({class:"zGrid"}).html());
                                 }                    
                             }
             
                         }
                         _table.append(_$row);
-                        if(_$extraRow !== null) _table.append(_$extraRow);
-                        
                         if ( ! isUD(_o.onEachComplete) ) {
                             _$row.onEachComplete  =  _o.onEachComplete;
                             _$row.onEachComplete(o);
@@ -1082,7 +1078,6 @@ var  ud='undefined'
                     _$pageNo.change(function(){
                          o.parameters.pno = this.value;
                         _obj.dataBindGrid(_obj.params);
-                        if(o.onPageChange) o.onPageChange();
                     });
                     
                     _self.find("#rpp").keyup(function(e){
@@ -1098,26 +1093,6 @@ var  ud='undefined'
                     });  
             
                 };
-                
-                $.fn.setRowHighlights = function(){
-                    //reset class
-                    this.find(".zRow").removeClass("odd").removeClass("even");
-                    var _gPanelR = this.find(".zGridPanel.right");
-                    var _gPanelL = this.find(".zGridPanel.left"); 
-                    if(_gPanelR.length> 0 ){
-                        var _even = false;
-                        var _$rowsR = _gPanelR.find(".zRows .zRow:not(.hidden)");
-                        var _$rowsL =  (_gPanelL.length > 0 ?  _gPanelL.find(".zRows .zRow:not(.hidden)") : null );
-                        $.each(_$rowsR,function(i){
-                            var _$self = $(this);
-                            var _toggleMod  =  ( ( i  +  1) % 2 === 0 ? "even" : "odd" ) ;
-                            _$self.addClass(_toggleMod);
-                            if(_$rowsL !==null ) $(_$rowsL.get(i)).addClass(_toggleMod);
-                        });
-                    }
-                    return this;
-                }
-                                
                 this.onRequestDone = function(o){
                     var  _Pnl =".zGridPanel"
                         ,_PL  =  _Pnl  + ".left"
@@ -1134,7 +1109,6 @@ var  ud='undefined'
                         this._onComplete = o.params.onComplete;
                         this._onComplete(o);
                     }
-                    this.setRowHighlights();
                     if(o.params.callBack) o.params.callBack(o);
                 };
                 this.setColumnResize = function(){
@@ -3171,13 +3145,9 @@ var  ud='undefined'
         }     
         /*initialize configuration settings*/
         ,init                       : function(o){
-            
-            zsi.__setPrototypes();
-            zsi.__setExtendedJqFunctions();
             zsi.initURLParameters();
             zsi.config =o;
             zsi.__monitorAjaxResponse();    
-            zsi.initInputTypesAndFormats();
         }            
         ,initDatePicker             : function(){
            var inputDate =$('input[id*=date]').not("input[type='hidden']");
@@ -3328,21 +3298,17 @@ var  ud='undefined'
             var $span = $(o.object).find("span");
             var $cp = $(_cpId + o.parentId);
             var _Cls = "loaded";
-            
             $cp.toggle(500, function () {
                 var isVisible = $cp.is(":visible");
-                if( isVisible ) {
-                    $span.removeClass("fas fa-caret-circle-down").addClass("fas fa-caret-circle-up");
-                }
-                else{
-                    $span.removeClass("fas fa-caret-circle-up").addClass("fas fa-caret-circle-down");
-                }
-                
+                if( isVisible )
+                    $span.removeClass("glyphicon glyphicon-collapse-down").addClass("glyphicon glyphicon-collapse-up");
+                else
+                    $span.removeClass("glyphicon glyphicon-collapse-up").addClass("glyphicon glyphicon-collapse-down");
             });
-
+        
             var isLoaded = $cp.hasClass(_Cls);
           
-            if( ! isLoaded ){
+            if(!isLoaded){
                 $cp.addClass(_Cls);
                 
                 if( ! isUD(o.onLoad) ) o.onLoad( $(_cpId + o.parentId + " .zGrid") );
@@ -3398,4 +3364,13 @@ var  ud='undefined'
     }
 ;  
 
-  
+zsi.__setPrototypes();
+zsi.__setExtendedJqFunctions();
+/* Page Initialization */
+$(document).ready(function(){
+    zsi.initDatePicker();
+    zsi.initInputTypesAndFormats();
+});
+                                                  
+                                                  
+                       

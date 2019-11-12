@@ -1,7 +1,7 @@
 var users = (function(){
     var   bs                    = zsi.bs.ctrl
         , tblName               = "tblusers"
-        , mdlImageUser        = "modalWindowImageUser"
+        , modalImageUser        = "modalWindowImageUser"
         , mdlAddNewUser         = "modalWindowAddNewUser"
         , mdlInactive           = "modalWindowInactive"
         , mdlOEM                = "modalWindowOEM"
@@ -23,14 +23,13 @@ var users = (function(){
         , gUserIndex             = -1
         , g$NewRow               = {}
     ;
-
+    
     zsi.ready = function(){
         gTw = new zsi.easyJsTemplateWriter();
         setSearch();
         setInputs();
         displayRecords("");
         getTemplates();
-        $(".page-title").html("Users");
         $(".panel").css("height", $(".page-content").height()); 
     };
 
@@ -60,13 +59,6 @@ var users = (function(){
             , sizeAttr  : "modal-md"
             , title     : "New User"
             , body      : gTw.new().modalBodyAddNewOEM({oemListGroup:"oemList"}).html()  
-        })
-        .bsModalBox({
-              id        : mdlImageUser
-            , sizeAttr  : "modal-md"
-            , title     : "Inactive Users"
-            , body      : ""
-            , footer    : gTw.new().modalBodyImageUser({onClickUploadImageUser:"users.uploadImageUser();"}).html()  
         });
     
     }
@@ -196,7 +188,7 @@ var users = (function(){
                 }
             });
         $('#' + mdlInactive).modal('hide');     
-    }; 
+    } 
     
     pub.submitNewUsers = function(){
         if( zsi.form.checkMandatory()!==true) return false;
@@ -329,26 +321,20 @@ var users = (function(){
         });
     }
     //modal window//
-     function displayInactiveUsers(){
-        var cb = app.bs({name:"cbFilter",type:"checkbox"});
+    function displayInactiveUsers(){
         $("#gridInactiveUsers").dataBind({
-             sqlCode    : "U77"
-            ,parameters : {is_active: "N"}
-     	    ,width      : $("#frm_modalWindowInactive").width() - 15
+             url        : app.execURL + "users_sel @is_active='N'" 
+     	    ,width      : $("#frm_modalWindowInactive").width() - 25
     	    ,height     : 400
             ,dataRows   : [
-                
-                {text: cb  ,width : 25   ,style : "text-align:left;"
+        		{text   : "Corplear logon "     , width : 200       , style : "text-align:center;"
                     ,onRender :function(d){
                                     return     app.bs({name:"user_id"   ,type:"hidden"  ,value: d.user_id})
                                              + app.bs({name:"is_edited" ,type:"hidden"})
                                              + app.bs({name:"oem_ids"   ,type:"hidden"  ,value:d.oem_ids })
-                                             + (d !==null ? app.bs({name:"cb",type:"checkbox"}) : "" );                          
+                                             + app.bs({name:"logon"     ,type:"hidden"  ,value: d.logon});                          
                                 } 
-                }
-                
-                
-        	   ,{text  : "Corplear logon "     , width : 200           , style : "text-align:center;"          ,type:"input"      ,name:"logon"}
+        		}
                ,{text  : "First Name"          , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"first_name"   }
                ,{text  : "Last Name"           , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"last_name"    }
                ,{text  : "Middle Initial"      , width : 100           , style : "text-align:center;"           
@@ -364,7 +350,6 @@ var users = (function(){
                ,{text  : "Active?"  , width : 70    , style : "text-align:center;"  ,type:"yesno"  ,name:"is_active"    ,defaultValue:"N"}
             ]
             ,onComplete: function(o){
-                this.find("#cbFilter").setCheckEvent("#gridInactiveCustomers input[name='cb']");
             }
         });  
     }
@@ -391,7 +376,7 @@ var users = (function(){
                 ,{text  : "Last Name"           , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"last_name"       ,sortColNo:6}
                 ,{text  : "Middle Initial"      , width : 130           , style : "text-align:center;"          ,type:"input"       ,name:"middle_name" }
                 ,{text  : "Name Suffix"         , width : 100           , style : "text-align:center;"          ,type:"input"       ,name:"name_suffix" }
-                ,{text  : "Role"                , width : 160           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
+                ,{text  : "Role"                , width : 130           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
                 ,{text  : "Admin?"              , width : 60            , style : "text-align:center;"          
                     ,onRender: function(d){
                         return app.bs({name:"is_admin"      ,type:"yesno"  ,value:app.svn(d,"is_admin") })
@@ -399,12 +384,12 @@ var users = (function(){
                             +  app.bs({name:"warehouse_id"  ,type:"hidden" ,value: app.svn(d,"warehouse_id")});
                     }
                 }
-                // ,{text  : "Oem"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
-                //     , onRender      : function(d) {
-                //         var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
-                //         return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalAddNewOEM(this," + ctr + ");'>" + _oems + "</a>";
-                //     }
-                // }    
+                ,{text  : "Oem"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
+                    , onRender      : function(d) {
+                        var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
+                        return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalAddNewOEM(this," + ctr + ");'>" + _oems + "</a>";
+                    }
+                }    
                 ,{text  : "Active?"             , width : 60            , style : "text-align:center;"          ,type:"yesno"       ,name:"is_active"       ,defaultValue: "Y"}
                 
             ]
@@ -433,15 +418,7 @@ var users = (function(){
             ,rowsPerPage    : 50
             ,isPaging : true
             ,dataRows       : [
-                { text:"image"             , width:40      , style:"text-align:center;" 
-    		    ,onRender : function(d){ 
-                        var mouseMoveEvent= "onmouseover='users.mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='users.mouseout();'";
-                        var html = "<a href='javascript:void(0);' "+ mouseMoveEvent +" class='btn btn-sm has-tooltip' onclick='users.showModalUploadUserImage(" + svn(d,"user_id") +",\"" 
-    		                           + svn(d,"userFullName") + "\");' data-toggle='tooltip' data-original-title='Upload Image'><i class='fas fa-image'></i> </a>";
-                        return (d!==null ? html : "");
-                    }
-    		    }
-        		,{text  : "Corplear logon "     , width : 155           , style : "text-align:center;"         ,sortColNo:3
+        		{text  : "Corplear logon "     , width : 155           , style : "text-align:center;"         ,sortColNo:3
                     ,onRender : function(d){ 
                         ctr++;
                         return app.bs({name:"user_id"   ,type:"hidden"  ,value:app.svn(d,"user_id") })
@@ -455,14 +432,14 @@ var users = (function(){
                 ,{text  : "Last Name"           , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"last_name"       ,sortColNo:6}
                 ,{text  : "Middle Initial"      , width : 130           , style : "text-align:center;"          ,type:"input"       ,name:"middle_name" }
                 ,{text  : "Name Suffix"         , width : 100           , style : "text-align:center;"          ,type:"input"       ,name:"name_suffix" }
-                ,{text  : "Role"                , width : 160           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
+                ,{text  : "Role"                , width : 130           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
                 ,{text  : "Admin?"              , width : 60            , style : "text-align:center;"          ,type:"yesno"       ,name:"is_admin" }
-                // ,{text  : "Oem"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
-                //     , onRender      : function(d) {
-                //         var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
-                //         return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalOEM(this," + ctr + ");'>" + _oems + "</a>";
-                //     }
-                // }    
+                ,{text  : "Oem"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
+                    , onRender      : function(d) {
+                        var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
+                        return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalOEM(this," + ctr + ");'>" + _oems + "</a>";
+                    }
+                }    
                 ,{text  : "Plant"               , width : 100           , style : "text-align:center;"          ,type:"select"      ,name:"plant_id"        ,displayText:"plant_name"}
                 ,{text  : "Warehouse"           , width : 100           , style : "text-align:center;"          ,type:"select"      ,name:"warehouse_id"    ,displayText:"warehouse_name"}
                 ,{text  : "Active?"             , width : 60            , style : "text-align:center;"          ,type:"yesno"       ,name:"is_active"       ,defaultValue: "Y"}
@@ -472,7 +449,7 @@ var users = (function(){
             }
             ,onComplete: function(o){
                 gUsersData = o.data.rows;
-                $('.has-tooltip').tooltip();
+                
                 if ($("#oem_ids").filter(function() { return $(this).val(); }).length > 0) {
                     $(this).closest(".zRow").find("#is_edited").val("Y");
                     
@@ -549,19 +526,8 @@ var users = (function(){
         _$row.find("#is_edited").val("Y");        
         _info.anchor.text = _oems;
         _$li.remove();
-        //if(_oem_ids===""){ console.log(_oem_ids); $("#frm_modalWindowOEM").find("#btnSaveUsersOEM").addClass("d-none"); }
-    };
-    
-    pub.saveUsersOEM = function(o){
-        var _info = users.getCurrentUser();
-        $.post( app.procURL + "user_oems_upd "
-            + "@upd_user_id='" + _info.user_id + "'"
-            + ",@oem_ids='" + _info.oem_ids + "'" 
-            ,function(data){
-                if(data.isSuccess===true){
-                    zsi.form.showAlert("alert");        
-                } 
-        });
+
+      
     };
 
     $.fn.clearValue = function(){
@@ -609,7 +575,6 @@ var users = (function(){
                 _h +=pub.setOEMItemTmpl(y,oem_id);
                 info.keyValue.push(  {key: y, value:oem_id});
             });
-            $frm.find("#btnSaveUsersOEM").removeClass("d-none");
         }
         $frm.find("#listItemGroup").html(_h);        
         
@@ -633,7 +598,6 @@ var users = (function(){
              return;
         }
         _$mdl.find("#oemListGroup").find("#listItemGroup").append(pub.setOEMItemTmpl(_filterText,_filterValue) );
-        _$mdl.find("#btnSaveUsersOEM").removeClass("d-none"); 
         
         if(_info.oem_ids !=="") {
             _info.oem_ids +=",";
@@ -654,7 +618,7 @@ var users = (function(){
         if(_oem_ids !=="") _oem_ids +=",";
         _oem_ids +=_filterValue;
         _$row.find("#oem_ids").val(_oem_ids);
-        _$row.find("#is_edited").val("Y"); 
+        _$row.find("#is_edited").val("Y");        
     }
 
     pub.addNewList = function(self){
@@ -666,25 +630,25 @@ var users = (function(){
         
     };
 
-    pub.showModalUploadUserImage = function(UserId, name){
+    function showModalUploadUserImage(UserId,title){
         user_id = UserId;
-        var m=$('#' + mdlImageUser);
+        var m=$('#' + modalImageUser);
         
-        m.find(".modal-title").text("Image User for » " + name);
+        m.find(".modal-title").text("Image User for » " + title);
         m.modal("show");
         m.find("form").attr("enctype","multipart/form-data");
         
         $.get(base_url + 'page/name/tmplImageUpload'
             ,function(data){
                 m.find('.modal-body').html(data);
-                m.find("#prefixKey").val("user.");
-                //initChangeEvent();
+                $("#frm_" + modalImageUser).find("#prefixKey").val("user.");
+                initChangeEvent();
             }
         ); 
     }
     
-    pub.uploadImageUser = function(){
-        var frm = $("#frm_" + mdlImageUser);
+    function userImageUpload(){
+        var frm = $("#frm_" + modalImageUser);
         var fileOrg=frm.find("#file").get(0);
     
         if( fileOrg.files.length<1 ) { 
@@ -705,13 +669,16 @@ var users = (function(){
                     ,function(data){
                         zsi.form.showAlert("alert");
                         //$("#userImgBox").attr("src",  base_url + "file/viewImage?fileName=user." + fileOrg.files[0].name + "&isthumbnail=n" );
-                        $('#' + mdlImageUser).modal('toggle');
+                        $('#' + modalImageUser).modal('toggle');
                         
                         //refresh latest records:
                         displayRecords();
-                    });   
+                    });
+    
+                        
                 }else
                     alert(data.errMsg);
+                
             },
             error: errorHandler = function() {
                 console.log("error");
@@ -725,12 +692,12 @@ var users = (function(){
         }, 'json');
     }
     
-    pub.mouseover = function(filename){
+    function mouseover(filename){
      $("#user-box").css("display","block");
      $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
     }
     
-    pub.mouseout = function (){
+    function mouseout(){
         $("#user-box").css("display","none");
     }
     
@@ -758,4 +725,4 @@ var users = (function(){
     
     return pub;
 })();
-                            
+                   

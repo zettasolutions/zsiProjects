@@ -5,12 +5,12 @@ var list = [
                 ,{"paytypecode": "00444"  ,"paytypedesc":"salary" }
                 ,{"paytypecode": "00555"  ,"paytypedesc":"salary" }
                 ,{"paytypecode": "00666"  ,"paytypedesc":"salary" }
-           ];
+           ]
 
 zsi.ready = function(){
     displayData();
     
-};
+}
 function displayData(){
     var cb = bs({name: "cbfilter" ,type: "checkbox" });
     $("#grid").dataBind({
@@ -31,4 +31,4 @@ function displayData(){
     })
 } 
 
-  
+ 
