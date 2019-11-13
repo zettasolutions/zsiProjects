@@ -17,7 +17,7 @@ var position = (function(){
         new zsi.easyJsTemplateWriter("body")
         .bsModalBox({
               id        : gMdlOtherIncome
-            , sizeAttr  : "modal-lg"
+            , sizeAttr  : "modal-md"
             , title     : "Other Income"
             , body      : gtw.new().modalBodyOtherIncome({grid:"gridOtherIncome",onClickSaveOtherIncome:"submitOtherIncome();"}).html()  
         });
@@ -83,7 +83,7 @@ var position = (function(){
             ,parameters     : {position_id : posId}
             ,blankRowsLimit : 5
             ,width          : $(".panel-container").width() 
-            ,height         : $(document).height() - 260
+            ,height         : 360
             ,dataRows       : [
                 { text  : cb , width : 25   , style : "text-center" 
                     , onRender  :  function(d)
@@ -147,9 +147,6 @@ var position = (function(){
               }
         });       
     };
-    
-    
-    
-    
+ 
     return _public;
-})();          
+})();            
