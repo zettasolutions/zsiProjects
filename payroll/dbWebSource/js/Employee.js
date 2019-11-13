@@ -18,7 +18,7 @@ var employees = (function(){
         new zsi.easyJsTemplateWriter("body")
         .bsModalBox({
               id        : gMdlOtherIncome
-            , sizeAttr  : "modal-lg"
+            , sizeAttr  : "modal-md"
             , title     : "Other Income"
             , body      : gtw.new().modalBodyOtherIncome({grid:"gridOtherIncome",onClickSaveOtherIncome:"submitOtherIncome();"}).html()  
         })
@@ -46,7 +46,6 @@ var employees = (function(){
                  
                  sqlCode    : "E162"
                 ,width      : $(".zContainer").outerWidth()
-                //,height     : $(document).height() - 260
                 ,blankRowsLimit : 5
                 ,dataRows   : [
                      {text: cb                      ,width:25           ,style:"text-align:center"
@@ -77,8 +76,6 @@ var employees = (function(){
                     ,{text:"HMDF No."               ,type:"input"       ,name:"hmdf_no"             ,width:105        ,style:"text-align:left"  }
                     ,{text:"Account No."            ,type:"input"       ,name:"account_no"          ,width:105        ,style:"text-align:left"  }
                     ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:50         ,style:"text-align:center"    ,defaultValue:"Y"}
-                    //,{text:"In Active Type"         ,type:"select"      ,name:"inactive_type_code"  ,width:130        ,style:"text-align:left"  }
-                    //,{text:"Inactive Date"          ,type:"input"       ,name:"inactive_data"       ,width:120        ,style:"text-alignleft"   }
                     ,{text:"Other Income"           ,type:"input"                                   ,width:90         ,style:"text-align:center"
                         ,onRender : function(d){
                                 var _link = "<a href='javascript:void(0)' ' onclick='employees.showModalEmp("+ app.svn (d,"employee_id") +",\""+ app.svn (d,"last_name") +"\", \"" + " " +"\", \""+ app.svn (d,"first_name") +"\")'><i class='fas fa-link link'></i></a>";
@@ -135,7 +132,7 @@ var employees = (function(){
             ,parameters     : {employee_id : emdId}
             ,blankRowsLimit : 5
             ,width          : $("#frm_modalWindowOtherIncome").width() 
-            ,height         : $(document).height() - 260
+            ,height         : 360
             ,dataRows       : [
                 { text  : cb , width : 25   , style : "text-center" 
                     , onRender  :  function(d)
@@ -232,4 +229,4 @@ var employees = (function(){
     
 })();
 
-                       
+                         
