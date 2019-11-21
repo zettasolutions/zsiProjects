@@ -21,3 +21,15 @@
   padding-bottom: 0;
 }
 
+.form-control{
+  height: calc(1.5em + .2rem + 2px);
+  border: 1px solid #ced4da;
+}
+
+.btn-outline-default{
+  line-height: 0.5;
+
+  .fa-filter{
+    font-size: 9px;
+  }
+}
