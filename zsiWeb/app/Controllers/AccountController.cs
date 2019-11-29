@@ -19,25 +19,40 @@ namespace zsi.web.Controllers
         {
             try
             {
+
                 Cryptography crypt = new Cryptography();
                 user _user = null;
                 string userName = Request["username"];
                 string userPassword = Request["password"];
-                using (new impersonate(userName, userPassword))
-                {
+
+                var verifyAndGetURL = new Func<string>(() =>{
                     _user = new dcUser().getUserInfo(userName);
-                
-                    if (_user.userName == null){
-                        return Redirect(Url.Content("~/") + "?access=Username not exist.");
+
+                    if (_user.userName == null)
+                    {
+                        return Url.Content("~/ ") + " ? access = Username not exist.";
                     }
-               
+
                     Session["isAuthenticated"] = "Y";
                     HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
                     SessionHandler.CurrentUser = _user;
                     SessionHandler.CurrentUser.password = userPassword;
                     SessionHandler.NotIncludeInCompression = DataHelper.GetDataTable(string.Format("dbo.zNoCompressionActions_sel"));
-                    return Redirect(gePriorityURL(Url.Content("~/")));
-                    
+
+                    return gePriorityURL(Url.Content("~/"));
+                });
+ 
+
+                if (dbConnection.GetAttributes.IntegratedSecurity == true)
+                {
+                    using (new impersonate(userName, userPassword))
+                    {
+
+                        return Redirect(verifyAndGetURL());
+                    }
+                }
+                else {
+                    return Redirect(verifyAndGetURL());
                 }
             }
             catch (Exception ex)
@@ -62,10 +77,30 @@ namespace zsi.web.Controllers
         {
             try
             {
+
                 Cryptography crypt = new Cryptography();
                 string userName = Request["username"];
                 string userPassword = Request["password"];
                 user _user = new dcUser().getUserInfo(userName);
+
+
+                var verifyGetURL = new Func<string>(() => {
+                    _user = new dcUser().getUserInfo(userName);
+
+                    if (_user.userName == null)
+                    {
+                        return Url.Content("~/ ") + " ? access = Username not exist.";
+                    }
+
+                    Session["isAuthenticated"] = "Y";
+                    HttpContext.Response.Cookies["isMenuItemsSaved"].Value = "N";
+                    SessionHandler.CurrentUser = _user;
+                    SessionHandler.CurrentUser.password = userPassword;
+                    SessionHandler.NotIncludeInCompression = DataHelper.GetDataTable(string.Format("dbo.zNoCompressionActions_sel"));
+
+                    return gePriorityURL(Url.Content("~/"));
+                });
+
                 if (_user.userName == null)
                 {
 

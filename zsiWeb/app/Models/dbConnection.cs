@@ -1,6 +1,7 @@
 namespace zsi.web.Models
 {
     using System.Configuration;
+    using System.Data.SqlClient;
 
     public static class dbConnection
     {
@@ -8,5 +9,15 @@ namespace zsi.web.Models
         {
             get { return ConfigurationManager.ConnectionStrings["ConnStr"].ConnectionString; }
         }
+
+        public static SqlConnectionStringBuilder GetAttributes
+        {
+            get { return new SqlConnectionStringBuilder(ConnectionString); }
+        }
+
+
+        
+
+
     }
 }
