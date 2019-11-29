@@ -92,7 +92,8 @@ namespace zsi.web.Models
         private void ImpersonateValidUser(string domain, string userName, string password)
         {
             if (userName == null) return;
-            if ( ConfigurationManager.AppSettings["domain"] =="" || ConfigurationManager.AppSettings["domain"] == null) return;
+            if ( ConfigurationManager.AppSettings["domain"] =="" || ConfigurationManager.AppSettings["domain"] == null  || dbConnection.GetAttributes.IntegratedSecurity == false) return;
+            
             WindowsIdentity tempWindowsIdentity = null;
             IntPtr token = IntPtr.Zero;
             IntPtr tokenDuplicate = IntPtr.Zero;

@@ -24,13 +24,14 @@ namespace zsi.web.Controllers
                 user _user = null;
                 string userName = Request["username"];
                 string userPassword = Request["password"];
+                string userNotExistURL = Url.Content("~/ ") + "?access=Username not exist.";
 
-                var verifyAndGetURL = new Func<string>(() =>{
+                var _verify = new Func<ActionResult>(() =>{
                     _user = new dcUser().getUserInfo(userName);
 
-                    if (_user.userName == null)
+                    if (_user.userName == null ||  ( dbConnection.GetAttributes.IntegratedSecurity == false  && crypt.Decrypt(_user.password) !=  userPassword ) )
                     {
-                        return Url.Content("~/ ") + " ? access = Username not exist.";
+                        return Redirect(userNotExistURL);
                     }
 
                     Session["isAuthenticated"] = "Y";
@@ -39,20 +40,20 @@ namespace zsi.web.Controllers
                     SessionHandler.CurrentUser.password = userPassword;
                     SessionHandler.NotIncludeInCompression = DataHelper.GetDataTable(string.Format("dbo.zNoCompressionActions_sel"));
 
-                    return gePriorityURL(Url.Content("~/"));
+                    return Redirect(gePriorityURL(Url.Content("~/")));
                 });
  
-
                 if (dbConnection.GetAttributes.IntegratedSecurity == true)
                 {
                     using (new impersonate(userName, userPassword))
                     {
 
-                        return Redirect(verifyAndGetURL());
+                        return _verify();
                     }
                 }
                 else {
-                    return Redirect(verifyAndGetURL());
+
+                    return _verify();
                 }
             }
             catch (Exception ex)
@@ -72,6 +73,7 @@ namespace zsi.web.Controllers
             }
         }
 
+        /*
         [HttpPost]
         public ActionResult validate2()
         {
@@ -123,7 +125,7 @@ namespace zsi.web.Controllers
                 return setMsg(ex.Message,false);
             }
         }
-
+        */
 
         public ActionResult setupDatabase(string dbName)
         {
