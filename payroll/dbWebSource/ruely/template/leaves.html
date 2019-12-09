@@ -2,20 +2,28 @@
    .fa-sign-out-alt, .count{
        color: #fff;
    }
+    .datepicker,.table-condensed {
+      width: inherit;
+      height:inherit;
+      font-size:medium;
+    }
+    #datepicker .table-condensed .thead{
+        font-size:50px;
+    }
 </style>
-<div class="panel">
+<div class="panel panel-asd">
     <div class="panel-container">
         <div class="panel-content">  
             <div class="row">
-                <div class="col-sm-3 col-md-3 col-12">
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
                     <label class="col-form-label">Employee</label>
                     <select id="userId" class="form-control form-control-sm"></select>
                 </div>
-                <div class="col-sm-3 col-md-3 col-12">
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 mb-2">
                     <label class="col-form-label">Leave Type</label>
                     <select id="leaveTypeId" class="form-control form-control-sm"></select>
                 </div>
-                <div class="col-sm-3 col-md-3 col-12 mb-2">
+                <!--<div class="col-sm-3 col-md-3 col-12 mb-2">
                     <label class="col-form-label">Date</label>
                     <div class="input-group">
                         <input id="datepicker" class="form-control form-control-sm p-2"/>
@@ -25,10 +33,40 @@
                             </button>
                         </div>
                     </div>
+                </div>-->
+            </div>
+            <div class="row">
+                 <div class="col-xl-12">
+                    <div class="panel">
+                        <div class="panel-hdr" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse">
+                            <i class="fas fa-calendar"></i>&nbsp;
+                            <h2>Select date(s) to leave</h2>
+                            <div class="panel-toolbar">
+                                <a href="#" class="btn btn-panel hover-effect-dot js-panel-collapse waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" title="Collapse"></a>
+                            </div>
+                        </div>
+                        <div class="panel-container show">
+                            <div class="panel-content">
+                                <div id="datepicker"></div>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <input id="datepickerVal" type="hidden"/>
+                                        <button id="btnGo" class="btn-sm btn btn-primary btn-outline-default " type="button" title="Generate Date(s)">
+                                            <i class="fas fa-sign-out-alt"></i><i class="count"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="row">
                 <div id="gridId" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none mb-1">
                     <div id="gridLeaves" class="zGrid"></div>
                 </div>
+            </div>
+            <div class="row">
                 <div id="btnId" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1 d-none">   
                     <button type="button" class="btn btn-primary btn-sm" id="btnSaveLeaves" data-toggle="tooltip" title="Save">
                         <i class="far fa-save"></i> Save

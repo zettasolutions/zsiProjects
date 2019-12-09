@@ -1,35 +1,43 @@
-(function(){
+var leave = (function(){
     var      bs                     = zsi.bs.ctrl
             ,svn                    = zsi.setValIfNull
             ,gtw                    = null
+            ,_pub                   = {}
     ;
     zsi.ready = function() {
-        $(".page-title").html("Leaves");
+        $(".page-title").html("Leave");
         runDatePicker();
-        $(".panel").css("height", $(".page-content").height());
+        $(".panel-asd").css("height", $(window).height() - 200);
         
         $("#userId").dataBind({
              sqlCode     : "U77" //users_sel
             ,text        : ("first_name"," ","middle_name"," ","last_name")
             ,value       : "user_id"
-        })
+        });
         $("#leaveTypeId").dataBind({
              sqlCode     : "L187" //leave_types_sel
             ,text        : "leave_type"
             ,value       : "leave_type_id"
-        })
+        });
+        
     };
-    
     
     runDatePicker = function(){
         $('#datepicker').datepicker(
         {
-             todayHighlight  : true
-            ,multidate       : true
-            ,pickTime        : false
-            
-        }).on('changeDate', function(e) {
-            $(this).closest('.input-group').find('.count').text(' ' + e.dates.length);
+             todayHighlight     : true
+            ,multidate          : true
+            ,multidateSeparator : ","
+            ,format             : 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+            var _date = e.dates;
+            var _dates = [];
+            $.each(e.dates, function(i, v){
+                _dates.push(e.format(i,"mm/dd/yyyy"));
+            });
+            console.log(_dates);
+            $("#datepickerVal").val(_dates);
         });
             
     };
@@ -44,6 +52,7 @@
                 }
         });
     });
+    
     $("#btnDeleteLeaves").click(function(){
         zsi.form.deleteData({
              code       : "ref-00014"
@@ -55,7 +64,7 @@
     
     $("#btnGo").click(function () {
         var _row  = $(this).closest(".row");
-        var _date = _row.find('#datepicker').val();
+        var _date = _row.find('#datepickerVal').val();
         var _user = _row.find('#userId').val();
         var _leaveType = _row.find('#leaveTypeId').val();
         var _rows = [];
@@ -89,7 +98,7 @@
              //sqlCode        : "F183" //filed_leaves_sel
              rows           : data
             ,width          : $(".zContainer").width() 
-            ,height         : $(document).height("")
+            ,height         : 198
             ,dataRows       : [
                 {text: "File Date"                                                              ,width : 190   ,style : "text-align:left;"
                     ,onRender  :  function(d)
@@ -123,8 +132,11 @@
             ,onComplete: function(){
                 var _zRow = this.find(".zRow");
                 _zRow.find("[name='file_date']").datepicker({todayHighlight:true}).datepicker("setDate", "0");
+                _zRow.find("#leave_date").attr('readonly',true);
                 
             }
         });
-    } 
-})();     
+    };
+    
+    return _pub;
+})();             
