@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    
+	<meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
+    <meta charset="utf-8" />
+	<meta name="generator" content="Mobirise v4.11.5, mobirise.com">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="Developed By" content="zetta-solutions.net">
+    <link rel="shortcut icon" href="@Url.Content("~/")favicon.png" type="image/x-icon">
+	<meta name="description" content="">   
+	
+    <title>@ViewBag.pageTitle - Zetta Solutions Inc. </title>
+	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
+	<script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>
+	
+    
+	<link rel="stylesheet" href='@Url.Content("~/")assets/web/assets/mobirise-icons2/mobirise2.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/web/assets/mobirise-icons/mobirise-icons.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/web/assets/mobirise-icons-bold/mobirise-icons-bold.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/bootstrap/css/bootstrap.min.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/bootstrap/css/bootstrap-grid.min.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/bootstrap/css/bootstrap-reboot.min.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/tether/tether.min.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/dropdown/css/style.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/socicon/css/styles.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/theme/css/style.css'>
+	<link rel="preload" as="style" href='@Url.Content("~/")assets/mobirise/css/mbr-additional.css'>
+	<link rel="stylesheet" href='@Url.Content("~/")assets/mobirise/css/mbr-additional.css' type="text/css">
+	
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
+    @{
+        string userId = "";
+    }
+    <script>
+        var base_url = '@Url.Content("~/")';
+        var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+        @userId
+    </script>
+ 
+	<style>.pageTitle{display:none}</style>
+	
+</head>
+<body>
+<section class="menu cid-qTkzRZLJNu" once="menu" id="menu1-0">
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="#">
+                         <img src='@Url.Content("~/")assets/images/logo-transparent-122x122.png' alt="Mobirise" title="" style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-4" href="http://dev.zetta-solutions.net">ZETTA SOLUTIONS INC.</a></span>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<!--  <div id="menuPanel"> </div>-->
+            <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+				<li class="nav-item"><a class="nav-link link text-white display-4" href='@Url.Content("~/")'>
+					<span class="mobi-mbri mobi-mbri-home mbr-iconfont mbr-iconfont-btn"></span>
+							Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link link text-white display-4" href='@Url.Content("~/")pub/services'>
+						<span class="mbrib-setting mbr-iconfont mbr-iconfont-btn"></span>                        
+							Services
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link link text-white display-4" href='@Url.Content("~/")pub/cloud_computing'>
+						<span class="mbrib-cloud mbr-iconfont mbr-iconfont-btn"></span>
+							Cloud Computing
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link link text-white display-4" href='@Url.Content("~/")pub/our_clients'>
+						<span class="mobi-mbri mobi-mbri-users mbr-iconfont mbr-iconfont-btn"></span>
+							Our Clients&nbsp;
+					</a>
+				</li>
+				
+				<li class="nav-item">
+						<a class="nav-link link text-white display-4" href='@Url.Content("~/")pub/about_us'>
+							<span class="mbri-search mbr-iconfont mbr-iconfont-btn"></span>
+							About Us
+						</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link link text-white display-4" href='@Url.Content("~/")pub/contact_us'>
+						<span class="mobi-mbri mobi-mbri-phone mbr-iconfont mbr-iconfont-btn"></span>
+							Contact Us
+					</a>
+				</li>
+			</ul>
+            
+        </div>
+    </nav>
+</section>
+
+@RenderBody()            
+   
+
+<script src='@Url.Content("~/")assets/web/assets/jquery/jquery.min.js'></script>
+<script src='@Url.Content("~/")assets/popper/popper.min.js'></script>
+<script src='@Url.Content("~/")assets/bootstrap/js/bootstrap.min.js'></script>
+<script src='@Url.Content("~/")assets/ytplayer/jquery.mb.ytplayer.min.js'></script>
+<script src='@Url.Content("~/")assets/vimeoplayer/jquery.mb.vimeo_player.js'></script>
+<script src='@Url.Content("~/")assets/tether/tether.min.js'></script>
+<script src='@Url.Content("~/")assets/bootstrapcarouselswipe/bootstrap-carousel-swipe.js'></script>
+<script src='@Url.Content("~/")assets/dropdown/js/nav-dropdown.js'></script>
+<script src='@Url.Content("~/")assets/dropdown/js/navbar-dropdown.js'></script>
+<script src='@Url.Content("~/")assets/touchswipe/jquery.touch-swipe.min.js'></script>
+<script src='@Url.Content("~/")assets/smoothscroll/smooth-scroll.js'></script>
+<script src='@Url.Content("~/")assets/theme/js/script.js'></script>
+<script src='@Url.Content("~/")assets/slidervideo/script.js'></script>
+<!--<script src='@Url.Content("~/")Scripts/popper.min.js'></script>
+<script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>-->
+@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
+
+</body>
+</html>

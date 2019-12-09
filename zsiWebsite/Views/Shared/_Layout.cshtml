@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="Developed By" content="zetta-solutions.net">
+    <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
+    <title>@ViewBag.pageTitle - E-Systems Trend Tool </title>
+	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
+	<script src='@Url.Content("~/")Scripts/detectmobilebrowser.js'></script>
+    <link href='@Url.Content("~/")css/app.min.css' rel="stylesheet" />
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
+	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLocalDb"))
+    @{
+        string userId = "";
+        if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
+    }
+    <script>
+        var base_url = '@Url.Content("~/")';
+        var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+        @userId
+    </script>
+ 
+	<style>
+		.ml-auto, .mx-auto {
+			margin-left: auto !important;
+			margin-right: 1.5rem;
+		}
+		.menu-content .menu-item.active .imgFade{
+			opacity:0;
+			-webkit-transition:0.8s;transition:0.8s
+		}
+		.menu-content .menu-item.active a{
+			-webkit-transition:padding-top 0.6s;
+			transition:padding-top 0.6s;
+			padding-top:24px
+		}
+		.menu-content .menu-item.active a .text .transparent-bg{
+			-webkit-transition:background-color 0.8s;
+			transition:background-color 0.8s;
+			background-color:rgba(0,0,0,0.5)
+		}	
+		
+		.navbar-main .navbar .navbar-expand-md .navbar-dark .fixed-top .bg-blue {#007bff !important;}
+	
+	</style>
+</head>
+<body id="page-top">
+    <div class="progressWindow zPopup-system">
+        <div class="loadingImg"></div>
+        <div class="loadingText">Loading...Please wait</div>
+    </div>
+    <div class="errorWindow zPopup-system">
+        Some processe(s) encountered a problem.
+        <br> Please Contact System Administrator.
+    </div>
+  
+	<!-- MAIN MENU -->
+	<nav class="navbar-main navbar navbar-expand-md navbar-dark fixed-top bg-blue">
+		<button class="navbar-toggler p-1 border-0" type="button" data-toggle="collapse"
+			data-target="#navbarSubCollapse" aria-controls="navbarSubCollapse" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSubCollapse">
+			<div id="menuPanel"> </div>	
+		</div>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto mr-0">			
+				
+
+			
+				@{ string role = (ViewBag.role == null ? "No Role" :  ViewBag.role ); }
+               
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> @zsi.web.SessionHandler.CurrentUser.userName.ToUpper() (@role)
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow-sm " aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@Url.Content("~/")page/signin">Log Out</a>
+                        <a class="dropdown-item" href="@Url.Content("~/")page/docs">User Manual</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+	<!-- SUB MENU -->
+   
+	@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appStart"))
+
+	<main role="main" class="w-100">
+		@RenderBody()
+	</main>
+
+	@{
+		if (Session["zsi_login"].ToString() == "Y")
+		{
+		<div class='debugPanel noprint'>
+			  <a href='@Url.Content("~/")pagetemplate/source/@ViewBag.pageName' target="_blank">Edit Page Template</a>
+			| <a href='@Url.Content("~/")javascript/source/@ViewBag.pageName' target="_blank">Edit Javascript</a>
+			
+		</div>
+		}
+	}
+<script src='@Url.Content("~/")Scripts/popper.min.js'></script>
+<script src='@Url.Content("~/")Scripts/bootstrap.min.js'></script>
+@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("easyJsTemplateWriter"))
+<div class="alert alert-success zPopup-system">
+    <p>Data has been saved.</p>
+</div>
+</body>
+</html>
