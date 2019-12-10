@@ -57,16 +57,22 @@ var employees = (function(){
                                  + (d !== null ? bs({name:"cb"  ,type:"checkbox"}) : "" );
                          }
                      }
-                    ,{text:"Employee ID"            ,type:"input"       ,name:"employee_id"         ,width:105        ,style:"text-align:center"}
+                    ,{text:"Employee ID"            ,type:"input"       ,name:"employee_id"         ,width:75         ,style:"text-align:center"}
                     ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:150        ,style:"text-align:left"  }
                     ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:150        ,style:"text-align:left"  }
                     ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:center"}
                     ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:105        ,style:"text-align:left"  }
                     ,{text:"Gender"                 ,type:"select"      ,name:"gender"              ,width:50         ,style:"text-align:left"  }
-                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:100        ,style:"text-align:left"  }
-                    ,{text:"Date Hired"             ,type:"input"       ,name:"date_hired"          ,width:100        ,style:"text-align:left"  }
+                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:100        ,style:"text-align:left"  } 
+                    ,{text:"Date Hired"                                                             ,width:100        ,style:"text-align:left"  
+                         ,onRender: function(d){
+                            return bs({name:"date_hired"   ,style:"text-align:center" ,type:"input"  ,value:app.svn(d,"date_hired").toShortDate()}); 
+                        }
+                    }
+                    
                     ,{text:"Employement Type"       ,type:"select"      ,name:"empl_type_code"      ,width:140        ,style:"text-align:left"  }
                     ,{text:"Department"             ,type:"select"      ,name:"department_id"       ,width:120        ,style:"text-alignleft"   }
+                    ,{text:"Section"                ,type:"select"      ,name:"section"             ,width:120        ,style:"text-alignleft"   }
                     ,{text:"Position"               ,type:"select"      ,name:"position_id"         ,width:120        ,style:"text-align:left"  }
                     ,{text:"Basic Pay"              ,type:"input"       ,name:"basic_pay"           ,width:105        ,style:"text-align:left"  }
                     ,{text:"Pay Type"               ,type:"select"      ,name:"pay_type_code"       ,width:105        ,style:"text-align:left"  }
@@ -80,7 +86,6 @@ var employees = (function(){
                         ,onRender : function(d){
                                 var _link = "<a href='javascript:void(0)' ' onclick='employees.showModalEmp("+ app.svn (d,"employee_id") +",\""+ app.svn (d,"last_name") +"\", \"" + " " +"\", \""+ app.svn (d,"first_name") +"\")'><i class='fas fa-link link'></i></a>";
                                 return (d !== null ? _link : "");
-                            
                         }
                     }
 
@@ -88,19 +93,37 @@ var employees = (function(){
             ,onComplete: function(){
                 var _this = this;
                 var _zRow = _this.find(".zRow");
-                _this.find("input[name='date_hired']").datepicker();
+                _this.find("input[name='date_hired']").datepicker({
+                     pickTime  : false
+                    , autoclose : true
+                    , todayHighlight: true
+                });
                 _this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");
                 _this.find("select[name='gender']").fillSelect({data: _genderOptions}); 
                 _this.find("select[name='civil_status_code']").dataBind("civil_status");
                 _this.find("select[name='empl_type_code']").dataBind("empl_types");
                 _this.find("select[name='pay_type_code']").dataBind("pay_types");
-                _this.find("select[name='department_id']").dataBind("departments");
+               // _this.find("select[name='department_id']").dataBind("dept_sect"); 
                 _zRow.find("#position_id").dataBind({
                      sqlCode      : "P201" //position_sel
                     ,text         : "position_title"
                     ,value        : "position_id"
-                });
+                }); 
                 
+                _zRow.find("#department_id").dataBind({
+                     sqlCode        : "D213" //position_sel 
+                    ,parameters    : {dept_sect_parent_id : this.val()} 
+                    ,text           : "dept_sect_name"
+                    ,value          : "dept_sec_id"
+                    ,onChange : function(o){  
+                       _zRow.find("#section").dataBind({
+                             sqlCode        : "D213" //position_sel
+                             ,parameters    : {dept_sect_parent_id : o.data[o.index - 1].dept_sect_parent_id} 
+                            ,text           : "dept_sect_name"
+                            ,value          : "dept_sec_id"
+                        }); 
+                    }
+                });
                 _zRow.find("[name='is_active']").change(function(){
                     var _$this = $(this);
                     if(_$this.val() === "N"){
@@ -204,15 +227,12 @@ var employees = (function(){
             
     $("#btnSave").click(function () {
        $("#grid").jsonSubmit({
-                 procedure: "employees_upd"
+                 procedure: "employees_upd" 
                 ,onComplete: function (data) {
                     if(data.isSuccess===true) zsi.form.showAlert("alert");
                     displayEmployees();
                 }
         });
-    });
-    $("#btnAdd").click(function(){
-        console.log("agi");
     });
     
     $("#btnDelete").click(function(){
@@ -229,4 +249,4 @@ var employees = (function(){
     
 })();
 
-                         
+                             
