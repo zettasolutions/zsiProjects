@@ -70,8 +70,6 @@ var leave = (function(){
         var _rows = [];
         var _info = null;
         
-        x = _date;
-        
         $.each(_date.split(","), function(i,v){
             _info = { 
                  employee_id    : _user
@@ -80,6 +78,9 @@ var leave = (function(){
             };
             
             if(i >= 0 && _date !== ""){
+                $(".row").find("#gridId").removeClass("d-none");
+                $(".row").find("#btnId").removeClass("d-none");
+            }else if(_user !== "" && _leaveType !== ""){
                 $(".row").find("#gridId").removeClass("d-none");
                 $(".row").find("#btnId").removeClass("d-none");
             }else{
@@ -132,11 +133,11 @@ var leave = (function(){
             ,onComplete: function(){
                 var _zRow = this.find(".zRow");
                 _zRow.find("[name='file_date']").datepicker({todayHighlight:true}).datepicker("setDate", "0");
-                _zRow.find("#leave_date").attr('readonly',true);
+                _zRow.find("[name='leave_date']").attr('readonly',true);
                 
             }
         });
-    };
+    }
     
     return _pub;
-})();             
+})();               

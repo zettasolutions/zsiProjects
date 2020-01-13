@@ -53,9 +53,9 @@
                             
                           ]
                           ,onComplete: function(){
-                            $("#cbFilter1").setCheckEvent("#sssGrid input[name='cb']");
+                            this.find("[name='cbFilter1']").setCheckEvent("#sssGrid input[name='cb']");
                           }  
     });
     
     }     
-})(); 
+})();  
