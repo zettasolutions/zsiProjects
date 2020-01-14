@@ -1,0 +1,112 @@
+<style type="text/css" media="all">
+    .pull-right {
+        float: right !important;
+    }
+    .link {
+        color: blue;
+        cursor: pointer;
+    }
+    .link:hover{
+        color: red;
+    }
+</style>
+
+<div class="col-xs-12 "> 
+    <div class="zPanel">
+        <div id="gridCustomers" class="zGrid"> </div>  
+    </div>
+        <div class="buttonGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="btnSaveCustomers">
+            	<span class="fas fa-save"></span> Save
+            </button>    
+        </div>
+</div>
+
+<ul id="localTemplates">
+    <li name="modalBodySites">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <div id="{{gridSites}}" class="zGrid row"> </div>
+                <button type="button" id="btnSave1" onclick="{{onClickSaveSites}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div class="modal" id="modalCustomer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full" role="document">
+        <div class="modal-content">
+            <form id="frm_modalCustomer" >
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCustomerLabel"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    
+                </div>
+                <div class="modal-body p-4">
+                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                        <nav>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-sites" role="tab" aria-controls="nav-sites"> Sites </a>
+                            <a class="nav-item nav-link"        data-toggle="tab" href="#nav-contacts" role="tab" aria-controls="nav-c"> Contacts </a>
+                              <a class="nav-item nav-link"        data-toggle="tab" href="#nav-p" role="tab" aria-controls="nav-p"> Programs </a>
+                          </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <div role="tabpanel" class="tab-pane fade show active" id="nav-sites">
+                                <div class="row">
+                                    <div id="grid-Sites" class="zGrid"> </div>
+                                </div>
+                                <button type="button" onclick="submitCustomerSites();" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade"   id="nav-c">
+                                <div class="row">
+                                    <div id="grid-Contacts" class="zGrid"> </div>
+                                </div>
+                                <button type="button" onclick="submitCustomerContacts();" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade"   id="nav-p">
+                                <div class="row">
+                                    <div id="grid-Programs" class="zGrid"> </div>
+                                </div>
+                                <button type="button" onclick="submitCustomerPrograms();" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+                          </div>
+                
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ul id="localTemplates">
+    <li name="modalBodySites">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <div id="{{gridSites}}" class="zGrid row"> </div>
+                <button type="button" id="btnSave1" onclick="{{onClickSaveSites}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+            </div>
+        </div>
+    </li>
+    
+    <li name="modalBodyContacts">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <div id="{{gridContacts}}" class="zGrid row"> </div>
+                <button type="button" id="btnSave1" onclick="{{onClickSaveContacts}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+            </div>
+        </div>
+    </li>
+
+    <li name="modalBodyPrograms">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                <div id="{{gridPrograms}}" class="zGrid row"> </div>
+                <button type="button" id="btnSave1" onclick="{{onClickSaveProgram}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+            </div>
+        </div>
+    </li>
+   
+</ul>

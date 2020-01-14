@@ -1,0 +1,465 @@
+<script src="/scripts/linq.min.js"></script>
+<style type="text/css" media="all">
+    .col-form-label {
+        padding-top: calc(.1rem + 1px);
+        padding-bottom: calc(.1rem + 1px);
+        margin-bottom: 0;
+        font-size: inherit;
+        line-height: 1.5;
+        white-space: nowrap;
+        text-align: center;
+        text-decoration: underline;
+    }     
+    
+    .form-group {
+        text-align: left;
+        font-weight: bold;
+        margin-top: 20px;
+    }    
+    
+    .buttonGroup {
+        margin-top: 85px;
+        margin-right: 0px; 
+        padding-left: 6px;
+        margin-bottom: 5px;
+    } 
+
+   .nav-tabs .nav-link:hover {
+        background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);
+        color: #fff;
+    }
+    div nav #nav-tab .nav-link {
+        color: black;
+    }
+    div nav #nav-tab .nav-link:hover {
+        color: #fff !important;
+    }    
+    div nav #nav-tab .nav-link.active {
+        background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%) !important;
+        color: #fff !important;
+    } 
+    .heading{
+        text-align:center;
+        font-weight:bold;
+        border:none;
+    }
+    #qty_po {
+        color: blue;
+        cursor: pointer;
+        text-decoration:underline;
+    }
+    #qty_po:hover{
+        color: red;
+    }
+    .inputText{
+       text-align: center;
+       border: none;
+       background: none !important;
+    }
+
+</style>
+
+
+<form style="margin-top: 10px; text-align: -webkit-right; margin-right: 10%;">
+    <div class="form-group row">
+        <div class="col-2">
+            <span type="text" class="form-control heading" id="program" name="program" >C27</span>
+        </div>
+        <div class="col-2">
+            <span type="text" class="form-control heading" id="part_no"  name="part_no" >LI8T-14A005-NAA</span>
+        </div>      
+        <div class="col-2">
+            <span type=text class="form-control heading" id="po_no" name="po_no" >PO# 3688914.1</span>
+        </div>
+        <div class="col-2">
+            <span type=text class="form-control heading" id="rev" name="rev" >Rev001</span>
+        </div>
+        <div class="col-3">
+            <span type=text class="form-control heading" id="created_date" name="created_date">Entry Created 8/1/2019 J. Buckowski</span>
+        </div>
+    </div>
+</form>
+
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist" style="margin-top:50px;">
+        <a class="nav-item nav-link active" data-toggle="tab" href="#nav-o" role="tab" aria-controls="nav-o"> Order Info</a>
+        <a class="nav-item nav-link"        data-toggle="tab" href="#nav-c" role="tab" aria-controls="nav-c"> Customer Info</a>
+        <a class="nav-item nav-link"        data-toggle="tab" href="#nav-m" role="tab" aria-controls="nav-m"> Manufacturing Input</a>
+        <a class="nav-item nav-link"        data-toggle="tab" href="#nav-w" role="tab" aria-controls="nav-w"> Warehouse Input</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div role="tabpanel" class="tab-pane fade show active" id="nav-o">
+            <form style="margin-top: 10px;">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer" class="col-12 col-form-label">Customer</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer" name="customer" value="Ford" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="part_no" class="col-12 col-form-label">Customer Part Number</label>
+                        <input type="text" class="col-12 form-control inputText" id="po_no"  name="po_no" value="LI8T-14A005-NAA" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="description" class="col-12 col-form-label">Part Description</label>
+                        <input type=text class="col-12 form-control inputText" id="description" name="description" value="Body Harness" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="status" class="col-12 col-form-label">Order Status</label>
+                        <input  type=text class="col-12 form-control inputText" id="status" name="status" value="Open" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="color_code" class="col-12 col-form-label">Color Coding</label>
+                        <input type=text class="col-12 form-control inputText" id="color_code" name="color_code" value="Late Order" readonly>
+                    </div>
+                </div>
+ 
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer" class="col-12 col-form-label">Customer Site Code</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer" name="customer" value="FZ13D" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="part_no" class="col-12 col-form-label">OEM Part Number</label>
+                        <input type="text" class="col-12 form-control inputText" id="po_no"  name="po_no" value="LI8T-14A005-NAA" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="description" class="col-12 col-form-label">Model Year</label>
+                        <input type=text class="col-12 form-control inputText" id="description" name="description" value="2019" readonly>
+                    </div>
+                </div>
+ 
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer" class="col-12 col-form-label">Program</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer" name="customer" value="C27" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="part_no" class="col-12 col-form-label">PO Issue Date</label>
+                        <input type="text" class="col-12 form-control inputText" id="po_no"  name="po_no" value="27/7/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="description" class="col-12 col-form-label">Prefix</label>
+                        <input type=text class="col-12 form-control inputText" id="description" name="description" value="LI8T" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer" class="col-12 col-form-label">Lear Plant</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer" name="customer" value="Monarca" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="part_no" class="col-12 col-form-label">Build Phase</label>
+                        <input type="text" class="col-12 form-control inputText" id="po_no"  name="po_no" value="VP">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="description" class="col-12 col-form-label">Base</label>
+                        <input type=text class="col-12 form-control inputText" id="description" name="description" value="14A005" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer" class="col-12 col-form-label">Lear Warehouse</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer" name="customer" value="El Paso" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="part_no" class="col-12 col-form-label">Rate and Flow</label>
+                        <input type="text" class="col-12 form-control inputText" id="po_no"  name="po_no" value="YES/NO" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="description" class="col-12 col-form-label">Suffix</label>
+                        <input type=text class="col-12 form-control inputText" id="description" name="description" value="NAA" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer" class="col-12 col-form-label">Car Leader</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer" name="customer" value="Edgar Delgadillo" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="part_no" class="col-12 col-form-label">Customer MRD</label>
+                        <input type="text" class="col-12 form-control inputText" id="po_no"  name="po_no" value="1/12/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="description" class="col-12 col-form-label">Promise Date to Customer</label>
+                        <input type=text class="col-12 form-control inputText" id="description" name="description" value="1/12/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="status" class="col-12 col-form-label">Red Border #</label>
+                        <input type=text class="col-12 form-control inputText" id="status" name="status" value="2019">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="color_code" class="col-12 col-form-label">Red Border Status #</label>
+                        <input type=text class="col-12 form-control inputText" id="color_code" name="color_code" value="Pending" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer" class="col-12 col-form-label">Order Type</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer" name="customer" value="GPIRS" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="qty_po" class="col-12 col-form-label">Quantity on PO</label>
+                        <input type="text" class="col-12 form-control inputText" id="qty_po"  name="qty_po" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="description" class="col-12 col-form-label">Quantity Shipped to Customer</label>
+                        <input type=text class="col-12 form-control inputText" id="description" name="description" value="20" readonly>
+                    </div>
+                </div>
+                <div class="buttonGroup ">
+                    <button type="button" onclick="editOrder(this,'O')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-edit"></span> Edit
+                    </button>
+                    <button type="button" onclick="submitOrder(this,'O')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-save"></span> Save
+                    </button>        
+                    <button type="button" onclick="deleteOrder(this,'O')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-trash"></span> Delete
+                    </button>        
+                </div>    
+            </form>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="nav-c">
+            <form style="margin-top: 10px;">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="customer_code" class="col-12 col-form-label">Customer Site Code</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer_code" name="customer_code" value="FZ13D" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="ship_address" class="col-12 col-form-label">Ship To Address</label>
+                        <textarea type="text" class="col-12 form-control inputText" id="ship_address"  name="ship_address" readonly> Ford Interiors Prototype Shop 8301 Enterprise Dr Allen Park, MI 48101 USA</textarea>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="customer_info" class="col-12 col-form-label">Customer Contact Info</label>
+                        <textarea type=text class="col-12 form-control inputText" id="customer_info" name="customer_info" readonly>Rajath Kajarath C727 Coordinator 313-xxx-xxxx Rajathkrajath1@ford.com</textarea>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="instructions" class="col-12 col-form-label">Special Delivery Instructions</label>
+                        <input type=text class="col-12 form-control inputText" id="instructions" name="instructions" value="TBD" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="customer" class="col-12 col-form-label">Customer</label>
+                        <input type=text class="col-12 form-control inputText" id="customer" name="customer" value="Ford" readonly>
+                    </div>
+                </div>
+                <div class="buttonGroup ">
+                    <button type="button" onclick="editCustomer(this,'C')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-edit"></span> Edit
+                    </button>
+                    <button type="button" onclick="submitCustomer(this,'C')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-save"></span> Save
+                    </button>        
+                    <button type="button" onclick="deleteCustomer(this,'C')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-trash"></span> Delete
+                    </button>        
+                </div>    
+            </form>
+      </div>
+      <div role="tabpanel" class="tab-pane fade"  id="nav-m">
+            <form style="margin-top: 10px;">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="customer_mrd" class="col-12 col-form-label">Customer MRD</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer_mrd" name="customer_mrd" value="1/12/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputText_manufacturing" class="col-12 col-form-label">Quantity on PO</label>
+                        <input type="text" class="col-12 form-control inputText" id="qty_po_manufacturing"  name="qty_po_manufacturing" value="50A" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="ship_target_date" class="col-12 col-form-label">Plant Target Ship Date</label>
+                        <input type=text class="col-12 form-control inputText" id="ship_target_date" name="ship_target_date" value="11/15/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="actual_ship_date" class="col-12 col-form-label">Plant Actual Ship Date</label>
+                        <input type=text class="col-12 form-control inputText" id="actual_ship_date" name="actual_ship_date" value="17/11/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="qty_shipped" class="col-12 col-form-label">Qty Shipped</label>
+                        <input type=text class="col-12 form-control inputText" id="qty_shipped" name="qty_shipped" value="2" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="serial" class="col-12 col-form-label">Serial Number</label>
+                        <input type="text" class="col-12 form-control inputText" id="serial"  name="serial" value="44403952" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="boxes" class="col-12 col-form-label">Number of Boxes</label>
+                        <input type=text class="col-12 form-control inputText" id="boxes" name="boxes" value="2" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="dimensions" class="col-12 col-form-label">Box Dimensions</label>
+                        <input type=text class="col-12 form-control inputText" id="dimensions" name="dimensions" value="47x14x9" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="pallets" class="col-12 col-form-label">Number of Pallets</label>
+                        <input type=text class="col-12 form-control inputText" id="pallets" name="pallets" value="1" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="weight" class="col-12 col-form-label">Weight</label>
+                        <input type="text" class="col-12 form-control inputText" id="weight" name="weight" value="3 LBS" readonly>
+                    </div>
+                </div>
+                <div class="buttonGroup ">
+                    <button type="button" onclick="editManufacturing(this,'M')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-edit"></span> Edit
+                    </button>
+                    <button type="button" onclick="submitManufacturing(this,'M')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-save"></span> Save
+                    </button>        
+                    <button type="button" onclick="deleteManufacturing(this,'M')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-trash"></span> Delete
+                    </button>        
+                </div>    
+            </form> 
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="nav-w">
+            <form style="margin-top: 10px;">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="customer_mrd" class="col-12 col-form-label">Customer MRD</label>
+                        <input type="text" class="col-12 form-control inputText" id="customer_mrd" name="customer_mrd" value="1/12/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="serial" class="col-12 col-form-label">Serial Number</label>
+                        <input type="text" class="col-12 form-control inputText" id="serial"  name="serial" value="44403952" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="date_ship" class="col-12 col-form-label">Date Shipped to Customer</label>
+                        <input type="text" class="col-12 form-control inputText" id="date_ship"  name="date_ship" value="25/11/2019" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="target_date_delivery" class="col-12 col-form-label">Target Date of Delivery</label>
+                        <input type=text class="col-12 form-control inputText" id="target_date_delivery" name="target_date_delivery" value="27/11/2019" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="shipper_number" class="col-12 col-form-label">Shipper Number</label>
+                        <input type=text class="col-12 form-control inputText" id="shipper_number" name="shipper_number" value="E0159219" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="carrier" class="col-12 col-form-label">Delivery Carrier</label>
+                        <input type=text class="col-12 form-control inputText" id="carrier" name="carrier" value="Fedex" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="tracking" class="col-12 col-form-label">Tracking Number</label>
+                        <input type=text class="col-12 form-control inputText" id="tracking" name="tracking" value="xxxxxx" readonly>
+                    </div>
+                </div>
+                <div class="buttonGroup ">
+                    <button type="button" onclick="editWarehouse(this,'W')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-edit"></span> Edit
+                    </button>
+                    <button type="button" onclick="submitWarehouse(this,'w')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-save"></span> Save
+                    </button>        
+                    <button type="button" onclick="deleteWarehouse(this,'W')" class="btn btn-primary btn-sm pull-right">
+                    	<span class="fas fa-trash"></span> Delete
+                    </button>        
+                </div>    
+            </form>
+      </div>
+    
+    </div>
+</div>
+
+<ul id="localTemplates">
+    <li name="modalBodyQtyOnPO">
+        <form style="margin-top: 10px;">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <span style="text-align:center" type="text" class="col-12 form-control heading" id="customer" name="customer">Ford</span>
+                </div>
+                <div class="form-group col-md-2">
+                    <span style="text-align:center" type="text" class="col-12 form-control heading" id="po_no"  name="po_no">LI8T-14A005-NAA</span>
+                </div>
+                <div class="form-group col-md-2">
+                    <span style="text-align:center" type=text class="col-12 form-control heading" id="description" name="description">Body Harness</span>
+                </div>
+                <div class="form-group col-md-2">
+                    <span style="text-align:center" type=text class="col-12 form-control heading" id="status" name="status">Open</span>
+                </div>
+                <div class="form-group col-md-2">
+                    <span style="text-align:center" type=text class="col-12 form-control heading" id="color_code" name="color_code">Late Order</span>
+                </div>
+            </div>
+        </form>
+
+        <div class="row col-12">
+            <div class="col-8">
+                <div class="row">
+                    <div id="{{grid}}" class="zGrid" style="margin-top:10px;"></div>
+                </div>
+                <button type="button" onclick="{{onClickSaveQty}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="comments" class="col-1 col-form-label">Comments</label>
+                        <textArea style="text-align:center;" type=text class="col-6 form-control" id="comments" name="comments">New PO to support C727 VP build</textArea>
+                    </div>
+                </div>            
+
+
+            </div>
+            <div class="col-4">
+                
+                <form style="margin-top: 10px;">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="my" class="col-12 col-form-label">Moddel Year</label>
+                            <input style="text-align:center; border:none;" type="text" class="col-12 form-control inputText" id="my" name="my" value="2019" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="prefix" class="col-12 col-form-label">Prefix</label>
+                            <input style="text-align:center; border:none;" type="text" class="col-12 form-control inputText" id="prefix"  name="prefix" value="LI8T" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="base" class="col-12 col-form-label">Base</label>
+                            <input style="text-align:center; border:none;" type=text class="col-12 form-control inputText" id="base" name="base" value="14A005" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="suffix" class="col-12 col-form-label">Suffix</label>
+                            <input style="text-align:center; border:none;" type=text class="col-12 form-control inputText" id="suffix" name="suffix" value="NAA" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <input style="text-align:center; border:none;" type=text class="col-12 form-control inputText" id="part_no" name="part_no" value="LI8T-14A005-NAA" readonly>
+                        </div>
+                    </div>            
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="description" class="col-12 col-form-label">Description</label>
+                            <input style="text-align:center; border:none;" type=text class="col-12 form-control inputText" id="description" name="description" value="Body Harness" readonly>
+                        </div>
+                    </div>            
+
+                    <div class="buttonGroup" style="text-align: center">
+                        <button type="button" onclick="editQty('this')" class="btn btn-primary btn-sm pull-right">
+                        	<span class="fas fa-edit"></span> Edit
+                        </button>
+                        <button type="button" onclick="submitQty(this)" class="btn btn-primary btn-sm pull-right">
+                        	<span class="fas fa-save"></span> Save
+                        </button>        
+                    </div>    
+
+                </form>
+            </div>
+        </div>
+    </li>
+</ul>
+    
