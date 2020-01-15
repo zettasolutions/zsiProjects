@@ -6,6 +6,10 @@ var employees = (function(){
         ,gMdlOtherIncome    = "modalWindowOtherIncome"
         ,gMdlInactiveEmpl   = "modalWindowInactiveEmployee"
         ,gMdlInactiveType   = "modalWindowInactiveType"
+        ,mdlImageEmpl       = "modalWindowImageEmployee"
+        ,gSearchOption      = "" 
+        ,gSearchValue       = "" 
+        
     ;
     
     zsi.ready = function(){
@@ -28,8 +32,14 @@ var employees = (function(){
             , sizeAttr  : "modal-lg"
             , title     : "Inactive Employee"
             , body      : gtw.new().modalBodyInactiveEmployee({gridInactive:"gridInactive",saveInactive:"saveInactive();",deleteInactive:"deleteInactive();"}).html()  
+        })
+        .bsModalBox({
+              id        : mdlImageEmpl
+            , sizeAttr  : "modal-md"
+            , title     : "Inactive Employee(s)"
+            , body      : ""
+            , footer    : gtw.new().modalBodyImageEmpl({onClickUploadImageEmpl:"employees.uploadImageEmpl();"}).html()  
         });
-
     }
     
     function displayEmployees(){
@@ -46,19 +56,18 @@ var employees = (function(){
         $("#grid").dataBind({
                  
                  sqlCode    : "E162"
-                ,width      : $(".zContainer").outerWidth()
+                ,height     : $(window).height() - 260
                 ,blankRowsLimit : 5
                 ,dataRows   : [
-                    // {text: cb                      ,width:25           ,style:"text-align:center"
-                    //     ,onRender : function(d){
-                    //        return app.bs({name:"id"          ,type:"hidden"  ,value: app.svn (d,"id")})
-                    //             + app.bs({name:"is_edited"   ,type:"hidden"  ,value: app.svn(d,"is_edited")}) 
-                    //             + app.bs({name:"inactive_type_code"  ,type:"hidden"    ,value: app.svn(d,"inactive_type_code") })
-                    //             + app.bs({name:"inactive_data"       ,type:"hidden"    ,value: app.svn(d,"inactive_date") })
-                    //             + (d !== null ? bs({name:"cb"  ,type:"checkbox"}) : "" );
-                    //     }
-                    // }
-                    {text:"Employee ID"            ,width:75         ,style:"text-align:center"  
+                    { text:"Photo"             , width:40      , style:"text-align:center;" 
+        		    ,onRender : function(d){ 
+                            var mouseMoveEvent= "onmouseover='employees.mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='employees.mouseout();'";
+                            var html = "<a href='javascript:void(0);' "+ mouseMoveEvent +" class='btn btn-sm has-tooltip' onclick='employees.showModalUploadEmplImage(" + svn(d,"employee_id") +",\"" 
+        		                           + svn(d,"emp_lfm_name") + "\");' data-toggle='tooltip' data-original-title='Upload Image'><i class='fas fa-image'></i> </a>";
+                            return (d!==null ? html : "");
+                        }
+        		    }
+                    ,{text:"Employee ID"            ,width:75         ,style:"text-align:center"  
                         ,onRender : function(d){
                             return app.bs({name:"id"                    ,type:"hidden"      ,value: app.svn (d,"id")})
                                  + app.bs({name:"is_edited"             ,type:"hidden"      ,value: app.svn(d,"is_edited")}) 
@@ -67,15 +76,15 @@ var employees = (function(){
                                  + app.bs({name:"employee_id"           ,type:"input"       ,value: app.svn(d,"employee_id") });
                         } 
                     }
-                    ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:200        ,style:"text-align:center"  }
-                    ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:200        ,style:"text-align:center"  }
-                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:center"  }
-                    ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:105        ,style:"text-align:center"  }
+                    ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:200        ,style:"text-align:left"  }
+                    ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:200        ,style:"text-align:left"  }
+                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:left"  }
+                    ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:105        ,style:"text-align:left"  }
                     ,{text:"Gender"                 ,type:"select"      ,name:"gender"              ,width:50         ,style:"text-align:center"  }
-                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:150        ,style:"text-align:center"  } 
-                    ,{text:"Date Hired"                                                             ,width:100        ,style:"text-align:center"  
+                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:150        ,style:"text-align:left"  } 
+                    ,{text:"Date Hired"                                                             ,width:100        ,style:"text-align:left"  
                          ,onRender: function(d){
-                            return bs({name:"date_hired"   ,style:"text-align:center" ,type:"input"  ,value:app.svn(d,"date_hired").toShortDate()}); 
+                            return bs({name:"date_hired"   ,style:"text-align:center" ,type:"input"  ,style:"text-align:left" ,value:app.svn(d,"date_hired").toShortDate()}); 
                         }
                     } 
                     ,{text:"Employement Type"       ,type:"select"      ,name:"empl_type_code"      ,width:150        ,style:"text-align:center"  }
@@ -89,6 +98,11 @@ var employees = (function(){
                     ,{text:"PhilHealth No."         ,type:"input"       ,name:"philhealth_no"       ,width:105        ,style:"text-align:center"  }
                     ,{text:"HMDF No."               ,type:"input"       ,name:"hmdf_no"             ,width:105        ,style:"text-align:center"  }
                     ,{text:"Account No."            ,type:"input"       ,name:"account_no"          ,width:105        ,style:"text-align:center"  }
+                    ,{text:"No. of Shares"          ,type:"input"       ,name:"no_shares"           ,width:105        ,style:"text-align:center"  }
+                    ,{text:"Contact Name"           ,type:"input"       ,name:"contact_name"        ,width:105        ,style:"text-align:center"  }
+                    ,{text:"Contact Phone No."      ,type:"input"       ,name:"contact_phone_no"    ,width:105        ,style:"text-align:center"  }
+                    ,{text:"Contact Address"        ,type:"input"       ,name:"contact_address"     ,width:105        ,style:"text-align:center"  }
+                    ,{text:"Cotact Relation"        ,type:"select"      ,name:"contact_relation_id" ,width:105        ,style:"text-align:center"  }
                     ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:50         ,style:"text-align:center"    ,defaultValue:"Y"}
                     ,{text:"Other Income"           ,type:"input"                                   ,width:90         ,style:"text-align:center"
                         ,onRender : function(d){
@@ -112,15 +126,14 @@ var employees = (function(){
                 _this.find("select[name='civil_status_code']").dataBind("civil_status");
                 _this.find("select[name='empl_type_code']").dataBind("empl_types");
                 _this.find("select[name='pay_type_code']").dataBind("pay_types");
-                _zRow.find("#position_id").dataBind({
+                _zRow.find("[name='position_id']").dataBind({
                      sqlCode      : "P201" //position_sel
                     ,text         : "position_title"
                     ,value        : "position_id"
                 }); 
                 
-                _zRow.find("#department_id").dataBind({
+                _zRow.find("[name='department_id']").dataBind({
                      sqlCode        : "D213" //dept_sect_sel 
-                   // ,parameters    : {dept_sect_parent_id : this.val()} 
                     ,text           : "dept_sect_name"
                     ,value          : "dept_sect_id"
                     ,onChange : function(o){  
@@ -132,6 +145,7 @@ var employees = (function(){
                         }); 
                     }
                 });
+                _this.find("select[name='contact_relation_id']").dataBind("relations");
                 _zRow.find("[name='is_active']").change(function(){
                     var _$this = $(this);
                     if(_$this.val() === "N"){
@@ -199,7 +213,7 @@ var employees = (function(){
                 ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:50         ,style:"text-align:center"    ,defaultValue:"N"}
             ]
             ,onComplete: function(o){
-                this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                this.find("[name='cbFilter1']").setCheckEvent("#gridInactive input[name='cb']");
                 
             }
         });
@@ -250,12 +264,79 @@ var employees = (function(){
         });
     } 
 
+    _public.showModalUploadEmplImage = function(emplId, name){
+        employee_id = emplId;
+        var m=$('#' + mdlImageEmpl);
+        
+        m.find(".modal-title").text("Image for » " + name);
+        m.modal("show");
+        m.find("form").attr("enctype","multipart/form-data");
+        
+        $.get(base_url + 'page/name/tmplImageUpload'
+            ,function(data){
+                m.find('.modal-body').html(data);
+                m.find("#prefixKey").val("employee.");
+            }
+        ); 
+    },
+    
+    _public.uploadImageEmpl = function(){
+        var frm = $("#frm_" + mdlImageEmpl);
+        var fileOrg=frm.find("#file").get(0);
+    
+        if( fileOrg.files.length<1 ) { 
+             alert("Please select image.");
+            return;
+        }
+        var formData = new FormData( frm.get(0));
+        $.ajax({
+            url: base_url + 'file/UploadImage',  //server script to process data
+            type: 'POST',
+    
+            //Ajax events
+            success: completeHandler = function(data) {
+                if(data.isSuccess){
+                    //submit filename to server
+                    $.get(base_url  + "sql/exec?p=dbo.image_file_employees_upd @employee_id=" + employee_id
+                                    + ",@img_filename='employee." +  fileOrg.files[0].name + "'"
+                    ,function(data){
+                        zsi.form.showAlert("alert");
+                        $('#' + mdlImageEmpl).modal('toggle');
+                        
+                        //refresh latest records:
+                        displayEmployees();
+                    });   
+                }else
+                    alert(data.errMsg);
+            },
+            error: errorHandler = function() {
+                console.log("error");
+            },
+            // Form data
+            data: formData,
+            //Options to tell JQuery not to process data or worry about content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
+    },
+    
+    _public.mouseover = function(filename){
+     $("#user-box").css("display","block");
+     $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
+    },
+    
+    _public.mouseout = function (){
+        $("#user-box").css("display","none");
+    }, 
+    
+
     _public.showModalEmp  = function(emdId,lName,fName) {
         var g$mdl = $("#" + gMdlOtherIncome);
         g$mdl.find(".modal-title").html(" Other Income » " + lName + " " + fName);
         g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
         displayOtherIncome(emdId);
-    };
+    },
  
     _public.deleteOtherIncome = function(){
         zsi.form.deleteData({
@@ -264,12 +345,12 @@ var employees = (function(){
                 $("#gridOtherIncome").trigger("refresh");
               }
         });       
-    };
+    },
             
     _public.onClickAdd = function(){
         $("#" + gMdlInactiveType).modal('hide');
 
-    };
+    },
     
     _public.submitOtherIncome = function(){
         var _$grid = $("#gridOtherIncome");
@@ -280,7 +361,7 @@ var employees = (function(){
                     displayOtherIncome(_$grid.data("emdId"));
                 }
             });
-    }; 
+    }, 
 
     _public.saveInactive = function(){
        $("#gridInactive").jsonSubmit({
@@ -291,7 +372,7 @@ var employees = (function(){
                     displayEmployees();
                 }
         });
-    };  
+    },  
 
     _public.deleteInactive = function(){
         zsi.form.deleteData({
@@ -320,10 +401,15 @@ var employees = (function(){
         });
     });
     
+    $("#btnGo").click(function(){
+        gSearchOption = $("#search_option").val();
+        gSearchValue = $.trim($("#search_value").val());
+        displayEmployees("");
+    });
 
     return _public;
 
     
 })();
 
-                                 
+                                      
