@@ -49,7 +49,7 @@
 		> [class*='fa-'],
 		>.#{$cust-icon-prefix} {
 			font-size: $nav-collapse-sign-font-size;
-    	}
+		}
 	}
 
 	ul {
@@ -100,7 +100,7 @@
 				font-size: 7px;
 				height: 10px;
 				width: auto;
-				color: #24b3a4;
+				color: #fbfbfb;
 				display: flex;
 				align-content: center;
 				align-items: center;
@@ -113,7 +113,7 @@
 			outline: 0;
 			padding: $nav-padding-y $nav-padding-x;
 			font-size: rem($nav-font-link-size);
-			color: #91c6f3;
+			color: #48d02d;
 			font-weight: 400;
 			text-decoration: none;
 
@@ -209,14 +209,17 @@
 
 				>[class*='fa-'],
 				>.#{$cust-icon-prefix} {
-					color: lighten($nav-link-color, 40%);
+					color: lighten($nav-link-color, 100%);
 				}
 
 				> .badge {
 					box-shadow: 0 0 0 1px rgba(lighten($nav-base-color, 1%), (80/100));
 					border: 1px solid rgba(lighten($nav-base-color, 1%), (80/100));
 				}
-			
+				
+				b {
+					color: lighten($nav-link-color, 100%);
+				}
 			}
 
 			&:focus {
@@ -237,7 +240,7 @@
 			li {
 
 				a {
-					color: #91c6f3;
+					color: #48d02d;
 
 					padding: $nav-padding-y $nav-padding-x $nav-padding-y $nav-padding-x + $nav-icon-width + $nav-icon-margin-right;
 
@@ -302,7 +305,6 @@
 								color: lighten($nav-link-color, 80%);
 							}
 						}	
-
 						&:hover {
 							> .nav-link-text {
 								>[class*='fa-'],

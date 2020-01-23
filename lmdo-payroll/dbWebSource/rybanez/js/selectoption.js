@@ -27,7 +27,7 @@
          $("#grid").dataBind({
     	     url            : app.execURL + "select_options_sel"
     	    ,width          : $(".zContainer").width()
-    	    ,height         : $(document).height() - 250
+    	    ,height         : $(document).height() - 260
     	    ,selectorType   : "checkbox"
             ,blankRowsLimit:5
             ,isPaging : false
@@ -46,7 +46,7 @@
             		,{text  : "Order By"            , name  : "order_by"                , type  : "input"         , width : 200       , style : "text-align:left;"}
     	    ]
         	     ,onComplete: function(){
-                    $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                    $("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
             }  
         });    
     }
@@ -62,4 +62,4 @@
     });
 })();
     
-                                      
+                                         

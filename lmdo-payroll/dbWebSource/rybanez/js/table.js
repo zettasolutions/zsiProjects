@@ -2,7 +2,7 @@
     var bs = zsi.bs.ctrl;
     var svn =  zsi.setValIfNull;
     
-    zsi.ready=function(){
+    zsi.ready = function(){
         $(".page-title").html("Table Reference");
         displayRecords();
         $(".panel").css("height", $(".page-content").height()); 
@@ -24,7 +24,7 @@
     
     function displayRecords(){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
-              $("#grid").dataBind({
+        $("#grid").dataBind({
     	     url            : app.execURL + "tables_sel"
     	    ,width          : $(".zContainer").width() 
     	    ,height         : $(document).height() - 250
@@ -89,4 +89,4 @@
 
 
                                                 
-                                                    
+                                                     

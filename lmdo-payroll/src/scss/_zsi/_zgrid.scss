@@ -21,28 +21,28 @@
 
   &.active {
     color: #fff;
-    background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%);
+    background-image: linear-gradient(to bottom, #219909 0px, #187c04 100%);
   }
 
   &:hover {
     color: #fff;
-    background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%);
+    background-image: linear-gradient(to bottom, #219909 0px, #187c04 100%);
   }
 
 }
 .btn-primary {
-  background-color: #1a0dab;
-  border-color: #1a0dab;
+  background-color: #219909;
+  border-color: #219909;
   &:hover {
-    background-color: #0a007a;
-    border-color: #0a007a;
+    background-color: #146803;
+    border-color: #146803;
   }
 }
 .zpage-title {
-  color: #1a0dab;
+  color: #219909;
 }
   .zGrid .zHeaders {
-    background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%);
+    background-image: linear-gradient(to bottom, #219909 0px, #187c04 100%);
     color: #fff;
     font-weight: bold;
     overflow: hidden;
@@ -235,6 +235,7 @@
       border: medium none;
       height: inherit;
       width: inherit;
+      padding-right: 0.3rem;
       padding-left: 0.3rem;
     }
     .active .zCell .form-control {
