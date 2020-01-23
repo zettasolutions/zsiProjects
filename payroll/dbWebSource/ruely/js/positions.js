@@ -59,6 +59,9 @@ var position = (function(){
                 ,{text: "Position Description"      ,name:"position_desc"       ,type:"input"        ,width : 200   ,style : "text-align:left;"}
                 ,{text: "Work Description"          ,name:"work_desc"           ,type:"input"        ,width : 200   ,style : "text-align:left;"}
                 ,{text: "Level No."                 ,name:"level_no"            ,type:"input"        ,width : 65    ,style : "text-align:left;"}
+                ,{text: "Basic Pay"                 ,name:"basic_pay"           ,type:"input"        ,width : 100   ,style : "text-align:right;"}
+                ,{text: "Hourly Rate"               ,name:"hourly_rate"         ,type:"input"        ,width : 100   ,style : "text-align:right;"}
+                ,{text: "Daily Rate"                ,name:"daily_rate"          ,type:"input"        ,width : 100   ,style : "text-align:right;"}
                 ,{text: "Other Income"                                          ,type:"input"        ,width : 90    ,style : "text-align:center"
                     ,onRender : function(d){
                             var _link = "<a href='javascript:void(0)' ' onclick='position.showModalOI("+ app.svn (d,"position_id") +",\""+ app.svn (d,"position_title") +"\")'><i class='fas fa-link link'></i></a>";
@@ -71,6 +74,11 @@ var position = (function(){
             ,onComplete: function(){
                 var _zRow = this.find(".zRow");
                 this.find("[name='cbFilter']").setCheckEvent("#gridPosition input[name='cb']");
+                this.find(".zHeaders .item:nth-child(6) .text,.zHeaders .item:nth-child(7) .text,.zHeaders .item:nth-child(8) .text").css({
+                    "text-align": "right"
+                    ,"width": "100%"
+                    ,"margin-right": "4px"
+                });
             }
         });
     } 
@@ -149,4 +157,4 @@ var position = (function(){
     };
  
     return _public;
-})();             
+})();              

@@ -46,7 +46,7 @@ var employees = (function(){
         $("#grid").dataBind({
                  
                  sqlCode    : "E162"
-                ,width      : $(".zContainer").outerWidth()
+                ,height     : $(window).height() - 260
                 ,blankRowsLimit : 5
                 ,dataRows   : [
                     // {text: cb                      ,width:25           ,style:"text-align:center"
@@ -326,4 +326,4 @@ var employees = (function(){
     
 })();
 
-                                   
+                                    

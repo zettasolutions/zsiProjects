@@ -1773,7 +1773,7 @@ var  ud='undefined'
             };
             $.fn.jsonSubmit         = function(o) {
                 var _param;
-               if( typeof o.isSingleEntry != ud && o.isSingleEntry===true ){ 
+                if( typeof o.isSingleEntry != ud && o.isSingleEntry===true ){ 
                     var _arr = this.serializeArray();
                     o.parameters = {};
                     for (var x = 0; x < _arr.length; x++) {
@@ -2552,8 +2552,18 @@ var  ud='undefined'
                 $.each( this.find(".right .zRow"),function(i){
                     var $rowRight  =  $(this);
                     var $rowLeft = _obj.find(".left .zRow:eq(" + i + ")");
-                    var arrLeft = $rowLeft.find('input, textarea, select').not(':checkbox').not((typeof o.notInclude !== ud?o.notInclude:"")).serializeArray();
-                    var arrRight = $rowRight.find('input, textarea, select').not(':checkbox').not((typeof o.notInclude !== ud?o.notInclude:"")).serializeArray();
+                    var _notIncludes = o.notInclude || "";
+                    
+                    if( Array.isArray(o.notIncludes) ){
+                       for(var x=0;x < o.notIncludes.length; x++ ){
+                         if(_notIncludes!=="") _notIncludes +=","
+                         _notIncludes +=  "[name='" + o.notIncludes[x] + "']";
+                       }
+                    }
+                    
+                    var arrLeft = $rowLeft.find('input, textarea, select').not(':checkbox').not(_notIncludes).serializeArray();
+                    var arrRight = $rowRight.find('input, textarea, select').not(':checkbox').not(_notIncludes).serializeArray();
+
                     var info = {};
                     $.each(arrLeft,function(){
                         info[this.name] = (this.value ===""? null: this.value);
@@ -3468,4 +3478,4 @@ var  ud='undefined'
     }
 ;  
 
-                      
+                        

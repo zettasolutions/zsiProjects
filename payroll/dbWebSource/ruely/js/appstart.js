@@ -9,6 +9,7 @@ var app = (function() {
         ,currentHash:  { page:"",methods : []}
         ,hash : {
                  getPageParams      : function(keys){
+                    if( ! app.currentHash.params) return {}; 
                     return app.currentHash.params.setParamKeys(keys) || {}; 
                  }
                 ,getMethodParams    : function(name,keys){
@@ -425,4 +426,4 @@ var app = (function() {
     return _app;
 
 })();
-                   
+                    
