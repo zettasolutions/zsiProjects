@@ -230,6 +230,44 @@ namespace zsi.web.Controllers
         }
 
         [HttpPost]
+        public JsonResult UploadImages( IEnumerable<HttpPostedFileBase> files, string prefixKey)
+        {
+
+            try
+            {
+                using (new impersonate())
+                {
+                    var path = this.tempPath;
+                    var fullPath = path;
+                    var fileNameOrg = "";
+                    if (this.AppConfig.image_folder.Contains("~")) this.AppConfig.image_folder = this.AppConfig.image_folder.Replace("~", AppSettings.BaseDirectory);
+                    foreach (var file in files)
+                    {
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
+                            fileNameOrg = Path.GetFileName(file.FileName);
+                            fullPath = Path.Combine(path, prefixKey + fileNameOrg);
+                            file.SaveAs(fullPath);
+
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, errMsg = ex.Message });
+            }
+
+            return Json(new { isSuccess = true, msg = "ok" });
+
+
+        }
+
+
+        [HttpPost]
         public JsonResult UploadImageDb(HttpPostedFileBase file, int? image_id,string sqlCode)
         {
 
