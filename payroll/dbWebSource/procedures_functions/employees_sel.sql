@@ -3,19 +3,29 @@ CREATE PROCEDURE [dbo].[employees_sel]
 (
     @id					INT = null
    ,@employee_id		VARCHAR(100) = NULL
-   ,@user_id			INT = NULL			
+   ,@department_id      INT = null
+   ,@position_id        INT = null
+   ,@user_id			INT = NULL		
+   ,@is_active CHAR(1)='Y'	
 )
 AS
 BEGIN
 	DECLARE @stmt		VARCHAR(4000);
-	SET @stmt = 'SELECT * FROM dbo.employees WHERE 1=1 ';
+	SET @stmt = 'SELECT * FROM dbo.employees_v WHERE 1=1 ';
 
-	IF @id <> '' 
-	SET @stmt = @stmt + ' AND id' + CAST(@id AS VARCHAR);
+	IF ISNULL(@id,0) <> 0
+	SET @stmt = @stmt + ' AND id=' + CAST(@id AS VARCHAR);
 
-	IF @employee_id <> ''
-		SET @stmt = @stmt + ' AND employee_id'+ CAST(@id AS VARCHAR);
+	IF ISNULL(@employee_id,'') <> ''
+		SET @stmt = @stmt + ' AND employee_id='''+ @employee_id + ''''
     
+	IF ISNULL(@department_id,0) <> 0
+		SET @stmt = @stmt + ' AND department_id='+ CAST(@department_id AS VARCHAR);
+    
+	IF ISNULL(@position_id,0) <> 0
+		SET @stmt = @stmt + ' AND position_id='+ CAST(@position_id AS VARCHAR);
+	IF isnull(@is_active,'') <> ''
+		SET @stmt = @stmt + ' AND is_active='''+ @is_active + '''';
 	set @stmt = @stmt + ' order by employee_id'
 	exec(@stmt);
  END;

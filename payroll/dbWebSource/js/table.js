@@ -2,7 +2,7 @@
     var bs = zsi.bs.ctrl;
     var svn =  zsi.setValIfNull;
     
-    zsi.ready = function(){
+    zsi.ready=function(){
         $(".page-title").html("Table Reference");
         displayRecords();
         $(".panel").css("height", $(".page-content").height()); 
@@ -24,10 +24,10 @@
     
     function displayRecords(){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
-        $("#grid").dataBind({
+              $("#grid").dataBind({
     	     url            : app.execURL + "tables_sel"
     	    ,width          : $(".zContainer").width() 
-    	    ,height         : $(document).height() - 250
+    	    ,height         : $(window).height() - 200
     	    ,selectorType   : "checkbox"
             ,blankRowsLimit:5
             ,isPaging : false
@@ -49,7 +49,7 @@
                    
                     var tr= this.parentNode.parentNode ;
                         if(this.value!=="")
-                            $(tr).find("#table_key_name").dataBind({ url :app.execURL + "table_column_options_sel '" + this.value + "'"});  
+                            $(tr).find("[name='table_key_name']").dataBind({ url :app.execURL + "table_column_options_sel '" + this.value + "'"});  
                    
                });
                
@@ -60,7 +60,7 @@
                         $.each($ddl,function(){
                             var tr= this.parentNode.parentNode ;
                             if(this.value!=="")
-                            $(tr).find("#table_key_name").dataBind({ url : app.execURL + "table_column_options_sel '" + this.value + "'"});
+                            $(tr).find("[name='table_key_name']").dataBind({ url : app.execURL + "table_column_options_sel '" + this.value + "'"});
                         });
                            
                             
@@ -89,4 +89,4 @@
 
 
                                                 
-                                                     
+                                                        

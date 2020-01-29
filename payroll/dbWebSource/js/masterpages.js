@@ -49,7 +49,7 @@
         		}	 
             ]
             ,onComplete: function(){
-                this.find("#cbFilter").setCheckEvent("#grid input[name='cb']");
+                this.find("[name='cbFilter']").setCheckEvent("#grid input[name='cb']");
     
             }
         });    
@@ -71,4 +71,4 @@
        
     }
 })(); 
-                                
+                                 

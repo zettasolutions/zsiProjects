@@ -18,8 +18,8 @@
                         <button type="button" class="btn btn-primary btn-sm" id="btnSave">
                         	<span class="fas fa-save"></span> Save
                         </button>   
-                        <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
-                        	<span class="fas fa-trash-alt"></span> Delete
+                        <button type="button" class="btn btn-primary btn-sm" id="btnInactive">
+                        	<span class="fas fa-ban"></span> Inactive
                         </button>
                     </div>
                 </div>
@@ -27,6 +27,7 @@
         </div>
     </div>
 </div>
+
 
 <ul name="localTemplates">
     <li name="modalBodyOtherIncome">
@@ -42,7 +43,24 @@
             </div>
         </div>
     </li>
-    <li name="modalBodyInactiveType">
+    <li name="modalBodyInactiveEmployee">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id="{{gridInactive}}" class="zGrid"> </div>
+                </div>
+        		<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button onclick="employees.{{saveInactive}}" class="btn-sm btn btn-primary" type="button">
+                                <i class="far fa-save"> Save</i>
+                            </button>
+                            <button onclick="employees.{{deleteInactive}}" class="btn-sm btn btn-primary" type="button">
+                                <i class="fas fa-trash-alt"> Delete</i>
+                            </button>
+        		</div>
+            </div>
+        </div>
+    </li>    
+    <!--<li name="modalBodyInactiveType">
         <div class="zContainer">
             <div class="row">
                 <div class="col-sm-6 col-md-6 col-12">
@@ -62,6 +80,5 @@
         		</div>
             </div>
         </div>
-    </li>
-    
+    </li>-->
 </ul>

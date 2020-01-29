@@ -24,8 +24,13 @@
         border-radius: 10px;
         overflow:hidden;
     }
+      #user-box img{ 
+      height: 100%;
+      width: 100%; 
+      
+  }
      .zGrid .item .title {
-        height: 22px;
+        height: 22px; 
         line-height: 19px;
     }
     .zGrid .zHeaders .zSort {
@@ -56,55 +61,67 @@
     .jqte_tool_19{
         display:none;
     }
-    .zGrid .zRows #table .zRow.even.active {
-        background-color: #333333;
-    }
-    
 </style>
+
 <div class="panel">
     <div class="panel-container">
         <div class="panel-content">  
             <div class="m-1">
                 <div class="row">
-                    <label class=" col-1 control-label">Search:</label>
-                    <div class=" col-2"> 
+                    <label class=" col-1 control-label"><b>Search:</b></label>
+                    <div class="col-xl-2 col-md-3 col-sm-5 col-12 mb-1"> 
                         <select class="form-control form-control-sm input-sm search-filter" name="search_option" id="search_option">
                             <option value="logon">Logon Name</option>
                             <option value="first_name">First Name</option>
                             <option value="last_name">Last Name</option>
                         </select>
                     </div>
-                    <div class="col-2"> 
-                        <input name="search_value" id="search_value" class="form-control form-control-sm input-sm search-filter">
+                    <div class="col-xl-2 col-md-3 col-sm-5 col-12"> 
+                        <input name="search_value" id="search_value" class="form-control form-control-sm input-sm search-filter pl-2">
                     </div>
-                    <label class="col-1 control-label">Filter:</label>
-                    <div class=" col-1"> 
+                    <label class="col-xl-1 col-sm-1 col-12 control-label"><b>Filter:</b></label>
+                    <div class="col-xl-1 col-md-2 col-sm-3 col-6"> 
                         <select class="form-control form-control-sm input-sm" name="filter_option" id="filter_option">
                             <option value="region_id">Region</option>
                             <option value="lead_unit_id">Lead Unit</option>
                         </select>
                     </div>
-                    <div class="col-1"> 
+                    <div class="col-xl-1 col-md-2 col-sm-3 col-6"> 
                         <select class="form-control form-control-sm input-sm" name="filter_value" id="filter_value">
                             <option value=""></option>
                         </select>
                     </div>
-                    <label class=" col-1 control-label">Role:</label>
-                    <div class=" col-1"> 
+                    <label class="col-xl-1 col-sm-1 col-12 control-label"><b>Role:</b></label>
+                    <!--<div class=" col-1"> 
                         <select class="form-control form-control-sm input-sm search-filter" name="roles_filter" id="roles_filter">
                             <option value=""></option>
                         </select>
-                    </div>
-                    <div class="row">
-                        <div class="button-group" style="margin-left: 10px;">
-                            <button type="button"  class="btn-sm btn btn-primary btn-sm " id="btnClear">
+                    </div>-->
+                    <div class="input-group col-md-5 col-xl-3 col-sm-6 col-12 mb-1" id="searchHarness"> 
+                        <select class="form-control form-control-sm input-sm search-filter" name="roles_filter" id="roles_filter">
+                            <option value=""></option>
+                        </select>
+                        <div class="input-group-append">
+                            <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnGo">
+                                <span class="fas fa-search"></span>
+                            </button>
+                        </div>
+                        <div class="input-group-append ml-1">
+                              <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnClear">
                                 <span class="fas fa-eraser"></span> Clear
                             </button>
-                            <button type="button"  class="btn-sm btn btn-primary btn-sm btn" id="btnGo">
+                        </div>
+                     </div>
+                    <!--<div class="row">
+                        <div class="button-group" style="margin-left: 10px;">
+                            <button type="button"  class="btn btn-primary btn-xs " id="btnClear">
+                                <span class="fas fa-eraser"></span> Clear
+                            </button>
+                            <button type="button"  class="btn btn-primary btn-xs btn" id="btnGo">
                                 <span class="fas fa-search"></span> Go
                             </button>
                         </div>    
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <form method="post" id="frm">
@@ -122,13 +139,7 @@
                         <button type="button" class="btn btn-primary btn-sm" id="btnAdd">
                         	<span class="fas fa-user-plus"></span> Add
                         </button>   
-                        <!--<button type="button" class="btn btn-primary btn-sm" id="btnSendEmail">
-                        	<span class="fas fa-mail-bulk"></span> Send Email
-                        </button> -->  
-                        <!--<button type="button" class="btn btn-primary btn-sm" id="btnAddRecp">-->
-                        <!--	<span class="glyphicon glyphicon-plus"></span> Add to Recipient-->
-                        <!--</button>-->
-                        <!--<button type="button" class="btn btn-primary btn-sm" onclick="viewRecipients()"><span class="glyphicon glyphicon-search"></span> View Recipients</button>-->
+                      
                     </div>
                 </div>
             </form>
@@ -137,18 +148,25 @@
 </div>
 <ul name="localTemplates">
     <li name="modalBodyInactive">
-        <div class="">
-            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                <div id="{{grid}}" class="zGrid row"> </div>
-                <button type="button" id="btnSave1" onclick="{{onClickSaveInactive}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                <div id="{{grid}}" class="zGrid"> </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button type="button" id="btnSave1" onclick="{{onClickSaveInactive}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                 <button type="button" class="btn btn-primary btn-sm" id="btnDeleteCustomer" onclick="{{onClickDeleteInactive}}" data-toggle="tooltip" title="Delete">
+                	<i class="fas fa-trash-alt"></i> Delete
+                </button>
             </div>
         </div>
     </li>
     <li name="modalBodyAddUsers">
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                <div id="{{grid}}" class="zGrid row"> </div>
-                <button type="button" id="btnSave2" onclick="{{onClickSaveNewUsers}}" class="btn btn-primary m-1"><i class="far fa-save"></i> Save</button>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                <div id="{{grid}}" class="zGrid"> </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button type="button" id="btnSave2" onclick="{{onClickSaveNewUsers}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
             </div>
         </div>
     </li>
@@ -156,7 +174,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="input-group mb-3">
-                    <select class="form-control form-control-sm input-sm search-filter" name="oem_filter_id" id="oem_filter_id"></select>
+                    <select class="form-control form-control-sm input-sm search-filter" name="oem_filter_id"></select>
                     <div class="input-group-prepend">
                         <button type="button" class="btn btn-primary btn-sm" onclick="users.addList(this)"><i class="fa fa-plus" aria-hidden="true" ></i> Add</button>
                     </div>
@@ -165,6 +183,7 @@
                     <div id="oemListGroup">
                        <ul class="list-group" id="listItemGroup"></ul>
                     </div>    
+                    <button type="button" id="btnSaveUsersOEM" onclick="users.saveUsersOEM(this)" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
                 </div>
             </div>
         </div>
@@ -173,7 +192,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="input-group mb-3">
-                    <select class="form-control form-control-sm input-sm search-filter" name="oem_filter_id" id="oem_filter_id"></select>
+                    <select class="form-control form-control-sm input-sm search-filter" name="oem_filter_id"></select>
                     <div class="input-group-prepend">
                         <button type="button" class="btn btn-primary btn-sm" onclick="users.addNewList(this)"><i class="fa fa-plus" aria-hidden="true" ></i> Add</button>
                     </div>
@@ -186,26 +205,11 @@
             </div>
         </div>
     </li>
-    <!--<li name="modalBodySendEmail">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                <div class="form-group">
-                    <label for="recipient">Recipient</label>
-                    <input type="hidden" id="user_id" name="user_id" >
-                    <input type="input" class="form-control input-sm" id="recipient" name="recipient" disabled>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <input type="input" class="form-control input-sm" id="subject" name="subject">
-                </div>
-                    <label for="body">Body</label>
-                    <textarea class="form-control" rows="10" id="body" name="body"></textarea>
-                <button type="button" id="btnSave3" onclick="{{onClickSendEmail}}" class="btn btn-primary m-1"><i class="fas fa-envelope-open-text"></i> Send Email</button>
-                <button type="button" id="btnSave3" onclick="{{onClickViewRecipients}" class="btn btn-primary m-1"><i class="fas fa-search"></i> View Recipients</button>
-            </div>
-        </div>
-    </li>-->
-
+    
+    <li name="modalBodyImageUser">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+   </li>
+  
 </ul> 
     
 

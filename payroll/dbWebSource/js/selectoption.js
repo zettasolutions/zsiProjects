@@ -46,7 +46,7 @@
             		,{text  : "Order By"            , name  : "order_by"                , type  : "input"         , width : 200       , style : "text-align:left;"}
     	    ]
         	     ,onComplete: function(){
-                    $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                    this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
             }  
         });    
     }
@@ -62,4 +62,4 @@
     });
 })();
     
-                                        
+                                         

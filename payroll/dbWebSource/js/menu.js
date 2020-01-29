@@ -27,7 +27,6 @@
         ;
         
         zsi.ready=function(){
-            // getTemplates();
             $(".page-title").html("Menu");
             displayRecords();
             $(".panel").css("height", $(".page-content").height());
@@ -36,17 +35,6 @@
         var contextModalProcess = { id : modalProcess
             , sizeAttr: "pageProcessWidth"
         };
-                
-        // function getTemplates(){
-        //     $.get(base_url + "templates/bsDialogBox.txt",function(d){
-        //         tmplDialog = Handlebars.compile(d); 
-        //         $("body").append(tmplDialog(contextModalProcess));
-        //     });    
-        //     $.get(base_url + 'page/name/tmplPageProcess', function(d){tmplPageProcess=d;});  
-        //     $.get(base_url + 'page/name/tmplPageProcessAction', function(d){ tmplPageProcessAction =d; });
-        //     $.get(base_url + 'page/name/tmplPageProcessActionProc', function(d){ tmplPageProcessActionProc=d;});  
-        //     $.get(base_url + 'page/name/tmplPageProcessRoles', function(d){ tmplPageProcessRoles=d;});  
-        // }  
         
         function showModalPageProcess(id, title){
             page_id = id;
@@ -54,7 +42,6 @@
             $("#" + modalProcess + " .modal-title").text("Process for » " + title);
             m.modal("show");
             m.find('.modal-body').html(tmplPageProcess);
-           // initPageProcessTemplate(page_id);
         }
                 
         $("#btnSave").click(function () {
@@ -96,18 +83,10 @@
                 		,{text  : "Default"                  , name  : "is_default"                 , type  : "yesno"         , width : 80        , style : "text-align:left;"}
                 		,{text  : "Admin"                    , name  : "is_admin"                   , type  : "yesno"         , width : 80        , style : "text-align:left;"}
                 		,{text  : "Developer"                , name  : "is_dev"                     , type  : "yesno"         , width : 80        , style : "text-align:left;"}
-                // 		,{text  : "Process"                  , width : 80                           , style : "text-align:center;"      
-                // 		    ,onRender  : 
-                //                 function(d){
-                //                     if(d!==null && (d.page_id !=="") )
-                //                         return "<a href='javascript:showModalPageProcess(" + d.page_id  + ",\"" +  d.menu_name  + "\");'><span class='badge'>" + d.ProcessCount + "</span></a>";
-                //                     else 
-                //                         return "";
-                //             }
-                //         }
+              
         	    ]
         	     ,onComplete: function(){
-        	         $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+        	         this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
                      $("select[name='pmenu_id']").dataBind("menus");
                      $("select[name='page_id']").dataBind( "pages");
                      $("select[name='page_process_id']").dataBind( "page_processes");
@@ -126,4 +105,4 @@
 })();        
 
 
-     
+      

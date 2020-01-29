@@ -51,7 +51,7 @@
                     
                 ]
                 ,onComplete: function(){
-                    $("#cbFilter1").setCheckEvent("#philHealth input[name='cb']");
+                    this.find("[name='cbFilter1']").setCheckEvent("#philHealth input[name='cb']");
                 }  
         });
     
@@ -66,4 +66,4 @@
  
  
  
-         
+          

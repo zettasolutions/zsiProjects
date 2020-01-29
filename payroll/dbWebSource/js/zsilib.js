@@ -705,7 +705,7 @@ var  ud='undefined'
                 
                 return this;
             };
-            $.fn.dataBind        = function(){
+            $.fn.dataBind           = function(){
                 var  a = arguments, p= a[0];
                 //zGrid and HTML table:
                 if(this.hasClass("zGrid")) return $(this).dataBindGrid(p);
@@ -834,8 +834,19 @@ var  ud='undefined'
             }; 
             $.fn.dataBindGrid       = function(o){
                 var _obj                = this
+                    ,_gp                = o //gp=grid parameters
+                    ,_Pnl               = ".zGridPanel"
+                    ,_clsPanelR         = ".right"
+                    ,_clsPanelL         = ".left"
+                    ,_clsHeaders        = ".zHeaders"
+                    ,_dataGridWidthR    = "grid-width-right"
+                    ,_dataGridWidthL    = "grid-width-left"
+                    ,_PL                =  _Pnl  + _clsPanelL
+                    ,_PR                =  _Pnl  + _clsPanelR
+                    ,_arrowUp           ="<span class=\"arrow-up\"></span>"
+                    ,_arrowDown         ="<span class=\"arrow-down\"></span>"
+                    ,_arrows            = _arrowUp + _arrowDown   
                     ,_tw                = zsi.easyJsTemplateWriter
-                    ,_o                 = o
                     ,num_rows           = 0
                     ,ctr                = 0  
                     ,_gridWidth         = 0
@@ -847,6 +858,7 @@ var  ud='undefined'
                     ,_headers
                     ,_tbl
                     ,_tableRight
+                    ,_tmr               = null
                     //,dataRows
                     ,_styles            = []
                     ,_isGroup           = false
@@ -866,7 +878,7 @@ var  ud='undefined'
                                 ,_oldClass = $a.attr("class")
                             ;
                             _obj.left=_tableRight.offset().left - _gridWidthLeft;
-                            _obj.find(".sPane").html(_obj.arrows);
+                            _obj.find(".sPane").html(_arrows);
                             
                             _obj.find(".zSort a").removeAttr("class");
                             $a.addClass(_oldClass);
@@ -876,34 +888,51 @@ var  ud='undefined'
                             if(className.indexOf("asc") > -1){
                                 $a.removeClass("asc");
                                 $a.addClass("desc");
-                                $a.find(".sPane").html(_obj.arrowDown);
+                                $a.find(".sPane").html(_arrowDown);
                                 _orderNo=1;
                             }
                             else{
                                 $a.removeClass("desc");
                                 $a.addClass("asc");
-                                $a.find(".sPane").html(_obj.arrowUp);
+                                $a.find(".sPane").html(_arrowUp);
                                 _orderNo=0;
                             }
-                            _obj.params.parameters = {col_no : _colNo, order_no:_orderNo};
-                            //if(o.onSortClick) 
-                            //    o.onSortClick(_colNo,_orderNo);
-                            //else 
-                                _obj.dataBindGrid(_obj.params);
+                            _gp.parameters.col_no = _colNo;
+                            _gp.parameters.order_no= _orderNo;
+                            _obj.dataBindGrid(_gp);
                         });
-                        if(_isGroup || o.width > _o.width ) o.headers.css({width:(o.width + 20 )});
-                        if (_o.width) o.table.css("width",(o.width + 1 )  + "px");
+                        //if(_isGroup || o.width > _gp.width ) o.headers.css({width:(o.width + 20 )});
+                        //if (_gp.width) o.table.css("width",(o.width + 1 )  + "px");
+                         o.table.css({width : o.width});
+                         
+                    }
+                    ,fixWidth           = function(){
+                        var _$zHeaders = _obj.find(_PR + " " + _clsHeaders);
+                        var _$table  = _obj.find(_PR + " #table");
+                        var _prWith = _obj.find(_PR).width();
+                        var _gw = _obj.data(_dataGridWidthR);
+                        
+                        if ( _prWith > 0 ){
+                            if(_prWith  < _gw + 20 ) {
+                                _$zHeaders.css({width: _gw + 40 })
+                                _$table.css({width: _gw })
+                            }else{
+                                 _$zHeaders.css({width: "unset" });
+                                 _$table.css({width: "unset" });
+                            }
+                        }
                     }
                     ,trItem             = function(o){
                         if(o.panelType === "Y" && _chLeft.length > 0) return; 
                         var _dt =  (o.panelType ==="R"? _chRight : _chLeft ); 
-                        var _table =  (o.panelType ==="R"? _obj.find(_obj.clsPanelR).find("#table") : _obj.find(_obj.clsPanelL).find("#table") ); 
+                        var _table =  (o.panelType ==="R"? _obj.find(_clsPanelR).find("#table") : _obj.find(_obj.clsPanelL).find("#table") ); 
                         var _$row =  $(new _tw().div({class:"zRow"}).html());
+                        var _$extraRow = null;
                         for(var x=0;x<_dt.length;x++){
                             var _info       = _dt[x] 
                                 ,_style     = 'width:' + (_dt[x].width ) +  'px;'  + _dt[x].style  
                                 ,_content   = '&nbsp;'
-                                ,_$cell =  $(new _tw().div({class:"zCell" +  svn(_info," " + _info.class),style: _style}).html())
+                                ,_$cell =  $('<div class="zCell' +  svn(_info," " + _info.class) + '" style="' + _style + '"></div>');  
                             ;
                             if(o.data) {
                                 o.data.recordIndex = o.index;
@@ -914,7 +943,7 @@ var  ud='undefined'
                             }
                             else{
                                 if(typeof _info.type === ud){
-                                     _content = new _tw().span({class:"text",value: svn(o.data,_info.name) }).html()
+                                     _content =$('<span class="text" value="' + svn(o.data,_info.name) + '"></span>');  
                                 }
                                 else{ 
                                     if(typeof _info.displayText !== ud ){
@@ -930,9 +959,9 @@ var  ud='undefined'
                                     }
                                 }
                                  
-                                if(x===0 || x ===_o.selectorIndex ){
-                                  if(typeof _o.selectorType !==ud) 
-                                        _content += (o.data !==null ? bs({name: (_o.selectorType ==="checkbox" ? "cb" :  (_o.selectorType==="radio" ? "rad" : "ctrl" )  ),type:_o.selectorType}) : "" );
+                                if(x===0 || x === _gp.selectorIndex ){
+                                  if(typeof _gp.selectorType !==ud) 
+                                        _content += (o.data !==null ? bs({name: (_gp.selectorType ==="checkbox" ? "cb" :  (_gp.selectorType==="radio" ? "rad" : "ctrl" )  ), type: _gp.selectorType}) : "" );
                                 }                    
                             }
             
@@ -940,14 +969,17 @@ var  ud='undefined'
                                 _$cell.html(_content);
                                 _$row.append(_$cell);
                                 
-                                if( o.panelType ==="R" && ! isUD(_o.toggleMasterKey) ){
-                                    _$cell.append(new _tw().div({id:"childPanel" + zsi.replaceIllegalId(svn(o.data,_o.toggleMasterKey)), class:"zExtraRow" }).in().div({class:"zGrid"}).html());
+                                if( o.panelType ==="R" && ! isUD(_gp.toggleMasterKey) ){
+
+                                    _$extraRow =$('<div id="childPanel' +  zsi.replaceIllegalId(svn(o.data,_gp.toggleMasterKey)) + '" class="zExtraRow" style="display:none"><div class="zGrid"></div></div>');
                                 }                    
                             }
             
                         }
                         _table.append(_$row);
-                        if ( ! isUD(_o.onEachComplete) ) {
+                        if(_$extraRow !== null) _table.append(_$extraRow);
+                        
+                        if ( ! isUD(_gp.onEachComplete) ) {
                             _$row.onEachComplete  =  _o.onEachComplete;
                             _$row.onEachComplete(o);
                         }   
@@ -966,7 +998,7 @@ var  ud='undefined'
                         //check on input change if current row is edited.
                         $rows.find("select, input").on("keyup change", function(){
                                 var $zRow = $(this).closest(".zRow");
-                                $zRow.find("#is_edited").val("Y");
+                                $zRow.find("[name='is_edited']").val("Y");
                         });   
                         
                         
@@ -980,6 +1012,14 @@ var  ud='undefined'
                             _headers.offset({left:_left});
                             _tblLeft.offset({top:_top});
                         });                         
+                    }
+                    ,getColumnsWidth    = function(groupHand){
+                        var _$zHeaders = _obj.find(groupHand + " " + _clsHeaders + " > .item");
+                        var _r=0;
+                        _$zHeaders.each( function(i,v) {
+                            _r+=   $(v).width()
+                        });
+                        return _r;                        
                     }
                     ,getdataRows        = function(d, id){
                         var  hasChild = function (d,id){
@@ -1028,7 +1068,7 @@ var  ud='undefined'
                         if(typeof sortColNo !== ud )
                             return  "<div class=\"zSort\">"
                                     + "<a href=\"javascript:void(0);\" sortColNo=\"" + sortColNo + "\" >"
-                                        + "<span class=\"sPane\">" + _obj.arrows + "</span>"
+                                        + "<span class=\"sPane\">" + _arrows + "</span>"
                                     + "</a>"
                                     + "</div>";
                         else return "";
@@ -1046,19 +1086,46 @@ var  ud='undefined'
                     }
                     ,rowsCompleted      = function(){
                         //setRowsKeyUpChange();
-                        createBlankRows(o);
+                        createBlankRows(_gp);
                         setRowClickEvent();
                         setScrollBars();
                         _obj.addClickHighlight(); 
                         _obj.setColumnResize();
                     }
+                    ,resizeGrid         = function(){
+                        clearTimeout(_tmr);
+                        _tmr=setTimeout(function(){ 
+                            var _$tabPane = _obj.closest(".tab-pane");
+                            //fix grid inside nav tabs
+                            if(_$tabPane.length > 0){
+                                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                                    fixWidth();
+                               })
+                               
+                            }
+                            fixWidth();
+                        }, 10);
+                    }
                 ;
-                
-                this.arrowUp ="<span class=\"arrow-up\"></span>";
-                this.arrowDown ="<span class=\"arrow-down\"></span>";
-                this.arrows = this.arrowUp + this.arrowDown;   
-                this.clsPanelR = ".right";
-                this.clsPanelL = ".left";
+
+                $.fn.setRowHighlights = function(){
+                    //reset class
+                    this.find(".zRow").removeClass("odd").removeClass("even");
+                    var _gPanelR = this.find(".zGridPanel.right");
+                    var _gPanelL = this.find(".zGridPanel.left"); 
+                    if(_gPanelR.length> 0 ){
+                        var _even = false;
+                        var _$rowsR = _gPanelR.find(".zRows .zRow:not(.hidden)");
+                        var _$rowsL =  (_gPanelL.length > 0 ?  _gPanelL.find(".zRows .zRow:not(.hidden)") : null );
+                        $.each(_$rowsR,function(i){
+                            var _$self = $(this);
+                            var _toggleMod  =  ( ( i  +  1) % 2 === 0 ? "even" : "odd" ) ;
+                            _$self.addClass(_toggleMod);
+                            if(_$rowsL !==null ) $(_$rowsL.get(i)).addClass(_toggleMod);
+                        });
+                    }
+                    return this;
+                }
                 this.setPageCtrl = function(o,data){
                     var _self = $(this);
                     var _$pageNo;
@@ -1076,48 +1143,50 @@ var  ud='undefined'
                     _createPageList(data.rows,data.returnValue);
                      
                     _$pageNo.change(function(){
-                         o.parameters.pno = this.value;
-                        _obj.dataBindGrid(_obj.params);
+                         _gp.parameters.pno = this.value;
+                        _obj.dataBindGrid(_gp);
+                        if(o.onPageChange) o.onPageChange();
                     });
                     
                     _self.find("#rpp").keyup(function(e){
                         var k = (e.keyCode ? e.keyCode : e.which);
                     	if(k == '13'){
-                            o.parameters.rpp = this.value;
-                            _obj.params.callBack = function(o){
+                            _gp.parameters.rpp = this.value;
+                            _gp.callBack = function(o){
                                 _createPageList(o.data.rows,o.data.returnValue);
-                                _obj.params.callBack = null;
+                                _gp.callBack = null;
                             };
-                            _obj.dataBindGrid(_obj.params);
+                            _obj.dataBindGrid(_gp);
                     	}
                     });  
             
                 };
                 this.onRequestDone = function(o){
-                    var  _Pnl =".zGridPanel"
-                        ,_PL  =  _Pnl  + ".left"
-                        ,_PR  =  _Pnl  + ".right"
-                        ,_row = ".zRows"
+                    var  _rows = ".zRows"
                         ,_$pl =  this.children(_PL)
                         ,_$pr =  this.children(_PR)
                     ;
-                    
-                    this.left = { panel :_$pl, rows: _$pl.find(_row)}; 
-                    this.right  = { panel :_$pr, rows: _$pr.find(_row)}; 
+                    this.left = { panel :_$pl, rows: _$pl.find(_rows)}; 
+                    this.right  = { panel :_$pr, rows: _$pr.find(_rows)}; 
                     
                     if(o.params.onComplete){
                         this._onComplete = o.params.onComplete;
                         this._onComplete(o);
                     }
+                    this.setRowHighlights();
                     if(o.params.callBack) o.params.callBack(o);
+                    _obj.data("grid.parameters",o);
                 };
                 this.setColumnResize = function(){
-                    var  _self      = this
-                        ,_clsGrp0   = "group0"
-                        ,_grpItem   = "groupItem"
+                    var  _self          = this
+                        ,_clsGrp0       = "group0"
+                        ,_grpItem       = "groupItem"
+                        ,_isSameObject = function(){
+                            return  ( zsi.tableResize ?  _self.is( zsi.tableResize.curCol.closest(".zGrid") ) : false ) ;  
+                        }
                     ;
                     
-                    if( ! isUD(_self.params.resizable)  &&  _self.params.resizable===false) return;
+                    if( ! isUD(_gp.resizable)  &&  _gp.resizable===false) return;
                     $(".zHeaders .item .cr").unbind("mousedown").on('mousedown', function (e) {
                         var _curCol = $(e.target).parent();
                         
@@ -1127,8 +1196,9 @@ var  ud='undefined'
                               _curCol = $(_gis[_gis.length-1]);
                         } 
                         //console.log(  _curCol.parent() );
-                        zsi.tableResize = { 
-                             curCol         : _curCol
+                        zsi.tableResize = {
+                             id             : _self.attr("id")
+                            ,curCol         : _curCol
                             ,curLastWidth   : parseFloat(_curCol.css("width"))
                             ,hdrLastWidth   : parseFloat(_curCol.closest(".zHeaders").css("width")) 
                             ,tblLastWidth   : parseFloat(_curCol.closest(".zGridPanel").find("#table").css("width"))
@@ -1140,8 +1210,7 @@ var  ud='undefined'
                     $(document).on('mousemove', function (e) {
                          if (typeof zsi.tableResize === ud || zsi.tableResize === null ) return;
                         var _tr = zsi.tableResize;
-                        if( ! _self.is( _tr.curCol.closest(".zGrid")) ) return;  //check if zGrid object is the same.
-                        
+                        if ( ! _isSameObject() ) return; //check if zGrid object is the same.
                         //find current column index
                         var  _groupIndex = -1
                             ,_grp0  =  _tr.curCol.closest("." + _clsGrp0);
@@ -1159,7 +1228,7 @@ var  ud='undefined'
                         var  _cIndex = (_grp0.length > 0 ? _groupIndex : _tr.curCol.index() )
                             ,_ew     = (e.clientX  - _tr.lastX) //extra width
                             ,_rows   = _tr.curCol.closest(".zGridPanel").find(".zRows").eq(0)
-                            ,_dr     = _self.params.dataRows
+                            ,_dr     = _gp.dataRows
                             ,_cls    = "#table > .zRow > .zCell:nth-child"
                             ,_getCurrentCell = function(j){
                                 var _r = [];
@@ -1180,13 +1249,26 @@ var  ud='undefined'
                         _zCell1.css({width: _tr.curLastWidth + _ew });
                         _zCell1.parent().parent().css({width: _tr.tblLastWidth + _ew});
                         
-                        if(_dr[ _cIndex]    ) _dr[_cIndex].width =  (_tr.curLastWidth + _ew);
+                        if(_dr[ _cIndex] ) _dr[_cIndex].width =  (_tr.curLastWidth + _ew);
+                        
+                        if ( zsi.tableResize.curCol.closest(".zGridPanel").hasClass("right") ) 
+                            _self.data(_dataGridWidthR,getColumnsWidth(_PR));
+                        else
+                            _self.data(_dataGridWidthL,getColumnsWidth(_PL));
+                                
+                        
+                        fixWidth();
                     }).on('mouseup', function (e) {
-                        zsi.tableResize = null;
+                       if ( _isSameObject() ) {
+                            zsi.tableResize = null;
+                       } 
+                      
                     });            
                 };
+
+
             
-                $.each(o.dataRows,function(){
+                $.each(_gp.dataRows,function(){
                     if(this.groupId > 0 || typeof this.groupId ===ud){ 
                         if(typeof this.groupId !==ud){ if(_isGroup===false) {_isGroup=true;}}
                         _styles.push(this);
@@ -1198,19 +1280,20 @@ var  ud='undefined'
                         _chRight.push(this);
                 });
                 
-            
-            
                 if(typeof this.isInitiated === ud){
-                    if( isUD(o.parameters) ) o.parameters = {};
-                    var  _p     = o.parameters;
-                         _p.rpp = ( ! isUD(o.rowsPerPage) ?  o.rowsPerPage :  ( ! isUD( _p.rpp) ?  _p.rpp : null ) );
+
+                    $(window).resize(resizeGrid);
+            
+                    if( isUD(_gp.parameters) ) _gp.parameters = {};
+                    var  _p     = _gp.parameters;
+                         _p.rpp = ( ! isUD(_gp.rowsPerPage) ?  _gp.rowsPerPage :  ( ! isUD( _p.rpp) ?  _p.rpp : null ) );
                          _rpp   = ( _p.rpp !== null ? _p.rpp : 0 );
                      var _head = ""
                         ,_getHdr = function(type){
                             return new _tw().div({class:"zGridPanel " + type}).in().div({class:"zHeaders"}).div({class:"zRows"}).in().div({id:"table"}).out().div({class:"zFooter"}).html();
                         }
                         ,_getFtr = function(){
-                             return (typeof o.isPaging !== ud && o.isPaging === true 
+                             return (typeof _gp.isPaging !== ud && _gp.isPaging === true 
                                     ? new _tw().div({class:"zPageFooter "}).in().div({class:"pagestatus",value:"Number of records in a current page : <i id='recordsNum'> 0 </i>" })
                                             .div({class:"pagectrl",value:  ( _rpp===0 ? "" :  new _tw().label({value: "No. of Rows:"}).input({id:"rpp",name:"rpp", type:"text",value:_rpp}).html() )  
                                             +  new _tw().label({id:"page",value:"Page"}).select({id:"pageNo"}).label({id:"of",value:"of 0"}).html()
@@ -1221,17 +1304,17 @@ var  ud='undefined'
                     if(_chLeft.length > 0){ _head += _getHdr("left");} 
                     _head +=_getHdr("right"); 
                             
-                    this.params = o;
-                    this.url = o.url;
+                   
+                    this.url = _gp.url;
                     this.isInitiated = true;
                     this.html( _head + _getFtr() );
                     
-                    o.isAsync = (typeof o.isAsync !== ud ? o.isAsync : false);
-                    _obj.curPageNo = (o.isAsync ===true?1:0);
+                    _gp.isAsync = (typeof _gp.isAsync !== ud ? _gp.isAsync : false);
+                    _obj.curPageNo = (_gp.isAsync ===true?1:0);
                     
-                    var _panelRight = this.find(_obj.clsPanelR);
-                    var _panelLeft = this.find(_obj.clsPanelL);
-                    var _top =  "top:" + ((o.columnHeight / 2)-8) + "px;";
+                    var _panelRight = this.find(_clsPanelR);
+                    var _panelLeft = this.find(_clsPanelL);
+                    var _top =  "top:" + ((_gp.columnHeight / 2)-8) + "px;";
                     
                     for(i=0; i <_styles.length;i++){
                         _gridWidth += _styles[i].width;
@@ -1241,31 +1324,34 @@ var  ud='undefined'
                         else
                             _gridWidthRight += _styles[i].width;
                     }
-                    if(typeof o.startGroupId === ud) o.startGroupId=0;
+                    if(typeof _gp.startGroupId === ud) _gp.startGroupId=0;
                     
                     _tableRight =  _panelRight.find("#table");
                     _tableLeft  =  _panelLeft.find("#table");
-                    _obj.find(".zRows").css("height", o.height + "px");
-                    _panelLeft.css("width", _gridWidthLeft + "px");
-                    _panelRight.css("width", (o.width - _gridWidthLeft -4  )  + "px");
+                    _obj.find(".zRows").css("height", _gp.height + "px");
                    
-                    if(_chLeft.length > 0)
+                    if(_chLeft.length > 0){
+                        _panelLeft.css("width", _gridWidthLeft + "px");
+                        _panelRight.css("width", (_gp.width - _gridWidthLeft -4  )  + "px");
                         createColumnHeader({ 
                               headers       : _panelLeft.find(".zHeaders")
                              ,table         : _tableLeft
                              ,dataTable     : _chLeft
                              ,width         : _gridWidthLeft
-                             ,startGroupId  : o.startGroupId
+                             ,startGroupId  : _gp.startGroupId
                         });
+                        _obj.data(_dataGridWidthL,_gridWidthLeft);
+                    }
                      
                     createColumnHeader({
                           headers    : _panelRight.find(".zHeaders")
                          ,table      : _tableRight
                          ,dataTable  : _chRight
                          ,width      : _gridWidthRight
-                         ,startGroupId  : o.startGroupId
+                         ,startGroupId  : _gp.startGroupId
                     });
-                    
+                    _obj.data(_dataGridWidthR,_gridWidthRight);
+                    resizeGrid();
                     
                 }
                 else{
@@ -1273,12 +1359,12 @@ var  ud='undefined'
                     _tableRight = this.find(".right").find("#table");
                 }
             
-                if(typeof o.isNew !== ud){
-                    if(o.isNew===true) clearTables();
+                if(typeof _gp.isNew !== ud){
+                    if(_gp.isNew===true) clearTables();
                 } 
                 
-                if(o.url || o.sqlCode){
-                    if( (o.isAsync && _obj.curPageNo === 1) ||  ! o.isAsync ) clearTables();
+                if(_gp.url || _gp.sqlCode){
+                    if( (_gp.isAsync && _obj.curPageNo === 1) ||  ! _gp.isAsync ) clearTables();
                     var params ={
                        dataType: "json"
                       ,cache: false
@@ -1292,13 +1378,13 @@ var  ud='undefined'
                                         trItem({data:this,panelType:"R",index:i});
                                     });
                                     
-                                    if(o.isAsync && _obj.curPageNo < _noOfPage ){
+                                    if(_gp.isAsync && _obj.curPageNo < _noOfPage ){
                                             //fire onAsyncComplete
                                             data.pageNo = _obj.curPageNo
-                                            if(o.onAsyncComplete) o.onAsyncComplete(data);
+                                            if(_gp.onAsyncComplete) _gp.onAsyncComplete(data);
                                             //loop page numbers
                                              _obj.curPageNo++;
-                                            _o.parameters.pno = _obj.curPageNo; 
+                                            _gp.parameters.pno = _obj.curPageNo; 
                                             setScrollBars();
                                             _obj.dataBindGrid(_obj.params);
                                     }
@@ -1306,35 +1392,35 @@ var  ud='undefined'
                                         rowsCompleted();
                                         _obj.find("#recordsNum").html(num_rows);
                                          if(typeof _obj.isPageInitiated === ud){
-                                            _obj.setPageCtrl(o,data);
+                                            _obj.setPageCtrl(_gp,data);
                                             _obj.isPageInitiated=true;
                                          }
                                         
                                         if(_obj.left) _tableRight.parent().scrollLeft(Math.abs(_obj.left ));
                                         
-                                        if(o.isAsync && o.onAsyncComplete) {
+                                        if(_gp.isAsync && _gp.onAsyncComplete) {
                                             data.pageNo = _obj.curPageNo;
-                                            o.onAsyncComplete(data);
+                                            _gp.onAsyncComplete(data);
                                         }
-                                        _obj.onRequestDone({params:o,data:data});
+                                        _obj.onRequestDone({params:_gp,data:data});
                                     }
                                    
                                    
                             }          
                     };
                     
-                    if(typeof o.sqlCode !== ud)  {
+                    if(typeof _gp.sqlCode !== ud)  {
                         if(typeof zsi.config.getDataURL===ud){
                             alert("zsi.config.getDataURL is not defined in AppStart JS.");
                             return;
                         }
                         params.url = zsi.config.getDataURL + "?ts=" + new Date().getTime();
-                        params.data = JSON.stringify({sqlCode :o.sqlCode,parameters:o.parameters});
+                        params.data = JSON.stringify({sqlCode :_gp.sqlCode,parameters:_gp.parameters});
                         params.type = "POST";
                     }
                     else {
-                        var _strUrl = o.url;
-                        var _pg = o.parameters;
+                        var _strUrl = _gp.url;
+                        var _pg = _gp.parameters;
                         var _setComma = function(url){
                             return ( url.indexOf("@") > -1 ?  "," : " "); 
                         }
@@ -1345,24 +1431,24 @@ var  ud='undefined'
                     _obj.bind('refresh',function() {
                         if(zsi.tmr) clearTimeout(zsi.tmr);
                         zsi.tmr =setTimeout(function(){              
-                            _obj.dataBindGrid(o);
+                            _obj.dataBindGrid(_gp);
                         }, 1);   
                     });
             
                     $.ajax(params);
                 }
-                else if(typeof o.rows !== ud){
-                    $.each(o.rows, function(i) {
+                else if(typeof _gp.rows !== ud){
+                    $.each(_gp.rows, function(i) {
                         if(_chLeft.length > 0) { trItem({data:this,panelType:"L",index:i}); } 
                         trItem({data:this,panelType:"R",index:i});                            
                     });
                     rowsCompleted();
-                    _obj.onRequestDone({params:o,data:o.rows});
+                    _obj.onRequestDone({params:_gp,data:_gp.rows});
                 }  
                 else{
-                    if( isUD(o.blankRowsLimit) ) o.blankRowsLimit=5;
+                    if( isUD(_gp.blankRowsLimit) ) _gp.blankRowsLimit=5;
                     rowsCompleted();                  
-                    _obj.onRequestDone({params:o});
+                    _obj.onRequestDone({params:_gp});
             
                 }
                 
@@ -1687,7 +1773,7 @@ var  ud='undefined'
             };
             $.fn.jsonSubmit         = function(o) {
                 var _param;
-               if( typeof o.isSingleEntry != ud && o.isSingleEntry===true ){ 
+                if( typeof o.isSingleEntry != ud && o.isSingleEntry===true ){ 
                     var _arr = this.serializeArray();
                     o.parameters = {};
                     for (var x = 0; x < _arr.length; x++) {
@@ -2466,8 +2552,18 @@ var  ud='undefined'
                 $.each( this.find(".right .zRow"),function(i){
                     var $rowRight  =  $(this);
                     var $rowLeft = _obj.find(".left .zRow:eq(" + i + ")");
-                    var arrLeft = $rowLeft.find('input, textarea, select').not(':checkbox').not((typeof o.notInclude !== ud?o.notInclude:"")).serializeArray();
-                    var arrRight = $rowRight.find('input, textarea, select').not(':checkbox').not((typeof o.notInclude !== ud?o.notInclude:"")).serializeArray();
+                    var _notIncludes = o.notInclude || "";
+                    
+                    if( Array.isArray(o.notIncludes) ){
+                       for(var x=0;x < o.notIncludes.length; x++ ){
+                         if(_notIncludes!=="") _notIncludes +=","
+                         _notIncludes +=  "[name='" + o.notIncludes[x] + "']";
+                       }
+                    }
+                    
+                    var arrLeft = $rowLeft.find('input, textarea, select').not(':checkbox').not(_notIncludes).serializeArray();
+                    var arrRight = $rowRight.find('input, textarea, select').not(':checkbox').not(_notIncludes).serializeArray();
+
                     var info = {};
                     $.each(arrLeft,function(){
                         info[this.name] = (this.value ===""? null: this.value);
@@ -2567,6 +2663,9 @@ var  ud='undefined'
                 return this.replace(/\n/g, "<br />");
             };
             //Array Prototypes : 
+            Array.prototype.createNewCopy = function(){
+                return $.extend(true,{}, this);
+            };
             Array.prototype.findIndexes = function(o){
                 var r =[];
                 $.each(this,function(i) {
@@ -2625,15 +2724,22 @@ var  ud='undefined'
                 });
                 return r;
             };
-            Array.prototype.createNewCopy = function(){
-                return $.extend(true,{}, this);
-            };
             Array.prototype.removeAttr = function(name){
                     $.each(this,function(){
                         delete this[name]; 
                     });
                 
             };
+            Array.prototype.setParamKeys = function(keys){
+                var _r = {};
+                var _self = this;
+                if(_self.length > 0){
+                    for(var i=0; i < keys.length;i++ ){
+                        if(_self[i]) _r[keys[i]] = _self[i];
+                    }
+                } 
+                return _r;    
+            };   
             //Number Prototypes : 
             Number.prototype.toMoney = function(){
                 return this.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
@@ -2642,9 +2748,9 @@ var  ud='undefined'
         ,bs                         : {
              ctrl                   : function(o){
                 var l_tag="input";
-                var l_id = (typeof o.id !== ud ? o.id : o.name);
-                var l_name =' name="' + o.name + '" id="' + l_id + '"';
-            
+                var l_id = (typeof o.id !== ud ?  '" id="' + o.id + '"': '');
+                var l_name =' name="' + o.name + '"' + l_id;
+
                 var l_type          = ' type="text"';
                 var l_class         = ' class="form-control '  +  (typeof o.class!==ud ? o.class : '') + '" ';
                 var l_endTag        ="";
@@ -2660,7 +2766,7 @@ var  ud='undefined'
                     var cls = 'class="form-control"';
                     
                     if (typeof p.class !==ud) cls = 'class="' + p.class + '"';
-                    str +='<select name="' + p.name + '" id="' + p.name + '" ' + cls +   '>';
+                        str +='<select '  + l_name +  ' ' + cls +  '>';
                     if (typeof p.value !==ud) v = p.value;
                     if(typeof p.mandatory !==ud){
                         if(p.mandatory.toLowerCase()=='n') str += '<option value=""></option>';
@@ -2692,7 +2798,7 @@ var  ud='undefined'
             
                     if(t=="hidden") l_class='';
                     
-                    if( ! (t=="hidden" || t=="input" || t=="checkbox" || t=="password"  || t=="email" || t=="radio") ) l_tag=t;        
+                    if( ! (t=="hidden" || t=="input" || t=="checkbox" || t=="password"  || t=="email" || t=="radio" || t=="time" || t=="date" ) ) l_tag=t;        
                     
                     if(t=='select' || t =='textarea'){
                         l_type="";
@@ -3145,9 +3251,13 @@ var  ud='undefined'
         }     
         /*initialize configuration settings*/
         ,init                       : function(o){
+            
+            zsi.__setPrototypes();
+            zsi.__setExtendedJqFunctions();
             zsi.initURLParameters();
             zsi.config =o;
             zsi.__monitorAjaxResponse();    
+            zsi.initInputTypesAndFormats();
         }            
         ,initDatePicker             : function(){
            var inputDate =$('input[id*=date]').not("input[type='hidden']");
@@ -3298,17 +3408,21 @@ var  ud='undefined'
             var $span = $(o.object).find("span");
             var $cp = $(_cpId + o.parentId);
             var _Cls = "loaded";
+            
             $cp.toggle(500, function () {
                 var isVisible = $cp.is(":visible");
-                if( isVisible )
-                    $span.removeClass("glyphicon glyphicon-collapse-down").addClass("glyphicon glyphicon-collapse-up");
-                else
-                    $span.removeClass("glyphicon glyphicon-collapse-up").addClass("glyphicon glyphicon-collapse-down");
+                if( isVisible ) {
+                    $span.removeClass("fas fa-caret-circle-down").addClass("fas fa-caret-circle-up");
+                }
+                else{
+                    $span.removeClass("fas fa-caret-circle-up").addClass("fas fa-caret-circle-down");
+                }
+                
             });
-        
+
             var isLoaded = $cp.hasClass(_Cls);
           
-            if(!isLoaded){
+            if( ! isLoaded ){
                 $cp.addClass(_Cls);
                 
                 if( ! isUD(o.onLoad) ) o.onLoad( $(_cpId + o.parentId + " .zGrid") );
@@ -3364,13 +3478,4 @@ var  ud='undefined'
     }
 ;  
 
-zsi.__setPrototypes();
-zsi.__setExtendedJqFunctions();
-/* Page Initialization */
-$(document).ready(function(){
-    zsi.initDatePicker();
-    zsi.initInputTypesAndFormats();
-});
-                                                  
-                                                  
-                       
+                        

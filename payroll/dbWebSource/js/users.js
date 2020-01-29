@@ -1,7 +1,7 @@
 var users = (function(){
     var   bs                    = zsi.bs.ctrl
         , tblName               = "tblusers"
-        , modalImageUser        = "modalWindowImageUser"
+        , mdlImageUser        = "modalWindowImageUser"
         , mdlAddNewUser         = "modalWindowAddNewUser"
         , mdlInactive           = "modalWindowInactive"
         , mdlOEM                = "modalWindowOEM"
@@ -23,16 +23,237 @@ var users = (function(){
         , gUserIndex             = -1
         , g$NewRow               = {}
     ;
-    
+
     zsi.ready = function(){
         gTw = new zsi.easyJsTemplateWriter();
         setSearch();
         setInputs();
         displayRecords("");
         getTemplates();
+        $(".page-title").html("Users");
         $(".panel").css("height", $(".page-content").height()); 
     };
+   
+    $.fn.clearValue = function(){
+       this.html("<option></option>"); 
+    }; 
+    
+    pub.submitInactive = function(){
+        var _$grid = $("#gridInactiveUsers");
+            _$grid.jsonSubmit({
+                 procedure: "users_upd"
+                ,optionalItems: ["is_active","is_contact"]
+                ,onComplete: function (data) {
+                    if(data.isSuccess===true) zsi.form.showAlert("alert");
+                    displayRecords();
+                    displayInactiveUsers();
+                }
+            });
+        $('#' + mdlInactive).modal('hide');     
+    }; 
+    
+    pub.submitNewUsers = function(){
+        if( zsi.form.checkMandatory()!==true) return false;
+        var res = isRequiredInputFound("#gridNewUsers");
+        if(!res.result){
+            $("#gridNewUsers").jsonSubmit({
+                     procedure  : "users_upd"
+                     ,optionalItems: ["is_active","is_contact"]
+                     ,onComplete : function (data) {
+                         if(data.isSuccess===true){
+                            zsi.form.showAlert("alert");
+                            isNew = false;
+                            displayRecords();
+                            displayAddNewUser();
+                         }
+                    }
+            });        
+            $('#' + mdlAddNewUser).modal('hide');
+        } else {
+            alert("Enter " + res.inputName);
+        }
+    };
+    
+    pub.getCurrentUser=function(){
+        return gUsersData[gUserIndex];
+    };
 
+    pub.setOEMItemTmpl  = function(text, value){
+        return '<li class="list-group-item" id='+ value +'>' + text 
+            +    '<i class="fas fa-minus-circle" aria-hidden="true" id='+ value + ' onclick="users.removeOEM(this);" style="float: right; cursor:pointer;"></i>'
+            + '</li>';
+    };    
+        
+    pub.addList = function(self){
+        
+        addList({
+             formSelector    : "#frm_modalWindowOEM"
+            ,info            : users.getCurrentUser()
+            ,button          : self
+        });
+       
+    };
+
+    pub.removeOEM = function(o){
+        var _$li = $(o).closest("li");
+        var _oem_id  = _$li.attr("id");
+        
+        var _info = null;
+        
+        if ( $(o).closest(".modal").attr("id").toLowerCase().includes("new") ){
+            //new    
+            _info = g$NewRow.info;
+        }
+        else{
+            //existing data;
+           _info = users.getCurrentUser();
+            
+        }
+        
+        var _i = _info.keyValue.findIndex( function(x) { return x.value ==  _oem_id;});
+
+        _info.keyValue.splice(_i,1);
+        
+        var _oem_ids="",_oems="";
+        for( var i = 0; i < _info.keyValue.length; i++){ 
+            if(_oem_ids !=="") {
+                _oem_ids  +=",";
+                _oems  +=",";
+            }
+            _oem_ids  += _info.keyValue[i].value;
+            _oems  += _info.keyValue[i].key;
+        }
+        _info.oem_ids = _oem_ids;
+        _info.oems = _oems;
+        
+        var _$row = $(_info.anchor).closest(".zRow");
+        _$row.find("#oem_ids").val(_oem_ids);
+        _$row.find("#is_edited").val("Y");        
+        _info.anchor.text = _oems;
+        _$li.remove();
+        //if(_oem_ids===""){ console.log(_oem_ids); $("#frm_modalWindowOEM").find("#btnSaveUsersOEM").addClass("d-none"); }
+    };
+    
+    pub.saveUsersOEM = function(o){
+        var _info = users.getCurrentUser();
+        $.post( app.procURL + "user_oems_upd "
+            + "@upd_user_id='" + _info.user_id + "'"
+            + ",@oem_ids='" + _info.oem_ids + "'" 
+            ,function(data){
+                if(data.isSuccess===true){
+                    zsi.form.showAlert("alert");        
+                } 
+        });
+    }; 
+    
+    pub.showModalOEM = function(obj,index){
+        gUserIndex = index;
+        var _info = users.getCurrentUser();
+        _info.anchor = obj;
+        var g$mdl = $("#" + mdlOEM);
+        var $form = g$mdl.find("form");
+        g$mdl.find(".modal-title").text("OEM") ;
+        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
+        $form.find("#oem_filter_id").dataBind("oem");
+        displayOEMList($form,_info);
+        
+    };
+
+    pub.showModalAddNewOEM = function(obj,index){
+        gUserIndex = index;
+        var g$mdl = $("#" + mdlAddNewOEM);
+        var $form = g$mdl.find("form");
+        g$mdl.find(".modal-title").text("OEM") ;
+        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
+        
+        $form.find("#oem_filter_id").dataBind("oem");
+        
+        //requirements for new parameters.
+        if( isUD(obj.info) )  { 
+            obj.info= {oem_ids:"",oems:"",keyValue:[],anchor:obj};
+            g$NewRow  =  $(obj).closest(".zRow");
+        }
+        g$NewRow.info = obj.info;
+        displayOEMList( $form, obj.info);  
+    };
+    
+    pub.addNewList = function(self){
+        addList({
+             formSelector    : "#frm_modalWindowAddNewOEM"
+            ,info            : g$NewRow.info
+            ,button          : self
+        });
+        
+    };
+
+    pub.showModalUploadUserImage = function(UserId, name){
+        user_id = UserId;
+        var m=$('#' + mdlImageUser);
+        
+        m.find(".modal-title").text("Image User for » " + name);
+        m.modal("show");
+        m.find("form").attr("enctype","multipart/form-data");
+        
+        $.get(base_url + 'page/name/tmplImageUpload'
+            ,function(data){
+                m.find('.modal-body').html(data);
+                m.find("#prefixKey").val("user.");
+                //initChangeEvent();
+            }
+        ); 
+    }
+    
+    pub.uploadImageUser = function(){
+        var frm = $("#frm_" + mdlImageUser);
+        var fileOrg=frm.find("#file").get(0);
+    
+        if( fileOrg.files.length<1 ) { 
+             alert("Please select image.");
+            return;
+        }
+        var formData = new FormData( frm.get(0));
+        $.ajax({
+            url: base_url + 'file/UploadImage',  //server script to process data
+            type: 'POST',
+    
+            //Ajax events
+            success: completeHandler = function(data) {
+                if(data.isSuccess){
+                    //submit filename to server
+                    $.get(base_url  + "sql/exec?p=dbo.image_file_users_upd @user_id=" + user_id
+                                    + ",@img_filename='user." +  fileOrg.files[0].name + "'"
+                    ,function(data){
+                        zsi.form.showAlert("alert");
+                        //$("#userImgBox").attr("src",  base_url + "file/viewImage?fileName=user." + fileOrg.files[0].name + "&isthumbnail=n" );
+                        $('#' + mdlImageUser).modal('toggle');
+                        
+                        //refresh latest records:
+                        displayRecords();
+                    });   
+                }else
+                    alert(data.errMsg);
+            },
+            error: errorHandler = function() {
+                console.log("error");
+            },
+            // Form data
+            data: formData,
+            //Options to tell JQuery not to process data or worry about content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
+    }
+    
+    pub.mouseover = function(filename){
+     $("#user-box").css("display","block");
+     $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
+    }
+    
+    pub.mouseout = function (){
+        $("#user-box").css("display","none");
+    } 
+    
     function getTemplates(){
         new zsi.easyJsTemplateWriter("body")
         .bsModalBox({
@@ -59,93 +280,16 @@ var users = (function(){
             , sizeAttr  : "modal-md"
             , title     : "New User"
             , body      : gTw.new().modalBodyAddNewOEM({oemListGroup:"oemList"}).html()  
+        })
+        .bsModalBox({
+              id        : mdlImageUser
+            , sizeAttr  : "modal-md"
+            , title     : "Inactive Users"
+            , body      : ""
+            , footer    : gTw.new().modalBodyImageUser({onClickUploadImageUser:"users.uploadImageUser();"}).html()  
         });
     
-    }
-
-    $("#btnClear").click(function(){
-        setSearch();
-        isNew = false;
-        displayRecords("");
-    });
-    
-    $("#btnGo").click(function(){
-        gSearchOption = $("#search_option").val();
-        gSearchValue = $.trim($("#search_value").val());
-        gFilterOption = $("#filter_option").val();
-        gFilterValue = $.trim($("#filter_value").val());
-        gRoleId = $.trim($("#roles_filter").val());
-        displayRecords("");
-    });
-    
-    $("#btnSave").click(function () {
-        $("#grid").jsonSubmit({
-             procedure  : "users_upd"
-             ,optionalItems: ["is_admin", "is_active"]
-            ,onComplete : function (data) {
-                if(data.isSuccess===true){
-                    zsi.form.showAlert("alert");
-                    displayRecords("");
-                }
-            }
-        });
-    });
-    
-    $("#btnNactive").click(function () {
-        var g$mdl = $("#" + mdlInactive);
-        g$mdl.find(".modal-title").text("Inactive Users") ;
-        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-        displayInactiveUsers();
-    });
-    
-    $("#btnAdd").click(function () {
-        var _$mdl = $('#' + mdlAddNewUser);
-        _$mdl.find(".modal-title").text("Add New Users");
-        _$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-        if (_$mdl.length === 0) {
-            console.log("agi");
-            _$mdl = 1;
-            _$mdl.on("hide.bs.modal", function () {
-                    if (confirm("You are about to close this window. Continue?")) return true;
-                    return false;
-            });
-        }    
-        displayAddNewUser();
-    });
-
-    $("#btnAddRecp").click(function(){
-        var leng    = recipients.length,
-            rec     = $("input[name=cb]:checked").getCheckBoxesValues();
-            
-            $.each(rec, function(index, row){
-                elem        = $("#user_id").val(row).closest(".zRow"),
-                logon       = elem.find("#logon").get(0).value,
-                ln          = elem.find("#last_name").get(0).value,
-                fn          = elem.find("#first_name").get(0).value,
-                mn          = elem.find("#middle_ini").get(0).value,
-                pn          = elem.find("#position").get(0).value,
-                role        = elem.find("#role_id").closest(".zCell").find("#text").get(0).innerText,
-                region      = elem.find("#region_id").closest(".zCell").find("#text").get(0).innerText,
-                lead        = elem.find("#lead_unit_id").closest(".zCell").find("#text").get(0).innerText,
-                contact     = elem.find("#contact_nos").get(0).value; 
-                
-                if(!recipients.isExists({keyName: "_userid", value: row}))
-                recipients.push({
-                    _userid:    row,
-                    _logon:     logon,
-                    _ln:        ln,
-                    _fn:        fn,
-                    _mn:        mn,
-                    _pn:        pn,
-                    _role:      role,
-                    _region:    region,
-                    _lead:      lead,
-                    _contact:   contact
-                });
-            });
-        
-        alert((recipients.length - leng)+" recipients added");
-    });
+    } 
 
     function removeRecipient(){
         var selected = $("input[name=recp_cb]:checked").getCheckBoxesValues();
@@ -175,42 +319,6 @@ var users = (function(){
             }
         });
     }
-    
-    pub.submitInactive = function(){
-        var _$grid = $("#gridInactiveUsers");
-            _$grid.jsonSubmit({
-                 procedure: "users_upd"
-                ,optionalItems: ["is_active","is_contact"]
-                ,onComplete: function (data) {
-                    if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    displayRecords();
-                    displayInactiveUsers();
-                }
-            });
-        $('#' + mdlInactive).modal('hide');     
-    } 
-    
-    pub.submitNewUsers = function(){
-        if( zsi.form.checkMandatory()!==true) return false;
-        var res = isRequiredInputFound("#gridNewUsers");
-        if(!res.result){
-            $("#gridNewUsers").jsonSubmit({
-                     procedure  : "users_upd"
-                     ,optionalItems: ["is_active","is_contact"]
-                     ,onComplete : function (data) {
-                         if(data.isSuccess===true){
-                            zsi.form.showAlert("alert");
-                            isNew = false;
-                            displayRecords();
-                            displayAddNewUser();
-                         }
-                    }
-            });        
-            $('#' + mdlAddNewUser).modal('hide');
-        } else {
-            alert("Enter " + res.inputName);
-        }
-    };
     
     function isRequiredInputFound(form){
         var result = false;
@@ -320,21 +428,27 @@ var users = (function(){
             }
         });
     }
-    //modal window//
+    
     function displayInactiveUsers(){
+        var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#gridInactiveUsers").dataBind({
-             url        : app.execURL + "users_sel @is_active='N'" 
-     	    ,width      : $("#frm_modalWindowInactive").width() - 25
-    	    ,height     : 400
+             sqlCode    : "U77"
+            ,parameters : {is_active: "N"}
+     	    ,width      : $("#frm_modalWindowInactive").width() - 15
+    	    ,height     : 360
             ,dataRows   : [
-        		{text   : "Corplear logon "     , width : 200       , style : "text-align:center;"
+                
+                {text: cb  ,width : 25   ,style : "text-align:left;"
                     ,onRender :function(d){
                                     return     app.bs({name:"user_id"   ,type:"hidden"  ,value: d.user_id})
                                              + app.bs({name:"is_edited" ,type:"hidden"})
                                              + app.bs({name:"oem_ids"   ,type:"hidden"  ,value:d.oem_ids })
-                                             + app.bs({name:"logon"     ,type:"hidden"  ,value: d.logon});                          
+                                             + (d !==null ? app.bs({name:"cb",type:"checkbox"}) : "" );                          
                                 } 
-        		}
+                }
+                
+                
+        	   ,{text  : "Corplear logon "     , width : 200           , style : "text-align:center;"          ,type:"input"      ,name:"logon"}
                ,{text  : "First Name"          , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"first_name"   }
                ,{text  : "Last Name"           , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"last_name"    }
                ,{text  : "Middle Initial"      , width : 100           , style : "text-align:center;"           
@@ -350,6 +464,7 @@ var users = (function(){
                ,{text  : "Active?"  , width : 70    , style : "text-align:center;"  ,type:"yesno"  ,name:"is_active"    ,defaultValue:"N"}
             ]
             ,onComplete: function(o){
+                this.find("[name='cbFilter']").setCheckEvent("#gridInactiveCustomers input[name='cb']");
             }
         });  
     }
@@ -358,8 +473,8 @@ var users = (function(){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
         ctr=-1;
         $("#gridNewUsers").dataBind({
-     	     width          : $(document).width()-35
-    	    ,height         : $(document).height()-540 
+     	     width          : $("#frm_modalWindowAddNewUser").width() - 22
+    	    ,height         : 360 
     	    ,selectorType   : "checkbox"
             ,blankRowsLimit : 5
             ,dataRows       : [
@@ -376,7 +491,7 @@ var users = (function(){
                 ,{text  : "Last Name"           , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"last_name"       ,sortColNo:6}
                 ,{text  : "Middle Initial"      , width : 130           , style : "text-align:center;"          ,type:"input"       ,name:"middle_name" }
                 ,{text  : "Name Suffix"         , width : 100           , style : "text-align:center;"          ,type:"input"       ,name:"name_suffix" }
-                ,{text  : "Role"                , width : 130           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
+                ,{text  : "Role"                , width : 160           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
                 ,{text  : "Admin?"              , width : 60            , style : "text-align:center;"          
                     ,onRender: function(d){
                         return app.bs({name:"is_admin"      ,type:"yesno"  ,value:app.svn(d,"is_admin") })
@@ -384,7 +499,7 @@ var users = (function(){
                             +  app.bs({name:"warehouse_id"  ,type:"hidden" ,value: app.svn(d,"warehouse_id")});
                     }
                 }
-                ,{text  : "Oem"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
+                ,{text  : "OEM"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
                     , onRender      : function(d) {
                         var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
                         return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalAddNewOEM(this," + ctr + ");'>" + _oems + "</a>";
@@ -395,14 +510,15 @@ var users = (function(){
             ]
             ,onComplete: function(){
                 this.find("input, select").on("change keyup ", function(){
-                            $(this).closest(".zRow").find("#is_edited").val("Y");
+                            $(this).closest(".zRow").find("[name='is_edited']").val("Y");
                 });       
     
-                this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
     
                 this.find("[name='role_id']").dataBind("roles");
     
                 markNewUserMandatory();
+                
             }
         });    
     }
@@ -411,14 +527,27 @@ var users = (function(){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
         ctr=-1;
         $("#grid").dataBind({
-             url            : app.procURL + "users_sel @searchOption='"+ gSearchOption +"',@searchValue='"+ gSearchValue +"',@role_id='"+ gRoleId +"'"
+             sqlCode        : "U77"
+            ,parameters     : {
+                                 searchOption   : gSearchOption 
+                                ,searchValue    : gSearchValue 
+                                ,role_id        : gRoleId 
+            }
      	    ,width          : $("#frm").width()
-    	    ,height         : $(document).height()-255 
+    	    ,height         : $(document).height() - 260 
     	    ,selectorType   : "checkbox"
             ,rowsPerPage    : 50
             ,isPaging : true
             ,dataRows       : [
-        		{text  : "Corplear logon "     , width : 155           , style : "text-align:center;"         ,sortColNo:3
+                { text:"image"             , width:40      , style:"text-align:center;" 
+    		    ,onRender : function(d){ 
+                        var mouseMoveEvent= "onmouseover='users.mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='users.mouseout();'";
+                        var html = "<a href='javascript:void(0);' "+ mouseMoveEvent +" class='btn btn-sm has-tooltip' onclick='users.showModalUploadUserImage(" + svn(d,"user_id") +",\"" 
+    		                           + svn(d,"userFullName") + "\");' data-toggle='tooltip' data-original-title='Upload Image'><i class='fas fa-image'></i> </a>";
+                        return (d!==null ? html : "");
+                    }
+    		    }
+        		,{text  : "Corplear logon "     , width : 155           , style : "text-align:center;"         ,sortColNo:3
                     ,onRender : function(d){ 
                         ctr++;
                         return app.bs({name:"user_id"   ,type:"hidden"  ,value:app.svn(d,"user_id") })
@@ -432,9 +561,9 @@ var users = (function(){
                 ,{text  : "Last Name"           , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"last_name"       ,sortColNo:6}
                 ,{text  : "Middle Initial"      , width : 130           , style : "text-align:center;"          ,type:"input"       ,name:"middle_name" }
                 ,{text  : "Name Suffix"         , width : 100           , style : "text-align:center;"          ,type:"input"       ,name:"name_suffix" }
-                ,{text  : "Role"                , width : 130           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
+                ,{text  : "Role"                , width : 160           , style : "text-align:center;"          ,type:"select"      ,name:"role_id"         ,displayText:"role_name"}
                 ,{text  : "Admin?"              , width : 60            , style : "text-align:center;"          ,type:"yesno"       ,name:"is_admin" }
-                ,{text  : "Oem"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
+                ,{text  : "OEM"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
                     , onRender      : function(d) {
                         var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
                         return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalOEM(this," + ctr + ");'>" + _oems + "</a>";
@@ -449,13 +578,13 @@ var users = (function(){
             }
             ,onComplete: function(o){
                 gUsersData = o.data.rows;
-                
-                if ($("#oem_ids").filter(function() { return $(this).val(); }).length > 0) {
-                    $(this).closest(".zRow").find("#is_edited").val("Y");
+                $('.has-tooltip').tooltip();
+                if ($("[name='oem_ids']").filter(function() { return $(this).val(); }).length > 0) {
+                    $(this).closest(".zRow").find("[name='is_edited']").val("Y");
                     
                 }
             
-                this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
                 this.find("select[name='role_id']").dataBind("roles");
                 this.find("select[name='plant_id']").dataBind("plants");
                 this.find("select[name='warehouse_id']").dataBind("warehouse");
@@ -467,103 +596,7 @@ var users = (function(){
                 });
             }
         });    
-    }
-
-    pub.getCurrentUser=function(){
-        return gUsersData[gUserIndex];
-    };
-
-    pub.setOEMItemTmpl  = function(text, value){
-        return '<li class="list-group-item" id='+ value +'>' + text 
-            +    '<i class="fas fa-minus-circle" aria-hidden="true" id='+ value + ' onclick="users.removeOEM(this);" style="float: right; cursor:pointer;"></i>'
-            + '</li>';
-    };    
-        
-    pub.addList = function(self){
-        
-        addList({
-             formSelector    : "#frm_modalWindowOEM"
-            ,info            : users.getCurrentUser()
-            ,button          : self
-        });
-       
-    };
-
-    pub.removeOEM = function(o){
-        var _$li = $(o).closest("li");
-        var _oem_id  = _$li.attr("id");
-        
-        var _info = null;
-        
-        if ( $(o).closest(".modal").attr("id").toLowerCase().includes("new") ){
-            //new    
-            _info = g$NewRow.info;
-        }
-        else{
-            //existing data;
-           _info = users.getCurrentUser();
-            
-        }
-        
-        var _i = _info.keyValue.findIndex( function(x) { return x.value ==  _oem_id;});
-
-        _info.keyValue.splice(_i,1);
-        
-        var _oem_ids="",_oems="";
-        for( var i = 0; i < _info.keyValue.length; i++){ 
-            if(_oem_ids !=="") {
-                _oem_ids  +=",";
-                _oems  +=",";
-            }
-            _oem_ids  += _info.keyValue[i].value;
-            _oems  += _info.keyValue[i].key;
-        }
-        _info.oem_ids = _oem_ids;
-        _info.oems = _oems;
-        
-        var _$row = $(_info.anchor).closest(".zRow");
-        _$row.find("#oem_ids").val(_oem_ids);
-        _$row.find("#is_edited").val("Y");        
-        _info.anchor.text = _oems;
-        _$li.remove();
-
-      
-    };
-
-    $.fn.clearValue = function(){
-       this.html("<option></option>"); 
-    };
-    
-    pub.showModalOEM = function(obj,index){
-        gUserIndex = index;
-        var _info = users.getCurrentUser();
-        _info.anchor = obj;
-        var g$mdl = $("#" + mdlOEM);
-        var $form = g$mdl.find("form");
-        g$mdl.find(".modal-title").text("OEM") ;
-        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-        $form.find("#oem_filter_id").dataBind("oem");
-        displayOEMList($form,_info);
-        
-    };
-
-    pub.showModalAddNewOEM = function(obj,index){
-        gUserIndex = index;
-        var g$mdl = $("#" + mdlAddNewOEM);
-        var $form = g$mdl.find("form");
-        g$mdl.find(".modal-title").text("OEM") ;
-        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-        
-        $form.find("#oem_filter_id").dataBind("oem");
-        
-        //requirements for new parameters.
-        if( isUD(obj.info) )  { 
-            obj.info= {oem_ids:"",oems:"",keyValue:[],anchor:obj};
-            g$NewRow  =  $(obj).closest(".zRow");
-        }
-        g$NewRow.info = obj.info;
-        displayOEMList( $form, obj.info);  
-    };
+    } 
     
     function displayOEMList($frm,info){
         var _h = "";
@@ -575,6 +608,7 @@ var users = (function(){
                 _h +=pub.setOEMItemTmpl(y,oem_id);
                 info.keyValue.push(  {key: y, value:oem_id});
             });
+            $frm.find("#btnSaveUsersOEM").removeClass("d-none");
         }
         $frm.find("#listItemGroup").html(_h);        
         
@@ -598,6 +632,7 @@ var users = (function(){
              return;
         }
         _$mdl.find("#oemListGroup").find("#listItemGroup").append(pub.setOEMItemTmpl(_filterText,_filterValue) );
+        _$mdl.find("#btnSaveUsersOEM").removeClass("d-none"); 
         
         if(_info.oem_ids !=="") {
             _info.oem_ids +=",";
@@ -618,88 +653,8 @@ var users = (function(){
         if(_oem_ids !=="") _oem_ids +=",";
         _oem_ids +=_filterValue;
         _$row.find("#oem_ids").val(_oem_ids);
-        _$row.find("#is_edited").val("Y");        
-    }
-
-    pub.addNewList = function(self){
-        addList({
-             formSelector    : "#frm_modalWindowAddNewOEM"
-            ,info            : g$NewRow.info
-            ,button          : self
-        });
-        
-    };
-
-    function showModalUploadUserImage(UserId,title){
-        user_id = UserId;
-        var m=$('#' + modalImageUser);
-        
-        m.find(".modal-title").text("Image User for » " + title);
-        m.modal("show");
-        m.find("form").attr("enctype","multipart/form-data");
-        
-        $.get(base_url + 'page/name/tmplImageUpload'
-            ,function(data){
-                m.find('.modal-body').html(data);
-                $("#frm_" + modalImageUser).find("#prefixKey").val("user.");
-                initChangeEvent();
-            }
-        ); 
-    }
-    
-    function userImageUpload(){
-        var frm = $("#frm_" + modalImageUser);
-        var fileOrg=frm.find("#file").get(0);
-    
-        if( fileOrg.files.length<1 ) { 
-             alert("Please select image.");
-            return;
-        }
-        var formData = new FormData( frm.get(0));
-        $.ajax({
-            url: base_url + 'file/UploadImage',  //server script to process data
-            type: 'POST',
-    
-            //Ajax events
-            success: completeHandler = function(data) {
-                if(data.isSuccess){
-                    //submit filename to server
-                    $.get(base_url  + "sql/exec?p=dbo.image_file_users_upd @user_id=" + user_id
-                                    + ",@img_filename='user." +  fileOrg.files[0].name + "'"
-                    ,function(data){
-                        zsi.form.showAlert("alert");
-                        //$("#userImgBox").attr("src",  base_url + "file/viewImage?fileName=user." + fileOrg.files[0].name + "&isthumbnail=n" );
-                        $('#' + modalImageUser).modal('toggle');
-                        
-                        //refresh latest records:
-                        displayRecords();
-                    });
-    
-                        
-                }else
-                    alert(data.errMsg);
-                
-            },
-            error: errorHandler = function() {
-                console.log("error");
-            },
-            // Form data
-            data: formData,
-            //Options to tell JQuery not to process data or worry about content-type
-            cache: false,
-            contentType: false,
-            processData: false
-        }, 'json');
-    }
-    
-    function mouseover(filename){
-     $("#user-box").css("display","block");
-     $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
-    }
-    
-    function mouseout(){
-        $("#user-box").css("display","none");
-    }
+        _$row.find("#is_edited").val("Y"); 
+    } 
     
     function showModalUploadImage(filename){
         var m=$('#modalWindow');
@@ -721,8 +676,92 @@ var users = (function(){
         $(".zDdlBtn").on("click", function(){
             $(this).closest(".zRow").find("#is_edited").val("Y");
         });
-    }     
+    }   
+    
+    $("#btnClear").click(function(){
+        setSearch();
+        isNew = false;
+        displayRecords("");
+    });
+    
+    $("#btnGo").click(function(){
+        gSearchOption = $("#search_option").val();
+        gSearchValue = $.trim($("#search_value").val());
+        gFilterOption = $("#filter_option").val();
+        gFilterValue = $.trim($("#filter_value").val());
+        gRoleId = $.trim($("#roles_filter").val());
+        displayRecords("");
+    });
+    
+    $("#btnSave").click(function () {
+        $("#grid").jsonSubmit({
+             procedure  : "users_upd"
+             ,optionalItems: ["is_admin", "is_active"]
+            ,onComplete : function (data) {
+                if(data.isSuccess===true){
+                    zsi.form.showAlert("alert");
+                    displayRecords("");
+                }
+            }
+        });
+    });
+    
+    $("#btnNactive").click(function () {
+        var g$mdl = $("#" + mdlInactive);
+        g$mdl.find(".modal-title").text("Inactive Users") ;
+        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
+        displayInactiveUsers();
+    });
+    
+    $("#btnAdd").click(function () {
+        var _$mdl = $('#' + mdlAddNewUser);
+        _$mdl.find(".modal-title").text("Add New Users");
+        _$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
+        if (_$mdl.length === 0) {
+            console.log("agi");
+            _$mdl = 1;
+            _$mdl.on("hide.bs.modal", function () {
+                    if (confirm("You are about to close this window. Continue?")) return true;
+                    return false;
+            });
+        }    
+        displayAddNewUser();
+    });
+
+    $("#btnAddRecp").click(function(){
+        var leng    = recipients.length,
+            rec     = $("input[name=cb]:checked").getCheckBoxesValues();
+            
+            $.each(rec, function(index, row){
+                elem        = $("#user_id").val(row).closest(".zRow"),
+                logon       = elem.find("#logon").get(0).value,
+                ln          = elem.find("#last_name").get(0).value,
+                fn          = elem.find("#first_name").get(0).value,
+                mn          = elem.find("#middle_ini").get(0).value,
+                pn          = elem.find("#position").get(0).value,
+                role        = elem.find("#role_id").closest(".zCell").find("#text").get(0).innerText,
+                region      = elem.find("#region_id").closest(".zCell").find("#text").get(0).innerText,
+                lead        = elem.find("#lead_unit_id").closest(".zCell").find("#text").get(0).innerText,
+                contact     = elem.find("#contact_nos").get(0).value; 
+                
+                if(!recipients.isExists({keyName: "_userid", value: row}))
+                recipients.push({
+                    _userid:    row,
+                    _logon:     logon,
+                    _ln:        ln,
+                    _fn:        fn,
+                    _mn:        mn,
+                    _pn:        pn,
+                    _role:      role,
+                    _region:    region,
+                    _lead:      lead,
+                    _contact:   contact
+                });
+            });
+        
+        alert((recipients.length - leng)+" recipients added");
+    });
     
     return pub;
 })();
-                   
+                                  

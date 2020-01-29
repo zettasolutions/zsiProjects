@@ -2,10 +2,10 @@ var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
 var tblName     = "tblInactiveEmp";
 
-zsi.ready(function(){
+zsi.ready = function(){
    displayRecords();
    getTemplate();
-});
+};
 
 $("#btnSave").click(function () {
     $("#grid").jsonSubmit({
@@ -110,4 +110,4 @@ function displayInactiveEmp(){
 	    ]
     });    
 }
-      
+       

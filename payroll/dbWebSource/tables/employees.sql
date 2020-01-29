@@ -16,6 +16,16 @@ id	INT IDENTITY(1,1)	NOT NULL
 ,philhealth_no	NVARCHAR(100)	NULL
 ,hmdf_no	NVARCHAR(100)	NULL
 ,account_no	NVARCHAR(100)	NULL
+,position_id	INT	NULL
+,department_id	INT	NULL
+,section_id	INT	NULL
+,no_shares	DECIMAL(12)	NULL
+,contact_name	NVARCHAR(100)	NULL
+,contact_phone_no	NVARCHAR(100)	NULL
+,contact_address	NVARCHAR(200)	NULL
+,contact_relation_id	INT	NULL
+,emp_hash_key	NVARCHAR(1000)	NULL
+,img_filename	NVARCHAR(1000)	NULL
 ,is_active	CHAR(1)	NULL
 ,inactive_type_code	CHAR(1)	NULL
 ,inactive_date	DATE	NULL

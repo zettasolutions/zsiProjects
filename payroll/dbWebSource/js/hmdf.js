@@ -11,7 +11,7 @@ function displayHMDF(){
     
     $("#grid").dataBind({
              url        :execURL + "hmdf_table_sel"
-            ,width      : 650
+            ,width      : 1100
             ,height     : 300
             ,blankRowsLimit : 5
             ,dataRows   : [
@@ -22,10 +22,10 @@ function displayHMDF(){
                                         + (d !== null ? bs({name:"cb"   ,type:"checkbox"}) : "" );
                                  }
                              }
-                            ,{text:"Salary Range (From)"    ,type:"input"       ,name:"salary_fr"       ,width:150        ,style:"text-align:left"}
-                            ,{text:"Salary Range (To)"      ,type:"input"       ,name:"salary_to"       ,width:150        ,style:"text-align:left"}
-                            ,{text:"Employee Share"         ,type:"input"       ,name:"ee_pct_share"    ,width:150        ,style:"text-align:left"}
-                            ,{text:"Employer Share"         ,type:"input"       ,name:"er_pct_share"    ,width:150        ,style:"text-align:left"}
+                            ,{text:"Salary Range (From)"    ,type:"input"       ,name:"salary_fr"       ,width:300        ,style:"text-align:left"}
+                            ,{text:"Salary Range (To)"      ,type:"input"       ,name:"salary_to"       ,width:300         ,style:"text-align:left"}
+                            ,{text:"Employee Share"         ,type:"input"       ,name:"ee_pct_share"    ,width:300         ,style:"text-align:left"}
+                            ,{text:"Employer Share"         ,type:"input"       ,name:"er_pct_share"    ,width:300         ,style:"text-align:left"}
                             
                           ]
                           ,onComplete : function(){
@@ -46,12 +46,12 @@ $("#btnSave").click(function (){
     });
 });
 
-$("#btnDelete").click(function (){s
-    zsi.form.deleteData({
+$("#btnDelete").click(function (){
+    zsi.form.deleteData({ 
             code:"ref-0007"
            ,onComplete:function(data){
                console.log("sr")
                  displayHMDF();
            }
     });
-});
+});  

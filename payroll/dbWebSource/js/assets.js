@@ -3,6 +3,7 @@
     
     var  bs    = zsi.bs.ctrl
         ,svn   = zsi.setValIfNull
+      /*  , $j   = jQuery.noConflict()*/
     ;
     
     zsi.ready = function(){
@@ -46,6 +47,7 @@
                     ] 
                     ,onComplete : function(d){    
                         this.find("#cbFilter1").setCheckEvent("#grid input[name='cb']");  
+                 
                         this.find("#asset_type_id").attr("selectedvalue",d.asset_type_id);
                         this.find("[name='date_acquired']").datepicker().attr("readonly",true); 
                         this.find("[name='exp_registration_date']").datepicker().attr("readonly",true); 
@@ -88,4 +90,4 @@
     
 })();
 
-                
+                 

@@ -1,6 +1,6 @@
-$(document).ready(function(){
+zsi.ready=function(){
     $("#tmpData").dataBind({ url : app.execURL + "excel_upload_sel"});
-});
+};
 
 function excelFileUpload(){
     var frm      = $("#frmUploadFile");
@@ -38,4 +38,4 @@ function excelFileUpload(){
         contentType: false,
         processData: false
     }, 'json');        
-}           
+}            

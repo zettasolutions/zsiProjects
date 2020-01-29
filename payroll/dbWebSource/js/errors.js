@@ -9,7 +9,6 @@ var errors =(function(){
         $(".page-title").html("Errors");
         $("#user_id").dataBind( "users");
         errors.displayRecords("");
-        $(".panel").css("height", $(".page-content").height()); 
     };
 
     _pub.displayRecords=function(params){   
@@ -19,10 +18,7 @@ var errors =(function(){
         $("#grid").dataBind({
             url    : app.execURL + "error_logs_sel " + params
             ,width          : $(".zContainer").width()
-    	    ,height         : $(document).height() - 290
-    	    //,selectorType   : "checkbox"
-            //,blankRowsLimit:5
-            //,isPaging : false
+    	    ,height         : $(window).height() - 280
             ,dataRows : [ 
                 {text  : cb                                , type  : "hidden"        , width    : 25        , style : "text-align:left;"       
             		    ,onRender   :   function(d){
@@ -66,7 +62,7 @@ var errors =(function(){
     
             ]
               ,onComplete: function(){
-                $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                $("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
             }
     
         });    
@@ -93,7 +89,6 @@ var errors =(function(){
         zsi.form.deleteData({
              code: "sys-0007"
             ,onComplete: function(data){
-                //displayRecords("");
                 $("#grid").trigger("refresh");
             }
         });
@@ -115,4 +110,4 @@ var errors =(function(){
     
     return _pub;
 })();
-                        
+                            

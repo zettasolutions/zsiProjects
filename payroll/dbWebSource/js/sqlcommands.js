@@ -58,7 +58,7 @@
              sqlCode:"S53"
             ,parameters : { sort_index: 3 }
             ,width: $(".zContainer").width() 
-            ,height: $(document).height() - 260
+            ,height: $(window).height() - 280
             ,isPaging : true
             ,rowsPerPage : 100
             ,dataRows : [
@@ -68,11 +68,12 @@
                                         +  app.bs({ type : 'input' , name : 'sqlcmd_code' , value : app.svn(d,'sqlcmd_code') });
                                 }
                             }
-                            ,{ text : "Text" , width : 300 , style : "text-align:left;" ,name : 'sqlcmd_text'  }
-                            ,{ text : "Is Proc?" , width : 80 , style : "text-align:left;" ,name : 'is_procedure' }
-                            ,{ text : "Is Public?" , width : 80 , style : "text-align:left;" ,name : 'is_public' }
+                            ,{ text : "Text"        ,type:"input"       ,width : 300    ,style : "text-align:left;"     ,name : 'sqlcmd_text'  }
+                            ,{ text : "Is Proc?"    ,type:"input"       ,width : 80     ,style : "text-align:left;"     ,name : 'is_procedure' }
+                            ,{ text : "Is Public?"  ,type:"input"       ,width : 80     ,style : "text-align:left;"     ,name : 'is_public' }
                             ,{ text : "Action" , width : 100 , style : "text-align:center;"
                                 ,onRender : function(d) {
+                                    console.log("d",d)
                                     return '<a href="javascript:void(0);" class="edit-sqlcommand"><i class="fas fa-edit"></i></a>';
                                 }
                             }
@@ -199,4 +200,4 @@ zsi.ready = function() {
     
 })();
 
-       
+          

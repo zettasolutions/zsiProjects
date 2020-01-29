@@ -1,3 +1,4 @@
+
 CREATE PROCEDURE [dbo].[employees_upd]
 (
     @tt    employees_tt READONLY
@@ -14,7 +15,11 @@ AS
 	 		 ,name_suffix				= b.name_suffix			
 			 ,gender					= b.gender				
 	   	     ,civil_status_code			= b.civil_status_code
+			 ,date_hired				= b.date_hired
 			 ,empl_type_code			= b.empl_type_code
+			 ,department_id				= b.department_id
+			 ,section_id				= b.section_id
+			 ,position_id				= b.position_id
 			 ,basic_pay					= b.basic_pay
 			 ,pay_type_code				= b.pay_type_code
 			 ,sss_no					= b.sss_no
@@ -22,6 +27,11 @@ AS
 			 ,philhealth_no				= b.philhealth_no
 			 ,hmdf_no					= b.hmdf_no
 			 ,account_no				= b.account_no
+			 ,no_shares                 = b.no_shares 
+			 ,contact_name              = b.contact_name 
+			 ,contact_phone_no          = b.contact_phone_no
+			 ,contact_address           = b.contact_address
+			 ,contact_relation_id       = b.contact_relation_id
 			 ,is_active					= b.is_active
 			 ,inactive_type_code		= b.inactive_type_code
 			 ,inactive_date				= b.inactive_date
@@ -42,7 +52,11 @@ AS
 		,name_suffix		
 		,gender			
 		,civil_status_code	
+		,date_hired
 		,empl_type_code	
+		,department_id
+		,section_id
+		,position_id
 		,basic_pay			
 		,pay_type_code		
 		,sss_no			
@@ -50,6 +64,12 @@ AS
 		,philhealth_no		
 		,hmdf_no			
 		,account_no		
+		,no_shares
+		,contact_name       
+		,contact_phone_no   
+		,contact_address    
+		,contact_relation_id
+		,emp_hash_key
 		,is_active			
 		,inactive_type_code
 		,inactive_date		
@@ -64,14 +84,24 @@ AS
 		,name_suffix		
 		,gender			
 		,civil_status_code	
+		,date_hired
 		,empl_type_code	
+		,department_id
+		,section_id
+		,position_id
 		,basic_pay			
 		,pay_type_code		
 		,sss_no			
 		,tin				
 		,philhealth_no		
 		,hmdf_no			
-		,account_no		
+		,account_no	
+		,no_shares
+		,contact_name       
+		,contact_phone_no   
+		,contact_address    
+		,contact_relation_id
+		,NewId()	
 		,is_active			
 		,inactive_type_code
 		,inactive_date		
@@ -80,6 +110,9 @@ AS
 	FROM @tt 
 	WHERE id IS NULL
       AND employee_id IS NOT NULL;
+
+
+
 
 
 
