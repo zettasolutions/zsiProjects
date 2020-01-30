@@ -356,8 +356,14 @@ namespace zsi.web.Controllers
 
                 if (Directory.Exists(this.AppConfig.image_folder)) path = this.AppConfig.image_folder;
                 var fullPath = Path.Combine(path, fileName);
-                string contentType = MimeMapping.GetMimeMapping(fileName);
-                return File(fullPath, contentType);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    string contentType = MimeMapping.GetMimeMapping(fileName);
+                    return File(fullPath, contentType);
+                }
+                else
+                    return base.File("/images/no-image.jpg", "image/jpeg");
+
             }
         }
 
