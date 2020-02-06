@@ -100,7 +100,7 @@
                     </form>
                 </div>
             </div>
-            <video id="preview"></video>
+            <video id="preview" class="d-none"></video>
             <!--<div id="vidContainer" class="d-none">
             	<video id="videoElement"></video>
             </div>-->
@@ -117,20 +117,3 @@
         </div>
     </div>
 </div>
-<script>
-    $("#btnScanQr").click(function() {
-        $("#vidContainer").removeClass("d-none");
-        $("#videoElement").attr("autoplay", true);
-        var video = document.querySelector("#videoElement");
-
-    	if (navigator.mediaDevices.getUserMedia) {
-    	  navigator.mediaDevices.getUserMedia({ video: true })
-    	    .then(function (stream) {
-    	      video.srcObject = stream;
-    	    })
-    	    .catch(function (err0r) {
-    	      console.log("Something went wrong!");
-    	    });
-    	}
-    });
-</script>

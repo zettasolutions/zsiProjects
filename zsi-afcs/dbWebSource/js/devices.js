@@ -4,7 +4,6 @@ var devices = (function(){
     
     zsi.ready = function(){
         $(".page-title").html("Devices");
-        $(".panel-container").css("min-height", $(window).height() - 160);
         displayDevices();
         $("#company_id").dataBind({
             sqlCode    : "C1216" //company_info_sel
@@ -37,10 +36,10 @@ var devices = (function(){
                         }
                 }
                 ,{text: "Serial No."                    ,name:"serial_no"               ,type:"input"       ,width : 150   ,style : "text-align:left;"}
-                ,{text: "Device Description."           ,name:"device_desc"             ,type:"input"       ,width : 250   ,style : "text-align:left;"}
+                ,{text: "Device Description"            ,name:"device_desc"             ,type:"input"       ,width : 250   ,style : "text-align:left;"}
                 ,{text: "Active?"                       ,name:"is_active"               ,type:"yesno"       ,width : 50    ,style : "text-align:left;" ,defaultValue:"Y"}
             ]
-            ,onComplete: function(o){
+            ,onComplete: function(){
             }
         });
     }
@@ -82,12 +81,12 @@ var devices = (function(){
     
     $("#btnSaveDevices").click(function () {
         $("#gridDevices").jsonSubmit({
-                 procedure: "devices_upd"
-                ,optionalItems: ["is_active"]
-                ,onComplete: function (data) { 
-                    if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    $("#gridDevices").trigger("refresh");
-                }
+             procedure: "devices_upd"
+            ,optionalItems: ["is_active"]
+            ,onComplete: function (data) { 
+                if(data.isSuccess===true) zsi.form.showAlert("alert");
+                $("#gridDevices").trigger("refresh");
+            }
         });
     });
     
@@ -101,24 +100,24 @@ var devices = (function(){
     
     $("#btnSaveInactiveDevice").click(function () {
        $("#gridInactiveDevices").jsonSubmit({
-                 procedure: "devices_upd"
-                ,optionalItems: ["is_active"]
-                ,onComplete: function (data) { 
-                    if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    $("#gridDevices").trigger("refresh");
-                    $('#modalInactiveDevices').modal('toggle');
-                }
+             procedure: "devices_upd"
+            ,optionalItems: ["is_active"]
+            ,onComplete: function (data) { 
+                if(data.isSuccess===true) zsi.form.showAlert("alert");
+                $("#gridDevices").trigger("refresh");
+                $('#modalInactiveDevices').modal('toggle');
+            }
         });
     });
     $("#btnDeleteDevices").click(function(){
         zsi.form.deleteData({
-             code       : "ref-00020"
+             code       : "ref-00014"
             ,onComplete : function(data){
-                    displayInactive();
+                    $("#gridDevices").trigger("refresh");
                     $('#modalInactiveDevices').modal('toggle');
            }
         });       
     });
     
     return _pub;
-})();         
+})();               

@@ -593,6 +593,104 @@ var  ud='undefined'
                   }, _time);         
                });
             };
+            $.fn.checkMandatory     = function(){
+                        var
+                              _objMandatoryGroupIndexValues = []
+                            , _self = this
+                            , _om   = this.data("mandatories")
+                            , x     = 0
+                            , i     = 0
+                            , _obj
+                        ;
+                       if(typeof _om === ud) return true;
+                       var _checkMandatory = function(oGroupN, oGroupT,groupIndex){
+                                var e = oGroupN.names;
+                                var d = oGroupT.titles;
+                                var l_irecords=[];
+                                var l_firstArrObj;
+                                
+                                _objMandatoryGroupIndexValues[groupIndex]="N";
+                                   for(var x=0;x<e.length;x++){
+                                        _obj = _self.find("[name='"+ e[x] + "']").toArray();
+                                        if(_obj.length > 1){
+                                             /* collect row-index if the row has a value */
+                                            var l_index=0;
+                                            for(var i=0;i<_obj.length;i++){
+                                                if(_obj[i].type!="hidden"){
+                                                   if(!l_firstArrObj) l_firstArrObj = _obj[i];
+                                                   if($.trim(_obj[i].value)!=="") {
+                                                     l_irecords[l_index]=i;
+                                                     l_index++;
+                                                     _objMandatoryGroupIndexValues[groupIndex]="Y";
+                                                   }
+                                                }
+                                            }
+                                            
+                                            }else{ /* single */
+                                             if(_obj[0]){
+                                                if(_obj[0].value===ud || $.trim(_obj[0].value)===""){
+                                                   _obj[0].focus();
+                                                   alert("Enter " + d[x] + ".");
+                                                   return false;
+                                                }
+                                            }
+                                        }
+                                
+                                   }
+                                  /* multiple */
+                                   if(oGroupN.type=="M"){
+                                      if(oGroupN.required_one){
+                                         if(oGroupN.required_one=="Y"){
+                                            if(l_irecords.length===0){
+                                               alert("Please enter at least 1 record.");
+                                               if(l_firstArrObj) l_firstArrObj.focus();
+                                               return false;
+                                            }
+                                         }
+                                      }
+                                      for(x=0;x<e.length;x++){
+                                         _obj = _self.find("[name='"+ e[x] + "']").toArray();
+                                         if(_obj.length > 1){
+                                            for(i=0;i<l_irecords.length;i++){
+                                               if(_obj[l_irecords[i]].type!="hidden"){
+                                                  if($.trim(_obj[l_irecords[i]].value)==="") {
+                                                    _obj[l_irecords[i]].focus();
+                                                    alert("Enter " + d[x] + ".");
+                                                    return false;
+                                                  }
+                                               }
+                                            }
+                                         }
+                                      }
+                                   }
+                                
+                                   return true;
+                                 };
+                       
+                       for(x=0; x < _om.groupNames.length;x++){  /*loop per group objects*/
+                          if ( ! _checkMandatory( _om.groupNames[x], _om.groupTitles[x], x ))
+                             return false;
+                       }
+                       
+                       /*check  required one indexes */
+                       if(_om.required_one_indexes){
+                          var roi=_om.required_one_indexes;
+                          var mgiv = _objMandatoryGroupIndexValues;
+                          var countNoRecords=0;
+                          for(x=0; x < roi.length;x++){
+                             for(var y=0;y < mgiv.length;y++){
+                                if(roi[x]==y){
+                                   if(mgiv[y]=="N") countNoRecords++;
+                                }
+                             }
+                          }
+                          if(roi.length == countNoRecords){
+                             alert("Please enter at least one record.");
+                             return false;
+                          }
+                       }
+                       return true;
+            };
             $.fn.clearGrid          = function(){
                 var _panel = ".zGridPanel";
                 if(this.find(_panel).length >0)
@@ -926,7 +1024,7 @@ var  ud='undefined'
                         if(o.panelType === "Y" && _chLeft.length > 0) return; 
                         var _dt =  (o.panelType ==="R"? _chRight : _chLeft ); 
                         var _table =  (o.panelType ==="R"? _obj.find(_clsPanelR).find("#table") : _obj.find(_obj.clsPanelL).find("#table") ); 
-                        var _$row =  $(new _tw().div({class:"zRow"}).html());
+                        var _$row =  $("<div class='zRow'></div>");//$(new _tw().div({class:"zRow"}).html());
                         var _$extraRow = null;
                         for(var x=0;x<_dt.length;x++){
                             var _info       = _dt[x] 
@@ -1290,7 +1388,8 @@ var  ud='undefined'
                          _rpp   = ( _p.rpp !== null ? _p.rpp : 0 );
                      var _head = ""
                         ,_getHdr = function(type){
-                            return new _tw().div({class:"zGridPanel " + type}).in().div({class:"zHeaders"}).div({class:"zRows"}).in().div({id:"table"}).out().div({class:"zFooter"}).html();
+                            return '<div class="zGridPanel ' + type +'"><div class="zHeaders"></div><div class="zRows"><div id="table"></div></div><div class="zFooter"></div></div>';
+                            //return new _tw().div({class:"zGridPanel " + type}).in().div({class:"zHeaders"}).div({class:"zRows"}).in().div({id:"table"}).out().div({class:"zFooter"}).html();
                         }
                         ,_getFtr = function(){
                              return (typeof _gp.isPaging !== ud && _gp.isPaging === true 
@@ -1505,6 +1604,22 @@ var  ud='undefined'
                 
                 return this;
             };
+            $.fn.htmlToExcel        = function(o){
+                if(!o) o={};
+                var _table = this.get(0);
+                if(_table){
+                    var _style ="<html><head><meta charset='utf-8' /><style> table, td {border:thin solid black}table {border-collapse:collapse;font-family:Tahoma;font-size:10pt;}</style></head><body>";
+                    var _html = _style + _table.outerHTML ;
+                    
+                    var _p = {html: _html + "</body></html>" };
+                    if(o.fileName) _p.fileName = o.fileName; 
+                    zsi.htmlToExcel(_p);
+                }else{
+                    console.error("table element not found.")
+                }
+
+            };
+            
             $.fn.fillSelect         = function(o){
                 var $ddl = this;
                 if(typeof o.isRequired ===ud )  o.isRequired = false;
@@ -1589,6 +1704,64 @@ var  ud='undefined'
                 }
                 return _v;
             }
+
+            $.fn.convertToTable       = function(cb){
+                var _$self  = this;
+                var _tableId = _$self.attr("id");
+                
+                var _getValue = function(e){
+                    var _ret = "";
+                    var _$e = $(e);
+                    if (  _$e.find("input,select").not(':hidden').length > 0 )
+                        _ret  =   _$e.find("input,select").val();
+                    else if (  _$e.find(".text").length > 0 )
+                        _ret  =   _$e.find(".text").html();
+                    else if (  _$e.find("a").length > 0 )
+                        _ret  =   _$e.find("a").html();
+                    else 
+                        _ret  =   e.innerText;
+                    return _ret;
+                }
+                
+
+                if(  _$self.hasClass('zGrid')) {  
+                    // Create temporary table 
+                    var _table = document.createElement('table');
+                        _table.setAttribute("id", "Excel" + _tableId);
+                        _table.setAttribute("class", "hide");
+                        _$self.after(_table);
+                    var pn = false;
+
+                     row = _table.insertRow(-1);
+                  
+                    _$self.find(".zHeaders .item").each(function(i, e){
+                        // If the parentNodes are different we need
+                	    // to create a new row
+                        if (pn && e.parentNode != pn) {
+                          row = _table.insertRow(-1);
+                        }
+                        pn = e.parentNode;
+                        var hCell = document.createElement("TH");
+                        hCell.innerHTML = _getValue(e);
+                        row.appendChild(hCell);
+                    });
+                    
+                    _$self.find(".zRows .zCell").each(function(i, e){
+                        // If the parentNodes are different we need
+                	    // to create a new row
+                        if (pn && e.parentNode != pn) {
+                          row = _table.insertRow(-1);
+                        }
+                        pn = e.parentNode;
+                        var cell = row.insertCell(-1);
+                        cell.innerHTML = _getValue(e);
+                        cell.style = e.getAttribute("style");
+                    });
+                    if(cb) cb($(_table));
+                }
+               return this;
+            }; 
+            
             $.fn.loadData           = function(o){
                 var __obj = this;
                 zsi.__setTableObjectsHistory(__obj,o);
@@ -2045,6 +2218,68 @@ var  ud='undefined'
                 }
                 return __obj;
             };
+            $.fn.markMandatory      = function(om){
+                        var _self   = this
+                            ,x      = 0
+                            ,e
+                        ;
+                        
+                        _self.data("mandatories",om);
+                    
+                        //check names and titles are equal.
+                        for(x=0;x<om.groupNames.length;x++){
+                           if(om.groupNames[x].names.length!=om.groupTitles[x].titles.length){
+                              alert("Error!, parameters are not equal.");
+                              return false;
+                           }
+                        }
+                        var _changeBorder =  function() {
+                                changeborder(this);
+                        };
+                        
+                        var _onEachElement = function(){
+                                 changeborder(this);
+                                $(this).on('change keyup blur', function(){
+                            
+                                   if($(this).val() !==""){
+                                      _self.find("*[name='" +  this.name + "'][type!=hidden]").each(_changeBorder);
+                                   }
+                                   else{
+                                      /* check input elements if there's a value */
+                                      _self.find("*[name='" +  this.name + "'][type!=hidden]").each(_changeBorder);
+                    
+                                   }
+                    
+                                });
+                    
+                        };
+                    
+                       for(var gn=0;gn< om.groupNames.length;gn++){  /*loop per groupNames*/
+                          e = om.groupNames[gn].names;
+                          var border ="solid 1px #F3961C";
+                          for(x=0; x < e.length;x++){
+                             var elements = _self.find("[name='"+ e[x] + "']").toArray();
+                             if(elements.length == 1){ /* single */
+                                var o = this.find("[name='" + e[x] + "']") ;
+                                 changeborder(o[0]);
+                                o.on('change keyup blur',_changeBorder);
+                    
+                             }else{ /* multiple */
+                                _self.find("*[name='" +  e[x] + "'][type!=hidden]").each(_onEachElement);
+                    
+                             }
+                          }
+                       } /* end of group loop */
+                    
+                       function changeborder(o){
+                          jo = $(o);
+                          if(typeof jo.val() === ud || jo.val()===""){
+                             jo.addClass("mandatory");
+                          }else{
+                             jo.removeClass("mandatory");
+                          }
+                       }
+            };
             $.fn.resetDragScroll    = function() {
                 var _$imagePanel    = $(this);
                 var _$zoomPanel     = _$imagePanel.find(".zoomPanel");
@@ -2476,8 +2711,6 @@ var  ud='undefined'
                }
             };
             $.fn.toJSON             = function(o) { //for multiple data only
-                            console.log("toJSON");
-
                 if (typeof o === ud) o={};
                 var isExistOptionalItems = function (o, name) {
                     if (typeof o.optionalItems !== ud) {
@@ -2501,8 +2734,15 @@ var  ud='undefined'
                     } );
                 
                 }
-                
-                var arr = this.find('input, textarea, select').not(':checkbox').not((typeof o.notInclude !== ud?o.notInclude:"")).serializeArray();
+                var _notIncludes = o.notInclude || "";
+                if( Array.isArray(o.notIncludes) ){
+                   for(var x=0;x < o.notIncludes.length; x++ ){
+                     if(_notIncludes!=="") _notIncludes +=","
+                     _notIncludes +=  "[name='" + o.notIncludes[x] + "']";
+                   }
+                }
+
+                var arr = this.find('input, textarea, select').not(':checkbox').not(_notIncludes).serializeArray();
                 var json = [];
                 var ctr = 0;
                 //get objectNames
@@ -2615,6 +2855,12 @@ var  ud='undefined'
             String.prototype.isValidDate = function () {
                 return isValidDate(this)
             };  
+            
+            String.prototype.toShortDates = function () {
+                return this.split(' ')[0];
+            };
+            
+            
             String.prototype.toShortDate = function () {
                 if(!isValidDate(this)) return "";
                 var _date=new Date( Date.parse(this) );
@@ -3011,7 +3257,7 @@ var  ud='undefined'
                   for(var x=0;x< e.length;x++){
                      var elements = document.getElementsByName(e[x]);
                      if(elements.length == 1){ /* single */
-                        var o=$("#" + e[x]);
+                        var o=$("[name='" + e[x] + "']") ;
                          changeborder(o[0]);
                         o.on('change keyup blur', function() {
                            changeborder(this);
@@ -3245,7 +3491,6 @@ var  ud='undefined'
             _h +='<input name ="html" value="' + encodeURI( _formatStyle(o.html)) + '" >'; 
             _h +='<input  name="filename" value="' +  (o.fileName || 'download') + '">';
             _h +='</form>';
-            
             $("body").append(_h); 
             $(id).submit();
         }     
@@ -3478,4 +3723,4 @@ var  ud='undefined'
     }
 ;  
 
-                        
+                                  

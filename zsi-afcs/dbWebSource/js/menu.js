@@ -119,11 +119,11 @@
             zsi.form.deleteData({
                  code       : "sys-0002"
                 ,onComplete : function(data){
-                                displayRecords();
-                              }
+                            displayRecords();
+                          }
             });      
         });
 })();        
 
 
-     
+      

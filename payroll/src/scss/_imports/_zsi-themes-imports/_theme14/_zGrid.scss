@@ -20,6 +20,24 @@
     }
   
   }
+
+  div nav #nav-tab .nav-link{
+
+    color : #000000;
+    margin-left: 2px;
+  
+    &.active {
+      color: #fff;
+      background-image: linear-gradient(to bottom, #F11716 0px, #CA1F14 100%);
+    }
+  
+    &:hover {
+      color: #fff;
+      background-image: linear-gradient(to bottom, rgb(82, 81, 81) 0px, rgb(59, 58, 58) 100%);
+    }
+  }
+
+
   .btn-primary {
     background-color: #CA1F14;
     border-color: #CA1F14;

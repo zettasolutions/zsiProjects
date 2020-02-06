@@ -236,20 +236,16 @@ var app = (function() {
                     if(data.rows.length>0) app.saveLocalStorageAndDisplay(data);
                 });
             }
-        });
-      
-        app.checkBrowser(function(isIE){
-             if(isIE) return true;
-        });
 
-
-        window.onpopstate = function(event) {
+            app.checkBrowser(function(isIE){
+                 if(isIE) return true;
+            });
+            window.onpopstate = function(event) {
+                _initPageLoad();
+            };    
+            if(zsi.ready) zsi.ready();  
             _initPageLoad();
-        };    
-    
-        if(zsi.ready) zsi.ready();  
-        _initPageLoad();
-
+        });
     };
     _app.addManageMenu              = function(){
             var ul =  $(".fa-tasks").closest("li").find("ul");
@@ -426,4 +422,4 @@ var app = (function() {
     return _app;
 
 })();
-                     
+                      

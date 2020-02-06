@@ -35,7 +35,7 @@ zsi.generatePdfReport = function(o){
     ,createReport = function(dbData){
         //var doc = new jsPDF();
         //var doc = new jsPDF('p', 'mm', [335, 210]);   
-        var doc = new jsPDF("p", "pt", "A4");
+        var doc = new jsPDF("p", "pt", "A4", true);
         var pageContent = function (data) {
                 // HEADER
                 doc.setFontSize(14);
@@ -283,4 +283,4 @@ zsi.createPdfReport = function(o){
 
 };    
 
-                         
+                          

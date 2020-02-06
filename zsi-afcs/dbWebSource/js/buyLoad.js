@@ -62,6 +62,34 @@ var buyLoad = (function(){
     });
     
     $("#btnScanQr").click(function() {
+        alert("Please select amount to proceed");
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        scanner.addListener('scan', function (content) {
+            console.log(content);
+            $("#buyLoadForm").find("#hash_key").val(content);
+        });
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+            } else {
+                console.error('No cameras found.');
+            }
+        }).catch(function (e) {
+            console.error(e);
+         });
+         
+        $("#buyLoadForm").jsonSubmit({
+             procedure: "generated_qr_upd"
+            ,isSingleEntry: true
+            ,onComplete: function (data) {
+                if(data.isSuccess){
+                   if(data.isSuccess===true) zsi.form.showAlert("alert");
+                }
+            }
+        });
+    });
+    
+    /*$("#btnScanQr").click(function() {
         $("#vidContainer").removeClass("d-none");
         $("#videoElement").attr("autoplay", true);
         var video = document.querySelector("#videoElement");
@@ -75,7 +103,7 @@ var buyLoad = (function(){
     	      console.log("Something went wrong!");
     	    });
     	}
-    });
+    });*/
     
     return _pub;
-})();      
+})();         

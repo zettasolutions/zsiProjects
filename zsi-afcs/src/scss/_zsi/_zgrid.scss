@@ -90,7 +90,7 @@
   }
   
   .zGroupHeaderItem:not(:last-child) {
-    border-right: 1pt solid #d6d8d8;
+    border-right: 0.01rem solid #d6d8d8;
     float: left;
     height: inherit;
     position: relative;
@@ -124,7 +124,7 @@
     }
     .zHeaders {
       .groupItem {
-        border-top: 1pt solid #d6d8d8;
+        border-top: 0.01rem solid #d6d8d8;
       }
       > .item .title {
         height: 20px;
@@ -154,7 +154,7 @@
       display: inline-block;
     }
     .item {
-      border-right: 1pt solid #d6d8d8;
+      border-right: 0.01rem solid #d6d8d8;
     }
   }
   
@@ -185,8 +185,8 @@
       overflow: hidden;
     }
     .zCell {
-      border-right: 1pt solid #d6d8d8;
-      border-bottom: 1pt solid #d6d8d8;      
+      border-right: 0.01rem solid #d6d8d8;
+      border-bottom: 0.01rem solid #d6d8d8;      
       float: left;
       height: inherit;
       line-height: 18pt;
@@ -241,12 +241,12 @@
       background-color: #333333;
       color: #fff;
       border-radius: 0;
-      border-right: 1pt solid #d6d8d8;
+      border-right: 0.01rem solid #d6d8d8;
     }
     .zRow {
       .form-control.mandatory {
         border-radius: 0;
-        border-right: 1pt solid #d6d8d8 !important;
+        border-right: 0.01rem solid #d6d8d8 !important;
       }
       &:nth-child(odd) .form-control.mandatory {
         background-color: #B7B5B5 !important;
