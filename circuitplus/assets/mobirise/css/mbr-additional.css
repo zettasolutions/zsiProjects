@@ -5355,7 +5355,7 @@ section.lazy-placeholder:after {
   padding-bottom: 2rem;
 }
 .cid-rMYL9qALFF H1 {
-  color: #57468b;
+  color: #066839;
 }
 .cid-rMYL9qALFF .mbr-text,
 .cid-rMYL9qALFF .mbr-section-btn {
@@ -5386,6 +5386,10 @@ section.lazy-placeholder:after {
 }
 .cid-rMYL9qALFF DIV {
   color: #57468b;
+}
+.cid-rMYL9qALFF .mbr-text,
+.cid-rMYL9qALFF .media-content {
+  color: #000000;
 }
 .cid-rMBH9u8G53 .navbar {
   padding: .5rem 0;
@@ -6258,6 +6262,10 @@ section.lazy-placeholder:after {
 }
 .cid-rMYQa5NWbk DIV {
   color: #57468b;
+}
+.cid-rMYQa5NWbk .mbr-text,
+.cid-rMYQa5NWbk .media-content {
+  color: #000000;
 }
 .cid-rMBHipAYYl .navbar {
   padding: .5rem 0;
