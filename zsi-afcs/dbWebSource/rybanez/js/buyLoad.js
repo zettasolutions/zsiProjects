@@ -62,6 +62,7 @@ var buyLoad = (function(){
     });
     
     $("#btnScanQr").click(function() {
+        alert("Please select amount to proceed");
         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         scanner.addListener('scan', function (content) {
             console.log(content);
@@ -105,4 +106,4 @@ var buyLoad = (function(){
     });*/
     
     return _pub;
-})();       
+})();         

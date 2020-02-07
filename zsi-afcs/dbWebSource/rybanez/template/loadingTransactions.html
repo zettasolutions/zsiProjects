@@ -1,0 +1,35 @@
+<style>
+    .zGrid .zHeaders > .item .title {
+        height: 20px;
+        align-items: center;
+        display: inherit;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-xl-3 col-12 mb-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm pl-2" id="load_date" name="load_date" placeholder="Load date....."/>
+                            <div class="input-group-append">
+                                <button id="btnFilterVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter">
+                                   <i class="fas fa-filter"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Reset">
+                                   <i class="far fa-refresh"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                         <div id="gridLoadingTransactions" class="zGrid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
