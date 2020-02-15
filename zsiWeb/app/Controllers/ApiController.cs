@@ -62,5 +62,31 @@ namespace zsi.web.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult ValidateEmail(string code)
+        {
+            string res = "";
+            try
+            {
+                //compare code here
+                res = CreateMessageJSONStr(true, "Email has been successfully validated.");
+            }
+            catch (Exception ex)
+            {
+                res = CreateMessageJSONStr(false, ex.Message.ToString());
+
+            }
+
+            return Content(res, "application/json");
+
+        }
+
+        private static string CreateMessageJSONStr(bool isSuccess, string msg = "")
+        {
+            return "{\"isSuccess\":" + isSuccess.ToString().ToLower()
+                + ",\"message\":\"" + msg + "\""
+                + "}";
+
+        }
     }
 }
