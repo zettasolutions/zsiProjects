@@ -54,5 +54,13 @@ namespace zsi.web.Controllers
             }
         }
 
+        [HttpPost]
+        public ContentResult SendEmail()
+        {
+            var ec = new EmailController();
+            return ec.SendEmail(Request["to"], Request["subject"], Request["body"], Request["cc"], Request["bcc"]);
+        }
+
+
     }
 }

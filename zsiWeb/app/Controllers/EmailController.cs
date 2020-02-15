@@ -20,6 +20,11 @@ namespace zsi.web.Controllers
         [HttpPost]
         public ContentResult Send()
         {
+            return SendEmail(Request["to"], Request["subject"], Request["body"], Request["cc"], Request["bcc"]);
+        }
+
+        public ContentResult SendEmail(string to, string subject, string body, string cc=null, string bcc =null)
+        {
             string res = "";
             try
             {
@@ -36,22 +41,23 @@ namespace zsi.web.Controllers
                 };
 
 
-                var msg = new MailMessage(info.email_add, Request["to"])
+                var msg = new MailMessage(info.email_add, to)
                 {
                     Sender = fromAddress,
-                    Subject = Request["subject"],
-                    Body = Request["body"],
+                    Subject = subject,
+                    Body = body,
                     IsBodyHtml = true
 
                 };
-                if (Request["cc"] != null) msg.CC.Add(new MailAddress(Request["cc"].ToString()));
-                if (Request["bcc"] != null) msg.Bcc.Add(new MailAddress(Request["bcc"].ToString()));
+                if (cc != null) msg.CC.Add(new MailAddress(cc.ToString()));
+                if (cc != null) msg.Bcc.Add(new MailAddress(cc.ToString()));
 
                 smtp.Send(msg);
-                
+
                 res = CreateMessageJSONStr(true, "Message sent.");
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 res = CreateMessageJSONStr(false, ex.Message.ToString());
 
             }
@@ -59,6 +65,7 @@ namespace zsi.web.Controllers
             return Content(res, "application/json");
 
         }
+
 
     }
 }
