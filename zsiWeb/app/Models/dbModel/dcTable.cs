@@ -13,7 +13,7 @@
         {
             try
             {
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
                 SqlCommand command = new SqlCommand("SELECT TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_TYPE='BASE TABLE'", conn);
                 conn.Open();
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
@@ -37,7 +37,7 @@
             try
             {
                 string result = "CREATE TABLE " + TableName + "(";
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
 
                 SqlCommand command = new SqlCommand("sp_columns", conn);
                 command.CommandType = CommandType.StoredProcedure;
@@ -69,7 +69,7 @@
         {
             try
             {
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
 
                 SqlCommand command = new SqlCommand("sp_table_types", conn);
                 command.CommandType = CommandType.StoredProcedure;
@@ -95,7 +95,7 @@
             try
             {
                 string result = "CREATE TYPE " + TableName + " AS TABLE(";
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
 
                 SqlCommand command = new SqlCommand("sp_table_type_columns_100", conn);
                 command.CommandType = CommandType.StoredProcedure;
@@ -126,8 +126,8 @@
         {
             try
             {
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
-                SqlConnection conn1 = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
+                SqlConnection conn1 = dbConnection.ConnectDb();
 
                 SqlCommand command = new SqlCommand("select SPECIFIC_NAME from information_schema.routines order by routine_type", conn);
                 conn.Open();
@@ -161,7 +161,7 @@
         {
             try
             {
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
                 SqlCommand command = new SqlCommand("SELECT TABLE_NAME, VIEW_DEFINITION from INFORMATION_SCHEMA.VIEWS", conn);
                 conn.Open();
                 SqlDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);

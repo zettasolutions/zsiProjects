@@ -52,7 +52,7 @@ namespace zsi.web.Models
             try
             {
      
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 SqlCommand command = new SqlCommand("users_sel", dbConn);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@logon", userName);
@@ -77,7 +77,7 @@ namespace zsi.web.Models
         {
             try
             {
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 SqlCommand command = new SqlCommand("dbo.users_change_pwd_upd", dbConn);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@user_id", SessionHandler.CurrentUser.userId);
@@ -101,7 +101,7 @@ namespace zsi.web.Models
         {
             try
             {
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 SqlCommand command = new SqlCommand("users_sel", dbConn);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@logon", userName);

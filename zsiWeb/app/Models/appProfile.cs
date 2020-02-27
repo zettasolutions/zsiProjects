@@ -22,7 +22,7 @@ namespace zsi.web.Models
     {
         public override void InitDataController()
         {
-            this.DBConn = new SqlConnection(dbConnection.ConnectionString);
+            this.DBConn = dbConnection.ConnectDb();
             this.Procedures.Add(new Procedure("dbo.app_profile_sel"), SQLCommandType.SingleRecord);
         }
 

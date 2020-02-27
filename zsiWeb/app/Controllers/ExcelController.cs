@@ -42,7 +42,7 @@ namespace zsi.web.Controllers
         {
             using (new impersonate())
             {
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.CommandTimeout = 0;
                 conn.Open();
@@ -83,7 +83,7 @@ namespace zsi.web.Controllers
             using (new impersonate())
             {
                 string html = "";
-                SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection conn = dbConnection.ConnectDb();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.CommandTimeout = 0;
                 conn.Open();

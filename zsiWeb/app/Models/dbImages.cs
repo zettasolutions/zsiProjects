@@ -52,7 +52,7 @@
         {
             try
             {
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 SqlCommand cmd = new SqlCommand(new dcSqlCmd().GetInfo(sqlCode).text, dbConn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 var p = cmd.Parameters;
@@ -78,7 +78,7 @@
         {
             try
             {
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 SqlCommand cmd = new SqlCommand(new dcSqlCmd().GetInfo(sqlCode).text, dbConn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 var p = cmd.Parameters;
@@ -104,7 +104,7 @@
         {
             try
             {
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 SqlCommand cmd = new SqlCommand(new dcSqlCmd().GetInfo(sqlCode).text, dbConn);
                 int returnValue = 0;
                 dbConn.Open();

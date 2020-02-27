@@ -16,6 +16,11 @@ namespace zsi.web.Models
         }
 
 
+        public static SqlConnection ConnectDb() {
+
+            return new SqlConnection(dbConnection.ConnectionString);
+
+        }
         
 
 

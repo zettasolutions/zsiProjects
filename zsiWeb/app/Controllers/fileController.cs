@@ -61,7 +61,7 @@ namespace zsi.web.Controllers
                 rdr = command.ExecuteReader();
                 if (rdr.HasRows)
                 {
-                    SqlBulkCopy sqlBulk = new SqlBulkCopy(dbConnection.ConnectionString);
+                    SqlBulkCopy sqlBulk = new SqlBulkCopy(dbConnection.ConnectDb());
                     sqlBulk.DestinationTableName = tempTable;
                     sqlBulk.WriteToServer(rdr);
                     rdr.Close();
@@ -405,7 +405,7 @@ namespace zsi.web.Controllers
             {
                 using (new impersonate())
                 {
-                    SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                    SqlConnection conn = dbConnection.ConnectDb();
                     SqlCommand cmd = new SqlCommand(sql, conn);
                     conn.Open();
                     SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -451,7 +451,7 @@ namespace zsi.web.Controllers
                 using (new impersonate())
                 {
                     string html = "";
-                    SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+                    SqlConnection conn = dbConnection.ConnectDb();
                     SqlCommand cmd = new SqlCommand(sql, conn);
                     conn.Open();
                     SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);

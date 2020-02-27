@@ -9,7 +9,7 @@ namespace zsi.web.Models
     {
         public override void InitDataController()
         {
-            this.DBConn = new SqlConnection(dbConnection.ConnectionString);
+            this.DBConn = dbConnection.ConnectDb();
             string spSelect = "dbo.page_templates_sel";
             this.Procedures.Add(new Procedure(spSelect), SQLCommandType.SingleRecord);
             this.Procedures.Add(new Procedure(spSelect), SQLCommandType.Select);

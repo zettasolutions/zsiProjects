@@ -8,7 +8,7 @@ namespace zsi.web.Models
     {
         public override void InitDataController()
         {
-            this.DBConn = new SqlConnection(dbConnection.ConnectionString);
+            this.DBConn = dbConnection.ConnectDb();
             this.Procedures.Add(new Procedure("dbo.pages_sel"), SQLCommandType.SingleRecord);
             this.Procedures.Add(new Procedure("dbo.pages_sel"), SQLCommandType.Select);
             this.Procedures.Add(new Procedure("dbo.pages_upd"), SQLCommandType.Update);

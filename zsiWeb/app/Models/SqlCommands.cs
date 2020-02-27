@@ -51,7 +51,7 @@
         {
             try
             {
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 string sql = string.Format("select sqlcmd_code,sqlcmd_text,is_procedure,is_public from sql_commands where sqlcmd_code='{0}'", code);
                 SqlCommand command = new SqlCommand(sql, dbConn);
                 dbConn.Open();

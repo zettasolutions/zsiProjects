@@ -63,7 +63,7 @@
         {
             try
             {
-                SqlConnection dbConn = new SqlConnection(dbConnection.ConnectionString);
+                SqlConnection dbConn = dbConnection.ConnectDb();
                 string sql = string.Format("select email_host,email_port,email_add,email_add_desc,email_pwd,email_is_ssl from app_profile");
                 SqlCommand command = new SqlCommand(sql, dbConn);
                 dbConn.Open();
