@@ -13,56 +13,22 @@ namespace zsi.web
 {
     public enum JsonRowsFormat
     {
-         KeyValue = 0
-        ,Array = 1
+        KeyValue = 0
+     , Array = 1
     }
+
+    public enum ExecutionType
+    {
+        NonQuery = 0
+         , Reader = 1
+    }
+
     public class DataHelper
     {
-        public enum ExecutionType {
-             NonQuery = 0
-            ,Reader   = 1
-        }
-
         public DataHelper() { }
         #region "private static"
 
-        /*
-        private static string ToJSON(SqlDataReader rdr)
-        {
-            StringBuilder sb = new StringBuilder();
-            StringWriter sw = new StringWriter(sb);
-            JsonWriter jsonWriter = new JsonTextWriter(sw);
-            jsonWriter.WriteStartArray();
-            while (rdr.Read())
-            {
-                int fieldcount = rdr.FieldCount; // count how many columns are in the row
-                object[] values = new object[fieldcount]; // storage for column values
-                rdr.GetValues(values); // extract the values in each column
-                jsonWriter.WriteStartObject();
-                for (int index = 0; index < fieldcount; index++)
-                {
-
-                    string colName = rdr.GetName(index);
-                    object value = values[index];
-                    jsonWriter.WritePropertyName(colName);
-
-                    if (value == DBNull.Value)
-                        value = "";
-                    else if (colName.Contains("date") && !colName.Contains("by"))
-                        value = String.Format("{0:MM/dd/yyyy HH:mm tt}", value);
-
-                    jsonWriter.WriteValue(value);
-                }
-                jsonWriter.WriteEndObject();
-            }
-            jsonWriter.WriteEndArray();
-
-            return sb.ToString();
-        }
-        */
-
-
-        private static string ToJSON(SqlDataReader rdr,JsonRowsFormat jsonRowsFormat = JsonRowsFormat.KeyValue)
+        private static string ToJSON(SqlDataReader rdr, JsonRowsFormat jsonRowsFormat = JsonRowsFormat.KeyValue)
         {
             StringBuilder sb = new StringBuilder();
             StringWriter sw = new StringWriter(sb);
@@ -168,6 +134,15 @@ namespace zsi.web
             req.InputStream.Seek(0, SeekOrigin.Begin);
             return new StreamReader(req.InputStream).ReadToEnd();
         }
+
+        private static void checkAuthKey(JObject jo)
+        {
+             
+                if (jo["AuthKey"] == null)
+                    throw new Exception("Authorization key is required.");
+          
+        }
+
         private static dcSqlCmd getProcedure(JObject jo)
         {
             dcSqlCmd sc = new dcSqlCmd();
@@ -192,7 +167,7 @@ namespace zsi.web
         #endregion
         public static DataTable GetDataTable(string sql)
         {
-            SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+            SqlConnection conn = dbConnection.ConnectDb();
             SqlCommand cmd = new SqlCommand(sql, conn);
             conn.Open();
             var dr = cmd.ExecuteReader();
@@ -211,7 +186,7 @@ namespace zsi.web
         }
         public static void LogError(int? errNumber, string procedure, string errMessage, string type) {
 
-            SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+            SqlConnection conn = dbConnection.ConnectDb();
             using (conn)
             {
                 SqlCommand cmd = new SqlCommand("dbo.error_logs_upd", conn);
@@ -229,7 +204,7 @@ namespace zsi.web
 
         }
         public static string GetDbValue(string sql) {
-            SqlConnection conn = new SqlConnection(dbConnection.ConnectionString);
+            SqlConnection conn = dbConnection.ConnectDb();
             SqlCommand cmd = new SqlCommand(sql, conn);
             string returnValue = "";
             cmd.CommandType = CommandType.Text;
@@ -250,7 +225,7 @@ namespace zsi.web
             String json = "";
             try
             {
-                conn = new SqlConnection(dbConnection.ConnectionString);
+                conn = dbConnection.ConnectDb();
                 command = new SqlCommand(sql, conn);
                 if (isProcedure){
                     SerializeURLParameters(command, sql);
@@ -306,7 +281,7 @@ namespace zsi.web
             String json = "";
             try
             {
-                conn = new SqlConnection(dbConnection.ConnectionString);
+                conn = dbConnection.ConnectDb();
                 cmd.Connection = conn;
                 conn.Open();
                 cmd.CommandTimeout = 3600;
@@ -324,7 +299,7 @@ namespace zsi.web
             }
             return json;
         }
-        public static string ProcessRequest(HttpRequestBase request, ExecutionType executionType,JsonRowsFormat jsonRowsFormat =JsonRowsFormat.KeyValue)
+        public static string ProcessRequest(HttpRequestBase request, ExecutionType executionType,JsonRowsFormat jsonRowsFormat, Boolean isAPI = false)
         {
             String _json = "";
             SqlDataReader rdr = null;
@@ -335,9 +310,12 @@ namespace zsi.web
                 var _strReq = HttpReqStreamToJString(request);
                 if (_strReq.Trim() == string.Empty) return CreateMessageJSONStr(new Message { isSuccess = false });
                 JObject jo = JObject.Parse(_strReq);
-                conn = new SqlConnection(dbConnection.ConnectionString);
+                conn = dbConnection.ConnectDb();
                 using (conn)
                 {
+
+                    if(isAPI) checkAuthKey(jo);
+
                     dcSqlCmd sc = getProcedure(jo);
                     SqlCommand cmd = new SqlCommand(sc.text, conn);
                     if (sc.IsProcedure)

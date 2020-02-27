@@ -14,7 +14,7 @@ namespace zsi.web.Controllers
                 using (new impersonate())
                 {
 
-                    return Content(DataHelper.ProcessRequest(HttpContext.Request, DataHelper.ExecutionType.NonQuery), "application/json");
+                    return Content(DataHelper.ProcessRequest(HttpContext.Request, ExecutionType.NonQuery, JsonRowsFormat.KeyValue, false), "application/json");
                 }
             }
             catch (Exception ex)
@@ -30,7 +30,7 @@ namespace zsi.web.Controllers
             {
                 using (new impersonate())
                 {
-                    return Content(DataHelper.ProcessRequest(HttpContext.Request, DataHelper.ExecutionType.Reader), "application/json");
+                    return Content(DataHelper.ProcessRequest(HttpContext.Request, ExecutionType.Reader, JsonRowsFormat.KeyValue, false), "application/json");
                 }
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace zsi.web.Controllers
             {
                 using (new impersonate())
                 {
-                    return Content(DataHelper.ProcessRequest(HttpContext.Request, DataHelper.ExecutionType.Reader, JsonRowsFormat.Array), "application/json");
+                    return Content(DataHelper.ProcessRequest(HttpContext.Request, ExecutionType.Reader, JsonRowsFormat.Array,false), "application/json");
                 }
             }
             catch (Exception ex)
