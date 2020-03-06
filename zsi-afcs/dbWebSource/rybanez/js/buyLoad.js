@@ -62,7 +62,7 @@ var buyLoad = (function(){
     });
     
     $("#btnScanQr").click(function() {
-        alert("Please select amount to proceed");
+        alert("Can't proceed to this transaction yet.");
         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         scanner.addListener('scan', function (content) {
             console.log(content);
@@ -106,4 +106,4 @@ var buyLoad = (function(){
     });*/
     
     return _pub;
-})();         
+})();          

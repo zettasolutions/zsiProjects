@@ -98,8 +98,7 @@ var  ud='undefined'
                     
                  }
               }
-           });         
-           
+           });
            function CloseProgressWindow(){
               setTimeout(function(){
                  if(typeof zsi_request_count!==ud){
@@ -988,17 +987,20 @@ var  ud='undefined'
                                 $a.addClass("desc");
                                 $a.find(".sPane").html(_arrowDown);
                                 _orderNo=1;
+                                if(_gp.onSortChange) _gp.onSortChange(1);
                             }
                             else{
                                 $a.removeClass("desc");
                                 $a.addClass("asc");
                                 $a.find(".sPane").html(_arrowUp);
                                 _orderNo=0;
+                                if(_gp.onSortChange) _gp.onSortChange(0);
                             }
                             _gp.parameters.col_no = _colNo;
                             _gp.parameters.order_no= _orderNo;
                             _obj.dataBindGrid(_gp);
                         });
+                        
                         //if(_isGroup || o.width > _gp.width ) o.headers.css({width:(o.width + 20 )});
                         //if (_gp.width) o.table.css("width",(o.width + 1 )  + "px");
                          o.table.css({width : o.width});
@@ -1098,6 +1100,7 @@ var  ud='undefined'
                                 var $zRow = $(this).closest(".zRow");
                                 $zRow.find("[name='is_edited']").val("Y");
                         });   
+                        $rows.find("input").attr("autocomplete", "off");
                         
                         
                     }
@@ -1194,12 +1197,18 @@ var  ud='undefined'
                         clearTimeout(_tmr);
                         _tmr=setTimeout(function(){ 
                             var _$tabPane = _obj.closest(".tab-pane");
+                            var _$modal = _obj.closest(".modal");
                             //fix grid inside nav tabs
                             if(_$tabPane.length > 0){
                                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                                     fixWidth();
-                               })
-                               
+                                });
+                            }else{
+                                if(_$modal.length > 0){ //fix grid inside w/o nav tabs
+                                    _$modal.on('shown.bs.modal', function (e) {
+                                        fixWidth();
+                                    });
+                                }
                             }
                             fixWidth();
                         }, 10);
@@ -2855,10 +2864,6 @@ var  ud='undefined'
             String.prototype.isValidDate = function () {
                 return isValidDate(this)
             };  
-            
-            String.prototype.toShortDates = function () {
-                return this.split(' ')[0];
-            };
             String.prototype.toShortDate = function () {
                 if(!isValidDate(this)) return "";
                 var _date=new Date( Date.parse(this) );
@@ -3721,4 +3726,4 @@ var  ud='undefined'
     }
 ;  
 
-                                   
+                                           

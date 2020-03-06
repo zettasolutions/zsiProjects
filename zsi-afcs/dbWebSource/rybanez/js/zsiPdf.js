@@ -29,13 +29,13 @@ zsi.generatePdfReport = function(o){
         if(o.data) 
             createReport(o.data);
         else 
-            $.post(execURL + o.sqlParameter,createReport);   
+            $.post(app.execURL + o.sqlParameter,createReport);   
         
     }
     ,createReport = function(dbData){
         //var doc = new jsPDF();
         //var doc = new jsPDF('p', 'mm', [335, 210]);   
-        var doc = new jsPDF("p", "pt", "A4", true);
+        var doc = new jsPDF("p", "pt", "A4");
         var pageContent = function (data) {
                 // HEADER
                 doc.setFontSize(14);

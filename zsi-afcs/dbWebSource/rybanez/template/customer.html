@@ -1,0 +1,245 @@
+<style type="text/css" media="all">
+    .pull-right {
+        float: right !important;
+    }
+    .link {
+        color: blue;
+        cursor: pointer;
+    }
+    .link:hover{
+        color: red;
+    }
+    .modal-body {
+    margin-right: unset;
+    margin-left: unset;  
+    
+    }
+    .popover{
+        max-width: 380px;
+    }
+    .popover-body{
+        padding: 0.5rem;
+    }
+    #gridCustomers .zHeaders .title .text{
+        width: 100%;
+        text-align: center;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer">
+                <div class="row">
+                    <div class="col-md-9 col-sm-6 col-xl-9"></div>
+                    <div class="col-sm-6 col-md-5 col-xl-3 col-12 mb-1">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm desc-prop-group pl-2" id="searchVal" name="searchVal" autocomplete="off" placeholder="Search.....">
+                            <div class="input-group-append">
+                                <button id="btnSearchVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Search">
+                                   <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">
+                                   <i class="far fa-refresh hvr-icon"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            	<div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                        <div id="gridCustomers" class="zGrid"> </div>      
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="button-group">
+                            <button type="button" class="btn btn-primary btn-sm" id="btnSaveCustomers">
+                            	<i class="fas fa-save"></i> Save
+                            </button>    
+                            <button type="button" class="btn btn-primary btn-sm" id="btnInactiveCustomers">
+                            	<i class="fas fa-ban"></i> Inactive
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal zsi-elliptic-top" id="modalCustomer" tabindex="" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full" role="document">
+        <div class="modal-content">
+            <form id="frm_modalCustomer" >
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCustomerLabel"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+                        <nav>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-sites" role="tab" aria-controls="nav-sites"> Sites </a>
+                            <a class="nav-item nav-link"        data-toggle="tab" href="#nav-c" role="tab" aria-controls="nav-c"> Contacts </a>
+                          </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <div role="tabpanel" class="tab-pane fade show active" id="nav-sites">
+                                <div class="zContainer">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                            <div id="grid-Sites" class="zGrid"> </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <button type="button" onclick="customer.submitCustomerSites();" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnInactiveCustomerSites"><i class="fas fa-ban"></i> Inactive</button> 
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade"   id="nav-c">
+                                <div class="zContainer">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                            <div id="grid-Contacts" class="zGrid"> </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <button type="button" onclick="customer.submitCustomerContacts();" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnInactiveCustomerContacts"><i class="fas fa-ban"></i> Inactive</button> 
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalContactPrograms" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div id="frm_modalContactPrograms">
+                <div class="modal-header">
+                    <h5 class="modal-title autoCaps" id="modalContactPrograms"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div class="input-group col-md-6 col-xl-6 col-sm-6 col-12 pull-right mb-1" id="searchHarness"> 
+                                <input type="text" class="form-control form-control-sm desc-prop-group p-2" id="search_program" placeholder="Search for Program....." name="search_program">
+                                <div class="input-group-append">
+                                    <button id="btnSearchProgram" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Search"><i class="fas fa-search"></i></button>
+                                </div>
+                                <div class="input-group-append ml-1">
+                                    <button id="btnResetProgram" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">
+                                       <i class="far fa-refresh hvr-icon"></i> Reset
+                                    </button>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridPrograms" class="zGrid"></div>
+                        </div> 
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSavePrograms" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalInactiveCustomers" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactive">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveCustomers" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveCustomers" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteCustomer" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalInactiveCustomerSites" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveSites">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactiveSites"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveCustomerSites" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveCustomerSites" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteCustomerSite" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalInactiveCustomerContacts" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveContacts">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactiveContacts"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveCustomerContacts" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveCustomerContactss" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteCustomerContact" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="d-none" id="popoverContent">				
+    <div class="form-group">
+        <textarea class="form-control" cols="100" rows="3" name="tmp_site_address" id="tmp_site_address"></textarea>
+    </div>
+</div>

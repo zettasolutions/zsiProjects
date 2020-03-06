@@ -4,7 +4,7 @@ var loadingTransactions = (function(){
     zsi.ready = function(){
         $(".page-title").html("Loading Transactions");
         displayLoadingTransactions();
-        $("#load_date").datepicker({todayHighlight:true});
+        $("#load_date").datepicker({todayHighlight:true}).datepicker("setDate","0");
     };
     
     function displayLoadingTransactions(loadDate){
@@ -19,13 +19,13 @@ var loadingTransactions = (function(){
                     }
                  }
                 ,{text: "QR Id"                      ,name:"qr_id"                   ,type:"input"      ,width : 60    ,style : "text-align:center;"}
-                ,{text: "Load Amount"                                                                   ,width : 100   ,style : "text-align:center;"
+                ,{text: "Load Amount"                                                                   ,width : 100   ,style : "text-align:right;padding-right: 0.3rem;"
                     ,onRender: function(d){
-                        return app.bs({name: "load_amount"        ,type: "input"     ,value: app.svn(d,"load_amount").toMoney()    ,style : "text-align:center;"});
+                        return app.bs({name: "load_amount"        ,type: "input"     ,value: app.svn(d,"load_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
                     }
                 }
                 ,{text: "Loaded By"                  ,name:"loaded_by"              ,type:"input"       ,width : 150   ,style : "text-align:center;"}
-                ,{text: "Compay Code"                ,name:"company_code"           ,type:"input"       ,width : 100   ,style : "text-align:center;"}
+                //,{text: "Compay Code"                ,name:"company_code"           ,type:"input"       ,width : 100   ,style : "text-align:center;"}
             ]
             ,onComplete: function(){
                 var _zRow = this.find(".zRow");
@@ -48,9 +48,9 @@ var loadingTransactions = (function(){
     });
 
     $("#btnResetVal").click(function(){
-        $("#load_date").val("");
+        $("#load_date").datepicker({todayHighlight:true}).datepicker("setDate","0");
         displayLoadingTransactions();
     });
 
     return _pub;
-})();                
+})();                  

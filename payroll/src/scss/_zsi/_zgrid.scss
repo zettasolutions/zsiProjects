@@ -45,8 +45,9 @@ div nav #nav-tab .nav-link{
     background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%);
   }
 }
-.zTotal .zCell {
-  background-image: linear-gradient(to bottom, #444444 0px, #333333 100%);
+.zTotal {
+  background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%) !important;
+  
 }
 .zTotal input {
   color: #fafafa;
@@ -257,6 +258,7 @@ input[type='radio'] {
     height: inherit;
     width: inherit;
     padding-left: 0.3rem;
+    padding-right: 0.3rem;
   }
   .active .zCell .form-control {
     background-color: #333333;

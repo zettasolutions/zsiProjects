@@ -15,6 +15,10 @@ var devices = (function(){
                 gCompanyCode = _company_code;
                 displayDevices(_company_code);
            }
+           ,onComplete : function(){
+               $("option:first-child",this).text("COMPANY");
+               $("option:first-child",this).val("");
+           }
        });
     };
     
@@ -23,7 +27,7 @@ var devices = (function(){
         $("#gridDevices").dataBind({
              sqlCode        : "D1214" //devices_sel
             ,parameters     : {company_code:(id ? id : "")} 
-            ,height         : $(window).height() - 280
+            ,height         : $(window).height() - 270
             ,blankRowsLimit : id ? 5 : 0            
             ,dataRows       : [
                 {text: "Mac Address"                 ,width : 200   ,style : "text-align:left;"
@@ -120,4 +124,4 @@ var devices = (function(){
     });
     
     return _pub;
-})();               
+})();                 

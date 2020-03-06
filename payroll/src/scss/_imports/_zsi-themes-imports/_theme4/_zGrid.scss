@@ -3,6 +3,10 @@
     background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%);
     color: #fff;
   }
+  .zTotal {
+    background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%) !important;
+    
+  }
   
   .modal-body div nav #nav-tab .nav-link{
 
@@ -11,12 +15,12 @@
   
     &.active {
       color: #fff;
-      background-image: linear-gradient(to bottom, #2198F3 0px, rgb(25, 134, 218) 100%);
+      background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%);
     }
   
     &:hover {
       color: #fff;
-      background-image: linear-gradient(to bottom, #2198F3 0px, rgb(25, 134, 218) 100%);
+      background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%);
     }
   
   }
@@ -28,17 +32,17 @@
   
     &.active {
       color: #fff;
-      background-image: linear-gradient(to bottom, #2198F3 0px, rgb(25, 134, 218) 100%);
+      background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%)
     }
   
     &:hover {
       color: #fff;
-      background-image: linear-gradient(to bottom, #2198F3 0px, rgb(25, 134, 218) 100%);
+      background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%)
     }
   }
 
   .zpage-title {
-    color : #2198F3;
+    color : #795ca5;
   }
   /* BACKGROUND TRANSITIONS */
   /* Fade */
