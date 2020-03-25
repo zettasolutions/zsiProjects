@@ -1,0 +1,362 @@
+<script src='/javascript/name/zsiSearch'></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<style>
+    .fa { 
+        font-size: 18px;
+        margin-top: 2px; 
+    }
+    .autoCaps{
+        text-transform: capitalize;
+    }
+    .col-3-3 {width: 12.1111%;} 
+    .zRows{
+        height: 210px !important;
+    }
+    .mt{
+        margin-top: 5px;
+    }
+    .input-group{
+        padding-left: 41px;
+    }
+    .form-control{
+        height:calc(1.5em + .5rem + 2px);;
+    }
+    #form-grid{
+        padding-left: 41px;
+    }
+   
+    
+    #grid{
+        width: 100% !important;
+        margin-right: 2%;
+    }
+ 
+   div.example input[type=text] {
+        padding: 10px; 
+        float: left;
+        width: 79%;
+    }
+    
+    div.example button {
+        width: 10% !important;
+        padding: 4px; 
+        margin-left: -5px;
+        color: white; 
+        border-left: none;
+        cursor: pointer;
+        border-top-left-radius: 1;
+        border-bottom-left-radius: 1;
+
+    } 
+    
+    div.example::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    .searchDiv{
+        width : 100% !important;
+    }
+    .fa-edit{
+        cursor: pointer;
+    }
+    .icon { 
+        min-width: 50px;
+        text-align: center;
+        position: relative;
+        bottom: 43px;
+        left: 92%;
+    }
+    .hideComment {
+        display: none;
+    }
+    .input-group-append{
+        height: 52% !important;
+        top: -35% !important;
+        margin-left: 67%;
+    } 
+   /* .input-group #tbn {
+        top: 27px;
+    }*/
+    #btnAddList{ 
+        height: 30px;
+        margin-left: -31px;
+    }
+</style> 
+ 
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <div role="content" id="tableOrder" >  
+                <div class="widget-body"  id="panel-1"> 
+                    <form id="form">  
+            			<input name="order_id"                  id="order_id"               type="hidden">
+                        <input name="is_edited"                 id="is_edited"              type="hidden">
+                        <input name="program_manager_ids"       id="program_manager_ids"    type="hidden">
+            		    <input name="car_leader_ids"            id="car_leader_ids"         type="hidden">
+            		    <input name="launch_manager_ids"        id="launch_manager_ids"     type="hidden">
+            		    <input name="warehouse_contact_ids"     id="warehouse_contact_ids"  type="hidden">
+                    
+                        <div class="row"> 
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label">OEM</label>  
+                                <select type="text" class="autoCaps form-control form-control-sm " id="oem_id" name="oem_id" ></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="customer" class="col-form-label">Customer</label>   
+                                <select type="text" class="autoCaps form-control form-control-sm inputText" id="customer_id" name="customer_id" ></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label">Contact</label>  
+                    			<select type="text" class="autoCaps form-control form-control-sm " id="contact_id" name="contact_id" ></select>
+                    		</div>
+                    	
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label">Program</label>  
+                                <select type="text" class="autoCaps form-control form-control-sm " id="program_id" name="program_id" ></select>
+                    		</div>
+                    	
+                    	</div>
+                    	<div class="row"> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12">
+                    	  	    <label for="" class="col-form-label control-label">Program Manager(s)</label>
+                    		    <label for="" class="col-form-label form-control control-label"   id="program_managers" name="program_managers" onclick="orders.showList('PM',this)"></label>
+                    		    <i class="far fa-edit icon" style="text-decoration: underline; cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to edit." id="btnEditPM"></i>
+                    		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label">Car Leader(s)</label>
+                    		    <label for="" class="col-form-label form-control control-label"  id="car_leaders" name="car_leaders" onclick="orders.showList('CL',this)"></label>
+                    		    <i class="far fa-edit icon" id="btnEditCL" style="text-decoration: underline; cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to edit." ></i>
+                    		</div>  
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                        		<label for="" class="col-form-label">Launch Manager(s)</label>
+                        	    <label for="" class="col-form-label form-control control-label"   id="launch_managers" name="launch_managers" onclick="orders.showList('LM',this)"></label>
+                		        <i class="far fa-edit icon" id="btnEditLM" style="text-decoration: underline; cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to edit." ></i>
+                    		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label">Warehouse Contact(s)</label>
+                    		    <label for="" class="col-form-label form-control control-label"   id="warehouse_contacts" name="warehouse_contacts" onclick="orders.showList('WC',this)"></label>
+                    	        <i class="far fa-edit icon" id="btnEditWC" style="text-decoration: underline; cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to edit."></i>
+                    		</div> 
+                    	</div> 
+                    	<div class="row"> 
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label">Engineering Manager</label>
+                    		    <select type="text" class="autoCaps form-control form-control-sm " id="engr_manager_id" name="engr_manager_id" ></select>
+                    	   	</div> 
+                	    	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label">PO#</label>  
+                                <input type="text" class="col-12 form-control form-control-sm p-2" id="po_no" name="po_no">
+                    		</div> 
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		   <label for="" class="col-form-label">PO Issue Date</label> 
+                    		    <input type="text" class="form-control form-control-sm"   id="po_issue_date" name="po_issue_date">  
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class=" col-form-label">Rev No</label>  
+                                <input type="text" class=" form-control form-control-sm inputText p-2" id="rev_no" name="rev_no" >
+                    		</div>
+                    	</div>
+                    	<div class="row"> 
+                    		<div class="col-sm-6 col-md-3 col-xs-12 hides">
+                    		    <label for="" class="col-form-label">Order Type</label>
+                    		    <select type="text" class="form-control form-control-sm " id="order_type_id" name="order_type_id"></select>
+                    	   	</div> 
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label class="col-form-label">Rate and Row</label>  
+                                <select name="rate_row" id="rate_row" class="form-control input-sm"  >
+                                    <option value="N">No</option><option value="Y" selected="selected" >Yes</option>
+                                </select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12 hideComment">
+                    		    <span type="text" class=" form-control form-control-sm inputText p-2" style="border:none;"></span>
+                    		    <label for="" class=" col-form-label">Comment</label>  
+                                &nbsp;
+                                <label id="comment" name="comment"><i class="fas fa-plus" onclick="orders.addComments(this)" style="cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to add comment(s)."></i></label>
+                                &nbsp;
+                                <label id="view_comment" name="view_comment"><i class="fas fa-eye" onclick="orders.showComments(this)" style="cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to show comment(s)."></i></label>  
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12 hideComment">
+                    		    <span type="text" class=" form-control form-control-sm inputText p-2" style="border:none;"></span>
+                    		    <label for="" class=" col-form-label">Attachment</label>  
+                                &nbsp;
+                                <label id="attachment" name="attachment"><i class="fas fa-plus" onclick="orders.addAttachments(this)" style="cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to add attachment(s)."></i></label>  
+                    	        &nbsp;
+                    	        <label id="view_attachment" name="view_attachment"><i class="fas fa-eye" onclick="orders.showAttachments(this)" style="cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Click to show attachment(s)."></i></label>  
+                            </div>
+                    	</div>  
+                    </form>
+                    <div class="form-group"></div> 
+                    <div class="btn-group">   
+                        <div class="button-group">
+                            <button type="button" class="btn btn-primary btn-sm  hvr-icon-rotate" id="btnReset">
+                              <span> <i class="far fa-refresh hvr-icon"></i> Reset</span>
+                            </button>   
+                            <button type="button" class="btn btn-primary btn-sm" id="btnSaveOrders">
+                               <span> <i class="far fa-save"></i> Save</span>
+                            </button>  
+                        </div>
+                    </div> 
+                </div>  
+            </div>     
+        </div>
+        <div class="form-group"></div>
+        <div class="row" id="searchGroup">
+            <input name="oem_program_part_id" id="oem_program_part_id" type="hidden">
+            <input name="customer_program_id" id="customer_program_id" type="hidden">
+            <input name="order_search_id" id="order_search_id" type="hidden">
+            <div class="input-group md-form form-sm search_list">
+    	        <div class=" col col-sm-6 col-md-4 col-xs-12">
+                     <label for="" class=" col-form-label">Build Phase:</label>  
+                    <input class="form-control" name="" id="">  
+                </div> 
+                 <div class="col col-sm-6 col-md-4 col-xs-12">
+                    <label for="" class=" col-form-label">Model Year:</label>  
+                    <input class="form-control" name="" id="">  
+                </div>
+                <div class=" col col-sm-6 col-md-4 col-xs-12">
+                    <label for="" class=" col-form-label">Search Part</label>  
+                    <input class="form-control" name="searchOrderParts" id="searchOrderParts" placeholder="Search Order Parts" aria-label="Search"> 
+                </div> 
+                 
+            </div> 
+	        <div class="input-group md-form form-sm search_list"> 
+                 <div class="col col-sm-6 col-md-4 col-xs-12 hides">
+                    <label for="" class=" col-form-label">Line No</label>  
+                    <input class="form-control" name="" id="">  
+                </div> 
+                <div class="col col-sm-6 col-md-4 col-xs-12">
+                    <label for="" class=" col-form-label">MRD</label>  
+                    <input class="form-control" name="mrd" id="mrd">  
+                </div>  
+                <div class="col col-sm-6 col-md-4 col-xs-12 ">
+                    <label for="" class=" col-form-label">Order Qty</label>  
+                    <input class="form-control" name="order_qty" id="order_qty">
+                    <div class="input-group-append  input-group">
+                        <button type="button"  id="btnAddList" class="btn btn-primary btn-sm">
+                            <i class="far fa-plus" aria-hidden="true"></i> Add to List
+                        </button> 
+                    </div>
+                </div> 
+            </div>  
+            <div class="zContainer col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="row">  
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                       <div id="orderPartGrid" style="margin-top: 10px; " class="zGrid"></div> 
+                    </div>  
+                </div>
+            </div> 
+        </div>
+    </div>
+</div> 
+
+<ul name="localTemplates">
+    <li name="modalBodyProgramManagers">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="progMngrsListGroup">
+                       <ul class="list-group" id="progMngrsListItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveProgMngrs" onclick="onClickSaveProgMngrs()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyCarLeaders">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="carLeaderListGroup">
+                       <ul class="list-group" id="carLeaderListItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveCarLeader" onclick="onClickSaveCarLeader()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyLaunchManager">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="launchManagerListGroup">
+                       <ul class="list-group" id="launchManagerListItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveLaunchManager" onclick="onClickSaveLaunchManager()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyWarehouseContact">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="warehouseContactsListGroup">
+                       <ul class="list-group" id="warehouseContactsItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveWarehouseContacts" onclick="onClickSaveWarehouseContacts()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyEngineeringManager">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="engrMngrListGroup">
+                       <ul class="list-group" id="engrMngrItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveEngrMngr" onclick="onClickSaveEngrMngr()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyAddComments">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="comments">
+                        <input id="comment_id" name="comment_id" type="hidden">
+                        <input id="order_id" name="order_id" type="hidden">
+                        <textarea type="text" rows="4" class=" form-control form-control-sm inputText p-2" id="comment" name="comment"></textarea>
+                        <input id="is_edited" name="is_edited" type="hidden">
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyShowComments">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="commentsListGroup">
+                       <ul class="list-group" id="commentsListItem"></ul>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyAddAttachment">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div id="attachment"></div>
+            </div>
+        </div>
+    </li>  
+    <li name="modalBodyOrderPartDetails">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <!--<div class="example col col-4">  </div> 
+                <div class="example col col-4"></div> -->
+                <div class="example col col-4" style="float:right">  
+                    <input type="text" class="form-control" id="no_rows" placeholder="Enter No. of Rows">
+                    <button type="button" id="btnGo" class="btn btn-primary btn-sm"><i class="fas fa-sign-in"></i></button>
+                </div> 
+                <div id="{{grid}}" style="margin-top: 10px;" class="zGrid"></div>
+            </div>
+        </div>
+    </li>
+</ul>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script> 

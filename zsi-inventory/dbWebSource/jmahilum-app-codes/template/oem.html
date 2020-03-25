@@ -1,0 +1,238 @@
+<style>
+.zGrid .zRows #table .zRow.even.active {
+    background-color: #333333;
+  }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content"> 
+            <form method="post" id="frm">
+                <div class="zContainer">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div id="grid" class="zGrid mb-1"></div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">      
+                            <button type="button" class="btn btn-primary btn-sm" id="btnSaveOEM" data-toggle="tooltip" title="Save">
+                                <i class="far fa-save"></i> Save
+                            </button>
+                            <button type="button" onclick="return checkDelete();" class="btn btn-primary btn-sm" id="btnDeleteOEM" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal zsi-elliptic-top" id="modalOEM" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full" role="document">
+        <div class="modal-content">
+            <form id="frm_modalOEM" >
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalOEMLabel"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                        <nav>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-bp" role="tab" aria-controls="nav-bp"> Build Phase </a>
+                            <a class="nav-item nav-link"        data-toggle="tab" href="#nav-p" role="tab" aria-controls="nav-p"> Programs </a>
+                            <a class="nav-item nav-link"        data-toggle="tab" href="#nav-hf" role="tab" aria-controls="nav-hf"> Harness Family </a>
+                          </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <div role="tabpanel" class="tab-pane fade show active" id="nav-bp">
+                                <div class="zContainer">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                            <div id="grid-BP" class="zGrid"> </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <button type="button" onclick="oem.submitDataBuildPhase(this,'BP');" class="btn btn-sm  btn-primary"><i class="far fa-save"></i> Save</button>
+                                            <button type="button" onclick="oem.deleteDataBuildPhase(this,'BP');" class="btn btn-sm  btn-primary"><i class="far fa-trash"></i> Delete</button>
+                                            <button type="button" onclick="oem.uploadDataBuildPhase(this,'BP');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade"   id="nav-p">
+                                <div class="zContainer">
+                                    <div class="row">
+                                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                            <div id="grid-P" class="zGrid"> </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <button type="button" onclick="oem.submitDataPrograms(this,'P');" class="btn-sm btn btn-primary"><i class="far fa-save"></i> Save</button>
+                                            <button type="button" onclick="oem.deleteDataPrograms(this,'P');" class="btn-sm btn btn-primary"><i class="far fa-trash"></i> Delete</button>
+                                            <button type="button" onclick="oem.uploadDataPrograms(this,'P');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade"   id="nav-hf">
+                                <div class="zContainer">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                            <div id="grid-HF" class="zGrid"> </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <button type="button" onclick="oem.submitDataHarnessFamily(this,'HF');" class="btn btn-sm  btn-primary"><i class="far fa-save"></i> Save</button>
+                                            <button type="button" onclick="oem.deleteDataHarnessFamily(this,'HF');" class="btn btn-sm  btn-primary"><i class="far fa-trash"></i> Delete</button>
+                                            <button type="button" onclick="oem.uploadDataHarnessFamily(this,'HF');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ul name="localTemplates">
+    <li name="modalBodyProgParts">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id="{{grid}}" class="zGrid "> </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <button type="button" id="btnSave1" onclick="oem.{{onClickSaveProgramParts}}" class="btn-sm btn btn-primary"><i class="far fa-save"></i> Save</button>
+                    <button type="button" onclick="oem.deleteDataProgramParts(this,'PR');" class="btn-sm btn btn-primary"><i class="far fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li name="modalBodyMY">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id="{{grid}}" class="zGrid "> </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <button type="button" id="btnSave1" onclick="oem.{{onClickSaveMY}}" class="btn-sm btn btn-primary"><i class="far fa-save"></i> Save</button>
+                    <button type="button" onclick="oem.deleteDataMY(this,'MY');" class="btn-sm btn btn-primary"><i class="far fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+       
+    </li>
+    <li name="modalBodyProgramPlant">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id={{grid}} class="zGrid"> </div><br>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <button type="button" onclick="oem.{{onClickSaveProgramTeam}}" class="btn-sm btn btn-primary"><i class="far fa-save"></i> Save</button>
+                    <button type="button" onclick="oem.{{deleteDataBuildPhase}}" class="btn-sm btn btn-primary"><i class="far fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </li> 
+    <li name="modalBodyProgramManagers">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="input-group mb-3">
+                    <select class="form-control form-control-sm input-sm search-filter" name="prog_mngr_filter_id" id="prog_mngr_filter_id"></select>
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="oem.addList('PM')"><i class="fa fa-plus" aria-hidden="true" ></i> Add</button>
+                    </div>
+                </div>
+                <div>
+                    <div id="progMngrsListGroup">
+                       <ul class="list-group" id="progMngrsListItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveProgMngrs" onclick="oem.onClickSaveProgMngrs()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+
+    <li name="modalBodyCarLeaders">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="input-group mb-3">
+                    <select class="form-control form-control-sm input-sm search-filter" name="car_leader_filter_id" id="car_leader_filter_id"></select>
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="oem.addList('CL')"><i class="fa fa-plus" aria-hidden="true" ></i> Add</button>
+                    </div>
+                </div>
+                <div>
+                    <div id="carLeaderListGroup">
+                       <ul class="list-group" id="carLeaderListItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveCarLeader" onclick="oem.onClickSaveCarLeader()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyLaunchManager">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="input-group mb-3">
+                    <select class="form-control form-control-sm input-sm search-filter" name="launch_manager_filter_id" id="launch_manager_filter_id"></select>
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="oem.addList('LM')"><i class="fa fa-plus" aria-hidden="true" ></i> Add</button>
+                    </div>
+                </div>
+                <div>
+                    <div id="launchManagerListGroup">
+                       <ul class="list-group" id="launchManagerListItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveLaunchManager" onclick="oem.onClickSaveLaunchManager()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="modalBodyWarehouseContact">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="input-group mb-3">
+                    <select class="form-control form-control-sm input-sm search-filter" name="warehouse_contacts_filter_id" id="warehouse_contacts_filter_id"></select>
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="oem.addList('WC')"><i class="fa fa-plus" aria-hidden="true" ></i> Add</button>
+                    </div>
+                </div>
+                <div>
+                    <div id="warehouseContactsListGroup">
+                       <ul class="list-group" id="warehouseContactsItemGroup"></ul>
+                    </div>    
+                    <button type="button" id="btnSaveWarehouseContacts" onclick="oem.onClickSaveWarehouseContacts()" class="btn-sm btn btn-primary m-1 d-none" style="float: right;" ><i class="far fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </li>    
+     <li name="modalBodyCustomers">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id={{grid}} class="zGrid"> </div><br>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <button type="button" onclick="oem.{{onClickSaveCustomers}}" class="btn-sm btn btn-primary"><i class="far fa-save"></i> Save</button>
+                    <button type="button" onclick="oem.{{deleteDataCustomers}}" class="btn-sm btn btn-primary"><i class="far fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </li> 
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+

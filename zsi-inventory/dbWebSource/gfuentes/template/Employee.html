@@ -1,0 +1,84 @@
+<style>
+#employee{
+    margin-bottom:10px;
+}
+#employee .zGridPanel .zHeaders .item .title .text{
+    width:100%;
+}
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">     
+            <div class="zContainer">
+                <div class="row">
+                    <div class="col-12 mb-1">
+                        <div id="grid" class="zGrid"></div>    
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                        	<span class="fas fa-save"></span> Save
+                        </button>   
+                        <button type="button" class="btn btn-primary btn-sm" id="btnInactive">
+                        	<span class="fas fa-ban"></span> Inactive
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ul name="localTemplates">
+    <li name="modalBodyOtherIncome">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id="{{grid}}" class="zGrid"> </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="btnPerUserHide">
+                    <button type="button" onclick="employees.{{onClickSaveOtherIncome}}" class="btn-sm btn btn-primary"><i class="far fa-save"></i> Save</button>
+                    <button type="button" onclick="employees.deleteOtherIncome(this);" class="btn-sm btn btn-primary"><i class="far fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li name="modalBodyInactiveEmployee">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id="{{gridInactive}}" class="zGrid"> </div>
+                </div>
+        		<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button onclick="employees.{{saveInactive}}" class="btn-sm btn btn-primary" type="button">
+                                <i class="far fa-save"> Save</i>
+                            </button>
+                            <button onclick="employees.{{deleteInactive}}" class="btn-sm btn btn-primary" type="button">
+                                <i class="fas fa-trash-alt"> Delete</i>
+                            </button>
+        		</div>
+            </div>
+        </div>
+    </li>    
+    <!--<li name="modalBodyInactiveType">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-12">
+        		    <label for="" class="col-form-label control-label">Reason</label>  
+                    <select class="form-control form-control-sm" id="inactive_type_code" name="inactive_type_code" ></select>
+        		</div>
+        		 <div class="col-sm-6 col-md-6 col-12 mb-2">
+        		    <label for="" class="col-form-label">Date</label>
+                    <div class="input-group">
+                        <input class="form-control form-control-sm " id="inactive_date" name="inactive_date" >
+                        <div class="input-group-append">
+                            <button onclick="employees.{{onClickAdd}}" class="btn-sm btn btn-primary btn-outline-default" type="button">
+                                <i class="fa fa-add"> Add</i>
+                            </button>
+                        </div>
+                    </div>
+        		</div>
+            </div>
+        </div>
+    </li>-->
+</ul>

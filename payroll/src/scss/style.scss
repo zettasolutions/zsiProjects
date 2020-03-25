@@ -1,0 +1,149 @@
+@import "variables";
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src:
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?dqx0bk') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?dqx0bk') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?dqx0bk##{$icomoon-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="z-"], [class*=" z-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.z-ev_station {
+  &:before {
+    content: $z-ev_station; 
+  }
+}
+.z-location-gas-station {
+  &:before {
+    content: $z-location-gas-station; 
+  }
+}
+.z-copy {
+  &:before {
+    content: $z-copy; 
+  }
+}
+.z-barcode {
+  &:before {
+    content: $z-barcode; 
+  }
+}
+.z-qrcode {
+  &:before {
+    content: $z-qrcode; 
+  }
+}
+.z-cart {
+  &:before {
+    content: $z-cart; 
+  }
+}
+.z-coin-dollar {
+  &:before {
+    content: $z-coin-dollar; 
+  }
+}
+.z-alarm {
+  &:before {
+    content: $z-alarm; 
+  }
+}
+.z-printer {
+  &:before {
+    content: $z-printer; 
+  }
+}
+.z-mobile {
+  &:before {
+    content: $z-mobile; 
+  }
+}
+.z-drawer {
+  &:before {
+    content: $z-drawer; 
+  }
+}
+.z-user {
+  &:before {
+    content: $z-user; 
+  }
+}
+.z-users {
+  &:before {
+    content: $z-users; 
+  }
+}
+.z-user-plus {
+  &:before {
+    content: $z-user-plus; 
+  }
+}
+.z-user-minus {
+  &:before {
+    content: $z-user-minus; 
+  }
+}
+.z-user-check {
+  &:before {
+    content: $z-user-check; 
+  }
+}
+.z-user-tie {
+  &:before {
+    content: $z-user-tie; 
+  }
+}
+.z-aid-kit {
+  &:before {
+    content: $z-aid-kit; 
+  }
+}
+.z-briefcase {
+  &:before {
+    content: $z-briefcase; 
+  }
+}
+.z-truck {
+  &:before {
+    content: $z-truck; 
+  }
+}
+.z-road {
+  &:before {
+    content: $z-road; 
+  }
+}
+.z-enter {
+  &:before {
+    content: $z-enter; 
+  }
+}
+.z-exit {
+  &:before {
+    content: $z-exit; 
+  }
+}
+.z-loop {
+  &:before {
+    content: $z-loop; 
+  }
+}
+
