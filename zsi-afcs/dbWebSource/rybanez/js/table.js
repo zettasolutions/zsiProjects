@@ -5,14 +5,29 @@
     zsi.ready=function(){
         $(".page-title").html("Table Reference");
         displayRecords();
+        $(".panel").css("height", $(".page-content").height()); 
     };
-     
+    
+    
+     $("#btnSave").click(function () {
+             $("#frm").jsonSubmit({
+                  procedure: "tables_upd"
+                   ,optionalItems: ["table_name","table_key_name"]
+                , onComplete: function (data) {
+                    displayRecords();
+                }
+            });
+            
+          
+    });
+    
+    
     function displayRecords(){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
               $("#grid").dataBind({
     	     url            : app.execURL + "tables_sel"
     	    ,width          : $(".zContainer").width() 
-    	    ,height         : $(window).height() - 240
+    	    ,height         : $(window).height() - 200
     	    ,selectorType   : "checkbox"
             ,blankRowsLimit:5
             ,isPaging : false
@@ -57,19 +72,8 @@
         
        
     }
-    
-    $("#btnSave").click(function () {
-             $("#frm").jsonSubmit({
-                  procedure: "tables_upd"
-                   ,optionalItems: ["table_name","table_key_name"]
-                , onComplete: function (data) {
-                    displayRecords();
-                }
-            });
-            
-          
-    });
- 
+       
+      
     $("#btnDelete").click(function(){
         zsi.form.deleteData({
              code       : "sys-0011"
@@ -80,9 +84,4 @@
     
     });    
     
-})();
-
-
-
-                                                
-                                                         
+})();                                

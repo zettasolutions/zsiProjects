@@ -1,8 +1,8 @@
-var loadingTransactions = (function(){
+ var loadingTransactions = (function(){
     var _pub            = {};
     
     zsi.ready = function(){
-        $(".page-title").html("Loading Transactions");
+        $(".page-title").html("Load Transactions Report");
         displayLoadingTransactions();
         validation();
     };
@@ -32,9 +32,9 @@ var loadingTransactions = (function(){
     
     function displayLoadingTransactions(loadDateFrm,loadDateTo){
         $("#gridLoadingTransactions").dataBind({
-             sqlCode        : "L1237" //loading_transactions_sel
+             sqlCode        : "L1267" //loads_report_sel
             ,parameters     : {load_date_frm:(loadDateFrm ? loadDateFrm : ""),load_date_to:(loadDateTo ? loadDateTo : "")} 
-            ,height         : $(window).height() - 240
+            ,height         : $(window).height() - 270
             ,dataRows       : [
                 {text: "Load Date"                                                                     ,width : 200
                      ,onRender: function(d){
@@ -82,4 +82,4 @@ var loadingTransactions = (function(){
     });
 
     return _pub;
-})();                   
+})();                    

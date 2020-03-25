@@ -38,9 +38,14 @@
                                         <select class="form-control form-control-sm paymentTypeId" id=""></select>
                                     </div>
                                 </div>
+                                <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm pl-2 from" id="date_frm" name="date_frm"/>
+                                    </div>
+                                </div>
                                 <div class="col-sm-6 col-md-4 col-xl-3 col-12 mb-2">
                                     <div class="input-group">
-                                        <input type="text" class="form-control form-control-sm pl-2 from" id="date_id" name="date_id"/>
+                                        <input type="text" class="form-control form-control-sm pl-2 from" id="date_to" name="date_to"/>
                                         <div class="input-group-append">
                                             <button id="btnFilterVal1" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter">
                                                <i class="fas fa-filter"></i>
@@ -52,6 +57,7 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <small id="ermsgId1" class="ml-2" style="color:red;">Date must not be lesser than "From date"!</small>
                                 </div>
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
                                      <div id="gridCollectionsForRemit" class="zGrid"></div>
@@ -99,7 +105,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <small id="ermsgId" class="ml-2" style="color:red;">Date must not be lesser than "From date"!</small>
+                                    <small id="ermsgId2" class="ml-2" style="color:red;">Date must not be lesser than "From date"!</small>
                                 </div>
                             </div>
                             <div class="row">

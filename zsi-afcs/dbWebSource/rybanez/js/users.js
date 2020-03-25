@@ -52,36 +52,26 @@ var users = (function(){
         $('#' + mdlInactive).modal('hide');     
     }; 
     
-    pub.deleteInactive = function(){
-        zsi.form.deleteData({
-             code       : "ref-00024"
-            ,onComplete : function(data){
-                displayInactiveUsers();
-                $('#' + mdlInactive).modal('hide');
-            }
-        });    
-    }; 
-    
     pub.submitNewUsers = function(){
-        if( $("#gridNewUsers").checkMandatory()!==true) return false;
-        //var res = isRequiredInputFound("#gridNewUsers");
-        //if(!res.result){
+        if( zsi.form.checkMandatory()!==true) return false;
+        var res = isRequiredInputFound("#gridNewUsers");
+        if(!res.result){
             $("#gridNewUsers").jsonSubmit({
-                 procedure  : "users_upd"
-                 ,optionalItems: ["is_active","is_contact"]
-                 ,onComplete : function (data) {
-                    if(data.isSuccess===true){
-                        zsi.form.showAlert("alert");
-                        isNew = false;
-                        displayRecords();
-                        //displayAddNewUser();
-                        $('#' + mdlAddNewUser).modal('hide');
+                     procedure  : "users_upd"
+                     ,optionalItems: ["is_active","is_contact"]
+                     ,onComplete : function (data) {
+                         if(data.isSuccess===true){
+                            zsi.form.showAlert("alert");
+                            isNew = false;
+                            displayRecords();
+                            displayAddNewUser();
+                         }
                     }
-                }
-            });  
-        //} else {
-        //    alert("Enter " + res.inputName);
-        //}
+            });        
+            $('#' + mdlAddNewUser).modal('hide');
+        } else {
+            alert("Enter " + res.inputName);
+        }
     };
     
     pub.getCurrentUser=function(){
@@ -151,9 +141,7 @@ var users = (function(){
             + ",@oem_ids='" + _info.oem_ids + "'" 
             ,function(data){
                 if(data.isSuccess===true){
-                    zsi.form.showAlert("alert"); 
-                    displayRecords();
-                    $('#' + mdlOEM).modal('toggle');
+                    zsi.form.showAlert("alert");        
                 } 
         });
     }; 
@@ -168,6 +156,7 @@ var users = (function(){
         g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
         $form.find("[name='oem_filter_id']").dataBind("oem");
         displayOEMList($form,_info);
+        
     };
 
     pub.showModalAddNewOEM = function(obj,index){
@@ -266,12 +255,12 @@ var users = (function(){
     } 
     
     function getTemplates(){
-        new zsi.easyJsTemplateWriter("body")
+        new zsi.easyJsTemplateWriter($("#generatedComponents").empty())
         .bsModalBox({
               id        : mdlInactive
             , sizeAttr  : "modal-lg"
             , title     : "Inactive Users"
-            , body      : gTw.new().modalBodyInactive({grid:"gridInactiveUsers",onClickSaveInactive:"users.submitInactive();" ,onClickDeleteInactive:"users.deleteInactive();"}).html()  
+            , body      : gTw.new().modalBodyInactive({grid:"gridInactiveUsers",onClickSaveInactive:"users.submitInactive();"}).html()  
         })
         
         .bsModalBox({
@@ -363,33 +352,18 @@ var users = (function(){
     
         return {result, inputName};
     }
-
-    function markUserMandatory(){
-        $("#grid").markMandatory({       
-          "groupNames":[
-                {
-                     "names" : ["logon","first_name","last_name","role_id"]
-                    ,"type":"M"
-                }             
-              
-          ]      
-          ,"groupTitles":[ 
-                 {"titles" : ["Logon","First Name","Last Name","Role"]}
-          ]
-        });    
-    }
     
     function markNewUserMandatory(){
-        $("#gridNewUsers").markMandatory({       
+        zsi.form.markMandatory({       
           "groupNames":[
                 {
-                     "names" : ["logon","first_name","last_name","role_id"]
+                     "names" : ["logon","first_name","last_name"]
                     ,"type":"M"
                 }             
               
           ]      
           ,"groupTitles":[ 
-                 {"titles" : ["Logon","First Name","Last Name","Role"]}
+                 {"titles" : ["Logon","First Name","Last Name"]}
           ]
         });    
     }
@@ -490,7 +464,7 @@ var users = (function(){
                ,{text  : "Active?"  , width : 70    , style : "text-align:center;"  ,type:"yesno"  ,name:"is_active"    ,defaultValue:"N"}
             ]
             ,onComplete: function(o){
-                this.find("[name='cbFilter']").setCheckEvent("#gridInactiveUsers input[name='cb']");
+                this.find("[name='cbFilter']").setCheckEvent("#gridInactiveCustomers input[name='cb']");
             }
         });  
     }
@@ -525,27 +499,26 @@ var users = (function(){
                             +  app.bs({name:"warehouse_id"  ,type:"hidden" ,value: app.svn(d,"warehouse_id")});
                     }
                 }
-                // ,{text  : "OEM"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
-                //     , onRender      : function(d) {
-                //         var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
-                //         return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalAddNewOEM(this," + ctr + ");'>" + _oems + "</a>";
-                //     }
-                // }    
+                ,{text  : "OEM"                 , width : 300           , style : "text-align:center;"          ,type:"input"       ,name:"oem" 
+                    , onRender      : function(d) {
+                        var _oems = (svn(d,"oems") ? svn(d,"oems") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
+                        return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='users.showModalAddNewOEM(this," + ctr + ");'>" + _oems + "</a>";
+                    }
+                }    
                 ,{text  : "Active?"             , width : 60            , style : "text-align:center;"          ,type:"yesno"       ,name:"is_active"       ,defaultValue: "Y"}
                 
             ]
             ,onComplete: function(){
-                this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
-                this.find("input").attr("autocomplete", "off");
                 this.find("input, select").on("change keyup ", function(){
                             $(this).closest(".zRow").find("[name='is_edited']").val("Y");
                 });       
+    
+                this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
+    
                 this.find("[name='role_id']").dataBind("roles");
-                this.find("input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"
-                   ,isNotExistShow :  false
-                   ,message : "data already exists"
-                });
+    
                 markNewUserMandatory();
+                
             }
         });    
     }
@@ -616,7 +589,7 @@ var users = (function(){
                 this.find("select[name='plant_id']").dataBind("plants");
                 this.find("select[name='warehouse_id']").dataBind("warehouse");
 
-                markUserMandatory();
+                markNewUserMandatory();
                 $(".no-data input[name='logon']").checkValueExists({code:"adm-0002",colName:"logon"
                    ,isNotExistShow :  false
                    ,message : "data already exists"
@@ -644,11 +617,11 @@ var users = (function(){
     function addList(o){
         var _info = o.info;
         var _$mdl = $(o.button).closest( o.formSelector );
-        var _filterText = _$mdl.find("[name='oem_filter_id'").find("option:selected").text();
-        var _filterValue = _$mdl.find("[name='oem_filter_id'").find("option:selected").val();
+        var _filterText = _$mdl.find("#oem_filter_id :selected").text();
+        var _filterValue = _$mdl.find("#oem_filter_id :selected").val();
         var _ids = _info.oem_ids.split(",");
         var _names = _info.oems.split(",");
-
+        
         if(_filterValue ==="" ){
              alert("Please Select OEM.");
              return;
@@ -721,7 +694,6 @@ var users = (function(){
     });
     
     $("#btnSave").click(function () {
-        if( $("#grid").checkMandatory()!==true) return false;
         $("#grid").jsonSubmit({
              procedure  : "users_upd"
              ,optionalItems: ["is_admin", "is_active"]
@@ -792,4 +764,4 @@ var users = (function(){
     
     return pub;
 })();
-                                       
+                                   

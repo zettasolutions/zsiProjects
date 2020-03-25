@@ -11,7 +11,6 @@ var app = (function() {
                  getPageParams      : function(keys){
                     if( ! app.currentHash.params) return {}; 
                     return app.currentHash.params.setParamKeys(keys) || {}; 
-                    
                  }
                 ,getMethodParams    : function(name,keys){
                     var _r={};
@@ -97,6 +96,7 @@ var app = (function() {
                 }                
         }
     }    
+    
     ,_cookie         = {
         create : function(name,value,days) {
             var expires;
@@ -121,8 +121,7 @@ var app = (function() {
         }
         
         ,delete : function(name) {
-            //document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
         
             
@@ -179,8 +178,16 @@ var app = (function() {
         _executeMethods();
     }
     ;
-
+    
     _app.init   = function(){
+        zsi.init({
+              baseURL : base_url
+             ,errorUpdateURL    :  base_url + "sql/logerror"
+             ,sqlConsoleName    :  "runsql"
+             ,excludeAjaxWatch  :  ["checkDataExist","searchdata"]
+             ,getDataURL        :  base_url + "data/getRecords"
+        });
+
         /* Page Initialization */
         zsi.initDatePicker  = function(){
            var inputDate =$('input[id*=date]').not("input[type='hidden']");
@@ -215,19 +222,11 @@ var app = (function() {
         
         zsi.initDatePicker();
 
-        zsi.init({
-              baseURL : base_url
-             ,errorUpdateURL    :  base_url + "sql/logerror"
-             ,sqlConsoleName    :  "runsql"
-             ,excludeAjaxWatch  :  ["checkDataExist","searchdata"]
-             ,getDataURL        :  base_url + "data/getRecords"
-        });
-        
         $.ajaxSetup({ cache: false });        
         app.getUserInfo(function(){
             if(app.userInfo.img_filename !=="") $(".profile-image").attr({src: base_url +  "file/loadFile?filename=" + app.userInfo.img_filename }); 
         });
-        app.getAppProfile();
+
         app.loadPublicTemplates(function(){
             var menuItems = localStorage.getItem("menuItems");
             if(menuItems){
@@ -238,20 +237,15 @@ var app = (function() {
                 });
             }
 
-
             app.checkBrowser(function(isIE){
                  if(isIE) return true;
             });
-    
             window.onpopstate = function(event) {
                 _initPageLoad();
             };    
-        
             if(zsi.ready) zsi.ready();  
             _initPageLoad();
-
         });
-
     };
     _app.addManageMenu              = function(){
             var ul =  $(".fa-tasks").closest("li").find("ul");
@@ -424,26 +418,8 @@ var app = (function() {
             }
         );
     };
-    _app.getAppProfile = function(){
-        var _lsName ="appProfile"
-        var _appProfile = localStorage.getItem(_lsName);
-        if(_appProfile){
-            app.profile =JSON.parse(_appProfile); 
-        }
-        else{    
-            zsi.getData({
-                 sqlCode : "A1"
-                ,onComplete : function(d) {
-                    if(d.rows.length > 0 ){ 
-                        app.profile = d.rows[0];
-                        localStorage.setItem(_lsName, JSON.stringify(app.profile));
-                    }
-                }
-            });
-        }
-    }
     
     return _app;
 
 })();
-                          
+                       

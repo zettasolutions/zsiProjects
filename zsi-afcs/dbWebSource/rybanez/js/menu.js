@@ -30,6 +30,7 @@
             // getTemplates();
             $(".page-title").html("Menu");
             displayRecords();
+            $(".panel").css("height", $(".page-content").height());
          };
         
         var contextModalProcess = { id : modalProcess
@@ -74,7 +75,7 @@
                  $("#grid").dataBind({
         	     url            : app.execURL + "menus_sel"
         	    ,width          : $(".zContainer").width()
-        	    ,height         : $(window).height() - 240
+        	    ,height         : $(document).height() - 210
         	    ,selectorType   : "checkbox"
                 ,blankRowsLimit:5
                 ,isPaging : false
@@ -106,7 +107,7 @@
                 //         }
         	    ]
         	     ,onComplete: function(){
-        	         $("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
+        	         $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
                      $("select[name='pmenu_id']").dataBind("menus");
                      $("select[name='page_id']").dataBind( "pages");
                      $("select[name='page_process_id']").dataBind( "page_processes");
@@ -118,11 +119,11 @@
             zsi.form.deleteData({
                  code       : "sys-0002"
                 ,onComplete : function(data){
-                                displayRecords();
-                              }
+                            displayRecords();
+                          }
             });      
         });
 })();        
 
 
-        
+      

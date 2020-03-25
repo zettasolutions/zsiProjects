@@ -98,7 +98,8 @@ var  ud='undefined'
                     
                  }
               }
-           });
+           });         
+           
            function CloseProgressWindow(){
               setTimeout(function(){
                  if(typeof zsi_request_count!==ud){
@@ -1000,7 +1001,6 @@ var  ud='undefined'
                             _gp.parameters.order_no= _orderNo;
                             _obj.dataBindGrid(_gp);
                         });
-                        
                         //if(_isGroup || o.width > _gp.width ) o.headers.css({width:(o.width + 20 )});
                         //if (_gp.width) o.table.css("width",(o.width + 1 )  + "px");
                          o.table.css({width : o.width});
@@ -1100,7 +1100,6 @@ var  ud='undefined'
                                 var $zRow = $(this).closest(".zRow");
                                 $zRow.find("[name='is_edited']").val("Y");
                         });   
-                        $rows.find("input").attr("autocomplete", "off");
                         
                         
                     }
@@ -1197,18 +1196,12 @@ var  ud='undefined'
                         clearTimeout(_tmr);
                         _tmr=setTimeout(function(){ 
                             var _$tabPane = _obj.closest(".tab-pane");
-                            var _$modal = _obj.closest(".modal");
                             //fix grid inside nav tabs
                             if(_$tabPane.length > 0){
                                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                                     fixWidth();
-                                });
-                            }else{
-                                if(_$modal.length > 0){ //fix grid inside w/o nav tabs
-                                    _$modal.on('shown.bs.modal', function (e) {
-                                        fixWidth();
-                                    });
-                                }
+                               })
+                               
                             }
                             fixWidth();
                         }, 10);
@@ -1713,7 +1706,6 @@ var  ud='undefined'
                 }
                 return _v;
             }
-
             $.fn.convertToTable       = function(cb){
                 var _$self  = this;
                 var _tableId = _$self.attr("id");
@@ -1765,8 +1757,10 @@ var  ud='undefined'
                         var cell = row.insertCell(-1);
                         cell.innerHTML = _getValue(e);
                         cell.style = e.getAttribute("style");
+                        
                     });
                     if(cb) cb($(_table));
+                    
                 }
                return this;
             }; 
@@ -2864,6 +2858,10 @@ var  ud='undefined'
             String.prototype.isValidDate = function () {
                 return isValidDate(this)
             };  
+            
+            String.prototype.toShortDates = function () {
+                return this.split(' ')[0];
+            };
             String.prototype.toShortDate = function () {
                 if(!isValidDate(this)) return "";
                 var _date=new Date( Date.parse(this) );
@@ -3726,4 +3724,4 @@ var  ud='undefined'
     }
 ;  
 
-                                           
+                                        

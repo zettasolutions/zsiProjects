@@ -2,10 +2,9 @@
     var  _pub            = {}
         ,gTotal          = ""
         ,gDate           = ""
-        ,gPaoId1         = ""
-        ,gPaoId2         = ""
+        ,gPaoId1         = null
+        ,gPaoId2         = null
         ,gPaymentId      = ""
-        ,gCompanyCode    = app.userInfo.company_code
         ,gzGrid1         = "#gridCollectionsForRemit"
         ,gzGrid2         = "#gridPostedTransactions"
         
@@ -14,12 +13,11 @@
     zsi.ready = function(){
         $(".page-title").html("PAO Collections");
         $(".panel-container").css("min-height", $(window).height() - 190);
-        displayCollectionsForRemit("",gCompanyCode,"","");
-        displayRemittedCollections("",gCompanyCode,"","");
+        displayCollectionsForRemit();
+        displayRemittedCollections();
         validation();
         $('.PAOForRemitted').select2({placeholder: "SELECT PAO",allowClear: true});
         $('.PAOForRemit').select2({placeholder: "SELECT PAO",allowClear: true});
-        $("#nav-tabContent").find("#date_id").datepicker({todayHighlight:true}).datepicker("setDate","0");
         var d = new Date();
         var month = d.getMonth()+1;
         var day = d.getDate();
@@ -27,7 +25,7 @@
             (month<10 ? '0' : '') + month + '/' +
             (day<10 ? '0' : '') + day;
         $(".PAOForRemit").dataBind({
-            sqlCode      : "P1233" //pao_sel
+            sqlCode      : "D1263" //dd_pao_sel
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
@@ -37,7 +35,7 @@
            }
         });
         $(".PAOForRemitted").dataBind({
-            sqlCode      : "P1233" //pao_sel
+            sqlCode      : "D1263" //dd_pao_sel
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
@@ -46,6 +44,7 @@
                 gPaoId2 = _pao_id;
            }
         });
+        
         $(".paymentTypeId").fillSelect({
             data: [
                  { text: "FARE"     ,value: "FARE"}
@@ -61,6 +60,8 @@
                 $("option:first-child",this).val("");
             }
         });
+        
+        
     };
     
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -80,30 +81,48 @@
         var _$navTab = $("#nav-tabContent");
         var _dayFrom = _$navTab.find("#remitted_from_date_id");
         var _dayTo   = _$navTab.find("#remitted_to_date_id");
+        var _dateFrm = _$navTab.find("#date_frm");
+        var _dateTo   = _$navTab.find("#date_to");
         var _timeFrom = "";
         var _timeTo = "";
-        var _error  = _$navTab.find("#ermsgId");
+        var _error1  = _$navTab.find("#ermsgId1");
+        var _error2  = _$navTab.find("#ermsgId2");
         
         _$navTab.find("#remitted_from_date_id,#remitted_to_date_id").on("keyup change",function(){
             var _colName    = $(this)[0].id;
             if(_colName === "remitted_from_date_id")_timeFrom = new Date(_dayFrom.val()).getTime();
             else _timeTo = new Date(_dayTo.val()).getTime();
             if(_timeFrom > _timeTo){
-                _error.removeClass("hide");
+                _error2.removeClass("hide");
                 _dayTo.css("border-color","red");
                 $("#btnFilterVal2").attr("disabled",true);
             }else{
-                _error.addClass("hide");
+                _error2.addClass("hide");
                 _dayTo.css("border-color","green");
                 $("#btnFilterVal2").removeAttr("disabled");
             }
         });
+        
+        _$navTab.find("#date_frm,#date_to").on("keyup change",function(){
+            var _colName    = $(this)[0].id;
+            if(_colName === "date_frm")_timeFrom = new Date(_dateFrm.val()).getTime();
+            else _timeTo = new Date(_dateTo.val()).getTime();
+            if(_timeFrom > _timeTo){
+                _error1.removeClass("hide");
+                _dateTo.css("border-color","red");
+                $("#btnFilterVal1").attr("disabled",true);
+            }else{
+                _error1.addClass("hide");
+                _dateTo.css("border-color","green");
+                $("#btnFilterVal1").removeAttr("disabled");
+            }
+        });
     }
     
-    function displayCollectionsForRemit(pao,cCode,date,paymentId){
+    function displayCollectionsForRemit(pao,dateFrm,dateTo,paymentId){
         zsi.getData({
                  sqlCode    : "P1240" //pao_collections_for_remit
-                ,parameters : {pao_id:(pao ? pao : ""),company_code:(cCode ? cCode : ""),tdate:(date ? date : ""),collection_type:(paymentId ? paymentId : "")}
+                ,parameters : {pao_id:(pao ? pao : ""),fdate:(dateFrm ? dateFrm : ""),tdate:(dateTo ? dateTo : ""),collection_type:(paymentId ? paymentId : "")}
                 ,onComplete : function(d) {
                     var _rows= d.rows;
                     var _tot = {total:0};
@@ -133,16 +152,22 @@
                             $(".zRow:last-child()").find('[name="pao"]').css("text-align","right");
                             if(o.data.length <= 1)$("#btnSaveCollections").attr("disabled",true);
                             else $("#btnSaveCollections").removeAttr("disabled");
+                            var _$dateFr = _this.find(".zRow:first-child()").find("[name='tdate']").val();
+                            var _$dateTo = _this.find(".zRow:nth-last-child(2)").find("[name='tdate']").val();
+                            var _dateFr = isUD(_$dateFr) ? "" : _$dateFr.toShortDates();
+                            var _dateTo = isUD(_$dateTo) ? "" : _$dateTo.toShortDates();
+                            $("#nav-tabContent").find("#date_frm").datepicker("setDate",_dateFr);
+                            $("#nav-tabContent").find("#date_to").datepicker("setDate",_dateTo);
                     }
                 });
             }
         });
     }
     
-    function displayRemittedCollections(pao,cCode,remitFrom,remitTo,paymentId){
+    function displayRemittedCollections(pao,remitFrom,remitTo,paymentId){
         zsi.getData({
                  sqlCode    : "P1244" //pao_collections_remitted
-                ,parameters : {pao_id:(pao ? pao : ""),company_code:(cCode ? cCode : ""),tdate:(remitFrom ? remitFrom : ""),remit_date:(remitTo ? remitTo : ""),collection_type:(paymentId ? paymentId : "")}
+                ,parameters : {pao_id:(pao ? pao : ""),tdate:(remitFrom ? remitFrom : ""),remit_date:(remitTo ? remitTo : ""),collection_type:(paymentId ? paymentId : "")}
                 ,onComplete : function(d) {
                     var _rows= d.rows;
                     var _tot = { reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0};
@@ -172,8 +197,10 @@
                             $(".zRow:last-child()").find('[name="pao"]').css("text-align","right");
                             if(o.data.length <= 1)$("#btnExcelCollections").attr("disabled",true);
                             else $("#btnExcelCollections").removeAttr("disabled");
-                            var _dateFr = _this.find(".zRow:first-child()").find("[name='remit_date']").val().toShortDates();
-                            var _dateTo = _this.find(".zRow:nth-last-child(2)").find("[name='remit_date']").val().toShortDates();
+                            var _$dateFr = _this.find(".zRow:first-child()").find("[name='remit_date']").val();
+                            var _$dateTo = _this.find(".zRow:nth-last-child(2)").find("[name='remit_date']").val();
+                            var _dateFr = isUD(_$dateFr) ? "" : _$dateFr.toShortDates();
+                            var _dateTo = isUD(_$dateTo) ? "" : _$dateTo.toShortDates();
                             $("#nav-tabContent").find("#remitted_from_date_id").datepicker("setDate",_dateFr);
                             $("#nav-tabContent").find("#remitted_to_date_id").datepicker("setDate",_dateTo);
                             setFooterFreezed(gzGrid1);
@@ -217,7 +244,7 @@
         var _zRowsHeight =   _zRows.height() - 40;
         var _zTotal = _tableRight.find(".zTotal");
         _zTotal.css({"top": _zRowsHeight});
-        _zTotal.prev().css({"margin-bottom":23 }); 
+        _zTotal.prev().css({"margin-bottom":23 });
         if(_zRows.find(".zRow").length == 1){
             _zTotal.addClass("hide");
         }else{
@@ -238,8 +265,8 @@
            procedure: "pao_collection_posting_upd"
           ,notIncludes : ["tdate","pao","amount"]
           ,onComplete: function (data) {
-              displayCollectionsForRemit("",gCompanyCode);
-              displayRemittedCollections("",gCompanyCode);
+              displayCollectionsForRemit();
+              displayRemittedCollections();
               if(data.isSuccess===true) zsi.form.showAlert("alert");
               $("#gridCollectionsForRemit").convertToTable(
                 function($table){
@@ -313,8 +340,9 @@
     
     //for remit tab
     $("#btnFilterVal1").click(function(){
-        var _date = $.trim($("#date_id").val()); 
-        displayCollectionsForRemit(gPaoId1,gCompanyCode,_date,gPaymentId);
+        var _dateFrm = $.trim($("#date_frm").val()); 
+        var _dateTo = $.trim($("#date_to").val());
+        displayCollectionsForRemit(gPaoId1,_dateFrm,_dateTo,gPaymentId);
         setTimeout(function(){
             setFooterFreezed(gzGrid1);
         }, 1000);
@@ -323,14 +351,14 @@
     $("#btnResetVal1").click(function(){
         $(".PAOForRemit").val(isUD);
         $("#nav-tabContent").find("#date_id").datepicker({todayHighlight:true}).datepicker("setDate","0");
-        displayCollectionsForRemit("",gCompanyCode,"","");
+        displayCollectionsForRemit();
     });
     
     //remitted tab
     $("#btnFilterVal2").click(function(){
         var _from = $.trim($("#remitted_from_date_id").val()); 
         var _to = $.trim($("#remitted_to_date_id").val()); 
-        displayRemittedCollections(gPaoId2,gCompanyCode,_from,_to,gPaymentId);
+        displayRemittedCollections(gPaoId2,_from,_to,gPaymentId);
         setTimeout(function(){
             setFooterFreezed(gzGrid2);
         }, 1000);
@@ -338,9 +366,9 @@
 
     $("#btnResetVal2").click(function(){
         $(".PAOForRemit").val(isUD);
-        displayRemittedCollections("",gCompanyCode,"","","");
+        displayRemittedCollections();
     });
     
     
     return _pub;
-})();                                                      
+})();                                                        
