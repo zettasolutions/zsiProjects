@@ -7,7 +7,6 @@ CREATE PROCEDURE [dbo].[employees_sel]
    ,@position_id        INT = null
    ,@user_id			INT = NULL		
    ,@is_active CHAR(1)='Y'	
-   ,@search_col nvarchar(100)=null
    ,@search_val nvarchar(100)=null
 )
 AS
@@ -28,10 +27,9 @@ BEGIN
 		SET @stmt = @stmt + ' AND position_id='+ CAST(@position_id AS VARCHAR);
 	IF isnull(@is_active,'') <> ''
 		SET @stmt = @stmt + ' AND is_active='''+ @is_active + '''';
-
-	IF ISNULL(@search_col,'')<>''
-       set @stmt = @stmt + ' AND ' + @search_col + ' like ''%' + @search_val  + '%'''
 	
+	IF ISNULL(@search_val,'')<>''
+       set @stmt = @stmt + ' AND first_name like ''%' + @search_val  + '%'' or last_name like ''%' + @search_val  + '%'''
 
 	set @stmt = @stmt + ' order by employee_id'
 	exec(@stmt);

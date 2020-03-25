@@ -27,14 +27,6 @@
   width: 100%; 
   
 }
-#printThis{
-    color: #fff;
-}
-@media screen {
-    #printSection {
-        display: none;
-    }
-}
 .modal-sm {
     max-width: 223px !important;
 }
@@ -43,7 +35,7 @@
     height:55px;
 }
 .bads #nameId{
-    font-size:18px;
+    font-size:20px;
     text-shadow: 2px 2px 4px #000000;
 }
 .bads #positionId{
@@ -55,71 +47,15 @@
     text-shadow: 2px 2px 4px #000000;
 }
 #printBody{
+    color: #fff;
     height:324px !important;
     width:204px !important;
+    position: relative;
 }
-@media print {
-    body * {
-        visibility:hidden;
-    }
-    #printSection, #printSection * {
-        visibility:visible;
-    }
-    #printSection {
-        position:absolute;
-        left:0;
-        top:0;
-        box-shadow: 1px 1px 1px 1px;
-        justify-content: center;
-        text-align: center;
-    }
-    #printBody{
-        position: fixed;
-        left:0;
-        top:0;
-        height:324px !important;
-        width:204px !important;
-    }
-    #printThis{
-        list-style-image:url('../images/zsi-id-front-bg.png');
-        list-style-position: inside;
-        display: list-item;
-        padding:0;
-        height:324px !important;
-        width:204px !important;
-        
-    }
-    .bads{
-        margin-top:4px !important;margin-bottom:15px !important;
-        height:55px !important;
-    }
-    .bads #nameId{
-        font-size:18px !important;
-        width:100% !important;
-        color: white !important;
-        text-shadow: 2px 2px 4px #000000 !important;
-        -webkit-print-color-adjust: exact;
-    }
-    .bads #positionId{
-        font-size:8px !important;
-        width:100% !important;
-        color: white !important;
-        text-shadow: 2px 2px 4px #000000 !important;
-        -webkit-print-color-adjust: exact;
-    }
-    .bads #idsId,.bads #idNo{
-        font-size:12px !important;
-        width:100% !important;
-        color: white !important;
-        text-shadow: 2px 2px 4px #000000 !important;
-        -webkit-print-color-adjust: exact;
-    }
-    #dummyId{
-        height:85px !important;
-    }
+img{
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
 }
-
-
 </style>
 
 <div class="panel">
@@ -127,33 +63,24 @@
         <div class="panel-content">     
             <div class="zContainer">
                 <div class="row">
-                    <div class="col-md-3 col-xl-7"></div>
-                    <div class="col-sm-6 col-md-4 col-xl-2 col-12 mb-1">
-                        <label for="program_id" class="col-form-label control-label"><b>Search For</b></label>
-                        <div id="selectId" class="input-group">
-                            <select class="form-control form-control-sm input-sm search-filter" name="search_option" id="search_option">
-                                <option value="logon">Full Name</option>
-                                <option value="first_name">First Name</option>
-                                <option value="last_name">Last Name</option>
-                            </select>
-                        </div>
-                    </div>
+                    <div class="col-md-7 col-sm-6 col-xl-9"></div>
                     <div class="col-sm-6 col-md-5 col-xl-3 col-12 mb-1">
-                        <label for="program_id" class="col-form-label control-label"><b>Keyword</b></label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm desc-prop-group pl-2" id="searchVal" name="searchVal">
+                            <input type="text" class="form-control form-control-sm desc-prop-group pl-2" id="searchVal" name="searchVal" autocomplete="off" placeholder="Search.....">
                             <div class="input-group-append">
                                 <button id="btnSearchVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Search">
                                    <i class="fas fa-search"></i>
                                 </button>
                             </div>
                             <div class="input-group-append ml-1">
-                                <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Reset">
-                                   <i class="far fa-refresh"></i> Reset
+                                <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">
+                                   <i class="far fa-refresh hvr-icon"></i> Reset
                                 </button>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-12 mb-1">
                         <div id="grid" class="zGrid"></div>    
                     </div>
@@ -181,7 +108,8 @@
                 </div>
                 <div class="modal-body panel">
                     <div id="previewImage" class="hide"></div>
-                    <div id="printThis" class="col-12" style="background-image:url('../images/zsi-id-front-bg.png');background-repeat: no-repeat;width:100%;position:cover;padding:0;">
+                    <div id="printThis">
+                        <img src="../images/zsi-id-front-bg.png" alt="" height="324" width="204" style="position:fixed;">
                         <div id="printBody">
                             <div id="dummyId" style="height:87px;"></div>
                             <div class="text-center">
@@ -193,7 +121,7 @@
                                 <div class="card-text"><b id="idsId">ID No.:</b>&nbsp; <span id="idNo"></span></div> 
                             </div>
                             <div class="justify-content-center d-flex mb-2" >
-                                <div id="qrcode" style="width:50px; height:50px;"></div>
+                                <div id="qrcode" style="width:60px; height:60px;"></div>
                             </div>
                         </div>
                     </div>
@@ -228,10 +156,10 @@
                 </div>
         		<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <button onclick="employees.{{saveInactive}}" class="btn-sm btn btn-primary" type="button">
-                        <i class="far fa-save"> Save</i>
+                        <i class="far fa-save"></i> Save
                     </button>
                     <button onclick="employees.{{deleteInactive}}" class="btn-sm btn btn-primary" type="button">
-                        <i class="fas fa-trash-alt"> Delete</i>
+                        <i class="fas fa-trash-alt"></i> Delete
                     </button>
         		</div>
             </div>

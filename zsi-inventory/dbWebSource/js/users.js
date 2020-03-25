@@ -252,7 +252,7 @@ var users = (function(){
     } 
     
     function getTemplates(){
-        new zsi.easyJsTemplateWriter("body")
+        new zsi.easyJsTemplateWriter($("#generatedComponents").empty())
         .bsModalBox({
               id        : mdlInactive
             , sizeAttr  : "modal-lg"
@@ -760,4 +760,4 @@ var users = (function(){
     
     return pub;
 })();
-                                     
+                                      

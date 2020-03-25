@@ -61,21 +61,21 @@ var employees = (function(){
         });
     }
     
-    function displayEmployees(searchCol,searchVal){
+    function displayEmployees(searchVal){
         var cb = bs({name:"cbFilter1",type:"checkbox"}); 
             _genderOptions      =   [
-                                         { text:"M"     ,value:"M"          }
-                                        ,{ text:"F"     ,value:"F"          }
+                                         {text:"M"     ,value:"M"}
+                                        ,{text:"F"     ,value:"F"}
                                     ]
            ,_inactiveTypeOptions =  [
-                                         {text:"A"      ,value:"A"          }
-                                        ,{text:"B"      ,value:"B"          }
+                                         {text:"A"      ,value:"A"}
+                                        ,{text:"B"      ,value:"B"}
                                     ] 
         ;                           
         $("#grid").dataBind({
                  sqlCode    : "E162"
                 ,height     : $(window).height() - 280
-                ,parameters  : {search_col: (searchCol ? searchCol : ""),search_val: (searchVal ? searchVal : "")} 
+                ,parameters  : {search_val: (searchVal ? searchVal : "")} 
                 ,blankRowsLimit : 5
                 ,dataRows   : [
                     { text:"Photo"             , width:40      , style:"text-align:center;" 
@@ -92,7 +92,7 @@ var employees = (function(){
                                 return (d !== null ? _link : "");
                         }
                     }
-                    ,{text:"Employee ID"            ,width:60         ,style:"text-align:center"  
+                    ,{text:"Employee ID"            ,width:70         ,style:"text-align:center"  
                         ,onRender : function(d){
                             return app.bs({name:"id"                    ,type:"hidden"      ,value: app.svn (d,"id")})
                                  + app.bs({name:"is_edited"             ,type:"hidden"      ,value: app.svn(d,"is_edited")}) 
@@ -101,19 +101,19 @@ var employees = (function(){
                                  + app.bs({name:"employee_id"           ,type:"input"       ,value: app.svn(d,"employee_id") });
                         } 
                     }
-                    ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:150        ,style:"text-align:left"  }
-                    ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:150        ,style:"text-align:left"  }
-                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:60         ,style:"text-align:left"  }
-                    ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:60        ,style:"text-align:left"  }
-                    ,{text:"Gender"                 ,type:"select"      ,name:"gender"              ,width:50         ,style:"text-align:center"  }
-                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:100        ,style:"text-align:left"  } 
+                    ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:150        ,style:"text-align:left"}
+                    ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:150        ,style:"text-align:left"}
+                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:left"}
+                    ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:60        ,style:"text-align:left"}
+                    ,{text:"Gender"                 ,type:"select"      ,name:"gender"              ,width:50         ,style:"text-align:center"}
+                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:100        ,style:"text-align:left"} 
                     ,{text:"Date Hired"                                                             ,width:100        ,style:"text-align:left"  
                          ,onRender: function(d){
                             return bs({name:"date_hired"   ,style:"text-align:center" ,type:"input" ,value:app.svn(d,"date_hired").toShortDate()}); 
                         }
                     } 
-                    ,{text:"Employement Type"       ,type:"select"      ,name:"empl_type_code"      ,width:140        ,style:"text-align:center"  }
-                    ,{text:"Department"             ,type:"select"      ,name:"department_id"       ,width:150        ,style:"text-align:center"  }
+                    ,{text:"Employement Type"       ,type:"select"      ,name:"empl_type_code"      ,width:140        ,style:"text-align:center"}
+                    ,{text:"Department"             ,type:"select"      ,name:"department_id"       ,width:150        ,style:"text-align:center"}
                     ,{text:"Section"                                                                ,width:150        ,style:"text-align:center"  
                         ,onRender : function(d){
                             return app.bs({name:"section_id"            ,type:"select"      ,value: app.svn(d,"section_id")})
@@ -121,20 +121,20 @@ var employees = (function(){
                                  
                         }
                     }
-                    ,{text:"Position"               ,type:"select"      ,name:"position_id"         ,width:200        ,style:"text-align:center"  }
-                    ,{text:"Basic Pay"              ,type:"input"       ,name:"basic_pay"           ,width:80        ,style:"text-align:right"  }
-                    ,{text:"Pay Type"               ,type:"select"      ,name:"pay_type_code"       ,width:90        ,style:"text-align:center"  }
-                    ,{text:"SSS No."                ,type:"input"       ,name:"sss_no"              ,width:105        ,style:"text-align:center"  }
-                    ,{text:"TIN"                    ,type:"input"       ,name:"tin"                 ,width:105        ,style:"text-align:center"  }
-                    ,{text:"PhilHealth No."         ,type:"input"       ,name:"philhealth_no"       ,width:105        ,style:"text-align:center"  }
-                    ,{text:"HMDF No."               ,type:"input"       ,name:"hmdf_no"             ,width:105        ,style:"text-align:center"  }
-                    ,{text:"Account No."            ,type:"input"       ,name:"account_no"          ,width:105        ,style:"text-align:center"  }
-                    ,{text:"No. of Shares"          ,type:"input"       ,name:"no_shares"           ,width:105        ,style:"text-align:center"  }
-                    ,{text:"Contact Name"           ,type:"input"       ,name:"contact_name"        ,width:105        ,style:"text-align:center"  }
-                    ,{text:"Contact Phone No."      ,type:"input"       ,name:"contact_phone_no"    ,width:105        ,style:"text-align:center"  }
-                    ,{text:"Contact Address"        ,type:"input"       ,name:"contact_address"     ,width:105        ,style:"text-align:center"  }
-                    ,{text:"Cotact Relation"        ,type:"select"      ,name:"contact_relation_id" ,width:105        ,style:"text-align:center"  }
-                    ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:50         ,style:"text-align:center"    ,defaultValue:"Y"}
+                    ,{text:"Position"               ,type:"select"      ,name:"position_id"         ,width:200        ,style:"text-align:center"}
+                    ,{text:"Basic Pay"              ,type:"input"       ,name:"basic_pay"           ,width:80        ,style:"text-align:right"}
+                    ,{text:"Pay Type"               ,type:"select"      ,name:"pay_type_code"       ,width:90        ,style:"text-align:center"}
+                    ,{text:"SSS No."                ,type:"input"       ,name:"sss_no"              ,width:105        ,style:"text-align:center"}
+                    ,{text:"TIN"                    ,type:"input"       ,name:"tin"                 ,width:105        ,style:"text-align:center"}
+                    ,{text:"PhilHealth No."         ,type:"input"       ,name:"philhealth_no"       ,width:105        ,style:"text-align:center"}
+                    ,{text:"HMDF No."               ,type:"input"       ,name:"hmdf_no"             ,width:105        ,style:"text-align:center"}
+                    ,{text:"Account No."            ,type:"input"       ,name:"account_no"          ,width:105        ,style:"text-align:center"}
+                    ,{text:"No. of Shares"          ,type:"input"       ,name:"no_shares"           ,width:105        ,style:"text-align:center"}
+                    ,{text:"Contact Name"           ,type:"input"       ,name:"contact_name"        ,width:105        ,style:"text-align:center"}
+                    ,{text:"Contact Phone No."      ,type:"input"       ,name:"contact_phone_no"    ,width:105        ,style:"text-align:center"}
+                    ,{text:"Contact Address"        ,type:"input"       ,name:"contact_address"     ,width:105        ,style:"text-align:center"}
+                    ,{text:"Cotact Relation"        ,type:"select"      ,name:"contact_relation_id" ,width:105        ,style:"text-align:center"}
+                    ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:60         ,style:"text-align:center"    ,defaultValue:"Y"}
                     ,{text:"Other Income"           ,type:"input"                                   ,width:90         ,style:"text-align:center"
                         ,onRender : function(d){
                                 var _link = "<a href='javascript:void(0)' ' onclick='employees.showModalEmp("+ app.svn (d,"employee_id") +",\""+ app.svn (d,"last_name") +"\", \"" + " " +"\", \""+ app.svn (d,"first_name") +"\")'><i class='fas fa-link link'></i></a>";
@@ -196,14 +196,14 @@ var employees = (function(){
                         g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
                         _inactiveTypeCode.fillSelect({data: _inactiveTypeOptions});
                         _inactiveTypeCode.change(function(){
-                            _$this.closest(".zRow").find("[name='inactive_type_code']").val( $(this).val() );    
+                            _$this.closest(".zRow").find("[name='inactive_type_code']").val( $(this).val());    
                         });
                         _date.datepicker().change(function(){
-                            _$this.closest(".zRow").find("[name='inactive_data']").val( $(this).val() );    
+                            _$this.closest(".zRow").find("[name='inactive_data']").val( $(this).val());    
                         });
                     } else {
-                        _$this.closest(".zRow").find("[name='inactive_type_code']").val("");    
-                        _$this.closest(".zRow").find("[name='inactive_data']").val("");    
+                        _$this.closest(".zRow").find("[name='inactive_type_code']").val("");
+                        _$this.closest(".zRow").find("[name='inactive_data']").val("");
                     }
                 });
             }
@@ -216,21 +216,21 @@ var employees = (function(){
         $("#gridInactive").dataBind({
              sqlCode    : "E162"
             ,parameters : {"is_active" : "N"}
-            ,width      : $(".zContainer").outerWidth()
+            ,height     : 300
             ,blankRowsLimit : 5
             ,dataRows   : [
                 {text: cb                      ,width:25            ,style:"text-align:center"
                      ,onRender : function(d){
                         return app.bs({name:"id"                    ,type:"hidden"      ,value: app.svn (d,"id")})
                              + app.bs({name:"is_edited"             ,type:"hidden"      ,value: app.svn(d,"is_edited")}) 
-                             + app.bs({name:"inactive_type_code"    ,type:"hidden"      ,value: app.svn(d,"inactive_type_code") })
-                             + app.bs({name:"inactive_data"         ,type:"hidden"      ,value: app.svn(d,"inactive_date") })
-                             + (d !== null ? bs({name:"cb"          ,type:"checkbox"}) : "" );
+                             + app.bs({name:"inactive_type_code"    ,type:"hidden"      ,value: app.svn(d,"inactive_type_code")})
+                             + app.bs({name:"inactive_data"         ,type:"hidden"      ,value: app.svn(d,"inactive_date")})
+                             + (d !== null ? bs({name:"cb"          ,type:"checkbox"}) : "");
                      }
                 }
                 ,{text:"Employee ID"            ,type:"input"       ,name:"employee_id"         ,width:75         ,style:"text-align:center"}
-                ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:200        ,style:"text-align:center"  }
-                ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:200        ,style:"text-align:center"  }
+                ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:200        ,style:"text-align:center"}
+                ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:200        ,style:"text-align:center"}
                 ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:center"  
                     ,onRender : function(d){
                         return app.bs({name:"middle_name"           ,type:"input"   ,value: app.svn (d,"middle_name")})
@@ -273,13 +273,13 @@ var employees = (function(){
                         { return  app.bs({name:"emp_pos_other_income_id"        ,type:"hidden"       ,value: app.svn(d,"emp_pos_other_income_id")})
                                 + app.bs({name:"is_edited"                      ,type:"hidden"       ,value: app.svn(d,"is_edited")})
                                 + app.bs({name:"employee_id"                    ,type:"hidden"       ,value: emdId})
-                                + app.bs({name:"position_id"                    ,type:"hidden"       ,value: app.svn(d,"position_id") })
+                                + app.bs({name:"position_id"                    ,type:"hidden"       ,value: app.svn(d,"position_id")})
                                 + (d !==null ? app.bs({name:"cb"                ,type:"checkbox"}) : "" ); }
                 }
                 ,{text: "Other Income"          ,name:"other_income_id"         ,type:"select"       ,width : 150   ,style : "text-align:left;"}
                 ,{text: "Amount"                                                                     ,width : 95    ,style : "text-align:right;"
                     ,onRender: function(d){
-                        return (d !== null ? bs({name: "amount"   ,type: "input"  ,value: parseFloat(app.svn(d,"amount")).toFixed(2) }) : bs({name: "amount"   ,type: "input"  ,value: app.svn(d,"amount") }) );
+                        return (d !== null ? bs({name: "amount"   ,type: "input"  ,value: parseFloat(app.svn(d,"amount")).toFixed(2) }) : bs({name: "amount"   ,type: "input"  ,value: app.svn(d,"amount") }));
                     }
                 }
     
@@ -302,10 +302,10 @@ var employees = (function(){
 
             }
         });
-    } 
+    }
     
     //Public Functions
-    _public.showModalViewId = function (eL,id,firstName,middleName,lastName,nameSuffix,fileName,positionId,hashKey) {
+    _public.showModalViewId = function (eL,id,firstName,middleName,lastName,nameSuffix,fileName,positionId,hashKey){
         var _frm = $("#frm_modalEmpoloyeeId");
         var _$position = $(eL).closest(".zRow").find('[name="position_id"] option[value="'+positionId+'"]').text();
         var _middleN = middleName !=="" ? middleName + "." : "";
@@ -318,22 +318,24 @@ var employees = (function(){
         _frm.find("#imgFilename").attr("src", _imgFilename);
         $('#modalEmployeesId').modal({ show: true, keyboard: false, backdrop: 'static' });
         _frm.find("#qrcode").text("");
-        if(hashKey){ var qrcode = new QRCode(_frm.find("#qrcode").get(0),{width:50,height:50}).makeCode(hashKey);}
+        if(hashKey){ var qrcode = new QRCode(_frm.find("#qrcode").get(0),{width:60,height:60}).makeCode(hashKey);}
         _frm.find("#qrcode").attr("title","");
         gFullName = firstName+lastName;
-        function pad(id) {
-            var _str = id.toString();
-            return _str.length < 3 ? pad("0" + _str, 3) : _str;
-        }
         setTimeout(function(){
-            html2canvas($("#printThis"), {
-                onrendered: function(canvas) {
+            html2canvas($("#printThis"),{
+                onrendered: function(canvas){
                     $("#previewImage").append(canvas);
                     gCanvas = canvas;
                 }
             });
         }, 100);
     };
+    
+    function pad(id) {
+        var _str = id.toString();
+        return _str.length < 3 ? pad("0" + _str, 3) : _str;
+    }
+    
     _public.showModalUploadEmplImage = function(emplId, name){
         employee_id = emplId;
         var m=$('#' + mdlImageEmpl);
@@ -388,8 +390,8 @@ var employees = (function(){
         }, 'json');
     },
     _public.mouseover = function(filename){
-     $("#user-box").css("display","block");
-     $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
+        $("#user-box").css("display","block");
+        $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
     },
     _public.mouseout = function (){
         $("#user-box").css("display","none");
@@ -452,8 +454,8 @@ var employees = (function(){
     $("#btnSave").click(function () {
        $("#grid").jsonSubmit({
                  procedure: "employees_upd"
-                ,notInclude     : "[name='emp_hash_key']"
                 ,notIncludes : ["emp_hash_key"]
+                ,optionalItems: ["is_active","is_active","is_active","is_active","is_active","is_active","is_active","is_active","is_active"]
                 ,onComplete: function (data) {
                     if(data.isSuccess===true) zsi.form.showAlert("alert");
                     displayEmployees();
@@ -463,18 +465,12 @@ var employees = (function(){
     
     $("#btnSearchVal").click(function(){ 
         var _searchVal = $.trim($("#searchVal").val()); 
-        if(_searchVal!==""){
-            displayEmployees(gCustName,_searchVal);
-            
-        }
+        displayEmployees(_searchVal);
     }); 
-   $("#searchVal").on('keypress',function(e) {
+    $("#searchVal").on('keypress',function(e) {
         var _searchVal = $.trim($("#searchVal").val()); 
         if(e.which == 13) {
-           if(_searchVal!==""){
-            displayEmployees(gCustName,_searchVal);
-            
-        }
+            displayEmployees(_searchVal);
         }
     });
 
@@ -483,38 +479,35 @@ var employees = (function(){
             displayEmployees();
         }
     });
-    
+
+
     $("#btnResetVal").click(function(){
-        $("#search_option").val(isUD);
-        $("#searchVal").val("").attr("placeholder", "Enter Keyword");
         displayEmployees();
     });
     
     document.getElementById("Print").onclick = function () {
-        printElement(document.getElementById("printThis"));
+        printCanvas();
     };
 
-    function printElement(elem) {
-        var domClone = elem.cloneNode(true);
-    
-        var $printSection = document.getElementById("printSection");
-    
-        if (!$printSection) {
-            var $printSection = document.createElement("div");
-            $printSection.id = "printSection";
-            document.body.appendChild($printSection);
-        }
-    
-        $printSection.innerHTML = "";
-        $printSection.appendChild(domClone);
-        window.print();
+    function printCanvas(){  
+        var _imgData = gCanvas.toDataURL("image/png");
+        var _newImgData = _imgData.replace(/^data:image\/png/, "data:application/octet-stream");
+        var windowContent = '<!DOCTYPE html>';
+        windowContent += '<html><body>';
+        windowContent += '<img src="' + _newImgData + '">';
+        windowContent += '</body></html>';
+        var printWin = window.open('','');
+        printWin.document.open();
+        printWin.document.write(windowContent);
+        printWin.document.close();
+        printWin.focus();
+        printWin.print();
     }
     
     $("#download").click(function() { 
         var _imgData = gCanvas.toDataURL("image/png");
         var _newImgData = _imgData.replace(/^data:image\/png/, "data:application/octet-stream");
         $("#download").attr("download", ""+gFullName+"Id.png").attr("href", _newImgData);
-            
     });
     
     return _public;
@@ -522,4 +515,4 @@ var employees = (function(){
     
 })();
 
-                                                 
+                                                       
