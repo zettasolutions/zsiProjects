@@ -7,6 +7,7 @@
         ,gDriverId       = null
         ,gRouteId        = null
         ,gVehicleId      = null
+        ,gDateType       = ""
         ,gzGrid1         = "#gridTransactions"
         ,gzGrid2         = "#gridPostedTransactions"
         ,gActiveTab      = ""
@@ -87,6 +88,22 @@
                    gVehicleId = _vehicle_id;
            }
         });
+        
+        $('[name="filter"]').on('change', function(){
+            var _this = $(this);
+            var _placeholderFrm = "";
+            var _placeholderTo = "";
+            if(_this.val() === "weekly"){ gDateType = "weekly";_placeholderFrm="FROM WEEK.....";_placeholderTo="TO WEEK....."}
+            else if (_this.val() === "monthly"){ gDateType = "monthly";_placeholderFrm="FROM MONTH.....";_placeholderTo="TO MONTH....."}
+            else{ gDateType = "yearly";_placeholderFrm="FROM YEAR.....";_placeholderTo="TO YEAR....."}
+            
+            if(_this.is(':checked')){
+                $("#posted_date_from").attr("placeholder",_placeholderFrm);
+                $("#posted_date_to").attr("placeholder",_placeholderTo);
+                $(".date-range").removeClass("hide");
+            }
+            
+        });
        
     };
     
@@ -96,20 +113,27 @@
         var _timeFrom = "";
         var _timeTo = "";
         var _error  = $("#ermsgId");
+        var _msg = "Value must not be lesser than "
+        var _erTypeMsg = "";
         
-
-        $("#posted_date_from,#posted_date_to").on("keyup change",function(){
+        $("#posted_date_from,#posted_date_to").on("keyup",function(){
             var _colName    = $(this)[0].id;
-            if(_colName === "posted_date_from")_timeFrom = new Date(_dayFrom.val()).getTime();
-            else _timeTo = new Date(_dayTo.val()).getTime();
+            if(gDateType === "weekly") _erTypeMsg = _msg + "from week value";
+            else if(gDateType === "monthly") _erTypeMsg = _msg + "from month value";
+            else _erTypeMsg = _msg + "from year value";
+            
+            _error.text(_erTypeMsg);
+            
+            if(_colName === "posted_date_from")_timeFrom = _dayFrom.val();
+            else _timeTo = _dayTo.val();
             if(_timeFrom > _timeTo){
                 _error.removeClass("hide");
                 _dayTo.css("border-color","red");
-                $("#btnFilterVal2").attr("disabled",true);
+                $("#btnFilterVal").attr("disabled",true);
             }else{
                 _error.addClass("hide");
                 _dayTo.css("border-color","green");
-                $("#btnFilterVal2").removeAttr("disabled");
+                $("#btnFilterVal").removeAttr("disabled");
             }
         });
         
@@ -117,10 +141,20 @@
     }
     
   
-    function displayPostedTransactions(fromDate,toDate,paymentId,routeId,vehicleId,driverId,paoId){
+    function displayPostedTransactions(fromDate,toDate,paymentId,routeId,vehicleId,driverId,paoId,dateType){
         zsi.getData({
                  sqlCode    : "P1268" //payments_report_sel
-                ,parameters : {posted_frm:(fromDate ? fromDate : ""),posted_to:(toDate ? toDate : ""),payment_type:(paymentId ? paymentId : ""),route_id:(routeId ? routeId : ""),vehicle_id:(vehicleId ? vehicleId : ""),driver_id:(driverId ? driverId : ""),pao_id:(paoId ? paoId : "")} 
+                ,parameters : { posted_frm:(fromDate ? fromDate : "")
+                                ,posted_to:(toDate ? toDate : "")
+                                ,payment_type:(paymentId ? paymentId : "")
+                                ,route_id:(routeId ? routeId : "")
+                                ,vehicle_id:(vehicleId ? vehicleId : "")
+                                ,driver_id:(driverId ? driverId : "")
+                                ,pao_id:(paoId ? paoId : "")
+                                ,date_type:(dateType ? dateType : "")
+                                
+                    
+                            } 
                 ,onComplete : function(d) {
                     var _rows= d.rows;
                     var _tot = { reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0};
@@ -178,15 +212,6 @@
                             this.find("input").attr("readonly",true);
                             if(o.data.length <= 1)$("#btnExportTransations").attr("disabled",true);
                             else $("#btnExportTransations").removeAttr("disabled");
-                            var _$dateFr = _this.find(".zRow:first-child()").find("[name='posted_date']").val();
-                            var _$dateTo = _this.find(".zRow:nth-last-child(2)").find("[name='posted_date']").val();
-                            var _dateFr = isUD(_$dateFr) ? "" : _$dateFr.toShortDates();
-                            var _dateTo = isUD(_$dateTo) ? "" : _$dateTo.toShortDates();
-                            console.log("_dateFr",_dateFr);
-                            console.log("_dateTo",_dateTo);
-                            
-                            $("#posted_date_from").datepicker("setDate",_dateFr);
-                            $("#posted_date_to").datepicker("setDate",_dateTo);
                             
                             setTimeout(function(){
                                 setFooterFreezed(gzGrid2);
@@ -293,41 +318,6 @@
         }
     }
     
-    $("#btnSaveTransations").click(function () {
-      $("#gridTransactions").jsonSubmit({
-           procedure: "payment_posting_upd"
-          ,notIncludes : ["payment_date","vehicle_plate_no","pao","driver","inspector_id","route_id","from_location","to_location","no_klm","no_reg","reg_amount","no_stu","stu_amount","no_sc","sc_amount","no_pwd","pwd_amount","total_paid_amount","payment_type","route_code"]
-          ,onComplete: function (data) {
-              displayTransactions();
-              displayPostedTransactions();
-              if(data.isSuccess===true) zsi.form.showAlert("alert");
-              
-              $("#gridTransactions").convertToTable(
-                function($table){
-                    $("#ExcelgridTransactions").find("th").remove();
-                    setTimeout(function(){
-                        var _confirmation = confirm("Do you want to print this data?");
-                        if (_confirmation === true) {
-                            var mywindow = window.open('', 'PRINT');
-                            mywindow.document.write('<html><head><style>table,th,td{border: 1px solid black;text-align:center;}</style></head><body>');
-                            mywindow.document.write('<div style="text-align:center;"><h1>LAMADO TRANSPORATION</h4></div>');
-                            mywindow.document.write('<div style="text-align:center;"><h4>Run Date: '+gDate+'</h4></div>');
-                            mywindow.document.write('<table style="border-collapse: collapse;">');
-                            mywindow.document.write('<thead><tr><td colspan="9">&nbsp;</td><td colspan="2">Regular</td><td colspan="2">Student</td><td colspan="2">Senior</td><td colspan="2">PWD</td><td ></td><td></td></tr>');
-                            mywindow.document.write('<tr><td>Date</td><td>Vehicle</td><td>PAO</td><td>Driver</td><td>Inspector</td><td>Route</td><td>From</td><td>To</td><td>Distance</td><td>Qty</td><td>Total</td><td>Qty</td><td>Total</td><td>Qty</td><td>Total</td><td>Qty</td><td>Total</td><td>Total Amount</td><td>Payment Type</td></tr></thead>');
-                            mywindow.document.write(document.getElementById("ExcelgridTransactions").innerHTML);
-                            mywindow.document.write('</table></body></html>');
-                            mywindow.document.close();
-                            mywindow.focus();
-                            mywindow.print();
-                            mywindow.close();
-                        }
-                        return true;
-                    }, 1000);
-                });
-            }
-        });
-    });
     
     $("#btnExportTransations").click(function () {
       $("#gridPostedTransactions").convertToTable(
@@ -348,7 +338,7 @@
     $("#btnFilterVal").click(function(){ 
         var _from = $.trim($("#posted_date_from").val()); 
         var _to = $.trim($("#posted_date_to").val()); 
-        displayPostedTransactions(_from,_to,gPaymentId,gRouteId,gVehicleId,gDriverId,gPaoId);
+        displayPostedTransactions(_from,_to,gPaymentId,gRouteId,gVehicleId,gDriverId,gPaoId,gDateType);
         setTimeout(function(){
             setFooterFreezed(gzGrid2);
         }, 1000);
@@ -361,4 +351,4 @@
     
     
     return _pub;
-})();                                                               
+})();                                                                 

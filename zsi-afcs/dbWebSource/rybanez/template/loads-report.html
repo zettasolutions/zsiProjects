@@ -11,15 +11,37 @@
         <div class="panel-content">
             <div class="zContainer">
                 <div class="row">
-                    <div class="col-sm-5 col-md-3 col-xl-2 col-12 mb-2">
+                    <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" id="loaderId"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-md-3 col-xl-2 col-12 mb-2 date-range hide">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm pl-2" id="load_date_frm" name="load_date_frm" placeholder="Load date from....."/>
                         </div>
                     </div>
-                    <div class="col-sm-7 col-md-4 col-xl-3 col-12 mb-2">
+                    <div class="col-sm-5 col-md-3 col-xl-2 col-12 mb-2 date-range hide">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-sm pl-2" id="load_date_to" name="load_date_to" placeholder="Load date to....."/>
+                        </div>
+                        <small id="ermsgId" class="ml-2 hide" style="color:red;"></small>
+                    </div>
+                    <div class="col-sm-7 col-md-3 col-xl-2 col-12 mb-2">
+                        <div class="input-group">
                             <div class="input-group-append">
+                               <button id="filterCol" type="button" class="btn btn-primary btn-outline-default text-white btn-sm dropdown-toggle bg-brand-gradient waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Date Range
+                                </button>
+                                <div class="dropdown-menu fadeinright dropdown-menu-right" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+                                    <div class="list-group list-group-flush" id="filterColumns">
+                                        <div class="list-group-item py-1"><label><input id="weakly" type="radio" name="filter" value="weekly"/> Weekly</label></div>
+                                        <div class="list-group-item py-1"><label><input id="monthly" type="radio" name="filter" value="monthly"/> Monthly</label></div>
+                                        <div class="list-group-item py-1"><label><input id="yearly" type="radio" name="filter" value="yearly"/> Yearly</label></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group-append ml-1">
                                 <button id="btnFilterVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter">
                                    <i class="fas fa-filter"></i>
                                 </button>
@@ -30,7 +52,6 @@
                                 </button>
                             </div>
                         </div>
-                        <small id="ermsgId" class="ml-2" style="color:red;">Date must not be lesser than "From date"!</small>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
                          <div id="gridLoadingTransactions" class="zGrid"></div>
