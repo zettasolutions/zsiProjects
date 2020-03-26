@@ -12,6 +12,7 @@ CREATE PROCEDURE [dbo].[users_sel]
   ,@order_no INT = 0
   ,@pno INT = 1
   ,@rpp INT = 1000
+  ,@userFullName VARCHAR(50) = null
 )  
 AS  
 BEGIN  
@@ -28,12 +29,16 @@ IF ISNULL(@user_id,0) <> 0
 IF ISNULL(@logon,'')<>''
 SELECT @is_dev = is_developer FROM dbo.users where logon=@logon;
  
-SET @stmt = 'SELECT user_id, userFullName, logon, first_name, middle_name, last_name, name_suffix, password,  is_admin, role_id, is_developer, img_filename  FROM users_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''''
+SET @stmt = 'SELECT user_id, userFullName, logon, first_name, middle_name, last_name, name_suffix, password,  is_admin, role_id, is_developer, img_filename, company_code, hash_key  FROM users_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''''
 ;  
    SET @order = ' ORDER BY ' + CAST(@col_no + 1 AS VARCHAR(1)) + ' ' + IIF(@order_no=0,'ASC','DESC');  
    SELECT @count = COUNT(*) FROM dbo.users_v WHERE is_active = @is_active;
 
-
+IF isnull(@userFullName,'') <>''
+BEGIN
+	  SET @stmt = @stmt + ' AND first_name like ''%'+@userFullName+'%'' or last_name like ''%'+@userFullName+'%''';
+	  SELECT @count = COUNT(*) FROM dbo.users_v WHERE is_active = @is_active + ' AND  first_name like ''%'+@userFullName+'%'' or last_name like ''%'+@userFullName+'%''';
+END
 IF ISNULL(@search_user_id,0) <>0
 BEGIN
      SET @stmt = @stmt + ' AND user_id = ' + CAST(@search_user_id AS VARCHAR(20));

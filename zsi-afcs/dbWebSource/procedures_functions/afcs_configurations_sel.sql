@@ -17,7 +17,7 @@ BEGIN
 			base_fare
 			, base_kms
 			, succeeding_km_fare
-		FROM zsi_fmis.dbo.fare_matrix
+		FROM dbo.fare_matrix
 	)
 	, cte_student (
 		student_discount

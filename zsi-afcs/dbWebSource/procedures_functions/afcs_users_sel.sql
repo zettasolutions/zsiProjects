@@ -9,7 +9,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-	      company_code
+		[user_id]
+	    , company_code
 		, logon
 		, position
 		, last_name

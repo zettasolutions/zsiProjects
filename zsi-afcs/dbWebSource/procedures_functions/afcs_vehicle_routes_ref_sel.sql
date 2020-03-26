@@ -9,8 +9,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-          a.asset_no
-		, d.asset_code
+		a.vehicle_plate_no AS asset_no
+		, d.vehicle_type AS asset_code
 		, b.route_code
 		, b.route_desc
 		, c.route_no
@@ -18,13 +18,13 @@ BEGIN
 		, c.distance_km
 		, c.seq_no
 		, a.is_active
-	FROM zsi_fmis.dbo.assets a 
-	JOIN zsi_fmis.dbo.routes_ref b
+	FROM dbo.vehicles a 
+	LEFT JOIN dbo.routes_ref b
 	ON a.route_id = b.route_id
-	JOIN zsi_fmis.dbo.route_details c
+	LEFT JOIN dbo.route_details c
 	ON b.route_id = c.route_id
-	JOIN zsi_fmis.dbo.asset_types d
-	ON a.asset_type_id = d.id
+	LEFT JOIN dbo.vehicle_types d
+	ON a.vehicle_type_id = d.vehicle_type_id
 	WHERE 1 = 1
 	AND a.hash_key = @hash_key
 	ORDER BY c.route_no, c.seq_no

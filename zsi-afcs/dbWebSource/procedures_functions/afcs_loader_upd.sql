@@ -3,7 +3,7 @@
 CREATE PROCEDURE [dbo].[afcs_loader_upd]  
 (  
    @serial_no NVARCHAR(50)
-   , @amount DECIMAL(12, 0)
+   , @amount DECIMAL(12, 2)
    , @user_id INT = NULL
 )  
 AS  
@@ -23,7 +23,7 @@ BEGIN
 	BEGIN
 		SELECT TOP 1 @generated_qr_id = id
 			FROM dbo.generated_qrs WHERE 1 = 1
-			AND balance_amt = @amount
+			AND ISNULL(balance_amt, 0) = 0
 			AND is_taken = 'N'
 			AND is_active = 'Y'
 			AND ISNULL(is_loaded, '') <> 'Y'
@@ -39,6 +39,7 @@ BEGIN
 				dbo.generated_qrs
 			SET
 				is_taken = 'Y'
+				, balance_amt = @amount
 				, ref_trans = CONCAT(REPLACE(CONVERT(CHAR(10), GETDATE(), 101), '/', ''), id)
 				, updated_by = @user_id
 				, updated_date = GETDATE()

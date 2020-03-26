@@ -11,30 +11,42 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @consumer_id INT;
+	DECLARE @consumer_generated_qr_id INT;
 	DECLARE @current_consumer_credit_amount DECIMAL(12, 2);
-	DECLARE @is_already_loaded NCHAR(1);
+	DECLARE @generated_qr_is_active NCHAR(1);
 	DECLARE @generated_qr_id INT;
 	DECLARE @generated_qr_amount DECIMAL(12, 2);
 
-	SELECT 
+	SELECT
 		@consumer_id = consumer_id
-		, @current_consumer_credit_amount = credit_amount
-	FROM dbo.consumers WHERE 1 = 1
+	FROM dbo.consumers
+	WHERE 1 = 1
 	AND email = @email;
 
 	SELECT 
+		TOP 1
+		@consumer_generated_qr_id = id
+		, @current_consumer_credit_amount = balance_amt
+	FROM dbo.generated_qrs
+	WHERE 1 = 1
+	AND consumer_id = @consumer_id
+	AND is_taken = 'Y'
+	AND is_active = 'Y';
+
+	SELECT 
 		@generated_qr_id = id
-		, @is_already_loaded = is_loaded
+		, @generated_qr_is_active = is_active
 		, @generated_qr_amount = balance_amt
-	FROM dbo.generated_qrs WHERE 1 = 1
+	FROM dbo.generated_qrs 
+	WHERE 1 = 1
+	AND consumer_id IS NULL
 	AND hash_key = @hash_key;
 
-	IF ISNULL(@is_already_loaded, '') = 'Y'
+	IF ISNULL(@generated_qr_is_active, '') <> 'Y'
 	BEGIN
 		SELECT
-			'N' AS is_loaded
-			, 'N' AS is_valid
-			, 'QR Code is not valid.' AS load_msg
+			'N' AS is_valid
+			, 'QR code is no longer valid.' AS load_msg
 			, 0.00 AS amount_loaded
 			, @current_consumer_credit_amount AS consumer_credit_amount
 	END
@@ -44,18 +56,24 @@ BEGIN
 
 		DECLARE @new_consumer_amount DECIMAL(12, 2) = 0;
 		SET @new_consumer_amount = ISNULL(@current_consumer_credit_amount, 0) + ISNULL(@generated_qr_amount, 0);
-		UPDATE 
-			dbo.consumers 
-		SET 
-			credit_amount = @new_consumer_amount 
-		WHERE 1 = 1 
-		AND consumer_id = @consumer_id;
 
+		-- Update the main qr of the consumer.
 		UPDATE
 			dbo.generated_qrs
 		SET
-			is_loaded = 'Y'
-			, is_taken = 'Y'
+			is_taken = 'Y'
+			, balance_amt = @new_consumer_amount
+			, updated_date = GETDATE()
+		WHERE 1 = 1
+		AND id = @consumer_generated_qr_id;
+
+		-- Update the transferred qr.
+		UPDATE
+			dbo.generated_qrs
+		SET
+			is_taken = 'Y'
+			, is_active = 'N'
+			, balance_amt = 0
 			, consumer_id = @consumer_id
 			, updated_by = @consumer_id
 			, updated_date = GETDATE()
@@ -73,9 +91,8 @@ BEGIN
 
 		IF @@ERROR = 0
 			SELECT
-				'Y' AS is_loaded
-				, 'Y' AS is_valid
-				, 'QR Code loaded successfully.' AS load_msg
+				'Y' AS is_valid
+				, 'QR code loaded successfully.' AS load_msg
 				, @generated_qr_amount AS amount_loaded
 				, @new_consumer_amount AS consumer_credit_amount
 	END

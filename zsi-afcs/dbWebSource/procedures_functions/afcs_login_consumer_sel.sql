@@ -10,13 +10,17 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-	      email
-		, first_name
-		, last_name
-		, is_active
-		, credit_amount
-	FROM dbo.consumers WHERE 1 = 1
-	AND is_active = 'Y'
-	AND email = @username
-	AND [password] = @password
+	      a.email
+		, a.first_name
+		, a.last_name
+		, a.is_active
+		, b.balance_amt AS credit_amount
+		, b.hash_key
+	FROM dbo.consumers a
+	LEFT JOIN dbo.generated_qrs b
+	ON a.consumer_id = b.consumer_id
+	WHERE 1 = 1
+	AND b.is_active = 'Y'
+	AND a.email = @username
+	AND a.[password] = @password
 END;
