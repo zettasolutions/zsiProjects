@@ -18,4 +18,6 @@ BEGIN
 	ON b.consumer_id = c.consumer_id
 	WHERE 1 = 1
 	AND c.email = @username
+	ORDER BY
+		a.load_date DESC
 END;
