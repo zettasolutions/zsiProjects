@@ -1,12 +1,24 @@
  var loadingTransactions = (function(){
     var _pub             = {}
-        ,gDateType       = "";
+        ,gDateType       = ""
+        ,gLoaderId       = null;
     
     zsi.ready = function(){
         $(".page-title").html("Load Transactions Report");
         displayLoadingTransactions();
         validation();
         $('#loaderId').select2({placeholder: "SELECT LOADER",allowClear: true});
+        
+        $("#loaderId").dataBind({
+            sqlCode      : "D1270" //dd_users_sel
+           ,text         : "full_name"
+           ,value        : "user_id"
+           ,onChange     : function(d){
+               var _info           = d.data[d.index - 1]
+                   _loader_id         = isUD(_info) ? "" : _info.user_id;
+                gLoaderId = _loader_id;
+           }
+        });
         
         $('[name="filter"]').on('change', function(){
             var _this = $(this);
@@ -19,6 +31,8 @@
             if(_this.is(':checked')){
                 $("#load_date_frm").attr("placeholder",_placeholderFrm);
                 $("#load_date_to").attr("placeholder",_placeholderTo);
+                $("#load_date_frm").val("");
+                $("#load_date_to").val("");
                 $(".date-range").removeClass("hide");
             }
             
@@ -59,10 +73,10 @@
         
     }
    
-    function displayLoadingTransactions(loadDateFrm,loadDateTo,dateType){
+    function displayLoadingTransactions(loadDateFrm,loadDateTo,dateType,loaderId){
         $("#gridLoadingTransactions").dataBind({
              sqlCode        : "L1267" //loads_report_sel
-            ,parameters     : {load_date_frm:(loadDateFrm ? loadDateFrm : ""),load_date_to:(loadDateTo ? loadDateTo : ""),date_type:(dateType ? dateType : "")} 
+            ,parameters     : {load_date_frm:(loadDateFrm ? loadDateFrm : ""),load_date_to:(loadDateTo ? loadDateTo : ""),date_type:(dateType ? dateType : ""),load_by:(loaderId ? loaderId : "")} 
             ,height         : $(window).height() - 270
             ,dataRows       : [
                 {text: "Load Date"                                                                     ,width : 200
@@ -88,10 +102,19 @@
         });
     }
     
+    $("#btnExportTransations").click(function () {
+      $("#gridLoadingTransactions").convertToTable(
+        function($table){
+            $table.htmlToExcel({
+               fileName: "Loads Report"
+           });
+        });
+    });
+    
     $("#btnFilterVal").click(function(){ 
         var _dateFrm = $.trim($("#load_date_frm").val());  
         var _dateTo = $.trim($("#load_date_to").val());
-        displayLoadingTransactions(_dateFrm,_dateTo,gDateType);
+        displayLoadingTransactions(_dateFrm,_dateTo,gDateType,gLoaderId);
     }); 
 
     $("#load_date").on("keyup change",function(){
@@ -101,8 +124,11 @@
     });
 
     $("#btnResetVal").click(function(){
+        $("#loaderId").val(null).trigger('change');
+        $(".date-range").addClass("hide");
+        $('[name="filter"]').prop('checked', false);
         displayLoadingTransactions();
     });
 
     return _pub;
-})();                     
+})();                        

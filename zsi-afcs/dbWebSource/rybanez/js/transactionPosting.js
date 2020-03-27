@@ -147,12 +147,10 @@
             case "#nav-posted":
                 gActiveTab = "posted";
                 setFooterFreezed(gzGrid2);
-                validation();
                 break;
             case "#nav-forPosting":
                 gActiveTab = "for-posting";
                 setFooterFreezed(gzGrid1);
-                validation();
                 break;
           default:break;
       }
@@ -163,44 +161,43 @@
         var _dayFrom = _$navTab.find("#posted_date_from");
         var _dayTo   = _$navTab.find("#posted_date_to");
         var _dateFrm = _$navTab.find("#date_frm");
-        var _dateTo   = _$navTab.find("#date_to");
-        var _timeFrom = "";
-        var _timeTo = "";
+        var _dateTo  = _$navTab.find("#date_to");
+        var _timeFrom1 = "";
+        var _timeTo1 = "";
+        var _timeFrom2 = "";
+        var _timeTo2 = "";
         var _error1  = _$navTab.find("#ermsgId1");
         var _error2  = _$navTab.find("#ermsgId2");
         
-        if(gActiveTab === "for-posting"){
-            _$navTab.find("#posted_date_from,#posted_date_to").on("keyup change",function(){
-                var _colName    = $(this)[0].id;
-                if(_colName === "posted_date_from")_timeFrom = new Date(_dayFrom.val()).getTime();
-                else _timeTo = new Date(_dayTo.val()).getTime();
-                if(_timeFrom > _timeTo){
-                    _error2.removeClass("hide");
-                    _dayTo.css("border-color","red");
-                    $("#btnFilterVal2").attr("disabled",true);
-                }else{
-                    _error2.addClass("hide");
-                    _dayTo.css("border-color","green");
-                    $("#btnFilterVal2").removeAttr("disabled");
-                }
-            });
-        }
-        else{
-            _$navTab.find("#date_frm,#date_to").on("keyup change",function(){
-                var _colName    = $(this)[0].id;
-                if(_colName === "date_frm")_timeFrom = new Date(_dateFrm.val()).getTime();
-                else _timeTo = new Date(_dateTo.val()).getTime();
-                if(_timeFrom > _timeTo){
-                    _error1.removeClass("hide");
-                    _dateTo.css("border-color","red");
-                    $("#btnFilterVal1").attr("disabled",true);
-                }else{
-                    _error1.addClass("hide");
-                    _dateTo.css("border-color","green");
-                    $("#btnFilterVal1").removeAttr("disabled");
-                }
-            });
-        }
+        _$navTab.find("#posted_date_from,#posted_date_to,#date_frm,#date_to").on("keyup change",function(){
+            var _colName    = $(this)[0].id;
+            if(_colName === "posted_date_from")_timeFrom2 = new Date(_dayFrom.val()).getTime();
+            else if(_colName === "date_frm")_timeFrom1 = new Date(_dateFrm.val()).getTime();
+            else if(_colName === "date_to") _timeTo1 = new Date(_dateTo.val()).getTime();
+            else _timeTo2 = new Date(_dayTo.val()).getTime();
+            
+            
+            if(_timeFrom2 > _timeTo2){
+                _error2.removeClass("hide");
+                _dayTo.css("border-color","red");
+                $("#btnFilterVal2").attr("disabled",true);
+            }else{
+                _error2.addClass("hide");
+                _dayTo.css("border-color","green");
+                $("#btnFilterVal2").removeAttr("disabled");
+            }
+            
+            if(_timeFrom1 > _timeTo1){
+                _error1.removeClass("hide");
+                _dateTo.css("border-color","red");
+                $("#btnFilterVal1").attr("disabled",true);
+            }else{
+                _error1.addClass("hide");
+                _dateTo.css("border-color","green");
+                $("#btnFilterVal1").removeAttr("disabled");
+            }
+        });
+        
     }
     
     function displayTransactions(dateFrm,dateTo,paymentId,routeId,vehicleId,driverId,paoId){
@@ -530,6 +527,10 @@
 
     $("#btnResetVal1").click(function(){
         $("#paymentTypeId1").val("");
+        $("#routeIdPosting").val(null).trigger('change');
+        $("#vehicleForRemit").val(null).trigger('change');
+        $("#driverIdPosting").val(null).trigger('change');
+        $("#PAOForRemitt").val(null).trigger('change');
         displayTransactions();
     });
     
@@ -545,9 +546,13 @@
 
     $("#btnResetVal2").click(function(){
         $("#paymentTypeId2").val("");
+        $("#routeIdPosted").val(null).trigger('change');
+        $("#vehicleRemitted").val(null).trigger('change');
+        $("#driverIdPosted").val(null).trigger('change');
+        $("#PAOForRemitted").val(null).trigger('change');
         displayPostedTransactions();
     });
     
     
     return _pub;
-})();                                                               
+})();                                                                  

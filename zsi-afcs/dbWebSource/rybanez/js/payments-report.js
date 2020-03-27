@@ -100,6 +100,8 @@
             if(_this.is(':checked')){
                 $("#posted_date_from").attr("placeholder",_placeholderFrm);
                 $("#posted_date_to").attr("placeholder",_placeholderTo);
+                $("#posted_date_from").val("");
+                $("#posted_date_to").val("");
                 $(".date-range").removeClass("hide");
             }
             
@@ -328,7 +330,7 @@
                         + '<th>Total</th><th>Qty</th><th>Total</th><th>Qty</th><th>Total</th><th>Total Amount</th><th>Payment Type</th></tr></thead>'
             );
             $table.htmlToExcel({
-               fileName: "Posted Payments"
+               fileName: "Payments Report"
            });
         });
     });
@@ -344,11 +346,17 @@
         }, 1000);
     }); 
 
-    $("#btnResetVal2").click(function(){
+    $("#btnResetVal").click(function(){
         $("#paymentTypeId2").val("");
+        $("#routeId").val(null).trigger('change');
+        $("#vehicleForRemit").val(null).trigger('change');
+        $("#driverId").val(null).trigger('change');
+        $("#PAOForRemitt").val(null).trigger('change');
+        $(".date-range").addClass("hide");
+        $('[name="filter"]').prop('checked', false);
         displayPostedTransactions();
     });
     
     
     return _pub;
-})();                                                                 
+})();                                                                   

@@ -82,17 +82,22 @@
         var _dayFrom = _$navTab.find("#remitted_from_date_id");
         var _dayTo   = _$navTab.find("#remitted_to_date_id");
         var _dateFrm = _$navTab.find("#date_frm");
-        var _dateTo   = _$navTab.find("#date_to");
-        var _timeFrom = "";
-        var _timeTo = "";
+        var _dateTo  = _$navTab.find("#date_to");
+        var _timeFrom1 = "";
+        var _timeTo1 = "";
+        var _timeFrom2 = "";
+        var _timeTo2 = "";
         var _error1  = _$navTab.find("#ermsgId1");
         var _error2  = _$navTab.find("#ermsgId2");
         
-        _$navTab.find("#remitted_from_date_id,#remitted_to_date_id").on("keyup change",function(){
+        _$navTab.find("#remitted_from_date_id,#remitted_to_date_id,#date_frm,#date_to").on("keyup change",function(){
             var _colName    = $(this)[0].id;
-            if(_colName === "remitted_from_date_id")_timeFrom = new Date(_dayFrom.val()).getTime();
-            else _timeTo = new Date(_dayTo.val()).getTime();
-            if(_timeFrom > _timeTo){
+            if(_colName === "remitted_from_date_id")_timeFrom2 = new Date(_dayFrom.val()).getTime();
+            else if(_colName === "remitted_to_date_id")_timeTo2 = new Date(_dayTo.val()).getTime();
+            else if(_colName === "date_frm")_timeFrom1 = new Date(_dateFrm.val()).getTime();
+            else _timeTo1 = new Date(_dateTo.val()).getTime();
+            
+            if(_timeFrom2 > _timeTo2){
                 _error2.removeClass("hide");
                 _dayTo.css("border-color","red");
                 $("#btnFilterVal2").attr("disabled",true);
@@ -101,13 +106,8 @@
                 _dayTo.css("border-color","green");
                 $("#btnFilterVal2").removeAttr("disabled");
             }
-        });
-        
-        _$navTab.find("#date_frm,#date_to").on("keyup change",function(){
-            var _colName    = $(this)[0].id;
-            if(_colName === "date_frm")_timeFrom = new Date(_dateFrm.val()).getTime();
-            else _timeTo = new Date(_dateTo.val()).getTime();
-            if(_timeFrom > _timeTo){
+            
+            if(_timeFrom1 > _timeTo1){
                 _error1.removeClass("hide");
                 _dateTo.css("border-color","red");
                 $("#btnFilterVal1").attr("disabled",true);
@@ -117,6 +117,7 @@
                 $("#btnFilterVal1").removeAttr("disabled");
             }
         });
+        
     }
     
     function displayCollectionsForRemit(pao,dateFrm,dateTo,paymentId){
@@ -349,7 +350,8 @@
     }); 
 
     $("#btnResetVal1").click(function(){
-        $(".PAOForRemit").val(isUD);
+        $(".paymentTypeId").val("");
+        $(".PAOForRemit").val(null).trigger('change');
         $("#nav-tabContent").find("#date_id").datepicker({todayHighlight:true}).datepicker("setDate","0");
         displayCollectionsForRemit();
     });
@@ -365,10 +367,11 @@
     }); 
 
     $("#btnResetVal2").click(function(){
-        $(".PAOForRemit").val(isUD);
+        $(".paymentTypeId").val("");
+        $(".PAOForRemit").val(null).trigger('change');
         displayRemittedCollections();
     });
     
     
     return _pub;
-})();                                                        
+})();                                                             

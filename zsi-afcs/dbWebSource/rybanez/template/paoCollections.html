@@ -9,9 +9,10 @@
          .zRow.zTotal{
              position:unset;
          }
-         table,th,td{border: 1px solid black;text-align:center;
+         table,th,td{border: 1px solid black;text-align:center;}
     }
-    #btnFilterVal2:disabled {color: #212529;background-color: gray;border-color: #9e9999;}
+    #btnFilterVal2:disabled{color: #212529;background-color: gray;border-color: #9e9999;}
+    #btnFilterVal1:disabled{color: #212529;background-color: gray;border-color: #9e9999;}
 </style>
 <div class="panel">
     <div class="panel-container">
@@ -28,24 +29,24 @@
                         <div class="zContainer">
                             <div class="mt-2"></div>
                             <div class="row">
-                                <div class="col-sm-6 col-md-4 col-xl-2 col-12 mb-2">
+                                <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
                                     <div class="input-group">
                                         <select class="form-control form-control-sm PAOForRemit select" id="PAOForRemitt"></select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-4 col-xl-2 col-12 mb-2">
+                                <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
                                     <div class="input-group">
                                         <select class="form-control form-control-sm paymentTypeId" id=""></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
                                     <div class="input-group">
-                                        <input type="text" class="form-control form-control-sm pl-2 from" id="date_frm" name="date_frm"/>
+                                        <input type="text" class="form-control form-control-sm pl-2" id="date_frm" name="date_frm"/>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-4 col-xl-3 col-12 mb-2">
                                     <div class="input-group">
-                                        <input type="text" class="form-control form-control-sm pl-2 from" id="date_to" name="date_to"/>
+                                        <input type="text" class="form-control form-control-sm pl-2" id="date_to" name="date_to"/>
                                         <div class="input-group-append">
                                             <button id="btnFilterVal1" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter">
                                                <i class="fas fa-filter"></i>
@@ -76,17 +77,17 @@
                         <div class="zContainer">
                             <div class="mt-2"></div>
                             <div class="row">
-                                <div class="col-sm-6 col-md-4 col-xl-2 col-12 mb-2">
+                                <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
                                     <div class="input-group">
                                         <select class="PAOForRemitted form-control form-control-sm" id=""></select>
                                     </div>
                                 </div>
-                                 <div class="col-sm-6 col-md-4 col-xl-2 col-12 mb-2">
+                                 <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
                                     <div class="input-group">
                                         <select class="form-control form-control-sm paymentTypeId" id=""></select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-4 col-xl-2 col-12 mb-2">
+                                <div class="col-sm-6 col-md-3 col-xl-2 col-12 mb-2">
                                     <div class="input-group">
                                         <input type="text" class="form-control form-control-sm pl-2 from" id="remitted_from_date_id" name="remitted_from_date_id" placeholder="From date....."/>
                                     </div>
