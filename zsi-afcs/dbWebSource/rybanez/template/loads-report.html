@@ -4,6 +4,11 @@
         align-items: center;
         display: inherit;
     }
+    @media print {
+         .zRow.zTotal{
+             position:unset;
+         }
+    }
     #btnFilterVal:disabled {color: #212529;background-color: gray;border-color: #9e9999;}
 </style>
 <div class="panel">
@@ -18,27 +23,25 @@
                     </div>
                     <div class="col-sm-5 col-md-3 col-xl-2 col-12 mb-2 date-range hide">
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm pl-2" id="load_date_frm" name="load_date_frm" placeholder="Load date from....."/>
+                            <input type="number" class="form-control form-control-sm pl-2" id="load_date_frm" name="load_date_frm" placeholder="Load date from....."/>
                         </div>
                     </div>
                     <div class="col-sm-5 col-md-3 col-xl-2 col-12 mb-2 date-range hide">
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm pl-2" id="load_date_to" name="load_date_to" placeholder="Load date to....."/>
+                            <input type="number" class="form-control form-control-sm pl-2" id="load_date_to" name="load_date_to" placeholder="Load date to....."/>
                         </div>
                         <small id="ermsgId" class="ml-2 hide" style="color:red;"></small>
                     </div>
                     <div class="col-sm-7 col-md-3 col-xl-2 col-12 mb-2">
                         <div class="input-group">
-                            <div class="input-group-append">
-                               <button id="filterCol" type="button" class="btn btn-primary btn-outline-default text-white btn-sm dropdown-toggle bg-brand-gradient waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Date Range
-                                </button>
-                                <div class="dropdown-menu fadeinright dropdown-menu-right" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
-                                    <div class="list-group list-group-flush" id="filterColumns">
-                                        <div class="list-group-item py-1"><label><input id="weakly" type="radio" name="filter" value="weekly" disabled="disabled"/> Weekly</label></div>
-                                        <div class="list-group-item py-1"><label><input id="monthly" type="radio" name="filter" value="monthly"/> Monthly</label></div>
-                                        <div class="list-group-item py-1"><label><input id="yearly" type="radio" name="filter" value="yearly"/> Yearly</label></div>
-                                    </div>
+                            <button id="filterCol" type="button" class="btn btn-primary form-control  text-white btn-sm dropdown-toggle bg-brand-gradient waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Date Range
+                            </button>
+                            <div class="dropdown-menu fadeinright dropdown-menu-right" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+                                <div class="list-group list-group-flush" id="filterColumns">
+                                    <div class="list-group-item py-1"><label><input id="weakly" type="radio" name="filter" value="weekly" disabled="disabled"/> Weekly</label></div>
+                                    <div class="list-group-item py-1"><label><input id="monthly" type="radio" name="filter" value="monthly"/> Monthly</label></div>
+                                    <div class="list-group-item py-1"><label><input id="yearly" type="radio" name="filter" value="yearly"/> Yearly</label></div>
                                 </div>
                             </div>
                             <div class="input-group-append ml-1">

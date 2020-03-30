@@ -240,25 +240,24 @@
     }
     
     function setFooterFreezed(zGridId){
-        var _zRows = $(zGridId).find(".zGridPanel.right .zRows");
+        var _zRows = $(zGridId).find(".zGridPanel .zRows");
         var _tableRight   = _zRows.find("#table");
-        var _zRowsHeight =   _zRows.height() - 40;
+        var _zRowsHeight =   _zRows.height() - 20;
         var _zTotal = _tableRight.find(".zTotal");
-        _zTotal.css({"top": _zRowsHeight});
+        _zTotal.css({"top": _zRowsHeight}); 
         _zTotal.prev().css({"margin-bottom":23 });
         if(_zRows.find(".zRow").length == 1){
             _zTotal.addClass("hide");
         }else{
             if(_tableRight.height() > _zRowsHeight){
                 _tableRight.parent().scroll(function() {
-                   _zTotal.css({"top":_zRowsHeight - ( _tableRight.offset().to - _zRows.offset().top) });
+                   _zTotal.css({"top":_zRowsHeight - ( _tableRight.offset().top - _zRows.offset().top) });
                 });
             }else{
                 _zTotal.css({"position":"unset"});
                 _zTotal.prev().css({"margin-bottom":0 });
             }
         }
-        
     }
     
     $("#btnSaveCollections").click(function () {
@@ -374,4 +373,4 @@
     
     
     return _pub;
-})();                                                             
+})();                                                               

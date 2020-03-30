@@ -1,10 +1,12 @@
  var loadingTransactions = (function(){
     var _pub             = {}
         ,gDateType       = ""
-        ,gLoaderId       = null;
+        ,gLoaderId       = null
+        ,gzGrid          = "#gridLoadingTransactions";
     
     zsi.ready = function(){
         $(".page-title").html("Load Transactions Report");
+        $(".panel-container").css("min-height", $(window).height() - 190);
         displayLoadingTransactions();
         validation();
         $('#loaderId').select2({placeholder: "SELECT LOADER",allowClear: true});
@@ -49,7 +51,7 @@
         var _msg = "Value must not be lesser than "
         var _erTypeMsg = "";
         
-        $("#load_date_frm,#load_date_to").on("keyup",function(){
+        $("#load_date_frm,#load_date_to").on("keyup mouseup",function(){
             var _colName    = $(this)[0].id;
             if(gDateType === "weekly") _erTypeMsg = _msg + "from week value";
             else if(gDateType === "monthly") _erTypeMsg = _msg + "from month value";
@@ -73,7 +75,7 @@
         
     }
    
-    function displayLoadingTransactions(loadDateFrm,loadDateTo,dateType,loaderId){
+    /*function displayLoadingTransactions(loadDateFrm,loadDateTo,dateType,loaderId){
         $("#gridLoadingTransactions").dataBind({
              sqlCode        : "L1267" //loads_report_sel
             ,parameters     : {load_date_frm:(loadDateFrm ? loadDateFrm : ""),load_date_to:(loadDateTo ? loadDateTo : ""),date_type:(dateType ? dateType : ""),load_by:(loaderId ? loaderId : "")} 
@@ -100,7 +102,95 @@
                 
             }
         });
+    }*/
+    
+    function displayLoadingTransactions(loadDateFrm,loadDateTo,dateType,loaderId){
+        zsi.getData({
+                 sqlCode    : "L1267" //loads_report_sel
+                ,parameters     : {load_date_frm:(loadDateFrm ? loadDateFrm : ""),load_date_to:(loadDateTo ? loadDateTo : ""),date_type:(dateType ? dateType : ""),load_by:(loaderId ? loaderId : "")}
+                ,onComplete : function(d) {
+                    var _rows= d.rows;
+                    var _totality = 0.00;
+                    
+                    for(var i=0; i < _rows.length;i++ ){
+                        var _info = _rows[i];
+                        _totality  +=_info.load_amount;
+                    }
+                    
+                    //create additional row for total
+                    var _total = {
+                         load_date          : ""
+                        ,qr_id              : "Total Amount"
+                        ,load_amount        : _totality
+                        ,loaded_by          : ""
+                    };
+                    
+                    d.rows.push(_total);
+                    $(gzGrid).dataBind({
+                         rows           : _rows
+                        ,height         : $(window).height() - 270
+                        ,dataRows       : getDataRows()
+                        ,onComplete: function(o){
+                            var _this = this;
+                            $(".zRow:last-child()").addClass("zTotal");
+                            $(".zRow:last-child()").find('[name="qr_id"]').css("font-weight","bold");
+                            this.find("input").attr("readonly",true);
+                            if(o.data.length <= 1)$("#btnExportTransations").attr("disabled",true);
+                            else $("#btnExportTransations").removeAttr("disabled");
+                            
+                            setTimeout(function(){
+                                setFooterFreezed(gzGrid);
+                            }, 200)
+
+                    }
+                });
+            }
+        });
     }
+    
+    function getDataRows(){
+        var _dataRows =[];
+        
+        _dataRows.push(
+             {text: "Load Date"                                                                     ,width : 200
+                     ,onRender: function(d){
+                        return app.bs({name: "load_date"          ,type: "input"     ,value: app.svn(d,"load_date").toShortDates()    ,style : "text-align:center;"});
+                    }
+                 }
+                ,{text: "QR Id"                      ,name:"qr_id"                   ,type:"input"      ,width : 100    ,style : "text-align:center;"}
+                ,{text: "Load Amount"                                                                   ,width : 100   ,style : "text-align:right;padding-right: 0.3rem;"
+                    ,onRender: function(d){
+                        return app.bs({name: "load_amount"        ,type: "input"     ,value: app.svn(d,"load_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
+                    }
+                }
+                ,{text: "Loaded By"                  ,name:"loaded_by"              ,type:"input"       ,width : 150   ,style : "text-align:center;"}
+                        
+        );
+        
+        return _dataRows;
+    }
+    
+    function setFooterFreezed(zGridId){
+        var _zRows = $(zGridId).find(".zGridPanel .zRows");
+        var _tableRight   = _zRows.find("#table");
+        var _zRowsHeight =   _zRows.height() - 20;
+        var _zTotal = _tableRight.find(".zTotal");
+        _zTotal.css({"top": _zRowsHeight});
+        _zTotal.prev().css({"margin-bottom":23 }); 
+        if(_zRows.find(".zRow").length == 1){
+            _zTotal.addClass("hide");
+        }else{
+            if(_tableRight.height() > _zRowsHeight){
+                _tableRight.parent().scroll(function() {
+                   _zTotal.css({"top":_zRowsHeight - ( _tableRight.top - _zRows.top) });
+                });
+            }else{
+                _zTotal.css({"position":"unset"});
+                _zTotal.prev().css({"margin-bottom":0 });
+            }
+        }
+    }
+    
     
     $("#btnExportTransations").click(function () {
       $("#gridLoadingTransactions").convertToTable(
@@ -131,4 +221,4 @@
     });
 
     return _pub;
-})();                        
+})();                          

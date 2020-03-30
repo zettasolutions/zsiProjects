@@ -118,7 +118,7 @@
         var _msg = "Value must not be lesser than "
         var _erTypeMsg = "";
         
-        $("#posted_date_from,#posted_date_to").on("keyup",function(){
+        $("#posted_date_from,#posted_date_to").on("keyup mouseup",function(){
             var _colName    = $(this)[0].id;
             if(gDateType === "weekly") _erTypeMsg = _msg + "from week value";
             else if(gDateType === "monthly") _erTypeMsg = _msg + "from month value";
@@ -359,4 +359,4 @@
     
     
     return _pub;
-})();                                                                   
+})();                                                                     
