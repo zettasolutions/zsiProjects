@@ -20,8 +20,10 @@ SET NOCOUNT ON
   select @co_code = company_code FROM dbo.users where user_id=@user_id;
 
   SET @stmt = 'SELECT * FROM dbo.payments_posted_v  WHERE company_code=''' + @co_code + ''''
+
 	IF ISNULL(@vehicle_id,0) <> 0
-		SET @stmt = @stmt + ' WHERE vehicle_id = ' + CAST(@vehicle_id AS VARCHAR(20));
+		SET @stmt = @stmt + ' AND vehicle_id = ' + CAST(@vehicle_id AS VARCHAR(20));
+
 	IF ISNULL(@payment_type,'') <>''
 	  SET @stmt = @stmt + ' AND payment_type = '''+@payment_type+'''';
 
