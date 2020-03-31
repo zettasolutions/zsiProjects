@@ -1,0 +1,224 @@
+<link rel="stylesheet" media="screen, print" href='/css/formplugins/summernote/summernote.css'>
+<style type="text/css" media="all">
+    .pull-left {
+        float: left !important;
+    }
+    #psnDetailsContainer{
+        display: none;
+    }
+</style>
+
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <div role="content" id="tablePSN" >  
+                <div class="widget-body"  id="panel-1"> 
+                    <form id="formPSN">  
+            			<input type="hidden" name="psn_id" id="psn_id">
+                        <div class="row"> 
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Direct Ship to Customer</b></label>  
+                                <select class="form-control form-control-sm" id="is_mfg_to_cust" name="is_mfg_to_cust"> 
+                    		        <option value=""></option>
+                    		        <option value="Y">Yes</option>
+                    		        <option value="N">No</option>
+                    		    </select>
+                    		    <input type="hidden" name="is_edited" id="is_edited" >
+                    		</div>
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Program</b></label>  
+                                <select type="text" class="form-control form-control-sm" id="program_id" name="program_id"> </select> 
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Ship to Code</b></label>
+                    		    <select type="text" class="form-control form-control-sm" id="site_id" name="site_id"> </select>
+                    		</div> 
+                    		<div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Ship to</b></label><br>
+                    		    <label id="shipToId" for="" class="col-form-label autoCaps"></label>
+                    		</div>
+                    	</div>
+                    	<div class="row"> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Date Shipped</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="date_shipped" name="date_shipped" autocomplete="off">  
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="customer" class="col-form-label"><b>Truck No.</b></label>   
+                                <input type="text" class="form-control form-control-sm pl-2" id="truck_no" name="truck_no" autocomplete="off">  
+                          	</div>
+                    	    <div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label"><b>DO ASN Shipper/Packing Slip</b></label>  
+                    			<input type="text" class="form-control form-control-sm pl-2" id="do_asn" name="do_asn" autocomplete="off">  
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>No. of Boxes</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="no_boxes" name="no_boxes" autocomplete="off">  
+                    		</div>  
+                    	</div> 
+                    	<div class="row"> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    	  	    <label for="" class="col-form-label control-label"><b>No. of Pallets</b></label>
+                    	  	    <input type="text" class="form-control form-control-sm pl-2" id="no_pallets" name="no_pallets" autocomplete="off">   
+                    		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Projected Date at Final Destination</b></label>
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="projected_date_final_dest" name="projected_date_final_dest" autocomplete="off">  
+                    		</div>
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                        		<label for="" class="col-form-label"><b>Contact Name/No. if Misses</b></label>
+                        		<input type="text" class="form-control form-control-sm pl-2" id="contact_name_no" name="contact_name_no" autocomplete="off">  
+                      		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Shipper No.</b></label>
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="shipper_no" name="shipper_no" autocomplete="off">  
+                    		</div>  
+                    	</div> 
+                    	<div class="row"> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    	  	    <label for="" class="col-form-label control-label"><b>Tracking No.</b></label>
+                    	  	    <input type="text" class="form-control form-control-sm pl-2" id="tracking_no" name="tracking_no" autocomplete="off">  
+                    		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Shipping Mode</b></label>
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="shipping_mode" name="shipping_mode" autocomplete="off">  
+                    		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                        		<label for="" class="col-form-label"><b>Account No./PTA No.</b></label>
+                        		<input type="text" class="form-control form-control-sm pl-2" id="acct_pta_no" name="acct_pta_no" autocomplete="off">  
+                      		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    	  	    <label for="" class="col-form-label control-label"><b>Attention to</b></label>
+                    	  	    <input type="text" class="form-control form-control-sm pl-2" id="attention_to" name="attention_to" autocomplete="off">  
+                    		</div>   
+                    	</div> 
+                    	<div class="row"> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>ASN Necessary</b></label>
+                    		    <select class="form-control form-control-sm" id="asn_necessary" name="asn_necessary"> 
+                    		        <option value=""></option>
+                    		        <option value="Y">Yes</option>
+                    		        <option value="N">No</option>
+                    		    </select>
+                    		</div>
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                        		<label for="" class="col-form-label"><b>Billable to Customer</b></label>
+                        		<select class="form-control form-control-sm" id="bill_to_customer" name="bill_to_customer"> 
+                    		        <option value=""></option>
+                    		        <option value="Y">Yes</option>
+                    		        <option value="N">No</option>
+                    		    </select> 
+                      		</div> 
+                    	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Send Update to</b></label>
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="send_update_to" name="send_update_to" autocomplete="off">  
+                    		</div> 
+                    		<div class="col-sm-12 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Comment</b></label>
+                    		    <textarea rows="3" aria-multiline="true" class="form-control form-control-sm pl-2" id="psn_comment" name="psn_comment" autocomplete="off"> </textarea>
+                    		</div> 
+                    	</div> 
+                        <!--<div class="form-group mt-3" id="psnComments"></div> -->
+                    </form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="gridPSNDetails" class="zGrid mt-2 hide"></div>
+                            <div class="btn-group mt-2">   
+                                <div class="button-group">
+                                    <button type="button" class="btn btn-primary btn-sm hide" id="btnSavePSN">
+                                       <span> <i class="far fa-save"></i> Save</span>
+                                    </button>  
+                                    <button type="button" class="btn btn-primary btn-sm  hvr-icon-spin" id="btnReset">
+                                      <span> <i class="far fa-refresh hvr-icon"></i> Reset</span>
+                                    </button>   
+                                </div>
+                            </div> 
+                        </div> 
+                    </div> 
+                </div>  
+            </div>     
+            <div id="psnDetailsContainer" class="zContainer"> 
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                         <div id="gridPSNDetails" class="zGrid" style="margin-top:20px"></div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSavePSNDetails" data-toggle="tooltip" title="Save">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+ 
+        </div>
+        <!--<div class="form-group"></div>-->
+
+    </div>
+</div> 
+
+<ul name="localTemplates">
+    <li name="modalBodyAddComments">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div>
+                    <div id="comments">
+                        <input id="psn_id" name="psn_id" type="hidden">
+                        <textarea rows="10" class=" form-control form-control-sm inputText pl-2" id="comment" name="comment" autocomplete="off"></textarea>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </li>    
+    <li name="accordion">
+        <div id="panel-5" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    <a href="javascript:void(0);" onclick="{{onclick}}">
+                        <span class="mr-2">
+                            <span class="collapsed-hidden">
+                                <i class="fal fa-plus fs-xl"></i>
+                            </span>
+                        </span>
+                       {{title}}
+                    </a>
+                </h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                </div>
+            </div>
+            <div class="panel-container collapse">
+                <div class="panel-content">
+                    <div class="accordion accordion-hover" id="{{id}}">
+                        {{{cards}}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li name="accordionCard">
+        <div class="card">
+            <div class="card-header">
+                <a href="javascript:void(0);" onclick="{{onclick}}" class="card-title collapsed" data-toggle="collapse" data-target="#{{id}}-{{index}}" aria-expanded="false">
+                    <i class="fal fa-{{{icon}}} width-2 fs-xl"></i>
+                    {{date}} | &nbsp;<div class="d-inline-block text-truncate overflow-hidden" style="max-width: 150px;max-height: 20px;">{{{title}}}..</div>
+                    <span class="ml-auto">
+                        <span class="collapsed-reveal">
+                            <i class="fal fa-chevron-up fs-xl"></i>
+                        </span>
+                        <span class="collapsed-hidden">
+                            <i class="fal fa-chevron-down fs-xl"></i>
+                        </span>
+                    </span>
+                </a>
+            </div>
+            <div id="{{id}}-{{index}}" class="collapse" data-parent="#{{id}}" style="">
+                <div class="card-body">
+                    {{{content}}}
+                </div>
+            </div>
+        </div>
+    </li>    
+</ul>
+<script src='/js/formplugins/summernote/summernote.js'></script>
+

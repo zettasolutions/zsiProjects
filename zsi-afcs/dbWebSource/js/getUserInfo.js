@@ -1,5 +1,5 @@
  function getUserInfo(callBack){
-    $.get(execURL + "user_info_sel @is_active='Y'"
+    $.get(app.execURL + "user_info_sel @is_active='Y'"
     ,function(data){
         var i     = data.rows[0];
         user_id   = i.user_id;
@@ -7,4 +7,4 @@
         
         if(callBack) callBack();
     });
-}
+} 

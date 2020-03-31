@@ -7,95 +7,25 @@ var roles = (function(){
     var role_id         = null;
     var gMdlUsers       = "modalWindowUsers";
     var gtw             = null;
-    //var tblNameDashboard     = "tblRolesDashboard";
-    //var modalWindowUser = 0;
+     
     zsi.ready=function(){
         $(".page-title").html("Roles");
         gtw = new zsi.easyJsTemplateWriter();
         displayRecords();
         getTemplate();
         
-        $(".panel").css("height", $(".page-content").height()); 
     };
-    function getTemplate(){
-        new zsi.easyJsTemplateWriter("body")
-        .bsModalBox({
-              id        : gMdlRoleMenus
-            , sizeAttr  : "modal-md"
-            , title     : "Role Menus"
-            , body      : gtw.new().modalBodyRoleMenus({grid:"gridRoleMenus",onClickSaveRoleMenus:"submitRoleMenus();"}).html()  
-        })
-        .bsModalBox({
-              id        : gMdlUsers
-            , sizeAttr  : "modal-md"
-            , title     : "User(s)"
-            , body      : gtw.new().modalBodyUsers({grid:"gridUsers",onClickSaveUsers:"submitUsers"}).html()  
-        }); 
-        
-    }    
     
-    pub.showModalRoleMenus = function(id,name) {
-        console.log("agi role");
-        g$mdl = $("#" + gMdlRoleMenus);
-        g$mdl.find(".modal-title").text("Role Menus » " + name ) ;
-        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-        displayRRolesMenu(id,name);
-    };     
-    pub.showModalUsers = function(id,name) {
-        console.log("agi");
-        g$mdl = $("#" + gMdlUsers);
-        //console.log("g$mdl",g$mdl);
-        g$mdl.find(".modal-title").text("Users » " + name ) ;
-        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-       displayUsers(id,name);
-    };     
-
-    
-    // // function manageItem(id,name){
-    // //     role_id =id;
-    // //     displayRRolesMenu(id);
-    // //     $(".modal-title").text("Role Menu for » " + name);
-    // //     $('#modalWindow').modal("show");
-    // // }
-    
-    // // function manageItemUser(id,name){
-    // //     role_id =id;
-    // //     displayUsers(id);
-    // //     $(".modal-title").text("Users for » " + name);
-    // //     $('#modalWindowUser').modal("show");
-    // //     if (modalWindowUser===0) {
-    // //         modalWindowUser=1;
-    // //         $("#modalWindowUser").on("hide.bs.modal", function () {
-    // //                 if (confirm("You are about to close this window. Continue?")) return true;
-    // //                 return false;
-    // //         });
-    // //     }    
-        
-    //   // clearGrid();
-        
-    // }
-    
+    //Private Functions
     function clearGrid(){
         $("#" + tblNameUser).clearGrid();
     }
-     $("#btnSave").click(function () {
-        $("#grid").jsonSubmit({
-                sqlCode: "R41"
-               /* ,optionalItems: ["is_add","is_edit","is_delete"] */
-                , onComplete: function (data) {
-                    $("#grid").clearGrid();
-                    displayRecords();
-                }
-        });
-         
-    });
-     
     function displayRecords(){   
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
         $("#grid").dataBind({
              url            : app.procURL + "roles_sel"
             ,width          : $("#frm").width()
-    	    ,height         : $(document).height() - 220
+    	    ,height         : $(window).height() - 240
             ,blankRowsLimit:5
             ,dataRows       :[
         		 { text: cb             , width:25  , style:"text-align:left;"   
@@ -127,7 +57,7 @@ var roles = (function(){
             //     }
             ]
             ,onComplete: function(){
-                $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                $("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
             //    $("select[name='page_id']").dataBind( "pages");
             /* s$("select[name='user_id']").dataBind({
                       url: base_url + "selectoption/code/notUsers"
@@ -141,19 +71,6 @@ var roles = (function(){
             }
         });    
     }
-    pub.submitRoleMenus = function(){
-             $("#frm_modalRoleMenus").jsonSubmit({
-                 procedure  : "role_menus_upd"
-                ,onComplete : function (data) {
-                    $("#gridRoleMenus").clearGrid();
-                    if(data.isSuccess) zsi.form.showAlert("alert");
-                    displayRRolesMenu($("#gridRoleMenus").data("id"));
-                    displayRecords();
-                }
-            });
-            
-            
-    };
     function displayRRolesMenu(id){   
         var cb = app.bs({name:"cbFilter2",type:"checkbox"});
         $("#gridRoleMenus").dataBind({
@@ -182,7 +99,7 @@ var roles = (function(){
            ,onComplete : function(){
                 setToNullIfChecked(id);
                 this.data("id",id);
-                $("#cbFilter2").setCheckEvent("#" + gMdlRoleMenus + " input[name='cb']");
+                $("[name='cbFilter2']").setCheckEvent("#" + gMdlRoleMenus + " input[name='cb']");
                 
                 this.find("input[name='menu_id']").dataBind({
                     sqlCode : "R38" 
@@ -193,31 +110,6 @@ var roles = (function(){
             }
         });    
     }
-    function setToNullIfChecked(id){
-        $("#gridRoleMenus  input[name='cb']").change(function(){
-                var td  = this.parentNode;
-                var role_id = $(td).find("#role_id");
-                if(this.checked) 
-                    role_id.val(id);
-                else
-                    role_id.val('');
-        });
-    }
-    
-    pub.submitUsers = function(){
-             $("#frm_modalUsers").jsonSubmit({
-                 procedure  : "users_upd"
-                ,onComplete : function (data) {
-                    $("#gridUser").clearGrid();
-                    if(data.isSuccess) zsi.form.showAlert("alert");
-                    displayUsers($("#gridUsers").data("id"));
-                    displayRecords();
-                   
-                }
-            });
-            
-            
-    };
     function displayUsers(id){   
         $("#gridUsers").dataBind({
              url            : app.execURL + "users_sel @role_id=" + id 
@@ -244,79 +136,85 @@ var roles = (function(){
         
         });    
     }
-    
-    // function displayRolesDashboard(id){   
-    //     var cb = app.bs({name:"cbFilter3",type:"checkbox"});
+    function setToNullIfChecked(id){
+        $("#gridRoleMenus  input[name='cb']").change(function(){
+                var td  = this.parentNode;
+                var role_id = $(td).find("#role_id");
+                if(this.checked) 
+                    role_id.val(id);
+                else
+                    role_id.val('');
+        });
+    }
+    function getTemplate(){
+        new zsi.easyJsTemplateWriter("body")
+        .bsModalBox({
+              id        : gMdlRoleMenus
+            , sizeAttr  : "modal-md"
+            , title     : "Role Menus"
+            , body      : gtw.new().modalBodyRoleMenus({grid:"gridRoleMenus",onClickSaveRoleMenus:"submitRoleMenus();"}).html()  
+        })
+        .bsModalBox({
+              id        : gMdlUsers
+            , sizeAttr  : "modal-md"
+            , title     : "User(s)"
+            , body      : gtw.new().modalBodyUsers({grid:"gridUsers",onClickSaveUsers:"submitUsers"}).html()  
+        }); 
         
-    //     $("#" + tblNameDashboard).dataBind({
-    //          url            : app.execURL + "role_dashboards_sel @role_id=" + id 
-    //         ,width          : 560
-    // 	    ,height         : 400
-    	    
-    //         ,dataRows       :[
-    //     		 { text: cb             , width:25  , style:"text-align:left;" 
-    //     		     ,onRender : function(d){ 
-    //                                 return    app.bs({name:"role_dashboard_id",type:"hidden",value:svn (d,"role_dashboard_id")})  
-    //                                         + app.bs({name:"is_edited",type:"hidden",value: svn (d,"id_edited") }) 
-    //                                         + app.bs({name:"role_id",type:"hidden",value: svn (d,"role_id") }) 
-    //                                         //+ bs({name:"menu_id",type:"hidden",value:svn (d,"menu_id")})
-    //                                         + app.bs({name:"cb",type:"checkbox",checked :(d.role_id!==""?true:false)}) ;
-    //                                     //    +  (d !==null ? bs({name:"cb1",type:"checkbox"}) : "" );
-    //                             }            
+    }
     
-    //     		 }	 
-    //     		,{ text:"Page"              , width:400     , style:"text-align:left;"    
-    //     		    ,onRender : function(d){ 
-    //                                 return app.bs({name:"page_id",type:"hidden",value:svn (d,"page_id")})  
-    //                                         + svn(d, "page_title");
-                                       
-    //                             }            
-                                
-    //             }	 
-    //     	//	,{ text:"Default?"          , width:110     , style:"text-align:center;"    ,type:"yesno"       ,name:"is_default"     ,defaultValue:"Y" }	 
-    //     		,{ text:"Seq #"             , width:60      , style:"text-align:center;"     ,type:"input"      ,name:"seq_no"}	 
-        	
-    //  	    ]
-    //       ,onComplete : function(){
-    //           setToNullIfChecked1(id);
-    //             $("#cbFilter3").setCheckEvent("#" + tblNameDashboard + " input[name='cb']");
-                
-    //             $("input[name='cb'], input").on("keyup change", function(){
-    //                     var $zRow = $(this).closest(".zRow");
-    //                     $zRow.find("#is_edited").val("Y");
-    //                 });  
-    //             $("select[name='page_id']").dataBind( "pages");    
-    //             $("select[name='page_id']").dataBind({
-    //                 url     : app.procURL + "dd_dashboard_sel" 
-    //                 ,text   : "page_title"
-    //                 ,value  : "page_id"
-    //             });
-    //         }
-    //     });    
-    // }
-    // function setToNullIfChecked1(id){
-    //     $("#" + tblNameDashboard + " input[name='cb']").change(function(){
-    //             var td  = this.parentNode;
-    //             var role_id = $(td).find("#role_id");
-    //             if(this.checked) 
-    //                 role_id.val(id);
-    //             else
-    //                 role_id.val('');
-    //     });
-    // }
-    // function submitItemsDashboard(){
-    //          $("#frm_modalWindowDashboards").jsonSubmit({
-    //              procedure  : "role_dashboards_upd"
-    //             ,onComplete : function (data) {
-    //                 $("#" + tblNameDashboard).clearGrid();
-    //                 if(data.isSuccess) zsi.form.showAlert("alert");
-    //                 displayRolesDashboard(role_id);
+    //Public Functions
+    pub.showModalRoleMenus = function(id,name) {
+        g$mdl = $("#" + gMdlRoleMenus);
+        g$mdl.find(".modal-title").text("Role Menus » " + name ) ;
+        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
+        displayRRolesMenu(id,name);
+    }; 
+    pub.showModalUsers = function(id,name) {
+        g$mdl = $("#" + gMdlUsers);
+        g$mdl.find(".modal-title").text("Users » " + name ) ;
+        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
+       displayUsers(id,name);
+    };  
+    pub.submitRoleMenus = function(){
+             $("#frm_modalRoleMenus").jsonSubmit({
+                 procedure  : "role_menus_upd"
+                ,onComplete : function (data) {
+                    $("#gridRoleMenus").clearGrid();
+                    if(data.isSuccess) zsi.form.showAlert("alert");
+                    displayRRolesMenu($("#gridRoleMenus").data("id"));
+                    displayRecords();
+                }
+            });
+            
+            
+    };
+    pub.submitUsers = function(){
+             $("#frm_modalUsers").jsonSubmit({
+                 procedure  : "users_upd"
+                ,onComplete : function (data) {
+                    $("#gridUser").clearGrid();
+                    if(data.isSuccess) zsi.form.showAlert("alert");
+                    displayUsers($("#gridUsers").data("id"));
+                    displayRecords();
                    
-    //             }
-    //         });
+                }
+            });
             
             
-    // }
+    };
+    
+    //Buttons
+    $("#btnSave").click(function () {
+        $("#grid").jsonSubmit({
+                sqlCode: "R41" 
+                , onComplete: function (data) {
+                    $("#grid").clearGrid();
+                    displayRecords();
+                }
+        });
+         
+    });
     $("#btnDelete").click(function(){
         zsi.form.deleteData({
              code       : "adm-0001"
@@ -330,4 +228,4 @@ var roles = (function(){
     return pub;      
 })();
 
-                                                                                                                      
+                                                                                                                             

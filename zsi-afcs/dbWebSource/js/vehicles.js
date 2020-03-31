@@ -1,13 +1,14 @@
 var vehicles = (function(){
-    var _pub            = {};
+    var _pub            = {}
+        ,gCompanyCode   = app.userInfo.company_code;
     
     zsi.ready = function(){
         $(".page-title").html("Vehicles");
-        displayVehicles();
+        displayVehicles(gCompanyCode);
         
     };
     
-    function displayVehicles(){
+    function displayVehicles(companyCode){
         $("#gridVehicles").dataBind({
              sqlCode        : "V1229" //vehicle_sel
             ,height         : $(window).height() - 240
@@ -27,16 +28,16 @@ var vehicles = (function(){
                                  
                         }
                 }
-                ,{text: "Route"                      ,name:"route_id"               ,type:"select"       ,width : 200   ,style : "text-align:left;"}
-                ,{text: "Company Code"                                                                  ,width : 200   ,style : "text-align:left;"
+                ,{text: "Route"                                                                 ,width : 200   ,style : "text-align:left;"
                     ,onRender  :  function(d)  
-                        { return   app.bs({name:"company_code"              ,type:"input"      ,value: app.svn(d,"company_code")}) 
+                        { return   app.bs({name:"route_id"                  ,type:"select"      ,value: app.svn(d,"route_id")})  
+                                 + app.bs({name:"company_code"              ,type:"hidden"      ,value: companyCode}) 
                                  + app.bs({name:"hash_key"                  ,type:"hidden"      ,value: app.svn(d,"hash_key")});
                                  
                         }
                 }
-                ,{text: "Vehicle Type"                      ,name:"vehicle_type_id"               ,type:"select"       ,width : 200   ,style : "text-align:left;"}
-                ,{text: "Active?"                      ,name:"is_active"               ,type:"yesno"       ,width : 50   ,style : "text-align:left;"    ,defaultValue:"Y"}
+                ,{text: "Vehicle Type"                      ,name:"vehicle_type_id"            ,type:"select"       ,width : 200   ,style : "text-align:left;"}
+                ,{text: "Active?"                           ,name:"is_active"                  ,type:"yesno"       ,width : 55   ,style : "text-align:center;"    ,defaultValue:"Y"}
             ]
             ,onComplete: function(){
                 var _zRow = this.find(".zRow");
@@ -55,6 +56,39 @@ var vehicles = (function(){
         });
     }
     
+    function displayInactiveVehicles(){
+        var cb = app.bs({name:"cbFilter",type:"checkbox"});
+        $("#gridInactiveVehicles").dataBind({
+             sqlCode        : "V1229" //vehicle_sel
+            ,parameters     : {is_active:'N'}
+            ,height         : 360
+            ,dataRows       : [
+                {text: cb  ,width : 25   ,style : "text-align:left;"
+                    ,onRender  :  function(d)  
+                        { return   app.bs({name:"vehicle_id"               ,type:"hidden"      ,value: app.svn(d,"vehicle_id")}) 
+                                 + app.bs({name:"is_edited"                ,type:"hidden"      ,value: app.svn(d,"is_edited")})
+                                 + (d !==null ? app.bs({name:"cb"    ,type:"checkbox"}) : "" );
+                            
+                        }
+                }
+                ,{text: "Vehicle Plate No."                                                                  ,width : 250   ,style : "text-align:left;"
+                    ,onRender  :  function(d)  
+                        { return   app.bs({name:"vehicle_plate_no"          ,type:"input"       ,value: app.svn(d,"vehicle_plate_no")})
+                                 + app.bs({name:"route_id"                  ,type:"hidden"      ,value: app.svn(d,"route_id")})
+                                 + app.bs({name:"company_code"              ,type:"hidden"      ,value: app.svn(d,"company_code")})
+                                 + app.bs({name:"hash_key"                  ,type:"hidden"      ,value: app.svn(d,"hash_key")})
+                                 + app.bs({name:"vehicle_type_id"           ,type:"hidden"      ,value: app.svn(d,"vehicle_type_id")});
+                                 
+                        }
+                }
+                ,{text: "Active?"                      ,name:"is_active"               ,type:"yesno"       ,width : 55   ,style : "text-align:left;"    ,defaultValue:"Y"}
+            ]
+            ,onComplete: function(){
+                var _zRow = this.find(".zRow");
+                this.find("[name='cbFilter']").setCheckEvent("#gridInactiveVehicles input[name='cb']");
+            }
+        });
+    }
     
     _pub.showModalViewInfo = function (eL,id,vehiclePlateNo,vehicleType,hashKey) {
         var _frm = $("#frm_modalVehicleId");
@@ -69,10 +103,18 @@ var vehicles = (function(){
         _frm.find("#qrcode").attr("title","");
     };
     
+    $("#btnInactive").click(function(){
+       var _$body = $("#frm_modalInactive").find(".modal-body"); 
+        g$mdl = $("#modalInactiveVehicles");
+        g$mdl.find(".modal-title").text("Inactive Vehicles") ;
+        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
+        displayInactiveVehicles();
+    });
+    
     $("#btnSaveVehicles").click(function () {
        $("#gridVehicles").jsonSubmit({
              procedure: "vehicle_upd"
-             //,optionalItems: ["is_active"]
+            ,optionalItems: ["route_id","vehicle_type_id","is_active"]
             ,onComplete: function (data) {
                 if(data.isSuccess===true) zsi.form.showAlert("alert");
                 $("#gridVehicles").trigger("refresh");
@@ -80,14 +122,27 @@ var vehicles = (function(){
         });
     });
     
+    $("#btnSaveInactiveVehicles").click(function () {
+       $("#gridInactiveVehicles").jsonSubmit({
+             procedure: "vehicle_upd"
+            ,optionalItems: ["is_active"]
+            ,onComplete: function (data) { 
+                if(data.isSuccess===true) zsi.form.showAlert("alert");
+                $("#gridVehicles").trigger("refresh");
+                $('#modalInactiveVehicles').modal('toggle');
+            }
+        });
+    });
+    
     $("#btnDeleteVehicles").click(function(){
         zsi.form.deleteData({
-             code       : "ref-00013"
+             code       : "ref-00015"
             ,onComplete : function(data){
                 $('#gridVehicles').trigger('refresh');
+                $('#modalInactiveVehicles').modal('toggle');
             }
         });       
     });
     
     return _pub;
-})();              
+})();                  

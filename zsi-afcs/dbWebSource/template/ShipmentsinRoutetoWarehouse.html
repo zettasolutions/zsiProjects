@@ -1,0 +1,53 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">   
+            <div class="zContainer form-grid">
+                <div class="row panel-row"> 
+                    <div class="row col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-md-3 col-sm-6 col-xs-12 mb-2">
+                            <select class="autoCaps form-control form-control-sm" id="model_year" name="model_year"></select>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 mb-2">
+                            <select class="autoCaps form-control form-control-sm" id="order_type" name="order_type"></select>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 mb-2">
+                            <select class="autoCaps form-control form-control-sm" id="ship_location" name="ship_location"></select>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 mb-2">
+                            <select class="autoCaps form-control form-control-sm" id="filter_build_phase_id" name="filter_build_phase_id"></select>
+                        </div>
+                    </div>
+                    <div class="row col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-md-3 col-sm-6 col-xs-12 mb-2">
+                            <select class="autoCaps form-control form-control-sm" id="filter_order_status_id" name="filter_order_status_id"></select>
+                        </div> 
+                        <div class="col-md-3 col-sm-6 col-xs-12 mb-2">
+                            <select type="text" class="autoCaps form-control form-control-sm " id="filter_customer_id" name="filter_customer_id"></select>
+                        </div>
+                         <div class="col-md-3 col-sm-6 col-xs-12 mb-2"> 
+                            <input type="text" class="autoCaps form-control form-control-sm pl-2" placeholder="PO No." id="filter_po_no" name="filter_customer_id"> 
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 mb-2">
+                            <div class="input-group">
+                                <select type="text" class="autoCaps form-control form-control-sm " id="filter_plants" name="filter_plants"></select>
+                                <div class="input-group-append">
+                                    <button id="btnFilter" class="btn-primary btn-sm btn btn-outline-default text-white" type="button" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                    </button>
+                                </div>
+                                <div class="input-group-append ml-1">
+                                    <button id="btnClear" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Clear">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">     
+                        <div id="grid" class="zGrid mb-2"></div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>

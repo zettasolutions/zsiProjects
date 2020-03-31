@@ -1,4 +1,5 @@
  $(document).ready(function(){
+     
      _tw = new zsi.easyJsTemplateWriter(".output")
             .bsFormGroup({id:"group1"}) 
                 .bsInput({name:"first_name",type:"text"},"#group1")
@@ -34,9 +35,10 @@
             .bsInput({name:"test1",type:"text"})
             .bsInput({name:"test2",type:"text"})
             .smagerDiv({id:"id123",class:"other-class",value:"This is from local Templates",style:"background-color: blue;color: #fff;width: 171px;"})
+            .smagerDivx3({id:"id123",class:"other-class",value:"This is from local Templatesx3",style:"background-color: blue;color: #fff;width: 171px;"})
             .bsModalBox({id:"modal1",title:"title 1", body:"body 1", footer:"footer 1"},"body")
             
     ;
     
  });
-             
+               

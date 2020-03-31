@@ -1,0 +1,214 @@
+<style>
+    .fa-filter{
+        color: #fff;
+    }
+     .modal-backdrop {
+        position: inherit; 
+        top: 0;
+        left: 0;
+        z-index: 2040;
+        width: 100vw;
+        height: 100vh;
+        background-color: #000;
+    } 
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <div class="zContainer">
+                <div class="row"> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div id="gridProof" class="zGrid mb-1"></div>  
+                    </div> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">  
+                            <button type="button" class="btn btn-primary btn-sm " id="btnSaveProof">Save</button>
+                            <button type="button" class="btn btn-primary btn-sm " id="btnDeleteProof">Delete</button> 
+                        </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div> 
+<!--
+<div class="modal zsi-elliptic-top" id="modalWindowProof" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-full" role="document">
+            <div class="modal-content">
+                <form id="frm_modalWindowProof">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Pending Target Ship Date</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label for="build_phase_id" class="col-form-label">Model Year</label>
+                                <select class="autoCaps form-control form-control-sm" id="model_year" name="model_year"></select>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label for="build_phase_id" class="col-form-label">Order Type</label>
+                                <select class="autoCaps form-control form-control-sm" id="order_type" name="order_type"></select>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label for="build_phase_id" class="col-form-label">Ship to Location</label> 
+                                <select class="autoCaps form-control form-control-sm" id="ship_location" name="ship_location"></select>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label for="build_phase_id" class="col-form-label">Build Phase</label>
+                                <select class="autoCaps form-control form-control-sm" id="filter_build_phase_id" name="filter_build_phase_id"></select>
+                            </div>
+                        </div>
+                        <div class="row col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label for="order_status_id" class="col-form-label control-label">Order Status</label>
+                                <select class="autoCaps form-control form-control-sm" id="filter_order_status_id" name="filter_order_status_id"></select>
+                            </div> 
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label for="customer_id" class="col-form-label control-label">Customer</label>
+                                <select type="text" class="autoCaps form-control form-control-sm " id="filter_customer_id" name="filter_customer_id"></select>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-xs-12 mb-3">
+                                <label for="enterPONumber" class="col-form-label control-label">Plant</label>
+                                <div class="input-group">
+                                    <select type="text" class="autoCaps form-control form-control-sm " id="filter_plants" name="filter_plants"></select>
+                                    <div class="input-group-append">
+                                        <button id="btnFilter" class="btn-primary btn-sm btn btn-outline-default" type="button">
+                                            <i class="fas fa-filter"></i>
+                                        </button>
+                                    </div>&nbsp;&nbsp;
+                                    <div class="input-group-append">
+                                        <button id="btnPopClear" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Clear">
+                                            <i class="fas fa-eraser">&nbsp;Clear</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <nav>
+                                <div class="nav nav-tabs nav-tab-main mb-2" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active" data-toggle="tab" href="#nav-ol" role="tab">Order List</a>
+                                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-mld" role="tab">MLD Replacements</a>
+                                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-rb" role="tab">Red Border</a>
+                                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-plpd" role="tab">Pending Lear Promise Date</a>
+                                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-mfg" id="navManufacturing" role="tab">Manufacturing</a>
+                                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-whs" id="navWarehouse" role="tab">Warehouse</a>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div role="tabpanel" class="tab-pane fade show active" id="nav-ol">
+                                    <div class="panel p-2 ">
+                                        <div class="row"> 
+                                            <div class="col-md-12 col-sm-12 col-xs-12"> 
+                                                <div id="gridOrderList" class="zGrid mb-2"></div> 
+                                                
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol" id="btnRevise">Revise</button>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol" id="btnPOCopy">P.O. Copy</button>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol" id="btnMLDRep">MLD Replacement</button>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol btnExport" >Export To Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="nav-mld">
+                                    <div class="panel p-2 ">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div id="gridMLD" class="zGrid mb-2"></div>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol btnExport" id="btnExport" >Export To Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="nav-rb">
+                                    <div class="panel p-2 ">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div id="gridRedBorder" class="zGrid mb-2"></div>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol btnExport" id="btnExport" >Export To Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="nav-plpd">
+                                    <div class="panel p-2 ">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div id="gridPlpd" class="zGrid mb-2"></div>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol btnExport" id="btnExport" >Export To Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div role="tabpanel" class="tab-pane fade" id="nav-mfg">
+                                    <nav>
+                                        <div class="nav nav-tabs nav-tab-main mb-2 nav-sub-mfg" id="nav-tab" role="tablist">
+                                            <a class="nav-item nav-link nav-mfg active" data-toggle="tab" href="#nav-mfg" role="tab">Pending Plant Target Ship Dates</a>
+                                            <a class="nav-item nav-link nav-mfg" data-toggle="tab" href="#nav-mfg" role="tab">Upcoming Plant Ship Dates (< 7 Days)</a>
+                                            <a class="nav-item nav-link nav-mfg" data-toggle="tab" href="#nav-mfg" role="tab">Upcoming Plant Ship Dates (< 14 Days)</a>
+                                            <a class="nav-item nav-link nav-mfg" data-toggle="tab" href="#nav-mfg" role="tab">Upcoming Plant Ship Dates (< 21 Days)</a>
+                                            <a class="nav-item nav-link nav-mfg" data-toggle="tab" href="#nav-mfg" role="tab">Overdue Plant Ship Dates</a>
+                                        </div>
+                                    </nav>
+                                    <div class="panel p-2 ">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div id="gridMfg" class="zGrid mb-2"></div>
+                                                
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-mfg" id="btnGeneratePSN">Generate PSN</button>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-mfg" id="btnShipToCustomer">Ship to Customer</button>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol btnExport" id="btnExport" >Export To Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="nav-whs">
+                                    <nav>
+                                        <div class="nav nav-tabs nav-tab-main mb-2 nav-sub-whs" id="nav-tab" role="tablist">
+                                            <a class="nav-item nav-link nav-whs active" data-toggle="tab" href="#nav-whs" role="tab">Upcoming customer MRD's (< 1 week)</a>
+                                            <a class="nav-item nav-link nav-whs" data-toggle="tab" href="#nav-whs" role="tab">Shipments in-route to warehouse</a>
+                                            <a class="nav-item nav-link nav-whs" data-toggle="tab" href="#nav-whs" role="tab">Shipments in-route to customer</a>
+                                            <a class="nav-item nav-link nav-whs" data-toggle="tab" href="#nav-whs" role="tab">Proof of Delivery</a>
+                                        </div>
+                                    </nav>
+                                    <div class="panel p-2 ">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div id="gridWhs" class="zGrid mb-2"></div>
+                                                <button type="button" class="btn btn-primary btn-sm hide btn-ol btnExport" id="btnExport" >Export To Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

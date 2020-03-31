@@ -1,0 +1,58 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content"> 
+            <form method="post" id="frmProject">
+                <input type="hidden" name="project_id" id="project_id" >
+                <input type="hidden" name="developer_key" id="developer_key" >
+                <input type="hidden" name="is_source_minified" id="is_source_minified" >
+                <div class="row mb-2">  
+                    <label class="col-12 col-sm-2 col-md-2 control-label">App Title</label>
+                    <div class=" col-3">
+                         <input type="text" name="app_title" id="app_title" class="form-control input-sm pl-2" >
+                    </div>  
+                    
+                    <label class="col-12 col-sm-2 col-md-2 control-label">Date Format</label>
+                    <div class=" col-3">
+                       <input type="text" name="d_format" id="d_format" class="form-control input-sm pl-2">
+                     </div>
+                </div>                      
+                <div class="row mb-2">  
+            
+                    <label class="col-12 col-sm-2 col-md-2 control-label">Excel Conn Str</label>
+                    <div class=" col-3">
+                         <input type="text" name="excel_conn_str" id="excel_conn_str" class="form-control input-sm pl-2">
+                    </div>
+                    
+                    <label class="col-12 col-sm-2 col-md-2 control-label">Excel Folder</label>
+                    <div class=" col-3">
+                         <input type="text" name="excel_folder" id="excel_folder" class="form-control input-sm pl-2" >
+                    </div>                                      
+                </div>  
+                <div class="row mb-2">  
+                    <label class="col-12 col-sm-2 col-md-2 control-label">Image Folder</label>
+                    <div class=" col-3">
+                        <input type="text" name="image_folder" id="image_folder" class="form-control input-sm pl-2">
+                    </div>
+                    
+                    <label class="col-12 col-sm-2 col-md-2 control-label">Default Page</label>
+                    <div class=" col-3">
+                        <input name="default_page" id="default_page" class="form-control input-sm pl-2" >
+                   </div>                                     
+            
+                </div>  
+                <div class="row mb-2">  
+                    <label class="col-12 col-sm-2 col-md-2 control-label">Network Group Folder</label>
+                    <div class=" col-3">
+                        <input name="network_group_folder" id="network_group_folder" class="form-control input-sm pl-2" >
+                   </div>                                     
+                </div>    
+                <div class="row">  
+                    <label class="col-12 col-sm-2 col-md-2 control-label">&nbsp;</label>
+                    <div class=" col-9" style="margin-top:10px;">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSave"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+                    </div>
+                </div>                             
+            </form> 
+        </div>
+    </div>    
+</div>

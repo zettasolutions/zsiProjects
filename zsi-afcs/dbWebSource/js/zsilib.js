@@ -988,12 +988,14 @@ var  ud='undefined'
                                 $a.addClass("desc");
                                 $a.find(".sPane").html(_arrowDown);
                                 _orderNo=1;
+                                if(_gp.onSortChange) _gp.onSortChange(1);
                             }
                             else{
                                 $a.removeClass("desc");
                                 $a.addClass("asc");
                                 $a.find(".sPane").html(_arrowUp);
                                 _orderNo=0;
+                                if(_gp.onSortChange) _gp.onSortChange(0);
                             }
                             _gp.parameters.col_no = _colNo;
                             _gp.parameters.order_no= _orderNo;
@@ -1704,7 +1706,6 @@ var  ud='undefined'
                 }
                 return _v;
             }
-
             $.fn.convertToTable       = function(cb){
                 var _$self  = this;
                 var _tableId = _$self.attr("id");
@@ -1756,8 +1757,10 @@ var  ud='undefined'
                         var cell = row.insertCell(-1);
                         cell.innerHTML = _getValue(e);
                         cell.style = e.getAttribute("style");
+                        
                     });
                     if(cb) cb($(_table));
+                    
                 }
                return this;
             }; 
@@ -2859,8 +2862,6 @@ var  ud='undefined'
             String.prototype.toShortDates = function () {
                 return this.split(' ')[0];
             };
-            
-            
             String.prototype.toShortDate = function () {
                 if(!isValidDate(this)) return "";
                 var _date=new Date( Date.parse(this) );
@@ -3723,4 +3724,4 @@ var  ud='undefined'
     }
 ;  
 
-                                  
+                                        

@@ -1,0 +1,64 @@
+<style>
+    .fa-filter{
+       color: #fff;
+   }
+  
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <div role="content" id="orderListGroup" >  
+                <div class="widget-body"  id="panel-1"> 
+                    <form id="form">  
+                	    <input name="order_id" id="order_id" type="hidden">
+                        <input name="is_edited" id="is_edited" type="hidden"> 
+                        <div class="row"> 
+                        <div class="col-sm-6 col-md-3 col-xs-12">
+                		    <label for="oem_id" class="col-form-label">User OEM</label>   
+                            <select class="autoCaps form-control form-control-sm" id="oem_id" name="oem_id" ></select>
+                		</div>
+                		<div class="col-sm-6 col-md-3 col-xs-12">
+                		    <label for="program_id" class="col-form-label control-label">Program</label>  
+                            <select type="text" class="autoCaps form-control form-control-sm " id="program_id" name="program_id" ></select>
+                		</div>  
+                		<div class="col-sm-6 col-md-3 col-xs-12">
+                		    <label for="build_phase_id" class="col-form-label">Build Phase</label>   
+                            <select class="autoCaps form-control form-control-sm" id="build_phase_id" name="build_phase_id" ></select>
+                		</div>
+                		 
+                		<div class="col-sm-6 col-md-3 col-xs-12">
+                		    <label for="customer_id" class="col-form-label control-label">Customer</label>  
+                            <select type="text" class="autoCaps form-control form-control-sm " id="customer_id" name="customer_id" ></select>
+                		</div> 
+                    	
+                    	</div>
+                    	<div class="row"> 
+                	     	<div class="col-sm-3 col-md-3 col-xs-12">
+        			            <label for="order_status_id" class="col-form-label control-label">Order Status</label>  
+                                <select class="autoCaps form-control form-control-sm" id="order_status_id" name="order_status_id" ></select>
+                		    </div>
+                		    <div class="col-sm-3 col-md-3 col-xs-12 mb-2">
+                			    <label for="poNO" class="col-form-label control-label">PO Number</label>   
+                                <div class="input-group"> 
+                                    <input type="text" id="poNO" name="poNO" class="form-control form-control-sm p-2" placeholder="Enter PO Number"> 
+                                    <div class="input-group-append">
+                                        <button id="btnGo" class="btn-primary btn-sm btn btn-outline-default" type="button">
+                                            <i class="fas fa-filter"></i>
+                                        </button>
+                                    </div>
+                                </div> 
+                    		</div> 
+                    	</div> 
+                    </form>
+                   <div class='row'>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div id="gridOrderList" class="zGrid mb-2"></div> 
+                        </div> 
+                   </div>
+                </div> 
+                
+            </div>     
+        </div>  
+    </div>
+</div> 
+  

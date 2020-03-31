@@ -6,7 +6,6 @@
     zsi.ready=function(){
         $(".page-title").html("Master Pages");
         displayRecords();
-        $(".panel").css("height", $(".page-content").height()); 
     };
     
      $("#btnSave").click(function () {
@@ -33,8 +32,8 @@
         var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#grid").dataBind({
              url   : app.execURL + "master_pages_sel"
-            ,width         : $(".zContainer").width()
-    	    ,height         : $(document).height() - 250
+            ,width          : $(".zContainer").width()
+    	    ,height         : $(window).height() - 240
             ,blankRowsLimit:5
             ,dataRows       :[
         		 { text: cb             , width:25  , style:"text-align:left;"   
@@ -49,7 +48,7 @@
         		}	 
             ]
             ,onComplete: function(){
-                this.find("#cbFilter").setCheckEvent("#grid input[name='cb']");
+                this.find("[name='cbFilter']").setCheckEvent("#grid input[name='cb']");
     
             }
         });    
@@ -71,4 +70,4 @@
        
     }
 })(); 
-                                
+                                   

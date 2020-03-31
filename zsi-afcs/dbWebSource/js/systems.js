@@ -16,9 +16,9 @@ $("#btnSave").click(function () {
         });    
 });
 function displayRecords(){   
-      var cb = bs({name:"cbFilter1",type:"checkbox"});
+      var cb = app.bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
-	     url            : execURL + "systems_sel"
+	     url            : app.execURL + "systems_sel"
 	    ,width          : 780
 	    ,height         : 506
 	    //,selectorType   : "checkbox"
@@ -27,8 +27,8 @@ function displayRecords(){
         ,dataRows : [
     		   {text  : cb                                 , width : 25        , style : "text-align:left;"       
             		    , onRender      :  function(d){ 
-                		              return bs({name:"system_id"   ,value: svn (d,"system_id")    ,type:"hidden"})
-                		                 +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                		              return app.bs({name:"system_id"   ,value: svn (d,"system_id")    ,type:"hidden"})
+                		                 +  (d !==null ? app.bs({name:"cb",type:"checkbox"}) : "" );
                     }
                 }	 
             	,{ text:"System Name"                           , width:365       , style:"text-align:center;"        , type:"input"          ,name:"system_name"}
@@ -46,4 +46,4 @@ $("#btnDelete").click(function(){
                         displayRecords();
                       }
     });      
-});      
+});       

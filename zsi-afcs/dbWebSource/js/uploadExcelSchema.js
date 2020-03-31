@@ -1,9 +1,10 @@
  var bs = zsi.bs.ctrl;
 var svn =  zsi.setValIfNull;
-zsi.ready(function(){
+zsi.ready=function(){
+    $(".page-title").html("Excel Upload Schema");
     displayRecords();
   
-});
+};
 
 $("#btnSave").click(function () {
    $("#grid").jsonSubmit({
@@ -19,11 +20,11 @@ $("#btnSave").click(function () {
 
 
  function displayRecords(){   
-      var cb = bs({name:"cbFilter1",type:"checkbox"});
+      var cb = app.bs({name:"cbFilter1",type:"checkbox"});
      $("#grid").dataBind({
-	     url            : execURL + "excel_upload_sel"
-	    ,width          : $(document).width()-35
-	    ,height         : 450
+	     url            : app.execURL + "excel_upload_sel"
+	    ,width          : $(".panel-content").width()- 05
+	    ,height         : $(window).height() - 240
         ,selectorType   : "checkbox"
         ,blankRowsLimit:5
        // ,isPaging : false
@@ -31,18 +32,21 @@ $("#btnSave").click(function () {
     	
     		   {text  : cb                      , width : 25        , style : "text-align:left;"       
             		    , onRender      :  function(d){ 
-                		              return bs({name:"id"   ,value: svn (d,"id")    ,type:"hidden"})
-                		                     +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                		              return app.bs({name:"id"              ,type:"hidden"      ,value: svn (d,"id")})
+                		                     + app.bs({name:"is_edited"     ,type:"hidden"     ,value: svn(d,"is_edited")})  
+                		                     +  (d !==null ? app.bs({name:"cb",type:"checkbox"}) : "" );
                     }
                 }	
-                ,{ text:"Seq #"                 , width:150          , style:"text-align:center;"        , type:"input"          ,name:"seq_no"}
             	,{ text:"Temporary Table"       , width:300          , style:"text-align:center;"        , type:"input"          ,name:"temp_table"}
             	,{ text:"Excel Column Range"    , width:180          , style:"text-align:center;"        , type:"input"          ,name:"excel_column_range"}
             	,{ text:"Load Name"             , width:230          , style:"text-align:center;"        , type:"input"          ,name:"load_name"}
+            	,{ text:"Seq #"                 , width:150          , style:"text-align:center;"        , type:"input"          ,name:"seq_no"}
             	,{ text:"Redirect Page"         , width:170          , style:"text-align:center;"        , type:"input"          ,name:"redirect_page"}
-            	,{ text:"Insert Procedure"      , width:250          , style:"text-align:center;"        , type:"input"          ,name:"insert_proc"}
+            	,{ text:"Insert Procedure"      , width:300          , style:"text-align:center;"        , type:"input"          ,name:"insert_proc"}
 	    ]
-	     
+	    ,onComplete : function(){
+	        this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
+	    } 
     });    
 }
 $("#btnDelete").click(function(){
@@ -52,4 +56,4 @@ $("#btnDelete").click(function(){
                         displayRecords();
                       }
     });      
-});           
+});                 

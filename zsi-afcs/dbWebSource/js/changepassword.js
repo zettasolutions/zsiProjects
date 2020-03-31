@@ -4,7 +4,7 @@
 	    if (msg) alert("Invalid old password.  Please try again.");
     }
     
-    $.get(execURL + "select dbo.getLogonName(" + userId+ ") as username",function(data){
+    $.get(app.execURL + "select dbo.getLogonName(" + userId+ ") as username",function(data){
          $("#username").val(data.rows[0].username);
     });
      
@@ -25,4 +25,4 @@
     });
  });
  
- 
+  

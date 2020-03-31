@@ -56,7 +56,7 @@ function getMenuTypeTemplate(callBack){
 // this function uses a stored procedure action to get the "menus" for the users
 function displayUserMenus(){
     var _tw = new zsi.easyJsTemplateWriter();    
-    $.get(execURL + "trend_menus_sel", function(data){
+    $.get(app.execURL + "trend_menus_sel", function(data){
         var d = data.rows;
         
         $(".users-menu-content").html(function(){
@@ -78,7 +78,7 @@ function displayUserMenus(){
 function displaySubCategory(sel,menuId, specsId){
     var _tw = new zsi.easyJsTemplateWriter("#main_container");
     
-    $.get(execURL + "criterias_sel @trend_menu_id=" + menuId, function(data){
+    $.get(app.execURL + "criterias_sel @trend_menu_id=" + menuId, function(data){
         var _rows = data.rows;
         var _result = _rows.filter(function (item) {
                 	return item.pcriteria_id === "";
@@ -203,7 +203,7 @@ function getDataByCriteriaId(criteriaId, callback){
             _param += ",@no_years='"+ gPrmNoYears +"',@include_cyear='N'";
         }
 
-        $.get(execURL + "dynamic_wires_usage_summary @byRegion='Y',@byMY='Y',@criteria_id="+ criteriaId + _param
+        $.get(app.execURL + "dynamic_wires_usage_summary @byRegion='Y',@byMY='Y',@criteria_id="+ criteriaId + _param
         , function(data){
             gData = [];
             gPrmCriteriaId = criteriaId; //Re-set to maintain the value of gPrmCriteriaId 
@@ -4414,7 +4414,7 @@ function displaySWSubDtlEachRegionPie(callback){
 function getDataNewWireTech(callback){
     var _my = new Date().getFullYear() - 2;
     var _wireGuage = "0.75";
-    $.get(execURL + "wire_tech_weight_lower_upper_limits @model_year="+ _my +",@wire_gauge='"+ _wireGuage +"'"
+    $.get(app.execURL + "wire_tech_weight_lower_upper_limits @model_year="+ _my +",@wire_gauge='"+ _wireGuage +"'"
     , function(data){
         var dataRows = [];
         if(data.rows.length > 0){
@@ -4518,7 +4518,7 @@ function displayNewWireTech(criteriaId){
 function getDataNewWireTechDimension(criteriaId, callback){
     var _my = new Date().getFullYear() - 2;
     var _wireGuage = "0.75";
-    $.get(execURL + "wire_tech_lower_upper_diameter @byMY="+ _my +",@criteria_id="+ criteriaId 
+    $.get(app.execURL + "wire_tech_lower_upper_diameter @byMY="+ _my +",@criteria_id="+ criteriaId 
     , function(data){
         var dataRows = [];
         if(data.rows.length > 0){
@@ -4653,7 +4653,7 @@ function dynamicObjectKey(data){
 }
 
 function getRetainerData(criteriaId, callback){
-    $.get(execURL + "dynamic_retainers_sel @byMY='Y',@byRegion='Y',@criteria_id=" + criteriaId 
+    $.get(app.execURL + "dynamic_retainers_sel @byMY='Y',@byRegion='Y',@criteria_id=" + criteriaId 
     , function(data){
         if(callback) callback(data.rows);
     });
@@ -4827,4 +4827,4 @@ function displayChartRetainer(criteriaId){
 }
 
 
-  
+   

@@ -7,9 +7,9 @@ zsi.ready(function(){
 
       
 function displayRecords(){   
-    var cb = bs({name:"cbFilter1",type:"checkbox"});
+    var cb = app.bs({name:"cbFilter1",type:"checkbox"});
          $("#grid").dataBind({
-	     url            : execURL + "menus_sel"
+	     url            : app.execURL + "menus_sel"
 	    ,width          : 1243
 	    ,height         : $(document).height() - 250
 	    ,selectorType   : "checkbox"
@@ -18,8 +18,8 @@ function displayRecords(){
         ,dataRows : [
                  {text  : cb                                                        , type  : "hidden"        , width    : 25        , style : "text-align:left;"       
         		    , onRender      :  function(d){ 
-                		                   return     bs({name:"menu_id",type:"hidden",value: svn (d,"menu_id")})
-                                                       +  (d !==null ? bs({name:"cb",type:"checkbox"}) : "" );
+                		                   return     app.bs({name:"menu_id",type:"hidden",value: svn (d,"menu_id")})
+                                                       +  (d !==null ? app.bs({name:"cb",type:"checkbox"}) : "" );
                             }
             }	 
         		,{text  : "Menu Name"   , name  : "pmenu_id"    , type : "select"  , width : 180   , style : "text-align:left;" }
@@ -41,4 +41,4 @@ function displayRecords(){
 
 
  
-      
+       

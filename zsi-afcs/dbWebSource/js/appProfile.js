@@ -1,9 +1,9 @@
   //jquery objects events:
-$(document).ready(function(){
+zsi.ready = function(){
+    $(".page-title").html("App Settings");
     displayAppProfile();
     $("#theme_id").dataBind("theme");
-   
-}); 
+}
 
 function displayAppProfile(){
    $.get( app.execURL + "app_profile_sel"

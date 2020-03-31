@@ -19,7 +19,7 @@ var buyLoad = (function(){
     
     function printDiv(qrcode) {
         setTimeout(function(){
-            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+            var mywindow = window.open('', '');
             mywindow.document.write('<html><body style="text-align:center;">');
             mywindow.document.write('<h1 style="margin-top:20px;">Your Generated QR!</h1>');
             mywindow.document.write('<div style="align-items:center;display: flex;justify-content: center;">');
@@ -62,7 +62,7 @@ var buyLoad = (function(){
     });
     
     $("#btnScanQr").click(function() {
-        alert("Please select amount to proceed");
+        alert("Can't proceed to this transaction yet.");
         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         scanner.addListener('scan', function (content) {
             console.log(content);
@@ -106,4 +106,4 @@ var buyLoad = (function(){
     });*/
     
     return _pub;
-})();         
+})();           

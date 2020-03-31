@@ -34,10 +34,10 @@ $(document).ready(function(){
 });
 
 function displayRecords(){   
-    var cb = bs({name:"cbFilter1",type:"checkbox"});    
+    var cb = app.bs({name:"cbFilter1",type:"checkbox"});    
     $("#grid1").dataBind(
         {
-             url   : procURL + "table_layout_sel"
+             url            : app.procURL + "table_layout_sel"
             ,width          :  $(document).width()-50
             ,height         : 300
             ,selectorType   : "checkbox"
@@ -90,7 +90,7 @@ function displayRecords(){
 function createTable(id){
     
     $.get(
-         execURL + "createTable @id=" + id
+         app.execURL + "createTable @id=" + id
         , function(data){
              if(data.isSuccess===true) zsi.form.showAlert("alert");
         }
@@ -99,9 +99,9 @@ function createTable(id){
 }
 
 function displayColumns(){   
-      var cb = bs({name:"cbFilter2",type:"checkbox"});    
+      var cb = app.bs({name:"cbFilter2",type:"checkbox"});    
     $("#grid2").dataBind({
-         url   : procURL + "table_layout_cols_sel @tableLayoutId=" + tableLayoutId
+         url   : app.procURL + "table_layout_cols_sel @tableLayoutId=" + tableLayoutId
         ,width           : $(document).width()-50
         ,height         : $(document).height()-636
         ,selectorType   : "checkbox"
@@ -113,9 +113,9 @@ function displayColumns(){
     		    , style :"text-align:left;"       
     		    , isFreeze:true
     		    ,onRender :  function(d){  
-    		                    return bs({name:"tableLayoutColId",type:"hidden", value:svn(d,"tableLayoutColId") })
-                                  +   bs({name:"tableLayoutId",type:"hidden",value:tableLayoutId})
-                                  +   (d !== null ? bs({name:"cb",type:"checkbox"}) : "");
+    		                    return app.bs({name:"tableLayoutColId",type:"hidden", value:svn(d,"tableLayoutColId") })
+                                  +    app.bs({name:"tableLayoutId",type:"hidden",value:tableLayoutId})
+                                  +   (d !== null ? app.bs({name:"cb",type:"checkbox"}) : "");
     		                }    		 
     		 }
             ,{ text: "Seq #"            , name  : "seqNo"           , width :40     , type : "input"    , style : "text-align:center;"  }
@@ -172,4 +172,4 @@ $("#btnSave2").click(function () {
     });
      
 });                                 
-         
+          

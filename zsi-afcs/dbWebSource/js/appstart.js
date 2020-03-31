@@ -180,6 +180,14 @@ var app = (function() {
     ;
     
     _app.init   = function(){
+        zsi.init({
+              baseURL : base_url
+             ,errorUpdateURL    :  base_url + "sql/logerror"
+             ,sqlConsoleName    :  "runsql"
+             ,excludeAjaxWatch  :  ["checkDataExist","searchdata"]
+             ,getDataURL        :  base_url + "data/getRecords"
+        });
+
         /* Page Initialization */
         zsi.initDatePicker  = function(){
            var inputDate =$('input[id*=date]').not("input[type='hidden']");
@@ -214,14 +222,6 @@ var app = (function() {
         
         zsi.initDatePicker();
 
-        zsi.init({
-              baseURL : base_url
-             ,errorUpdateURL    :  base_url + "sql/logerror"
-             ,sqlConsoleName    :  "runsql"
-             ,excludeAjaxWatch  :  ["checkDataExist","searchdata"]
-             ,getDataURL        :  base_url + "data/getRecords"
-        });
-        
         $.ajaxSetup({ cache: false });        
         app.getUserInfo(function(){
             if(app.userInfo.img_filename !=="") $(".profile-image").attr({src: base_url +  "file/loadFile?filename=" + app.userInfo.img_filename }); 
@@ -422,4 +422,4 @@ var app = (function() {
     return _app;
 
 })();
-                      
+                       

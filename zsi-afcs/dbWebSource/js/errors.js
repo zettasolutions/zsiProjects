@@ -9,7 +9,6 @@ var errors =(function(){
         $(".page-title").html("Errors");
         $("#user_id").dataBind( "users");
         errors.displayRecords("");
-        $(".panel").css("height", $(".page-content").height()); 
     };
 
     _pub.displayRecords=function(params){   
@@ -19,7 +18,7 @@ var errors =(function(){
         $("#grid").dataBind({
             url    : app.execURL + "error_logs_sel " + params
             ,width          : $(".zContainer").width()
-    	    ,height         : $(document).height() - 290
+    	    ,height         : $(window).height() - 280
     	    //,selectorType   : "checkbox"
             //,blankRowsLimit:5
             //,isPaging : false
@@ -66,7 +65,7 @@ var errors =(function(){
     
             ]
               ,onComplete: function(){
-                $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
+                $("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
             }
     
         });    
@@ -115,4 +114,4 @@ var errors =(function(){
     
     return _pub;
 })();
-                        
+                           

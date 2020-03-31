@@ -3,10 +3,11 @@ var  gTw
 
 ;
 
-$(document).ready(function(){
+zsi.ready = function(){
+    $(".page-title").html("Backup Codes");
     gTw = new zsi.easyJsTemplateWriter();
     setUploadTemplate();
-});
+};
 
 function btnUploadRestoreBackup(){
         var m=$('#' + mdlUploadId);
@@ -126,4 +127,4 @@ function btnCreateProceduresBackup(){
 }   
 
 
-            
+             
