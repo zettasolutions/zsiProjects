@@ -1,14 +1,13 @@
    var payment = (function(){
-    var  _pub            = {} 
-        ,gDate           = ""
-        ,gPaymentId      = "" 
-    ;
+        var  _pub            = {} 
+            ,gDate           = ""
+            ,gPaymentId      = "";
     
     zsi.ready = function(){
         $(".page-title").html("Bank Transfer");  
-        displayForTransfer(); 
-        displayTransfered(); 
         zsiReadyEvents();
+        displayTransfered(); 
+        displayForTransfer(); 
     };
     
     function zsiReadyEvents(){
@@ -20,7 +19,7 @@
             ,value      : "bank_id"
         });  
         _$frm.find("#company_code").val(app.userInfo.company_code); 
-        $('.bank_id').select2({placeholder: "Select Bank Code",allowClear: true});
+        $('.bank_id').select2({placeholder: "Select Bank",allowClear: true});
         $("#bank_transfer_date").datepicker({pickTime  : false , autoclose : true , todayHighlight: true}).datepicker("setDate","0");
         $("#posted_date").datepicker({pickTime  : false , autoclose : true , todayHighlight: true }).datepicker("setDate","0");
     }
@@ -28,37 +27,40 @@
         $("#gridBankForTransfer").dataBind({
              sqlCode        : "F1246" //for_bank_transfer_sel
             ,parameters     : {posted_date:(postedDate ? postedDate:"")}
-            ,height         : $(window).height() - 450 
+            ,height         : $(window).height() - 335 
             ,dataRows       : [
                 {text: "Posted Date"                    ,type:"input"           ,name:"posted_date"             ,width : 200   ,style : "text-align:left;"} 
                 ,{text: "Posted Amount"                                                                         ,width : 130   ,style : "text-align:right;padding-right: 0.3rem;"
                     ,onRender: function(d){
                         return app.bs({type: "input"                            ,name: "posted_amount"          ,value: app.svn(d,"posted_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
                     }
-                }  
-                
+                }   
             ]
             ,onComplete: function(){
                this.find(".zRow").find("input").attr("readonly",true); 
-               var _totalAmt = this.find("[name='posted_amount']").map( function() { return parseFloat($(this).val()); } ).get(); 
+               var _totalAmt = this.find("[name='posted_amount']").map( function() { return parseFloat($(this).val().replace(/,/g, "")); } ).get(); 
+              /* var val = this.value.replace(/,/g, "");
+                if (isNaN(val)) {
+                    alert("Please only enter valid values.");
+                } else {
+                    parseFloat(val)
+                }*/
                computeTotalAmt(_totalAmt)
             }
         });
     }
-    function computeTotalAmt(amt){ 
-        console.log("asda",amt)
+    function computeTotalAmt(amt){  
         var _total = 0;
         for (var i = 0; i < amt.length; i++) {
             _total += amt[i];
-            if(_total !=="" ? _total : "0.00");
-        }  
-       $("#frm_post").find("#transferred_amount").val(_total); 
-    }
-
+            if(_total !=="" ? _total : 0.00);
+        }   
+        $("#frm_post").find("#transferred_amount").val(_total);  
+    } 
     function displayTransfered(){
         $("#gridBankTransfered").dataBind({
              sqlCode        : "P1247" //posted_banktransfers_sel 
-            ,height         : $(window).height() - 350 
+            ,height         : $(window).height() - 245 
             ,dataRows       : [
                 
                  {text: "Bank Transfer Date"              ,width : 120   ,style : "text-align:left;"
@@ -66,10 +68,10 @@
                          return app.bs({type:"input"    ,value:app.svn(d,"bank_transfer_date").toShortDate()});
                      }
                  }
-                ,{text: "Bank Code"                         ,name:"bank_code"                       ,type:"input"       ,width : 100   ,style : "text-align:left;"} 
+                ,{text: "Bank"                         ,name:"bank_code"                       ,type:"input"       ,width : 100   ,style : "text-align:left;"} 
                 ,{text: "Reference No"                      ,name:"bank_ref_no"                     ,type:"input"       ,width : 100   ,style : "text-align:left;"}
                 ,{text: "Company Code"                      ,name:"company_code"                    ,type:"input"       ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Transfered Amount"                                                         ,width : 130   ,style : "text-align:right;padding-right: 0.3rem;"
+                ,{text: "Amount"                                                         ,width : 130   ,style : "text-align:right;padding-right: 0.3rem;"
                     ,onRender: function(d){
                         return app.bs({name: "transferred_amount"          ,type: "input"     ,value: app.svn(d,"transferred_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
                     }
@@ -84,8 +86,7 @@
                 this.find(".zRow").find("input").attr("readonly",true); 
             }
         });
-    }  
-    
+    }   
     $("#btnFilter").click(function(){
         var _$frm = $("#frm_post")
             ,_$bank = _$frm.find("#bank_id").val()
@@ -93,9 +94,7 @@
             ,_$date = $.trim(_$frm.find("#bank_transfer_date").val()) 
             ,_$postedDate = _$frm.find("#posted_date").val(); 
             displayForTransfer(_$postedDate);
-    });
-    
-    
+    }); 
     $("#btnSaveTransations").click(function(){
         var _$frm =  $("#frm_post"); 
         _$frm.jsonSubmit({
@@ -113,4 +112,4 @@
     });
 
     return _pub;
-})();                                     
+})();                                          

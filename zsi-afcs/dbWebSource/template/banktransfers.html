@@ -19,7 +19,7 @@
                 <nav>
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" data-toggle="tab" href="#nav-forTransfer" role="tab" aria-controls="nav-forPosting"> For Transfer </a>
-                    <a class="nav-item nav-link"        data-toggle="tab" href="#nav-Transfered" role="tab" aria-controls="nav-posted">Transfered </a>
+                    <a class="nav-item nav-link"        data-toggle="tab" href="#nav-Transfered" role="tab" aria-controls="nav-posted">Transferred </a>
                   </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -29,26 +29,26 @@
                             <form id="frm_post"> 
                                 <input type="hidden" id="bank_transfer_id">
                                <div class="row mb-2"> 
-                                    <div class="col-sm-6 col-md-2 col-xs-12">
+                                    <div class="col-sm-6 col-md-3 col-xs-12">
                             		    <label class=" control-label" >Date of Transfer</label>  
-                                        <input type="text" class="form-control" name="bank_transfer_date" id="bank_transfer_date">
+                                        <input type="text" class="form-control pl-2" name="bank_transfer_date" id="bank_transfer_date">
                             		</div> 
-                                    <div class="col-sm-6 col-md-2 col-xs-12">
-                            		    <label class=" control-label" >Bank Code</label>  
+                                    <div class="col-sm-6 col-md-3 col-xs-12">
+                            		    <label class=" control-label" >Bank</label>  
                                         <select type="text" class="form-control" name="bank_id" id="bank_id"></select>
                             		</div>
-                            		<div class="col-sm-6 col-md-2 col-xs-12">
+                            		<div class="col-sm-6 col-md-3 col-xs-12">
                             		    <label class=" control-label" >Bank Reference No</label>  
-                                        <input type="text" class="form-control " name="bank_ref_no" id="bank_ref_no"> 
+                                        <input type="text" class="form-control pl-2" name="bank_ref_no" id="bank_ref_no"> 
                             		</div>
                             		 <input type="hidden" class="form-control " name="company_code" id="company_code"> 
                             		 <input type="hidden" id="transferred_amount" name="transferred_amount">
-                            		<div class="col-sm-6 col-md-2 col-xs-12 mb-1">
+                            		<div class="col-sm-6 col-md-3 col-xs-12 mb-1">
                                          <label class=" control-label" >Posted Date</label>  
                                         <div class="input-group"> 
-                                            <input type="text" class="form-control" name="posted_date" id="posted_date">
+                                            <input type="text" class="form-control pl-2" name="posted_date" id="posted_date">
                                             <div class="input-group-append">
-                                                <button id="btnFilter" class="btn-sm btn btn-primary btn-outline-default" type="button">
+                                                <button id="btnFilter" class="btn-sm btn btn-primary btn-outline-default text-white" type="button">
                                                     <i class="fa fa-filter"></i>
                                                 </button>
                                             </div>

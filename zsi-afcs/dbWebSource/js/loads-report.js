@@ -176,13 +176,13 @@
         var _zRowsHeight =   _zRows.height() - 20;
         var _zTotal = _tableRight.find(".zTotal");
         _zTotal.css({"top": _zRowsHeight});
-        _zTotal.prev().css({"margin-bottom":23 }); 
         if(_zRows.find(".zRow").length == 1){
             _zTotal.addClass("hide");
         }else{
             if(_tableRight.height() > _zRowsHeight){
                 _tableRight.parent().scroll(function() {
-                   _zTotal.css({"top":_zRowsHeight - ( _tableRight.top - _zRows.top) });
+                   _zTotal.css({"top":_zRowsHeight - ( _tableRight.offset().top - _zRows.offset().top) });
+                   _zTotal.prev().css({"margin-bottom":23 }); 
                 });
             }else{
                 _zTotal.css({"position":"unset"});
@@ -221,4 +221,4 @@
     });
 
     return _pub;
-})();                          
+})();                           
