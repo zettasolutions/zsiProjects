@@ -1,0 +1,197 @@
+<script type="text/javascript" src="/scripts/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<style>
+#employee{
+    margin-bottom:10px;
+}
+#employee .zGridPanel .zHeaders .item .title .text{
+    width:100%;
+}
+#user-box{
+    top:200px;
+    background-color: #fff;
+    height: 250px;
+    width: 250px;
+    left: 360px;
+    position: absolute;
+    display:none;
+    webkit-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+    -moz-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+    box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+    border: 2px solid #fff;
+    border-radius: 10px;
+    overflow:hidden;
+}
+  #user-box img{ 
+  height: 100%;
+  width: 100%; 
+  
+}
+.modal-sm {
+    max-width: 223px !important;
+}
+.bads{
+    margin-top:5px;margin-bottom:15px;
+    height:55px;
+}
+.bads #nameId{
+    font-size:20px;
+    text-shadow: 2px 2px 4px #000000;
+}
+.bads #positionId{
+    font-size:8px;
+    text-shadow: 2px 2px 4px #000000;
+}
+.bads #idsId,.bads #idNo{
+    font-size:13px;
+    text-shadow: 2px 2px 4px #000000;
+}
+#printBody{
+    color: #fff;
+    height:324px !important;
+    width:204px !important;
+    position: relative;
+}
+img{
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+</style>
+
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">     
+            <div class="zContainer">
+                <div class="row">
+                    <div class="col-md-7 col-sm-6 col-xl-9"></div>
+                    <div class="col-sm-6 col-md-5 col-xl-3 col-12 mb-1">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm desc-prop-group pl-2" id="searchVal" name="searchVal" autocomplete="off" placeholder="Search.....">
+                            <div class="input-group-append">
+                                <button id="btnSearchVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Search">
+                                   <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">
+                                   <i class="far fa-refresh hvr-icon"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-1">
+                        <div id="grid" class="zGrid"></div>    
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                        	<span class="fas fa-save"></span> Save
+                        </button>   
+                        <button type="button" class="btn btn-primary btn-sm" id="btnInactive">
+                        	<span class="fas fa-ban"></span> Inactive
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalEmployeesId" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="vertical-alignment-helper modal-dialog modal-sm" role="document">
+        <div class="modal-content vertical-align-center">
+            <form id="frm_modalEmpoloyeeId">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body panel">
+                    <div id="previewImage" class="hide"></div>
+                    <div id="printThis">
+                        <img src="../images/zsi-id-front-bg.png" alt="" height="324" width="204" style="position:fixed;">
+                        <div id="printBody">
+                            <div id="dummyId" style="height:87px;"></div>
+                            <div class="text-center">
+                                <img src="../img/avatar-m.png" id="imgFilename" height="96" width="96">
+                            </div>
+                            <div class="text-center bads">
+                                <div id="nameId">FirstName LastName</div>
+                                <div id="positionId"></div>
+                                <div class="card-text"><b id="idsId">ID No.:</b>&nbsp; <span id="idNo"></span></div> 
+                            </div>
+                            <div class="justify-content-center d-flex mb-2" >
+                                <div id="qrcode" style="width:60px; height:60px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" id="download" class="btn btn-primary text-white">Download</a>
+                    <button type="button" id="Print" class="btn btn-primary">Print</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ul name="localTemplates">
+    <li name="modalBodyOtherIncome">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                    <div id="{{grid}}" class="zGrid"> </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="btnPerUserHide">
+                    <button type="button" onclick="employees.{{onClickSaveOtherIncome}}" class="btn-sm btn btn-primary"><i class="far fa-save"></i> Save</button>
+                    <button type="button" onclick="employees.deleteOtherIncome(this);" class="btn-sm btn btn-primary"><i class="far fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li name="modalBodyInactiveEmployee">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id="{{gridInactive}}" class="zGrid"> </div>
+                </div>
+        		<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <button onclick="employees.{{saveInactive}}" class="btn-sm btn btn-primary" type="button">
+                        <i class="far fa-save"></i> Save
+                    </button>
+                    <button onclick="employees.{{deleteInactive}}" class="btn-sm btn btn-primary" type="button">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+        		</div>
+            </div>
+        </div>
+    </li>   
+    <li name="modalBodyImageEmpl">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageEmpl}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+   </li>
+  
+    
+    <!--<li name="modalBodyInactiveType">
+        <div class="zContainer">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-12">
+        		    <label for="" class="col-form-label control-label">Reason</label>  
+                    <select class="form-control form-control-sm" id="inactive_type_code" name="inactive_type_code" ></select>
+        		</div>
+        		 <div class="col-sm-6 col-md-6 col-12 mb-2">
+        		    <label for="" class="col-form-label">Date</label>
+                    <div class="input-group">
+                        <input class="form-control form-control-sm " id="inactive_date" name="inactive_date" >
+                        <div class="input-group-append">
+                            <button onclick="employees.{{onClickAdd}}" class="btn-sm btn btn-primary btn-outline-default" type="button">
+                                <i class="fa fa-add"> Add</i>
+                            </button>
+                        </div>
+                    </div>
+        		</div>
+            </div>
+        </div>
+    </li>-->
+</ul>
+<div id="user-box">
+    <img src="/file/viewImage?fileName=no-image.jpg&amp;isThumbNail=y" id="userImage" >
+</div>

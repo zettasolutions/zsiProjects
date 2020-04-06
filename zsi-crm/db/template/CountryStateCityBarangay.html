@@ -1,0 +1,129 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-12 col-xl-7 col-md-5 col-sm-5">
+                    <nav>
+                      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" data-toggle="tab" href="#nav-countries" role="tab" aria-controls="nav-countries"> Countries</a>
+                        <a class="nav-item nav-link hide" data-toggle="tab" href="#nav-states" role="tab" aria-controls="nav-states"> States </a>
+                        <a class="nav-item nav-link hide" data-toggle="tab" href="#nav-cities" role="tab" aria-controls="nav-cities"> Cities </a>
+                        <a class="nav-item nav-link hide" data-toggle="tab" href="#nav-barangays" role="tab" aria-controls="nav-barangays"> Barangays </a>
+                      </div>
+                    </nav>
+                </div>
+                <div id="dummyDiv" class="col-sm-3 col-md-3 col-xl-2"></div>
+                <div id="countryDiv" class="col-sm-3 col-md-3 col-xl-2 col-12 mt-1 hide"> 
+                    <div class="input-group" style="flex-wrap: inherit !important;">
+                        <select class="form-control form-control-sm filter-oem" name="countryId" id="countryId"></select>
+                        <div class="input-group-append">
+                            <button id="btnFilterCountry" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="filter"><i class="fas fa-filter"></i></button>
+                        </div> 
+                    </div>
+                </div>
+                <div id="stateDiv" class="col-sm-3 col-md-3 col-xl-2 col-12 mt-1 hide"> 
+                    <div class="input-group" style="flex-wrap: inherit !important;">
+                        <select class="form-control form-control-sm filter-oem" name="stateId" id="stateId"></select>
+                        <div class="input-group-append">
+                            <button id="btnFilterState" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="filter"><i class="fas fa-filter"></i></button>
+                        </div> 
+                    </div>
+                </div>
+                <div class="col-md-4 col-xl-3 col-sm-4 col-12 mt-1">
+                    <div class="input-group" id="searchGroup">
+                        <input type="text" class="form-control form-control-sm desc-prop-group pl-2" id="searchVal" name="searchVal" autocomplete="off" placeholder="Search.....">
+                        <div class="input-group-append">
+                            <button id="btnSearchVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Search">
+                               <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="input-group-append ml-1">
+                            <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">
+                               <i class="far fa-refresh hvr-icon"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+           </div>   
+            <div class="tab-content" id="nav-tabContent">
+                <div role="tabpanel" class="tab-pane fade show active" id="nav-countries">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div id="gridCountries" class="zGrid mb-1"></div> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="button-group">   
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveCountries" title="Save">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnDeleteCountries" title="Delete">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="nav-states">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div id="gridStates" class="zGrid mb-1"></div> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="button-group">   
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveStates" title="Save">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnDeleteStates" title="Delete">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="nav-cities">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div id="gridCities" class="zGrid mb-1"></div> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="button-group">   
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveCities" title="Save">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnDeleteCities" title="Delete">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div role="tabpanel" class="tab-pane fade" id="nav-barangays">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div id="gridBarangays" class="zGrid mb-1"></div> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="button-group">   
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveBarangays" title="Save">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnDeleteBarangays" title="Delete">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
