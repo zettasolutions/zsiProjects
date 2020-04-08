@@ -1,62 +1,85 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+    border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    *:focus{
+      outline:0px;
+    }
+</style>
 <div class="panel">
     <div class="panel-container">
         <div class="panel-content">  
             <div role="content" id="tablePSN" >  
                 <div class="widget-body"  id="panel-1"> 
-                    <form id="formClients">  
+                    <form id="formClients" class="needs-validation" novalidate>  
             			<input type="hidden" name="client_id" id="client_id">
                         <div class="row mb-2"> 
-                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                        	<div class="col-sm-6 col-md-4 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Client Code</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_code" name="client_code" autocomplete="off"/>
+                                <input type="text" class="form-control form-control-sm pl-2" id="client_code" required  name="client_code" autocomplete="off"/>
                     		</div>
-                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                        	<div class="col-sm-6 col-md-4 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Client Name</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_name" name="client_name" autocomplete="off"/> 
+                                <input type="text" class="form-control form-control-sm pl-2" id="client_name" required  name="client_name" autocomplete="off"/> 
                     		</div>
-                    		<div class="col-sm-6 col-md-3 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Client Phone #</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_phone_no" name="client_phone_no" autocomplete="off"/>
-                    		</div>
-                    		<div class="col-sm-6 col-md-3 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Mobile #</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_mobile_no" name="client_mobile_no" autocomplete="off"/>
-                    		</div>
-                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		<div class="col-sm-6 col-md-4 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Email Address</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_email_add" name="client_email_add" autocomplete="off"/>
+                                <input type="text" class="form-control form-control-sm pl-2" id="client_email_add" required  name="client_email_add" autocomplete="off"/>
                     		</div>
-                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Billing Address</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="billing_address" name="billing_address" autocomplete="off"/>
+                                <textarea type="text" class="form-control form-control-sm pl-2" id="billing_address" name="billing_address" required autocomplete="off"></textarea>
+                                    
+                                <small>Building No, Street, Barangay</small>
+                    		</div>
+                    		<div class="col-sm-6 col-md-4 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Country</b></label>  
+                                <select type="text" class="form-control form-control-sm custom-select select" rows="1" id="country_id" required  name="country_id" autocomplete="off"></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-4 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>State</b></label>  
+                                <select type="text" class="form-control form-control-sm custom-select select" id="state_id" name="state_id" required autocomplete="off"></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-4 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>City</b></label>  
+                                <select type="text" class="form-control form-control-sm custom-select select" id="city_id" name="city_id" required  autocomplete="off"></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-4 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Phone #</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="client_phone_no" name="client_phone_no" maxlength="15" required  autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-4 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Mobile #</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="client_mobile_no" name="client_mobile_no" maxlength="12" required  autocomplete="off"/>
                     		</div>
                     	</div>
+                    	<div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                                <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed" title="Save">
+                                    <i class="far fa-save"></i> Save
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>  
             </div>     
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" title="Save">
-                        <i class="far fa-save"></i> Save
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </div> 
 <div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-xs">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header x_title">
+            <div class="modal-header">
                 <h5 class="modal-title">Confirmation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="col-12">
-                    <p id="msg">Are you sure you want to save this data?</p>
-                </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="btnSaveClient" class="btn btn-primary btn-sm">Yes</button>
