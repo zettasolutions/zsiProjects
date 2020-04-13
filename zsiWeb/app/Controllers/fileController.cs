@@ -61,10 +61,13 @@ namespace zsi.web.Controllers
                 rdr = command.ExecuteReader();
                 if (rdr.HasRows)
                 {
-                    SqlBulkCopy sqlBulk = new SqlBulkCopy(dbConnection.ConnectDb());
+                    SqlConnection conn2 = dbConnection.ConnectDb();
+                    conn2.Open();
+                    SqlBulkCopy sqlBulk = new SqlBulkCopy(conn2);
                     sqlBulk.DestinationTableName = tempTable;
                     sqlBulk.WriteToServer(rdr);
                     rdr.Close();
+                    conn2.Close();
                 }
                 conn.Close();
             }
