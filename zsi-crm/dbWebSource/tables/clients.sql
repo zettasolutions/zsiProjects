@@ -1,0 +1,20 @@
+CREATE TABLE clients(
+client_id	INT IDENTITY(1,1)	NOT NULL
+,client_code	CHAR(10)	NULL
+,client_name	NVARCHAR(100)	NULL
+,client_phone_no	NVARCHAR(40)	NULL
+,client_mobile_no	NVARCHAR(40)	NULL
+,client_email_add	NVARCHAR(60)	NULL
+,billing_address	NTEXT(2147483646)	NULL
+,country_id	INT	NULL
+,state_id	INT	NULL
+,city_id	INT	NULL
+,registration_date	DATE	NULL
+,account_exec_id	INT	NULL
+,billing_class_id	INT	NULL
+,is_active	CHAR(1)	NULL
+,created_by	INT	NULL
+,created_date	DATETIME	NULL
+,updated_by	INT	NULL
+,updated_date	DATETIME	NULL
+,balance_amount	DECIMAL(12)	NULL)
