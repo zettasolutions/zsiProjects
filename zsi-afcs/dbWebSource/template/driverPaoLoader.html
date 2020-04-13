@@ -71,6 +71,7 @@
                         <button type="button" class="btn btn-primary btn-sm" id="btnNactive">
                         	<span class="fas fa-ban"></span> Inactive
                         </button> 
+                        <button type="button" onclick="driverpaoloader.showModalUpload(this,'Driver Pao Loader');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>
                         <button type="button" class="btn btn-primary btn-sm" id="btnAdd">
                         	<span class="fas fa-user-plus"></span> Add
                         </button>
@@ -139,3 +140,30 @@
 <div id="user-box">
     <img src="/file/viewImage?fileName=no-image.jpg&amp;isThumbNail=y" id="userImage" >
 </div>
+
+
+<ul name="localTemplates"> 
+    <li name="modalBodyUploadExcel">
+        <div class="row">  
+            <input id="tmpData" name="tmpData" type="hidden" class="form-control input-sm" > 
+        </div>
+        <div class="row mb-2">  
+            <label class="col-2  control-label">Select File:</label>
+            <div class=" col-3">
+                <input type="file" class="browse btn btn-primary" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file">
+            </div>
+        </div>
+        <div class="row">  
+            <div class="col-3">
+                <button type="button" onclick="driverpaoloader.{{onClickUploadExcel}}" class="btn btn-primary" id="btnUploadFile" style="margin-left: 5px">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+            </div>
+        </div>
+    </li> 
+</ul>
+
+
+
+
+

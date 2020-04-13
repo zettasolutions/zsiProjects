@@ -7,6 +7,7 @@
         ,gRoleId                = ""
         ,mdlAddNewUser          = "modalWindowAddNewUser"
         ,mdlInactive            = "modalWindowInactive"
+        ,gMdlUploadExcel        = "modalWindowUploadExcel"
         ,gTw                    = null
         
     ;
@@ -14,9 +15,9 @@
     zsi.ready = function(){
         $(".page-title").html("Driver/PAO/Loader");
         $(".panel-container").css("min-height", $(window).height() - 190); 
-        gtw = new zsi.easyJsTemplateWriter();
+        gTw = new zsi.easyJsTemplateWriter();
         displayRecords("");
-        //getTemplates();
+        getTemplates();
         $("#driverpaoloaderId").fillSelect({
             data: [
                  { text: "DRIVER"       , value: "1"}
@@ -34,31 +35,65 @@
             }
         });
     };
+    _public.excelFileUpload = function(){
+        var frm      = $("#frm_modalWindowUploadExcel");
+        var formData = new FormData(frm.get(0));
+        var files    = frm.find("input[name='file']").get(0).files; 
     
-    /*function getTemplates(){
+        if(files.length===0){
+            alert("Please select excel file.");
+            return;    
+        }
+        
+        //disable button and file upload.
+        //frm.find("input[name='file']").attr("disabled","disabled");
+        $("btnUploadFile").hide();
+        $("#loadingStatus").html("<div class='loadingImg'></div> Uploading...");
+    
+        $.ajax({
+            url: base_url + 'file/templateUpload',  //server script to process data
+            type: 'POST',
+            //Ajax events
+            success: completeHandler = function(data) {
+                if(data.isSuccess){
+                     alert("Data has been successfully uploaded.");
+                }
+                else
+                    alert(data.errMsg);
+            },
+            error: errorHandler = function() {
+                console.log("error");
+            },
+            // Form data
+            data: formData,
+            //Options to tell JQuery not to process data or worry about content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
+    };  
+    _public.showModalUpload = function(o,tabName){
+        console.log("tabName",tabName);
+        $.get(app.execURL +  "excel_upload_sel @load_name ='" + tabName +"'"
+        ,function(data){
+            console.log("data",data);
+            g$mdl = $("#" + gMdlUploadExcel);
+            g$mdl.find(".modal-title").text("Upload Excel for » " + tabName ) ;
+            g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' }); 
+            $("#tmpData").val(data.rows[0].value);
+            
+            $("input[name='file']").val(""); 
+        });
+    };     
+    function getTemplates(){
         new zsi.easyJsTemplateWriter("body")
         .bsModalBox({
-              id        : mdlImageEmpl
-            , sizeAttr  : "modal-md"
+              id        : gMdlUploadExcel
+            , sizeAttr  : "modal-xs"
             , title     : ""
-            , body      : ""
-            , footer    : gtw.new().modalBodyImageEmpl({onClickUploadImageEmpl:"employees.uploadImageEmpl();"}).html()  
+            , body      : gTw.new().modalBodyUploadExcel({onClickUploadExcel:"excelFileUpload();"}).html()  
         })
-        
-        .bsModalBox({
-              id        : mdlAddNewUser
-            , sizeAttr  : "modal-full"
-            , title     : "New User"
-            , body      : gTw.new().modalBodyAddUsers({grid:"gridNewUsers",onClickSaveNewUsers:""}).html()  
-        })
-        
-        .bsModalBox({
-              id        : mdlInactive
-            , sizeAttr  : "modal-lg"
-            , title     : "Inactive Users"
-            , body      : gTw.new().modalBodyInactive({grid:"gridInactiveUsers",onClickSaveInactive:"users.submitInactive();"}).html()  
-        });
-    }*/
+    }
    
     function displayRecords(roleId,userName){   
         console.log("userName",userName);
@@ -72,17 +107,7 @@
     	    ,selectorType   : "checkbox"
             ,rowsPerPage    : 50
             ,isPaging : true
-            ,dataRows       : [
-                /*{text  : "Corplear logon "     , width : 155           , style : "text-align:center;"         ,sortColNo:3
-                    ,onRender : function(d){ 
-                        ctr++;
-                        return app.bs({name:"user_id"   ,type:"hidden"  ,value:app.svn(d,"user_id") })
-                            +  app.bs({name:"is_edited" ,type:"hidden"                              })
-                            +  app.bs({name:"oem_ids"   ,type:"hidden"  ,value:app.svn(d,"oem_ids") })
-                            +  app.bs({name:"logon"     ,type:"input"   ,value:app.svn(d,"logon")   });
-                                                 
-                    }
-        		}*/
+            ,dataRows       : [ 
         		{ text:"Photo"             , width:40      , style:"text-align:center;" 
     		    ,onRender : function(d){ 
                         var mouseMoveEvent= "onmouseover='driverpaoloader.mouseover(\"" +  app.svn(d,"img_filename") + "\");' onmouseout='driverpaoloader.mouseout();'";
@@ -209,10 +234,11 @@
         _frm.find("#qrcode").attr("title","");
     };
     
-    _public.showModalUploadUserImage = function(UserId, name){
+    _public.showModalUploadUserImage = function(UserId, name){ 
         user_id = UserId;
-        var m=$('#' + mdlImageUser);
-        
+        var m=$('#' + mdlImageUser); 
+        m = $("#" + gMdlUploadExcel); 
+        m.modal({ show: true, keyboard: false, backdrop: 'static' }); 
         m.find(".modal-title").text("Image User for » " + name);
         m.modal("show");
         m.find("form").attr("enctype","multipart/form-data");
@@ -379,4 +405,4 @@
     
     return _public;
 })();
-                                          
+                                             

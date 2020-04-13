@@ -1,12 +1,75 @@
 var vehicles = (function(){
-    var _pub            = {}
-        ,gCompanyCode   = app.userInfo.company_code;
+    var _pub                = {}
+        ,gCompanyCode       = app.userInfo.company_code
+        ,gtw                = null
+        ,gMdlUploadExcel    = "modalWindowUploadExcel";
     
     zsi.ready = function(){
         $(".page-title").html("Vehicles");
+        gtw = new zsi.easyJsTemplateWriter();
         displayVehicles(gCompanyCode);
-        
+        getTemplates();
     };
+    
+   _pub.excelFileUpload = function(){
+        var frm      = $("#frm_modalWindowUploadExcel");
+        var formData = new FormData(frm.get(0));
+        var files    = frm.find("input[name='file']").get(0).files; 
+    
+        if(files.length===0){
+            alert("Please select excel file.");
+            return;    
+        } 
+        $("btnUploadFile").hide();
+        $("#loadingStatus").html("<div class='loadingImg'></div> Uploading...");
+    
+        $.ajax({
+            url: base_url + 'file/templateUpload',  //server script to process data
+            type: 'POST',
+            //Ajax events
+            success: completeHandler = function(data) {
+                if(data.isSuccess){
+                     alert("Data has been successfully uploaded.");
+                }
+                else
+                    alert(data.errMsg);
+            },
+            error: errorHandler = function() {
+                console.log("error");
+            },
+            // Form data
+            data: formData,
+            //Options to tell JQuery not to process data or worry about content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
+    }; 
+    _pub.showModalUpload = function(o,tabName){
+        console.log("tabName",tabName);
+        $.get(app.execURL +  "excel_upload_sel @load_name ='" + tabName +"'"
+        ,function(data){
+            g$mdl = $("#" + gMdlUploadExcel);
+            g$mdl.find(".modal-title").text("Upload Excel for » " + tabName ) ;
+            g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' }); 
+            $("#tmpData").val(data.rows[0]);
+            
+            $("input[name='file']").val("");
+            
+        //    excelFileUpload();
+        });
+    };   
+
+    function getTemplates(){ 
+        new zsi.easyJsTemplateWriter($("#generatedComponents").empty()) 
+        .bsModalBox({
+              id        : gMdlUploadExcel
+            , sizeAttr  : "modal-lg"
+            , title     : ""
+            , body      : gtw.new().modalBodyUploadExcel({onClickUploadExcel:"excelFileUpload();"}).html()  
+        });
+         
+    }
     
     function displayVehicles(companyCode){
         $("#gridVehicles").dataBind({
@@ -145,4 +208,4 @@ var vehicles = (function(){
     });
     
     return _pub;
-})();                  
+})();                   
