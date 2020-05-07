@@ -314,7 +314,7 @@ namespace zsi.web
                 using (conn)
                 {
 
-                    //if(isAPI) checkAuthKey(jo);
+                    if(isAPI) checkAuthKey(jo);
 
                     dcSqlCmd sc = getProcedure(jo);
                     SqlCommand cmd = new SqlCommand(sc.text, conn);
