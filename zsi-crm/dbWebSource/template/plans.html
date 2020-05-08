@@ -1,0 +1,63 @@
+<style>
+    @media print {
+         .zRow.zTotal{
+             position:unset;
+         }
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row mb-5">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                     <div id="gridPlans" class="zGrid"></div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                    <div class="button-group">     
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSavePlans">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnDeletePlans">
+                        	<i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div id="panel-1" class="panel">
+                        <div class="panel-hdr">
+                            <h2>
+                                Plan <span class="fw-300"><i>Inclusions</i></span>&nbsp; » &nbsp;<span id="lblPlanCode"></span>
+                            </h2>
+                            <div class="panel-toolbar">
+                                <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                <!--<button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>-->
+                                <!--<button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>-->
+                            </div>
+                        </div>
+                        <div class="panel-container show">
+                            <div class="panel-content">
+                                <div class="row hide" id="divPlanInclusions">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1"> 
+                                        <div id="gridPlanInclusions" class="zGrid"></div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                        <div class="button-group">     
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnSavePlanInclusion">
+                                                <i class="far fa-save"></i> Save
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnDeletePlanInclusion">
+                                            	<i class="fas fa-trash-alt"></i> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
