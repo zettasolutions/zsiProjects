@@ -1,5 +1,5 @@
 CREATE TABLE billings(
-billing_perod_id	INT IDENTITY(1,1)	NOT NULL
+billing_period_id	INT IDENTITY(1,1)	NOT NULL
 ,billing_date	DATE	NULL
 ,billing_class_id	INT	NULL
 ,is_posted	CHAR(1)	NULL
