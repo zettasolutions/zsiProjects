@@ -1,6 +1,6 @@
 <style>
     .was-validated .custom-select:invalid + .select2 .select2-selection{
-    border-color: #f30000!important;
+        border-color: #f30000!important;
     }
     .was-validated .custom-select:valid + .select2 .select2-selection{
         border-color: #1dc9b7!important;
@@ -8,67 +8,66 @@
     *:focus{
       outline:0px;
     }
+    .zGrid .zCell{
+        padding-left: 3px;
+    }
 </style>
 <div class="panel">
-    <div class="panel-container">
-        <div class="panel-content">  
-            <div role="content" id="tablePSN" >  
-                <div class="widget-body"  id="panel-1"> 
-                    <form id="formClients" class="needs-validation" novalidate>  
-            			<input type="hidden" name="client_id" id="client_id">
-                        <div class="row mb-2"> 
-                        	<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Client Code</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_code" required  name="client_code" autocomplete="off"/>
-                    		</div>
-                        	<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Client Name</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_name" required  name="client_name" autocomplete="off"/> 
-                    		</div>
-                    		<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Email Address</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_email_add" required  name="client_email_add" autocomplete="off"/>
-                    		</div>
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Billing Address</b></label>  
-                                <textarea type="text" class="form-control form-control-sm pl-2" id="billing_address" name="billing_address" required autocomplete="off"></textarea>
-                                    
-                                <small>Building No, Street, Barangay</small>
-                    		</div>
-                    		<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Country</b></label>  
-                                <select type="text" class="form-control form-control-sm custom-select select" rows="1" id="country_id" required  name="country_id" autocomplete="off"></select>
-                    		</div>
-                    		<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>State</b></label>  
-                                <select type="text" class="form-control form-control-sm custom-select select" id="state_id" name="state_id" required autocomplete="off"></select>
-                    		</div>
-                    		<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>City</b></label>  
-                                <select type="text" class="form-control form-control-sm custom-select select" id="city_id" name="city_id" required  autocomplete="off"></select>
-                    		</div>
-                    		<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Phone #</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_phone_no" name="client_phone_no" maxlength="15" required  autocomplete="off"/>
-                    		</div>
-                    		<div class="col-sm-6 col-md-4 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Mobile #</b></label>  
-                                <input type="text" class="form-control form-control-sm pl-2" id="client_mobile_no" name="client_mobile_no" maxlength="12" required  autocomplete="off"/>
-                    		</div>
-                    	</div>
-                    	<div class="row">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
-                                <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed" title="Save">
-                                    <i class="far fa-save"></i> Save
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>  
-            </div>     
+    <div class="panel-hdr">
+        <div class="d-flex w-100">
+            <div class="mr-auto">
+                <button type="button" class="btn btn-primary btn-sm" id="btnNew"><i class="far fa-plus"></i> New</button>
+            </div>
+            <div class="">
+                <div class="input-group input-group-sm bg-white shadow-inset-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                            <i class="fal fa-search"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Type here...">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary waves-effect waves-themed" type="button">Search</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div> 
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="zGrid" id="gridClients"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            
+<!--<div class="row">-->
+<!--    <div class="col-sm-12 col-md-6 d-flex align-items-center justify-content-start">-->
+<!--        <div class="col-sm-12 col-md-6 d-flex align-items-center justify-content-start">-->
+<!--            <button type="button" class="btn btn-primary btn-sm mb-2" id="btnNew"><i class="far fa-plus"></i> New</button>-->
+<!--        </div>-->
+<!--        <div class="col-sm-12 col-md-6 d-flex align-items-center justify-content-end">-->
+<!--            <div class="input-group input-group-sm bg-white shadow-inset-2  mb-2">-->
+<!--                <div class="input-group-prepend">-->
+<!--                    <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">-->
+<!--                        <i class="fal fa-search"></i>-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--                <input type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Type here...">-->
+<!--                <div class="input-group-append">-->
+<!--                    <button class="btn btn-primary waves-effect waves-themed" type="button">Search</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-sm-12">-->
+<!--            <div class="zGrid" id="gridClients"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -88,3 +87,67 @@
         </div>
     </div>
 </div>
+<ul name="localTemplates">
+    <li name="modalBodyClient">
+        <div class="panel">
+            <div class="panel-container">
+                <div class="panel-content">  
+                    <div role="content" id="tablePSN" >  
+                        <div class="widget-body"  id="panel-1"> 
+                            <form id="formClients" class="needs-validation" novalidate>  
+                    			<input type="hidden" name="client_id" id="client_id">
+                                <div class="row mb-2"> 
+                                	<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>Client Code</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_code" required  name="client_code" autocomplete="off"/>
+                            		</div>
+                                	<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>Client Name</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_name" required  name="client_name" autocomplete="off"/> 
+                            		</div>
+                            		<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>Email Address</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_email_add" required  name="client_email_add" autocomplete="off"/>
+                            		</div>
+                            		<div class="col-sm-12 col-md-12 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>Billing Address</b></label>  
+                                        <textarea type="text" class="form-control form-control-sm pl-2" id="billing_address" name="billing_address" required autocomplete="off"></textarea>
+                                            
+                                        <small>Building No, Street, Barangay</small>
+                            		</div>
+                            		<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>Country</b></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="country_id" required  name="country_id" autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>State</b></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>City</b></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>Phone #</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_phone_no" name="client_phone_no" maxlength="15" required  autocomplete="off"/>
+                            		</div>
+                            		<div class="col-sm-6 col-md-4 col-xs-12">
+                            		    <label for="" class="col-form-label control-label"><b>Mobile #</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_mobile_no" name="client_mobile_no" maxlength="12" required  autocomplete="off"/>
+                            		</div>
+                            	</div>
+                            	<div class="row">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                                        <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed" title="Save" onclick="{{onClickSaveClient}}">
+                                            <i class="far fa-save"></i> Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>  
+                    </div>     
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
