@@ -1,5 +1,5 @@
- var clients = (function(){
-    var _public = {}
+ var client = (function(){
+    var _pub = {}
         ,gMdlAddClient = "modalWindowAddClient"
         ,gTW = null
     ;
@@ -12,13 +12,17 @@
         displayClients();
     };
     
+    _pub.submitNewClient = function(){
+        event.preventDefault();    
+    };
+    
     function getTemplates(){
         new zsi.easyJsTemplateWriter($("#generatedComponents").empty())
         .bsModalBox({
               id        : gMdlAddClient
             , sizeAttr  : "modal-full"
             , title     : "New Client"
-            , body      : gTW.new().modalBodyClient({onClickSaveClient:"submitNewClient();"}).html()
+            , body      : gTW.new().modalBodyClient({onClickSaveClient:"client.submitNewClient();"}).html()
         });
     }
     
@@ -64,23 +68,42 @@
         });
     }
 
-    function validations(){
-        var forms = document.getElementsByClassName('needs-validation');
-    	// Loop over them and prevent submission
-    	var validation = Array.prototype.filter.call(forms, function(form) {
-    		form.addEventListener('submit', function(event) {
-    			if (form.checkValidity() === false) {
+    function validations(frm){
+        var forms = frm;
+        //var forms = document.getElementsByClassName('needs-validation');
+        forms.attr("novalidate", true);
+        forms.find("input, select, textarea").prop("required", true);
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                console.log(form.checkValidity());
+                if (form.checkValidity() === false) {
     				event.preventDefault();
     				event.stopPropagation();
-    			    $("form").addClass('was-validated');
     			}else{
         			event.preventDefault();
         			event.stopPropagation();
     			    $('#myModal').modal('show');
-    			    $("form").addClass('was-validated');
     			}
-    		}, false);
-    	});
+    			$(form).addClass("was-validated");
+            }, false);
+        });
+    //     var forms = document.getElementsByClassName('needs-validation');
+    // 	// Loop over them and prevent submission
+    // 	var validation = Array.prototype.filter.call(forms, function(form) {
+    // 		form.addEventListener('submit', function(event) {
+    // 			if (form.checkValidity() === false) {
+    // 				event.preventDefault();
+    // 				event.stopPropagation();
+    // 			    $("form").addClass('was-validated');
+    // 			}else{
+    //     			event.preventDefault();
+    //     			event.stopPropagation();
+    // 			    $('#myModal').modal('show');
+    // 			    $("form").addClass('was-validated');
+    // 			}
+    // 		}, false);
+    // 	});
     }
     
     $("#btnNew").click(function() {
@@ -89,11 +112,11 @@
         var _$country = _$mdl.find('#country_id')
             ,_$state = _$mdl.find('#state_id')
             ,_$city = _$mdl.find('#city_id');
-        _$mdl.find(".modal-title").text("New Client") ;
+        //_$mdl.find(".modal-title").text("New Client") ;
         _$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
         _$mdl.find(".modal-footer").addClass("justify-content-start");
         
-        validations();
+        validations(_$frm);
         _$country.select2({placeholder: "",allowClear: true, dropdownParent: _$mdl});
         _$state.select2({placeholder: "",allowClear: true, dropdownParent: _$mdl});
         _$city.select2({placeholder: "",allowClear: true, dropdownParent: _$mdl});
@@ -136,22 +159,22 @@
             ,isSingleEntry: true
             ,onComplete: function (data) {
                 if(data.isSuccess){
-                   if(data.isSuccess===true) zsi.form.showAlert("alert");
-                   $("#formClients").find("input").val("");
-                   $("#formClients").find("textarea").val("");
-                   $("#formClients").find("select").val(null).trigger('change');
-                   $("#myModal").find("#msg").text("Data successfully saved.");
-                   $("#myModal").find("#msg").css("color","green");
-                   setTimeout(function(){
-                       $("#myModal").modal('toggle');
-                   },1000);
+                  if(data.isSuccess===true) zsi.form.showAlert("alert");
+                  $("#formClients").find("input").val("");
+                  $("#formClients").find("textarea").val("");
+                  $("#formClients").find("select").val(null).trigger('change');
+                  $("#myModal").find("#msg").text("Data successfully saved.");
+                  $("#myModal").find("#msg").css("color","green");
+                  setTimeout(function(){
+                      $("#myModal").modal('toggle');
+                  },1000);
                 }else{
-                   $("#myModal").find("#msg").text("Something went wrong when saving the data.");
-                   $("#myModal").find("#msg").css("color","red");
+                  $("#myModal").find("#msg").text("Something went wrong when saving the data.");
+                  $("#myModal").find("#msg").css("color","red");
                 }
             }
         }); 
     });
     
-    return _public;
-})();      
+    return _pub;
+})();       

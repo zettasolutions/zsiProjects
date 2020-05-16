@@ -39,12 +39,12 @@
             ]
             ,onComplete: function(o){
                 gPlansData = o.data.rows;
-                var _this = this;
-                var _$row = _this.find(".zRow");
-                _this.find("[name='cbFilter1']").setCheckEvent("#gridPlans input[name='cb']");
+                var _$this = this;
+                var _$row = _$this.find(".zRow");
+                _$this.find("[name='cbFilter1']").setCheckEvent("#gridPlans input[name='cb']");
                 
-                _this.find("[name='monthly_rate']").focusout(function(){
-                    $(this).val(commaSeparateNumber($(this).val()));
+                _$this.find("[name='monthly_rate']").focusout(function(){
+                    $(this).val(commaSeparateNumber(this.value.replace(/,/g, "")));
                 });
                 
                 _$row.click(function(){
@@ -61,6 +61,9 @@
                         $("#divPlanInclusions").addClass("hide");
                     } 
                 });
+                
+                _$this.find("[name='monthly_rate']").addClass("numeric");
+                zsi.initInputTypesAndFormats();
             }
         });
     }
@@ -98,11 +101,13 @@
         });
     }
     
-   function commaSeparateNumber(val){
-        while (/(\d+)(\d{3})/.test(val.toString())){
-          val = parseFloat(val).toFixed(2).toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+   function commaSeparateNumber(n){
+        var _res = "";
+        if($.isNumeric(n)){
+            var _num = parseFloat(n).toFixed(2).toString().split(".");
+            _res = _num[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (!isUD(_num[1]) ? "." + _num[1] : "");
         }
-        return val;
+        return _res;
     }
   
     $("#btnSavePlans").click(function(){ 
@@ -152,4 +157,4 @@
     });
     
     return _pub;
-})();                                
+})();                                  
