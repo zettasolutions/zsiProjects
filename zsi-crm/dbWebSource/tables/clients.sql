@@ -13,6 +13,11 @@ client_id	INT IDENTITY(1,1)	NOT NULL
 ,account_exec_id	INT	NULL
 ,billing_class_id	INT	NULL
 ,is_active	CHAR(1)	NULL
+,bank_acct_no	NVARCHAR(40)	NULL
+,bank_id	INT	NULL
+,is_tax_exempt	CHAR(1)	NULL
+,client_tin	NVARCHAR(40)	NULL
+,payment_mode_id	INT	NULL
 ,created_by	INT	NULL
 ,created_date	DATETIME	NULL
 ,updated_by	INT	NULL

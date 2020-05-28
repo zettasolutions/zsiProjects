@@ -6,11 +6,19 @@ CREATE procedure [dbo].[clients_upd](
   ,@client_mobile_no nvarchar(20)=null
   ,@client_email_add nvarchar(30)=null
   ,@user_id   int
-  ,@is_active varchar(1)='Y'
+  ,@is_active char(1)='Y'
   ,@billing_address nvarchar(max)=null
   ,@country_id  int=null
   ,@state_id  int=null
   ,@city_id  int=null
+  ,@registration_date date=null
+  ,@account_exec_id int=null
+  ,@billing_class_id int=null
+  ,@bank_acct_no nvarchar(20)=null
+  ,@bank_id int=null
+  ,@is_tax_exempt char(1)='Y'
+  ,@client_tin nvarchar(20)=null
+  ,@payment_mode_id int=null
 )
 as
 BEGIN
@@ -28,6 +36,14 @@ BEGIN
 		 ,country_id
 		 ,state_id
 		 ,city_id
+		 ,registration_date
+		 ,account_exec_id
+		 ,billing_class_id
+		 ,bank_acct_no
+		 ,bank_id
+		 ,is_tax_exempt
+		 ,client_tin
+		 ,payment_mode_id
 		 ,created_by
 		 ,created_date
 		 ) VALUES
@@ -42,6 +58,14 @@ BEGIN
 		 ,@country_id
 		 ,@state_id
 		 ,@city_id
+		 ,@registration_date
+		 ,@account_exec_id
+		 ,@billing_class_id
+		 ,@bank_acct_no
+		 ,@bank_id
+		 ,@is_tax_exempt
+		 ,@client_tin
+		 ,@payment_mode_id
 		 ,@user_id
 		 ,GETDATE()
 		 ) 
@@ -57,6 +81,14 @@ BEGIN
 			   ,country_id			= @country_id
 			   ,state_id			= @state_id
 			   ,city_id				= @city_id
+			   ,registration_date	= @registration_date
+			   ,account_exec_id		= @account_exec_id
+			   ,billing_class_id	= @billing_class_id
+			   ,bank_acct_no		= @bank_acct_no
+			   ,bank_id				= @bank_id
+			   ,is_tax_exempt		= @is_tax_exempt
+			   ,client_tin			= @client_tin
+			   ,payment_mode_id		= @payment_mode_id
 			   ,updated_by			= @user_id
 			   ,updated_date		= GETDATE();
 END;
