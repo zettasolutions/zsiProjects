@@ -1,0 +1,239 @@
+<style>
+    .far {
+        margin-top:4px;
+    }
+    .ml{
+        margin-left: 4rem !important;
+    }
+    #modalCompanyInfo .modal-title {
+        margin-left:40% !important;
+    }
+</style>
+
+<div class="panel hide" id="panelDeveloper">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                         <div id="gridCompanyInfo" class="zGrid"></div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                        <div class="button-group">     
+                            <button type="button" class="btn btn-primary btn-sm" id="btnUpdateInfo" >
+                                <i class="far fa-save"></i> Update
+                            </button>   
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="modal zsi-elliptic-top" id="modalCompanyInfo" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full" role="document">
+        <div class="modal-content"> 
+            <div class="modal-header">
+                <h3 class="modal-title mt-3"></h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-3 col-md-1 col-xs-12"></div>
+                <div class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 ml">
+                    <form id="frm_modalCompanyInfo"> 
+                        <input type="hidden" id="company_id" name="company_id">
+                        <div class="form-row mb-0">
+                            <i class="far fa-building"></i>&nbsp;&nbsp;<i><small>Company Profile</small></i> 
+                        </div>
+                        <div class="form-row pl-5">
+                            <div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Company Code</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="company_codes"  readonly >   
+                    		</div>
+                    		 <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Company Tin</b></label>
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="company_tins" readonly> 
+                    		    <input type="hidden" class="form-control form-control-sm pl-2" id="company_tin" name="company_tin">  
+                    		</div> 
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Company Name</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="company_name" name="company_name" >   
+                    		</div>
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Contact Name</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="contact_name" name="contact_name" > 
+                    		</div> 
+                        </div> 
+                        <div class="form-row mt-3">
+                           <i class="far fa-phone-volume"></i>&nbsp;&nbsp;<i><small>Company Contact Information</small></i> 
+                        </div>
+                        <div class="form-row pl-5">
+                            <div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Company Mobile</b></label>  
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="company_mobile" name="company_mobile">  
+                    		</div>
+                    	   <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                    		    <label for="" class="col-form-label"><b>Company Landline</b></label>
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="company_landline" name="company_landline" >  
+                    		</div> 
+                    		<div class="col-sm-6 col-md-3 col-xs-12 ">
+                    		    <label for="customer" class="col-form-label"><b>Email Address</b></label>   
+                                <input type="text" class="form-control form-control-sm pl-2" id="emal_add" readonly>  
+                          	</div>
+                    	     <div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                        		<label for="" class="col-form-label"><b>Company Address</b></label>
+                        		<input type="text" class="form-control form-control-sm pl-2" id="company_address" name="company_address" >  
+                        	</div>
+                        	<div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                        		<label class="form-label" for="password"><b>Province/State</b></label>
+            				    <select id="state_id" class="form-control form-control-sm custom-select select2"></select>
+                        	</div>
+                        	
+                        	<div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                        		<label for="" class="col-form-label"><b>City</b></label>  
+                        		<select  class="form-control form-control-sm select2 pl-2" id="city_id" name="city_id"></select> 
+                        	</div> 
+                        </div>  
+                        <div class="form-row mt-3">
+                            <i class="far fa-users"></i>&nbsp;&nbsp;<i><small>Bank Account Profile</small></i>
+                        </div>   
+                        <div class="form-row pl-5">
+                            <div class="col-sm-6 col-md-3 col-xs-12 ">
+                    		    <label for="" class="col-form-label"><b>Bank</b></label>    
+                    		    <select  class="form-control form-control-sm select2 pl-2" id="bank_id" name="bank_id"></select>  
+                    		</div> 
+                            <div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                    		    <label for="" class="col-form-label"><b>Account No.</b></label>
+                    		    <input type="text" class="form-control form-control-sm pl-2" id="account_no" name="account_no" autocomplete="off">  
+                    		</div> 
+                        </div>  
+                    </form>
+                     <div class=" mt-4" style="float:right;"> 
+                        <button type="button" class="btn btn-primary btn-sm mt-2" id="btnSaveUpdateInfo" data-toggle="tooltip" title="Save">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                         <button type="button" class="btn btn-primary btn-sm mt-2 " id="btnUploadLogo" data-toggle="tooltip" title="Save">
+                            <i class="far fa-upload"></i> Upload Logo
+                        </button>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div> 
+
+<div class="panel hide" id="panelNotDeveloper">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer"> 
+                <div class="row"> 
+                    <div class="modal-header">
+                        <h3 class="modal-title mt-3"></h3> 
+                    </div>
+                    <div class="col-sm-3 col-md-1 col-xs-12"></div>
+                    <div class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 ">    
+                        <form id="frm_CompanyInfo"> 
+                            <input type="hidden" id="company_id" name="company_id">
+                            <div class="form-row mb-0">
+                              <i class="far fa-building"></i>&nbsp;&nbsp;<i><small>Company Profile</small></i> 
+                            </div>
+                            <div class="form-row pl-5">
+                                <div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label control-label"><b>Company Code</b></label>  
+                                    <input type="text" class="form-control form-control-sm pl-2" id="company_codes"  readonly >   
+                        		</div> 
+                        		 <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                        		    <label for="" class="col-form-label"><b>Company Tin</b></label>
+                        		    <input type="text" class="form-control form-control-sm pl-2" id="company_tins" readonly> 
+                        		    <input type="hidden" class="form-control form-control-sm pl-2" id="company_tin" name="company_tin">  
+                        		</div>   
+                                <div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label control-label"><b>Company Name</b></label>  
+                                    <input type="text" class="form-control form-control-sm pl-2" id="company_name" name="company_name" >   
+                        		</div> 
+                            	<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label control-label"><b>Contact Name</b></label>  
+                                    <input type="text" class="form-control form-control-sm pl-2" id="contact_name" name="contact_name" > 
+                        		</div> 
+                            </div>
+                            <div class="form-row mt-3">
+                               <i class="far fa-phone-volume"></i>&nbsp;&nbsp;<i><small>Company Contact Information</small></i> 
+                            </div>
+                            <div class="form-row pl-5">
+                                <div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label control-label"><b>Company Mobile</b></label>  
+                        		    <input type="text" class="form-control form-control-sm pl-2" id="company_mobile" name="company_mobile">  
+                        		</div> 
+                        	    <div class="col-sm-6 col-md-3 col-xs-12 bm">
+                        		    <label for="" class="col-form-label"><b>Company Landline</b></label>
+                        		    <input type="text" class="form-control form-control-sm pl-2" id="company_landline" name="company_landline" >  
+                        		</div>      
+                                <div class="col-sm-6 col-md-3 col-xs-12 ">
+                        		    <label for="customer" class="col-form-label"><b>Email Address</b></label>   
+                                    <input type="text" class="form-control form-control-sm pl-2" id="emal_add" readonly>  
+                              	</div> 
+                        	   <div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                            		<label for="" class="col-form-label"><b>Company Address</b></label>
+                            		<input type="text" class="form-control form-control-sm pl-2" id="company_address" name="company_address" >  
+                            	</div>  
+                            </div>  
+                            <div class="form-row pl-5 mt-2">  
+                            	<div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                            		<label for="" class="col-form-label"><b>Province/State</b></label>  
+                            		<select  class="form-control form-control-sm custom-select select2 pl-2 " id="state_id" ></select> 
+                            	</div> 
+                            	<div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                            		<label for="" class="col-form-label"><b>City</b></label>  
+                            		<select  class="form-control form-control-sm custom-select select2 pl-2 " id="city_id" name="city_id"></select> 
+                            	</div> 
+                        		
+                            </div>  
+                            <div class="form-row mt-3">
+                                <i class="far fa-users"></i>&nbsp;&nbsp;<i><small>Bank Account Profile</small></i>
+                            </div> 
+                            <div class="form-row pl-5">
+                                <div class="col-sm-6 col-md-3 col-xs-12 ">
+                        		    <label for="" class="col-form-label"><b>Bank</b></label>    
+                        		    <select  class="form-control form-control-sm  pl-2 custom-select select2" id="bank_id" name="bank_id"></select>  
+                        		</div>  
+                                <div class="col-sm-6 col-md-3 col-xs-12 bm ">
+                        		    <label for="" class="col-form-label"><b>Account No.</b></label>
+                        		    <input type="text" class="form-control form-control-sm pl-2" id="account_no" name="account_no" autocomplete="off">  
+                        		</div>
+                        	     
+                            </div>  
+                        </form>
+                        <div class=" mt-4" style="float:right;"> 
+                            <button type="button" class="btn btn-primary btn-sm mt-2" id="btnSaveUpdateInfo" data-toggle="tooltip" title="Save">
+                                <i class="far fa-save"></i> Save
+                            </button>
+                             <button type="button" class="btn btn-primary btn-sm mt-2 " id="btnUploadLogo" data-toggle="tooltip" title="Save">
+                                <i class="far fa-upload"></i> Upload Logo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div> 
+<ul name="localTemplates"> 
+    <li name="modalBodyImageUser">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+    </li> 
+</ul> 
+    
+
+
+
+
+
+
+
+
+
+
+ 
