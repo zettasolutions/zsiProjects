@@ -15,12 +15,17 @@
         getTemplates();
         displayCompanyInfo();
         displayCompanyProfile();
-        displaySaveButton(); 
+        displaySaveButton();
+        var _developer = $("#modalCompanyInfo").find("#frm_modalCompanyInfo");
+        var _notDeveloper = $("#panelNotDeveloper");
         if(app.userInfo.company_id == 2){ 
-            $("#panelDeveloper").removeClass("hide"); 
+            $("#panelDeveloper").removeClass("hide");
+            companyProfileMandatory(_developer); 
         }else{
             $("#panelNotDeveloper").removeClass("hide");
+            companyProfileMandatory(_notDeveloper);
         }
+        
     };
     _pub.getOrderListData = function(){
         return gCompanyInfoData[gOrderListIndex]; 
@@ -89,7 +94,7 @@
                 if(data.isSuccess){
                     //submit filename to server
                     $.get(base_url  + "sql/exec?p=dbo.image_file_upd @company_id=" + company_id
-                                    + ",@company_logo='company profile." +  fileOrg.files[0].name + "'"
+                                    + ",@company_logo='user." +  fileOrg.files[0].name + "'"
                     ,function(data){
                         zsi.form.showAlert("alert"); 
                         $('#' + mdlImageUser).modal('toggle');  
@@ -107,9 +112,8 @@
             contentType: false,
             processData: false
         }, 'json');
-    },
-     
-     _pub.showModalUploadUserImage = function(UserId, name){
+    };
+    _pub.showModalUploadUserImage = function(UserId, name){
         company_id = UserId;
         var m=$('#' + mdlImageUser);
         
@@ -125,7 +129,20 @@
             }
         ); 
     };
-     
+    
+    function companyProfileMandatory(grid){
+         console.log("grid",grid);
+        grid.markMandatory({       
+            "groupNames":[
+                {
+                     "names" : ["company_name","contact_name","company_mobile","company_landline","company_address","city_id","bank_id","account_no"]
+                } 
+            ]      
+            ,"groupTitles":[ 
+                 {"titles" : ["Company Name","Contact Name","Company Mobile","Company Landline","Company Address","State to proceed city","Bank","Account No"]}
+            ]
+        }); 
+     } 
     function getTemplates(){
         new zsi.easyJsTemplateWriter($("#generatedComponents").empty()) 
         .bsModalBox({
@@ -146,7 +163,6 @@
         $("#gridCompanyInfo").dataBind({
              sqlCode        : "C1278" //company_info_v_sel
             ,height         : $(window).height() - 240
-            ,parameters     :  {company_id:id  }
             ,blankRowsLimit : 5
             ,dataRows       : [
                 { text  : "" , width : 25   , style : "text-center" 
@@ -179,14 +195,13 @@
     function displayCompanyProfile(){
         var _companyId = app.userInfo.company_id;  
         zsi.getData({ 
-             sqlCode        : "C1216" //company_info_sel
-            ,parameters : {company_id:app.userInfo.comapny_id}
+             sqlCode        : "C1278" //C1278 
             ,onComplete : function(d) {
                 var data = d.rows[0]; 
                 var _$frm =  $("#panelNotDeveloper").find("#frm_CompanyInfo"); 
-                _$frm.find("#city_id").select2({placeholder: "",allowClear: true});
+               /* _$frm.find("#city_id").select2({placeholder: "",allowClear: true});
                 _$frm.find("#bank_id").select2({placeholder: "",allowClear: true});
-                _$frm.find("#state_id").select2({placeholder: "",allowClear: true});
+                _$frm.find("#state_id").select2({placeholder: "",allowClear: true});*/
                 _$frm.find("#company_id").val(data.company_id); 
                 _$frm.find("#company_codes").val(data.company_code);
                 _$frm.find("#company_name").val(data.company_name);
@@ -236,7 +251,8 @@
                 _pub.showModalUploadUserImage(_companyId,_companyName);
             });
             $("#modalCompanyInfo").find("#btnSaveUpdateInfo").click(function(){ 
-                var _$frm = $("#modalCompanyInfo").find("#frm_modalCompanyInfo"); 
+                var _$frm = $("#modalCompanyInfo").find("#frm_modalCompanyInfo");
+                if(_$frm.checkMandatory()!==true) return false; 
                 _$frm.jsonSubmit({
                      procedure: "company_info_upd" 
                     ,isSingleEntry: true
@@ -254,10 +270,12 @@
                 _pub.showModalUploadUserImage(_companyId,_companyName);
             });
             $("#panelNotDeveloper").find("#btnSaveUpdateInfo").click(function(){ 
+                 if($("#panelNotDeveloper").checkMandatory()!==true) return false;
                 var _$frm = $("#panelNotDeveloper").find("#frm_CompanyInfo"); 
                 _$frm.jsonSubmit({
                      procedure: "company_info_upd" 
                     ,isSingleEntry: true
+                    ,notIncludes : ["state_id"]
                     ,onComplete: function (data) { 
                         if(data.isSuccess){
                             if(data.isSuccess===true) zsi.form.showAlert("alert");
@@ -268,6 +286,7 @@
             });
         }
     }
+    
     $("#btnUpdateInfo").click(function(){
          if(getRowIndexUpdateInfo() !== -1){  
            gOrderListIndex = getRowIndexUpdateInfo(); 
@@ -289,4 +308,4 @@
 
 
 
-  
+         
