@@ -19,7 +19,7 @@
             ,value      : "bank_id"
         });  
         _$frm.find("#company_code").val(app.userInfo.company_code); 
-        $('.bank_id').select2({placeholder: "Select Bank",allowClear: true});
+        $('#bank_id').select2({placeholder: "Select Bank",allowClear: true});
         $("#bank_transfer_date").datepicker({pickTime  : false , autoclose : true , todayHighlight: true}).datepicker("setDate","0");
         $("#posted_date").datepicker({pickTime  : false , autoclose : true , todayHighlight: true }).datepicker("setDate","0");
     }
@@ -29,12 +29,18 @@
             ,parameters     : {posted_date:(postedDate ? postedDate:"")}
             ,height         : $(window).height() - 335 
             ,dataRows       : [
-                {text: "Posted Date"                    ,type:"input"           ,name:"posted_date"             ,width : 200   ,style : "text-align:left;"} 
-                ,{text: "Posted Amount"                                                                         ,width : 130   ,style : "text-align:right;padding-right: 0.3rem;"
+                {text: "Posted Date"             
                     ,onRender: function(d){
-                        return app.bs({type: "input"                            ,name: "posted_amount"          ,value: app.svn(d,"posted_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
+                        return app.bs({type: "input"        ,name: "posted_date"           ,value: app.svn(d,"posted_date").toShortDate()    ,style : "text-align:center"});
                     }
-                }   
+                } 
+                ,{text: "Posted Amount"                     ,width : 130   ,style : "text-align:right;padding-right: 0.3rem;"
+                    ,onRender: function(d){
+                        return app.bs({type: "input"        ,name: "posted_amount"          ,value: app.svn(d,"posted_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
+                    }
+                }
+                ,{text: "Bank Transfer"                     ,name:"bank_transfer_id"                    ,type:"select"      ,width : 100   ,style : "text-align:left;"}
+                ,{text: "Company Code"                      ,name:"company_code"                        ,type:"input"       ,width : 100   ,style : "text-align:left;"}
             ]
             ,onComplete: function(){
                this.find(".zRow").find("input").attr("readonly",true); 
@@ -112,4 +118,4 @@
     });
 
     return _pub;
-})();                                          
+})();                                           
