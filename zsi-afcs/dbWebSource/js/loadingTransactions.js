@@ -8,26 +8,20 @@ var loadingTransactions = (function(){
     };
     
     function validation(){
-        var _dayFrom = $("#load_date_frm");
-        var _dayTo   = $("#load_date_to");
-        var _timeFrom = "";
-        var _timeTo = "";
-        var _error  = $("#ermsgId");
-        
-        $("#load_date_frm,#load_date_to").on("keyup change",function(){
-            var _colName    = $(this)[0].id;
-            if(_colName === "load_date_frm")_timeFrom = new Date(_dayFrom.val()).getTime();
-            else _timeTo = new Date(_dayTo.val()).getTime();
-            if(_timeFrom > _timeTo){
-                _error.removeClass("hide");
-                _dayTo.css("border-color","red");
-                $("#btnFilterVal").attr("disabled",true);
-            }else{
-                _error.addClass("hide");
-                _dayTo.css("border-color","green");
-                $("#btnFilterVal").removeAttr("disabled");
-            }
-        });
+        $("#load_date_frm").datepicker({
+             autoclose : true
+            ,todayHighlight: true 
+        }).on("changeDate keyup change",function(e){ 
+            $("#load_date_to").val("");
+            if($(this).val() ===""){ $("#load_date_to").attr("disabled",true); $("#load_date_to").val(""); }
+            else{ $("#load_date_to").removeAttr("disabled"); } 
+            gVfrom = $(this).val(); 
+            $("#load_date_to").removeAttr("readonly",true); 
+            $("#load_date_to").datepicker('setStartDate', e.date).on("change",function(){
+               gVtoDate = $(this).val();
+            }); 
+        }); 
+       
     }
     
     function displayLoadingTransactions(loadDateFrm,loadDateTo){
@@ -82,4 +76,4 @@ var loadingTransactions = (function(){
     });
 
     return _pub;
-})();                   
+})();                    
