@@ -26,30 +26,7 @@
             $("#panelNotDeveloper").removeClass("hide");
             companyProfileMandatory(_notDeveloper);
         }
-        $("#frm_modalCompanyInfo > div:gt(0)").hide();
-        $("#prev").hide();
-        $("#next").click(function(){ 
-            count += 1;
-            $("#prev").show();
-            $('#frm_modalCompanyInfo > .slider:first-child')
-            .toggle()
-            .next()
-            .toggle()
-            .end()
-            .appendTo('#frm_modalCompanyInfo'); 
-            if(count === 2){ $("#next").hide();}
-        });
-        $("#prev").click(function(){
-            count -= 1;
-            $("#next").show();
-            console.log("count",count);
-            if(count === 0){ $("#prev").hide();}
-            $('#frm_modalCompanyInfo > .slider:first-child')
-            .toggle()
-             $('#frm_modalCompanyInfo > .slider:last-child')
-            .prependTo('#frm_modalCompanyInfo') 
-            .toggle();
-         });
+       
     };
     _pub.getOrderListData = function(){
         return gCompanyInfoData[gOrderListIndex]; 
@@ -97,15 +74,11 @@
                         }
                     });
                 }
-            });
-             
-            
+            }); 
     }; 
     _pub.uploadImageUser = function(){
         var frm = $("#frm_" + mdlImageUser);
-        var fileOrg=frm.find("#file").get(0);
-        console.log("passed")
-    
+        var fileOrg=frm.find("#file").get(0); 
         if( fileOrg.files.length<1 ) { 
              alert("Please select image.");
             return;
@@ -141,23 +114,19 @@
     };
     _pub.showModalUploadUserImage = function(UserId, name){
         company_id = UserId;
-        var m=$('#' + mdlImageUser);
-        
+        var m=$('#' + mdlImageUser); 
         m.find(".modal-title").text("Image User for » " + name);
         m.modal("show");
-        m.find("form").attr("enctype","multipart/form-data");
-        
+        m.find("form").attr("enctype","multipart/form-data"); 
         $.get(base_url + 'page/name/tmplImageUpload'
             ,function(data){
                 m.find('.modal-body').html(data);
-                m.find("#prefixKey").val("user.");
-                //initChangeEvent();
+                m.find("#prefixKey").val("user."); 
             }
         ); 
     };
     
-    function companyProfileMandatory(grid){
-         console.log("grid",grid);
+    function companyProfileMandatory(grid){ 
         grid.markMandatory({       
             "groupNames":[
                 {
@@ -212,8 +181,7 @@
                 ,{text: "City"                      ,name:"city_name"                   ,type:"input"       ,width : 150   ,style : "text-align:left;"} 
             ]
             ,onComplete: function(o){
-                gCompanyInfoData = o.data.rows;
-                console.log("data rows",o.data.rows[0])
+                gCompanyInfoData = o.data.rows; 
                 $("[name='cbFilter1']").setCheckEvent("#gridCompanyInfo input[name='rb']");
             }
         });
@@ -318,7 +286,9 @@
     }
     
     $("#btnUpdateInfo").click(function(){
-         if(getRowIndexUpdateInfo() !== -1){  
+         if(getRowIndexUpdateInfo() !== -1){ 
+            if($(window).height() <= 700) $("#frm_modalCompanyInfo").css({"height":$(window).height() - 208,"overflow-y":"auto","overflow-x":"hidden"});
+            else $("#frm_modalCompanyInfo").css({"height":$(window).height() - 360,"overflow-y":"auto","overflow-x":"hidden"});
            gOrderListIndex = getRowIndexUpdateInfo(); 
             var _data = ci.getOrderListData();   
             _pub.showUpdateCompanyInfo(_data); 
@@ -338,4 +308,4 @@
 
 
 
-            
+              
