@@ -1,0 +1,148 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    .panel-container-grid{
+        min-height: 200px !important;
+    }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
+</style>
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ml-auto col-xs-12">
+	<h1 class="text-white d-sm-block">
+		Sign Up > <span id="stepId">STEP 1</span>
+	</h1>
+	<div class="row">
+        <div class="col-12 col-sm-12">   
+            <div class="panel">
+                <div class="">
+                    
+                    <nav>
+                      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a id="companyInformationTab" class="nav-item nav-link active" role="tab" aria-controls="nav-vehicles" disabled>Company's Information</a>
+                        <a id="userInformationTab" class="nav-item nav-link"  role="tab" aria-controls="nav-fuel" disabled>User's Information</a>
+                      </div>
+                    </nav>
+                    
+                </div>
+                <div class="panel-container show panel-container-grid">
+                    <div class="panel-content">
+                        <!--<label class="">
+                    		PLEASE FILL THE INFORMATIONS FOR YOU TO GO ON THE NEXT STEP
+                    	</label>-->
+                        <div class="p-4 bg-brand-dark">
+                    		<form id="frmSignUp" class="needs-validation" novalidate>
+                    		    <input type="hidden" id="company_id" name="company_id"/>
+                    		    <div id="companySaveDiv" class="row">
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Company Name</b></label>
+                        				<input type="text" id="company_name" name="company_name" class="form-control form-control-sm" required>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Contact Name</b></label>
+                        				<input type="text" id="contact_name" name="contact_name" class="form-control form-control-sm" required>
+                        			</div>
+                        			<div class="col-sm-12 col-md-12 col-xs-12">
+                            		    <label for="" class="form-label"><b>Company Address</b></label>  
+                                        <textarea type="text" class="form-control form-control-sm pl-2" id="company_address" name="company_address" autocomplete="off" required></textarea>
+                                        <small>Building No, Street, Barangay</small>
+                            		</div>
+                            		<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Province/State</b></label>
+                        				<select id="state_id" class="form-control form-control-sm custom-select select2" required></select>
+                        			</div>
+                            		<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>City</b></label>
+                        				<select id="city_id" name="city_id" class="form-control form-control-sm custom-select select2" required></select>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Phone #</b></label>
+                        				<input type="text" id="company_landline" name="company_landline" class="form-control form-control-sm" placeholder="(123) 456-7890"  maxlength="13" required>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Mobile #</b></label>
+                        				<input type="tel" id="company_mobile" name="company_mobile" class="form-control form-control-sm" placeholder="888 888 8888"  maxlength="12" required>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>TIN #</b></label>
+                        				<input type="text" id="company_tin" name="company_tin" class="form-control form-control-sm" required>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Bank</b></label>
+                        				<select id="bank_id" name="bank_id" class="form-control form-control-sm custom-select select2" required></select>
+                        			</div>
+                        			<div class="col-12 mb-2">
+                        				<label class="form-label" for="password"><b>Account #</b></label>
+                        				<input type="text" id="account_no" name="account_no" class="form-control form-control-sm" required>
+                        			</div>
+                    		    </div>
+                    		    
+                    		    <div id="usersSaveDiv" class="row hide">
+                    		        <input type="hidden" id="companyId" name="company_id"/>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Logon</b></label>
+                        				<input type="text" id="logon" name="logon" class="form-control form-control-sm" required>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Password</b></label>
+                        				<input type="password" id="password" name="password" class="form-control form-control-sm" required>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>First Name</b></label>
+                        				<input type="text" id="first_name" name="first_name" class="form-control form-control-sm" required>
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Middle Name</b></label>
+                        				<input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm">
+                        			</div>
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Last Name</b></label>
+                        				<input type="text" id="last_name" name="last_name" class="form-control form-control-sm" required>
+                        			</div> 
+                        			<div class="col-12 col-md-6 mb-1">
+                        				<label class="form-label" for="password"><b>Name Suffix</b></label>
+                        				<input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm">
+                        			</div>
+                    		    </div>
+                    		    <div class="row">
+                        		    <div class="col-12 justify-content-center d-flex">
+                        				<button id="btnPrev" type="button" class="btn btn-default btn-md col-5" title="Previous">Previous</button>
+                        				<button id="btnNext" type="button" class="btn btn-primary btn-md col-5 ml-1" title="Next">Next</button>
+                        				<button id="btnSubmit" type="submit" class="btn btn-primary btn-md col-5 ml-1 hide" title="Save">Save</button>
+                        			</div>
+                        		</div>
+                    		</form>
+                    		<div class="col-lg-12 pl-lg-1 my-2 text-center">
+                    			Member click here >  <a href="/" id="btnSignUp" class="">Sign In</a>
+                    		</div>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSave" type="button" class="btn btn-primary btn-sm">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>

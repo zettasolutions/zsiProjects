@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     	<meta charset="utf-8">
+        <meta name="description" content="Login">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+		<meta name="Developed By" content="zetta-solutions.net">
+		<link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">						
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+		<link rel="shortcut icon" href="assets/images/zfleet-logo-cyan-bg.png" type="image/x-icon">
+		<meta name="description" content="">
+		
+        <!-- Call App Mode on ios devices -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!-- Remove Tap Highlight on Windows Phone IE -->
+        <meta name="msapplication-tap-highlight" content="no">
+        
+		<!-- base css -->
+		<link rel="stylesheet" href="assets/web/assets/mobirise-icons/mobirise-icons.css">
+		<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
+		<link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
+		<link rel="stylesheet" href="assets/socicon/css/styles.css">
+		<link rel="stylesheet" href="assets/dropdown/css/style.css">
+		<link rel="stylesheet" href="assets/tether/tether.min.css">
+		<link rel="stylesheet" href="assets/theme/css/style.css">
+		<link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css">
+		<link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+	
+		<title>Home - ZFLEET</title>
+		<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+		
+
+  <style>	
+	.btn,.btn-md{
+		padding: 0.3rem 2rem !important;
+	}
+	.video-text{position:absolute;
+	margin-top:10rem;}
+	.logo-zfleet{
+		background-image: url(assets/images/zfleet-logo-white.png);
+		position:absolute;
+		z-index:1;
+	}
+	.cid-s2xk43HheR .full-screen .carousel-item .container.container-slide img {
+    <!-- display: flex !important; -->
+	}
+	.carousel .carousel-inner .carousel-item .container-slide .image_wrapper .carousel-caption div img{
+		display: block;
+		width: 100px;
+	}
+	.zproducts .text{
+		height: 100px;
+
+	}
+	.zabout .text{
+		height: 100px;
+
+	}
+  </style>
+  <script>
+	$('ul.nav').find('a').click(function(){
+    var $href = $(this).attr('href');
+    var $anchor = $('#'+$href).offset();
+    window.scrollTo($anchor.left,$anchor.top);
+    return false;
+	});
+  </script>
+  
+<script>
+        var base_url = '@Url.Content("~/")';
+        var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+    </script>	
+</head>	
+
+<body>
+
+<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+@RenderBody()
+
+	<!-- Load Facebook SDK for JavaScript -->
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {				
+			FB.init({
+			xfbml            : true,
+			version          : 'v7.0'
+			});
+	 
+			FB.Event.subscribe('customerchat.load', function(){					
+				setTimeout(function(){ 
+					FB.CustomerChat.hideDialog();					
+				}, 1000);
+					
+			});				
+
+        };
+		
+ 		
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+ 		
+      }(document, 'script', 'facebook-jssdk'));
+	 
+	  </script>
+
+      <!-- Your Chat Plugin code -->
+      <div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="107506740786479">
+      </div>
+	  
+</body>
+</html>

@@ -1,0 +1,120 @@
+  
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer"> 
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-xs-12">
+                        <div class="form-row">
+                            <div class="" style="text-align:center;">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" id="passengerRadio" name="radioButton" >
+                                    <label class="custom-control-label" for="passengerRadio">Passenger</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" id="vehicleRadio" name="radioButton">
+                                    <label class="custom-control-label" for="vehicleRadio">Vehicle</label>
+                                </div> 
+                            </div>
+                        </div> 
+                    </div> 
+                </div>
+                <div class="m-1  mt-5" id="searchGroup">
+                    <div class="row"> 
+                        <div class="input-group input-group-sm bg-white shadow-inset-2 hide" id="passengerForm">
+                            <label class=" col-1 control-label"><b>Search:</b></label> 
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    Last Name :
+                                </span>
+                            </div> 
+                            <input type="text" class="form-control form-control-sm  border-left-0 bg-transparent pl-0" id="P_last_name" name="P_last_name"  autoComplete="off" >  
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    First Name :
+                                </span>
+                            </div>   
+                            <input type="text" class="form-control form-control-sm  border-left-0 bg-transparent pl-0" id="P_first_name" name="P_first_name" autoComplete="off" >  
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                   Travel Date :
+                                </span>
+                            </div> 
+                            <input type="text" class="form-control form-control-sm  border-left-0 bg-transparent pl-0" id="travel_date" name="travel_date" autoComplete="off" > 
+                            <div class="input-group-append">
+                                <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnPassenger">
+                                    <span class="fas fa-search"></span>
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                  <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnClearPassenger">
+                                    <span class="fas fa-eraser"></span> Clear
+                                </button>
+                            </div>
+                            <div class="row mt-3 col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 hide" id="PassengerRow">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                     <div id="gridPassengerHistory" class="zGrid"></div>
+                                </div> 
+                            </div>
+                        </div> 
+                        
+<!--                                                       VEHICLE GROUP                                                                 -->
+                        <div class="input-group input-group-sm bg-white shadow-inset-2 hide" id="vehicleForm">
+                            <label class=" col-1 control-label"><b>Search:</b></label> 
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    Last Name :
+                                </span>
+                            </div> 
+                            <input type="text" class="form-control form-control-sm  border-left-0 bg-transparent pl-0" id="V_last_name" name="V_last_name"  autoComplete="off" >  
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    First Name :
+                                </span>
+                            </div>   
+                            <input type="text" class="form-control form-control-sm  border-left-0 bg-transparent pl-0" id="V_first_name" name="V_first_name" autoComplete="off" >
+                            <label class=" col-1 control-label"><b>Date:</b></label> 
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    From :
+                                </span>
+                            </div> 
+                            <input type="text" class="form-control form-control-sm  border-left-0 bg-transparent pl-0" id="V_fromDate" name="V_fromDate"  autoComplete="off" >  
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    To :
+                                </span>
+                            </div>   
+                            <input type="text" class="form-control form-control-sm  border-left-0 bg-transparent pl-0" id="V_toDate" name="V_toDate" autoComplete="off" >
+                            <div class="input-group-append">
+                                <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnVehicle">
+                                    <span class="fas fa-search"></span>
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                  <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnClearVehicle">
+                                    <span class="fas fa-eraser"></span> Clear
+                                </button>
+                            </div>
+                            
+                            <div class="row mt-3 col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 hide" id="VehicleRow">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                     <div id="gridVehicleHistory" class="zGrid"></div>
+                                </div> 
+                            </div>
+                        </div>  
+                        
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div> 
+    
+</div>  
+
+
+ 
+ 
+ 
+ 
+  
