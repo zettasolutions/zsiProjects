@@ -1,17 +1,17 @@
 
-CREATE PROCEDURE [dbo].[clients_sel]
+CREATE PROCEDURE [dbo].[loaders_sel]
 ( 
 	@user_id INT = NULL
    ,@search_val nvarchar(100)=null
    ,@is_active VARCHAR(1)='Y'
-   ,@is_zfare VARCHAR(1)='Y'
+   ,@is_zload VARCHAR(1)='Y'
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @stmt NVARCHAR(MAX)
 
- 	SET @stmt = 'SELECT * FROM dbo.clients WHERE is_zfare='''+ @is_zfare + '''';
+ 	SET @stmt = 'SELECT * FROM dbo.clients WHERE is_zload='''+ @is_zload + '''';
 
 	IF @is_active <> ''
 		SET @stmt = @stmt + ' AND is_active='''+ @is_active + '''';
