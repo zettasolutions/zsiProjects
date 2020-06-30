@@ -12,10 +12,10 @@ CREATE procedure [dbo].[payment_for_posting_sel]
 AS
 BEGIN
   SET NOCOUNT ON
-  DECLARE @co_code nvarchar(20)=null
+  --DECLARE @co_code nvarchar(20)=null
   DECLARE @stmt nvarchar(max)='';
-  select @co_code = company_code FROM dbo.users where user_id=@user_id;
-  SET @stmt = 'SELECT * FROM dbo.payments_for_posting_v where company_code=''' + @co_code + ''''
+  --select @co_code = company_code FROM dbo.users where user_id=@user_id;
+  SET @stmt = 'SELECT * FROM dbo.payments_transactions_for_posting_v where 1=1'
   IF ISNULL(@vehicle_id,0) <> 0
      SET @stmt = @stmt + ' AND vehicle_id = ' + CAST(@vehicle_id AS VARCHAR(20));
 

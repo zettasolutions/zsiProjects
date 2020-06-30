@@ -13,7 +13,7 @@ BEGIN
 		SET @stmt = @stmt + ' AND registration_code=' + CAST(@registration_code AS VARCHAR);
 
 	IF @company_code <> ''
-		SET @stmt = @stmt + ' AND company_code'+ @company_code;
+		SET @stmt = @stmt + ' AND company_code='+ @company_code;
 
 	set @stmt = @stmt + ' order by registration_code';
 	exec(@stmt);

@@ -22,14 +22,15 @@ DECLARE @order          VARCHAR(4000);
 DECLARE @count INT = 0;
 DECLARE @page_count INT = 1;
 DECLARE @is_dev  char(1) = null
-
+DECLARE @company_id nvarchar(20)=null
+SELECT @company_id = company_id FROM dbo.users where user_id=@user_id;
 IF ISNULL(@user_id,0) <> 0
   SELECT @is_dev = is_developer FROM dbo.users where user_id=@user_id;
    ELSE
 IF ISNULL(@logon,'')<>''
 SELECT @is_dev = is_developer FROM dbo.users where logon=@logon;
  
-SET @stmt = 'SELECT user_id, userFullName, logon, first_name, middle_name, last_name, name_suffix, password,  is_admin, role_id, is_developer, img_filename, company_code, hash_key  FROM users_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''''
+SET @stmt = 'SELECT user_id, userFullName, logon, first_name, middle_name, last_name, name_suffix, password,  is_admin, role_id, is_developer, img_filename, company_code, hash_key, company_id, company_logo, company_name  FROM users_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + ''''
 ;  
    SET @order = ' ORDER BY ' + CAST(@col_no + 1 AS VARCHAR(1)) + ' ' + IIF(@order_no=0,'ASC','DESC');  
    SELECT @count = COUNT(*) FROM dbo.users_v WHERE is_active = @is_active;
@@ -74,3 +75,4 @@ print 'rpp:' +  CAST(@page_count AS VARCHAR(20))
 RETURN @page_count;
 END; 
 
+select * from dbo.users_v

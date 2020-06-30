@@ -10,11 +10,11 @@ CREATE procedure [dbo].[loads_report_sel]
 AS
 BEGIN
 SET NOCOUNT ON
-  DECLARE @co_code nvarchar(20)=null
+  --DECLARE @co_code nvarchar(20)=null
   DECLARE @stmt nvarchar(max)='';
-  select @co_code = company_code FROM dbo.users where user_id=@user_id;
+  --select @co_code = company_code FROM dbo.users where user_id=@user_id;
 
-  SET @stmt = 'SELECT * FROM dbo.loading_v WHERE company_code=''' + @co_code + ''''
+  SET @stmt = 'SELECT * FROM dbo.loading_v WHERE 1=1'
 	
 	IF isnull(@load_by,0) <>0
 	  SET @stmt = @stmt + ' AND load_by = '''+@load_by+'''';

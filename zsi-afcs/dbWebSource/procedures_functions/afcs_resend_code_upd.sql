@@ -14,7 +14,8 @@ BEGIN
 	DECLARE @server_mail_subject NVARCHAR(50) = 'Welcome to zPay';
 	DECLARE @server_mail_body_format NVARCHAR(10) = 'HTML';
 	DECLARE @server_mail_body NVARCHAR(MAX) = '';
-	DECLARE @count_register_email INT = 0;
+	DECLARE @count_register_mobile INT = 0;
+	DECLARE @consumer_email NVARCHAR(100);
 
 	SELECT @activation_code = CAST(RAND() * 1000000 AS NVARCHAR(6));
 
@@ -23,26 +24,51 @@ BEGIN
 	SET @server_mail_body = @server_mail_body + CHAR(13);
 	SET @server_mail_body = @server_mail_body + 'This is an auto-generated email. Please do not reply.';
 
-	SELECT @count_register_email = COUNT(consumer_id) FROM dbo.consumers WHERE 1 = 1 AND email = @username;
+	SELECT 
+		@count_register_mobile = COUNT(consumer_id) 
+	FROM dbo.consumers WHERE 1 = 1 AND mobile_no = @username;
 
-	IF @count_register_email = 1
+	IF @count_register_mobile = 1
 	BEGIN
 		BEGIN TRAN;
-
 		UPDATE dbo.consumers
 		SET activation_code = @activation_code WHERE 1 = 1
-		AND email = @username;
+		AND mobile_no = @username;
+
+		-- Insert record in the sms_notifications table.
+		INSERT INTO [dbo].[sms_notifications]
+			([app_name]
+			,[mobile_no]
+			,[message]
+			,[is_processed]
+			,[created_by]
+			,[created_date])
+		VALUES(
+			'zpay'
+			, @username
+			, 'Welcome to zPay. Your activation code is ' + CAST(@activation_code AS NVARCHAR(100)) + '.'
+			, 'N'
+			, @user_id
+			, GETDATE()
+		);
 
 		IF @@ERROR = 0
 		BEGIN
 			COMMIT;
-			-- Email new user.
-			EXEC msdb.dbo.sp_send_dbmail
-				@profile_name = @server_mail_profile_name
-			   , @recipients = @username
-			   , @subject = @server_mail_subject
-			   , @body = @server_mail_body
-			   , @body_format = @server_mail_body_format
+			SELECT 
+				@consumer_email = email
+			FROM dbo.consumers WHERE 1 = 1 AND mobile_no = @username;
+
+			IF ISNULL(@consumer_email, '') <> ''
+			BEGIN
+				-- Email new user.
+				EXEC msdb.dbo.sp_send_dbmail
+					@profile_name = @server_mail_profile_name
+				   , @recipients = @consumer_email
+				   , @subject = @server_mail_subject
+				   , @body = @server_mail_body
+				   , @body_format = @server_mail_body_format
+			END
 		END
 		ELSE
 		BEGIN
@@ -54,7 +80,7 @@ BEGIN
 			SELECT 
 			'Y' is_valid
 			, @activation_code AS activation_code
-			, 'Activation code is sent to your email.' AS msg
+			, 'Activation code is sent to your mobile number or email.' AS msg
 		END
 		ELSE
 		BEGIN

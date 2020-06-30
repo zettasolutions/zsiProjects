@@ -5,7 +5,7 @@ CREATE PROCEDURE [dbo].[vehicle_types_sel]
 )
 AS
 BEGIN
-      SELECT * FROM dbo.vehicle_types WHERE 1=1; 
+      SELECT fare_id vehicle_type_id, vehicle_type FROM dbo.fare_matrix WHERE 1=1; 
 END
 
 

@@ -1,20 +1,8 @@
-
-
-
-
-
-
-
-
-CREATE VIEW [dbo].[payments_v]
+CREATE VIEW dbo.payments_v
 AS
-SELECT        dbo.payments.*, CONCAT(dbo.drivers_v.first_name,' ', dbo.drivers_v.last_name) AS driver, CONCAT(dbo.pao_v.first_name, ' ', dbo.pao_v.last_name) AS pao, dbo.drivers_v.company_code, iif(isnull(qr_id,0)=0,'CASH','QR') payment_type, rr.route_code
+SELECT        dbo.payments.payment_id, dbo.payments.payment_date, dbo.payments.total_paid_amount, dbo.payments.qr_id, dbo.payments.consumer_id, dbo.drivers_v.full_name, dbo.payments.no_reg, dbo.payments.no_stu, 
+                         dbo.payments.no_sc, dbo.payments.no_pwd, dbo.payments.reg_amount, dbo.payments.stu_amount, dbo.payments.sc_amount, dbo.payments.pwd_amount, dbo.vehicles_v.vehicle_plate_no, dbo.vehicles_v.vehicle_type, 
+                         dbo.payments.client_id, dbo.payments.base_fare, dbo.vehicles_v.company_id, dbo.payments.vehicle_id, dbo.payments.driver_id
 FROM            dbo.payments INNER JOIN
                          dbo.drivers_v ON dbo.payments.driver_id = dbo.drivers_v.user_id INNER JOIN
-                         dbo.pao_v ON dbo.payments.pao_id = dbo.pao_v.user_id INNER JOIN
-						 dbo.routes_ref rr ON dbo.payments.route_id = rr.route_id
-
-
-						 
-
-
+                         dbo.vehicles_v ON dbo.payments.vehicle_id = dbo.vehicles_v.vehicle_id
