@@ -1,0 +1,157 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    *:focus{
+      outline:0px;
+    }
+    .zGrid .zCell{
+        padding-left: 3px;
+    }
+</style>
+<div class="panel">
+    <div class="panel-hdr">
+        <div class="d-flex w-100">
+            <div class="mr-auto">
+                <button type="button" class="btn btn-primary btn-sm" id="btnNew"><i class="far fa-plus"></i> New</button>
+            </div>
+            <div class="">
+                <div class="input-group input-group-sm bg-white shadow-inset-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                            <i class="fal fa-search"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Type here...">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary waves-effect waves-themed" type="button">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="zGrid" id="gridSuppliers"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+ 
+<div class="modal fade modal-backdrop-transparent" id="modalWindowSupplier" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-l" role="document">
+            <div class="modal-content">
+                <div id="frm_modalWindowSupplier" class="tag-form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Supplier </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12 col-md-12 col-sm-12 col-xs-12"> 
+            				<form  id="formSupplier"> 
+                			    <input type="hidden" name="supplier_id" id="supplier_id"> 
+                                <div id="" class="row mb-2"> 
+                                    <div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Supplier Code</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="supplier_code" required  name="supplier_code" autocomplete="off"/>
+                            		</div>
+                                	<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Supplier Name</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="supplier_name" required  name="supplier_name" autocomplete="off"/> 
+                            		</div>
+                                	<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Email Address</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="supplier_email_add" required  name="supplier_email_add" autocomplete="off" placeholder="email@gmail.com"/>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Billing Address</b></label>  
+                                        <textarea type="text" class="form-control form-control-sm pl-2" id="billing_address" name="billing_address" required autocomplete="off"></textarea>
+                                            
+                                        <small>Building No, Street, Barangay</small>
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Country</b></label>  
+                                        <select class="form-control form-control-sm custom-select select2" id="country_id" required  name="country_id" autocomplete="off"></select>
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-12">
+                            		     <label for="" class="col-form-label control-label"><b>State</b></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>City</b></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Landline #</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="supplier_phone_no" name="supplier_phone_no"  autocomplete="off" data-inputmask="'mask': '(999) 999-9999'" im-insert="true" placeholder="(123) 456-7890"  maxlength="14"/>
+                                    </div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Mobile #</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="supplier_mobile_no" name="supplier_mobile_no"  maxlength="13"   autocomplete="off" data-inputmask="'mask': '+639999999999'" im-insert="true"/>
+                            		</div>
+                            	<!--	<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><b>Bank Acct #</b></label>  
+                                        <input type="text" class="form-control form-control-sm pl-2" id="bank_acct_no" name="bank_acct_no" maxlength="12" required  autocomplete="off"/>
+                            		</div>-->
+                            	<!--	<div class="col-12 col-md-12 mb-2">
+                            		    <label for="" class="col-form-label control-label"><b>Payment Mode</b></label>
+                            		    <input type="text" class="form-control form-control-sm pl-2" id="payment_mode_id" name="payment_mode_id" maxlength="12" required  autocomplete="off"/> 
+                            		</div> 
+                                    -->
+                            	</div>
+                            	
+                            	 
+                    		    
+                            	<div class="row">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                                        <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed" title="Save">
+                                            <i class="far fa-save"></i> Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </form> 
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+
+ 
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveSupplier" class="btn btn-primary btn-sm">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

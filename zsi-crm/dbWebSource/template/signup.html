@@ -1,0 +1,213 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    .panel-container-grid{
+        min-height: 200px !important;
+    }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
+    .autoCaps{
+        text-transform: capitalize;
+    }
+    .form-control{
+        border-left:none;
+        border-right:none;
+        border-top:none;
+        border-radius:0 0 0 0;
+        padding: 0;
+    }
+</style>
+<div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0" style="position:relative">
+    <div class="col-12 col-md-6 col-lg-6 col-xl-6 hidden-sm-down zsi-home-color">
+        <a href="/" class="page-logo-link press-scale-down d-flex align-items-center navbar-brand text-white">
+			<img src='@Url.Content("~/")images/logo.png' alt="Lear Logo" aria-roledescription="logo" class="mr-2">
+			 ZSI CRM
+		</a>
+        <div class="container">
+            <h2 class="fs-xxl fw-500 mt-4">
+                The simplest UI toolkit for developers &amp; programmers
+                <small class="h3 fw-300 mt-3 mb-5 opacity-60">
+                    Presenting you with the next level of innovative UX design and engineering. The most modular toolkit available with over 600+ layout permutations. Experience the simplicity of SmartAdmin, everywhere you go!
+                </small>
+            </h2>
+            <a href="#" class="fs-lg fw-500 opacity-70">Learn more &gt;&gt;</a>
+            <div class="d-sm-flex flex-column align-items-center justify-content-center d-md-block">
+                <div class="px-0 py-1 mt-5 fs-nano opacity-50">
+                    Find us on social media
+                </div>
+                <div class="d-flex flex-row opacity-70">
+                    <a href="#" class="mr-2 fs-xxl bg-color-red">
+                        <i class="fab fa-facebook-square"></i>
+                    </a>
+                    <a href="#" class="mr-2 fs-xxl bg-color-red">
+                        <i class="fab fa-twitter-square"></i>
+                    </a>
+                    <a href="#" class="mr-2 fs-xxl bg-color-red">
+                        <i class="fab fa-google-plus-square"></i>
+                    </a>
+                    <a href="#" class="mr-2 fs-xxl bg-color-red">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+            © 2020 - Powered By ZettaSolutions, Inc.
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-12 crm-bg-white">
+    	<div class="row">
+            <div class="col-12 col-sm-12">   
+                <div class="">
+                    <select id="clientPassword" class="hide"></select>
+                    <h1 class="pt-2"><b>Sign Up</b><br></h1><span>Create your account by filling the form bellow.</span>
+                    <div class="border-top mt-3"></div>
+                    <form id="formClients" class="needs-validation" novalidate>
+                        <div class="panel-container show panel-container-grid">
+                            <div class="panel-content">
+                                <div class="pl-4 pr-4">
+                        		    <div id="clientInformationDiv" class="row mb-2"> 
+                                        <input type="hidden" name="client_id" id="client_id">
+                                        <!--<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Registration Date</b><span class="text-danger">*</span></label>  
+                                            <input type="text" class="form-control form-control-sm" id="registration_date" required  name="registration_date" autocomplete="off"/>
+                                		</div>-->
+                                    	<!--<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Company Code</b><span class="text-danger">*</span></label> 
+                                            <input type="text" class="form-control form-control-sm" id="client_code" required  name="client_code" autocomplete="off"/>
+                                		</div>-->
+                                    	<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Company Name</b><span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm autoCaps" id="client_name" required  name="client_name" autocomplete="off"/> 
+                                		</div>
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Email Address</b><span class="text-danger">*</span></label> 
+                                            <input type="text" class="form-control form-control-sm" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
+                                		</div>
+                                		
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>TIN</b><span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" id="client_tin" name="client_tin" required  autocomplete="off" placeholder="999-999-999-999V"  maxlength="16"/>
+                                		</div>
+                                		
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Landline Number</b><span class="text-danger">*</span></label> 
+                                            <input type="text" class="form-control form-control-sm" id="client_phone_no" name="client_phone_no" required  autocomplete="off" data-inputmask="'mask': '(999) 999-9999'" im-insert="true" placeholder="(123) 456-7890"  maxlength="14"/>
+                                		</div>
+                                		
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Mobile Number</b><span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-sm" id="client_mobile_no" name="client_mobile_no" maxlength="11" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true" placeholder="09999999999"/>
+                                		</div>
+                                		
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Billing Address</b><span class="text-danger">*</span></label> 
+                                            <input type="text" class="form-control form-control-sm autoCaps" id="billing_address" name="billing_address" required autocomplete="off" placeholder="Building No, Street, Barangay">
+                                		</div>
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Country</b><span class="text-danger">*</span></label>  
+                                            <select class="form-control form-control-sm custom-select select2" id="country_id" required  name="country_id" autocomplete="off"></select>
+                                		</div>
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Province/State</b><span class="text-danger">*</span></label>  
+                                            <select type="text" class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
+                                		</div>
+                                		<div class="col-12 col-md-12 mb-2">
+                                		    <label for="" class="col-form-label control-label"><b>City</b><span class="text-danger">*</span></label>  
+                                            <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                                		</div>
+                                		
+                                		<div class="col-12 col-md-12 mb-2">
+                                            <h5 class="frame-heading">Collection / Loading Merchant<span class="text-danger">*</span></h5>
+                                            <di class="frame-wrap">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input id="is_zfare" name="is_zfare" type="checkbox" value="Y" class="custom-control-input">
+                                                    <label class="custom-control-label" for="is_zfare">Fare Collection</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input id="is_zload" name="is_zload" type="checkbox" value="Y" class="custom-control-input">
+                                                    <label class="custom-control-label" for="is_zload">Loading Merchant</label>
+                                                </div>
+                                            </di>
+                                        </div>
+                                	</div>
+                        		    <div id="adminUserDiv" class="row hide">
+                        		        <input type="hidden" id="clientId" name="client_id"  value=""/>
+                        		        <div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Login (Email Address)</b><span class="text-danger">*</span></label> 
+                                            <input type="email" id="logon" name="logon" class="form-control form-control-sm" placeholder="email@gmail.com" required autoComplete="off">
+                                		</div>
+                        		        
+                        		        <div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Last Name</b><span class="text-danger">*</span></label>  
+                                            <input type="text" id="last_name" name="last_name" class="form-control form-control-sm autoCaps" required autoComplete="off">
+                                		</div>
+                        		        
+                            			<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>First Name</b><span class="text-danger">*</span></label>  
+                                            <input type="text" id="first_name" name="first_name" class="form-control form-control-sm autoCaps" required autoComplete="off">
+                                		</div>
+                                		
+                                		<div class="col-12 col-md-12">
+                                		    <label for="" class="col-form-label control-label"><b>Middle Name</b></label>
+                                            <input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm autoCaps" autoComplete="off">
+                                		</div>
+                                		
+                                		<div class="col-12 col-md-12 mb-2"> 
+                                		    <label for="" class="col-form-label control-label"><b>Name Suffix</b></label>  
+                                            <input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm autoCaps" autoComplete="off">
+                                		</div> 
+                        		    </div>
+                                </div>
+                                <div class="border-top my-2"></div>
+                    		    <div class="row mb-2">
+                            	    <div class="col-md-12 col-12 mb-2">
+                                        <di class="frame-wrap">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input id="is_ready" type="checkbox" class="custom-control-input" required>
+                                                <label class="custom-control-label" for="is_ready">Ready to make user admin?</label>
+                                            </div>
+                                        </di>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                                        <button id="btnSubmit" type="submit" class="btn btn-primary btn-md col-5 ml-1 hvr-sweep-to-left" title="Register Now">Register Now</button>
+                        				<span class="ml-2">Member click here > </span><a href="/" id="btnSignUp" class="">Sign In</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hide">
+<form id="formEmail">
+    <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
+    <input type="hidden" name="mail_subject" id="mail_subject" value="AFCS Password">
+    <input type="hidden" name="mail_body" id="mail_body" value="">
+</form>
+</div><div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSave" type="button" class="btn btn-primary btn-sm">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>

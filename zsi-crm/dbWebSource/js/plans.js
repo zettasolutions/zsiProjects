@@ -35,7 +35,7 @@
                         return app.bs({name:"monthly_rate"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"monthly_rate"))}); 
                     }
                 }
-                ,{text: "Is Active?"            ,width : 90     ,name:"is_active"           ,type:"yesno"        ,style : "text-align:center;" ,defaultValue: "Y"}
+                ,{text: "Active?"               ,width : 60     ,name:"is_active"           ,type:"yesno"        ,style : "text-align:center;" ,defaultValue: "Y"}
             ]
             ,onComplete: function(o){
                 gPlansData = o.data.rows;
@@ -157,4 +157,4 @@
     });
     
     return _pub;
-})();                                  
+})();                                   
