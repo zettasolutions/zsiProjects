@@ -12,8 +12,7 @@
         ,gVehicleId1     = null
         ,gVehicleId2     = null
         ,gzGrid1         = "#gridTransactions"
-        ,gzGrid2         = "#gridPostedTransactions" 
-        ,gzGrid3         = "#gridDailyFareCollections"
+        ,gzGrid2         = "#gridPostedTransactions"  
         ,gSubTabName     = ""
         ,gTabName        = ""
     ;
@@ -45,24 +44,20 @@
     $(".nav-tab-sub").find('a[data-toggle="tab"]').unbind().on('shown.bs.tab', function(e){ 
         gSubTabName = $.trim($(e.target).text());
         displayDailyFareCollection(); 
-    }); 
-    
+    });  
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target).attr("href");
         switch(target){
-            case "#nav-posted":
-                gActiveTab = "posted";
+            case "#nav-posted": 
                 setFooterFreezed(gzGrid2);
                 break;
-            case "#nav-forPosting":
-                gActiveTab = "for-posting";
+            case "#nav-forPosting": 
                 setFooterFreezed(gzGrid1);
-                break; 
+                break;  
           default:break;
         }
     });
-    function dropdowns(){
-        gActiveTab = "for-posting";
+    function dropdowns(){ 
         var d = new Date();
         var month = d.getMonth()+1;
         var day = d.getDate();
@@ -71,70 +66,66 @@
             (day<10 ? '0' : '') + day;
             
             
-        $('.PAOForRemitted').select2({allowClear: true});
-        $('#dailyFare_pao').select2({allowClear: true});
-        $('#dailyFare_vehicle').select2({allowClear: true});
-        $('#vehicleRemitted').select2({allowClear: true});
-        $('#dailyFare_route').select2({allowClear: true});
-        $('#dailyFare_driver').select2({allowClear: true});
-        $('#routeIdPosted').select2({allowClear: true});
-        $('#driverIdPosted').select2({allowClear: true});  
+        $('.PAOForRemitted').select2({placeholder: " ",allowClear: true});
+        $('#dailyFare_pao').select2({placeholder: " ",allowClear: true});
+        $('#dailyFare_vehicle').select2({placeholder: " ",allowClear: true});
+        $('#vehicleRemitted').select2({placeholder: " ",allowClear: true});
+        $('#dailyFare_route').select2({placeholder: " ",allowClear: true});
+        $('#dailyFare_driver').select2({placeholder: " ",allowClear: true});
+        $('#routeIdPosted').select2({placeholder: " ",allowClear: true});
+        $('#driverIdPosted').select2({placeholder: " ",allowClear: true});  
         $("#dailyFare_driver").dataBind({
             sqlCode      : "D1262" //dd_drivers_sel
+           ,parameters : {company_id:app.userInfo.company_id}
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
-               var _info           = d.data[d.index - 1]
+               var _info           = d.data[d.index - 1];
                    _driver_id         = isUD(_info) ? "" : _info.user_id;
                 gDriverId1 = _driver_id;
            }
         }); 
         $("#dailyFare_vehicle").dataBind({
             sqlCode      : "D1264" //dd_vehicle_sel
+           ,parameters : {company_id:app.userInfo.company_id}
            ,text         : "vehicle_plate_no"
            ,value        : "vehicle_id"
            ,onChange     : function(d){
-               var _info           = d.data[d.index - 1]
+               var _info           = d.data[d.index - 1];
                    _vehicle_id     = isUD(_info) ? "" : _info.vehicle_id;
                    gVehicleId1 = _vehicle_id;
            }
         });
+        
         $("#driverIdPosted").dataBind({
             sqlCode      : "D1262" //dd_drivers_sel
+             ,parameters : {company_id:app.userInfo.company_id}
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
-               var _info           = d.data[d.index - 1]
+               var _info           = d.data[d.index - 1];
                    _driver_id         = isUD(_info) ? "" : _info.user_id;
                 gDriverId2 = _driver_id;
            }
         }); 
         $("#routeIdPosted").dataBind({
-            sqlCode      : "R1224" //route_ref_sel
+            sqlCode      : "R1224" //route_ref_sel 
            ,text         : "route_code"
            ,value        : "route_id"
            ,onChange     : function(d){
-               var _info           = d.data[d.index - 1]
+               var _info           = d.data[d.index - 1];
                    _route_id         = isUD(_info) ? "" : _info.route_id;
                 gRouteId2 = _route_id;
            }
         }); 
-        $("#dailyFare_pao").dataBind({
-            sqlCode      : "D1263" //dd_pao_sel
-           ,text         : "full_name"
-           ,value        : "user_id"
-           ,onChange     : function(d){
-               var _info           = d.data[d.index - 1]
-                   _pao_id         = isUD(_info) ? "" : _info.user_id;
-                gPaoId1 = _pao_id;
-           }
-        });
+        
         $(".PAOForRemitted").dataBind({
             sqlCode      : "D1263" //dd_pao_sel
+            ,parameters : {company_id:app.userInfo.company_id}
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
-               var _info           = d.data[d.index - 1]
+               var _info           = d.data[d.index - 1];
                    _pao_id         = isUD(_info) ? "" : _info.user_id;
                 gPaoId2 = _pao_id;
            }
@@ -142,10 +133,11 @@
         
         $("#vehicleRemitted").dataBind({
             sqlCode      : "D1264" //dd_vehicle_sel
+            ,parameters : {company_id:app.userInfo.company_id} 
            ,text         : "vehicle_plate_no"
            ,value        : "vehicle_id"
            ,onChange     : function(d){
-               var _info           = d.data[d.index - 1]
+               var _info           = d.data[d.index - 1];
                    _vehicle_id     = isUD(_info) ? "" : _info.vehicle_id;
                    gVehicleId2 = _vehicle_id;
            }
@@ -169,26 +161,22 @@
     }
     function dateValidation(){
         $("#dailyFare_to").attr("disabled",true); 
-        $("#posted_date_to").attr("disabled",true); 
-       // $("#dailyFare_from").datepicker({ endDate: new Date()}); 
+        $("#posted_date_to").attr("disabled",true);  
         $("#dailyFare_from").datepicker({
              autoclose : true 
-             ,endDate: new Date()  
-        }).datepicker("setDate",'-0d').on("changeDate",function(e){  
+             ,endDate: new Date()
+            ,todayHighlight: false 
+        }).datepicker("setDate",'-1d').on("changeDate",function(e){  
             $("#dailyFare_to").removeAttr("disabled",true);  
-            
             $("#dailyFare_to").datepicker('setStartDate', e.date); 
         });
          
         $("#dailyFare_to").datepicker({
              autoclose : true
-            ,endDate: new Date() 
-        }) ;
-        
-        
-        
-        
-        
+            ,todayHighlight: false 
+            ,endDate: new Date()
+        }).datepicker("setDate",'-1d');
+         
         
         $("#posted_date_from").datepicker({
              autoclose : true
@@ -204,12 +192,11 @@
              autoclose : true
             ,todayHighlight: true 
         }).datepicker("setDate","0"); 
-    }
-    
-    function displayTransactions(dateFrm,dateTo,routeId,vehicleId,driverId,paoId){
+    } 
+    function displayTransactions(){
         zsi.getData({
                  sqlCode    : "P1231" //payment_for_posting_sel
-                ,parameters : {payment_frm:(dateFrm ? dateFrm : ""),payment_to:(dateTo ? dateTo : ""),route_id:(routeId ? routeId : ""),vehicle_id:(vehicleId ? vehicleId : ""),driver_id:(driverId ? driverId : ""),pao_id:(paoId ? paoId : "")}
+                //,parameters : {payment_frm:(dateFrm ? dateFrm : ""),payment_to:(dateTo ? dateTo : ""),route_id:(routeId ? routeId : ""),vehicle_id:(vehicleId ? vehicleId : ""),driver_id:(driverId ? driverId : ""),pao_id:(paoId ? paoId : "")}
                 ,onComplete : function(d) {
                     var _rows= d.rows;
                     var _tot = {reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0};
@@ -273,8 +260,7 @@
 
             }
         });
-    }
-    
+    } 
     function displayPostedTransactions(fromDate,toDate,paymentId,routeId,vehicleId,driverId,paoId){
         zsi.getData({
                  sqlCode    : "P1235" //payment_posted_sel
@@ -336,18 +322,17 @@
                             this.find("input").attr("readonly",true);
                             if(o.data.length <= 1)$("#btnExportTransations").attr("disabled",true);
                             else $("#btnExportTransations").removeAttr("disabled");
-                           /* var _$dateFr = _this.find(".zRow:first-child()").find("[name='posted_date']").val();
+                           var _$dateFr = _this.find(".zRow:first-child()").find("[name='posted_date']").val();
                             var _$dateTo = _this.find(".zRow:nth-last-child(2)").find("[name='posted_date']").val();
                             var _dateFr = isUD(_$dateFr) ? "" : _$dateFr.toShortDates();
-                            var _dateTo = isUD(_$dateTo) ? "" : _$dateTo.toShortDates(); */
+                            var _dateTo = isUD(_$dateTo) ? "" : _$dateTo.toShortDates(); 
                             setFooterFreezed(gzGrid1);
 
                     }
                 });
             }
         });
-    }
-    
+    } 
     function getFilters(){ 
         var  _$filter       = $("#nav-dailyFareCollection")
             ,_clientId      = app.userInfo.company_id
@@ -363,11 +348,10 @@
             ,pdate_from     : _dateFrom
             ,pdate_to       : _dateTo 
         };
-    }      
-    
+    }   
     function displayDailyFareCollection(){
         var _$tabPanel = $("#nav-dailyFareCollection")
-            ,_$navGrid = "gridDailyFareCollections"
+            ,_$navGrid = "#gridDailyFareCollections"
             ,_sqlCode  = "P1338" //DEFAUL SQL payment_recent_sel
             ,_o        = getFilters()
             ,_params = {
@@ -388,18 +372,18 @@
                         case "Recent Collection": 
                             $("#nav-dailyFareCollection").find("#dateHide,#dateHideTo").addClass("hide"); 
                             _sqlCode = "P1338"; //payment_recent_sel
-                            _params = _params
-                            setFooterFreezed(gzGrid3);  
+                            _params = _params   
                             break;
                         case "History Collection": 
                            $("#nav-dailyFareCollection").find("#dateHide,#dateHideTo").removeClass("hide"); 
                            _sqlCode = "P1337";    //payment_history_sel
-                           _params = _paramsHistory;
-                            setFooterFreezed(gzGrid3);  
+                           _params = _paramsHistory;  
                             break;
                     }
                 break;
             } 
+            
+           
            
             var _getDataRows = function(){ 
                 if(gSubTabName === "Recent Collection" || gSubTabName === "History Collection"){ 
@@ -506,17 +490,16 @@
                     };
                     
                     d.rows.push(_total);
-                    $("#"+_$navGrid).dataBind({
+                    $(_$navGrid).dataBind({
                          rows           : _rows
                         ,height         : $(window).height() - 500
                         ,dataRows       : _getDataRows()
                         ,onComplete: function(o){
-                            var _this   = this;
-                            console.log("o",o);
+                            var _this   = this; 
                             this.find("input").attr("readonly",true);
                             $(".zRow:last-child()").addClass("zTotal");
                             $(".zRow:last-child()").find('[name="no_klm"]').css("font-weight","bold"); 
-                            /*$("#dailyFare_driver").val(o.)*/
+                            setFooterFreezed(_$navGrid); 
                     }
                 });
 
@@ -545,17 +528,7 @@
             }
                             
         ];
-        
-       /* if(statusId === 2){
-            _dataRows.push(                    
-                {text: "Posted Date"                                                      ,width : 150          ,groupId : 1
-                    ,onRender: function(d){
-                        return app.bs({name: "posted_date"          ,type: "input"     ,value: app.svn(d,"posted_date")    ,style : "text-align:center;"});
-                    }
-                }
-            );
-        }*/
-        
+       
         _dataRows.push(
              {text: "Vehicle"                   ,name:"vehicle_plate_no"        ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1}
             ,{text: "PAO"                       ,name:"pao"                     ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1}
@@ -601,7 +574,7 @@
         return _dataRows;
     }
     
-    function setFooterFreezed(zGridId){
+    function setFooterFreezed(zGridId){ 
         var _zRows = $(zGridId).find(".zGridPanel.right .zRows");
         var _tableRight   = _zRows.find("#table");
         var _zRowsHeight =   _zRows.height() - 40;
@@ -657,11 +630,12 @@
             }
         });
     });
-     
+    
    
     $("#btnExportTransations").click(function () {
       $("#gridPostedTransactions").convertToTable(
         function($table){
+            console.log("inside converted table")
             $table.find("th").closest("tr").remove();
             $("#ExcelgridPostedTransactions tbody").before('<thead><tr><th colspan="10"></th><th colspan="2">Regular</th><th colspan="2">Student</th><th colspan="2">Senior</th><th colspan="2">PWD</th><th ></th><th></th></tr>'
                         + '<tr><th>Payment Date</th><th>Posted Date</th><th>Vehicle</th><th>PAO</th><th>Driver</th><th>Inspector</th><th>Route</th><th>From</th><th>To</th><th>Distance</th><th>Qty</th><th>Total</th><th>Qty</th>'
@@ -679,15 +653,13 @@
         setTimeout(function(){
             setFooterFreezed(gzGrid1);
         }, 1000);
-    }); 
-
-    $("#btnResetDailyFareVal1").click(function(){
-        $("#paymentTypeId1").val("");
-        $("#dailyFare_route").val(null).trigger('change');
-        $("#dailyFare_vehicle").val(null).trigger('change');
-        $("#dailyFare_driver").val(null).trigger('change');
-        $("#PAOForRemitt").val(null).trigger('change');
-        displayTransactions();
+    });  
+    $("#btnResetDailyFare").click(function(){   
+        var _$vehicle = $.trim($("#dailyFare_vehicle").val(null).trigger('change')); 
+        var _$driver = $.trim($("#dailyFare_driver").val(null).trigger('change'));
+        var _from = $.trim($("#dailyFare_from").val("")); 
+        var _to = $.trim($("#dailyFare_to").val(""));
+        displayDailyFareCollection();
     });
     
     //posted tab
@@ -711,4 +683,4 @@
     
     
     return _pub;
-})();                                                                          
+})();                                                                             
