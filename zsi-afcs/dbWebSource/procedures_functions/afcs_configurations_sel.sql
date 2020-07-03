@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[afcs_configurations_sel]  
 (  
    @user_id INT = NULL
+  ,@vehicle_type_id INT
 )  
 AS  
 BEGIN  
@@ -18,6 +19,7 @@ BEGIN
 			, base_kms
 			, succeeding_km_fare
 		FROM dbo.fare_matrix
+		WHERE fare_id=@vehicle_type_id
 	)
 	, cte_student (
 		student_discount

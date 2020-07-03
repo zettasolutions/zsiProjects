@@ -23,8 +23,8 @@ BEGIN
 	ON a.route_id = b.route_id
 	LEFT JOIN dbo.route_details c
 	ON b.route_id = c.route_id
-	LEFT JOIN dbo.vehicle_types d
-	ON a.vehicle_type_id = d.vehicle_type_id
+	LEFT JOIN dbo.fare_matrix d
+	ON a.vehicle_type_id = d.fare_id
 	WHERE 1 = 1
 	AND a.hash_key = @hash_key
 	ORDER BY c.route_no, c.seq_no

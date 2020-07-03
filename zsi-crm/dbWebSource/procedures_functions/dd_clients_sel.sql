@@ -6,7 +6,7 @@ CREATE PROCEDURE [dbo].[dd_clients_sel]
 )
 AS
 BEGIN
-	SELECT client_id, client_name FROM dbo.clients;
+	SELECT client_id, client_name FROM dbo.clients WHERE is_zfare='Y';
  END;
 
 

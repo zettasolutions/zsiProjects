@@ -29,7 +29,7 @@
             ,parameters     : {posted_date:(postedDate ? postedDate:"")}
             ,height         : $(window).height() - 335 
             ,dataRows       : [
-                {text: "Posted Date"             
+                {text: "Posted Date"             ,width : 130 
                     ,onRender: function(d){
                         return app.bs({type: "input"        ,name: "posted_date"           ,value: app.svn(d,"posted_date").toShortDate()    ,style : "text-align:center"});
                     }
@@ -74,10 +74,10 @@
                          return app.bs({type:"input"    ,value:app.svn(d,"bank_transfer_date").toShortDate()});
                      }
                  }
-                ,{text: "Bank"                         ,name:"bank_code"                       ,type:"input"       ,width : 100   ,style : "text-align:left;"} 
+                ,{text: "Bank"                              ,name:"bank_code"                       ,type:"input"       ,width : 100   ,style : "text-align:left;"} 
                 ,{text: "Reference No"                      ,name:"bank_ref_no"                     ,type:"input"       ,width : 100   ,style : "text-align:left;"}
                 ,{text: "Company Code"                      ,name:"company_code"                    ,type:"input"       ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Amount"                                                         ,width : 130   ,style : "text-align:right;padding-right: 0.3rem;"
+                ,{text: "Amount"                                                                                        ,width : 130   ,style : "text-align:right;padding-right: 0.3rem;"
                     ,onRender: function(d){
                         return app.bs({name: "transferred_amount"          ,type: "input"     ,value: app.svn(d,"transferred_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
                     }
@@ -118,4 +118,4 @@
     });
 
     return _pub;
-})();                                           
+})();                                            

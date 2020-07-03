@@ -2,8 +2,8 @@
 
 CREATE PROCEDURE [dbo].[afcs_consumer_load_upd]  
 (  
-   @hash_key NVARCHAR(50)
-   , @email NVARCHAR(300)
+     @hash_key NVARCHAR(50)
+   , @mobile_no NVARCHAR(300)
    , @user_id INT = NULL
 )  
 AS  
@@ -21,7 +21,7 @@ BEGIN
 		@consumer_id = consumer_id
 	FROM dbo.consumers
 	WHERE 1 = 1
-	AND email = @email;
+	AND mobile_no = @mobile_no;
 
 	SELECT 
 		TOP 1

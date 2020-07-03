@@ -2,11 +2,14 @@
 
 CREATE PROCEDURE [dbo].[afcs_register_consumer_upd]  
 (  
-   @email NVARCHAR(100)
+     @mobile_no nvarchar(20)
+   , @email NVARCHAR(100)=NULL
    , @first_name NVARCHAR(300)
+   , @middle_name NVARCHAR(300)=NULL
    , @last_name NVARCHAR(300)
    , @password NVARCHAR(50)
-   , @birthdate DATE
+   , @birthdate DATE = NULL
+   , @image_filename NVARCHAR(MAX)
    , @user_id INT = NULL
 )  
 AS  
@@ -20,18 +23,18 @@ BEGIN
 	DECLARE @server_mail_subject NVARCHAR(50) = 'Welcome to zPay';
 	DECLARE @server_mail_body_format NVARCHAR(10) = 'HTML';
 	DECLARE @server_mail_body NVARCHAR(MAX) = '';
-	DECLARE @count_register_email INT = 0;
+	DECLARE @count_register_mobile INT = 0;
 
-	SELECT @activation_code = CAST(RAND() * 1000000 AS NVARCHAR(6));
+	SELECT @activation_code = REPLACE(CAST(RAND() * 1000000 AS NVARCHAR(6)),'.',0);
 
 	SET @server_mail_body = N'Welcome to zPay. Your activation code is ';
 	SET @server_mail_body = @server_mail_body + @activation_code + '.';
 	SET @server_mail_body = @server_mail_body + CHAR(13);
 	SET @server_mail_body = @server_mail_body + 'This is an auto-generated email. Please do not reply.';
 
-	SELECT @count_register_email = COUNT(consumer_id) FROM dbo.consumers WHERE 1 = 1 AND email = @email;
+	SELECT @count_register_mobile = COUNT(consumer_id) FROM dbo.consumers WHERE 1 = 1 AND mobile_no = @mobile_no;
 
-	IF @count_register_email = 0
+	IF @count_register_mobile = 0
 	BEGIN
 		BEGIN TRAN;
 
@@ -39,90 +42,84 @@ BEGIN
 			(hash_key
 			, is_active
 			, first_name
+			, middle_name
 			, last_name
 			, email
+			, mobile_no
 			, [password]
 			, created_by
 			, created_date
 			, activation_code
 			, birthdate
+			, image_filename
+			, activation_code_expiry
 		)
 		VALUES
 			(NEWID()
 			, 'N'
 			, @first_name
+			, @middle_name
 			, @last_name
 			, @email
-			, @password
+			, @mobile_no
+			, dbo.securityEncrypt(@password)
 			, @user_id
 			, GETDATE()
 			, @activation_code
-			, @birthdate
-		)
+			, IIF(@birthdate = '', NULL, @birthdate)
+			, @image_filename
+			, dateadd(minute,30, getdate())
+		);
 
-		SELECT @id = @@IDENTITY;
-
-		-- Get an unassigned QR and assign it to the new commuter.
-		SELECT 
-			TOP 1 @generated_qr_id = id
-		FROM dbo.generated_qrs 
-		WHERE 1 = 1
-		AND ISNULL(balance_amt, 0) = 0
-		AND is_taken = 'N'
-		AND is_active = 'Y'
-		AND ISNULL(is_loaded, '') <> 'Y'
-		AND ISNULL(consumer_id, 0) = 0
-		ORDER BY
-			created_date;
-
-		IF @generated_qr_id > 0
-		BEGIN
-			UPDATE 
-				dbo.generated_qrs
-			SET
-				is_taken = 'Y'
-				, consumer_id = @id
-				, ref_trans = CONCAT(REPLACE(CONVERT(CHAR(10), GETDATE(), 101), '/', ''), id)
-				, updated_by = @user_id
-				, updated_date = GETDATE()
-			WHERE 1 = 1
-			AND id = @generated_qr_id;
-		END
+		-- Insert record in the sms_notifications table.
+		INSERT INTO [dbo].[sms_notifications]
+			([app_name]
+			,[mobile_no]
+			,[message]
+			,[is_processed]
+			,[created_by]
+			,[created_date])
+		VALUES(
+			'zpay'
+			, @mobile_no
+			, 'Welcome to zPay. Your activation code is ' + CAST(@activation_code AS NVARCHAR(100)) + '. Registration will expire in 30 mins. if not activated.'
+			, 'N'
+			, @user_id
+			, GETDATE()
+		);
 
 		IF @@ERROR = 0
 		BEGIN
 			COMMIT;
-			-- Email new user.
-			EXEC msdb.dbo.sp_send_dbmail
-				@profile_name = @server_mail_profile_name
-			   , @recipients = @email
-			   , @subject = @server_mail_subject
-			   , @body = @server_mail_body
-			   , @body_format = @server_mail_body_format
+
+			IF ISNULL(@email, '') <> ''
+			BEGIN
+				-- Email new user.
+				EXEC msdb.dbo.sp_send_dbmail
+					@profile_name = @server_mail_profile_name
+				   , @recipients = @email
+				   , @subject = @server_mail_subject
+				   , @body = @server_mail_body
+				   , @body_format = @server_mail_body_format
+			END;
+
+			SELECT 
+				'Y' is_valid
+				, 'Registration is successful. Activation code is sent to your mobile number or email. Registration will expire in 30 minutes if not activated. ' AS msg
 		END
 		ELSE
 		BEGIN
 			ROLLBACK;
-		END
-
-		IF @@ERROR = 0
-		BEGIN
-			-- Get the qr code in the generated qrs table and set it as the qr code of the commuter.
 			SELECT 
-				b.hash_key
-				, 'Y' AS is_valid
-				, 'Success' AS msg
-			FROM dbo.consumers a
-			JOIN dbo.generated_qrs b
-			ON a.consumer_id = b.consumer_id
-			WHERE 1 = 1 
-			AND a.consumer_id = @id;
+				'N' is_valid
+				, 'An error occurred. Please try again later.' AS msg
 		END
 	END
 	ELSE
 	BEGIN
 		SELECT 
 			'N' is_valid
-			, 'Email already exists.' AS msg
+			, 'User already exists.' AS msg
 	END
 END;
+

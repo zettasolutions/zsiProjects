@@ -4,8 +4,8 @@
 CREATE PROCEDURE [dbo].[client_contract_devices_sel]  
 (  
     @user_id int = NULL
-   --,@is_active varchar(1)='Y'
-)  
+   ,@client_contract_id nvarchar(20) = NULL
+)   
 AS  
 BEGIN  
 
@@ -14,8 +14,8 @@ SET NOCOUNT ON
 
  	SET @stmt = 'SELECT * FROM dbo.client_contract_devices WHERE 1=1';
 
-	--IF @is_active <> ''
-	--	SET @stmt = @stmt + ' AND is_active='''+ @is_active + '''';
+	IF ISNULL(@client_contract_id,0)<>0
+       set @stmt = @stmt + ' AND client_contract_id='''+ @client_contract_id+'''';
 
 
 	exec(@stmt);

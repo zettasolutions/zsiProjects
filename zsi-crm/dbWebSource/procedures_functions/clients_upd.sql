@@ -19,11 +19,26 @@ CREATE procedure [dbo].[clients_upd](
   ,@is_tax_exempt char(1)='Y'
   ,@client_tin nvarchar(20)=null
   ,@payment_mode_id int=null
+  ,@is_zload char(1)=null
+  ,@is_zfare char(1)=null
+  ,@id	INT=NULL 
 )
 as
 BEGIN
    SET NOCOUNT ON
+	 DECLARE @seq_no int
+	 SELECT @seq_no = max(client_id) FROM dbo.clients
+	 SET @id = @client_id
+	 IF ISNULL(@is_zfare,'')=''
+	 BEGIN
+		SET @client_code = CONCAT('LMRT-' ,RIGHT('000' + CAST(@seq_no+1 AS NVARCHAR(3)), 3 ))
+	 END
+	 ELSE
+	 BEGIN
+		SET @client_code = CONCAT('FCLT-' ,RIGHT('000' + CAST(@seq_no+1 AS NVARCHAR(3)), 3 ))
+	 END
 	 IF ISNULL(@client_id,0)=0
+	 BEGIN
 		INSERT INTO dbo.clients
 		 (
 		  client_code
@@ -44,6 +59,8 @@ BEGIN
 		 ,is_tax_exempt
 		 ,client_tin
 		 ,payment_mode_id
+		 ,is_zload
+		 ,is_zfare
 		 ,created_by
 		 ,created_date
 		 ) VALUES
@@ -66,13 +83,19 @@ BEGIN
 		 ,@is_tax_exempt
 		 ,@client_tin
 		 ,@payment_mode_id
+		 ,@is_zload
+		 ,@is_zfare
 		 ,@user_id
 		 ,GETDATE()
-		 ) 
+		 );
+		 SET @id = @@IDENTITY
+		 
+		 RETURN @id; 
+	END
 	ELSE
 	   UPDATE dbo.clients SET
-			    client_code			= @client_code
-			   ,client_name			= @client_name
+			    --client_code			= @client_code
+			   client_name			= @client_name
 			   ,client_phone_no		= @client_phone_no
 			   ,client_mobile_no    = @client_mobile_no
 			   ,client_email_add    = @client_email_add
@@ -89,6 +112,8 @@ BEGIN
 			   ,is_tax_exempt		= @is_tax_exempt
 			   ,client_tin			= @client_tin
 			   ,payment_mode_id		= @payment_mode_id
+			   ,is_zload			= @is_zload
+			   ,is_zfare			= @is_zfare
 			   ,updated_by			= @user_id
 			   ,updated_date		= GETDATE();
 END;

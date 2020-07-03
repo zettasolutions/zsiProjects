@@ -1,0 +1,46 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                         <div id="gridRoutes" class="zGrid"></div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                        <div class="button-group">     
+                            <button type="button" class="btn btn-primary btn-sm" id="btnSaveRoute">
+                                <i class="far fa-save"></i> Save
+                            </button>
+                            <button type="button" id="btnDeleteRoute" class="btn btn-primary btn-sm"><i class="fas fa-trash-alt"></i> Delete</button>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="modal" id="modalRouteDetails" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="frm_modalRouteDetails">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridRouteDetails" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveRouteDetails" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" id="btnDeleteRouteDetails" class="btn btn-primary btn-sm"><i class="fas fa-trash-alt"></i> Delete</button>    
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,7 @@ AS
 BEGIN
   SET NOCOUNT ON
   DECLARE @stmt nvarchar(max)='';
-  SET @stmt = 'SELECT * FROM dbo.payments_for_posting_v where 1=1'
+  SET @stmt = 'SELECT * FROM dbo.payments_transactions_for_posting_v where 1=1'
   IF ISNULL(@vehicle_id,0) <> 0
      SET @stmt = @stmt + ' AND vehicle_id = ' + CAST(@vehicle_id AS VARCHAR(20));
 
