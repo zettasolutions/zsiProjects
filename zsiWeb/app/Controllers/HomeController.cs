@@ -13,17 +13,21 @@ namespace zsi.web.Controllers
                
                 using (new impersonate())
                 {
-                    dcAppProfile dc = null;
+                    dcAppProfile dc =  new dcAppProfile(); ;
                     if (Session["isAuthenticated"] != null)
                     {
-                        dc = new dcAppProfile();
                         appProfile info = dc.GetInfoByCurrentUser();
                         SessionHandler.AppConfig = info;                        
                         return Redirect(Url.Content("~/") + "page/" + info.default_page);
                     }
                     else
                     {
-                       //if (SessionHandler.AppConfig == null) SessionHandler.AppConfig = dc.GetInfo();
+                        string isADSecurity = System.Configuration.ConfigurationManager.AppSettings["ADSecurity"];
+                        if (isADSecurity != null && bool.Parse(isADSecurity) == false ){
+                            appProfile info = dc.GetInfo();
+                            SessionHandler.AppConfig = info;
+                            ViewBag.appTitle = info.app_title;
+                        }
                         return View();
                     }
                 }
