@@ -13,14 +13,23 @@
         displayClients();
         displayClientContracts();
         //displaySelects();
-        validations();
+        //validations();
         gActiveTab = "search";
+        $('#keyWord').select2({placeholder: "",allowClear: true});
         
-        $("#device_qty").on("keyup change", function(){
-            var _$qty = $(this).val();
-            displayClientContractDevice(gClientContractid,_$qty);
-        });
     };
+    
+    $('#keyWord').on("keyup change", function(){
+        var _this = $(this);
+        if(_this.val() === "client_name"){
+            $("#keyValue").attr("placeholder", "Enter Client Name......");
+            $("#keyValue").val("");
+        }
+        else{
+            $("#keyValue").val("");
+            $("#keyValue").attr("placeholder", "Enter Contract No......")
+        }
+    });
     
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
       var target = $(e.target).attr("href");
@@ -40,7 +49,7 @@
     function displayClients(){
         $("#gridClients").dataBind({
              sqlCode     : "C241" //clients_sel
-            ,height      : $(window).height() - 248
+            ,height      : $(window).height() - 278
             ,dataRows    : [
                 {text: "Code", width: 130, style: "text-align:center"
                     ,onRender : function(d){ 
@@ -79,12 +88,12 @@
         });
     }
     
-    function displayClientContracts(searchVal){
+    function displayClientContracts(keyword,searchVal){
         var _ctr = 1;
         $("#gridClientContracts").dataBind({
                  sqlCode    : "C1284" //client_contracts_sel
-                ,parameters  : {search_val: (searchVal ? searchVal : "")} 
-                ,height     : $(window).height() - 284
+                ,parameters  : {keyword:keyword,search_val: searchVal} 
+                ,height     : $(window).height() - 346
                 ,blankRowsLimit : 0
                 ,dataRows   : [
                      {text: "Line No."         ,width:60                   ,style:"text-align:center"
@@ -94,14 +103,13 @@
                                 +   _ctr++;
                          }
                      }
-                    ,{text:"Client Name"                                                                 ,width:250          ,style:"text-align:left"
+                    ,{text:"Client Name"                                                                    ,width:250          ,style:"text-align:left"
                         ,onRender : function(d){
                              return app.bs({name:"client_name"                    ,type:"input"                  ,value: app.svn(d,"client_name")}) ;
                          }
                     }
                     ,{text:"Contract Number"            ,type:"input"       ,name:"contract_no"             ,width:150          ,style:"text-align:center"
                         , onRender      : function(d) {
-                            console.log("data",d);
                             var _contractNo = (app.svn(d,"contract_no") ? app.svn(d,"contract_no") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
                             return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='client.showModalContracts(this," + _ctr + ", \""+ app.svn (d,"client_contract_id") +"\", \""+ app.svn (d,"client_name") +"\", \""+ app.svn (d,"contract_no") +"\", \""+ app.svn (d,"client_id") +"\", \""+ app.svn (d,"contract_date").toShortDate() +"\", \""+ app.svn (d,"contract_term_id") +"\", \""+ app.svn (d,"activation_date").toShortDate() +"\", \""+ app.svn (d,"expiry_date").toShortDate() +"\", \""+ app.svn (d,"plan_id") +"\", \""+ app.svn (d,"plan_qty") +"\", \""+ app.svn (d,"device_model_id") +"\", \""+ app.svn (d,"device_qty") +"\", \""+ app.svn (d,"device_term_id") +"\", \""+ app.svn (d,"unit_assignment_type_id") +"\");'>" + _contractNo + "</a>";
                         }
@@ -120,7 +128,7 @@
     
     }
     
-    function displayClientContractDevice(client_contract_id,qty){
+    /*function displayClientContractDevice(client_contract_id,qty){
         var _ctr = 1;
         $("#gridContracts").dataBind({
                  sqlCode    : "C272" //client_contract_devices_sel
@@ -171,11 +179,75 @@
                 }
         });
     
+    }*/
+    
+    function displayClientContractDevice(client_contract_id,qty){
+        zsi.getData({
+                 sqlCode    : "C272" //client_contract_devices_sel
+                ,parameters  : {client_contract_id: client_contract_id} 
+                ,onComplete : function(d) {
+                    var _rows= d.rows;
+                    var _ctr = 1;
+                    
+                    $("#gridContracts").dataBind({
+                         rows           : _rows
+                        ,height         : $(window).height() - 390
+                        ,blankRowsLimit : (qty? qty - _rows.length: 0)
+                        ,dataRows       : [
+                             {text: "Item No."         ,width:60                   ,style:"text-align:center"
+                                 ,onRender : function(d){
+                                     return app.bs({name:"client_contract_device_id"    ,type:"hidden"                  ,value: app.svn(d,"client_contract_device_id")}) 
+                                        +   app.bs({name:"is_edited"                    ,type:"hidden"                  ,value: app.svn(d,"is_edited")})
+                                        +   _ctr++;
+                                 }
+                             }
+                            ,{text:"Subscription No."                                                                 ,width:140          ,style:"text-align:left"
+                                ,onRender : function(d){
+                                     return app.bs({name:"subscripton_no"               ,type:"input"                  ,value: app.svn(d,"subscripton_no")}) 
+                                        +   app.bs({name:"client_contract_id"           ,type:"hidden"                  ,value: (app.svn(d,"client_contract_id")? app.svn(d,"client_contract_id") : client_contract_id)});
+                                 }
+                            }
+                            ,{text:"Device"                ,type:"select"       ,name:"device_id"             ,width:130          ,style:"text-align:left"}
+                            //,{text:"Device No."                ,type:"input"       ,name:"tag_no"             ,width:130          ,style:"text-align:left"}
+                            //,{text:"Sim No."                                                                ,width:200          ,style:"text-align:left"
+                            //    ,onRender : function(d){
+                            //         return app.bs({name:"client_id"                ,type:"select"                  ,value: app.svn(d,"client_id")}) 
+                            //            +   app.bs({name:"released_date"            ,type:"hidden"                  ,value: app.svn(d,"released_date")});
+                            //     }
+                            //}
+                            //,{text:"Release Date"            ,type:"select"      ,name:"device_type_id"     ,width:130           ,style:"text-align:center"}
+                            ,{text:"Unit Assignment"            ,type:"input"      ,name:"unit_assignment"     ,width:130           ,style:"text-align:center"}
+                            //,{text:"Active?"                ,type:"yesno"       ,name:"is_active"          ,width:60            ,style:"text-align:left"    ,defaultValue: "Y"}
+                            //,{text:"Status"                 ,type:"select"      ,name:"status_id"          ,width:120           ,style:"text-align:left"}
+                          ]
+                          ,onComplete : function(){
+                            var _this = this;
+                            
+                            if (!qty){
+                                _this.find("input").attr("disabled",true);
+                                _this.find("select").attr("disabled",true);
+                            }
+                            _this.find("input,select").prop('required',true);
+                            _this.find(".zRow").find("[name='device_id']").dataBind({
+                                sqlCode      : "D276" //dd_devices_sel
+                               ,text         : "serial_no"
+                               ,value        : "device_id"
+                            });
+                            
+                        }
+                });
+            }
+        });
     }
+    
+    
+    
+    
     
      _pub.showModalContracts = function (eL,ctr,clientContractId,clientName,contractNo,clientId,contractDate,contractTermId,activationDate,expiryDate,planId,planQty,deviceModelId,deviceQty,deviceTermId,unitAssignmentTypeId) {
          var _$mdl = $('#modalClientContracts');
          _$mdl.modal('show');
+         gBatchQty = deviceQty;
          gClientContractid = clientContractId;
          $("#modalTitle").text(clientName + " " + "|" + " " + contractNo);
          $('#client_id').select2({placeholder: "",allowClear: true, dropdownParent: _$mdl});
@@ -228,7 +300,7 @@
          _$mdl.find("#device_qty").val(deviceQty);
          _$mdl.find("#device_term_id").val(deviceTermId);
          _$mdl.find("#unit_assignment_type_id").val(unitAssignmentTypeId);
-         
+         gBatchNoVal = clientContractId;
          displayClientContractDevice(clientContractId,deviceQty);
      };
     
@@ -284,8 +356,21 @@
         if(_this.val() === "name") $("#searchVal").attr("placeholder", "Type client name......");
         else $("#searchVal").attr("placeholder", "Type contract number......");
     });
+    
+    
+    $("#btnSubmit").click(function () {
+        var _$frm = $("#formClients");
+        var _frm = _$frm[0];
+        var _formData = new FormData(_frm);  
+        if( ! _frm.checkValidity() ){
+            $("#formClients").addClass('was-validated');
+        }else{   
+            $("#formClients").removeClass('was-validated');
+            $('#myModal').modal('show');
+        }
+    });
         
-    $("#btnSubmit").click(function(){
+    /*$("#btnSubmit").click(function(){
         var forms = document.getElementsByClassName('needs-validation'); 
     	var validation = Array.prototype.filter.call(forms, function(form) {
     		form.addEventListener('submit', function(event) {
@@ -303,7 +388,7 @@
     		}, false);
     	});
     	
-    });
+    });*/
     
     $("#btnNew").click(function() {
         var _$mdl = $('#newClientModal');
@@ -476,6 +561,7 @@
                 ,isSingleEntry: true
                 ,onComplete: function (data) {
                     gBatchNoVal = data.returnValue;
+                    console.log("gBatchNoVal",gBatchNoVal);
                     gBatchQty = $("#formContract").find("#device_qty").val();
                     if(data.isSuccess){
                       if(data.isSuccess===true) zsi.form.showAlert("alert");
@@ -486,10 +572,8 @@
                       modalTxt();
                       setTimeout(function(){
                           $("#myModal").modal('toggle');
-                          $("#gridContracts").find("input").removeAttr("disabled");
-                          $("#gridContracts").find("select").removeAttr("disabled");
-                          $("#formContract").find("#btnSaveContracts").removeClass("hide");
-                          $("#formContract").find("#submit").addClass("hide");
+                          //$("#gridContracts").find("input").removeAttr("disabled");
+                          //$("#gridContracts").find("select").removeAttr("disabled");
                       },1000);
                     }else{
                       $("#myModal").find("#msg").text("Something went wrong when saving the data.");
@@ -536,7 +620,8 @@
                                         $("#clientPassword").val(_userId);
                                         var _password = $("#clientPassword").find('option:selected').text();
                                         $("#mail_recipients").val(_email);
-                                        $("#mail_body").val('Hi '+_firstName+'! Thank you for signing up on our website. Your logon password is ' + _password);
+                                        $("#ename").val(_firstName);
+                                        $("#epassword").val(_password);
                                         if(data.isSuccess){
                                            if(data.isSuccess===true) zsi.form.showAlert("alert"); 
                                            _$frm.removeClass('was-validated');
@@ -575,6 +660,18 @@
         
     });
     
+    $("#submit").click(function () {
+        var _$frm = $("#formContract");
+        var _frm = _$frm[0];
+        var _formData = new FormData(_frm);  
+        if( ! _frm.checkValidity() ){
+            $("#formContract").addClass('was-validated');
+        }else{   
+            $("#formContract").removeClass('was-validated');
+            $('#myModal').modal('show');
+        }
+    });
+    /*
      function validations(){
         var forms = $('.needs-validation');
     	// Loop over them and prevent submission
@@ -592,7 +689,7 @@
     			}
     		}, false);
     	});
-    }
+    }*/
     
     $("#btnSaveContracts").click(function(){ 
         $("#gridContracts").jsonSubmit({
@@ -600,23 +697,22 @@
             //,optionalItems: ["is_active"] 
             ,onComplete: function (data) { 
                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                displayClientContractDevice();
+                displayClientContractDevice(gClientContractid,gBatchQty);
             } 
         }); 
     });
     
     $("#btnFilterVal").click(function(){
-        var _searchVal = $("#searchVal").val();
+        var _keyWord = $("#keyWord").val()
+        var _keyValue = $("#keyValue").val();
         
-        if(gActiveTab === "search") displayClientContracts(_searchVal);
-        else displayClients();
+        if(gActiveTab === "search") displayClientContracts(_keyWord,_keyValue);
+        //else displayClients();
         
     });
     
     $("#btnResetVal").click(function(){
         //displayClientContractDevice();
-        $("#formContract").find("#submit").removeClass("hide");
-        $("#formContract").find("#btnSaveContracts").addClass("hide");
         $("#formContract").find("#batch_qty").val("");
         $("#formContract").find("#received_by").val(null).trigger('change');
         $("#formContract").find("#batchId").text("");
@@ -624,9 +720,9 @@
               pickTime  : false
             , autoclose : true
             , todayHighlight: true
-            , startDate: new Date()
+            //, startDate: new Date()
         }).datepicker("setDate","0");
     })
     
     return _pub;
-})();                      
+})();                        
