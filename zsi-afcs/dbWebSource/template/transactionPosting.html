@@ -11,21 +11,9 @@
              position:unset;
          }
     }
-    .zRow.zTotal, .zRow.zTotal:hover{
-        color: #fff;
-        font-weight: bold;
-    }
+    
     #btnFilterVal2:disabled {color: #212529;background-color: gray;border-color: #9e9999;}
     #btnFilterVal1:disabled {color: #212529;background-color: gray;border-color: #9e9999;}
-    .after_modal_appended{  
-        position:relative;
-    }
-    .modal, .modal-backdrop {
-        position: absolute !important;
-    }
-    .modal-backdrop{
-        opacity: 0 !important;
-    }
 </style>
 <div class="panel">
     <div class="panel-container">
@@ -46,35 +34,11 @@
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
                                      <div id="gridTransactions" class="zGrid"></div>
                                 </div>
-                                <!--<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
                                     <div class="button-group">     
                                         <button type="button" class="btn btn-primary btn-sm" id="btnSaveTransations">
                                             <i class="far fa-save"></i> Post Payments
                                         </button>
-                                    </div>
-                                </div>-->
-                            </div>
-                        </div>
-                        <div id="modalForPostingSummary" class="modal fade modal-backdrop-transparent" role="dialog">
-                            <div class="modal-dialog modal-full">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close pl-0 ml-0 mr-1" data-dismiss="modal" aria-label="Close" title="Back">
-                                            <i class="fas fa-arrow-alt-circle-left"></i>
-                                        </button>
-                                        <h5 id="modalTitle" class="modal-title"></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Back">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="col-12 col-sm-12 col-md-12">  
-                                            <div class="row"> 
-                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                                                    <div class="zGrid" id="gridForPostingSummary"></div>
-                                                </div>  
-                                            </div>
-                                        </div>   
                                     </div>
                                 </div>
                             </div>
@@ -82,117 +46,64 @@
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="nav-posted">
                         <div class="zContainer">
+                            <div class="mt-2"></div>
                             <div class="row"> 
-                                <div class="col-12 col-sm-12 mb-1">
+                            	<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label control-label text-label">Route</label>  
+                                    <select  id="routeIdPosted" class="form-control form-control-sm"></select>
+                        		</div>
+                        		<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="customer" class="col-form-label text-label">Vehicle</label>   
+                                    <select  id="vehicleRemitted" class="form-control form-control-sm"></select>
+                        		</div>
+                        		<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label text-label">Driver</label>  
+                        			<select  id="driverIdPosted" class="form-control form-control-sm"></select>
+                        		</div>
+                        		<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label text-label">Pao</label>  
+                        			<select class="PAOForRemitted form-control form-control-sm" id=""></select>
+                        		</div>
+                        	</div>
+                        	<div class="row">  
+                        		<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="customer" class="col-form-label text-label">From</label>   
+                                    <input type="text" class="form-control form-control-sm pl-2" id="posted_date_from" name="posted_date_from" placeholder="From date....."/>
+                        		</div>
+                        		<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label text-label">To</label> 
+                        		    <input type="text" class="form-control form-control-sm pl-2" id="posted_date_to" name="posted_date_to" placeholder="To date....."/> 
+                        		</div> 
+                        		<div class="col-sm-6 col-md-3 col-xs-12">
+                        		    <label for="" class="col-form-label text-label" style=" margin-top: 17px; "></label>
+                        		    <input type="hidden" class="form-control form-control-sm pl-2"/>
+                        		     <div class="input-group"> 
+                                        <div class="input-group-append">
+                                            <button id="btnFilterVal2" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter">
+                                               <i class="fas fa-filter"></i>
+                                            </button>
+                                        </div>
+                                        <div class="input-group-append ml-1">
+                                            <button id="btnResetPosted" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">
+                                               <i class="far fa-refresh hvr-icon"></i> Reset
+                                            </button>
+                                        </div>
+                                    </div>
+                        		</div> 
+                        	</div> 
+                            <div class="row mt-3">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
                                      <div id="gridPostedTransactions" class="zGrid"></div>
                                 </div>
-                            </div>
-                        </div>
-                        <div id="modalPostedSummary" class="modal fade modal-backdrop-transparent" role="dialog">
-                            <div class="modal-dialog modal-full">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close pl-0 ml-0 mr-1" data-dismiss="modal" aria-label="Close" title="Back">
-                                            <i class="fas fa-arrow-alt-circle-left"></i>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                    <div class="button-group">     
+                                        <button type="button" class="btn btn-primary btn-sm" id="btnExportTransations">
+                                            <i class="far fa-save"></i> Export To Excel
                                         </button>
-                                        <h5 id="modalTitle" class="modal-title"></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="col-12 col-sm-12 col-md-12">  
-                                            <div class="row"> 
-                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                                                    <div class="zGrid" id="gridPostedSummary"></div>
-                                                </div>  
-                                            </div>
-                                        </div>   
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="modalPostedSummaryDtl" class="modal fade modal-backdrop-transparent" role="dialog">
-                            <div class="modal-dialog modal-full">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close pl-0 ml-0 mr-1" data-dismiss="modal" aria-label="Close" title="Back">
-                                            <i class="fas fa-arrow-alt-circle-left"></i>
-                                        </button>
-                                        <h5 id="modalTitle" class="modal-title"></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="col-12 col-sm-12 col-md-12">  
-                                            <div class="row"> 
-                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                                                    <div class="zGrid" id="gridPostedSummaryDtl"></div>
-                                                </div>  
-                                            </div>
-                                        </div>   
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--   <div class="mt-2"></div>-->
-                         <!--   <div class="row"> -->
-                         <!--   	<div class="col-sm-6 col-md-3 col-xs-12">-->
-                        	<!--	    <label for="" class="col-form-label control-label text-label">Route</label>  -->
-                         <!--           <select  id="routeIdPosted" class="form-control form-control-sm"></select>-->
-                        	<!--	</div>-->
-                        	<!--	<div class="col-sm-6 col-md-3 col-xs-12">-->
-                        	<!--	    <label for="customer" class="col-form-label text-label">Vehicle</label>   -->
-                         <!--           <select  id="vehicleRemitted" class="form-control form-control-sm"></select>-->
-                        	<!--	</div> -->
-                        	<!--	<div class="col-sm-6 col-md-3 col-xs-12">-->
-                        	<!--	    <label for="" class="col-form-label text-label">Pao</label>  -->
-                        	<!--		<select class="PAOForRemitted form-control form-control-sm" id=""></select>-->
-                        	<!--	</div>-->
-                        	<!--	<div class="col-sm-6 col-md-3 col-xs-12">-->
-                        	<!--	    <label for="" class="col-form-label text-label">Driver</label>  -->
-                        	<!--		<select  id="driverIdPosted" class="form-control form-control-sm"></select>-->
-                        	<!--	</div>-->
-                        	<!--</div>-->
-                        	<!--<div class="row">  -->
-                        	<!--	<div class="col-sm-6 col-md-3 col-xs-12">-->
-                        	<!--	    <label for="customer" class="col-form-label text-label">From</label>   -->
-                         <!--           <input type="text" class="form-control form-control-sm pl-2" id="posted_date_from" name="posted_date_from" placeholder="From date....."/>-->
-                        	<!--	</div>-->
-                        	<!--	<div class="col-sm-6 col-md-3 col-xs-12">-->
-                        	<!--	    <label for="" class="col-form-label text-label">To</label> -->
-                        	<!--	    <input type="text" class="form-control form-control-sm pl-2" id="posted_date_to" name="posted_date_to" placeholder="To date....."/> -->
-                        	<!--	</div> -->
-                        	<!--	<div class="col-sm-6 col-md-3 col-xs-12">-->
-                        	<!--	    <label for="" class="col-form-label text-label" style=" margin-top: 17px; "></label>-->
-                        	<!--	    <input type="hidden" class="form-control form-control-sm pl-2"/>-->
-                        	<!--	     <div class="input-group"> -->
-                         <!--               <div class="input-group-append">-->
-                         <!--                   <button id="btnFilterVal2" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter">-->
-                         <!--                      <i class="fas fa-filter"></i>-->
-                         <!--                   </button>-->
-                         <!--               </div>-->
-                         <!--               <div class="input-group-append ml-1">-->
-                         <!--                   <button id="btnResetPosted" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">-->
-                         <!--                      <i class="far fa-refresh hvr-icon"></i> Reset-->
-                         <!--                   </button>-->
-                         <!--               </div>-->
-                         <!--           </div>-->
-                        	<!--	</div> -->
-                        	<!--</div> -->
-                         <!--   <div class="row mt-3">-->
-                         <!--       <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">-->
-                         <!--            <div id="gridPostedTransactions" class="zGrid"></div>-->
-                         <!--       </div>-->
-                         <!--       <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    -->
-                         <!--           <div class="button-group">     -->
-                         <!--               <button type="button" class="btn btn-primary btn-sm" id="btnExportTransations">-->
-                         <!--                   <i class="far fa-save"></i> Export To Excel-->
-                         <!--               </button>-->
-                         <!--           </div>-->
-                         <!--       </div>-->
-                         <!--   </div>-->
                     </div>
                      
                     <div role="tabpanel" class="tab-pane fade" id="nav-dailyFareCollection">
