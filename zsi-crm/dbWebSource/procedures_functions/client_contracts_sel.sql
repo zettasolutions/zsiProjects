@@ -3,6 +3,7 @@
 CREATE PROCEDURE [dbo].[client_contracts_sel]
 ( 
 	@user_id INT = NULL
+   ,@keyword nvarchar(100)=null
    ,@search_val nvarchar(100)=null
    ,@is_active VARCHAR(1)='Y'
 )
@@ -16,8 +17,8 @@ BEGIN
 	IF @is_active <> ''
 		SET @stmt = @stmt + ' AND is_active='''+ @is_active + '''';
 
-	IF ISNULL(@search_val,'')<>''
-       set @stmt = @stmt + ' AND client_name like ''%' + @search_val  + '%'' or contract_no like ''%' + @search_val  + '%'''
+	--IF ISNULL(@keyword,'')<>''
+    set @stmt = @stmt + ' AND '+ @keyword + ' like ''%' + @search_val  + '%'''
 
 	exec(@stmt);
  END;
