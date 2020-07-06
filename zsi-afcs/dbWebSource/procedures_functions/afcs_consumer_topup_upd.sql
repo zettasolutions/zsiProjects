@@ -63,7 +63,7 @@ BEGIN
 			is_taken = 'Y'
 			, balance_amt = @new_consumer_amount
 			, updated_by = @consumer_id
-			, updated_date = GETDATE()
+			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 		WHERE 1 = 1
 		AND id = @consumer_generated_qr_id;
 
@@ -73,7 +73,7 @@ BEGIN
 		SET
 			balance_amt = balance_amt - @load_amount
 			, updated_by = @consumer_id
-			, updated_date = GETDATE()
+			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 		WHERE 1 = 1
 		AND id = @generated_qr_id;
 
@@ -86,7 +86,7 @@ BEGIN
 			, load_by
 			, is_top_up
 		) VALUES (
-			GETDATE()
+			DATEADD(HOUR, 8, GETUTCDATE())
 			, @consumer_generated_qr_id
 			, @load_amount
 			, @generated_qr_id
@@ -95,7 +95,7 @@ BEGIN
 		)
 		SET @id = @@IDENTITY;
 
-        UPDATE dbo.loading set ref_no = 'ZL' + CAST(RAND() * 1000000 AS VARCHAR(6)) WHERE loading_id=@id
+        UPDATE dbo.loading set ref_no = 'ZL' + REPLACE(CAST(RAND() * 1000000 AS VARCHAR(6)),'.',0) WHERE loading_id=@id
 		IF @@ERROR = 0
 		BEGIN
 			COMMIT;

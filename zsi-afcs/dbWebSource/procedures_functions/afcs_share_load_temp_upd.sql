@@ -1,9 +1,8 @@
 
 
-CREATE PROCEDURE [dbo].[zload_load_temp_upd]  
+CREATE PROCEDURE [dbo].[afcs_share_load_temp_upd]  
 (  
-	@merchant_hash_key		NVARCHAR(MAX)
-	, @user_hash_key		NVARCHAR(MAX)
+	  @user_mobile_no	    NVARCHAR(MAX)
 	, @pin_1				NVARCHAR(MAX)
 	, @mobile_no			NVARCHAR(11)
 	, @load_amount			DECIMAL(12, 2)
@@ -15,25 +14,29 @@ BEGIN
 
 	DECLARE @consumer_id INT;
 	DECLARE @consumer_mobile_no NVARCHAR(12);
-	DECLARE @client_id INT;
-	DECLARE @client_current_balance_amount DECIMAL(12, 2);
-	DECLARE @client_mobile_no NVARCHAR(12);
+    DECLARE @user_qr_id int
+	DECLARE @user_balance_amount DECIMAL(12, 2);
+	DECLARE @consumer_balance_amount DECIMAL(12, 2);
 	DECLARE @generated_qr_id INT;
 	DECLARE @loader_id INT;
 	DECLARE @otp NVARCHAR(6);
 	DECLARE @otp_expiry_datetime DATETIME;
 	
-	SELECT @otp = CAST(RAND() * 1000000 AS NVARCHAR(6));
-	SELECT @otp_expiry_datetime = DATEADD(HOUR, 2, GETDATE());
+	
+	SELECT @otp = REPLACE(CAST(RAND() * 1000000 AS NVARCHAR(6)),'.',0);
+	SELECT @otp_expiry_datetime = DATEADD(HOUR, 2, DATEADD(HOUR, 8, GETUTCDATE()));
 
 	IF ISNULL(@pin_1, '') <> ''
 	BEGIN
 	   	SELECT 
 			@consumer_id = consumer_id 
-			, @generated_qr_id = id
+          , @consumer_balance_amount = balance_amt
+		  , @generated_qr_id = id
 		FROM dbo.generated_qrs
 		WHERE is_active = 'Y'
 		AND hash_key = @pin_1;
+
+		SELECT @consumer_mobile_no = mobile_no FROM dbo.consumers WHERE consumer_id = @consumer_id;
 	END
     ELSE IF ISNULL(@mobile_no, '') <> ''
 	BEGIN
@@ -46,39 +49,31 @@ BEGIN
 		AND mobile_no = @mobile_no;
 
 	END
-	IF ISNULL(@consumer_id,0) = 0 AND ISNULL(@mobile_no, '') <> ''
+	IF ISNULL(@generated_qr_id,0)= 0
 	    SELECT
 		'N' AS is_valid
 	     , 'User account not found.' AS msg
     ELSE
 	BEGIN
-	   SELECT 
-			@client_id = client_id 
-			, @client_current_balance_amount = ISNULL(balance_amount, 0)
-			, @client_mobile_no = client_mobile_no
-		FROM zsi_crm.dbo.clients 
-		WHERE 1 = 1 
-		AND is_active = 'Y'
-		AND hash_key = @merchant_hash_key;
+	   IF ISNULL(@mobile_no, '') <> ''
+	      SELECT @consumer_balance_amount = balance_amt FROM dbo.generated_qrs WHERE id=@generated_qr_id;
+		  
+	   SELECT @user_id = qr_id FROM dbo.consumers where mobile_no = @user_mobile_no
+	   SELECT @user_balance_amount = balance_amt
+		FROM dbo.generated_qrs_registered_v
+	   WHERE id=@user_qr_id
 
-		SELECT
-			@loader_id = [user_id]
-		FROM dbo.loading_personnels_active_v
-		WHERE hash_key = @user_hash_key;
-
-		IF @client_id IS NOT NULL
-		BEGIN
-			IF @client_current_balance_amount > @load_amount
+		IF @user_balance_amount > @load_amount
 			BEGIN
 				BEGIN TRAN;
 
 				-- Insert into loading_temp table to verify the OTP.
+
 				INSERT INTO dbo.loading_temp (
 					load_date
 					, qr_id
 					, load_amount
 					, load_by
-					, loading_branch_id
 					, otp
 					, otp_expiry_date
 					, is_processed
@@ -86,8 +81,7 @@ BEGIN
 					GETDATE()
 					, @generated_qr_id
 					, @load_amount
-					, @loader_id
-					, @client_id
+					, @consumer_id
 					, @otp
 					, @otp_expiry_datetime
 					, 'N'
@@ -102,13 +96,13 @@ BEGIN
 					,[created_by]
 					,[created_date])
 				VALUES(
-					'zload'
-					, @client_mobile_no
-					, 'A load amount of PHP ' + CAST(@load_amount AS NVARCHAR(100)) + ' is entered through zLoad. Use this OTP ' 
+					'zpay'
+					, @user_mobile_no
+					, 'A load amount of PHP ' + CAST(@load_amount AS NVARCHAR(100)) + ' is entered through zpay share a load. Use this OTP ' 
 						+ CAST(@otp AS NVARCHAR(100)) + ' to finalize the transaction. The OTP will expire on ' + CAST(@otp_expiry_datetime AS NVARCHAR(100)) + '.'
 					, 'N'
 					, @loader_id
-					, GETDATE())
+					, DATEADD(HOUR, 8, GETUTCDATE()))
 
 				IF @@ERROR = 0
 				BEGIN
@@ -129,14 +123,7 @@ BEGIN
 			BEGIN
 				SELECT
 					'N' AS is_valid
-					, 'Merchant balance is insufficient.' AS msg
+					, 'Your ZPay balance is insufficient.' AS msg
 			END
 		END
-		ELSE
-		BEGIN
-			SELECT
-				'N' AS is_valid
-				, 'Merchant account not found.' AS msg
-		END
-	END
 END;

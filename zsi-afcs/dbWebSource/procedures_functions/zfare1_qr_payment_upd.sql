@@ -1,26 +1,22 @@
 
-CREATE PROCEDURE [dbo].[afcs_qr_payment_upd](  
-	@serial_no NVARCHAR(50)
-	, @hash_key1 NVARCHAR(MAX)
-	, @hash_key2 NVARCHAR(MAX)
-	, @base_fare DECIMAL(12, 2)
-	, @regular_count INT
-	, @student_count INT
-	, @senior_count INT
-	, @pwd_count INT
-	, @regular_amount DECIMAL(12, 2)
-	, @student_amount DECIMAL(12, 2)
-	, @senior_amount DECIMAL(12, 2)
-	, @pwd_amount DECIMAL(12, 2)
-	, @vehicle_hash_key NVARCHAR(MAX)
-	, @driver_id INT
-	, @trip_no  INT
-	, @pao_id INT
-	, @route_id INT
-	, @from_location NVARCHAR(100)
-	, @to_location NVARCHAR(100)
-	, @travel_distance DECIMAL(12, 2)
-	, @user_id INT = NULL
+CREATE PROCEDURE [dbo].[zfare1_qr_payment_upd]  
+
+ (  @serial_no NVARCHAR(50)
+   , @hash_key1 NVARCHAR(MAX)
+   , @hash_key2 NVARCHAR(MAX)
+   , @base_fare DECIMAL(12, 2)
+   , @regular_count INT
+   , @student_count INT
+   , @senior_count INT
+   , @pwd_count INT
+   , @regular_amount DECIMAL(12, 2)
+   , @student_amount DECIMAL(12, 2)
+   , @senior_amount DECIMAL(12, 2)
+   , @pwd_amount DECIMAL(12, 2)
+   , @vehicle_hash_key NVARCHAR(MAX)
+   , @driver_hash_key NVARCHAR(MAX)
+   , @trip_no  int = null
+   , @user_id INT = NULL
 )  
 AS  
 BEGIN  
@@ -34,12 +30,12 @@ BEGIN
 	DECLARE @total_amount DECIMAL(12, 2);
 	DECLARE @mobile_no NVARCHAR(20);
 	DECLARE @vehicle_id INT;
+	DECLARE @driver_id INT;
 	DECLARE @client_id INT;
 	DECLARE @device_id INT = 0;
-	DECLARE @new_id NVARCHAR(50);
 
-	SELECT @new_id = NEWID();
-	
+	-- Check whether the hash_key1 and hash_key2 exists in the generated_qrs table and is active.
+
 	SELECT @device_id = device_id
 		FROM dbo.devices WHERE 1 = 1
 		AND serial_no = @serial_no
@@ -68,6 +64,11 @@ BEGIN
 					   ,@client_id  = company_id
 					FROM dbo.active_vehicles_v WHERE 1 = 1
 					AND hash_key = @vehicle_hash_key;
+
+					SELECT
+						@driver_id = [user_id]
+					FROM dbo.drivers_v WHERE is_active='Y'
+					AND hash_key = @driver_hash_key;
 
 					BEGIN TRAN;
 
@@ -101,12 +102,6 @@ BEGIN
 						, [client_id]
 						, [device_id]
 						, [trip_no]
-						, [payment_key]
-						, [pao_id]
-						, [route_id]
-						, [from_location]
-						, [to_location]
-						, [no_klm]
 					)
 					VALUES(
 						DATEADD(HOUR, 8, GETUTCDATE())
@@ -126,12 +121,6 @@ BEGIN
 						, @client_id
 						, @device_id
 						, @trip_no
-						, @new_id
-						, @pao_id
-						, @route_id
-						, @from_location
-						, @to_location
-						, @travel_distance
 					)
 
 					SET @id = @@IDENTITY;
@@ -166,7 +155,6 @@ BEGIN
 						SELECT 
 							'Y' AS is_valid
 							, 'Payment successful.' AS msg
-							, @new_id AS payment_key
 					END
 					ELSE
 					BEGIN
@@ -175,7 +163,6 @@ BEGIN
 						SELECT 
 							'N' AS is_valid
 							, 'An error occurred while processing the payment.' AS msg
-							, '' AS payment_key
 					END
 				END
 				ELSE
@@ -183,7 +170,6 @@ BEGIN
 					SELECT 
 						'N' AS is_valid
 						, 'User has insufficient balance. Current balance is ' + CAST(@credit_amount AS NVARCHAR(100)) + '.' AS msg
-						, '' AS payment_key
 				END
 			END
 			ELSE
@@ -191,7 +177,6 @@ BEGIN
 				SELECT 
 					'N' AS is_valid
 					, 'QR Not found.' AS msg
-					, '' AS payment_key
 			END
 	END
 	ELSE
@@ -199,7 +184,6 @@ BEGIN
 		SELECT 
 			'N' AS is_valid
 			, 'Device is not registered to process payment.' AS msg
-			, '' AS payment_key
 			, 0 AS current_balance_amount
 	END
 END;

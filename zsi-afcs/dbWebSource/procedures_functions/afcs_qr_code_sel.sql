@@ -15,10 +15,8 @@ BEGIN
 
 	SELECT
 		@id = id
-	FROM dbo.generated_qrs
-	WHERE 1 = 1
-	AND is_active = 'Y'
-	AND hash_key = @hash_key1
+	FROM dbo.generated_qrs_active_v
+	WHERE hash_key = @hash_key1
 	AND hash_key2 = @hash_key2;
 
 	IF @id IS NOT NULL
@@ -27,7 +25,7 @@ BEGIN
 			'Y' AS is_valid
 			, ISNULL(balance_amt, 0)  AS amount
 			, 'OK' AS msg
-		FROM dbo.generated_qrs
+		FROM dbo.generated_qrs_active_v
 		WHERE 1 = 1
 		AND id = @id;
 	END
