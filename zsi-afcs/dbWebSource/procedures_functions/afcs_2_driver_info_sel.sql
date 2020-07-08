@@ -8,15 +8,15 @@ AS
 BEGIN  
 	SET NOCOUNT ON;
 
-	DECLARE @uuser_id INT;
+	DECLARE @driver_id INT;
 
 	-- Check whether the vehicle is registered and active.
-	SELECT @uuser_id = [user_id] FROM dbo.users WHERE 1 = 1 AND hash_key = @hash_key;
+	SELECT @driver_id = [user_id] FROM dbo.drivers_active_v WHERE hash_key = @hash_key;
 
-	IF @uuser_id IS NOT NULL
+	IF @driver_id IS NOT NULL
 	BEGIN
 		SELECT
-			[user_id]
+			  [user_id]
 			, [hash_key]
 			, [first_name]
 			, [last_name]
@@ -24,7 +24,7 @@ BEGIN
 			, [is_active]
 			, 'Y' AS is_valid
 			, 'Success' AS msg
-		FROM dbo.users
+		FROM dbo.drivers_active_v
 		WHERE 1 = 1
 		AND hash_key = @hash_key;
 	END

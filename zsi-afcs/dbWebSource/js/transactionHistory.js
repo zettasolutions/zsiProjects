@@ -1,14 +1,6 @@
  var th = (function(){ 
     var _pub                = {}
-        ,bs                 = zsi.bs.ctrl
-        ,gtw                = null 
-        ,gVLName            = ""
-        ,gVfName            = ""
-        ,gVfrom             = ""
-        ,gVtoDate           = ""
-        ,gPLName            = ""
-        ,gPfName            = ""
-        ,gTravelDate        = ""
+        ,bs                 = zsi.bs.ctrl 
     ;
     zsi.ready = function(){
         $(".page-title").html("Transaction History");   
@@ -42,32 +34,37 @@
     /*                  DATEPICKER VALIDATION                                  */  
         $("#travel_date").datepicker({
              autoclose : true
-            ,todayHighlight: true 
-        }).datepicker("setDate", "0");  
+            ,endDate: new Date() 
+        }).datepicker("setDate", "-1d");  
+         
         $("#V_toDate").attr("disabled",true);
         $("#V_fromDate").datepicker({
-             autoclose : true
-            ,todayHighlight: true 
-        }).on("changeDate keyup",function(e){ 
+             autoclose : true 
+             ,endDate: new Date()
+            ,todayHighlight: false 
+        }).datepicker("setDate",'-1d').on("changeDate",function(e){ 
             if($(this).val() ===""){ $("#V_toDate").attr("disabled",true); $("#V_toDate").val(""); }
             else{ $("#V_toDate").removeAttr("disabled"); } 
-            gVfrom = $(this).val(); 
-            $("#V_toDate").removeAttr("readonly",true); 
-            $("#V_toDate").datepicker('setStartDate', e.date).on("change",function(){
-               gVtoDate = $(this).val();
-            }); 
-        }); 
+            $("#V_toDate").removeAttr("disabled",true);  
+            $("#V_toDate").datepicker('setStartDate', e.date); 
+        });
+         
+        $("#V_toDate").datepicker({
+             autoclose : true
+            ,todayHighlight: false 
+            ,endDate: new Date()
+        }).datepicker("setDate",'-1d'); 
      /*                  DATEPICKER VALIDATION                                  */  
         
     }
-    function displayPassengerHistory(){
+    function displayPassengerHistory(Lname,Fname,Tdate){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
         $("#gridPassengerHistory").dataBind({
-             sqlCode        : "P1295" //passenger_travel_history_sel 
+             sqlCode        : "P1295" 
              ,parameters     : {
-                                 last_name      :  (gPLName ? gPLName : '')
-                                ,first_name     :  (gPfName ? gPfName : '')
-                                ,travel_date     : (gTravelDate ? gTravelDate : '') 
+                                 last_name      :  (Lname ? Lname : '')
+                                ,first_name     :  (Fname ? Fname : '')
+                                ,travel_date     : (Tdate ? Tdate : '') 
             }
     	    ,height         : $(window).height() - 300  
             ,dataRows       : [
@@ -75,7 +72,7 @@
                 ,{text  : "First Name"          , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"first_name"}
                 ,{text  : "<div id='Transactions'>Transactions</div>"        , width : 150           , style : "text-align:center;"   
                     ,onRender : function(d){
-                            var _link = "<a href='javascript:void(0)' ' title='View Transactions'onclick='th.showModalTransaction(this,"+ app.svn (d,"consumer_id") +", \""+ app.svn (d,"vehicle_plate_no") +"\",\""+ app.svn (d,"vehicle_img_filename") +"\",\""+ app.svn (d,"full_name") +"\",\""+ app.svn (d,"payment_date") +"\")'><i class='fas fa-eye'></i></a>";
+                            var _link = "<a href='javascript:void(0)' ' title='View Transactions'onclick='th.showModalTransaction(this,"+ app.svn (d,"consumer_id") +", \""+ app.svn (d,"vehicle_plate_no") +"\",\""+ app.svn (d,"vehicle_img_filename") +"\",\""+ app.svn (d,"last_name") +","+app.svn (d,"first_name") +"\",\""+ app.svn (d,"payment_date") +"\")'><i class='fas fa-eye'></i></a>";
                             return (d !== null ? _link : "");
                     }
                 } 
@@ -87,15 +84,15 @@
         });
         
     }   
-    function displayVehicleHistory(){  
+    function displayVehicleHistory(Lname,Fname,Fdate,ToDate){  
         var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
         $("#gridVehicleHistory").dataBind({
-             sqlCode        : "V1296" //vehicle_travel_history_sel 
+             sqlCode        : "V1296"
              ,parameters    : {
-                                 last_name      :  (gVLName  ? gVLName  : '')
-                                ,first_name     :  (gVfName  ? gVfName  : '')
-                                ,time_start     :  (gVfrom   ? gVfrom   : '')
-                                ,time_end       :  (gVtoDate ? gVtoDate : '')
+                                 last_name      :  (Lname  ? Lname  : '')
+                                ,first_name     :  (Fname  ? Fname  : '')
+                                ,time_start     :  (Fdate  ? Fdate  : '')
+                                ,time_end       :  (ToDate ? ToDate : '')
             }
     	    ,height         : $(window).height() - 300  
             ,dataRows       : [
@@ -105,36 +102,53 @@
                  
             ] 
             ,onComplete: function(o){
-                gUsersData = o.data.rows;
-                $('.has-tooltip').tooltip();  
+                gUsersData = o.data.rows; 
             }
         }); 
     }
     
     /*Validation for Passenger*/
     $("#btnPassenger").click( function() {
-        gPLName = $.trim($("#P_last_name").val());
-        gPfName = $.trim($("#P_first_name").val()); 
-        gTravelDate = $.trim($("#travel_date").val()); 
-        displayPassengerHistory();
+       var _$PLName = $.trim($("#P_last_name").val()) 
+           ,_$PfName = $.trim($("#P_first_name").val()) 
+           ,_$TravelDate = $.trim($("#travel_date").val());  
         $("#PassengerRow").removeClass("hide"); 
+        displayPassengerHistory(_$PLName,_$PfName,_$TravelDate); 
+       
     });
     $("#btnClearPassenger").click( function() {
-        $("#passengerForm").find("input").val("");
+        $("#P_last_name").val("") ;
+        $("#P_first_name").val("");   
         displayPassengerHistory(""); 
     });
     
     /*Validation for Vehicle*/
     $("#btnClearVehicle").click( function() {
-        $("#vehicleForm").find("input").val("");
-        displayVehicleHistory();
+        $("#V_last_name").val("");
+        $("#V_first_name").val("");
+        $("#V_fromDate").val("");
+        $("#V_toDate").val("");
+        displayVehicleHistory("");
          
     });   
     $("#btnSearchVehicle").click( function() {  
-        gVLName = $.trim($("#V_last_name").val());
-        gVfName = $.trim($("#V_first_name").val());  
-        displayVehicleHistory();
+       var _$VLName = $.trim($("#V_last_name").val()) 
+            ,_$VfName = $.trim($("#V_first_name").val()) 
+            ,_$FDate = $.trim($("#V_fromDate").val())
+            ,_$ToDate = $.trim($("#V_toDate").val()); 
+           displayVehicleHistory(_$VLName,_$VfName,_$FDate,_$ToDate);
         $("#VehicleRow").removeClass("hide"); 
     }); 
     return _pub;
-})();                                     
+})();               
+
+
+
+
+
+
+
+
+
+
+ 

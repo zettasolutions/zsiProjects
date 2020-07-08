@@ -57,20 +57,8 @@
             }
         });
     }
-    
-    $("#btnSubmit").click(function () {
-        var _$frm = $("#formClients");
-        var _frm = _$frm[0];
-        var _formData = new FormData(_frm);  
-        if( ! _frm.checkValidity() ){
-            $("#formClients").addClass('was-validated');
-        }else{   
-            $("#formClients").removeClass('was-validated');
-            $('#myModal').modal('show');
-        }
-    });
-    
-    /*$("#btnSubmit").click(function(){ 
+
+    $("#btnSubmit").click(function(){ 
         var forms = document.getElementsByClassName('needs-validation'); 
     	var validation = Array.prototype.filter.call(forms, function(form) {
     		form.addEventListener('submit', function(event) {
@@ -88,7 +76,7 @@
     		}, false);
     	});
     	
-    });*/
+    });
     
     $("#btnNew").click(function() {
         console.log("window",$(window).height());
@@ -204,8 +192,7 @@
                                     $("#clientPassword").val(_userId);
                                     var _password = $("#clientPassword").find('option:selected').text();
                                     $("#mail_recipients").val(_email);
-                                    $("#ename").val(_firstName);
-                                    $("#epassword").val(_password);
+                                    $("#mail_body").val('Hi '+_firstName+'! Thank you for signing up on our website. Your logon password is ' + _password);
                                     if(data.isSuccess){
                                        if(data.isSuccess===true) zsi.form.showAlert("alert"); 
                                        _$frm.removeClass('was-validated');
@@ -256,4 +243,4 @@
 
 
 
-        
+      

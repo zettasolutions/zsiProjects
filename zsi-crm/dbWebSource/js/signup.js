@@ -1,4 +1,4 @@
-var signup = (function(){
+ var signup = (function(){
     var _pub         = {}
         gClientId    = null
     ;
@@ -8,19 +8,27 @@ var signup = (function(){
         $(":input").inputmask();
         displaySelects();
     };
-    
-    $("#btnSubmit").click(function () {
-        var _$frm = $("#formClients");
-        var _frm = _$frm[0];
-        var _formData = new FormData(_frm);  
-        if( ! _frm.checkValidity() ){
-            $("#formClients").addClass('was-validated');
-        }else{   
-            $("#formClients").removeClass('was-validated');
-            $('#myModal').modal('show');
-        }
-    });
 
+    $("#btnSubmit").click(function(){ 
+        var forms = document.getElementsByClassName('needs-validation'); 
+    	var validation = Array.prototype.filter.call(forms, function(form) {
+    		form.addEventListener('submit', function(event) {
+    		    $("form").removeClass('was-validated');
+    			if (form.checkValidity() === false) {
+    				event.preventDefault();
+    				event.stopPropagation();
+    			    $("form").addClass('was-validated');
+    			}else{
+        			event.preventDefault();
+        			event.stopPropagation();
+    			    $('#myModal').modal('show');
+    			    $("form").addClass('was-validated');
+    			}
+    		}, false);
+    	});
+    	
+    });
+    
     function displaySelects() {
         if($(window).height() <= 724) $("#clientInformationDiv").css({"height":$(window).height() - 290,"overflow-y":"auto","overflow-x":"hidden"});
         var _$country = $('#country_id')
@@ -131,8 +139,7 @@ var signup = (function(){
                                     $("#clientPassword").val(_userId);
                                     var _password = $("#clientPassword").find('option:selected').text();
                                     $("#mail_recipients").val(_email);
-                                    $("#ename").val(_firstName);
-                                    $("#epassword").val(_password);
+                                    $("#mail_body").val('Hi '+_firstName+'! Thank you for signing up on our website. Your logon password is ' + _password);
                                     if(data.isSuccess){
                                        if(data.isSuccess===true) zsi.form.showAlert("alert"); 
                                        _$frm.removeClass('was-validated');
@@ -169,4 +176,4 @@ var signup = (function(){
     });
     
     return _pub;
-})();                
+})();              

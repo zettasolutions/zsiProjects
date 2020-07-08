@@ -1,4 +1,5 @@
 
+
 CREATE VIEW [dbo].[clients_v]
 AS 
 SELECT *

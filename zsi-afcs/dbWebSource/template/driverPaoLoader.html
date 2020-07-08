@@ -7,7 +7,7 @@
     width:100%;
 }
 #user-box{
-    top:200px;
+    top:100px;
     background-color: #fff;
     height: 250px;
     width: 250px;
@@ -29,41 +29,56 @@
 </style>
 <div class="panel">
     <div class="panel-container">
-        <div class="panel-content">  
-            <div class="m-1">
-                <div class="row">
-                    <div class="col-xl-2 col-md-3 col-sm-5 col-12 mb-1"> 
-                        <div class="input-group">
-                            <select class="form-control form-control-sm" name="driverpaoloaderId" id="driverpaoloaderId"></select>
-                            <div class="input-group-append">
-                                <button id="btnFilterVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter">
-                                   <i class="fas fa-filter"></i>
-                                </button>
+        <div class="panel-content">
+            <div class="row">
+                <nav class="col-12 col-sm-8 col-md-8 col-xs-8">
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" data-toggle="tab" href="#nav-drivers" role="tab" aria-controls="nav-drivers"> Drivers </a>
+                    <a class="nav-item nav-link"        data-toggle="tab" href="#nav-pao" role="tab" aria-controls="nav-pao"> PAO </a>
+                  </div>
+                </nav>
+                <div class="col-md-4 col-xl-4 col-sm-4 col-12"> 
+                    <div class="input-group bg-white shadow-inset-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                <i class="fal fa-search"></i>
+                            </span>
+                        </div>
+                        <input id="searchVal" type="text" class="form-control form-control-sm desc-prop-group border-left-0 bg-transparent pl-2" placeholder="Type here..." autocomplete="off">
+                        <div class="input-group-append">
+                            <button id="btnSearchVal" class="btn btn-primary waves-effect waves-themed btn-outline-default text-white" type="button" title="Search">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+                <div role="tabpanel" class="tab-pane fade show active" id="nav-drivers">
+                    <div class="zContainer">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
+                                 <div id="gridDrivers" class="zGrid mb-1"></div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                <div class="button-group">     
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-5 col-xl-3 col-12 mb-1">
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-sm desc-prop-group pl-2" id="searchVal" name="searchVal" placeholder="Search....." autocomplete="off">
-                            <div class="input-group-append">
-                                <button id="btnSearchVal" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Search">
-                                   <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <div class="input-group-append ml-1">
-                                <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin" type="button" title="Reset">
-                                   <i class="far fa-refresh hvr-icon"></i> Reset
-                                </button>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="nav-pao">
+                    <div class="zContainer">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                 <div id="gridPAO" class="zGrid"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
             <form method="post" id="frm">
                 <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div id="grid" class="zGrid mb-1"> </div>
-                    </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <button type="button" class="btn btn-primary btn-sm" id="btnSave">
                         	<span class="far fa-save"></span> Save
@@ -71,7 +86,6 @@
                         <button type="button" class="btn btn-primary btn-sm" id="btnNactive">
                         	<span class="fas fa-ban"></span> Inactive
                         </button> 
-                        <button type="button" onclick="driverpaoloader.showModalUpload(this,'Driver Pao Loader');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>
                         <button type="button" class="btn btn-primary btn-sm" id="btnAdd">
                         	<span class="fas fa-user-plus"></span> Add
                         </button>
@@ -132,38 +146,17 @@
                 <div id="{{grid}}" class="zGrid"> </div>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <button type="button" id="btnSave2" onclick="" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                <button type="button" id="btnSave2" onclick="{{onClickSaveNewUsers}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
             </div>
         </div>
     </li>
+    <li name="modalBodyImageUser">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+   </li>
+   <li name="modalBodyImageDriverLicence">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageDriverLicence}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+   </li>
 </ul>
 <div id="user-box">
     <img src="/file/viewImage?fileName=no-image.jpg&amp;isThumbNail=y" id="userImage" >
 </div>
-
-
-<ul name="localTemplates"> 
-    <li name="modalBodyUploadExcel">
-        <div class="row">  
-            <input id="tmpData" name="tmpData" type="hidden" class="form-control input-sm" > 
-        </div>
-        <div class="row mb-2">  
-            <label class="col-2  control-label">Select File:</label>
-            <div class=" col-3">
-                <input type="file" class="browse btn btn-primary" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file">
-            </div>
-        </div>
-        <div class="row">  
-            <div class="col-3">
-                <button type="button" onclick="driverpaoloader.{{onClickUploadExcel}}" class="btn btn-primary" id="btnUploadFile" style="margin-left: 5px">
-                    <i class="fas fa-upload"></i> Upload
-                </button>
-            </div>
-        </div>
-    </li> 
-</ul>
-
-
-
-
-

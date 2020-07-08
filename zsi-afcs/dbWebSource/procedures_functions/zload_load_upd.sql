@@ -170,15 +170,6 @@ BEGIN
 					, 0 AS merchant_balance_amount
 			END
 		END
-/*
-		BEGIN
-			SELECT
-				'N' AS is_valid
-				, 'User account not found.' AS msg
-				, @load_amount AS amount_loaded
-				, @client_current_balance_amount AS merchant_balance_amount
-		END
-*/
 	END
 	ELSE
 	BEGIN
