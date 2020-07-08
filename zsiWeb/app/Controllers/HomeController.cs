@@ -10,20 +10,21 @@ namespace zsi.web.Controllers
         {
             try
             {
-               
+
                 using (new impersonate())
                 {
-                    dcAppProfile dc =  new dcAppProfile(); ;
+                    dcAppProfile dc = new dcAppProfile(); ;
                     if (Session["isAuthenticated"] != null)
                     {
                         appProfile info = dc.GetInfoByCurrentUser();
-                        SessionHandler.AppConfig = info;                        
+                        SessionHandler.AppConfig = info;
                         return Redirect(Url.Content("~/") + "page/" + info.default_page);
                     }
                     else
                     {
                         string isADSecurity = System.Configuration.ConfigurationManager.AppSettings["ADSecurity"];
-                        if (isADSecurity != null && bool.Parse(isADSecurity) == false ){
+                        if (isADSecurity != null && bool.Parse(isADSecurity) == false)
+                        {
                             appProfile info = dc.GetInfo();
                             SessionHandler.AppConfig = info;
                             ViewBag.appTitle = info.app_title;
@@ -41,7 +42,7 @@ namespace zsi.web.Controllers
         public ActionResult SignIn()
         {
             return Redirect(Url.Content("~/"));
-        
+
         }
     }
 }
