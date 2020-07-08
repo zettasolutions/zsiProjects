@@ -65,7 +65,11 @@
     .form-control {    
         padding: unset;   
     }
-    
+    .zsi-page-logo{
+        width: 4.155rem !important;
+        height: auto;
+        display: inline-block;
+    }
     </style>
 </head>
 <body class="mod-bg-1 ">   
@@ -149,8 +153,8 @@
                 <aside class="page-sidebar">
                     <div class="page-logo">
                         <a href="/" class="page-logo-link press-scale-down d-flex align-items-center position-relative">
-                            <img src='@Url.Content("~/")img/logo.png' alt="Lear Logo" aria-roledescription="logo">
-                            <span class="page-logo-text mr-1">ZSI Payroll</span>
+                            <img src='@Url.Content("~/")img/logo.png' class="zsi-page-logo" alt="Lear Logo" aria-roledescription="logo">
+                            <span class="page-logo-text mr-1">ZSI CRM</span>
                             <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
                             <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
                         </a>
@@ -170,7 +174,7 @@
                             <div class="info-card-text">
                                 <a href="#" class="d-flex align-items-center text-white">
                                     <span class="text-truncate text-truncate-sm d-inline-block autoCaps">
-                                        @zsi.web.SessionHandler.CurrentUser.userFullName.ToLower()
+                                        @zsi.web.SessionHandler.CurrentUser.userFullName
                                     </span>
                                 </a>
                                 <span class="d-inline-block text-truncate text-truncate-sm"><small>@role</small></span>
@@ -216,7 +220,7 @@
                         <!-- we need this logo when user switches to nav-function-top -->
                         <div class="page-logo">
                             <a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
-                                <img src='@Url.Content("~/")img/logo.png' alt="ZSI CRM" aria-roledescription="logo">
+                                <img src='@Url.Content("~/")img/logo.png' class="zsi-page-logo" alt="ZSI CRM" aria-roledescription="logo">
                                 <span class="page-logo-text mr-1">ZSI CRM</span>
                                 <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
                                 <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>

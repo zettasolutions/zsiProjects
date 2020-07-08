@@ -21,9 +21,10 @@ BEGIN
 	IF @client_id IS NOT NULL
 	BEGIN
 		SELECT
-			@loader_name = full_name
-		FROM dbo.loading_personnels_active_v 
-		WHERE hash_key = @loader_hash_key;
+			@loader_name = CONCAT(first_name, ' ', last_name)
+		FROM dbo.[users] 
+		WHERE 1 = 1
+		AND hash_key = @loader_hash_key;
 
 		SELECT 
 			hash_key

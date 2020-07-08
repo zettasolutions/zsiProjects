@@ -12,7 +12,7 @@
         $('#loaderId').select2({placeholder: "SELECT LOADER",allowClear: true});
         
         $("#loaderId").dataBind({
-            sqlCode      : "D1270" 
+            sqlCode      : "D1270" //dd_users_sel
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
@@ -43,13 +43,13 @@
     
     
     function validation(){
-        var _dayFrom    = $("#load_date_frm");
-        var _dayTo      = $("#load_date_to");
-        var _timeFrom   = "";
-        var _timeTo     = "";
-        var _error      = $("#ermsgId");
-        var _msg        = "Value must not be lesser than "
-        var _erTypeMsg  = "";
+        var _dayFrom = $("#load_date_frm");
+        var _dayTo   = $("#load_date_to");
+        var _timeFrom = "";
+        var _timeTo = "";
+        var _error  = $("#ermsgId");
+        var _msg = "Value must not be lesser than "
+        var _erTypeMsg = "";
         
         $("#load_date_frm,#load_date_to").on("keyup mouseup",function(){
             var _colName    = $(this)[0].id;
@@ -75,9 +75,38 @@
         
     }
    
+    /*function displayLoadingTransactions(loadDateFrm,loadDateTo,dateType,loaderId){
+        $("#gridLoadingTransactions").dataBind({
+             sqlCode        : "L1267" //loads_report_sel
+            ,parameters     : {load_date_frm:(loadDateFrm ? loadDateFrm : ""),load_date_to:(loadDateTo ? loadDateTo : ""),date_type:(dateType ? dateType : ""),load_by:(loaderId ? loaderId : "")} 
+            ,height         : $(window).height() - 270
+            ,dataRows       : [
+                {text: "Load Date"                                                                     ,width : 200
+                     ,onRender: function(d){
+                        return app.bs({name: "load_date"          ,type: "input"     ,value: app.svn(d,"load_date").toShortDates()    ,style : "text-align:center;"});
+                    }
+                 }
+                ,{text: "QR Id"                      ,name:"qr_id"                   ,type:"input"      ,width : 60    ,style : "text-align:center;"}
+                ,{text: "Load Amount"                                                                   ,width : 100   ,style : "text-align:right;padding-right: 0.3rem;"
+                    ,onRender: function(d){
+                        return app.bs({name: "load_amount"        ,type: "input"     ,value: app.svn(d,"load_amount").toMoney()    ,style : "text-align:right;padding-right: 0.3rem;"});
+                    }
+                }
+                ,{text: "Loaded By"                  ,name:"loaded_by"              ,type:"input"       ,width : 150   ,style : "text-align:center;"}
+                //,{text: "Compay Code"                ,name:"company_code"           ,type:"input"       ,width : 100   ,style : "text-align:center;"}
+            ]
+            ,onComplete: function(){
+                var _this = this;
+                var _zRow = _this.find(".zRow");
+                this.find("input").attr("readonly",true);
+                
+            }
+        });
+    }*/
+    
     function displayLoadingTransactions(loadDateFrm,loadDateTo,dateType,loaderId){
         zsi.getData({
-                 sqlCode    : "L1267" 
+                 sqlCode    : "L1267" //loads_report_sel
                 ,parameters     : {load_date_frm:(loadDateFrm ? loadDateFrm : ""),load_date_to:(loadDateTo ? loadDateTo : ""),date_type:(dateType ? dateType : ""),load_by:(loaderId ? loaderId : "")}
                 ,onComplete : function(d) {
                     var _rows= d.rows;
@@ -111,7 +140,7 @@
                             
                             setTimeout(function(){
                                 setFooterFreezed(gzGrid);
-                            }, 200);
+                            }, 200)
 
                     }
                 });
@@ -192,4 +221,4 @@
     });
 
     return _pub;
-})();                            
+})();                           

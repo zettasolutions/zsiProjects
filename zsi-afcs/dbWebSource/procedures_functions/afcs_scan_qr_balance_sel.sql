@@ -20,7 +20,7 @@ BEGIN
 	BEGIN
 		SELECT 
 			IIF(is_active = 'Y', 'Y', 'N') AS is_valid
-			, IIF(is_active = 'Y', 'QR Code is valid.', 'QR Code is not active.') AS msg
+			, IIF(is_active = 'Y', 'QR Code is valid.', 'QR Code is no longer valid.') AS msg
 			, IIF(is_active = 'Y', balance_amt, 0) AS current_balance
 		FROM dbo.generated_qrs WHERE 1 = 1 
 		AND hash_key = @hash_key

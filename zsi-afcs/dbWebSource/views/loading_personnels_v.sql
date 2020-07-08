@@ -1,5 +1,0 @@
-CREATE VIEW dbo.loading_personnels_v
-AS
-SELECT client_id, employee_id AS user_id, emp_hash_key AS hash_key, last_name, first_name, emp_lfm_name AS full_name, img_filename, middle_name, name_suffix, is_active
-FROM     zsi_payroll.dbo.employees_v
-WHERE  (position_id = 20)

@@ -34,6 +34,19 @@ BEGIN
 		FROM dbo.generated_qrs
 		WHERE is_active = 'Y'
 		AND hash_key = @pin_1;
+
+/*
+		SELECT 
+			@consumer_id = a.consumer_id 
+			, @consumer_mobile_no = a.mobile_no
+			, @generated_qr_id = b.id
+		FROM dbo.consumers a
+		JOIN dbo.generated_qrs b
+		ON a.consumer_id = b.consumer_id
+		WHERE 1 = 1 
+		AND a.is_active = 'Y'
+		AND b.hash_key = @pin_1;
+*/
 	END
     ELSE IF ISNULL(@mobile_no, '') <> ''
 	BEGIN
@@ -63,8 +76,9 @@ BEGIN
 
 		SELECT
 			@loader_id = [user_id]
-		FROM dbo.loading_personnels_active_v
-		WHERE hash_key = @user_hash_key;
+		FROM dbo.[loaders_v]
+		WHERE 1 = 1
+		AND hash_key = @user_hash_key;
 
 		IF @client_id IS NOT NULL
 		BEGIN

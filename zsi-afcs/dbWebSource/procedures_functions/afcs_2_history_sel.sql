@@ -18,7 +18,7 @@ BEGIN
 	FROM dbo.payments a
 	JOIN dbo.vehicles b
 	ON a.vehicle_id = b.vehicle_id
-	JOIN dbo.drivers_v c
+	JOIN dbo.[users] c
 	ON a.driver_id = c.[user_id]
 	WHERE 1 = 1
 	AND CAST(a.payment_date AS DATE) = @history_date

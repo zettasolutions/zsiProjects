@@ -31,11 +31,9 @@ BEGIN
 	DECLARE @vehicle_id INT;
 	DECLARE @driver_id INT;
 	DECLARE @client_id INT;
-
 	-- Check whether the hash_key1 and hash_key2 exists in the generated_qrs table and is active.
 	SELECT 
-		 @generated_qrs_id = [id] 
-		,@credit_amount = balance_amt 
+		@generated_qrs_id = [id] 
 	FROM dbo.generated_qrs 
 	WHERE 1 = 1 
 	AND is_active = 'Y' 
@@ -44,21 +42,33 @@ BEGIN
 
 	IF @generated_qrs_id IS NOT NULL
 	BEGIN
-		SET @total_amount = ISNULL(@regular_amount, 0) + ISNULL(@student_amount, 0) + ISNULL(@senior_amount, 0) + ISNULL(@pwd_amount, 0);
-	    SELECT @consumer_id = consumer_id, @mobile_no = mobile_no FROM dbo.consumers WHERE qr_id=@generated_qrs_id;
-		
+		SELECT
+			@consumer_id = a.[consumer_id]
+			, @credit_amount = a.[balance_amt] 
+			, @mobile_no = b.[mobile_no]
+		FROM dbo.generated_qrs a
+		JOIN dbo.consumers b
+		ON a.consumer_id = b.consumer_id
+		WHERE 1 = 1
+		AND a.hash_key = @hash_key1
+		AND a.hash_key2 = @hash_key2;
+
+		IF @consumer_id IS NOT NULL
+		BEGIN
+			SET @total_amount = ISNULL(@regular_amount, 0) + ISNULL(@student_amount, 0) + ISNULL(@senior_amount, 0) + ISNULL(@pwd_amount, 0);
+			
 			IF @credit_amount >= @total_amount
 			BEGIN
 				SELECT
 					@vehicle_id = vehicle_id
-				   ,@client_id  = company_id
+					,@client_id  = company_id
 				FROM dbo.active_vehicles_v WHERE 1 = 1
 				AND hash_key = @vehicle_hash_key;
 
-				SELECT 
+				SELECT
 					@driver_id = [user_id]
-				FROM dbo.drivers_active_v 
-				WHERE hash_key = @driver_hash_key;
+				FROM dbo.drivers_v WHERE 1 = 1
+				AND hash_key = @driver_hash_key;
 
 				BEGIN TRAN;
 
@@ -67,9 +77,9 @@ BEGIN
 				UPDATE 
 					dbo.generated_qrs 
 				SET
-					  [balance_amt] = @new_credit_amount
+					[balance_amt] = @new_credit_amount
 					, [updated_by] = @consumer_id
-					, [updated_date] = DATEADD(HOUR, 8, GETUTCDATE())
+					, [updated_date] = GETDATE()
 				WHERE 1 = 1
 				AND id = @generated_qrs_id;
 
@@ -93,7 +103,7 @@ BEGIN
 					, [client_id]
 				)
 				VALUES(
-					DATEADD(HOUR, 8, GETUTCDATE())
+					GETDATE()
 					, @regular_count
 					, @student_count
 					, @senior_count
@@ -112,9 +122,8 @@ BEGIN
 				)
 
 				SET @id = @@IDENTITY;
-				UPDATE [dbo].[payments] SET qr_ref_no = 'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0) where payment_id=@id;
+				UPDATE [dbo].[payments] SET qr_ref_no = 'ZP' + cast(rand() * + 1000000 as NVARCHAR(6)) where payment_id=@id;
 
-			IF @consumer_id IS NOT NULL
 				-- Insert record in the sms_notifications table.
 				INSERT INTO [dbo].[sms_notifications]
 				   ([app_name]
@@ -129,8 +138,8 @@ BEGIN
 				   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' .'
 				   , 'N'
 				   , @user_id
-				   , DATEADD(HOUR, 8, GETUTCDATE()))
-			
+				   , GETDATE())
+
 				IF @@ERROR <> 0
 				BEGIN
 					SET @error = 1;
@@ -164,8 +173,15 @@ BEGIN
 		BEGIN
 			SELECT 
 				'N' AS is_valid
-				, 'QR Not found.' AS msg
+				, 'User not found.' AS msg
 		END
+	END
+	ELSE
+	BEGIN
+		SELECT 
+			'N' AS is_valid
+			, 'User not found.' AS msg
+	END
 END;
 
 

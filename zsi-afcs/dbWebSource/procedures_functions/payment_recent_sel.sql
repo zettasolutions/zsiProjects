@@ -1,6 +1,7 @@
 CREATE procedure [dbo].[payment_recent_sel]
 ( 
-  @vehicle_id int = null
+  @client_id  int 
+ ,@vehicle_id int = null
  ,@driver_id  int = null
  ,@user_id    int = null
 )
@@ -8,10 +9,7 @@ AS
 BEGIN
   SET NOCOUNT ON
   DECLARE @stmt VARCHAR(MAX)
-  DECLARE @client_id INT
-
-  SELECT @client_id = company_id FROM dbo.users_v WHERE [user_id] = @user_id;
-  SET @stmt = 'SELECT * FROM dbo.payments_v WHERE CONVERT(VARCHAR(10),payment_date,101)=CONVERT(VARCHAR(10),DATEADD(HOUR, 8, GETUTCDATE()),101) '
+  SET @stmt = 'SELECT * FROM dbo.payments_v WHERE CONVERT(VARCHAR(10),payment_date,101)=CONVERT(VARCHAR(10),GETDATE(),101) '
 
   IF ISNULL(@client_id,0)<>0
      SET @stmt = @stmt + ' AND client_id = ' + CAST(@client_id AS VARCHAR(20))

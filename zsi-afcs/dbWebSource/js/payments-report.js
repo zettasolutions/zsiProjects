@@ -46,31 +46,29 @@
         });
         
         $("#driverId").dataBind({
-            sqlCode      : "D1262" 
-            ,parameters : {company_id:app.userInfo.company_id}
+            sqlCode      : "D1262" //dd_drivers_sel
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
-               var _info      = d.data[d.index - 1];
-                   _driver_id = isUD(_info) ? "" : _info.user_id;
-                    gDriverId = _driver_id;
+               var _info           = d.data[d.index - 1]
+                   _driver_id         = isUD(_info) ? "" : _info.user_id;
+                gDriverId = _driver_id;
            }
         });
         
         $("#routeId").dataBind({
-            sqlCode      : "R1224"
+            sqlCode      : "R1224" //route_ref_sel
            ,text         : "route_code"
            ,value        : "route_id"
            ,onChange     : function(d){
-               var _info     = d.data[d.index - 1]
-                   _route_id = isUD(_info) ? "" : _info.route_id;
-                    gRouteId = _route_id;
+               var _info           = d.data[d.index - 1]
+                   _route_id         = isUD(_info) ? "" : _info.route_id;
+                gRouteId = _route_id;
            }
         });
         
         $(".PAOForRemit").dataBind({
-            sqlCode      : "D1263" 
-            ,parameters : {client_id:app.userInfo.company_id}
+            sqlCode      : "D1263" //dd_pao_sel
            ,text         : "full_name"
            ,value        : "user_id"
            ,onChange     : function(d){
@@ -81,14 +79,13 @@
         });
         
         $("#vehicleForRemit").dataBind({
-            sqlCode      : "D1264" 
-            ,parameters : {company_id:app.userInfo.company_id}
+            sqlCode      : "D1264" //dd_vehicle_sel
            ,text         : "vehicle_plate_no"
            ,value        : "vehicle_id"
            ,onChange     : function(d){
-               var _info       = d.data[d.index - 1]
-                   _vehicle_id = isUD(_info) ? "" : _info.vehicle_id;
-                   gVehicleId  = _vehicle_id;
+               var _info           = d.data[d.index - 1]
+                   _vehicle_id     = isUD(_info) ? "" : _info.vehicle_id;
+                   gVehicleId = _vehicle_id;
            }
         });
         
@@ -148,12 +145,14 @@
   
     function displayPostedTransactions(fromDate,toDate,paymentId,routeId,vehicleId,driverId,paoId,dateType){
         zsi.getData({
-                 sqlCode    : "P1268" 
+                 sqlCode    : "P1268" //payments_report_sel
                 ,parameters : { posted_frm:(fromDate ? fromDate : "")
                                 ,posted_to:(toDate ? toDate : "")
+                                ,payment_type:(paymentId ? paymentId : "")
                                 ,route_id:(routeId ? routeId : "")
                                 ,vehicle_id:(vehicleId ? vehicleId : "")
                                 ,driver_id:(driverId ? driverId : "")
+                                ,pao_id:(paoId ? paoId : "")
                                 ,date_type:(dateType ? dateType : "")
                                 
                     
@@ -325,7 +324,6 @@
     $("#btnExportTransations").click(function () {
       $("#gridPostedTransactions").convertToTable(
         function($table){
-            console.log("table",$table);
             $table.find("th").closest("tr").remove();
             $("#ExcelgridPostedTransactions tbody").before('<thead><tr><th colspan="10"></th><th colspan="2">Regular</th><th colspan="2">Student</th><th colspan="2">Senior</th><th colspan="2">PWD</th><th ></th><th></th></tr>'
                         + '<tr><th>Payment Date</th><th>Posted Date</th><th>Vehicle</th><th>PAO</th><th>Driver</th><th>Inspector</th><th>Route</th><th>From</th><th>To</th><th>Distance</th><th>Qty</th><th>Total</th><th>Qty</th>'
@@ -361,4 +359,4 @@
     
     
     return _pub;
-})();                                                                           
+})();                                                                     

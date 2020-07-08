@@ -1,0 +1,19 @@
+mobirise
+  - assets
+smagerUp
+  - content
+  - bin
+  - dbwebsource
+  - docs
+  - images
+  - scripts
+  - temp
+  - views
+smartadmin
+  - js
+  - media
+  - css
+  - img
+  - webfonts
+
+

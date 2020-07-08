@@ -25,8 +25,9 @@ BEGIN
 		SELECT 
 			@generated_qr_id = id
 			, @current_balance_amount = balance_amt
-		FROM dbo.generated_qrs_active_v WHERE 1 = 1
+		FROM dbo.generated_qrs WHERE 1 = 1
 		AND hash_key = @hash_key
+		AND is_taken = 'Y'
 		AND is_active = 'Y'
 		
 		IF @generated_qr_id > 0

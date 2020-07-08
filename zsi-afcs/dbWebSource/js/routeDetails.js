@@ -4,42 +4,35 @@
     zsi.ready = function(){
         $(".page-title").html("Routes");
         displayRoutes();
-
+        
     };
     
-    function displayRoutes(){
+    function displayRoutes(id){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
         $("#gridRoutes").dataBind({
              sqlCode        : "R1224" //route_ref_sel
             ,height         : $(window).height() - 240
             ,blankRowsLimit : 5
             ,dataRows       : [
-                 { text  : cb , width : 25   , style : "text-center" 
+                { text  : cb , width : 25   , style : "text-center" 
                     ,onRender  :  function(d)  
-                        { return   app.bs({name:"route_id"              ,type:"hidden"      ,value: app.svn(d,"route_id")}) 
-                                 + app.bs({name:"is_edited"             ,type:"hidden"      ,value: app.svn(d,"is_edited")})
-                                 + (d !==null ? app.bs({name:"cb"       ,type:"checkbox"}) : "" );
+                        { return   app.bs({name:"route_id"                ,type:"hidden"      ,value: app.svn(d,"route_id")}) 
+                                 + app.bs({name:"is_edited"               ,type:"hidden"      ,value: app.svn (d,"is_edited")})
+                                 + (d !==null ? app.bs({name:"cb"         ,type:"checkbox"}) : "" );
                         }
                 }
-                ,{ text  : "" , width : 25   , style : "text-center" 
-                    ,onRender  :  function(d)  
-                        { return  (d !==null ? app.bs({name:"rb"       ,type:"radio"   ,style:" width: 13px; margin:0 5px; cursor:pointer;"}) : "" ); }
-                }
-                ,{text: "Route Code"                             ,name:"route_code"     ,type:"input"   ,width : 150   ,style : "text-align:left;"}
+                ,{text: "Route Code"                             ,name:"route_code"               ,type:"input"       ,width : 150   ,style : "text-align:left;"}
                 ,{text: "Route Description"                      ,name:"route_desc"               ,type:"input"       ,width : 450   ,style : "text-align:left;"}
+                ,{text: "Route Details"                          ,width: 100                      ,style : "text-align:center;"
+        		    ,onRender : function(d){
+        		        var _return = "<a href='javascript:void(0);' title='Route Details'"
+        		                    + "onclick='route.showModalRouteDetails(\"" +  app.svn(d,"route_id")  + "\",\"" +  app.svn(d,"route_code")  + "\");'><i class='fa fa-plus' aria-hidden='true'></i></a>";
+        		        return (! (d) ? "" : _return);
+        		    }
+        		}
             ]
-            ,onComplete: function(o){
+            ,onComplete: function(){
                 $("[name='cbFilter1']").setCheckEvent("#gridRoutes input[name='cb']");
-                var _dRows = o.data.rows;
-                var _this  = this;
-                var _zRow  = _this.find(".zRow");
-                _zRow.find("input[type='radio']").click(function(){
-    	            var _i      = $(this).closest(".zRow").index();
-    	            var _data   = _dRows[_i];
-    	            displayRouteDetails(_data.route_id);
-    	            $(".page-title").html("Routes » " + _data.route_code + " » " + _data.route_desc);
-    	            $("#nav-tab").find("[aria-controls='nav-routeDtls']").removeClass("hide");
-                });
             }
         });
     }
@@ -47,7 +40,7 @@
     function displayRouteDetails(id){
         var cb = app.bs({name:"cbFilter2",type:"checkbox"});
         $("#gridRouteDetails").dataBind({
-             sqlCode        : "R1221"
+             sqlCode        : "R1221" //route_details_sel
             ,parameters     : {route_id:id}
             ,blankRowsLimit : 5
             ,height         : $(window).height() - 240         
@@ -60,11 +53,15 @@
                                  + (d !==null ? app.bs({name:"cb"         ,type:"checkbox"}) : "" );
                         }
                 }
+                ,{text: "ID"                                                                             ,width : 60     ,style : "text-align:left;"
+                    ,onRender  :  function(d)  
+                        { return   app.bs({name:"dummy_id"                           ,value: app.svn(d,"route_detail_id")});}
+                }
                 ,{text: "Route No."                     ,name:"route_no"             ,type:"input"       ,width : 60     ,style : "text-align:left;"}
                 ,{text: "Location"                      ,name:"location"             ,type:"input"       ,width : 250    ,style : "text-align:left;"}
                 ,{text: "Distance Kilometer"            ,name:"distance_km"          ,type:"input"       ,width : 110    ,style : "text-align:center;"}
                 ,{text: "Sequence No."                  ,name:"seq_no"               ,type:"input"       ,width : 80     ,style : "text-align:center;"}
-                ,{text: "Map Area"                      ,name:"map_area"             ,type:"input"       ,width : 300    ,style : "text-align:left;"}
+                ,{text: "Map Area"                      ,name:"map_area"             ,type:"input"       ,width : 130    ,style : "text-align:left;"}
             ]
             ,onComplete: function(){
                 $("[name='cbFilter2']").setCheckEvent("#gridRouteDetails input[name='cb']");
@@ -83,6 +80,7 @@
     $("#btnSaveRoute").click(function () {
        $("#gridRoutes").jsonSubmit({
              procedure: "routes_ref_upd"
+             //,optionalItems: ["is_active"]
             ,onComplete: function (data) {
                 if(data.isSuccess===true) zsi.form.showAlert("alert");
                 $("#gridRoutes").trigger("refresh");
@@ -93,6 +91,7 @@
     $("#btnSaveRouteDetails").click(function () {
        $("#gridRouteDetails").jsonSubmit({
              procedure: "route_details_upd"
+            //,optionalItems: ["is_active"]
             ,notIncludes : ["dummy_id"]
             ,onComplete: function (data) {
                 if(data.isSuccess===true) zsi.form.showAlert("alert");
@@ -120,4 +119,4 @@
     });
     
     return _pub;
-})();         
+})();                  

@@ -18,16 +18,6 @@
         border-radius:0 0 0 0;
         padding: 0;
     }
-    .panel-container-grid .panel-content{
-        padding: 0 !important;
-        margin: 0 -1px;
-    }
-    .btn-outline-default {
-        line-height: 0.5;
-    }
-    .border-none{
-        border: none !important;
-    }
 </style>
 <div class="panel">
     <!--<div class="panel-hdr">
@@ -52,60 +42,20 @@
     </div>-->
     <div class="panel-container">
         <div class="panel-content">
-            <div class="zContainer">
-                <div class="row mb-2 col-12 col-sm-12 col-md-12">
-                     <label class="col-form-label control-label"><b>Search :</b></label>
-                    <div class="col-12 col-sm-4 col-md-3 mb-2">
-                        <!--<label class="col-form-label control-label"><b>Key Word</b></label>-->
-                        <select id="keyWord"  class="form-control form-control-sm">
-                            <option value=""></option>
-                            <option value="client_name">Client Name</option>
-                            <option value="contract_no">Contract No.</option>
-                            <!--<option value=""></option>-->
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-5">
-                        <!--<label class="col-form-label control-label"><b>Key Value</b></label>-->
-                        <div class="input-group">
-                            <input id="keyValue" type="text" class="form-control form-control-sm pl-2" placeholder="Please select keyword....."/>
-                            <div class="input-group-append">
-                                <button id="btnFilterVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Search">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left ml-1 btn-outline-default text-white" id="btnNew">
-                                    <i class="far fa-plus"></i> New Client
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="contractsDiv" class="row hide">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
-                         <div id="gridClientContracts" class="zGrid mb-1"></div>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
-                        <div class="button-group">     
-                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnNewContracts"><i class="far fa-plus"></i> New Contracts</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!--<div class="row">
                 <select id="clientPassword" class="hide"></select>
                 <div class="col-sm-12">
                     <div class="zGrid" id="gridClients"></div>
                 </div>
             </div>-->
-            <!--<nav class="">
-              <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" data-toggle="tab" href="#nav-search" role="tab" aria-controls="nav-search"> Search </a>
-                <a class="nav-item nav-link"        data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-new"> New  </a>
-              </div>
-            </nav>-->
-            <!--<div class="row">
-                
+            
+            <div class="row">
+                <nav class="col-12 col-sm-8 col-md-9">
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" data-toggle="tab" href="#nav-search" role="tab" aria-controls="nav-search"> Search </a>
+                    <a class="nav-item nav-link"        data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-new"> New  </a>
+                  </div>
+                </nav>
                 
                 <div class="col-12 col-md-3 col-sm-4">
                     <div class="input-group input-group-sm bg-white shadow-inset-2">
@@ -121,33 +71,14 @@
                     </div>
                 </div>
                 
-            </div>-->
+            </div>
             
             
             
             
             <div class="tab-content" id="nav-tabContent">
-                <!--<div role="tabpanel" class="tab-pane fade show active" id="nav-search">
+                <div role="tabpanel" class="tab-pane fade show active" id="nav-search">
                     <div class="zContainer">
-                        <div class="row mb-2">
-                            <div class="col-12 col-sm-4 col-md-3">
-                                <label class="col-form-label control-label"><b>Key Word</b></label>
-                                <select id="keyWord"  class="form-control form-control-sm">
-                                    <option value=""></option>
-                                    <option value="client_name">Client Name</option>
-                                    <option value="contract_no">Contract No.</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-3">
-                                <label class="col-form-label control-label"><b>Key Value</b></label>
-                                <div class="input-group">
-                                    <input id="keyValue" type="text" class="form-control form-control-sm pl-2" placeholder="Please select keyword....."/>
-                                    <div class="input-group-append">
-                                        <button id="btnFilterVal" class="btn btn-primary btn-outline-default hvr-sweep-to-left text-white" type="button">Search</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
                                  <div id="gridClientContracts" class="zGrid mb-1"></div>
@@ -159,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                </div>-->
+                </div>
                 <div role="tabpanel" class="tab-pane fade" id="nav-new">
                     <div class="row">
                         <select id="clientPassword" class="hide"></select>
@@ -377,7 +308,7 @@
                                 </di>
                             </div>
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
-                                <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                <button id="btnSubmit" type="submit" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
                                     <i class="far fa-save"></i> Save
                                 </button>
                             </div>
@@ -391,132 +322,10 @@
 </div>
 <div class="hide">
     <form id="formEmail">
-        <input type="hidden" name="password" id="epassword" value="">
-        <input type="hidden" name="name" id="ename" value="">
         <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
+        <input type="hidden" name="mail_subject" id="mail_subject" value="AFCS Password">
+        <input type="hidden" name="mail_body" id="mail_body" value="">
     </form>
-</div>
-<div id="modalClientContracts" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-full">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="modalTitle" class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row col-12 col-sm-12 col-md-12"> 
-                    <div class="col-12 col-sm-5 col-md-4"> 
-                        <form id="formContract" class="needs-validation panel" novalidate>  
-                			<input type="hidden" name="client_contract_id" id="client_contract_id">
-                            
-                            <div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Client</b></label>  
-                                <select class="form-control form-control-sm custom-select select2" id="client_id" required  name="client_id"></select>
-                    		</div>
-                        	<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Contract No.</b></label>  
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="contract_no" required  name="contract_no" autocomplete="off"/> 
-                    		</div>
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Contract Date</b></label>  
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="contract_date" required  name="contract_date" autocomplete="off"/> 
-                    		</div>
-                    		
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Activation Date</b></label>  
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="activation_date" required  name="activation_date" autocomplete="off"/> 
-                    		</div>
-                    		
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Expiry Date</b></label>  
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="expiry_date" required  name="expiry_date" autocomplete="off"/>
-                    		</div>
-                    		
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Contract Term</b></label>  
-                                <select class="form-control form-control-sm custom-select select2" id="contract_term_id" required  name="contract_term_id"></select>
-                    		</div>
-                    		
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Plan</b></label>  
-                                <select class="form-control form-control-sm custom-select select2" id="plan_id" required  name="plan_id"></select>
-                    		</div>
-                    		
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Plan Quantity</b></label>  
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="plan_qty" required  name="plan_qty" autocomplete="off"/>
-                    		</div>
-                    		
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>SRP Amount</b></label>  
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="srp_amount" required  name="srp_amount" autocomplete="off" readonly="true"/>
-                    		</div>
-                    		
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Down Payment Amount</b></label>  
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="dp_amount" required  name="dp_amount" value="0.00"/>
-                            </div>
-                            
-                    		<div class="col-sm-12 col-md-12 col-xs-12">
-                    		    <label for="" class="col-form-label control-label"><b>Less Down Payment Amount</b></label>   
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="less_dp_amount" required  name="less_dp_amount" autocomplete="off" value="0.00" readonly="true"/>
-                    		</div> 
-                    		<div class="col-sm-12 col-md-12 col-xs-12"> 
-                    		    <label for="" class="col-form-label control-label"><b>Total Amortization Amount</b></label>   
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="total_amort_amount" required  name="total_amort_amount" autocomplete="off" value="0.00" readonly="true"/>
-                    		</div> 
-                    		<div class="col-sm-12 col-md-12 col-xs-12">  
-                    		    <label for="" class="col-form-label control-label"><b>Monthly Amortization Amount</b></label>   
-                                <input type="text" class="form-control form-control-sm zsi-form-control" id="monthly_amort_amount" required  name="monthly_amort_amount" autocomplete="off" value="0.00" readonly="true"/>
-                    		</div>
-                    		<div class="border-top my-2"></div>
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2"> 
-                                <button id="submit" type="button" class="btn btn-primary btn-sm waves-effect waves-themed savingBtn hvr-sweep-to-left" title="Save">
-                                    <i class="far fa-save"></i> Save
-                                </button>
-                                <!--<button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnInactive" data-toggle="tooltip" title="Inactive">
-                                	  <i class="fas fa-ban"></i> Inactive
-                                </button>-->
-                                <button id="btnResetVal" class="btn-sm btn btn-primary text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
-                                   <i class="far fa-refresh hvr-icon"></i> Reset
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-12 col-sm-7 col-md-8">   
-                        <div class="panel mb-2">
-                            <div class="panel-hdr">
-                                <h2>
-                                    Subscription <span class="fw-300"><i>List</i></span>
-                                </h2>
-                                <div class="panel-toolbar">
-                                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                                </div>
-                            </div>
-                            <div class="panel-container show panel-container-grid">
-                                <div class="panel-content">
-                                    <div class="row" id="divReplacementParts">
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                                            <div class="zGrid" id="gridContracts"></div>
-                                        </div>
-                                        <!--<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
-                                            <div class="button-group"> 
-                                                <button id="btnSaveContracts" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
-                                                    <i class="far fa-save"></i> Save
-                                                </button>
-                                            </div>
-                                        </div>-->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>   
-            </div>
-        </div>
-    </div>
 </div>
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -531,10 +340,117 @@
                 <p id="msg">Are you sure you want to save this data?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnConfirm" class="continuecancel btn btn-primary btn-sm hide">Continue</button>
-                <button type="button"  class="continuecancel btn btn-primary btn-sm hide" data-dismiss="modal">Cancel</button>
+                <button type="button" id="btnConfirm" class="btn btn-primary btn-sm hide">Confirm</button>
                 <button type="button" id="btnSave" class="btn btn-primary btn-sm yesno">Yes</button>
                 <button type="button" class="btn btn-primary btn-sm yesno" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalClientContracts" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalTitle" class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-md-12"> 
+                    <form id="formContract" class="needs-validation" novalidate>  
+            			<input type="hidden" name="client_contract_id" id="client_contract_id">
+                        <div class="row mb-2"> 
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Client</b></label>  
+                                <select class="form-control form-control-sm custom-select select2" id="client_id" required  name="client_id"></select>
+                    		</div>
+                        	<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Contract No.</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="contract_no" required  name="contract_no" autocomplete="off"/> 
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Contract Date</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="contract_date" required  name="contract_date" autocomplete="off"/> 
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Contract Term</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="contract_term_id" required  name="contract_term_id" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Activation Date</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="activation_date" required  name="activation_date" autocomplete="off"/> 
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Expiry Date</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="expiry_date" required  name="expiry_date" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Plan</b></label>  
+                                <select class="form-control form-control-sm custom-select select2" id="plan_id" required  name="plan_id"></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Plan Quantity</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="plan_qty" required  name="plan_qty" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Device Model</b></label>  
+                                <select class="form-control form-control-sm custom-select select2" id="device_model_id" required  name="device_model_id"></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Device Subscriptions Qty</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="device_qty" required  name="device_qty" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Device Term</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="device_term_id" required  name="device_term_id" autocomplete="off"/>
+                                 		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Unit Monthly</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="unit_assignment_type_id" name="unit_assignment_type_id" required autocomplete="off"/>
+                    		</div>
+                    	</div>
+                        <div class="row">
+                            <div class="col-12 col-sm-12">   
+                                <div class="panel mb-2">
+                                    <div class="panel-hdr">
+                                        <h2>
+                                            Subscription <span class="fw-300"><i>List</i></span>
+                                        </h2>
+                                        <div class="panel-toolbar">
+                                            <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                        </div>
+                                    </div>
+                                    <div class="panel-container show panel-container-grid">
+                                        <div class="panel-content">
+                                            <div class="row" id="divReplacementParts">
+                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                                    <div class="zGrid" id="gridContracts"></div>
+                                                </div>
+                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                                    <div class="button-group"> 
+                                                        <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed savingBtn" title="Save">
+                                                            <i class="far fa-save"></i> Save
+                                                        </button>
+                                                        <button id="btnSaveContracts" type="button" class="btn btn-primary btn-sm hide" title="Save">
+                                                            <i class="far fa-save"></i> Save
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary btn-sm" id="btnInactive" data-toggle="tooltip" title="Inactive">
+                                                        	  <i class="fas fa-ban"></i> Inactive
+                                                        </button>
+                                                        <button id="btnResetVal" class="btn-sm btn btn-primary text-white hvr-icon-spin" type="button" title="Reset">
+                                                           <i class="far fa-refresh hvr-icon"></i> Reset
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>   
             </div>
         </div>
     </div>
