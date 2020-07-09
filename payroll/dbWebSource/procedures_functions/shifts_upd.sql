@@ -8,6 +8,7 @@ AS
 	UPDATE a 
 		   SET 
 	   	      shift_code				= b.shift_code
+			 ,shift_title				= b.shift_title
 			 ,monday					= b.monday				
 			 ,tuesday					= b.tuesday			
 			 ,wednesday					= b.wednesday	
@@ -23,7 +24,8 @@ AS
 	     WHERE ISNULL(b.shift_code,'') <> '' AND isnull(b.is_edited,'') <> '';
 -- Insert Process
 	INSERT INTO shifts (
-        shift_code			
+         shift_code	
+		,shift_title
 		,monday				
 		,tuesday		
 		,wednesday		
@@ -36,7 +38,8 @@ AS
 		,to_time_in	
 	)
 	SELECT 
-		 shift_code				
+		 shift_code	
+		,shift_title
 		,monday					
 		,tuesday		
 		,wednesday		

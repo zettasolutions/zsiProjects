@@ -1,6 +1,7 @@
 CREATE TABLE shifts(
 shift_id	INT IDENTITY(1,1)	NOT NULL
-,shift_code	NVARCHAR(100)	NULL
+,shift_code	NVARCHAR(20)	NULL
+,shift_title	NVARCHAR(100)	NULL
 ,monday	INT	NULL
 ,tuesday	INT	NULL
 ,wednesday	INT	NULL

@@ -40,14 +40,13 @@ AS
 		,work_desc	
 		,level_no
 		,@user_id
-		,GETDATE()
+		,GETDATE()	
 		,basic_pay	
 		,hourly_rate
-		,daily_rate 	
+		,daily_rate 
 	FROM @tt 
 	WHERE position_id IS NULL
-      AND position_title IS NOT NULL
-	  AND position_desc IS NOT NULL;
+      AND position_title IS NOT NULL;
 
 
 

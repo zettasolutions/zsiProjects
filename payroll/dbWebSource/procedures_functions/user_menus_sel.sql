@@ -22,8 +22,3 @@ BEGIN
  END;
 
  --[user_menus_sel] @user_id=9
-
-
-
-
-
