@@ -48,7 +48,7 @@ BEGIN
 			SET  qr_id=@generated_qr_id
 				,is_active = 'Y'
 				,activation_code_expiry=null
-				,updated_date = GETDATE()
+				,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			WHERE 1 = 1
 			AND consumer_id = @consumer_id;
 

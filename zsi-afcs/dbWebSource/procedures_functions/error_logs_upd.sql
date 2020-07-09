@@ -21,7 +21,7 @@ SET NOCOUNT ON
 	if(@occurence is null)
 
 			INSERT INTO dbo.error_logs( error_no,error_msg,error_type,occurence,page_url,created_by,created_date) 
-			VALUES (@error_no, @error_msg,@error_type,1,@page_url,@user_id,GETDATE())
+			VALUES (@error_no, @error_msg,@error_type,1,@page_url,@user_id,DATEADD(HOUR, 8, GETUTCDATE()))
 	else 	 
 			UPDATE dbo.error_logs 
 			SET 
@@ -31,7 +31,7 @@ SET NOCOUNT ON
 			, occurence=@occurence + 1
 			, page_url=@page_url
 			, updated_by =  @user_id
-			, updated_date = GETDATE()
+			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			where error_id=@error_id
 			  
 	

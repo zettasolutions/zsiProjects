@@ -22,7 +22,7 @@ declare @v varchar(10) = 'zeT@1'
 
             ,updated_by   = @user_id
 
-            ,updated_date = GETDATE()
+            ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 
      FROM dbo.master_pages a INNER JOIN @tt b
 

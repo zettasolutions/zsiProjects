@@ -16,7 +16,7 @@ IF ISNULL(@sqlcmd_id,0) <> 0
 				,sqlcmd_text	=	@sqlcmd_text
 				,is_public		=	@is_public
 				,updated_by		=	@user_id
-				,updated_date   =	GETDATE()
+				,updated_date   =	DATEADD(HOUR, 8, GETUTCDATE())
 			WHERE
 				sqlcmd_id = @sqlcmd_id
 	END
@@ -36,7 +36,7 @@ ELSE
 			,'N'
 			,@is_public	
 			,@user_id  
-			,GETDATE()
+			,DATEADD(HOUR, 8, GETUTCDATE())
 		)
 	END
 END

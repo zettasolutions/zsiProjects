@@ -25,9 +25,8 @@ BEGIN
 		SELECT 
 			@generated_qr_id = id
 			, @current_balance_amount = balance_amt
-		FROM dbo.generated_qrs WHERE 1 = 1
+		FROM dbo.generated_qrs_active_v WHERE 1 = 1
 		AND hash_key = @hash_key
-		AND is_taken = 'Y'
 		AND is_active = 'Y'
 		
 		IF @generated_qr_id > 0
@@ -39,7 +38,7 @@ BEGIN
 			SET
 				balance_amt = ISNULL(@current_balance_amount, 0) + ISNULL(@payment_amount, 0)
 				, updated_by = @user_id
-				, updated_date = GETDATE()
+				, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			WHERE 1 = 1
 			AND id = @generated_qr_id
 
@@ -50,7 +49,7 @@ BEGIN
 			   ,[device_id]
 			   ,[load_by])
 			VALUES
-			   (GETDATE()
+			   (DATEADD(HOUR, 8, GETUTCDATE())
 			   ,@generated_qr_id
 			   ,@payment_amount
 			   ,@device_id

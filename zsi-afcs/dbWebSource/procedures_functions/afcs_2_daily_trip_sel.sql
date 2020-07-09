@@ -29,10 +29,9 @@ BEGIN
 	
 	SELECT 
 		@driver_id = [user_id]
-		, @driver = CONCAT(last_name, ', ', first_name) 
-	FROM dbo.users
-	WHERE 1 = 1 
-	AND hash_key = @driver_hash_key;
+		, @driver = full_name
+	FROM dbo.drivers_v
+	WHERE hash_key = @driver_hash_key;
 
 	SELECT 
 		@daily_amount = SUM(total_paid_amount) 

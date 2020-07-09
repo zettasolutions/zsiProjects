@@ -32,6 +32,6 @@ BEGIN
    ,@name_suffix
    ,newid()
    ,'Y'
-   ,GETDATE()
+   ,DATEADD(HOUR, 8, GETUTCDATE())
    );
 END;  

@@ -14,7 +14,7 @@ AS
 	 		 ,ee_share					= b.ee_share				
 			 ,er_share					= b.er_share				
 	   	     ,updated_by				= @user_id
-			 ,updated_date				= GETDATE()
+			 ,updated_date				= DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.philhealth_table a INNER JOIN @tt b
 	     ON a.philhealth_id = b.philhealth_id
 	     WHERE (
@@ -39,7 +39,7 @@ AS
 	    ,ee_share				
 	    ,er_share				
 	   ,@user_id
-	   , GETDATE()
+	   , DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE philhealth_id IS NULL
  

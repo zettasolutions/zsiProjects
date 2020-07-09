@@ -16,7 +16,7 @@ AS
 			,status_id				= b.status_id
 			,is_active				= b.is_active		
 	   	    ,updated_by				= @user_id
-			,updated_date			= GETDATE()
+			,updated_date			= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.assets a INNER JOIN @tt b
 	     ON a.asset_id = b.asset_id
@@ -44,7 +44,7 @@ AS
 		,status_id				 
 		,is_active				 		
 	   ,@user_id
-	   , GETDATE()
+	   , DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE asset_id IS NULL
  

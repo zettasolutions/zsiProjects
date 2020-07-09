@@ -56,7 +56,7 @@ BEGIN
 					@payment_id
 					, 'Cancelled'
 					, @user_id
-					, GETDATE()
+					, DATEADD(HOUR, 8, GETUTCDATE())
 				)
 
 				-- For QR payments, update generated_qrs balance_amt to reflect the refunded amount.
@@ -72,7 +72,7 @@ BEGIN
 					SET
 						balance_amt = @new_balance_amount
 						, updated_by = @user_id
-						, updated_date = GETDATE()
+						, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 					WHERE 1 = 1
 					AND id = @qr_id;
 				END

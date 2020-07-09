@@ -52,7 +52,7 @@ BEGIN
 		,CONCAT(SUBSTRING(@company_name,1,3),@seq_no)
 		,@is_zfare
 		,@is_zload
-		,GETDATE()
+		,DATEADD(HOUR, 8, GETUTCDATE())
 	   );
 	   SET @id = @@IDENTITY
 	   UPDATE dbo.sequence SET seq_no = seq_no + 1;
@@ -68,7 +68,7 @@ ELSE
     	 ,bank_id=@bank_id
 		 ,account_no=@account_no
 		 ,updated_by = @user_id
-		 ,updated_date = GETDATE();
+		 ,updated_date = DATEADD(HOUR, 8, GETUTCDATE());
 		 
 END;
 

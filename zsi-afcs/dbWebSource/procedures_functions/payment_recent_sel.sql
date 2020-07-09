@@ -1,28 +1,26 @@
-CREATE procedure [dbo].[payment_recent_sel]
-( 
-  @client_id  int 
- ,@vehicle_id int = null
- ,@driver_id  int = null
- ,@user_id    int = null
-)
-AS
-BEGIN
-  SET NOCOUNT ON
-  DECLARE @stmt VARCHAR(MAX)
-  SET @stmt = 'SELECT * FROM dbo.payments_v WHERE CONVERT(VARCHAR(10),payment_date,101)=CONVERT(VARCHAR(10),GETDATE(),101) '
+CREATE procedure [dbo].[payment_recent_sel]  
+(   
+  @client_id  int
+  ,@vehicle_id int = null  
+ ,@driver_id  int = null  
+ ,@user_id    int = null  
+)  
+AS  
+BEGIN  
+  SET NOCOUNT ON  
+  DECLARE @stmt VARCHAR(MAX)  
 
-  IF ISNULL(@client_id,0)<>0
-     SET @stmt = @stmt + ' AND client_id = ' + CAST(@client_id AS VARCHAR(20))
-
-  IF ISNULL(@vehicle_id,0)<>0
-     SET @stmt = @stmt + ' AND vehicle_id = ' + CAST(@vehicle_id AS VARCHAR(20))
+  SET @stmt = 'SELECT * FROM dbo.payments_v WHERE CONVERT(VARCHAR(10),payment_date,101)=CONVERT(VARCHAR(10),DATEADD(HOUR, 8, GETUTCDATE()),101) AND client_id = ' + CAST(@client_id AS VARCHAR(20))  
   
-  IF ISNULL(@driver_id,0)<>0
-     SET @stmt = @stmt + ' AND driver_id = ' + CAST(@driver_id AS VARCHAR(20))
+  IF ISNULL(@vehicle_id,0)<>0  
+     SET @stmt = @stmt + ' AND vehicle_id = ' + CAST(@vehicle_id AS VARCHAR(20))  
+    
+  IF ISNULL(@driver_id,0)<>0  
+     SET @stmt = @stmt + ' AND driver_id = ' + CAST(@driver_id AS VARCHAR(20))  
+    
+  SET @stmt = @stmt + ' ORDER BY payment_id';  
+  EXEC(@stmt);  
+END  
   
-  SET @stmt = @stmt + ' ORDER BY payment_id';
-  EXEC(@stmt);
-END
-
-
+  
 --[dbo].[payment_recent_sel] @client_id=1

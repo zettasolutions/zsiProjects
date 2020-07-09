@@ -14,7 +14,7 @@ AS
 			  ,age				= b.age				
 			  ,salary			= b.salary
 			   ,updated_by   = @user_id
-			,updated_date = GETDATE()	  
+			,updated_date = DATEADD(HOUR, 8, GETUTCDATE())  
        FROM dbo.test_table a INNER JOIN @tt b
         ON a.id = b.id 
        AND isnull(b.is_edited,'N')='Y'
@@ -33,7 +33,7 @@ AS
 		,age
 		,salary 
 		 ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE id IS NULL
   

@@ -29,7 +29,7 @@ IF ISNULL(@bank_transfer_id,0)=0
 	 ,@transferred_amount
 	 ,@posted_date
 	 ,@user_id
-	 ,GETDATE()
+	 ,DATEADD(HOUR, 8, GETUTCDATE())
 	 ) 
 ELSE
    UPDATE dbo.bank_transfers SET
@@ -40,5 +40,5 @@ ELSE
 		   ,transferred_amount = @transferred_amount
 		   ,posted_date		  = @posted_date
 		   ,updated_by        = @user_id
-		   ,updated_date      = GETDATE();
+		   ,updated_date      = DATEADD(HOUR, 8, GETUTCDATE());
 END

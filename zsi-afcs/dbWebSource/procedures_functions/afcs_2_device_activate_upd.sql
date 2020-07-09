@@ -53,7 +53,7 @@ BEGIN
 				, 'Y'
 				, @company_id
 				, @user_id
-				, GETDATE()
+				, DATEADD(HOUR, 8, GETUTCDATE())
 			)
 
 			IF @@ERROR = 0
@@ -86,7 +86,7 @@ BEGIN
 			UPDATE dbo.devices SET 
 				is_active = 'Y'
 				, updated_by  = @user_id 
-				, updated_date = GETDATE()
+				, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			WHERE 1 = 1 
 			AND serial_no = @serial_no;
 		END

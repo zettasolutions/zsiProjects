@@ -15,7 +15,7 @@ AS
 			 ,pay_type_id				= b.pay_type_id
 			 ,status_id					= b.status_id
 	   	     ,created_by				= @user_id
-			 ,created_date				= GETDATE()
+			 ,created_date				= DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.pay_period_id a INNER JOIN @tt b
 	     ON a.pay_period_id = b.pay_period_id
 	     WHERE (
@@ -36,7 +36,7 @@ AS
 		,pay_type_id		
 		,status_id			
 		,@user_id
-		,GETDATE()
+		,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE pay_period_id IS NULL
  

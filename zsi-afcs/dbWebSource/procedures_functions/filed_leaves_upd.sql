@@ -20,7 +20,7 @@ AS
 			,leave_reason			= b.leave_reason
 			,approver_comment		= b.approver_comment 
 			,created_by				= @user_id
-			,created_date			= GETDATE() 	    
+			,created_date			= DATEADD(HOUR, 8, GETUTCDATE()) 	    
 
        FROM dbo.filed_leaves a INNER JOIN @tt b
 	     ON a.leave_id = b.leave_id
@@ -58,7 +58,7 @@ AS
 			,leave_reason
 			,approver_comment	 		 		
 			,@user_id
-			, GETDATE()
+			, DATEADD(HOUR, 8, GETUTCDATE())
 			 
 	FROM @tt 
 	WHERE leave_id IS NULL

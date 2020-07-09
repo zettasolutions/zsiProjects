@@ -19,7 +19,7 @@ DECLARE @updated_count INT;
 		  ,is_admin		= b.is_admin
 		  ,is_active	= b.is_active
           ,updated_by   = @user_id
-          ,updated_date = GETDATE()
+          ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.users a INNER JOIN @tt b
         ON a.user_id = b.user_id 
        AND isnull(b.is_edited,'N')='Y'

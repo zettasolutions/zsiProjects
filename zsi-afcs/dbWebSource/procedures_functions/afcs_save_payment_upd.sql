@@ -74,7 +74,7 @@ BEGIN
 		   ,[payment_key]
 		)
 		VALUES(
-			GETDATE()
+			DATEADD(HOUR, 8, GETUTCDATE())
 			, @device_id
 			, @vehicle_id
 			, @pao_id

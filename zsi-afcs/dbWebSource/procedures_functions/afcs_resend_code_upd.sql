@@ -49,7 +49,7 @@ BEGIN
 			, 'Welcome to zPay. Your activation code is ' + CAST(@activation_code AS NVARCHAR(100)) + '.'
 			, 'N'
 			, @user_id
-			, GETDATE()
+			, DATEADD(HOUR, 8, GETUTCDATE())
 		);
 
 		IF @@ERROR = 0

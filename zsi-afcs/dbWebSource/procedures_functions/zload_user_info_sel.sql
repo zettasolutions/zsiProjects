@@ -9,25 +9,24 @@ AS
 BEGIN  
 	SET NOCOUNT ON;
 
-	DECLARE @role_id INT = 4; -- role_id defined for loader personnel
-	DECLARE @uuser_id INT;
+	DECLARE @loader_id INT;
 
 	SELECT 
-		@uuser_id = [user_id] 
-	FROM dbo.[loaders_v] 
+		@loader_id = [user_id] 
+	FROM dbo.[loaders_personnels_active_v] 
 	WHERE hash_key = @hash_key
 	--and company_id=@client_id;
 
-	IF @uuser_id IS NOT NULL
+	IF @loader_id IS NOT NULL
 	BEGIN
 		SELECT 
 			hash_key
-			, CONCAT(first_name, ' ', last_name) AS personnel_name
+			, full_name AS personnel_name
 			, 'Y' AS is_valid
 			, 'Success' AS msg
-		FROM dbo.[users] 
+		FROM dbo.[loaders_personnels_active_v] 
 		WHERE 1 = 1
-		AND [user_id] = @uuser_id;
+		AND [user_id] = @loader_id;
 	END
 	ELSE
 	BEGIN

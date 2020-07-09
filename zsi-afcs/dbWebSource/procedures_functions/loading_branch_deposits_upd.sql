@@ -43,7 +43,7 @@ BEGIN
 		,deposit_ref_no
 		,deposit_amount		
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	   
     FROM @tt
     WHERE loading_branch_id is not null

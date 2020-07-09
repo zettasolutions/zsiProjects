@@ -17,11 +17,11 @@ BEGIN
 	    SET balance_amt = @amount
 	       ,is_taken = 'Y'
 		   ,created_by = @user_id
-		   ,created_date = GETDATE()
+		   ,created_date = DATEADD(HOUR, 8, GETUTCDATE())
      WHERE id=@id; 
 	 
 	 INSERT INTO dbo.loading (load_date,qr_id, load_amount, device_id, load_by) 
-	      values (GETDATE(),@id, @amount,@device_id, @user_id)
+	      values (DATEADD(HOUR, 8, GETUTCDATE()),@id, @amount,@device_id, @user_id)
   END
   ELSE
   BEGIN
@@ -31,11 +31,11 @@ BEGIN
 		 UPDATE dbo.generated_qrs 
 			SET balance_amt = balance_amt + @amount
 			   ,updated_by = @user_id
-			   ,updated_date = GETDATE()
+			   ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 		 WHERE id=@id; 
 
 	 INSERT INTO dbo.loading (load_date,qr_id, load_amount, device_id, load_by) 
-	      values (GETDATE(),@id, @amount,@device_id, @user_id)
+	      values (DATEADD(HOUR, 8, GETUTCDATE()),@id, @amount,@device_id, @user_id)
      END
 
   END;

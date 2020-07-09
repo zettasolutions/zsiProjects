@@ -16,7 +16,7 @@ AS
 	 		 ,ssc_ee					= b.ssc_ee				
 			 ,ecc_er					= b.ecc_er				
 	   	     ,updated_by				= @user_id
-			 ,updated_date				= GETDATE()
+			 ,updated_date				= DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.sss_table a INNER JOIN @tt b
 	     ON a.id = b.id
 	     WHERE (
@@ -41,7 +41,7 @@ AS
 	    ,ssc_ee				
 	    ,ecc_er				
 	   ,@user_id
-	   , GETDATE()
+	   , DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE id IS NULL
  

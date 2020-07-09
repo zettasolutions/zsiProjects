@@ -27,7 +27,7 @@ BEGIN
 		( @user_id			
 		 ,@cust_id		
 		 ,dbo.getTokenTimeout() 	
-		 ,GETDATE()
+		 ,DATEADD(HOUR, 8, GETUTCDATE())
 		)
 		print @@IDENTITY 
 		SET  @new_token = HASHBYTES('SHA', CAST(@@IDENTITY AS nvarchar))  

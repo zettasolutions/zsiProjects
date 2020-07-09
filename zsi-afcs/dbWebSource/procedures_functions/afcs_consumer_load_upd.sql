@@ -63,7 +63,7 @@ BEGIN
 		SET
 			is_taken = 'Y'
 			, balance_amt = @new_consumer_amount
-			, updated_date = GETDATE()
+			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 		WHERE 1 = 1
 		AND id = @consumer_generated_qr_id;
 
@@ -76,7 +76,7 @@ BEGIN
 			, balance_amt = 0
 			, consumer_id = @consumer_id
 			, updated_by = @consumer_id
-			, updated_date = GETDATE()
+			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 		WHERE 1 = 1
 		AND id = @generated_qr_id;
 

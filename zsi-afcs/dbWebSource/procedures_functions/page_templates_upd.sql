@@ -24,7 +24,7 @@ SET NOCOUNT ON
 						,@pt_name
 						,dbo.setMasterPageId(@pt_name)
 						,@user_id
-						,GETDATE()
+						,DATEADD(HOUR, 8, GETUTCDATE())
 				)
 				set @page_id=@@identity
 			END
@@ -43,7 +43,7 @@ SET NOCOUNT ON
 	if(isnull(@l_pt_id,0)=0 )
 		begin
 			INSERT INTO dbo.page_templates(pt_name, page_id,pt_content,created_by,created_date) 
-			VALUES (@pt_name,@page_id, @pt_content,@user_id, GETDATE())
+			VALUES (@pt_name,@page_id, @pt_content,@user_id, DATEADD(HOUR, 8, GETUTCDATE()))
 			set @new_id	=@@identity
 		end
 	else
@@ -54,7 +54,7 @@ SET NOCOUNT ON
 			  page_id=@page_id
 			, pt_content=@pt_content 
 			, updated_by =  @user_id
-			, updated_date = GETDATE()
+			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			where pt_id=@l_pt_id
 		end	  
 	

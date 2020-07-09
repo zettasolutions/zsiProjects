@@ -13,7 +13,7 @@ BEGIN
     UPDATE a 
     SET  theme_name				= b.theme_name		
         ,updated_by				= @user_id
-        ,updated_date			= GETDATE()
+        ,updated_date			= DATEADD(HOUR, 8, GETUTCDATE())
     FROM dbo.themes a INNER JOIN @tt b
     ON a.theme_id = b.theme_id
     WHERE (
@@ -31,7 +31,7 @@ BEGIN
     SELECT 
         theme_name 	   
        ,@user_id
-       ,GETDATE()
+       ,DATEADD(HOUR, 8, GETUTCDATE())
     FROM @tt
     WHERE theme_id IS NULL;
 END

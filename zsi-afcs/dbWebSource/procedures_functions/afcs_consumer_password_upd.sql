@@ -26,7 +26,7 @@ BEGIN
 		WHERE 1 = 1 
 		AND mobile_no = @username 
 		AND otp = @otp 
-		AND otp_expiry_datetime > GETDATE();
+		AND otp_expiry_datetime > DATEADD(HOUR, 8, GETUTCDATE());
 
 		IF @count_otp > 0
 		BEGIN

@@ -26,7 +26,7 @@ BEGIN
 			@consumer_id
 			, @reason
 			, @user_id
-			, GETDATE()
+			, DATEADD(HOUR, 8, GETUTCDATE())
 		)
 
 		IF @@ERROR = 0

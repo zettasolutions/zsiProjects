@@ -75,7 +75,7 @@ BEGIN
 					SET
 						balance_amt = @consumer_new_balance_amount
 						, updated_by = @client_id
-						, updated_date = GETDATE()
+						, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 					WHERE 1 = 1
 					AND id = @load_temp_qr_id;
 
@@ -85,7 +85,7 @@ BEGIN
 					SET 
 						balance_amount = @client_new_balance_amount
 						, updated_by = @client_id
-						, updated_date = GETDATE()
+						, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 					WHERE 1 = 1
 					AND client_id = @client_id;
 
@@ -123,7 +123,7 @@ BEGIN
 							, 'You have received an amount of PHP ' + CAST(@load_amount AS NVARCHAR(100)) + ' through zLoad.'
 							, 'N'
 							, @load_by
-							, GETDATE())
+							,DATEADD(HOUR, 8, GETUTCDATE()))
 
 					-- Update loading_temp table and set to is_processed = 'Y'
 					UPDATE
@@ -170,15 +170,6 @@ BEGIN
 					, 0 AS merchant_balance_amount
 			END
 		END
-/*
-		BEGIN
-			SELECT
-				'N' AS is_valid
-				, 'User account not found.' AS msg
-				, @load_amount AS amount_loaded
-				, @client_current_balance_amount AS merchant_balance_amount
-		END
-*/
 	END
 	ELSE
 	BEGIN

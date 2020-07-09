@@ -18,7 +18,7 @@ DECLARE @updated_count INT;
 	 		,is_write        = b.is_write
 			,is_delete       = b.is_delete
 	   	    ,updated_by      = @user_id
-			,updated_date    = GETDATE()
+			,updated_date    = DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.role_menus a INNER JOIN @tt b
 	     ON a.role_menu_id = b.role_menu_id 
 	    WHERE (
@@ -47,7 +47,7 @@ SET @updated_count = @@ROWCOUNT;
 		,is_write
 		,is_delete
 	    , @user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE role_menu_id IS NULL
 	AND role_id IS NOT NULL AND menu_id IS NOT NULL;

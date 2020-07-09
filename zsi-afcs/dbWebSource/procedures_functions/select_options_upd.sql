@@ -14,7 +14,7 @@ AS
 			,text			= b.text
 			,value			= b.value
 	   	    ,updated_by      = @user_id
-			,updated_date    = GETDATE()
+			,updated_date    = DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.select_options a INNER JOIN @tt b
 	     ON a.select_id = b.select_id
 	    WHERE (
@@ -45,7 +45,7 @@ AS
 		,condition_text	 
 		,order_by	 
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE select_id IS NULL
 

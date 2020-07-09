@@ -17,7 +17,7 @@ AS
 			 ,is_admin     = b.is_admin
 			 ,is_dev	   = b.is_dev	
 	   	     ,updated_by   = @user_id
-			 ,updated_date = GETDATE()
+			 ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.menus a INNER JOIN @tt b
 	     ON a.menu_id = b.menu_id 
 	    AND (isnull(is_edited,'N')='Y')
@@ -47,7 +47,7 @@ AS
 		,is_admin
 		,is_dev
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE menu_id IS NULL
       AND menu_name IS NOT NULL;

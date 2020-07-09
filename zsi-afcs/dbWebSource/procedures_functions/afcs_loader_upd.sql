@@ -42,7 +42,7 @@ BEGIN
 				, balance_amt = @amount
 				, ref_trans = CONCAT(REPLACE(CONVERT(CHAR(10), GETDATE(), 101), '/', ''), id)
 				, updated_by = @user_id
-				, updated_date = GETDATE()
+				, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			WHERE 1 = 1
 			AND id = @generated_qr_id
 
@@ -53,7 +53,7 @@ BEGIN
 			   ,[device_id]
 			   ,[load_by])
 			VALUES
-			   (GETDATE()
+			   (DATEADD(HOUR, 8, GETUTCDATE())
 			   ,@generated_qr_id
 			   ,@amount
 			   ,@device_id

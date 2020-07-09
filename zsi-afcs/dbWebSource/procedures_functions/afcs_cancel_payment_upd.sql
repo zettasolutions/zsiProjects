@@ -44,7 +44,7 @@ BEGIN
 				, is_loaded = NULL
 				, ref_trans = NULL
 				, updated_by = @user_id
-				, updated_date = GETDATE()
+				, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			WHERE 1 = 1
 			AND hash_key = @hash_key;
 
@@ -59,7 +59,7 @@ BEGIN
 					@generated_qr_id
 					, @amount
 					, @user_id
-					, GETDATE()
+					, DATEADD(HOUR, 8, GETUTCDATE())
 				)
 			END
 			ELSE

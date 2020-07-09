@@ -1,6 +1,6 @@
 CREATE procedure [dbo].[payment_history_sel]
 ( 
-  @client_id  int 
+  @client_id  int
  ,@vehicle_id int = null
  ,@driver_id  int = null
  ,@pdate_from varchar(10)=null
@@ -11,6 +11,7 @@ AS
 BEGIN
   SET NOCOUNT ON
   DECLARE @stmt VARCHAR(MAX)
+
   SET @stmt = 'SELECT * FROM dbo.payments_v WHERE client_id = ' + CAST(@client_id AS VARCHAR(20))
 
   IF ISNULL(@vehicle_id,0)<>0

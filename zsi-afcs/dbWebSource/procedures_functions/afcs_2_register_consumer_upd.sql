@@ -62,7 +62,7 @@ BEGIN
 			, @activation_code
 			, 'Y'
 			, @user_id
-			, GETDATE()
+			, DATEADD(HOUR, 8, GETUTCDATE())
 		)
 
 		SELECT @id = @@IDENTITY;

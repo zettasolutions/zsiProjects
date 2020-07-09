@@ -13,7 +13,7 @@ AS
 			,load_balance	    = b.load_balance 
 			,is_active			= b.is_active		
 	   	    ,updated_by			= @user_id
-			,updated_date		= GETDATE()
+			,updated_date		= DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.loading_branches a INNER JOIN @tt b
 	     ON a.loading_branch_id = b.loading_branch_id
 	     WHERE (
@@ -36,7 +36,7 @@ AS
 		,cast(load_balance as nvarchar) 
 		,is_active	
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE loading_branch_id IS NULL
 	AND ISNULL(company_id,'') <>''

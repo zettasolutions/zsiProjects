@@ -12,7 +12,7 @@ BEGIN
 			,storage_location  = b.storage_location
 			,library_name  = b.library_name
             ,updated_by   = @user_id
-            ,updated_date = GETDATE()
+            ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
      FROM dbo.page_includes a INNER JOIN @tt b
         ON a.page_include_id = b.page_include_id 
 		WHERE isnull(b.is_edited,'N') = 'Y'
@@ -31,7 +31,7 @@ BEGIN
        ,storage_location
 	   ,library_name
        ,@user_id
-       ,GETDATE()
+       ,DATEADD(HOUR, 8, GETUTCDATE())
     FROM @tt
     WHERE page_include_id IS NULL
 END
