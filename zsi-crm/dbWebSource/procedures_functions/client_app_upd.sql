@@ -22,7 +22,7 @@ BEGIN
 		 ,@app_id
 		 ,@is_active
 		 ,@user_id
-		 ,GETDATE()
+		 ,DATEADD(HOUR, 8, GETUTCDATE())
 		 ) 
 	ELSE
 	   UPDATE dbo.client_applications SET
@@ -30,6 +30,6 @@ BEGIN
 			   ,app_id			  = @app_id
 			   ,is_active		  = @is_active
 			   ,updated_by        = @user_id
-			   ,updated_date      = GETDATE();
+			   ,updated_date      = DATEADD(HOUR, 8, GETUTCDATE());
   
 END;

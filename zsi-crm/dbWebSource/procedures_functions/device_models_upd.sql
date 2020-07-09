@@ -13,7 +13,7 @@ AS
 			,model_desc				= b.model_desc
 			,is_active				= b.is_active
 	   	    ,updated_by				= @user_id
-			,updated_date			= GETDATE()
+			,updated_date			= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.device_models a INNER JOIN @tt b
 	     ON a.device_model_id = b.device_model_id
@@ -37,7 +37,7 @@ AS
 		,model_desc
 		,is_active
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE device_model_id IS NULL
 	AND brand_id IS NOT NULL

@@ -12,7 +12,7 @@ AS
 			  ,ee_pct_share				= b.ee_pct_share			
 			  ,er_pct_share				= b.er_pct_share			
 			  ,updated_by   = @user_id
-			  ,updated_date = GETDATE()
+			  ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
         FROM dbo.hmdf_table a INNER JOIN @tt b
 	     ON a.id = b.id 
 		WHERE b.salary_fr IS NOT NULL
@@ -34,7 +34,7 @@ AS
 		,ee_pct_share	
 		,er_pct_share		
 		,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE id IS NULL
   

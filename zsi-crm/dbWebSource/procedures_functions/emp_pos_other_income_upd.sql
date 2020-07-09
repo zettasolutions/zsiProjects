@@ -12,7 +12,7 @@ AS
 			 ,other_income_id	= b.other_income_id	   
 			 ,amount			= b.amount
 			 ,updated_by        = @user_id
-			 ,updated_date      = GETDATE() 
+			 ,updated_date      = DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.emp_pos_other_income a INNER JOIN @tt b
 	     ON a.emp_pos_other_income_id = b.emp_pos_other_income_id 
 	    AND isnull(b.is_edited,'N')='Y'
@@ -36,7 +36,7 @@ AS
 		,other_income_id	
 		,amount			
 		,@user_id
-		,GETDATE()
+		,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE emp_pos_other_income_id IS NULL
       AND isnull(amount,0) <> 0

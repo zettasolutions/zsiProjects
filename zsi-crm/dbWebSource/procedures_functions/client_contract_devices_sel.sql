@@ -14,7 +14,7 @@ SET NOCOUNT ON
 
  	SET @stmt = 'SELECT * FROM dbo.client_contract_devices WHERE 1=1';
 
-	IF ISNULL(@client_contract_id,0)<>0
+	
        set @stmt = @stmt + ' AND client_contract_id='''+ @client_contract_id+'''';
 
 

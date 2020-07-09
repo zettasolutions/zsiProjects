@@ -8,10 +8,11 @@ client_contract_id	INT IDENTITY(1,1)	NOT NULL
 ,expiry_date	DATE	NULL
 ,plan_id	INT	NULL
 ,plan_qty	INT	NULL
-,device_model_id	INT	NULL
-,device_qty	INT	NULL
-,device_term_id	INT	NULL
-,unit_assignment_type_id	INT	NULL
+,srp_amount	DECIMAL(12)	NULL
+,dp_amount	DECIMAL(12)	NULL
+,less_dp_amount	DECIMAL(12)	NULL
+,total_amort_amount	DECIMAL(12)	NULL
+,monthly_amort_amount	DECIMAL(12)	NULL
 ,is_active	CHAR(1)	NULL
 ,created_by	INT	NULL
 ,created_date	DATE	NULL

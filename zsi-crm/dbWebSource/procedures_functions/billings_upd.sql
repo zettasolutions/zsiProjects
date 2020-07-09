@@ -12,7 +12,7 @@ AS
 			,billing_class_id		= b.billing_class_id
 			,is_posted				= b.is_posted
 	   	    ,updated_by				= @user_id
-			,updated_date			= GETDATE()
+			,updated_date			= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.billings a INNER JOIN @tt b
 	     ON a.billing_period_id = b.billing_period_id
@@ -32,7 +32,7 @@ AS
 		,billing_class_id
 		,is_posted
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE billing_period_id IS NULL
 	AND billing_date IS NOT NULL

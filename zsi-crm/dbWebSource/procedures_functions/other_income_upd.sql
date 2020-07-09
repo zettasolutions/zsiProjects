@@ -13,7 +13,7 @@ AS
 	   	      other_income_code			= b.other_income_code				
 			 ,other_income_desc			= b.other_income_desc							 	
 	   	     ,updated_by				= @user_id
-			 ,updated_date				= GETDATE()
+			 ,updated_date				= DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.other_income a INNER JOIN @tt b
 	     ON a.other_income_id = b.other_income_id
 	     WHERE (
@@ -30,7 +30,7 @@ AS
          other_income_code				
 	    ,other_income_desc
 		,@user_id
-		, GETDATE()
+		, DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE other_income_id IS NULL
  

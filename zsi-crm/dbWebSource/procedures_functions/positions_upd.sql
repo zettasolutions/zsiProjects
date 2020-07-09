@@ -17,7 +17,7 @@ AS
 			 ,hourly_rate		= b.hourly_rate  
 			 ,daily_rate        = b.daily_rate
 			 ,updated_by        = @user_id
-			 ,updated_date      = GETDATE()
+			 ,updated_date      = DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.positions a INNER JOIN @tt b
 	     ON a.position_id = b.position_id 
 	    AND (isnull(is_edited,'N')='Y')
@@ -40,7 +40,7 @@ AS
 		,work_desc	
 		,level_no
 		,@user_id
-		,GETDATE()	
+		,DATEADD(HOUR, 8, GETUTCDATE())
 		,basic_pay	
 		,hourly_rate
 		,daily_rate 

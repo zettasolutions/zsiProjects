@@ -11,9 +11,9 @@ AS
 			,type_name			= b.type_name
 			,type_desc			= b.type_desc
 			,created_by				= @user_id
-			,created_date			= GETDATE()
+			,created_date			= DATEADD(HOUR, 8, GETUTCDATE())
 	   	    ,updated_by				= @user_id
-			,updated_date			= GETDATE()
+			,updated_date			= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.types a INNER JOIN @tt b
 	     ON a.type_id = b.type_id
@@ -35,9 +35,9 @@ AS
 		,type_name			 
 		,type_desc	 
 		,@user_id
-		,GETDATE()						 		
+		,DATEADD(HOUR, 8, GETUTCDATE())					 		
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 
 	WHERE type_id IS NULL

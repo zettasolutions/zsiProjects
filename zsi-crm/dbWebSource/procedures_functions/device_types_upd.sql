@@ -15,7 +15,7 @@ AS
 			,device_type_desc		= b.device_type_desc
 			,is_active				= b.is_active
 	   	    ,updated_by				= @user_id
-			,updated_date			= GETDATE()
+			,updated_date			= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.device_types a INNER JOIN @tt b
 	     ON a.device_type_id = b.device_type_id
@@ -37,7 +37,7 @@ AS
 		,device_type_desc
 		,is_active
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE device_type_id IS NULL
 	AND device_type_code IS NOT NULL

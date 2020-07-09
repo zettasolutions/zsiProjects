@@ -21,7 +21,7 @@ AS
 			,ot_reason				= b.ot_reason
 			,approver_comment		= b.approver_comment
 			,created_by				= @user_id
-			,created_date			= GETDATE() 	    
+			,created_date			= DATEADD(HOUR, 8, GETUTCDATE())	    
 
        FROM dbo.filed_overtime a INNER JOIN @tt b
 	     ON a.ot_id = b.ot_id
@@ -57,7 +57,7 @@ AS
 			,ot_reason				
 			,approver_comment	 		 		
 			,@user_id
-			, GETDATE()
+			, DATEADD(HOUR, 8, GETUTCDATE())
 			 
 	FROM @tt 
 	WHERE ot_id IS NULL

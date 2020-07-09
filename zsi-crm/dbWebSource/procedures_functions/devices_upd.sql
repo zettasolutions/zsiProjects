@@ -16,12 +16,12 @@ AS
 			,is_active			= b.is_active
 			,status_id			= b.status_id
 	   	    ,updated_by			= @user_id
-			,updated_date		= GETDATE()
+			,updated_date		= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.devices a INNER JOIN @tt b
 	     ON a.device_id = b.device_id
 	     WHERE (
-			isnull(b.is_edited,'')  <> ''
+			isnull(is_edited,'N')='Y'
 		);
 -- Insert Process
 	INSERT INTO devices(
@@ -46,12 +46,10 @@ AS
 		,is_active
 		,status_id
 	    ,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
-	WHERE device_id IS NULL
-	AND batch_id IS NOT NULL
-	AND serial_no IS NOT NULL
-	AND tag_no IS NOT NULL
+	WHERE device_id IS NULL 
+	AND serial_no IS NOT NULL 
 
 
 

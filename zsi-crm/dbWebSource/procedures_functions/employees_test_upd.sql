@@ -26,7 +26,7 @@ AS
 			 ,inactive_type_code		= b.inactive_type_code
 			 ,inactive_date				= b.inactive_date
 			 ,updated_by   = @user_id
-			 ,updated_date = GETDATE()
+			 ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
         FROM dbo.employees_test a INNER JOIN @tt b
 	     ON a.id = b.id 
 		WHERE b.employee_id IS NOT NULL
@@ -76,7 +76,7 @@ AS
 		,inactive_type_code
 		,inactive_date		
 		,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE id IS NULL
       AND employee_id IS NOT NULL;

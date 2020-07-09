@@ -16,7 +16,7 @@ AS
 			,device_id						= b.device_id
 			,unit_assignment				= b.unit_assignment
 			,updated_by						= @user_id
-			,updated_date					= GETDATE()
+			,updated_date					= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.client_contract_devices a INNER JOIN @tt b
 	     ON a.client_contract_device_id = b.client_contract_device_id
@@ -38,7 +38,7 @@ AS
 		,device_id
 		,unit_assignment
 		,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE client_contract_device_id IS NULL
 	AND subscripton_no IS NOT NULL

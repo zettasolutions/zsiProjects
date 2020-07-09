@@ -18,9 +18,9 @@ AS
 			,item_type_id			= b.item_type_id
 			,is_active				= b.is_active 
 			,created_by				= @user_id
-			,created_date			= GETDATE()
+			,created_date			= DATEADD(HOUR, 8, GETUTCDATE())
 	   	    ,updated_by				= @user_id
-			,updated_date			= GETDATE()
+			,updated_date			= DATEADD(HOUR, 8, GETUTCDATE())
 
        FROM dbo.item_master a INNER JOIN @tt b
 	     ON a.item_id = b.item_id
@@ -48,9 +48,9 @@ AS
 			,item_type_id				 
 			,is_active	 		 
 			,@user_id
-			,GETDATE()						 		
+			,DATEADD(HOUR, 8, GETUTCDATE())					 		
 			,@user_id
-			,GETDATE()
+			,DATEADD(HOUR, 8, GETUTCDATE())
 
 	FROM @tt 
 

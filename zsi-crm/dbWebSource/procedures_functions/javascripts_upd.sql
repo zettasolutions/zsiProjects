@@ -24,7 +24,7 @@ BEGIN
 				,@js_name
 				,dbo.setMasterPageId(@js_name)
 				,@user_id
-				,GETDATE()
+				,DATEADD(HOUR, 8, GETUTCDATE())
 		)
 		set @page_id=@@identity
 	END
@@ -44,7 +44,7 @@ select @rev_no = ISNULL(rev_no,0)  from javascripts where js_id=@l_js_id
  	if(isnull(@l_js_id,0)=0 )
 		begin			
 			INSERT INTO dbo.javascripts( page_id,js_name,js_content,rev_no,created_by,created_date) 
-			VALUES (@page_id, @js_name,@js_content,1,@user_id,GETDATE())
+			VALUES (@page_id, @js_name,@js_content,1,@user_id,DATEADD(HOUR, 8, GETUTCDATE()))
 			set @new_id	=@@identity
 		end
 	else
@@ -56,7 +56,7 @@ select @rev_no = ISNULL(rev_no,0)  from javascripts where js_id=@l_js_id
 			, js_content=@js_content 
 			, rev_no=@rev_no + 1
 			, updated_by =  @user_id
-			, updated_date = GETDATE()
+			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
 			where js_id=@l_js_id
 		end	  
 	

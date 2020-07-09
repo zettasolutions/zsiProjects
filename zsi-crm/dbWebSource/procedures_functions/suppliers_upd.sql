@@ -1,5 +1,5 @@
 
-Create procedure [dbo].[suppliers_upd](
+CREATE procedure [dbo].[suppliers_upd](
    @supplier_id  int=null
   ,@supplier_code    char(10)=null
   ,@supplier_name nvarchar(50)=null
@@ -53,7 +53,7 @@ BEGIN
 		 ,@is_tax_exempt
 		 ,@payment_mode_id
 		 ,@user_id
-		 ,GETDATE()
+		 ,DATEADD(HOUR, 8, GETUTCDATE())
 		 ) 
 	ELSE
 	   UPDATE dbo.suppliers SET
@@ -71,6 +71,6 @@ BEGIN
 			   ,is_tax_exempt			= @is_tax_exempt
 			   ,payment_mode_id			= @payment_mode_id
 			   ,updated_by				= @user_id
-			   ,updated_date			= GETDATE();
+			   ,updated_date			= DATEADD(HOUR, 8, GETUTCDATE());
 END;
 

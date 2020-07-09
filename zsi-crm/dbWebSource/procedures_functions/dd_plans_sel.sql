@@ -1,11 +1,10 @@
 CREATE PROCEDURE [dbo].[dd_plans_sel]
 ( 
      @user_id INT = NULL
-	,@plan_id INT = NULL
 )
 AS
 BEGIN
-	SELECT plan_id, plan_code, plan_desc FROM dbo.plans;
+	SELECT * FROM dbo.plans WHERE is_promo='Y' AND is_active='Y';
  END;
 
 

@@ -16,7 +16,7 @@ DECLARE @updated_count INT;
 	 	    ,page_id         = b.page_id
 			,seq_no          = b.seq_no
 	   	    ,updated_by      = @user_id
-			,updated_date    = GETDATE()
+			,updated_date    = DATEADD(HOUR, 8, GETUTCDATE())
        FROM dbo.role_dashboards a INNER JOIN @tt b
 	     ON a.role_dashboard_id = b.role_dashboard_id 
 	    WHERE isnull(b.is_edited,'N') = 'Y'
@@ -36,7 +36,7 @@ SET @updated_count = @@ROWCOUNT;
 		,page_id
 		,seq_no
 	    , @user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE role_dashboard_id IS NULL
 	AND role_id IS NOT NULL AND page_id IS NOT NULL;

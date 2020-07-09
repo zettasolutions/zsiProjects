@@ -1,8 +1,8 @@
 CREATE TABLE clients(
 client_id	INT IDENTITY(1,1)	NOT NULL
-,hash_key	NVARCHAR(100)	NULL
-,client_code	CHAR(10)	NULL
-,client_name	NVARCHAR(100)	NULL
+,hash_key	NVARCHAR(200)	NOT NULL
+,client_code	CHAR(10)	NOT NULL
+,client_name	NVARCHAR(100)	NOT NULL
 ,client_phone_no	NVARCHAR(40)	NULL
 ,client_mobile_no	NVARCHAR(40)	NULL
 ,client_email_add	NVARCHAR(60)	NULL
@@ -23,6 +23,7 @@ client_id	INT IDENTITY(1,1)	NOT NULL
 ,is_active	CHAR(1)	NULL
 ,is_zfare	CHAR(1)	NULL
 ,is_zload	CHAR(1)	NULL
+,company_logo	NVARCHAR(200)	NULL
 ,created_by	INT	NULL
 ,created_date	DATETIME	NULL
 ,updated_by	INT	NULL

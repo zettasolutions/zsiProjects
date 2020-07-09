@@ -8,10 +8,11 @@ CREATE procedure [dbo].[client_contracts_upd](
   ,@expiry_date date=null
   ,@plan_id int=null
   ,@plan_qty int=null
-  ,@device_model_id int = null
-  ,@device_qty int = null
-  ,@device_term_id int = null
-  ,@unit_assignment_type_id int=null
+  ,@srp_amount decimal(10,2)=null
+  ,@dp_amount decimal(10,2)=null
+  ,@less_dp_amount decimal(10,2)=null
+  ,@total_amort_amount decimal(10,2)=null
+  ,@monthly_amort_amount decimal(10,2)=null
   ,@is_active varchar(1)='Y'
   ,@is_edited char(1)='N'
   ,@user_id int
@@ -23,8 +24,7 @@ BEGIN
    SET @id = @client_contract_id
 	 IF ISNULL(@client_contract_id,0)=0 
 	    AND ISNULL(@client_id,0)<>0
-		AND ((ISNULL(@plan_id,0)<>0 AND ISNULL(@plan_qty,0) >0) 
-		  OR (ISNULL(@device_model_id,0) <> 0 AND ISNULL(@device_qty,0) > 0 AND ISNULL(@device_term_id,0) <> 0)) 
+		AND ((ISNULL(@plan_id,0)<>0 AND ISNULL(@plan_qty,0) >0)) 
 		BEGIN
 		INSERT INTO dbo.client_contracts
 		 (
@@ -36,10 +36,11 @@ BEGIN
 		 ,expiry_date
 		 ,plan_id
 		 ,plan_qty
-		 ,device_model_id
-		 ,device_qty
-		 ,device_term_id
-		 ,unit_assignment_type_id
+		 ,srp_amount
+		 ,dp_amount
+		 ,less_dp_amount
+		 ,total_amort_amount
+		 ,monthly_amort_amount
 		 ,is_active
 		 ,created_by
 		 ,created_date
@@ -53,13 +54,14 @@ BEGIN
 		 ,@expiry_date
 		 ,@plan_id
 		 ,@plan_qty
-		 ,@device_model_id
-		 ,@device_qty
-		 ,@device_term_id
-		 ,@unit_assignment_type_id
+		 ,@srp_amount
+		 ,@dp_amount
+		 ,@less_dp_amount
+		 ,@total_amort_amount
+		 ,@monthly_amort_amount
 		 ,@is_active
 		 ,@user_id
-		 ,GETDATE()
+		 ,DATEADD(HOUR, 8, GETUTCDATE())
 		 ) 
 		 SET @id = @@IDENTITY
 	END
@@ -73,17 +75,17 @@ BEGIN
 				,expiry_date				= @expiry_date
 				,plan_id					= @plan_id
 				,plan_qty					= @plan_qty
-				,device_model_id			= @device_model_id
-				,device_qty					= @device_qty
-				,device_term_id				= @device_term_id
-				,unit_assignment_type_id	= @unit_assignment_type_id
+				,srp_amount					= @srp_amount
+				,dp_amount					= @dp_amount
+				,less_dp_amount				= @less_dp_amount
+				,total_amort_amount			= @total_amort_amount
+				,monthly_amort_amount		= @monthly_amort_amount
 				,is_active					= @is_active
 			    ,updated_by		   	        = @user_id
-			    ,updated_date		        = GETDATE()
+			    ,updated_date		        = DATEADD(HOUR, 8, GETUTCDATE())
 		   WHERE client_contract_id = @client_contract_id 
    		     AND ISNULL(@client_id,0)<>0
-		     AND ((ISNULL(@plan_id,0)<>0 AND ISNULL(@plan_qty,0) >0) 
-		      OR (ISNULL(@device_model_id,0) <> 0 AND ISNULL(@device_qty,0) > 0 AND ISNULL(@device_term_id,0) <> 0)) 
+		     AND ((ISNULL(@plan_id,0)<>0 AND ISNULL(@plan_qty,0) >0)) 
 			 AND @is_edited = 'Y';
 
 RETURN @id;

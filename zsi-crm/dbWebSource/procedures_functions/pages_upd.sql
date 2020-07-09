@@ -13,7 +13,7 @@ BEGIN
 			,is_public   = b.is_public
 			,master_page_id  = b.master_page_id
             ,updated_by   = @user_id
-            ,updated_date = GETDATE()
+            ,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
      FROM dbo.pages a INNER JOIN @tt b
         ON a.page_id = b.page_id 
        WHERE (
@@ -39,7 +39,7 @@ BEGIN
 	   ,is_public
 	   ,isnull(master_page_id,2) --default is: _layout
        ,@user_id
-       ,GETDATE()
+       ,DATEADD(HOUR, 8, GETUTCDATE())
     FROM @tt
     WHERE page_id IS NULL
 END
