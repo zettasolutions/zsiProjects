@@ -160,7 +160,7 @@
                                 </di>
                             </div>
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
-                                <button id="btnSubmit" type="submit" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
                                     <i class="far fa-save"></i> Save
                                 </button>
                             </div>
@@ -172,7 +172,13 @@
         </div>
     </div>
 </div>
-
+<div class="hide">
+    <form id="formEmail">
+        <input type="hidden" name="password" id="epassword" value="">
+        <input type="hidden" name="name" id="ename" value="">
+        <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
+    </form>
+</div>
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">

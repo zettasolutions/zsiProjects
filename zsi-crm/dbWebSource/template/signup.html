@@ -25,15 +25,12 @@
 </style>
 <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0" style="position:relative">
     <div class="col-12 col-md-6 col-lg-6 col-xl-6 hidden-sm-down zsi-home-color">
-        <a href="/" class="page-logo-link press-scale-down d-flex align-items-center navbar-brand text-white">
-			<img src='@Url.Content("~/")images/logo.png' alt="Lear Logo" aria-roledescription="logo" class="mr-2">
-			 ZSI CRM
-		</a>
         <div class="container">
             <h2 class="fs-xxl fw-500 mt-4">
-                The simplest UI toolkit for developers &amp; programmers
+                Welcome to Customer Relationship Management (CRM) Control Panel
                 <small class="h3 fw-300 mt-3 mb-5 opacity-60">
-                    Presenting you with the next level of innovative UX design and engineering. The most modular toolkit available with over 600+ layout permutations. Experience the simplicity of SmartAdmin, everywhere you go!
+                    A system helps company's stay connected to customers, streamline processes, and improve profitability.
+                    
                 </small>
             </h2>
             <a href="#" class="fs-lg fw-500 opacity-70">Learn more &gt;&gt;</a>
@@ -56,7 +53,6 @@
                     </a>
                 </div>
             </div>
-            © 2020 - Powered By ZettaSolutions, Inc.
         </div>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-12 crm-bg-white">
@@ -72,14 +68,6 @@
                                 <div class="pl-4 pr-4">
                         		    <div id="clientInformationDiv" class="row mb-2"> 
                                         <input type="hidden" name="client_id" id="client_id">
-                                        <!--<div class="col-12 col-md-12">
-                                		    <label for="" class="col-form-label control-label"><b>Registration Date</b><span class="text-danger">*</span></label>  
-                                            <input type="text" class="form-control form-control-sm" id="registration_date" required  name="registration_date" autocomplete="off"/>
-                                		</div>-->
-                                    	<!--<div class="col-12 col-md-12">
-                                		    <label for="" class="col-form-label control-label"><b>Company Code</b><span class="text-danger">*</span></label> 
-                                            <input type="text" class="form-control form-control-sm" id="client_code" required  name="client_code" autocomplete="off"/>
-                                		</div>-->
                                     	<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Company Name</b><span class="text-danger">*</span></label>
                                             <input type="text" class="form-control form-control-sm autoCaps" id="client_name" required  name="client_name" autocomplete="off"/> 
@@ -173,8 +161,10 @@
                                             </div>
                                         </di>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
-                                        <button id="btnSubmit" type="submit" class="btn btn-primary btn-md col-5 ml-1 hvr-sweep-to-left" title="Register Now">Register Now</button>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">   
+                                        <button id="btnSubmit" type="button" class="btn btn-primary btn-md col-5 ml-1 hvr-sweep-to-left col-12" title="Register Now">Register Now</button>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">   
                         				<span class="ml-2">Member click here > </span><a href="/" id="btnSignUp" class="">Sign In</a>
                                     </div>
                                 </div>
@@ -187,12 +177,13 @@
     </div>
 </div>
 <div class="hide">
-<form id="formEmail">
-    <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
-    <input type="hidden" name="mail_subject" id="mail_subject" value="AFCS Password">
-    <input type="hidden" name="mail_body" id="mail_body" value="">
-</form>
-</div><div id="myModal" class="modal fade" role="dialog">
+    <form id="formEmail">
+        <input type="hidden" name="password" id="epassword" value="">
+        <input type="hidden" name="name" id="ename" value="">
+        <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
+    </form>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -4,11 +4,15 @@
              position:unset;
          }
     }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
 </style>
 <div class="panel">
     <div class="panel-container">
         <div class="panel-content">
-            <div class="row mb-5">
+            <div class="row mb-3">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
                      <div id="gridPlans" class="zGrid"></div>
                 </div>
@@ -32,11 +36,9 @@
                             </h2>
                             <div class="panel-toolbar">
                                 <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                                <!--<button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>-->
-                                <!--<button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>-->
                             </div>
                         </div>
-                        <div class="panel-container show">
+                        <div class="panel-container show panel-container-grid">
                             <div class="panel-content">
                                 <div class="row hide" id="divPlanInclusions">
                                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1"> 
