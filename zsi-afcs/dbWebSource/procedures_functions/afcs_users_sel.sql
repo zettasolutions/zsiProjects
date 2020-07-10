@@ -9,13 +9,13 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		  employee_id [user_id]
-	    , client_id company_code
-		, null logon
-		, position_title position
+		  id AS [user_id]
+	    , client_id AS company_code
+		, null AS logon
+		, position_title AS position
 		, last_name
 		, first_name
-		, emp_lfm_name full_name
+		, emp_lfm_name AS full_name
 		, is_active
 		, emp_hash_key AS user_hash_key
 	FROM zsi_payroll.dbo.employees_v

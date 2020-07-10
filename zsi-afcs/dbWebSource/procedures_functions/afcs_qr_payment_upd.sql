@@ -14,7 +14,7 @@ CREATE PROCEDURE [dbo].[afcs_qr_payment_upd](
 	, @pwd_amount DECIMAL(12, 2)
 	, @vehicle_hash_key NVARCHAR(MAX)
 	, @driver_id INT
-	, @trip_no  INT
+	, @trip_hash_key NVARCHAR(MAX)
 	, @pao_id INT
 	, @route_id INT
 	, @from_location NVARCHAR(100)
@@ -37,6 +37,7 @@ BEGIN
 	DECLARE @client_id INT;
 	DECLARE @device_id INT = 0;
 	DECLARE @new_id NVARCHAR(50);
+	DECLARE @trip_id INT;
 
 	SELECT @new_id = NEWID();
 	
@@ -69,6 +70,11 @@ BEGIN
 					FROM dbo.active_vehicles_v WHERE 1 = 1
 					AND hash_key = @vehicle_hash_key;
 
+					SELECT 
+						@trip_id = trip_id
+					FROM dbo.vehicle_trips WHERE 1 = 1
+					AND trip_hash_key = @trip_hash_key;
+
 					BEGIN TRAN;
 
 					SET @new_credit_amount = @credit_amount - @total_amount;
@@ -100,7 +106,7 @@ BEGIN
 						, [base_fare]
 						, [client_id]
 						, [device_id]
-						, [trip_no]
+						, [trip_id]
 						, [payment_key]
 						, [pao_id]
 						, [route_id]
@@ -125,7 +131,7 @@ BEGIN
 						, @base_fare
 						, @client_id
 						, @device_id
-						, @trip_no
+						, @trip_id
 						, @new_id
 						, @pao_id
 						, @route_id

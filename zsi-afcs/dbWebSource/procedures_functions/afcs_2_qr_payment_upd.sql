@@ -87,7 +87,7 @@ BEGIN
 					, [consumer_id]
 					, [vehicle_id]
 					, [driver_id]
-					, [trip_no]
+					, [trip_id]
 					, [qr_id]
 					, [base_fare]
 					, [client_id]

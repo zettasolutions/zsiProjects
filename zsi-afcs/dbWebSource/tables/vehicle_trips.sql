@@ -1,7 +1,7 @@
 CREATE TABLE vehicle_trips(
 trip_id	INT IDENTITY(1,1)	NOT NULL
 ,trip_no	INT	NULL
-,trip_date	DATE	NULL
+,client_id	INT	NULL
 ,vehicle_id	INT	NULL
 ,driver_id	INT	NULL
 ,pao_id	INT	NULL

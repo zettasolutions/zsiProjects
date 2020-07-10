@@ -26,7 +26,7 @@ payment_id	INT IDENTITY(1,1)	NOT NULL
 ,payment_key	NVARCHAR(100)	NULL
 ,prev_qr_id	INT	NULL
 ,is_cancelled	NCHAR(2)	NOT NULL
-,trip_no	NVARCHAR(40)	NULL
+,trip_id	INT	NULL
 ,consumer_id	INT	NULL
 ,base_fare	DECIMAL(12)	NULL
 ,client_id	INT	NULL)
