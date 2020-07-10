@@ -14,10 +14,13 @@
         ,gzGrid1         = "#gridTransactions"
         ,gzGrid2         = "#gridPostedTransactions"  
         ,gzGridForPostDtl = "#gridForPostingSummary"
-        ,gzGridPostDtl  = "#gridPostingSummary"
+        ,gzGridPostDtl   = "#gridPostingSummary"
         ,gSubTabName     = ""
         ,gTabName        = "" 
         ,gUser           =  app.userInfo
+        ,gTripNo          = []
+        ,gVehicle         = []
+        ,gDriver          = []
     ;
        
     gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());  
@@ -67,7 +70,7 @@
             ,end_date       : _endDate
         };
     }  
-    function dropdowns(){ 
+    /*function dropdowns(){ 
         var d = new Date();
         var month = d.getMonth()+1;
         var day = d.getDate();
@@ -124,7 +127,7 @@
         });
        
         
-    } 
+    } */
     function dateValidation(){
         $("#dailyFare_to").attr("disabled",true); 
         $("#end_date").attr("disabled",true);  
@@ -603,7 +606,6 @@
         });
     }    
     function displayDailyFareCollection(){ 
-        console.log("gSubTabName Recent ",gSubTabName);
         var _$navGrid = "#gridDailyFareCollections"
             ,_sqlCode  = "V1349" 
             ,_o        = getFilters()
@@ -674,8 +676,16 @@
                         ,{text: "Vehicle"                   ,name:"vehicle_plate_no"        ,type:"input"       ,width : 100    ,style : "text-align:center;"  }  
                         ,{text: "Driver"                    ,name:"driver_name"             ,type:"input"       ,width : 130    ,style : "text-align:center;"  } 
                         ,{text: "Pao"                       ,name:"pao_name"                ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
-                        ,{text: "Start Date"                ,name:"start_date"              ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
-                        ,{text: "End Date"                  ,name:"end_date"                ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
+                        ,{text: "Start Date"                ,width : 100                    ,style : "text-align:left;"  
+                            ,onRender : function(d){
+                                return app.bs({name: "start_date"                           ,type: "input"     ,value: app.svn(d,"start_date").toShortDate()   })
+                            }
+                        }
+                        ,{text: "End Date"                   ,width : 100                   ,style : "text-align:left;"  
+                            ,onRender : function(d){
+                                return app.bs({name: "end_date"         ,type: "input"     ,value: app.svn(d,"end_date").toShortDate()   })
+                            }
+                        }
                         ,{text: "Start Odo Reading"         ,name:"start_odo"               ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
                         ,{text: "End Odo Reading"           ,name:"end_odo"                 ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
                         ,{text: "Distance(Km)"              ,name:"no_kms"                  ,type:"input"       ,width : 100    ,style : "text-align:center;"  } 
@@ -740,12 +750,13 @@
                  return _dataRows; 
             };  
             
-        zsi.getData({
-                 sqlCode    : _sqlCode //
+            zsi.getData({
+                 sqlCode    : _sqlCode 
                 ,parameters :  _params
                 ,onComplete : function(d) {
-                    var _rows= d.rows;
-                    var _tot = {reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0,stod:0,edo:0,kms:0,tca:0}; 
+                    var _rows = d.rows;
+                    var _tot  = {reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0,stod:0,edo:0,kms:0,tca:0}; 
+                    
                     for(var i=0; i < _rows.length;i++ ){
                         var _info = _rows[i];
                         _tot.reg    +=_info.reg_amount; 
@@ -762,7 +773,6 @@
                         _tot.kms    +=_info.no_kms;
                         _tot.tca    +=_info.total_collection_amt;
                     }
-                    
                     //create additional row for total 
                     if(_sqlCode ==="V1349"){
                         var _total = {
@@ -777,7 +787,7 @@
                                 ,no_kms                 : _tot.kms
                                 ,total_collection_amt   : _tot.tca 
                         };
-                         d.rows.push(_total);
+                         _rows.push(_total);
                     }else{
                         var _total = {
                                  payment_date       : ""
@@ -801,24 +811,41 @@
                                 ,pao                : ""
                                 ,vehicle_plate_no   : ""
                         };
-                         d.rows.push(_total);
+                         _rows.push(_total);
                     } 
+    
+                    $("#nav-recentCollection").find("select[id='trip_no']").fillSelect({
+                         data   : _rows
+                        ,text   : "trip_no"
+                        ,value  : "trip_id"
+                    });
+                    $("#nav-recentCollection").find("select[id='dailyFare_vehicle']").fillSelect({
+                         data   : _rows
+                        ,text   : "vehicle_plate_no"
+                        ,value  : "vehicle_id"
+                    });
+                    $("#nav-recentCollection").find("select[id='dailyFare_driver']").fillSelect({
+                         data   : _rows
+                        ,text   : "driver_name"
+                        ,value  : "driver_id"
+                    });
+    
                     $(_$navGrid).dataBind({
                          rows           : _rows
                         ,height         : $(window).height() - 500
                         ,dataRows       : _getDataRows()
                         ,onComplete: function(o){
-                            var _this   = this; 
+                            var _this = this; 
                             this.find("input").attr("readonly",true);
                             $(".zRow:last-child()").addClass("zTotal");
                             $(".zRow:last-child()").find('[name="no_klm"]').css("font-weight","bold"); 
-                            setFooterFreezed(_$navGrid); 
                     }
                 });
-
+    
             }
         });
     }
+    
     function getDataRowsByStatus(statusId){
         //statusId: 1 =  for posting, 2= posted
         var _dataRows =[
@@ -942,7 +969,6 @@
         displayPostedSummaryDtl(post_id, vehicle_id);
     }
 
-
     $("#btnSaveTransations").click(function () {
     $("#gridTransactions").jsonSubmit({
        procedure: "payment_posting_upd"
@@ -1030,9 +1056,7 @@
         dateValidation();
         displayForPosting();
         displayPostedTransactions(); 
-        dropdowns();  
+        //dropdowns();  
     };
-
-
     return _pub;
-})();                                                                                            
+})();                                                                                                
