@@ -566,6 +566,9 @@
                                     <a href="#" class="dropdown-item" data-toggle="modal" data-target=".js-modal-settings">
                                         <span data-i18n="drpdwn.settings">Settings</span>
                                     </a>
+                                    <a href='@Url.Content("~/")page/changepassword' class="dropdown-item">
+                                        <span>Change Password</span>
+                                    </a>
                                     <div class="dropdown-divider m-0 hide"></div>
                                     <a href="#" class="dropdown-item hide" data-action="app-fullscreen">
                                         <span data-i18n="drpdwn.fullscreen">Fullscreen</span>
@@ -1219,9 +1222,11 @@
 						+ ba-throttle-debounce.js (core)
 						+ waves.js (extension)
 						+ smartpanels.js (extension)
-						+ src/../jquery-snippets.js (core) -->
+						+ src/../jquery-snippets.js (core) -->			
         <script src='@Url.Content("~/")js/vendors.bundle.js'></script>
         <script src='@Url.Content("~/")js/app.bundle.js'></script>
+        <script src='@Url.Content("~/")js/jquery.maskMoney.js'></script>
+        <script src='@Url.Content("~/")js/jquery.maskMoney.min.js'></script>
         <script src='@Url.Content("~/")js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js'></script>
         <script src='@Url.Content("~/")js/formplugins/select2/select2.bundle.js'></script>
         <script src='@Url.Content("~/")js/formplugins/inputmask/inputmask.bundle.js'></script>
