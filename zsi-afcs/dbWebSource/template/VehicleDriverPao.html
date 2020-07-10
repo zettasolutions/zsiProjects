@@ -32,7 +32,7 @@
         <div class="panel-content">
             <div class="row">
                 <nav class="col-12 col-sm-8 col-md-8 col-xs-8">
-                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <div class="nav nav-tabs nav-tab-main" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" data-toggle="tab" href="#nav-vehicles" role="tab" aria-controls="nav-vehicles"> Vehicles </a>
                     <a class="nav-item nav-link" data-toggle="tab" href="#nav-drivers" role="tab" aria-controls="nav-drivers"> Drivers </a>
                     <a class="nav-item nav-link" data-toggle="tab" href="#nav-pao" role="tab" aria-controls="nav-pao"> PAO </a>
@@ -55,7 +55,7 @@
             <div class="tab-content" id="nav-tabContent">
                 <div role="tabpanel" class="tab-pane fade show active" id="nav-vehicles">
                     <div class="zContainer">
-                        <div class="row">
+                        <div class="row"> 
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
                                  <div id="gridVehicles" class="zGrid mb-1"></div>
                             </div>
@@ -75,20 +75,21 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div role="tabpanel" class="tab-pane fade" id="nav-drivers">
-                    <div class="zContainer">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
-                                 <div id="gridDrivers" class="zGrid mb-1"></div>
-                            </div>
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
-                                <div class="button-group">     
-                                    
-                                </div>
-                            </div>
+                </div> 
+                <div role="tabpanel" class="tab-pane fade" id="nav-drivers">  
+                    <nav>
+                        <div class="nav nav-tabs nav-tab-sub nav-sub-mfg" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link  nav-mfg active" data-toggle="tab" href="#nav-ol" role="tab" id="ol1">Active</a>
+                            <a class="nav-item nav-link  nav-mfg" data-toggle="tab" href="#nav-ol" role="tab" id="ol2">(15)Days for Renewal</a>
+                            <a class="nav-item nav-link  nav-mfg" data-toggle="tab" href="#nav-ol" role="tab" id="ol3">(30)Days for Renewal</a>
+                            <a class="nav-item nav-link  nav-mfg" data-toggle="tab" href="#nav-ol" role="tab" id="ol4">Expired License</a>
+                            <a class="nav-item nav-link  nav-mfg " data-toggle="tab" href="#nav-ol" role="tab" id="ol5">Inactive</a>
                         </div>
+                    </nav>
+                    <div class="panel p-2 "> 
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
+                             <div id="gridDriversLicensed" class="zGrid mb-1"></div>
+                        </div> 
                         <form method="post" id="frm">
                             <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -103,7 +104,7 @@
                                     </button>
                                 </div>
                             </div>
-                        </form>
+                        </form> 
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="nav-pao">
