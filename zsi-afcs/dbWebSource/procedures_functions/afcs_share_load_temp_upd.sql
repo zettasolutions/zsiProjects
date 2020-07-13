@@ -52,16 +52,14 @@ BEGIN
 	IF ISNULL(@generated_qr_id,0)= 0
 	    SELECT
 		'N' AS is_valid
-	     , 'User account not found.' AS msg
+	     , 'Sorry, the user is not registered. Please register the user first to enjoy the service.' AS msg
     ELSE
 	BEGIN
-	   IF ISNULL(@mobile_no, '') <> ''
-	      SELECT @consumer_balance_amount = balance_amt FROM dbo.generated_qrs WHERE id=@generated_qr_id;
+		IF ISNULL(@mobile_no, '') <> ''
+			SELECT @consumer_balance_amount = balance_amt FROM dbo.generated_qrs WHERE [id] = @generated_qr_id;
 		  
-	   SELECT @user_id = qr_id FROM dbo.consumers where mobile_no = @user_mobile_no
-	   SELECT @user_balance_amount = balance_amt
-		FROM dbo.generated_qrs_registered_v
-	   WHERE id=@user_qr_id
+		SELECT @user_id = qr_id FROM dbo.consumers WHERE 1 = 1 AND mobile_no = @user_mobile_no;
+		SELECT @user_balance_amount = balance_amt FROM dbo.generated_qrs_registered_v WHERE 1 = 1 AND id = @user_id;
 
 		IF @user_balance_amount > @load_amount
 			BEGIN
@@ -101,7 +99,7 @@ BEGIN
 					, 'A load amount of PHP ' + CAST(@load_amount AS NVARCHAR(100)) + ' is entered through zpay share a load. Use this OTP ' 
 						+ CAST(@otp AS NVARCHAR(100)) + ' to finalize the transaction. The OTP will expire on ' + CAST(@otp_expiry_datetime AS NVARCHAR(100)) + '.'
 					, 'N'
-					, @loader_id
+					, @user_id
 					, DATEADD(HOUR, 8, GETUTCDATE()))
 
 				IF @@ERROR = 0
@@ -109,21 +107,21 @@ BEGIN
 					COMMIT;
 					SELECT
 						'Y' AS is_valid
-						, 'Transaction pending. Enter the OTP to finalize the transaction.' AS msg
+						, 'Your transaction is pending. Please enter the OTP to finalize the transaction.' AS msg
 				END
 				ELSE
 				BEGIN
 					ROLLBACK;
 					SELECT
 						'N' AS is_valid
-						, 'An error occurred while processing the transaction.' AS msg
+						, 'Sorry, something went wrong while processing your request. Please try again later.' AS msg
 				END
 			END
 			ELSE
 			BEGIN
 				SELECT
 					'N' AS is_valid
-					, 'Your ZPay balance is insufficient.' AS msg
+					, 'Sorry, your ZPay balance is insufficient to continue this request.' AS msg
 			END
 		END
 END;

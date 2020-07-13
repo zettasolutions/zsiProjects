@@ -16,6 +16,7 @@ BEGIN
 	DECLARE @generated_qr_is_active NCHAR(1);
 	DECLARE @generated_qr_id INT;
 	DECLARE @generated_qr_amount DECIMAL(12, 2);
+	DECLARE @expiry_date DATETIME = NULL;
 
 	SELECT
 		@consumer_id = consumer_id
@@ -27,6 +28,7 @@ BEGIN
 		TOP 1
 		@consumer_generated_qr_id = id
 		, @current_consumer_credit_amount = balance_amt
+		, @expiry_date = [expiry_date]
 	FROM dbo.generated_qrs
 	WHERE 1 = 1
 	AND consumer_id = @consumer_id
@@ -37,6 +39,7 @@ BEGIN
 		@generated_qr_id = id
 		, @generated_qr_is_active = is_active
 		, @generated_qr_amount = balance_amt
+		, @expiry_date = [expiry_date]
 	FROM dbo.generated_qrs 
 	WHERE 1 = 1
 	AND consumer_id IS NULL
@@ -95,5 +98,6 @@ BEGIN
 				, 'QR code loaded successfully.' AS load_msg
 				, @generated_qr_amount AS amount_loaded
 				, @new_consumer_amount AS consumer_credit_amount
+				, @expiry_date AS [expiry_date]
 	END
 END;

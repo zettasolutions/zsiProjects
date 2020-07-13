@@ -30,4 +30,4 @@ BEGIN
 	EXEC(@stmt);
 END
 
-
+--vehicle_sel @is_active='N'

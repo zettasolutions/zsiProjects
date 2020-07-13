@@ -29,7 +29,7 @@ BEGIN
 	
 	SELECT 
 		@driver_id = [user_id]
-		, @driver = full_name
+		, @driver = CONCAT(first_name, ' ', last_name)
 	FROM dbo.drivers_v
 	WHERE hash_key = @driver_hash_key;
 
@@ -39,17 +39,19 @@ BEGIN
 	WHERE 1 = 1 
 	AND vehicle_id = @vehicle_id 
 	AND driver_id = @driver_id
-	AND CAST(payment_date AS DATE) = CAST(GETDATE() AS DATE);
+	AND CAST(payment_date AS DATE) = CAST(DATEADD(HOUR,8,GETUTCDATE()) AS DATE);
 
 	SELECT 
-		TOP 1 @trip_no = trip_no 
-	FROM dbo.payments 
+		TOP 1 @trip_no = b.trip_no 
+	FROM dbo.payments a
+	LEFT JOIN dbo.vehicle_trips b
+	ON a.trip_id = b.trip_id
 	WHERE 1 = 1 
-	AND vehicle_id = @vehicle_id 
-	AND driver_id = @driver_id
-	AND CAST(payment_date AS DATE) = CAST(GETDATE() AS DATE)
+	AND a.vehicle_id = @vehicle_id 
+	AND a.driver_id = @driver_id
+	AND CAST(a.payment_date AS DATE) = CAST(DATEADD(HOUR,8,GETUTCDATE()) AS DATE)
 	ORDER BY 
-		payment_id DESC;
+		a.payment_id DESC;
 
     SELECT 
 		@vehicle_id AS vehicle_id

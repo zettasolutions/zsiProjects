@@ -18,8 +18,7 @@ BEGIN
 		, emp_lfm_name AS full_name
 		, is_active
 		, emp_hash_key AS user_hash_key
-	FROM zsi_payroll.dbo.employees_v
+	FROM zsi_hcm.dbo.employees_active_v
 	WHERE position_id in (3,4,20)
-	AND is_active='Y'
 	AND emp_hash_key = @hash_key
 END;

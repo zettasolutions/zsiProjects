@@ -8,8 +8,8 @@ CREATE PROCEDURE [dbo].[image_drivers_image_licence_upd](
 AS
 BEGIN
 SET NOCOUNT ON
-update dbo.users
+update zsi_hcm.dbo.employees
 set driver_licence_img_filename =@driver_licence_img_filename 
-   where user_id = @user_id
+   where id = @user_id
 
 END 

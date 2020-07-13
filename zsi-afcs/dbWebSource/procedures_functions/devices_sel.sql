@@ -11,4 +11,3 @@ BEGIN
 		SELECT * FROM dbo.devices where company_code = @company_code and is_active = @is_active
 END
 
-

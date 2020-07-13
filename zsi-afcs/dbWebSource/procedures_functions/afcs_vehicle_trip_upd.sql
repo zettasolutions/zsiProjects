@@ -17,7 +17,7 @@ BEGIN
 	DECLARE @vehicle_id INT
 	DECLARE @driver_id  INT
 	DECLARE @pao_id     INT
-	DECLARE @cur_date   DATE  = DATEADD(HOUR, 8, GETUTCDATE());
+	DECLARE @cur_date   DATETIME  = DATEADD(HOUR, 8, GETUTCDATE());
 	DECLARE @msg        NVARCHAR(100);
 	DECLARE @ttl_amount decimal(10,2)=0;
 
@@ -69,3 +69,6 @@ BEGIN
 			, '' AS is_open
 	END
 END
+
+
+

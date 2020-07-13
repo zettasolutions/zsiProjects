@@ -48,7 +48,7 @@ BEGIN
 			SET  qr_id=@generated_qr_id
 				,is_active = 'Y'
 				,activation_code_expiry=null
-				,updated_date = DATEADD(HOUR, 8, GETUTCDATE())
+				,updated_date = DATEADD(HOUR,8,GETUTCDATE())
 			WHERE 1 = 1
 			AND consumer_id = @consumer_id;
 
@@ -56,6 +56,7 @@ BEGIN
 			SET 
 				 is_taken  = 'Y'
 			    ,consumer_id = @consumer_id
+				,expiry_date = DATEADD(MONTH,6,DATEADD(HOUR,8,GETUTCDATE()))
 			WHERE 1 = 1
 			AND id = @generated_qr_id;
 
@@ -88,4 +89,5 @@ BEGIN
 			, 'Invalid activation code. Please try again.' AS msg
 	END
 END;
+
 

@@ -15,6 +15,7 @@ CREATE PROCEDURE [dbo].[afcs_2_qr_payment_upd]
    , @vehicle_hash_key NVARCHAR(MAX)
    , @driver_hash_key NVARCHAR(MAX)
    , @trip_no INT
+   , @pao_hash_key NVARCHAR(MAX)
    , @user_id INT = NULL
 )  
 AS  
@@ -31,6 +32,7 @@ BEGIN
 	DECLARE @vehicle_id INT;
 	DECLARE @driver_id INT;
 	DECLARE @client_id INT;
+	DECLARE @pao_id INT = NULL;
 
 	-- Check whether the hash_key1 and hash_key2 exists in the generated_qrs table and is active.
 	SELECT 
@@ -60,18 +62,12 @@ BEGIN
 				FROM dbo.drivers_active_v 
 				WHERE hash_key = @driver_hash_key;
 
+				SELECT 
+					@pao_id = [user_id]
+				FROM dbo.pao_active_v 
+				WHERE hash_key = @pao_hash_key;
+
 				BEGIN TRAN;
-
-				SET @new_credit_amount = @credit_amount - @total_amount;
-
-				UPDATE 
-					dbo.generated_qrs 
-				SET
-					  [balance_amt] = @new_credit_amount
-					, [updated_by] = @consumer_id
-					, [updated_date] = DATEADD(HOUR, 8, GETUTCDATE())
-				WHERE 1 = 1
-				AND id = @generated_qrs_id;
 
 				-- Insert record in the payments table.
 				INSERT INTO [dbo].[payments](
@@ -91,6 +87,8 @@ BEGIN
 					, [qr_id]
 					, [base_fare]
 					, [client_id]
+					, [pao_id]
+					, [qr_ref_no]
 				)
 				VALUES(
 					DATEADD(HOUR, 8, GETUTCDATE())
@@ -109,35 +107,43 @@ BEGIN
 					, @generated_qrs_id
 					, @base_fare
 					, @client_id
+					, @pao_id
+					,'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0)
 				)
-
-				SET @id = @@IDENTITY;
-				UPDATE [dbo].[payments] SET qr_ref_no = 'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0) where payment_id=@id;
-
-			IF @consumer_id IS NOT NULL
-				-- Insert record in the sms_notifications table.
-				INSERT INTO [dbo].[sms_notifications]
-				   ([app_name]
-				   ,[mobile_no]
-				   ,[message]
-				   ,[is_processed]
-				   ,[created_by]
-				   ,[created_date])
-				VALUES(
-					'zpay'
-				   , @mobile_no
-				   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' .'
-				   , 'N'
-				   , @user_id
-				   , DATEADD(HOUR, 8, GETUTCDATE()))
-			
-				IF @@ERROR <> 0
-				BEGIN
-					SET @error = 1;
 				END
 
-				IF @error = 0
+				IF @@ERROR = 0
 				BEGIN
+					SET @new_credit_amount = @credit_amount - @total_amount;
+
+					UPDATE 
+						dbo.generated_qrs 
+					SET
+						  [balance_amt] = @new_credit_amount
+						, [expiry_date] = DATEADD(MONTH,6,DATEADD(HOUR,8,GETUTCDATE()))
+						, [updated_by] = @consumer_id
+						, [updated_date] = DATEADD(HOUR, 8, GETUTCDATE())
+					WHERE 1 = 1
+					AND id = @generated_qrs_id;
+
+				IF @consumer_id IS NOT NULL
+				BEGIN
+					-- Insert record in the sms_notifications table.
+					INSERT INTO [dbo].[sms_notifications]
+					   ([app_name]
+					   ,[mobile_no]
+					   ,[message]
+					   ,[is_processed]
+					   ,[created_by]
+					   ,[created_date])
+					VALUES(
+						'zpay'
+					   , @mobile_no
+					   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' .'
+					   , 'N'
+					   , @user_id
+					   , DATEADD(HOUR, 8, GETUTCDATE()))
+
 					COMMIT;
 
 					SELECT 

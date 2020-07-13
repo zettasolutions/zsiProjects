@@ -79,15 +79,6 @@ BEGIN
 
 					SET @new_credit_amount = @credit_amount - @total_amount;
 
-					UPDATE 
-						dbo.generated_qrs 
-					SET
-						  [balance_amt] = @new_credit_amount
-						, [updated_by] = @consumer_id
-						, [updated_date] = DATEADD(HOUR, 8, GETUTCDATE())
-					WHERE 1 = 1
-					AND id = @generated_qrs_id;
-
 					-- Insert record in the payments table.
 					INSERT INTO [dbo].[payments](
 						[payment_date]
@@ -113,6 +104,7 @@ BEGIN
 						, [from_location]
 						, [to_location]
 						, [no_klm]
+						, [qr_ref_no]
 					)
 					VALUES(
 						DATEADD(HOUR, 8, GETUTCDATE())
@@ -138,28 +130,9 @@ BEGIN
 						, @from_location
 						, @to_location
 						, @travel_distance
+						, 'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0)
 					)
-
-					SET @id = @@IDENTITY;
-					UPDATE [dbo].[payments] SET qr_ref_no = 'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0) where payment_id=@id;
-
-				IF @consumer_id IS NOT NULL
-					-- Insert record in the sms_notifications table.
-					INSERT INTO [dbo].[sms_notifications]
-					   ([app_name]
-					   ,[mobile_no]
-					   ,[message]
-					   ,[is_processed]
-					   ,[created_by]
-					   ,[created_date])
-					VALUES(
-						'zpay'
-					   , @mobile_no
-					   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' .'
-					   , 'N'
-					   , @user_id
-					   , DATEADD(HOUR, 8, GETUTCDATE()))
-			
+			        
 					IF @@ERROR <> 0
 					BEGIN
 						SET @error = 1;
@@ -167,6 +140,32 @@ BEGIN
 
 					IF @error = 0
 					BEGIN
+						UPDATE 
+							dbo.generated_qrs_active_v 
+						SET
+							  [balance_amt] = @new_credit_amount
+							, [updated_by] = @consumer_id
+							, [updated_date] = DATEADD(HOUR, 8, GETUTCDATE())
+						WHERE 1 = 1
+						AND id = @generated_qrs_id;
+
+						IF @consumer_id IS NOT NULL
+							-- Insert record in the sms_notifications table.
+							INSERT INTO [dbo].[sms_notifications]
+							   ([app_name]
+							   ,[mobile_no]
+							   ,[message]
+							   ,[is_processed]
+							   ,[created_by]
+							   ,[created_date])
+							VALUES(
+								'zpay'
+							   , @mobile_no
+							   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' .'
+							   , 'N'
+							   , @user_id
+							   , DATEADD(HOUR, 8, GETUTCDATE()))
+
 						COMMIT;
 
 						SELECT 
@@ -209,5 +208,6 @@ BEGIN
 			, 0 AS current_balance_amount
 	END
 END;
+
 
 

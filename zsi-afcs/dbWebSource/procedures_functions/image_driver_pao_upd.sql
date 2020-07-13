@@ -7,8 +7,8 @@ CREATE PROCEDURE [dbo].[image_driver_pao_upd](
 AS
 BEGIN
 SET NOCOUNT ON
-update dbo.users
+update zsi_hcm.dbo.employees
 set img_filename =@img_filename 
-   where user_id = @user_id
+   where id = @user_id
 
 END 

@@ -2,7 +2,7 @@
 
 CREATE PROCEDURE [dbo].[afcs_share_load_upd]  
 (  
-	  @mobile_no	        NVARCHAR(MAX)
+	  @username				NVARCHAR(MAX)
 	, @otp					NVARCHAR(MAX)
 	, @user_id				INT = NULL
 )  
@@ -52,7 +52,7 @@ BEGIN
 		   SELECT  @consumer_mobile_no = mobile_no FROM dbo.consumers WHERE is_active='Y'
 
 		BEGIN
-		    SELECT @user_qr_id = qr_id, @user_consumer_id = consumer_id FROM dbo.consumers where mobile_no = @mobile_no
+		    SELECT @user_qr_id = qr_id, @user_consumer_id = consumer_id FROM dbo.consumers where mobile_no = @username
 			SELECT @user_current_balance_amount = ISNULL(balance_amt, 0)
 			FROM dbo.generated_qrs_registered_v
 			WHERE id = @user_qr_id;
@@ -132,7 +132,7 @@ BEGIN
 						COMMIT;
 						SELECT
 							'Y' AS is_valid
-							, 'Transaction successful.' AS msg
+							, 'Your transaction is successful.' AS msg
 							, @load_amount AS amount_loaded
 							, @user_new_balance_amount AS user_balance_amount
 					END
@@ -141,7 +141,7 @@ BEGIN
 						ROLLBACK;
 						SELECT
 							'N' AS is_valid
-							, 'An error occurred while processing the transaction.' AS msg
+							, 'Sorry, something went wrong while processing your request. Please try again later.' AS msg
 							, @load_amount AS amount_loaded
 							, @user_current_balance_amount AS user_balance_amount
 					END
@@ -150,7 +150,7 @@ BEGIN
 				BEGIN
 					SELECT
 						'N' AS is_valid
-						, 'User balance is insufficient.' AS msg
+						, 'Sorry, your ZPay balance is insufficient to continue this request.' AS msg
 						, @load_amount AS amount_loaded
 						, @user_current_balance_amount AS user_balance_amount
 				END
@@ -159,7 +159,7 @@ BEGIN
 			BEGIN
 				SELECT
 					'N' AS is_valid
-					, 'User account not found.' AS msg
+					, 'Sorry, the user is not registered. Please register the user first to enjoy the service' AS msg
 					, @load_amount AS amount_loaded
 					, 0 AS user_balance_amount
 			END
@@ -169,7 +169,7 @@ BEGIN
 	BEGIN
 		SELECT
 			'N' AS is_valid
-			, 'OTP is no longer valid.' AS msg
+			, 'Sorry, the OTP entered is no longer valid. Please create another request.' AS msg
 			, 0 AS amount_loaded
 			, 0 AS user_balance_amount
 	END
