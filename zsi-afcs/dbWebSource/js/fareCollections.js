@@ -15,12 +15,11 @@
         ,gzGrid2         = "#gridPostedTransactions"  
         ,gzGridForPostDtl = "#gridForPostingSummary"
         ,gzGridPostDtl   = "#gridPostingSummary"
+        
         ,gSubTabName     = ""
         ,gTabName        = "" 
         ,gUser           =  app.userInfo
-        ,gTripNo          = []
-        ,gVehicle         = []
-        ,gDriver          = []
+        ,gSqlCode        = ""
     ;
        
     gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());  
@@ -33,17 +32,22 @@
         $(".nav-tab-sub").find(".nav-item:first-child()").addClass("active");
 
         if(gTabName === "Recent Collection"){
-            gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text()); 
-            displayDailyFareCollection(); 
-        }
-        if(gTabName === "History Collection"){ 
             gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());  
-            displayDailyFareCollection(); 
         }
+        
+        console.log("gTabName",gTabName);
+        if(gTabName === "History Collection"){ 
+            gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());   
+        } 
+        displayDailyFareCollection();   
     }); 
     
     $(".nav-tab-sub").find('a[data-toggle="tab"]').unbind().on('shown.bs.tab', function(e){ 
         gSubTabName = $.trim($(e.target).text()); 
+        console.log("gSubTabName",gSubTabName);
+
+        if(gSubTabName === "under collection Collection by Trip") gSqlCode = "V1349";
+        else gSqlCode = "P1338"; 
         displayDailyFareCollection(); 
     }); 
     _pub.viewDetails = function(){ 
@@ -69,65 +73,33 @@
             ,start_date     : _startDate 
             ,end_date       : _endDate
         };
-    }  
-    /*function dropdowns(){ 
-        var d = new Date();
-        var month = d.getMonth()+1;
-        var day = d.getDate();
-        gDate = d.getFullYear() + '/' +
-            (month<10 ? '0' : '') + month + '/' +
-            (day<10 ? '0' : '') + day;
-            
-             
-        $('#dailyFare_vehicle').select2({placeholder: " ",allowClear: true});  
-        $('#dailyFare_driver').select2({placeholder: " ",allowClear: true});
-       // $('#trips_vehicle').select2({placeholder: " ",allowClear: true});
-       // $('#trips_driver').select2({placeholder: " ",allowClear: true});  
-        
-        $("#dailyFare_driver").dataBind({
-            sqlCode      : "D1262" //dd_drivers_sel
-           ,parameters : {company_id:app.userInfo.company_id}
-           ,text         : "full_name"
-           ,value        : "user_id"
-           ,onChange     : function(d){
-               var _info           = d.data[d.index - 1];
-                   _driver_id         = isUD(_info) ? "" : _info.user_id;
-                gDriverId1 = _driver_id;
-           }
-        }); 
-        $("#dailyFare_vehicle").dataBind({
-            sqlCode      : "D1264" //dd_vehicle_sel
-           ,parameters : {company_id:app.userInfo.company_id}
-           ,text         : "vehicle_plate_no"
-           ,value        : "vehicle_id"
-           ,onChange     : function(d){
-               var _info           = d.data[d.index - 1];
-                   _vehicle_id     = isUD(_info) ? "" : _info.vehicle_id;
-                   gVehicleId1 = _vehicle_id;
-           }
+    }
+    function dropdowns(sqlCode){
+        zsi.getData({
+             sqlCode    : sqlCode
+            ,parameters : {client_id: gUser.company_id}
+            ,onComplete : function(d) {
+                $("select[id='trip_no']").fillSelect({
+                     data   : d.rows
+                    ,text   : "trip_no"
+                    ,value  : "trip_id"
+                });
+                
+                $("select[id='dailyFare_vehicle']").fillSelect({
+                     data   : d.rows.getUniqueRows(["vehicle_id"])
+                    ,text   : "vehicle_plate_no"
+                    ,value  : "vehicle_id"
+                });
+                
+                $("select[id='dailyFare_driver']").fillSelect({
+                     data   : d.rows.getUniqueRows(["driver_id"])
+                    ,text   : "driver_name"
+                    ,value  : "driver_id"
+                });
+            }
         });
-         $("#trips_driver").dataBind({
-            sqlCode      : "D1262" 
-           ,parameters : {company_id:app.userInfo.company_id}
-           ,text         : "full_name"
-           ,value        : "user_id"
-            
-        }); 
-        $("#trips_vehicle").dataBind({
-            sqlCode      : "D1264" 
-           ,parameters : {company_id:app.userInfo.company_id}
-           ,text         : "vehicle_plate_no"
-           ,value        : "vehicle_id"
-            
-        });
-        $("#trip_no").dataBind({
-            sqlCode      : "D1350"   
-           ,text         : "trip_no"
-           ,value        : "trip_id" 
-        });
-       
-        
-    } */
+    }
+    
     function dateValidation(){
         $("#dailyFare_to").attr("disabled",true); 
         $("#end_date").attr("disabled",true);  
@@ -150,7 +122,7 @@
         
         $("#trip_startDate").datepicker({
              autoclose : true 
-             ,endDate: new Date()
+            ,endDate: new Date()
             ,todayHighlight: false 
         }).datepicker("setDate",'-1d').on("changeDate",function(e){  
              $("#trip_endDate").removeAttr("disabled",true);  
@@ -191,21 +163,21 @@
                     ,height         : $(window).height() - 240
                     ,blankRowsLimit : 0
                     ,dataRows       : [
-                        {text: "Payment Date"           ,name:"payment_date"            ,type:"input"       ,width : 150   ,style : "text-align:left;"
+                        {text: "Payment Date"           ,name:"payment_date"            ,type:"input"       ,width : 150   ,style : "text-align:left;padding-left:2px;"
                             , onRender      : function(d) { 
                                 return app.svn(d, "payment_date").toShortDate();
                             }
                         }
-                        ,{text: "Vehicle Plate No."           ,width : 150   ,style : "text-align:left;"
+                        ,{text: "Vehicle Plate No."           ,width : 150   ,style : "text-align:left;padding-left:2px;"
                             , onRender      : function(d) { 
                                 var _vpn = app.svn (d,"vehicle_plate_no");
                                 if(_vpn=="Total Amount")
                                     return _vpn;
                                 else
-                                    return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='payment.showModalForPostingSummary(\""+ app.svn (d,"vehicle_id") +"\",\""+ _vpn +"\");'>" + _vpn + "</a>";
+                                    return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='payment.showModalForPostingSummary(\""+ app.svn (d,"vehicle_id") +"\",\""+ app.svn (d,"payment_date") +"\",\""+ _vpn +"\");'>" + _vpn + "</a>";
                             }
                         }
-                        ,{text: "Total Fare"        ,name:"total_fare"              ,type:"input"       ,width : 150   ,style : "text-align:right;"
+                        ,{text: "Total Fare"        ,name:"total_fare"              ,type:"input"       ,width : 150   ,style : "text-align:right;padding-right:4px;"
                             , onRender      : function(d) { 
                                 return app.svn(d, "total_fare").toMoney();
                             }
@@ -215,7 +187,7 @@
                         var _this   = this; 
                         this.find("input").attr("readonly",true);
                         $(".zRow:last-child()").addClass("zTotal");
-                        $(".zRow:last-child()").find('[name="no_klm"]').css("font-weight","bold"); 
+                        $(".zRow:last-child()").find('[name="no_klm"]').css({"font-weight":"bold","text-align":"right"}); 
                         setFooterFreezed(gzGrid1); 
                     }
                 });
@@ -257,7 +229,7 @@
                                     return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='payment.showModalPostedSummary(\""+ app.svn (d,"id") +"\",\""+ _postNo +"\");'>" + _postNo + "</a>";
                             }
                          }
-                        ,{text: "Posted Date"           ,width : 150   ,style : "text-align:left;"
+                        ,{text: "Posted Date"           ,width : 150   ,style : "text-align:left;padding-left:2px;"
                             , onRender      : function(d) { 
                                 var _postDate = app.svn (d,"posted_date");
                                 if(_postDate=="Total Amount")
@@ -266,12 +238,12 @@
                                     return _postDate.toShortDate();;
                             }
                         }
-                        ,{text: "Amount"                ,width : 150   ,style : "text-align:right;"
+                        ,{text: "Amount"                ,width : 150   ,style : "text-align:right;padding-right:4px;"
                             , onRender      : function(d) { 
                                 return app.svn(d, "posted_amount").toMoney();
                             }
                         }
-                        ,{text: "Bank Transfer No."     ,width : 150   ,style : "text-align:right;"
+                        ,{text: "Bank Transfer No."     ,width : 150   ,style : "text-align:right;padding-right:4px;"
                             , onRender      : function(d) { 
                                 return app.svn(d, "bank_transfer_no");
                             }
@@ -309,7 +281,7 @@
         }
     }
     
-    function displayForPostingSummary(vehicle_id){
+    function displayForPostingSummary(vehicle_id,payment_date){
         var _getDataRows = function(){ 
             var _dataRows =[
                  {id: 1  ,groupId: 0                ,text: ""                       ,style: "text-align:center;"}	 
@@ -319,7 +291,7 @@
         		,{id: 5  ,groupId: 0                ,text: "PWD"                    ,style: "text-align:center;"}
         		,{id: 6  ,groupId: 0                ,text: ""                       ,style: "text-align:center;"}
         		,{id: 7  ,groupId: 0                ,text: ""                       ,style: "text-align:center;"}
-                ,{text: "Payment Date"                                                      ,width : 150          ,groupId : 1
+                ,{text: "Payment Date"                                                      ,width : 165          ,groupId : 1
                     ,onRender: function(d){
                         return app.bs({name: "payment_date"         ,type: "input"     ,value: app.svn(d,"payment_date")    ,style : "text-align:center;"})
                             +  app.bs({name: "payment_id"           ,type: "hidden"    ,value: app.svn(d,"payment_id")});
@@ -330,9 +302,9 @@
             _dataRows.push(
                  {text: "Vehicle"                   ,name:"vehicle_plate_no"        ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1} 
                 ,{text: "Vehicle Type"              ,name:"vehicle_type"            ,type:"input"       ,width : 150   ,style : "text-align:center;"       ,groupId : 1}
-                ,{text: "Driver"                    ,name:"full_name"               ,type:"input"       ,width : 130   ,style : "text-align:center;"       ,groupId : 1} 
+                ,{text: "Driver"                    ,name:"driver_name"             ,type:"input"       ,width : 130   ,style : "text-align:center;"       ,groupId : 1} 
                 ,{text: "Distance(Km)"              ,name:"no_klm"                  ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1}
-                ,{text: "Base Fare"                 ,name:"base_fare"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 1}
+                ,{text: "Base Fare"                 ,name:"base_fare"               ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 1}
                 ,{text: "Quantity"                  ,name:"no_reg"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 2}
                 ,{text: "Total"                                                                         ,width : 60    ,style : "text-align:center;"       ,groupId : 2
                     ,onRender: function(d){
@@ -369,7 +341,7 @@
             
         zsi.getData({
              sqlCode        : "P1231" //payment_for_posting_sel
-            ,parameters     : {vehicle_id: vehicle_id}
+            ,parameters     : {vehicle_id: vehicle_id, client_id : gUser.company_id, payment_date : payment_date}
             ,onComplete : function(d) {
                 var _rows= d.rows;
                 var _tot = {reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0};
@@ -630,20 +602,19 @@
                 ,pdate_to    : _o.end_date  
             };
             
-            console.log("_sqlCode",_sqlCode);
             switch(gTabName){  
                 case "Recent Collection":  
                     switch (gSubTabName) { 
                         case "Collection by Trip":   
                             _sqlCode = "V1349"; 
                             _params = _params;  
-                            $("#tripNo").removeClass("hide");
+                            //$("#tripNo").removeClass("hide");
                             $("#hideFromDate,#hideToDate").addClass("hide");
                             break;
                         case "Collection Details":  
                             _sqlCode = "P1338"; 
                             _params = _paramsDetails;  
-                            $("#hideFromDate,#hideToDate,#tripNo").addClass("hide");
+                            $("#hideFromDate,#hideToDate").addClass("hide");
                         break;
                        
                     }
@@ -653,14 +624,14 @@
                         case "Collection by Trip":   
                             _sqlCode = "V1349"; 
                             _params = _params;  
-                            $("#tripNo").removeClass("hide");
-                            $("#hideFromDate,#hideToDate").addClass("hide");
+                            $("#tripNo,#hideFromDate,#hideToDate").removeClass("hide");
+                           // $("#hideFromDate,#hideToDate").addClass("hide");
                             break;
                         case "Collection Details":  
                             _sqlCode = "P1337"; 
                             _params = _paramsHistory;  
-                            $("#hideFromDate,#hideToDate,#tripNo").removeClass("hide");
-                            $("#tripNo").addClass("hide");
+                            $("#tripNo,#hideFromDate,#hideToDate").removeClass("hide");
+                           // $("#tripNo").addClass("hide");
                         break;
                        
                     }
@@ -670,7 +641,6 @@
             var _getDataRows = function(){  
                 var _dataRows =[];  
                 if(gSubTabName === "Collection by Trip"){ 
-                    console.log("gSubTabName under collection",gSubTabName);
                     _dataRows.push(
                          {text: "Trip No"                   ,name:"trip_no"                 ,type:"input"       ,width : 80     ,style : "text-align:center;"  } 
                         ,{text: "Vehicle"                   ,name:"vehicle_plate_no"        ,type:"input"       ,width : 100    ,style : "text-align:center;"  }  
@@ -702,6 +672,7 @@
                 		,{id: 5  ,groupId: 0                ,text: "PWD"                    ,style: "text-align:center;"}
                 		,{id: 6  ,groupId: 0                ,text: ""                       ,style: "text-align:center;"}
                 		,{id: 7  ,groupId: 0                ,text: ""                       ,style: "text-align:center;"}
+                        ,{text: "Trip No"                   ,name:"trip_no"                 ,type:"input"       ,width : 80     ,style : "text-align:center;"       ,groupId : 1} 
                         ,{text: "Payment Date"                                                      ,width : 150          ,groupId : 1
                             ,onRender: function(d){
                                 return app.bs({name: "payment_date"         ,type: "input"     ,value: app.svn(d,"payment_date")    ,style : "text-align:center;"})
@@ -713,7 +684,7 @@
                     _dataRows.push(
                          {text: "Vehicle"                   ,name:"vehicle_plate_no"        ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1} 
                         ,{text: "Vehicle Type"              ,name:"vehicle_type"            ,type:"input"       ,width : 150   ,style : "text-align:center;"       ,groupId : 1}
-                        ,{text: "Driver"                    ,name:"full_name"               ,type:"input"       ,width : 130   ,style : "text-align:center;"       ,groupId : 1} 
+                        ,{text: "Driver"                    ,name:"driver_name"             ,type:"input"       ,width : 130   ,style : "text-align:center;"       ,groupId : 1} 
                         ,{text: "Distance(Km)"              ,name:"no_klm"                  ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1}
                         ,{text: "Base Fare"                 ,name:"base_fare"               ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 1}
                         ,{text: "Quantity"                  ,name:"no_reg"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 2}
@@ -749,6 +720,8 @@
                 } 
                  return _dataRows; 
             };  
+            
+            gSqlCode = _sqlCode;
             
             zsi.getData({
                  sqlCode    : _sqlCode 
@@ -813,23 +786,9 @@
                         };
                          _rows.push(_total);
                     } 
-    
-                    $("#nav-recentCollection").find("select[id='trip_no']").fillSelect({
-                         data   : _rows
-                        ,text   : "trip_no"
-                        ,value  : "trip_id"
-                    });
-                    $("#nav-recentCollection").find("select[id='dailyFare_vehicle']").fillSelect({
-                         data   : _rows
-                        ,text   : "vehicle_plate_no"
-                        ,value  : "vehicle_id"
-                    });
-                    $("#nav-recentCollection").find("select[id='dailyFare_driver']").fillSelect({
-                         data   : _rows
-                        ,text   : "driver_name"
-                        ,value  : "driver_id"
-                    });
-    
+                    
+                    dropdowns(_sqlCode);
+                    
                     $(_$navGrid).dataBind({
                          rows           : _rows
                         ,height         : $(window).height() - 500
@@ -839,6 +798,7 @@
                             this.find("input").attr("readonly",true);
                             $(".zRow:last-child()").addClass("zTotal");
                             $(".zRow:last-child()").find('[name="no_klm"]').css("font-weight","bold"); 
+                            setFooterFreezed("#gridDailyFareCollections");
                     }
                 });
     
@@ -910,7 +870,7 @@
         return _dataRows;
     }
     
-    _pub.showModalForPostingSummary = function(vehicle_id, vehicle_plate_no){
+    _pub.showModalForPostingSummary = function(vehicle_id, payment_date, vehicle_plate_no){
         var _tabH = $("#nav-tabContent").height();
         var _$mdl = $('#modalForPostingSummary');
         _$mdl.modal('show');
@@ -927,7 +887,7 @@
     	$('body').removeClass("modal-open")
    	 	$('body').css("padding-right","");     
          
-        displayForPostingSummary(vehicle_id);
+        displayForPostingSummary(vehicle_id,payment_date);
     }
     _pub.showModalPostedSummary = function(post_id, post_no){
         var _tabH = $("#nav-tabContent").height();
@@ -1056,7 +1016,8 @@
         dateValidation();
         displayForPosting();
         displayPostedTransactions(); 
-        //dropdowns();  
+        
+       // dropdowns();  
     };
     return _pub;
-})();                                                                                                
+})();                                                                                                    
