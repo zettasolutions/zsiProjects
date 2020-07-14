@@ -648,12 +648,12 @@
                         ,{text: "Pao"                       ,name:"pao_name"                ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
                         ,{text: "Start Date"                ,width : 100                    ,style : "text-align:left;"  
                             ,onRender : function(d){
-                                return app.bs({name: "start_date"                           ,type: "input"     ,value: app.svn(d,"start_date").toShortDate()   })
+                                return app.bs({name: "start_date"        ,type: "input"     ,value: app.svn(d,"start_date").toShortDates()   });
                             }
                         }
                         ,{text: "End Date"                   ,width : 100                   ,style : "text-align:left;"  
                             ,onRender : function(d){
-                                return app.bs({name: "end_date"         ,type: "input"     ,value: app.svn(d,"end_date").toShortDate()   })
+                                return app.bs({name: "end_date"          ,type: "input"     ,value: app.svn(d,"end_date").toShortDates()   });
                             }
                         }
                         ,{text: "Start Odo Reading"         ,name:"start_odo"               ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
@@ -1020,4 +1020,4 @@
        // dropdowns();  
     };
     return _pub;
-})();                                                                                                    
+})();                                                                                                     
