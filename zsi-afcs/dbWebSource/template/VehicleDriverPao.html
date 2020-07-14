@@ -31,14 +31,15 @@
     <div class="panel-container">
         <div class="panel-content">
             <div class="row">
+                
                 <nav class="col-12 col-sm-8 col-md-8 col-xs-8">
-                  <div class="nav nav-tabs nav-tab-main" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" data-toggle="tab" href="#nav-vehicles" role="tab" aria-controls="nav-vehicles"> Vehicles </a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-drivers" role="tab" aria-controls="nav-drivers"> Drivers </a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-pao" role="tab" aria-controls="nav-pao"> PAO </a>
-                  </div>
-                </nav>
-                <div class="col-md-4 col-xl-4 col-sm-4 col-12"> 
+                  <div class="nav nav-tabs nav-tab-main" id="nav-tab" role="tablist"> 
+                    <a class="nav-item nav-link active" data-toggle="tab" href="#nav-vehicles" role="tab" aria-controls="nav-vehicles"><i class="fal fa-bus mr-1"></i> Vehicles </a> 
+                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-drivers" role="tab" aria-controls="nav-drivers"><i class="fal fa-user mr-1"></i> Drivers </a>  
+                    <a class="nav-item nav-link" data-toggle="tab" href="#nav-pao" role="tab" aria-controls="nav-pao"><i class="fal fa-user mr-1"></i> PAO </a> 
+                  </div> 
+                </nav> 
+                <div class="col-md-4 col-xl-4 col-sm-4 col-12" id="searchDiv"> 
                     <div class="input-group bg-white shadow-inset-2">
                         <div class="input-group-prepend">
                             <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
@@ -67,7 +68,8 @@
                                      <button type="button" class="btn btn-primary btn-sm" id="btnInactiveVehicles" data-toggle="tooltip" title="Delete">
                                 	  <i class="fas fa-ban"></i> Inactive
                                     </button> 
-                                    <button type="button" onclick="vehicles.showModalUpload(this,'Vehicles');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>
+                                    <!--<button type="button" onclick="vehicledriverpao.showModalUpload(this,'Vehicles');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>-->
+                                    <button type="button" id="btnUploadExcel" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Export Excel</button>
                                     <button type="button" class="btn btn-primary btn-sm" id="btnAddVehicles">
                                     	<span class="fas fa-user-plus"></span> Add
                                     </button>
@@ -93,13 +95,13 @@
                         <form method="post" id="frm">
                             <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveUpdateDrivers">
                                     	<span class="far fa-save"></span> Save
                                     </button>
                                     <button type="button" class="btn btn-primary btn-sm" id="btnNactive">
                                     	<span class="fas fa-ban"></span> Inactive
                                     </button> 
-                                    <button type="button" class="btn btn-primary btn-sm btnAddDrivers " id="">
+                                    <button type="button" class="btn btn-primary btn-sm " id="btnAddDrivers">
                                     	<span class="fas fa-user-plus"></span> Add
                                     </button>
                                 </div>
@@ -118,22 +120,20 @@
                     <form method="post" id="frm">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <button type="button" class="btn btn-primary btn-sm" id="btnSave">
+                                <button type="button" class="btn btn-primary btn-sm" id="btnSavePaoTable">
                                 	<span class="far fa-save"></span> Save
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm" id="btnNactive">
+                                <button type="button" class="btn btn-primary btn-sm" id="btnNactivePao">
                                 	<span class="fas fa-ban"></span> Inactive
                                 </button> 
-                                <button type="button" class="btn btn-primary btn-sm btnAddDrivers" id="">
+                                <button type="button" class="btn btn-primary btn-sm " id="addNewPao">
                                 	<span class="fas fa-user-plus"></span> Add
                                 </button>
                             </div>
                         </div>
                     </form>
                 </div>
-            </div>
-            
-            
+            </div> 
         </div>
     </div>
 </div>
@@ -193,10 +193,10 @@
     </div>
 </div>
 
-<div class="modal" id="modalEmployeesId" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal" id="modalPao" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="vertical-alignment-helper modal-dialog modal-sm" role="document">
         <div class="modal-content vertical-align-center">
-            <form id="frm_modalEmpoloyeeId">
+            <form id="frm_modalPao">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -210,7 +210,7 @@
                       <div class="card-body text-center">
                         <b id="nameId" class="card-title" style="font-size:25px;">FirstName LastName</b>
                         <p id="positionId" class="card-text" style="font-size:12px;"></p>
-                        <p class="card-text" style="font-size:20px;"><b>ID No.:</b>&nbsp; <span id="idNo"></span></p> 
+                        <p class="card-text" style="font-size:20px;"><b>ID No.:</b>&nbsp; <span id="id_no"></span></p> 
                       </div>
                       <div class="justify-content-center d-flex mb-1" >
                         <div id="qrcode" style="width:100px; height:100px;"></div>
@@ -221,19 +221,55 @@
         </div>
     </div>
 </div>
+<div class="modal" id="modalInactivePao" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactivePao">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactivePao" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveVehicles" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteVehicles" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <ul name="localTemplates">
     <!--Start Vehicle li-->
-     <li name="modalBodyAddVehicleUsers">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                <div id="{{grid}}" class="zGrid"> </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <button type="button" id="btnSaveVehicle" onclick="{{onClickSaveNewVehicleUsers}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
-            </div>
-        </div>
+    <li name="modalBodyVehicleImageUser">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+    </li>   
+    <!--End Vehicle li-->
+    <li name="modalBodyImageDriverUser">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageDriverUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+    </li>
+    <!--END VEHICLE-->
+    <!--START PAO-->
+    <li name="modalBodyImagePaoUser">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImagePaoUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
+    </li>
+    <!--END PAO-->
+    <!--START DRIVERS-->
+    <li name="modalBodyImageDriverLicence">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageDriverLicence}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
     </li> 
+    <!--END DRIVERS-->
+    <!--UPLOAD EXCEL-->
     <li name="modalBodyUploadExcel">
         <div class="row">  
             <input id="tmpData" name="tmpData" type="hidden" class="form-control input-sm" > 
@@ -246,17 +282,17 @@
         </div>
         <div class="row">  
             <div class="col-3">
-                <button type="button" onclick="vehicles.{{onClickUploadExcel}}" class="btn btn-primary" id="btnUploadFile" style="margin-left: 5px">
+                <button type="button" onclick="vehicledriverpao.{{onClickUploadExcel}}" class="btn btn-primary" id="btnUploadFile" style="margin-left: 5px">
                     <i class="fas fa-upload"></i> Upload
                 </button>
             </div>
         </div>
     </li>
-    <li name="modalBodyImageVehicleUser">
-      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageVehicleUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-   </li>
-    <!--End Vehicle li-->
-    <li name="modalBodyInactive">
+    
+    <!--UPLOAD EXCEL-->
+     
+     
+   <li name="modalBodyInactive">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
                 <div id="{{grid}}" class="zGrid"> </div>
@@ -268,12 +304,8 @@
                 </button>
             </div>
         </div>
-    </li>
+    </li> 
     
-    <li name="modalBodyImageEmpl">
-      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageEmpl}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-   </li>
-   
    <li name="modalBodyAddDriverUsers">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
@@ -283,15 +315,28 @@
                 <button type="button" id="btnSaveDriver" onclick="{{onClickSaveNewDriverUsers}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
             </div>
         </div>
+    </li>   
+    <li name="modalBodyAddVehicleUsers">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                <div id="{{grid}}" class="zGrid"> </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button type="button" id="btnSave2" onclick="{{onClickSaveNewUsers}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+            </div>
+        </div>
     </li>
-    
-    <li name="modalBodyImageDriverUser">
-      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageDriverUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-   </li>
+   <li name="modalBodyAddPaoUsers">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                <div id="{{grid}}" class="zGrid"> </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button type="button" id="btnSave2" onclick="{{onClickSaveNewPao}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+            </div>
+        </div>
+    </li>
    
-   <li name="modalBodyImageDriverLicence">
-      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageDriverLicence}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-   </li>
 </ul>
 <div id="user-box">
     <img src="/file/viewImage?fileName=no-image.jpg&amp;isThumbNail=y" id="userImage" >
