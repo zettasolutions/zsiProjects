@@ -35,17 +35,13 @@
             gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());  
         }
         
-        console.log("gTabName",gTabName);
         if(gTabName === "History Collection"){ 
             gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());   
         } 
         displayDailyFareCollection();   
     }); 
-    
     $(".nav-tab-sub").find('a[data-toggle="tab"]').unbind().on('shown.bs.tab', function(e){ 
         gSubTabName = $.trim($(e.target).text()); 
-        console.log("gSubTabName",gSubTabName);
-
         if(gSubTabName === "under collection Collection by Trip") gSqlCode = "V1349";
         else gSqlCode = "P1338"; 
         displayDailyFareCollection(); 
@@ -99,7 +95,11 @@
             }
         });
     }
-    
+    function toExcelFormat(html){
+        return "<html><head><meta charset='utf-8' /><style> table, td {border:thin solid black}table {border-collapse:collapse;font-family:Tahoma;font-size:10pt;}</style></head><body>"
+             + html + "</body></html>";
+    }
+  
     function dateValidation(){
         $("#dailyFare_to").attr("disabled",true); 
         $("#end_date").attr("disabled",true);  
@@ -1010,6 +1010,47 @@
         displayPostedTransactions();
     });
 
+    $(".btnExport").click(function(){
+        var _grid = "#gridDailyFareCollections";
+        var _navId  = "#nav-recentCollection";
+        if(gTabName === "Recent Collection") {
+            _navId = "#nav-recentCollection"
+            if(gSubTabName === "Collection by Trip") _fileName = "Recent Collection by Trip"
+            else _fileName = "Recent Collection Details"
+        }
+        else if(gTabName === "History Collection"){
+            _navId = "#nav-recentCollection"
+            if(gSubTabName === "Collection by Trip") {
+                _fileName = "History Collection by Trip"
+            }
+            else _fileName = "History Collection Details"
+        }
+        else if(gTabName === "For Posting"){
+            _navId = "#nav-forPosting"
+            _grid  = "#gridTransactions"
+            _fileName = "For Posting"
+            
+        }else {
+            _navId = "#Posted"
+            _grid  = "#gridPostedTransactions"
+            _fileName = "Posted"
+            
+        }
+        console.log("grid",$(_grid))
+        console.log("_fileName",_fileName);
+        /*$(_grid).convertToTable(function(table){
+            var _html = table.get(0).outerHTML;
+            console.log("html",toExcelFormat(_html));
+            zsi.htmlToExcel({
+                fileName: _fileName
+               ,html : toExcelFormat(_html)
+            });
+        });*/ 
+        $(_grid).htmlToExcel({
+            fileName: _fileName
+        });
+    });
+
     zsi.ready = function(){ 
         $(".page-title").html("Fare Collections");
         $(".panel-container").css("min-height", $(window).height() - 190);
@@ -1020,4 +1061,4 @@
        // dropdowns();  
     };
     return _pub;
-})();                                                                                                     
+})();                                                                                                       
