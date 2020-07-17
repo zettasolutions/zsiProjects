@@ -5,59 +5,17 @@
         ,gBatchQty          = null
         ,gClientContractid  = null
         ,gActiveTab         = ""
+        ,gCtr               = 1
     ;
     
     zsi.ready = function(){
         $(".page-title").html("Clients");
         $(":input").inputmask();
-        displayClients();
         displayClientContracts();
         gActiveTab = "search";
         $('#keyWord').select2({placeholder: "SELECT KEY WORD",allowClear: true});
         
     };
-    
-    function displayClients(){
-        $("#gridClients").dataBind({
-             sqlCode     : "C241"
-            ,height      : $(window).height() - 278
-            ,dataRows    : [
-                {text: "Code", width: 130, style: "text-align:center"
-                    ,onRender : function(d){ 
-                        return app.svn (d,"client_code");
-                    }
-                }
-                ,{text: "Name", width : 250, style: "text-align:left"
-                    ,onRender : function(d){ 
-                        return app.svn (d,"client_name");
-                    }
-                }
-                ,{text: "Phone No.", width: 120, style: "text-align:left"
-                    ,onRender  :  function(d){ 
-                        return app.svn (d,"client_phone_no");
-                    }
-                }
-                ,{text: "Mobile No.", width: 120, style: "text-align:left"
-                    ,onRender  :  function(d){ 
-                        return app.svn (d,"client_mobile_no");
-                    }
-                }
-                ,{text: "Email Address", width: 200, style: "text-align:left"
-                    ,onRender  :  function(d){ 
-                        return app.svn (d,"client_email_add");
-                    }
-                }
-                ,{text: "Billing Address", width: 300, style: "text-align:left"
-                    ,onRender  :  function(d){ 
-                        return app.svn (d,"billing_address");
-                    }
-                }
-            ]
-            ,onComplete  : function(o){
-                
-            }
-        });
-    }
     
     function displayClientContracts(keyword,searchVal){
         var _ctr = 1;
@@ -79,12 +37,13 @@
                          }
                      }
                     ,{text:"Client Name"                                                                    ,width:250          ,style:"text-align:left"
-                        ,onRender : function(d){
-                             return app.bs({name:"client_name"                    ,type:"input"                  ,value: app.svn(d,"client_name")}) ;
-                         }
+                        ,onRender      : function(d) {
+                            var _clientName = (app.svn(d,"client_name") ? app.svn(d,"client_name") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
+                            return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='client.showModalClients(this," + _ctr + ", \""+ app.svn (d,"client_name") +"\", \""+ app.svn (d,"client_phone_no") +"\", \""+ app.svn (d,"client_mobile_no") +"\", \""+ app.svn (d,"client_email_add") +"\", \""+ app.svn (d,"billing_address") +"\", \""+ app.svn (d,"country_id") +"\", \""+ app.svn (d,"state_id") +"\", \""+ app.svn (d,"city_id") +"\", \""+ app.svn (d,"client_tin") +"\", \""+ app.svn (d,"mayor_permit_img") +"\", \""+ app.svn (d,"bir_img") +"\", \""+ app.svn (d,"sec_dti_img") +"\", \""+ app.svn(d,"logon") +"\", \""+ app.svn(d,"last_name") +"\", \""+ app.svn(d,"first_name") +"\", \""+ app.svn(d,"middle_name") +"\", \""+ app.svn(d,"name_suffix") +"\");'>" + _clientName + "</a>";
+                        }
                     }
                     ,{text:"Contract Number"            ,type:"input"       ,name:"contract_no"             ,width:150          ,style:"text-align:center"
-                        , onRender      : function(d) {
+                        ,onRender      : function(d) {
                             var _contractNo = (app.svn(d,"contract_no") ? app.svn(d,"contract_no") : '<i class="fa fa-plus" aria-hidden="true" ></i>');
                             return "<a style='text-decoration:underline !important;' href='javascript:void(0)'  onclick='client.showModalContracts(this," + _ctr + ", \""+ app.svn (d,"client_contract_id") +"\", \""+ app.svn (d,"client_name") +"\", \""+ app.svn (d,"contract_no") +"\", \""+ app.svn (d,"client_id") +"\", \""+ app.svn (d,"contract_date").toShortDate() +"\", \""+ app.svn (d,"contract_term_id") +"\", \""+ app.svn (d,"activation_date").toShortDate() +"\", \""+ app.svn (d,"expiry_date").toShortDate() +"\", \""+ app.svn (d,"plan_id") +"\", \""+ app.svn (d,"plan_qty") +"\", \""+ app.svn(d,"srp_amount") +"\", \""+ app.svn(d,"dp_amount") +"\");'>" + _contractNo + "</a>";
                         }
@@ -279,11 +238,17 @@
         
         function totalAmt(){
             setTimeout(function(){
+                var  lessDpAmt          = commaSeparateNumber(_productSrp - _productDp)
+                    ,totalAmortAmt      = commaSeparateNumber((_interest/100 * _productSrp) + _productSrp)
+                    ,monthlyAmortAmt    = commaSeparateNumber((_interest/100 * _productSrp) + _productSrp/_noMos);
+                
+                
                _$mdl.find("#srp_amount").val(commaSeparateNumber(_productSrp));
                if(!_keyup) _$mdl.find("#dp_amount").val(commaSeparateNumber(_productDp));
-               _$mdl.find("#less_dp_amount").val(commaSeparateNumber(_productSrp - _productDp));
-               _$mdl.find("#total_amort_amount").val(commaSeparateNumber((_interest/100 * _productSrp) + _productSrp));
-               _$mdl.find("#monthly_amort_amount").val(commaSeparateNumber((_interest/100 * _productSrp) + _productSrp/_noMos));
+               _$mdl.find("#less_dp_amount").val(lessDpAmt? lessDpAmt : 0.00);
+               _$mdl.find("#total_amort_amount").val(totalAmortAmt? totalAmortAmt : 0.00);
+               _$mdl.find("#monthly_amort_amount").val(monthlyAmortAmt? monthlyAmortAmt : "0.00");
+               
             },500);
         }
         
@@ -316,32 +281,22 @@
         else $("#searchVal").attr("placeholder", "Type contract number......");
     });
     
-    
-    $("#btnSubmit").click(function () {
-        var _$frm = $("#formClients");
-        var _frm = _$frm[0];
-        var _formData = new FormData(_frm);  
-        if( ! _frm.checkValidity() ){
-            $("#formClients").addClass('was-validated');
-        }else{   
-            $("#formClients").removeClass('was-validated');
-            $('#myModal').modal('show');
-        }
-    });
-    
     $("#submit").click(function () {
         var _$frm = $("#formContract");
         var _frm = _$frm[0];
         var _formData = new FormData(_frm);  
         if( ! _frm.checkValidity() ){
-            $("#formContract").addClass('was-validated');
+            _$frm.addClass('was-validated');
         }else{   
-            $("#formContract").removeClass('was-validated');
+            _$frm.removeClass('was-validated');
             $('#myModal').modal('show');
         }
     });
     
-    $("#btnNew").click(function() {
+   _pub.showModalClients = function (eL,ctr,clientName,clientPhoneNo,clientMobileNo,clientEmailAdd,billingAdd,countryId,stateId,cityId,clientTin,mayorPermit,bir,secDti,logon,lastName,firstName,middleName,nameSuffix) {
+       
+       console.log("clientName",clientName);
+       
         var _$mdl = $('#newClientModal');
         if($(window).height() <= 724 ) $("#clientInformationDiv").css({"height":$(window).height() - 208,"overflow-y":"auto","overflow-x":"hidden"});
         //else $("#clientInformationDiv").css({"height":$(window).height() - 578,"overflow-y":"auto","overflow-x":"hidden"}); 
@@ -351,9 +306,30 @@
         var _$country = _$mdl.find('#country_id')
             ,_$state = _$mdl.find('#state_id')
             ,_$city = _$mdl.find('#city_id');
+        $("#is_ready").prop('checked', false);
+        $("#clientInformationDiv").show();
+        $("#adminUserDiv").hide();
+        $("#formClientsStep1One").removeClass('was-validated');
+        $("#formClientsStep2").removeClass('was-validated');
+        
+        _$mdl.find("#client_name").val(clientName? clientName : "");
+        _$mdl.find("#client_phone_no").val(clientPhoneNo? clientPhoneNo : "");
+        _$mdl.find("#client_mobile_no").val(clientMobileNo? clientMobileNo : "");
+        _$mdl.find("#client_email_add").val(clientEmailAdd? clientEmailAdd : "");
+        _$mdl.find("#billing_address").val(billingAdd? billingAdd : "");
+        _$mdl.find("#client_tin").val(clientTin? clientTin : "");
+        _$mdl.find("#file1").val(mayorPermit? mayorPermit : "");
+        _$mdl.find("#file2").val(bir? bir : "");
+        _$mdl.find("#file3").val(secDti? secDti : "");
+        _$mdl.find("#logon").val(logon? logon : "");
+        _$mdl.find("#last_name").val(lastName? lastName : "");
+        _$mdl.find("#first_name").val(firstName? firstName : "");
+        _$mdl.find("#middle_name").val(middleName? middleName : "");
+        _$mdl.find("#name_suffix").val(nameSuffix? nameSuffix : "");
+        
         _$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
         _$mdl.find(".modal-footer").addClass("justify-content-start");
-        $("#formClients").find("input[type='text'],input[type='email'],select").val("");
+        //_$mdl.find("input[type='text'],input[type='email'],input[type='file'],select").val("");
         $("#registration_date").datepicker({ 
               pickTime  : false
             , autoclose : true
@@ -365,10 +341,13 @@
         _$city.select2({placeholder: "",allowClear: true, dropdownParent: _$mdl});
         $("#bank_id").select2({placeholder: "",allowClear: true, dropdownParent: _$mdl});
         _$country.dataBind({
-            sqlCode : "D247"
-            ,text : "country_name"
-            ,value : "country_id"
-            ,onChange : function(d){
+            sqlCode     : "D247"
+            ,text       : "country_name"
+            ,value      : "country_id"
+            ,onComplete : function(){
+                this.val(countryId? countryId : "").trigger("change");
+            }
+            ,onChange   : function(d){
                 var _info = d.data[d.index - 1]
                     ,country_id = isUD(_info) ? "" : _info.country_id;
                 
@@ -377,6 +356,9 @@
                     ,parameters : {country_id:country_id}
                     ,text : "state_name"
                     ,value : "state_id"
+                    ,onComplete : function(){
+                        this.val(stateId? stateId : "").trigger("change");
+                    }
                     ,onChange : function(d){
                         var _info = d.data[d.index - 1]
                             ,state_id = isUD(_info) ? "" : _info.state_id;
@@ -386,6 +368,9 @@
                             ,parameters   : {state_id:state_id}
                             ,text         : "city_name"
                             ,value        : "city_id"
+                            ,onComplete : function(){
+                                this.val(cityId? cityId : "").trigger("change");
+                            }
                             ,onChange     : function(d){
                                 var _info = d.data[d.index - 1]
                                     ,city_id = isUD(_info) ? "" : _info.city_id;
@@ -395,16 +380,53 @@
                 });
             }
         });
-    });
+    };
     
     $("#is_ready").click(function(){
-       if($(this).is(":checked")){
-           $("#clientInformationDiv").toggle("top");
-           $("#adminUserDiv").toggle("top");
-       }else{
-           $("#clientInformationDiv").toggle("down");
-           $("#adminUserDiv").toggle("down");
-       } 
+        var _$this = $(this);
+        var _$frmStep1 = $("#formClientsStep1One")
+            _$frmStep2 = $("#formClientsStep2")
+        var _frmStep1 = _$frmStep1[0]
+            _frmStep2 = _$frmStep2[0];
+            
+        if(_$this.is(":checked")){
+            if( ! _frmStep1.checkValidity()){
+                _$frmStep1.addClass('was-validated');
+                _$this.prop('checked', false);
+            }else{   
+                $("#clientInformationDiv").hide(600);
+                $("#adminUserDiv").show(600);
+            }
+        }else{
+            if( ! _frmStep2.checkValidity()){
+                _$frmStep2.addClass('was-validated');
+                $("#formClientsCB").addClass('was-validated');
+                $("#clientInformationDiv").show(600);
+                $("#adminUserDiv").hide(600);
+            }else{ 
+                _$frmStep1.addClass('was-validated');
+                $("#formClientsCB").removeClass('was-validated');
+                $("#clientInformationDiv").show(600);
+                $("#adminUserDiv").hide(600);
+            }
+        } 
+    });
+    
+    $("#btnSubmit").click(function(){
+        var _$frmStep1 = $("#formClientsStep1One")
+            ,_$frmStep2 = $("#formClientsStep2");
+            
+        var _frmStep1 = _$frmStep1[0]
+            ,_frmStep2 = _$frmStep2[0];
+        
+        if( ! _frmStep1.checkValidity()){
+            $("#formClientsStep1One").addClass('was-validated');
+        }else if( ! _frmStep2.checkValidity()){
+            $("#formClientsStep2").addClass('was-validated');
+            $("#formClientsCB").addClass('was-validated');
+        }else{   
+            $('#myModal').modal('show');
+        }
     });
     
     $(".continuecancel").click(function(){
@@ -412,9 +434,6 @@
         modalTxt();
         $(".yesno").removeClass("hide");
         $(this).addClass("hide");
-        $("#is_ready").prop('checked', false);
-        $("#clientInformationDiv").toggle("down");
-        $("#adminUserDiv").toggle("down");
         $(".continuecancel").addClass("hide");
          setTimeout(function(){
             $("#btnConfirm").removeAttr("onclick");
@@ -464,11 +483,7 @@
                 }
             }); 
         }else{
-            var _$div1 = $("#clientInformationDiv");
-            var _$div2 = $("#adminUserDiv");
-            _$div2.find("input,select").attr("disabled", true);
-            var _$frm = $("#formClients"); 
-            _$frm.jsonSubmit({
+            $("#formClientsStep1One").jsonSubmit({
                  procedure: "clients_upd" 
                 ,isSingleEntry: true
                 ,onComplete: function (data) {
@@ -476,17 +491,13 @@
                     gClientId = data.returnValue;
                     if(data.isSuccess){
                         if(data.isSuccess===true) zsi.form.showAlert("alert");
-                        _$div1.find("input,select").attr("disabled", true);
-                        _$div2.find("input,select").removeAttr("disabled");
-                        _$frm.find("#clientId").val(gClientId);
+                        $("#formClientsStep2").find("#clientId").val(gClientId);
                         $("#newClientModal").modal('toggle');
-                        displayClients();
     			        setTimeout(function(){
-        			        _$frm.jsonSubmit({
+        			        $("#formClientsStep2").jsonSubmit({
                                  procedure: "admin_user_upd" 
                                 ,isSingleEntry: true
                                 ,onComplete: function (data) {
-                                    console.log("data",data);
                                     var _userId = data.returnValue;
                                     var _firstName = $("#first_name").val();
                                     var _email = $("#logon").val();
@@ -514,7 +525,6 @@
                                            
                                            $("#btnConfirm").attr("onclick", "client.showModalContracts(this, '', '', '"+ _clientName +"', '', "+ gClientId +")");
                                            $(".continuecancel").removeClass("hide");
-                                           _$div1.find("input,select").removeAttr("disabled");
                                            
                                            $("#formEmail").jsonSubmit({
                                                  procedure: "send_mail_upd" 
@@ -525,7 +535,6 @@
                                                     }
                                                 }
                                             });
-                                            
                                             setTimeout(function(){
                                                $("#myModal").find("#msg").text("Do you want to create contract(s) for this client?");
                                                $("#myModal").find("#msg").css("color","#000");
@@ -536,7 +545,114 @@
                                            modalTxt();
                                         }
                                     },2000);
+                                    setTimeout (function(){
+                                        var frm = $("#formClientsStep1Two");
+                                        var frm1 = $("#formClientsStep1Three");
+                                        var frm2 = $("#formClientsStep1Four");
+                                        var  fileOrg1=frm.find("#file1").get(0)
+                                            ,fileOrg2=frm1.find("#file2").get(0)
+                                            ,fileOrg3=frm2.find("#file3").get(0);
                                     
+                                        var formData = new FormData( frm.get(0));
+                                        var formData1 = new FormData( frm1.get(0));
+                                        var formData2 = new FormData( frm2.get(0));
+                                        
+                                        if(isUD(fileOrg1.files[0])){}
+                                        else {
+                                            $.ajax({
+                                                url: base_url + 'file/UploadImage',  //server script to process data
+                                                type: 'POST',
+                                        
+                                                //Ajax events
+                                                success: completeHandler = function(data) {
+                                                    if(data.isSuccess){
+                                                        //submit filename to server
+                                                        $.get(base_url  + "sql/exec?p=clients_mayor_pemit_img_upd @client_id=" + gClientId
+                                                                    + ",@mayor_permit_img='" +  fileOrg1.files[0].name + "'"
+                                                        ,function(data){
+                                                            zsi.form.showAlert("alert");
+                                                            if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                        });
+                                                        
+                                                    }else
+                                                        alert(data.errMsg);
+                                                },
+                                                error: errorHandler = function() {
+                                                    console.log("error");
+                                                },
+                                                // Form data
+                                                data: formData,
+                                                //Options to tell JQuery not to process data or worry about content-type
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false
+                                            }, 'json');
+                                        }
+                                        if(isUD(fileOrg2.files[0])){}
+                                        else {
+                                            $.ajax({
+                                                url: base_url + 'file/UploadImage',  //server script to process data
+                                                type: 'POST',
+                                        
+                                                //Ajax events
+                                                success: completeHandler = function(data) {
+                                                    if(data.isSuccess){
+                                                        //submit filename to server
+                                                        $.get(base_url  + "sql/exec?p=clients_bir_img_upd @client_id=" + gClientId
+                                                                    + ",@bir_img='" +  fileOrg2.files[0].name + "'"
+                                                        ,function(data){
+                                                            zsi.form.showAlert("alert");
+                                                            if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                        });
+                                                        
+                                                        
+                                                    }else
+                                                        alert(data.errMsg);
+                                                },
+                                                error: errorHandler = function() {
+                                                    console.log("error");
+                                                },
+                                                // Form data
+                                                data: formData1,
+                                                //Options to tell JQuery not to process data or worry about content-type
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false
+                                            }, 'json');
+                                        }
+                                        if(isUD(fileOrg3.files[0])){}
+                                        else{
+                                            $.ajax({
+                                                url: base_url + 'file/UploadImage',  //server script to process data
+                                                type: 'POST',
+                                        
+                                                //Ajax events
+                                                success: completeHandler = function(data) {
+                                                    if(data.isSuccess){
+                                                        //submit filename to server
+                                                        $.get(base_url  + "sql/exec?p=clients_sec_dti_img_upd @client_id=" + gClientId
+                                                                    + ",@sec_dti_img='" +  fileOrg3.files[0].name + "'"
+                                                        ,function(data){
+                                                            zsi.form.showAlert("alert");
+                                                            if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                        });
+                                                        
+                                                        
+                                                    }else
+                                                        alert(data.errMsg);
+                                                },
+                                                error: errorHandler = function() {
+                                                    console.log("error");
+                                                },
+                                                // Form data
+                                                data: formData2,
+                                                //Options to tell JQuery not to process data or worry about content-type
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false
+                                            }, 'json');
+                                        }
+                                    },2000);
                                 }
                             }); 
                             
@@ -550,16 +666,17 @@
         
     });
     
-    $("#btnSaveContracts").click(function(){ 
-        $("#gridContracts").jsonSubmit({
-             procedure: "client_contract_devices_upd"
-            //,optionalItems: ["is_active"] 
-            ,onComplete: function (data) { 
-               if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                displayClientContractDevice(gClientContractid,gBatchQty);
-            } 
-        }); 
-    });
+ 
+    //$("#btnSaveContracts").click(function(){ 
+    //    $("#gridContracts").jsonSubmit({
+    //         procedure: "client_contract_devices_upd"
+    //        ,optionalItems: ["is_active"] 
+    //        ,onComplete: function (data) { 
+    //           if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+    //            displayClientContractDevice(gClientContractid,gBatchQty);
+    //        }
+    //    }); 
+    //});
     
     $("#btnFilterVal").click(function(){
         var _keyWord = $("#keyWord").val();
@@ -567,16 +684,15 @@
         if(_keyWord && _keyValue) $("#contractsDiv").removeClass("hide");
         
         if(gActiveTab === "search") displayClientContracts(_keyWord,_keyValue);
-        //else displayClients();
         
     });
     
-    $("#btnResetVal").click(function(){
-        $("#formContract").find("#plan_qty").val("");
-        $("#formContract").find("#srp_amount,#dp_amount,#less_dp_amount,#total_amort_amount,#monthly_amort_amount").val("0.00");
-        $("#formContract").find("#contract_term_id,#plan_id").val(null).trigger('change');
-        $("input[name$='date']").datepicker({ pickTime:false,autoclose:true,todayHighlight:true}).datepicker("setDate","0");  
-    })
+    //$("#btnResetVal").click(function(){
+    //    $("#formContract").find("#plan_qty").val("");
+    //    $("#formContract").find("#srp_amount,#dp_amount,#less_dp_amount,#total_amort_amount,#monthly_amort_amount").val("0.00");
+    //    $("#formContract").find("#contract_term_id,#plan_id").val(null).trigger('change');
+    //    $("input[name$='date']").datepicker({ pickTime:false,autoclose:true,todayHighlight:true}).datepicker("setDate","0");  
+    //});
     
     return _pub;
-})();                             
+})();                                   

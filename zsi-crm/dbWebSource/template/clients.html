@@ -22,9 +22,6 @@
         padding: 0 !important;
         margin: 0 -1px;
     }
-    .btn-outline-default {
-        line-height: 0.5;
-    }
     .border-none{
         border: none !important;
     }
@@ -42,6 +39,37 @@
                             <option value="contract_no">Contract No.</option>
                         </select>
                     </div>
+                    <!--<div class="row">
+                        <div class="col-xl-12">
+                            <div id="panel-1" class="panel">
+                                <div class="panel-hdr">
+                                    <h2>
+                                        Panel <span class="fw-300"><i>Title</i></span>
+                                    </h2>
+                                    <div class="panel-toolbar">
+                                        <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                        <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                                        <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                                    </div>
+                                </div>
+                                <div class="panel-container show">
+                                    <div class="panel-content">
+                                        <div class="panel-tag">
+                                            Dropzone does not handle your file uploads on the server. You have to implement the code to receive and store the file yourself. See the section Server side implementation for more information.
+                                        </div>
+                                        <form action="/upload" class="dropzone needsclick" style="min-height: 7rem;">
+                                            <div class="dz-message needsclick">
+                                                <i class="fal fa-cloud-upload text-muted mb-3"></i> <br>
+                                                <span class="text-uppercase">Drop files here or click to upload.</span>
+                                                <br>
+                                                <span class="fs-sm text-muted">This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.</span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
                     <div class="col-12 col-sm-6 col-md-5">
                         <div class="input-group">
                             <input id="keyValue" type="text" class="form-control form-control-sm pl-2" placeholder="Please select keyword....."/>
@@ -51,7 +79,7 @@
                                 </button>
                             </div>
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left ml-1 btn-outline-default text-white" id="btnNew">
+                                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left ml-1 btn-outline-default text-white" onclick="client.showModalClients()">
                                     <i class="far fa-plus"></i> New Client
                                 </button>
                             </div>
@@ -91,7 +119,6 @@
     <div class="modal-dialog modal-l" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -100,36 +127,36 @@
                 <div class="col-12 col-sm-12 col-md-12">
                     <h1 class="pt-2"><b>Client Registration</b><br></h1><span>Add new client by filling the form bellow.</span>
                     <div class="border-top mt-3"></div>
-                    <form id="formClients" class="needs-validation" novalidate>  
-                        <div id="clientInformationDiv" class="row mb-2"> 
-                            <input type="hidden" name="client_id">
+                    <div id="clientInformationDiv" class="mb-2"> 
+                        <form id="formClientsStep1One" class="needs-validation row" novalidate>
+            			    <input type="hidden" name="client_id">
                         	<div class="col-12 col-md-12">
-                    		    <label for="" class="col-form-label control-label"><b>Client Name</b><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control zsi-form-control form-control-sm autoCaps" id="client_name" required  name="client_name" autocomplete="off"/> 
+                    		    <label for="" class="col-form-label control-label"><b>Company Name</b><span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm autoCaps zsi-form-control" id="client_name" required  name="client_name" autocomplete="off"/> 
                     		</div>
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Email Address</b><span class="text-danger">*</span></label> 
-                                <input type="text" class="form-control zsi-form-control form-control-sm" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
+                                <input type="email" class="form-control form-control-sm zsi-form-control" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
                     		</div>
                     		
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>TIN</b><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control zsi-form-control form-control-sm" id="client_tin" name="client_tin" required  autocomplete="off" placeholder="999-999-999-999V"  maxlength="16"/>
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="client_tin" name="client_tin" required  autocomplete="off" placeholder="999-999-999-999"  maxlength="16"/>
                     		</div>
                     		
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Landline Number</b><span class="text-danger">*</span></label> 
-                                <input type="text" class="form-control zsi-form-control form-control-sm" id="client_phone_no" name="client_phone_no" required  autocomplete="off" data-inputmask="'mask': '(999) 999-9999'" im-insert="true" placeholder="(123) 456-7890"  maxlength="14"/>
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="client_phone_no" name="client_phone_no" required  autocomplete="off" data-inputmask="'mask': '(999) 999-9999'" im-insert="true" placeholder="(123) 456-7890"  maxlength="14"/>
                     		</div>
                     		
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Mobile Number</b><span class="text-danger">*</span></label>
-                                <input type="text" class="form-control zsi-form-control form-control-sm" id="client_mobile_no" name="client_mobile_no" maxlength="11" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true" placeholder="09999999999"/>
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="client_mobile_no" name="client_mobile_no" maxlength="13" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true" placeholder="09999999999"/>
                     		</div>
                     		
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Billing Address</b><span class="text-danger">*</span></label> 
-                                <input type="text" class="form-control zsi-form-control form-control-sm autoCaps" id="billing_address" name="billing_address" required autocomplete="off" placeholder="Building No, Street, Barangay">
+                                <input type="text" class="form-control form-control-sm autoCaps zsi-form-control" id="billing_address" name="billing_address" required autocomplete="off" placeholder="Building No, Street, Barangay">
                     		</div>
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Country</b><span class="text-danger">*</span></label>  
@@ -137,65 +164,83 @@
                     		</div>
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Province/State</b><span class="text-danger">*</span></label>  
-                                <select class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
+                                <select type="text" class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
                     		</div>
                     		<div class="col-12 col-md-12 mb-2">
                     		    <label for="" class="col-form-label control-label"><b>City</b><span class="text-danger">*</span></label>  
-                                <select class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                                <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
                                 <input id="is_zfare" name="is_zfare" type="hidden" value="Y" class="custom-control-input">
                     		</div>
-                    	</div>
+                		</form>
+                		<form id="formClientsStep1Two" class="row">  
+                        	<div class="col-12 col-md-12 mb-2">  
+                                <label class="col-form-label control-label"><b>Mayor's Permit</b></label>
+                                <input id="file1" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer" required>
+                            </div>
+                        </form>
+                        <form id="formClientsStep1Three" class="row">
+                            <div class="col-12 col-md-12 mb-2">  
+                                <label class="col-form-label control-label"><b>BIR</b></label>
+                                <input id="file2" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer" required>
+                            </div>
+                        </form>
+                        <form id="formClientsStep1Four" class="row">
+                            <div class="col-12 col-md-12 mb-2">  
+                                <label class="col-form-label control-label"><b>SEC/DTI</b></label>
+                                <input id="file3" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer" required>
+                            </div>
+                        </form>
+                	</div>
                     	
-                    	<div id="adminUserDiv" class="row hide">
+                	<div id="adminUserDiv" class="hide">
+                	    <form id="formClientsStep2" class="needs-validation row" novalidate>
             		        <input type="hidden" id="clientId" name="client_id"  value=""/>
             		        <div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Login (Email Address)</b><span class="text-danger">*</span></label> 
-                                <input type="email" id="logon" name="logon" class="form-control zsi-form-control form-control-sm" placeholder="email@gmail.com" required autoComplete="off">
+                                <input type="email" id="logon" name="logon" class="form-control form-control-sm zsi-form-control" placeholder="email@gmail.com" required autoComplete="off">
                     		</div>
             		        
             		        <div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Last Name</b><span class="text-danger">*</span></label>  
-                                <input type="text" id="last_name" name="last_name" class="form-control zsi-form-control form-control-sm autoCaps" required autoComplete="off">
+                                <input type="text" id="last_name" name="last_name" class="form-control form-control-sm autoCaps zsi-form-control" required autoComplete="off">
                     		</div>
             		        
                 			<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>First Name</b><span class="text-danger">*</span></label>  
-                                <input type="text" id="first_name" name="first_name" class="form-control zsi-form-control form-control-sm autoCaps" required autoComplete="off">
+                                <input type="text" id="first_name" name="first_name" class="form-control form-control-sm autoCaps zsi-form-control" required autoComplete="off">
                     		</div>
                     		
                     		<div class="col-12 col-md-12">
                     		    <label for="" class="col-form-label control-label"><b>Middle Name</b></label>
-                                <input type="text" id="middle_name" name="middle_name" class="form-control zsi-form-control form-control-sm autoCaps" autoComplete="off">
+                                <input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm autoCaps zsi-form-control" autoComplete="off">
                     		</div>
                     		
                     		<div class="col-12 col-md-12 mb-2"> 
                     		    <label for="" class="col-form-label control-label"><b>Name Suffix</b></label>  
-                                <input type="text" id="name_suffix" name="name_suffix" class="form-control zsi-form-control form-control-sm autoCaps" autoComplete="off">
-                    		</div> 
-            		    </div>
-            		    
-                    	<div class="row">
-                    	    <div class="col-md-12 col-12 mb-2">
-                                <di class="frame-wrap">
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input id="is_ready" type="checkbox" class="custom-control-input" required>
-                                        <label class="custom-control-label" for="is_ready">Ready to make user admin?</label>
-                                    </div>
-                                </di>
-                            </div>
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
-                                <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
-                                    <i class="far fa-save"></i> Save
-                                </button>
-                            </div>
+                                <input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm autoCaps zsi-form-control" autoComplete="off">
+                    		</div>  
+                		</form>
+        		    </div>
+                	<form id="formClientsCB" class="needs-validation row" novalidate>
+                	    <div class="col-md-12 col-12 mb-2">
+                            <di class="frame-wrap">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input id="is_ready" type="checkbox" class="custom-control-input cursor-pointer" required>
+                                    <label class="custom-control-label cursor-pointer" for="is_ready">Ready to make user admin?</label>
+                                </div>
+                            </di>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                            <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                <i class="far fa-save"></i> Save
+                            </button>
                         </div>
                     </form>
                 </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
+            </div> 
+        </div> 
+    </div> 
+</div> 
 <div class="hide">
     <form id="formEmail">
         <input type="hidden" name="password" id="epassword" value="">
@@ -217,7 +262,6 @@
                     <div class="col-12 col-sm-5 col-md-4"> 
                         <form id="formContract" class="needs-validation panel" novalidate>  
                 			<input type="hidden" name="client_contract_id" id="client_contract_id">
-                            
                             <div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Client</b></label>  
                                 <select class="form-control form-control-sm custom-select select2" id="client_id" required  name="client_id"></select>
@@ -230,42 +274,34 @@
                     		    <label for="" class="col-form-label control-label"><b>Contract Date</b></label>  
                                 <input type="text" class="form-control form-control-sm zsi-form-control" id="contract_date" required  name="contract_date" autocomplete="off"/> 
                     		</div>
-                    		
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Activation Date</b></label>  
                                 <input type="text" class="form-control form-control-sm zsi-form-control" id="activation_date" required  name="activation_date" autocomplete="off"/> 
                     		</div>
-                    		
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Expiry Date</b></label>  
                                 <input type="text" class="form-control form-control-sm zsi-form-control" id="expiry_date" required  name="expiry_date" autocomplete="off"/>
                     		</div>
-                    		
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Contract Term</b></label>  
                                 <select class="form-control form-control-sm custom-select select2" id="contract_term_id" required  name="contract_term_id"></select>
                     		</div>
-                    		
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Plan</b></label>  
                                 <select class="form-control form-control-sm custom-select select2" id="plan_id" required  name="plan_id"></select>
                     		</div>
-                    		
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Plan Quantity</b></label>  
                                 <input type="text" class="form-control form-control-sm zsi-form-control" id="plan_qty" required  name="plan_qty" autocomplete="off"/>
                     		</div>
-                    		
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>SRP Amount</b></label>  
                                 <input type="text" class="form-control form-control-sm zsi-form-control" id="srp_amount" required  name="srp_amount" autocomplete="off" readonly="true"/>
                     		</div>
-                    		
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Down Payment Amount</b></label>  
                                 <input type="text" class="form-control form-control-sm zsi-form-control" id="dp_amount" required  name="dp_amount" value="0.00"/>
                             </div>
-                            
                     		<div class="col-sm-12 col-md-12 col-xs-12">
                     		    <label for="" class="col-form-label control-label"><b>Less Down Payment Amount</b></label>   
                                 <input type="text" class="form-control form-control-sm zsi-form-control" id="less_dp_amount" required  name="less_dp_amount" autocomplete="off" value="0.00" readonly="true"/>

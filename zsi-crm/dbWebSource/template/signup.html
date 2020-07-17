@@ -15,13 +15,16 @@
     .autoCaps{
         text-transform: capitalize;
     }
-    .form-control{
+    .zsi-form-control{
         border-left:none;
         border-right:none;
         border-top:none;
         border-radius:0 0 0 0;
         padding: 0;
     }
+    .form-control {    
+		padding: unset;   
+	}
 </style>
 <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0" style="position:relative">
     <div class="col-12 col-md-6 col-lg-6 col-xl-6 hidden-sm-down zsi-home-color">
@@ -62,39 +65,39 @@
                     <select id="clientPassword" class="hide"></select>
                     <h1 class="pt-2"><b>Sign Up</b><br></h1><span>Create your account by filling the form bellow.</span>
                     <div class="border-top mt-3"></div>
-                    <form id="formClients" class="needs-validation" novalidate>
-                        <div class="panel-container show panel-container-grid">
-                            <div class="panel-content">
-                                <div class="pl-4 pr-4">
-                        		    <div id="clientInformationDiv" class="row mb-2"> 
-                                        <input type="hidden" name="client_id" id="client_id">
+                    <div class="panel-container show panel-container-grid">
+                        <div class="panel-content">
+                            <div class="pl-4 pr-4">
+                                <div id="clientInformationDiv" class="mb-2"> 
+                                    <form id="formClientsStep1One" class="needs-validation row" novalidate>
+                        			    <input type="hidden" name="client_id">
                                     	<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Company Name</b><span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control form-control-sm autoCaps" id="client_name" required  name="client_name" autocomplete="off"/> 
+                                            <input type="text" class="form-control form-control-sm autoCaps zsi-form-control" id="client_name" required  name="client_name" autocomplete="off"/> 
                                 		</div>
                                 		<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Email Address</b><span class="text-danger">*</span></label> 
-                                            <input type="text" class="form-control form-control-sm" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
+                                            <input type="email" class="form-control form-control-sm zsi-form-control" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
                                 		</div>
                                 		
                                 		<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>TIN</b><span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control form-control-sm" id="client_tin" name="client_tin" required  autocomplete="off" placeholder="999-999-999-999V"  maxlength="16"/>
+                                            <input type="text" class="form-control form-control-sm zsi-form-control" id="client_tin" name="client_tin" required  autocomplete="off" placeholder="999-999-999-999"  maxlength="16"/>
                                 		</div>
                                 		
                                 		<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Landline Number</b><span class="text-danger">*</span></label> 
-                                            <input type="text" class="form-control form-control-sm" id="client_phone_no" name="client_phone_no" required  autocomplete="off" data-inputmask="'mask': '(999) 999-9999'" im-insert="true" placeholder="(123) 456-7890"  maxlength="14"/>
+                                            <input type="text" class="form-control form-control-sm zsi-form-control" id="client_phone_no" name="client_phone_no" required  autocomplete="off" data-inputmask="'mask': '(999) 999-9999'" im-insert="true" placeholder="(123) 456-7890"  maxlength="14"/>
                                 		</div>
                                 		
                                 		<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Mobile Number</b><span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control form-control-sm" id="client_mobile_no" name="client_mobile_no" maxlength="11" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true" placeholder="09999999999"/>
+                                            <input type="text" class="form-control form-control-sm zsi-form-control" id="client_mobile_no" name="client_mobile_no" maxlength="13" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true" placeholder="09999999999"/>
                                 		</div>
                                 		
                                 		<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Billing Address</b><span class="text-danger">*</span></label> 
-                                            <input type="text" class="form-control form-control-sm autoCaps" id="billing_address" name="billing_address" required autocomplete="off" placeholder="Building No, Street, Barangay">
+                                            <input type="text" class="form-control form-control-sm autoCaps zsi-form-control" id="billing_address" name="billing_address" required autocomplete="off" placeholder="Building No, Street, Barangay">
                                 		</div>
                                 		<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Country</b><span class="text-danger">*</span></label>  
@@ -107,70 +110,77 @@
                                 		<div class="col-12 col-md-12 mb-2">
                                 		    <label for="" class="col-form-label control-label"><b>City</b><span class="text-danger">*</span></label>  
                                             <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                                            <input id="is_zfare" name="is_zfare" type="hidden" value="Y" class="custom-control-input">
                                 		</div>
-                                		
-                                		<div class="col-12 col-md-12 mb-2">
-                                            <h5 class="frame-heading">Collection / Loading Merchant<span class="text-danger">*</span></h5>
-                                            <di class="frame-wrap">
-                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input id="is_zfare" name="is_zfare" type="checkbox" value="Y" class="custom-control-input">
-                                                    <label class="custom-control-label" for="is_zfare">Fare Collection</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input id="is_zload" name="is_zload" type="checkbox" value="Y" class="custom-control-input">
-                                                    <label class="custom-control-label" for="is_zload">Loading Merchant</label>
-                                                </div>
-                                            </di>
+                            		</form>
+                            		<form id="formClientsStep1Two" class="row">  
+                                    	<div class="col-12 col-md-12 mb-2">  
+                                            <label class="col-form-label control-label"><b>Mayor's Permit</b></label>
+                                            <input id="file1" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer" required>
                                         </div>
-                                	</div>
-                        		    <div id="adminUserDiv" class="row hide">
+                                    </form>
+                                    <form id="formClientsStep1Three" class="row">
+                                        <div class="col-12 col-md-12 mb-2">  
+                                            <label class="col-form-label control-label"><b>BIR</b></label>
+                                            <input id="file2" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer" required>
+                                        </div>
+                                    </form>
+                                    <form id="formClientsStep1Four" class="row">
+                                        <div class="col-12 col-md-12 mb-2">  
+                                            <label class="col-form-label control-label"><b>SEC/DTI</b></label>
+                                            <input id="file3" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer" required>
+                                        </div>
+                                    </form>
+                            	</div>
+                                	
+                            	<div id="adminUserDiv" class="hide">
+                            	    <form id="formClientsStep2" class="needs-validation row" novalidate>
                         		        <input type="hidden" id="clientId" name="client_id"  value=""/>
                         		        <div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Login (Email Address)</b><span class="text-danger">*</span></label> 
-                                            <input type="email" id="logon" name="logon" class="form-control form-control-sm" placeholder="email@gmail.com" required autoComplete="off">
+                                            <input type="email" id="logon" name="logon" class="form-control form-control-sm zsi-form-control" placeholder="email@gmail.com" required autoComplete="off">
                                 		</div>
                         		        
                         		        <div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Last Name</b><span class="text-danger">*</span></label>  
-                                            <input type="text" id="last_name" name="last_name" class="form-control form-control-sm autoCaps" required autoComplete="off">
+                                            <input type="text" id="last_name" name="last_name" class="form-control form-control-sm autoCaps zsi-form-control" required autoComplete="off">
                                 		</div>
                         		        
                             			<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>First Name</b><span class="text-danger">*</span></label>  
-                                            <input type="text" id="first_name" name="first_name" class="form-control form-control-sm autoCaps" required autoComplete="off">
+                                            <input type="text" id="first_name" name="first_name" class="form-control form-control-sm autoCaps zsi-form-control" required autoComplete="off">
                                 		</div>
                                 		
                                 		<div class="col-12 col-md-12">
                                 		    <label for="" class="col-form-label control-label"><b>Middle Name</b></label>
-                                            <input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm autoCaps" autoComplete="off">
+                                            <input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm autoCaps zsi-form-control" autoComplete="off">
                                 		</div>
                                 		
                                 		<div class="col-12 col-md-12 mb-2"> 
                                 		    <label for="" class="col-form-label control-label"><b>Name Suffix</b></label>  
-                                            <input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm autoCaps" autoComplete="off">
-                                		</div> 
-                        		    </div>
-                                </div>
-                                <div class="border-top my-2"></div>
-                    		    <div class="row mb-2">
+                                            <input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm autoCaps zsi-form-control" autoComplete="off">
+                                		</div>  
+                            		</form>
+                    		    </div>
+                            	<form id="formClientsCB" class="needs-validation row" novalidate>
                             	    <div class="col-md-12 col-12 mb-2">
                                         <di class="frame-wrap">
                                             <div class="custom-control custom-checkbox custom-control-inline">
-                                                <input id="is_ready" type="checkbox" class="custom-control-input" required>
-                                                <label class="custom-control-label" for="is_ready">Ready to make user admin?</label>
+                                                <input id="is_ready" type="checkbox" class="custom-control-input cursor-pointer" required>
+                                                <label class="custom-control-label cursor-pointer" for="is_ready">Ready to make user admin?</label>
                                             </div>
                                         </di>
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">   
                                         <button id="btnSubmit" type="button" class="btn btn-primary btn-md col-5 ml-1 hvr-sweep-to-left col-12" title="Register Now">Register Now</button>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">   
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-2">   
                         				<span class="ml-2">Member click here > </span><a href="/" id="btnSignUp" class="">Sign In</a>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
