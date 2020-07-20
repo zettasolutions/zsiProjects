@@ -1,5 +1,7 @@
  var vehicledriverpao = (function(){
-    var   bs                    = zsi.bs.ctrl
+    var   bs                    = zsi.bs.ctrl 
+        ,svn                    = zsi.setValIfNull 
+        ,bsButton               = zsi.bs.button
         ,gTw                    = null
         , tblName               = "tblusers"
         ,_public                = {}
@@ -11,14 +13,13 @@
         ,gRoleId                = 0
         ,gPosition              = 0
         ,gCompanyId             = app.userInfo.company_id
-        ,mdlAddNewDriverUser    = "modalWindowAddNewDriverUser"
-        ,mdlInactive            = "modalWindowInactive"
-        ,gMdlUploadExcel        = "modalWindowUploadExcel"
+        ,mdlAddNewDriverUser    = "modalWindowAddNewDriverUser" 
         ,mdlImageUserVehicle    = "modalWindowImageUser"
         ,mdlImagePaoUser        = "modalWindowImagePaoUser" 
         ,mdlAddNewPao           = "modalWindowAddNewPao"
         ,gSubTabName            = ""
         ,gTabName               = ""
+        ,gSqlCode               = ""
     ;
    
     zsi.ready = function(){
@@ -26,79 +27,46 @@
         $(".panel-container").css("min-height", $(window).height() - 190); 
         gTw = new zsi.easyJsTemplateWriter();
         displayVehicles(gCompanyId); 
-        displayDrivers();
+        displayDrivers(gCompanyId);
         displayPAO(gCompanyId);
         getTemplates();
-        setSearch();  
+        setSearch();   
     }; 
     gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());  
     gTabName = $.trim($(".nav-tab-main").find(".nav-item.active").text());  
+    $("#searchVal").attr('placeholder','Search vehicles...');
+    $("#searchDiv").removeClass("hide");
     $(".nav-tab-main").find('a[data-toggle="tab"]').unbind().on('shown.bs.tab', function(e){
         gTabName = $.trim($(e.target).text());
         $(".nav-tab-sub").find(".nav-item").removeClass("active");
         $(".nav-tab-sub").find(".nav-item:first-child()").addClass("active"); 
         if(gTabName === "PAO"){
             gRoleId = 2; 
-            gPosition = 4;
+            gPosition = 4;  
+            $("#searchDiv").addClass("hide");
         }
         if(gTabName === "Drivers"){
             gPosition = 3;
-            gRoleId = 1;   
-            //$("#searchDiv").addClass("hide");
-            gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text());  
+            gRoleId = 1;    
             displayDrivers(); 
-        }//else $("#searchDiv").removeClass("hide"); 
+            gSubTabName = $.trim($(".nav-sub-mfg").find(".nav-item.active").text()); 
+            $("#searchVal").attr('placeholder','Search drivers...');
+            $("#searchDiv").removeClass("hide");
+        }
+        if(gTabName === "Vehicles"){
+            $("#searchVal").attr('placeholder','Search vehicles...');
+            $("#searchDiv").removeClass("hide");
+            displayVehicles(gCompanyId);
+        } 
     });  
     $(".nav-tab-sub").find('a[data-toggle="tab"]').unbind().on('shown.bs.tab', function(e){ 
-        gSubTabName = $.trim($(e.target).text()); 
-        displayDrivers();
-    });   
-    _public.excelFileUpload = function(){
-        var frm      = $("#frm_modalWindowUploadExcel");
-        var formData = new FormData(frm.get(0));
-        var files    = frm.find("input[name='file']").get(0).files; 
-    
-        if(files.length===0){
-            alert("Please select excel file.");
-            return;    
-        }
-        
-        //disable button and file upload.
-        $("btnUploadFile").hide();
-        $("#loadingStatus").html("<div class='loadingImg'></div> Uploading...");
-    
-        $.ajax({
-            url: base_url + 'file/templateUpload',  //server script to process data
-            type: 'POST',
-            //Ajax events
-            success: completeHandler = function(data) {
-                if(data.isSuccess){
-                     alert("Data has been successfully uploaded.");
-                }
-                else
-                    alert(data.errMsg);
-            },
-            error: errorHandler = function() {
-                console.log("error");
-            },
-            // Form data
-            data: formData,
-            //Options to tell JQuery not to process data or worry about content-type
-            cache: false,
-            contentType: false,
-            processData: false
-        }, 'json');
-    };  
-    _public.showModalUpload = function(o,tabName){ 
-        $.get(app.execURL +  "excel_upload_sel @load_name ='" + "Metrics Data" +"'"
-        ,function(data){
-            g$mdl = $("#" + gMdlUploadExcel);
-            g$mdl.find(".modal-title").text("Upload Excel for » " + tabName ) ;
-            g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });  
-            $("#tmpData").val(data.rows[0].value);
-            $("input[name='file']").val(""); 
-        });
-    };  
+        gSubTabName = $.trim($(e.target).text());  
+        displayDrivers();   
+    });  
+    $(".nav-tab-vhs").find('a[data-toggle="tab"]').unbind().on('shown.bs.tab', function(e){ 
+        gSubTabName = $.trim($(e.target).text());  
+        displayVehicles(gCompanyId);   
+    }); 
     _public.mouseover = function(filename){
          $("#user-box").css("display","block");
          $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
@@ -110,23 +78,20 @@
         _paramId = Ids;
         _license = license;
         var m=$('#' + mdlImageUserVehicle); 
-       if(gTabName==="Vehicles") m.find(".modal-title").text("Vehicle image for » " + name);
-       if(gTabName==="PAO") m.find(".modal-title").text("PAO image for » " + name);
-       if(gTabName==="Drivers") m.find(".modal-title").text("Driver image for » " + name);
-       if(license) m.find(".modal-title").text("Driver's licence image for » " + name);
+        if(gTabName==="Vehicles") m.find(".modal-title").text("Vehicle image for » " + name);
+        if(gTabName==="PAO") m.find(".modal-title").text("PAO image for » " + name);
+        if(gTabName==="Drivers") m.find(".modal-title").text("Driver image for » " + name);
+        if(license) m.find(".modal-title").text("Driver's licence image for » " + name);
         m.modal("show");
-        m.find("form").attr("enctype","multipart/form-data");
-        
+        m.find("form").attr("enctype","multipart/form-data"); 
         $.get(base_url + 'page/name/tmplImageUpload'
             ,function(data){
                 m.find('.modal-body').html(data);
                 m.find("#prefixKey").val("user.");
             }
         ); 
-    }; 
-     
-    _public.uploadImageUserVehicle = function(){
-         console.log("_license",_license);
+    };  
+    _public.uploadImageUserVehicle = function(){ 
         var frm = $("#frm_" + mdlImageUserVehicle);
         var fileOrg=frm.find("#file").get(0);
     
@@ -233,8 +198,7 @@
     _public.submitNewDriverUsers = function(){
         $("#gridNewDriverUsers").jsonSubmit({
                  procedure  : "drivers_upd"
-                 ,optionalItems: ["is_active"]
-                // ,notIncludes : ["middle_name","name_suffix","driver_license_exp_date","driver_academy_no","driver_license_no"]
+                 ,optionalItems: ["is_active"] 
                  ,onComplete : function (data) {
                      if(data.isSuccess===true){
                         zsi.form.showAlert("alert");
@@ -246,21 +210,7 @@
         });
         
     };  
-    _public.submitNewVehicles = function(){
-        $("#gridNewVehicles").jsonSubmit({
-                 procedure: "vehicle_upd"
-                ,optionalItems: ["route_id","vehicle_type_id","is_active"]
-                ,onComplete : function (data) {
-                    if(data.isSuccess===true){
-                       zsi.form.showAlert("alert");
-                       isNew = false;
-                       displayVehicles(gCompanyId);
-                       displayAddNewVehicle(gCompanyId);
-                    }
-                }
-        });
-        
-    };  
+      
     function setSearch(){
         var _searchVal = "";
         $("#searchVal").on('keyup',function(e){
@@ -283,13 +233,7 @@
         });   
     } 
     function getTemplates(){
-        new zsi.easyJsTemplateWriter($("#generatedComponents").empty())
-        .bsModalBox({
-              id        : gMdlUploadExcel
-            , sizeAttr  : "modal-lg"
-            , title     : ""
-            , body      : gTw.new().modalBodyUploadExcel({onClickUploadExcel:"excelFileUpload();"}).html()  
-        }) 
+        new zsi.easyJsTemplateWriter($("#generatedComponents").empty())  
         .bsModalBox({
               id        : mdlImageUserVehicle
             , sizeAttr  : "modal-md"
@@ -317,13 +261,6 @@
             , title     : "Driver's Licence"
             , body      : ""
             , footer    : gTw.new().modalBodyImageDriverLicence({onClickUploadImageDriverLicence:"vehicledriverpao.uploadImageDriverLicence();"}).html()  
-        })
-        
-        .bsModalBox({
-              id        : mdlAddNewVehicleUser
-            , sizeAttr  : "modal-full"
-            , title     : "New User"
-            , body      : gTw.new().modalBodyAddVehicleUsers({grid:"gridNewVehicles",onClickSaveNewUsers:"vehicledriverpao.submitNewVehicles();"}).html()  
         }) 
         .bsModalBox({
               id        : mdlAddNewDriverUser
@@ -331,12 +268,7 @@
             , title     : "New User"
             , body      : gTw.new().modalBodyAddDriverUsers({grid:"gridNewDriverUsers",onClickSaveNewDriverUsers:"vehicledriverpao.submitNewDriverUsers();"}).html()  
         })
-        .bsModalBox({
-              id        : mdlInactive
-            , sizeAttr  : "modal-lg"
-            , title     : "Inactive Users"
-            , body      : gTw.new().modalBodyInactive({grid:"gridInactiveUsers",onClickSaveInactive:"vehicledriverpao.submitInactive();"}).html()  
-        }) 
+         
         .bsModalBox({
               id        : mdlAddNewPao
             , sizeAttr  : "modal-full"
@@ -345,8 +277,7 @@
         });
         
     }   
-    function displayDrivers(searchVal){  
-        console.log("searchVal",searchVal);
+    function displayDrivers(searchVal){   
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
         var ctr=-1
             ,_params = {
@@ -399,19 +330,6 @@
                             return (d !== null ? _link : ""); 
                     }
                 }
-               /* ,{text  : "Last Name"           , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"last_name"       ,sortColNo:4}
-                ,{text  : "First Name"          , width : 150           , style : "text-align:left;"            ,type:"input"       ,name:"first_name"      ,sortColNo:5}
-                ,{text  : "Middle Initial"      , width : 130           , style : "text-align:center;"          ,type:"input"       ,name:"middle_name" }
-                ,{text  : "Name Suffix"         , width : 100           , style : "text-align:center;"          ,type:"input"       ,name:"name_suffix" }
-                ,{text  : "Academy No."         , width : 100           , style : "text-align:center;"          ,type:"input"       ,name:"driver_academy_no" }
-                ,{text  : "License No."         , width : 100           , style : "text-align:center;"          ,type:"input"       ,name:"driver_license_no" }
-                ,{text  : "License Exp. Date"   , width : 100           , style : "text-align:center;"          ,type:"input"   
-                    ,onRender : function(d){
-                         return app.svn(d, "driver_license_exp_date").toShortDate();
-                    }
-                }
-                ,{text  : "Active?"             , width : 60            , style : "text-align:center;"          ,type:"yesno"       ,name:"is_active"       ,defaultValue: "Y"}
-                */
                 
                 ,{text  : "Last Name"     , width : 150           , style : "text-align:center;"    ,sortColNo:4
                     ,onRender : function(d){ 
@@ -433,12 +351,8 @@
                             +  app.bs({name:"position_id"               ,type:"hidden"      ,value: gPosition});
                     }
                 } 
-                ,{text  : "Active?"                     ,width : 60            ,style : "text-align:center;"          ,type:"yesno"       ,name:"is_active"       ,defaultValue: "Y"}
-                
-                
-                
-            ]
-            
+                ,{text  : "Active?"                     ,width : 60            ,style : "text-align:center;"          ,type:"yesno"       ,name:"is_active"       ,defaultValue: "Y"}  
+            ] 
             ,onComplete: function(o){
                  var _zRow = this.find(".zRow");
                  _zRow.find("[name='transfer_type_id']").dataBind({
@@ -463,9 +377,46 @@
             }
         });    
     }  
-    function displayVehicles(gCompanyId,searchVal){
+    function displayVehicles(gCompanyId,searchVal){ 
+        $("#linkDiv").addClass("hide"); 
+        var ctr=-1
+            ,_params = {
+                client_id: gCompanyId
+                ,tab_id : 0
+                ,searchVal:(searchVal ? searchVal : "")
+            }
+            ,_sqlCode = "V1229"; 
+        switch(gTabName){  
+            case "Vehicles":  
+                switch (gSubTabName) {  
+                    case "All":  
+                       $("#linkDiv").addClass("hide");
+                       $("#gridVehicles").removeClass("hide");
+                       $("#forExpiration").addClass("hide"); 
+                    break;
+                    case "For Registration":  
+                        displayForRegistration(gCompanyId);
+                        $("#linkDiv").removeClass("hide");
+                        $("#gridVehicles").addClass("hide"); 
+                        $("#forExpiration").removeClass("hide"); 
+                    break;
+                    case "Registration Expired": 
+                        $("#forExpiration").addClass("hide"); 
+                        $("#gridVehicles").removeClass("hide");
+                        $("#linkDiv").addClass("hide");
+                    break;
+                    case "Insurance": 
+                        displayForRegistration(gCompanyId);
+                        $("#linkDiv").removeClass("hide");
+                        $("#gridVehicles").addClass("hide"); 
+                        $("#forExpiration").removeClass("hide"); 
+                    break;
+                }
+            break; 
+        } 
+        
         $("#gridVehicles").dataBind({
-             sqlCode        : "V1229" 
+             sqlCode        :  (_sqlCode ? _sqlCode : gSqlCode) 
             ,parameters     : {client_id: gCompanyId, searchVal:(searchVal ? searchVal : "")}
             ,height         : $(window).height() - 240
             ,dataRows       : [
@@ -488,22 +439,36 @@
                         { return   app.bs({name:"vehicle_id"               ,type:"hidden"      ,value: app.svn(d,"vehicle_id")}) 
                                  + app.bs({name:"company_id"               ,type:"hidden"      ,value: gCompanyId}) 
                                  + app.bs({name:"is_edited"                ,type:"hidden"      ,value: app.svn(d,"is_edited")})
-                                 + app.bs({name:"vehicle_plate_no"         ,type:"input"       ,value: app.svn(d,"vehicle_plate_no")}) ;
-                                 
+                                 + app.bs({name:"vehicle_plate_no"         ,type:"input"       ,value: app.svn(d,"vehicle_plate_no")}) ; 
                         }
                 }
                 ,{text: "Route"                                                                 ,width : 100   ,style : "text-align:left;"
                     ,onRender  :  function(d)  
-                        { return   app.bs({name:"route_id"                  ,type:"select"      ,value: app.svn(d,"route_id")})  
-                                 + app.bs({name:"hash_key"                  ,type:"hidden"      ,value: app.svn(d,"hash_key")});
-                                 
+                        { return    app.bs({name:"route_id"                  ,type:"select"      ,value: app.svn(d,"route_id")})  
+                                 +  app.bs({name:"hash_key"                  ,type:"hidden"      ,value: app.svn(d,"hash_key")}) ; 
                         }
                 }
-                ,{text: "Vehicle Type"                      ,name:"vehicle_type_id"             ,type:"select"      ,width : 160   ,style : "text-align:left;"}
-                ,{text: "Transfer Type"                     ,name:"transfer_type_id"            ,type:"select"      ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Bank"                              ,name:"bank_id"                     ,type:"select"      ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Transfer No"                       ,name:"transfer_no"                 ,type:"input"       ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Account Name"                      ,name:"account_name"                ,type:"input"       ,width : 150   ,style : "text-align:left;"}
+                ,{text: "Vehicle Type"                                                          ,width : 160   ,style : "text-align:left;"
+                            ,onRender  :  function(d)  
+                        { return    app.bs({name:"vehicle_type_id"          ,type:"select"      ,value: app.svn(d,"vehicle_type_id")})  
+                                 +  app.bs({name:"transfer_type_id"         ,type:"hidden"      ,value: app.svn(d,"transfer_type_id")})
+                                 +  app.bs({name:"bank_id"                  ,type:"hidden"      ,value: app.svn(d,"bank_id")})   
+                                 +  app.bs({name:"transfer_no"              ,type:"hidden"      ,value: app.svn(d,"transfer_no")})      
+                                 +  app.bs({name:"account_name"             ,type:"hidden"      ,value: app.svn(d,"account_name")}); 
+                        }        
+                }
+                ,{text:"Exp Registration Date"                                                                      ,width:120       ,style:"text-align:left"
+                    ,onRender: function(d){ return app.bs({name:"exp_registration_date"     ,type:"input"    ,value: app.svn(d,"exp_registration_date").toShortDate()});
+                       
+                    }
+                }
+                ,{text:"Exp Insurance Date"                                                                         ,width:120       ,style:"text-align:left"
+                    ,onRender: function(d){ 
+                        return app.bs({name:"exp_insurance_date"        ,type:"input"       ,value: app.svn(d,"exp_insurance_date").toShortDate()})
+                             + app.bs({name:"vehicle_maker_id"          ,type:"hidden"      ,value: app.svn(d,"vehicle_maker_id")});
+                    }
+                }
+                ,{text:"Odometer Reading"                   ,type:"input"           ,name:"odometer_reading"         ,width:150       ,style:"text-align:left"} 
                 ,{text: "Active?"                           ,name:"is_active"                   ,type:"yesno"       ,width : 55    ,style : "text-align:center;"    ,defaultValue:"Y"}
             ]
             ,onComplete: function(){
@@ -531,99 +496,7 @@
                 exportToExcel(this);
             }
         });
-    }  
-    function displayAddNewVehicle(company_id){   
-        var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
-        $("#gridNewVehicles").dataBind({
-    	     height         : 360 
-    	    ,selectorType   : "checkbox"
-            ,blankRowsLimit : 5
-            ,dataRows       : [
-                {text: "Vehicle Plate No."                 ,width : 200   ,style : "text-align:left;"
-                    ,onRender  :  function(d)  
-                        { return   app.bs({name:"vehicle_id"               ,type:"hidden"      ,value: app.svn(d,"vehicle_id")}) 
-                                 + app.bs({name:"company_id"               ,type:"hidden"      ,value: company_id}) 
-                                 + app.bs({name:"is_edited"                ,type:"hidden"      ,value: app.svn(d,"is_edited")})
-                                 + app.bs({name:"vehicle_plate_no"         ,type:"input"       ,value: app.svn(d,"vehicle_plate_no")}) ;
-                                 
-                        }
-                }
-                ,{text: "Route"                                                                 ,width : 100   ,style : "text-align:left;"
-                    ,onRender  :  function(d)  
-                        { return   app.bs({name:"route_id"                  ,type:"select"      ,value: app.svn(d,"route_id")})  
-                                 + app.bs({name:"hash_key"                  ,type:"hidden"      ,value: app.svn(d,"hash_key")});
-                                 
-                        }
-                }
-                ,{text: "Vehicle Type"                      ,name:"vehicle_type_id"             ,type:"select"      ,width : 160   ,style : "text-align:left;"}
-                ,{text: "Transfer Type"                     ,name:"transfer_type_id"            ,type:"select"      ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Bank"                              ,name:"bank_id"                     ,type:"select"      ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Transfer No"                       ,name:"transfer_no"                 ,type:"input"       ,width : 100   ,style : "text-align:left;"}
-                ,{text: "Account Name"                      ,name:"account_name"                ,type:"input"       ,width : 150   ,style : "text-align:left;"}
-                ,{text: "Active?"                           ,name:"is_active"                   ,type:"yesno"       ,width : 55    ,style : "text-align:center;"    ,defaultValue:"Y"}
-            ]
-            ,onComplete: function(){
-                var _zRow = this.find(".zRow");
-                _zRow.find("[name='route_id']").dataBind({
-                    sqlCode      : "R1224"
-                   ,text         : "route_code"
-                   ,value        : "route_id"
-                });
-                _zRow.find("[name='vehicle_type_id']").dataBind({
-                    sqlCode      : "V1230"
-                   ,text         : "vehicle_type"
-                   ,value        : "vehicle_type_id"
-                });
-                _zRow.find("[name='transfer_type_id']").dataBind({
-                    sqlCode      : "D1284"
-                   ,text         : "transfer_type"
-                   ,value        : "transfer_type_id"
-                });
-                _zRow.find("[name='bank_id']").dataBind({
-                    sqlCode      : "B1245"
-                   ,text         : "bank_code"
-                   ,value        : "bank_id"
-                });
-            }
-        });    
-    }  
-    function displayInactiveVehicles(){
-        var cb = app.bs({name:"cbFilter",type:"checkbox"});
-        $("#gridInactiveVehicles").dataBind({
-             sqlCode        : "V1229" 
-            ,parameters     : {client_id: gCompanyId,is_active:'N'}
-            ,height         : 360
-            ,dataRows       : [
-                {text: cb  ,width : 25   ,style : "text-align:left;"
-                    ,onRender  :  function(d)  
-                        { return   app.bs({name:"vehicle_id"               ,type:"hidden"      ,value: app.svn(d,"vehicle_id")}) 
-                                 + app.bs({name:"company_id"               ,type:"hidden"      ,value: gCompanyId}) 
-                                 + app.bs({name:"is_edited"                ,type:"hidden"      ,value: app.svn(d,"is_edited")})
-                                 + (d !==null ? app.bs({name:"cb"    ,type:"checkbox"}) : "" );
-                            
-                        }
-                }
-                ,{text: "Vehicle Plate No."                                                                  ,width : 250   ,style : "text-align:left;"
-                    ,onRender  :  function(d)  
-                        { return   app.bs({name:"vehicle_plate_no"          ,type:"input"       ,value: app.svn(d,"vehicle_plate_no")})
-                                 + app.bs({name:"route_id"                  ,type:"hidden"      ,value: app.svn(d,"route_id")}) 
-                                 + app.bs({name:"hash_key"                  ,type:"hidden"      ,value: app.svn(d,"hash_key")}) 
-                                 + app.bs({name:"vehicle_type_id"           ,type:"hidden"      ,value: app.svn(d,"vehicle_type_id")})   
-                                 + app.bs({name:"transfer_type_id"          ,type:"hidden"      ,value: app.svn(d,"transfer_type_id")})
-                                 + app.bs({name:"bank_id"                   ,type:"hidden"      ,value: app.svn(d,"bank_id")})
-                                 + app.bs({name:"transfer_no"               ,type:"hidden"      ,value: app.svn(d,"transfer_no")})
-                                 + app.bs({name:"account_name"              ,type:"hidden"      ,value: app.svn(d,"account_name")});
-                                 
-                        }
-                }
-                ,{text: "Active?"                      ,name:"is_active"               ,type:"yesno"       ,width : 55   ,style : "text-align:left;"    ,defaultValue:"Y"}
-            ]
-            ,onComplete: function(){
-                var _zRow = this.find(".zRow");
-                this.find("[name='cbFilter']").setCheckEvent("#gridInactiveVehicles input[name='cb']");
-            }
-        });
-    } 
+    }   
     function displayPAO(companyId, searchVal){    
         var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
         var ctr=-1;
@@ -705,11 +578,7 @@
                 } 
                 ,{text  : "Active?"                     ,width : 60            ,style : "text-align:center;"          ,type:"yesno"       ,name:"is_active"       ,defaultValue: "Y"}
             
-            );
-         
-         
-        
-        
+            ); 
         $("#gridNewDriverUsers").dataBind({
     	     height         : 360 
     	    ,selectorType   : "checkbox"
@@ -721,26 +590,7 @@
                  _zRow.find("[name='driver_license_exp_date']").datepicker({
                      autoclose : true
                     ,todayHighlight: false  
-                }).datepicker("setDate",'0');
-               /* _zRow.find("[name='transfer_type_id']").dataBind({
-                    sqlCode      : "D1284"
-                   ,text         : "tranfer_type"
-                   ,value        : "tranfer_type_id"
-                });
-                _zRow.find("[name='bank_id']").dataBind({
-                    sqlCode      : "B1245"
-                   ,text         : "bank_code"
-                   ,value        : "bank_id"
-                });
-                _zRow.find("[name='driver_license_exp_date']").datepicker({
-                     autoclose : true
-                    ,todayHighlight: false  
-                }).datepicker("setDate",'0');
-                _zRow.find("[name='transfer_type_id']").dataBind({
-                    sqlCode      : "D1284"
-                   ,text         : "transfer_type"
-                   ,value        : "transfer_type_id"
-                });*/
+                }).datepicker("setDate",'0'); 
             }
         });    
     }  
@@ -837,19 +687,42 @@
                 });
             }
         });    
-    }
-    function displayInactivePao(){
-        var cb = app.bs({name:"cbFilter1",type:"checkbox"});
-        $("#gridInactivePao").dataBind({
-             sqlCode    : "P1233"
-            ,parameters : {client_id:gCompanyId, is_active: "N"}
+    }  
+    function exportToExcel(grid){   
+        var _$grid = $("#" + grid[0].id);  
+        $("#btnUploadExcel").click(function(e){
+             e.preventDefault();
+            var _$wrap = $("#cloneWrapper");
+            var _filename = gTabName;  
+            _$grid.clone().appendTo("#cloneWrapper");
+            setTimeout(function(){ 
+                _$grid.convertToTable(
+                    function($table){  
+                        $table.htmlToExcel({
+                        fileName: _filename
+                    }); 
+                     _$wrap.empty(); 
+                    }
+                ); 
+            },1000);
+        });
+         
+    }  
+    function displayForRegistration(companyId,link){
+        var _sqlCode = "P1233";
+        if(link=="expire") _sqlCode = "P1233"
+        if(link=="renew") _sqlCode = "P1234" 
+         
+        $("#gridExpiration").dataBind({
+             sqlCode    : _sqlCode
+            ,parameters : {client_id:companyId, is_active: "Y"}
      	    ,width      : $("#frm_modalInactivePao").width() - 15
     	    ,height     : 360
             ,dataRows   : [ 
                 {text  : "First Name"     , width : 150           , style : "text-align:center;"
                     ,onRender : function(d){ 
                         return app.bs({name:"user_id"           ,type:"hidden"      ,value: app.svn(d,"user_id")}) 
-                            +  app.bs({name:"client_id"         ,type:"hidden"       ,value: gCompanyId})
+                            +  app.bs({name:"client_id"         ,type:"hidden"       ,value: companyId})
                             +  app.bs({name:"emp_hash_key"      ,type:"hidden"      ,value: app.svn(d,"emp_hash_key")})   
                             +  app.bs({name:"is_edited"         ,type:"hidden"      ,value: app.svn(d,"is_edited")})
                             +  app.bs({name:"first_name"        ,type:"input"       ,value: app.svn(d,"first_name")});
@@ -869,35 +742,12 @@
                 this.find("[name='cbFilter']").setCheckEvent("#gridInactivePao input[name='cb']");
             }
         });  
-    } 
-    function exportToExcel(grid){ 
-        var _$grid = $("#" + grid[0].id);
-        var _$zRows = $("#" + grid[0].id).find(".zRows"); 
-        $("#btnUploadExcel").click(function(){
-            var _$wrap = $("#cloneWrapper");
-            var _filename = gTabName; 
-            _$grid.convertToTable(
-                function($table){
-                    $table.htmlToExcel({
-                      fileName: _filename
-                  });
-                  _$wrap.empty();
-                }
-            ); 
-        });
-    }  
-    $("#btnAddVehicles").click(function () {
-        var _$mdl = $('#' + mdlAddNewVehicleUser);
-        _$mdl.find(".modal-title").text("Add New Vehicle(s)");
-        _$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-        if (_$mdl.length === 0) {
-            _$mdl = 1;
-            _$mdl.on("hide.bs.modal", function () {
-                    if (confirm("You are about to close this window. Continue?")) return true;
-                    return false;
-            });
-        }    
-        displayAddNewVehicle(gCompanyId);
+    }
+     $("#forExp").click(function(){ 
+        displayForRegistration(gCompanyId,"expire");
+    });
+    $("#forRen").click(function(){ 
+        displayForRegistration(gCompanyId,"renew");
     });
     $("#btnSaveVehicles").click(function () {
        $("#gridVehicles").jsonSubmit({
@@ -908,14 +758,7 @@
                 $("#gridVehicles").trigger("refresh");
             }
         });
-    }); 
-    $("#btnInactiveVehicles").click(function(){
-       var _$body = $("#frm_modalInactive").find(".modal-body"); 
-        g$mdl = $("#modalInactiveVehicles");
-        g$mdl.find(".modal-title").text("Inactive Vehicles") ;
-        g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });
-        displayInactiveVehicles();
-    }); 
+    });  
     $("#btnSaveInactiveVehicles").click(function () {
        $("#gridInactiveVehicles").jsonSubmit({
              procedure: "vehicle_upd"
@@ -984,8 +827,7 @@
     $("#btnSaveUpdateDrivers").click(function () {
         $("#gridDriversLicensed").jsonSubmit({
              procedure  : "drivers_upd"
-            ,optionalItems: ["is_active"]
-           // ,notIncludes : ["middle_name","name_suffix","driver_license_exp_date","driver_academy_no","driver_license_no"]
+            ,optionalItems: ["is_active"] 
             ,onComplete : function (data) {
                 if(data.isSuccess===true){
                     zsi.form.showAlert("alert");
@@ -995,4 +837,4 @@
         });
     }); 
     return _public;
-})();                                                            
+})();                                                                      

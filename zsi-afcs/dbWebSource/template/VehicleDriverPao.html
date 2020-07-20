@@ -26,6 +26,9 @@
   width: 100%; 
   
 }
+.btn{
+    padding: 0.3rem 1.125rem !important;
+}
 </style>
 <div class="panel">
     <div class="panel-container">
@@ -39,40 +42,44 @@
                     <a class="nav-item nav-link" data-toggle="tab" href="#nav-pao" role="tab" aria-controls="nav-pao"><i class="fal fa-user mr-1"></i> PAO </a> 
                   </div> 
                 </nav> 
-                <div class="col-md-4 col-xl-4 col-sm-4 col-12" id="searchDiv"> 
-                    <div class="input-group bg-white shadow-inset-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
-                                <i class="fal fa-search"></i>
-                            </span>
-                        </div>
-                        <input id="searchVal" type="text" class="form-control form-control-sm desc-prop-group border-left-0 bg-transparent pl-2" placeholder="Type here..." autocomplete="off">
+                <div class="col-md-4 col-xl-4 col-sm-4 col-12 hide" id="searchDiv"> 
+                    <div class="input-group bg-white shadow-inset-2"> 
+                        <input id="searchVal" type="text" class="form-control form-control-sm desc-prop-group border-left-0 bg-transparent pl-2" autocomplete="off">
                         <div class="input-group-append">
-                            <button id="btnSearchVal" class="btn btn-primary waves-effect waves-themed btn-outline-default text-white" type="button" title="Search">Search</button>
+                            <button id="btnSearchVal" class="btn btn-primary waves-effect waves-themed btn-outline-default text-white" type="button" title="Search"><i class="fal fa-search"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="tab-content" id="nav-tabContent">
                 <div role="tabpanel" class="tab-pane fade show active" id="nav-vehicles">
+                    <nav>
+                        <div class="nav nav-tabs nav-tab-vhs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link  nav-vhs active cursor-pointer" data-toggle="tab"   role="tab">All</a>
+                            <a class="nav-item nav-link  nav-vhs cursor-pointer" data-toggle="tab"          role="tab" >For Registration</a>
+                            <a class="nav-item nav-link  nav-vhs cursor-pointer" data-toggle="tab"          role="tab" >Registration Expired</a>
+                            <a class="nav-item nav-link  nav-vhs cursor-pointer" data-toggle="tab"          role="tab" >Insurance</a> 
+                        </div>
+                    </nav>
                     <div class="zContainer">
-                        <div class="row"> 
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
+                        <div class="row">
+                            <div class="form-row hide mb-3" id="linkDiv" style="margin-left: 20px">
+                                <a href="javascript:void(0)" id="forExp">For Expiration</a> &nbsp;|&nbsp;
+                                <a href="javascript:void(0)" id="forRen">For Renewal</a> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid"> 
                                  <div id="gridVehicles" class="zGrid mb-1"></div>
                             </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1 hide" id="forExpiration"> 
+                                <div id="gridExpiration" class="zGrid mb-1 "></div>
+                            </div>
+                             
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
                                 <div class="button-group">     
                                     <button type="button" class="btn btn-primary btn-sm" id="btnSaveVehicles">
                                         <i class="far fa-save"></i> Save
-                                    </button>
-                                     <button type="button" class="btn btn-primary btn-sm" id="btnInactiveVehicles" data-toggle="tooltip" title="Delete">
-                                	  <i class="fas fa-ban"></i> Inactive
-                                    </button> 
-                                    <!--<button type="button" onclick="vehicledriverpao.showModalUpload(this,'Vehicles');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>-->
-                                    <button type="button" id="btnUploadExcel" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Export Excel</button>
-                                    <button type="button" class="btn btn-primary btn-sm" id="btnAddVehicles">
-                                    	<span class="fas fa-user-plus"></span> Add
-                                    </button>
+                                    </button>  
+                                    <button type="button" id="btnUploadExcel" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Export Excel</button> 
                                 </div>
                             </div>
                         </div>
@@ -81,11 +88,11 @@
                 <div role="tabpanel" class="tab-pane fade" id="nav-drivers">  
                     <nav>
                         <div class="nav nav-tabs nav-tab-sub nav-sub-mfg" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link  nav-mfg active" data-toggle="tab" href="#nav-ol" role="tab" id="ol1">Active</a>
-                            <a class="nav-item nav-link  nav-mfg" data-toggle="tab" href="#nav-ol" role="tab" id="ol2">(15)Days for Renewal</a>
-                            <a class="nav-item nav-link  nav-mfg" data-toggle="tab" href="#nav-ol" role="tab" id="ol3">(30)Days for Renewal</a>
-                            <a class="nav-item nav-link  nav-mfg" data-toggle="tab" href="#nav-ol" role="tab" id="ol4">Expired License</a>
-                            <a class="nav-item nav-link  nav-mfg " data-toggle="tab" href="#nav-ol" role="tab" id="ol5">Inactive</a>
+                            <a class="nav-item nav-link  nav-mfg active cursor-pointer" data-toggle="tab" href="#nav-ol" role="tab" id="ol1">Active</a>
+                            <a class="nav-item nav-link  nav-mfg cursor-pointer" data-toggle="tab" href="#nav-ol" role="tab" id="ol2">(15)Days for Renewal</a>
+                            <a class="nav-item nav-link  nav-mfg cursor-pointer" data-toggle="tab" href="#nav-ol" role="tab" id="ol3">(30)Days for Renewal</a>
+                            <a class="nav-item nav-link  nav-mfg cursor-pointer" data-toggle="tab" href="#nav-ol" role="tab" id="ol4">Expired License</a>
+                            <a class="nav-item nav-link  nav-mfg cursor-pointer" data-toggle="tab" href="#nav-ol" role="tab" id="ol5">Inactive</a>
                         </div>
                     </nav>
                     <div class="panel p-2 "> 
@@ -97,9 +104,6 @@
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <button type="button" class="btn btn-primary btn-sm" id="btnSaveUpdateDrivers">
                                     	<span class="far fa-save"></span> Save
-                                    </button>
-                                    <button type="button" class="btn btn-primary btn-sm" id="btnNactive">
-                                    	<span class="fas fa-ban"></span> Inactive
                                     </button> 
                                     <button type="button" class="btn btn-primary btn-sm " id="btnAddDrivers">
                                     	<span class="fas fa-user-plus"></span> Add
@@ -122,9 +126,6 @@
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <button type="button" class="btn btn-primary btn-sm" id="btnSavePaoTable">
                                 	<span class="far fa-save"></span> Save
-                                </button>
-                                <button type="button" class="btn btn-primary btn-sm" id="btnNactivePao">
-                                	<span class="fas fa-ban"></span> Inactive
                                 </button> 
                                 <button type="button" class="btn btn-primary btn-sm " id="addNewPao">
                                 	<span class="fas fa-user-plus"></span> Add
@@ -249,27 +250,19 @@
     </div>
 </div>
 
-<ul name="localTemplates">
-    <!--Start Vehicle li-->
+<ul name="localTemplates"> 
     <li name="modalBodyVehicleImageUser">
       <div class="pull-left"><button type="button" onclick="{{onClickUploadImageUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-    </li>   
-    <!--End Vehicle li-->
+    </li>    
     <li name="modalBodyImageDriverUser">
       <div class="pull-left"><button type="button" onclick="{{onClickUploadImageDriverUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-    </li>
-    <!--END VEHICLE-->
-    <!--START PAO-->
+    </li> 
     <li name="modalBodyImagePaoUser">
       <div class="pull-left"><button type="button" onclick="{{onClickUploadImagePaoUser}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-    </li>
-    <!--END PAO-->
-    <!--START DRIVERS-->
+    </li> 
     <li name="modalBodyImageDriverLicence">
       <div class="pull-left"><button type="button" onclick="{{onClickUploadImageDriverLicence}}" class="btn btn-sm btn-primary"><span class="fas fa-upload"></span> Upload</button></div>
-    </li> 
-    <!--END DRIVERS-->
-    <!--UPLOAD EXCEL-->
+    </li>  
     <li name="modalBodyUploadExcel">
         <div class="row">  
             <input id="tmpData" name="tmpData" type="hidden" class="form-control input-sm" > 
@@ -287,26 +280,8 @@
                 </button>
             </div>
         </div>
-    </li>
-    
-    <!--UPLOAD EXCEL-->
-     
-     
-   <li name="modalBodyInactive">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                <div id="{{grid}}" class="zGrid"> </div>
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <button type="button" id="btnSave1" onclick="{{onClickSaveInactive}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
-                 <button type="button" class="btn btn-primary btn-sm" id="btnDeleteCustomer" onclick="{{onClickDeleteInactive}}" data-toggle="tooltip" title="Delete">
-                	<i class="fas fa-trash-alt"></i> Delete
-                </button>
-            </div>
-        </div>
-    </li> 
-    
-   <li name="modalBodyAddDriverUsers">
+    </li>   
+    <li name="modalBodyAddDriverUsers">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
                 <div id="{{grid}}" class="zGrid"> </div>
@@ -316,16 +291,6 @@
             </div>
         </div>
     </li>   
-    <li name="modalBodyAddVehicleUsers">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                <div id="{{grid}}" class="zGrid"> </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <button type="button" id="btnSave2" onclick="{{onClickSaveNewUsers}}" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
-            </div>
-        </div>
-    </li>
    <li name="modalBodyAddPaoUsers">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
