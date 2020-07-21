@@ -2219,18 +2219,31 @@ a.text-dark:hover, a.text-dark:focus {
   background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%);
   color: #fff; }
 
+.zTotal {
+  background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%) !important; }
+
 .modal-body div nav #nav-tab .nav-link {
   color: #000000;
   margin-left: 2px; }
   .modal-body div nav #nav-tab .nav-link.active {
     color: #fff;
-    background-image: linear-gradient(to bottom, #2198F3 0px, #1986da 100%); }
+    background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%); }
   .modal-body div nav #nav-tab .nav-link:hover {
     color: #fff;
-    background-image: linear-gradient(to bottom, #2198F3 0px, #1986da 100%); }
+    background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%); }
+
+div nav #nav-tab .nav-link {
+  color: #000000;
+  margin-left: 2px; }
+  div nav #nav-tab .nav-link.active {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%); }
+  div nav #nav-tab .nav-link:hover {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #886ab5 0px, #795ca5 100%); }
 
 .zpage-title {
-  color: #2198F3; }
+  color: #795ca5; }
 
 /* BACKGROUND TRANSITIONS */
 /* Fade */

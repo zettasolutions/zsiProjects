@@ -8460,6 +8460,9 @@ a.text-dark:hover, a.text-dark:focus {
   .btn-outline-default .fa-filter {
     font-size: 9px; }
 
+.modal-dialog {
+  margin: 2px auto !important; }
+
 /* #GLOBAL IMPORTS
 ========================================================================== */
 /* #BOOTSTRAP AND MIXINS - Base Unmodified Bootstrap file with theme mixins

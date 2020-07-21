@@ -7884,6 +7884,22 @@ ul[name="localTemplates"], ul[id="localTemplates"] {
     color: #fff;
     background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%); }
 
+div nav #nav-tab .nav-link {
+  color: #000000;
+  margin-left: 2px; }
+  div nav #nav-tab .nav-link.active {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%); }
+  div nav #nav-tab .nav-link:hover {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%); }
+
+.zTotal {
+  background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%) !important; }
+
+.zTotal input {
+  color: #fafafa; }
+
 .btn-primary {
   background-color: #1a0dab;
   border-color: #1a0dab; }
@@ -7934,7 +7950,7 @@ ul[name="localTemplates"], ul[id="localTemplates"] {
   overflow: hidden; }
 
 .zGroupHeaderItem:not(:last-child) {
-  border-right: 1pt solid #d6d8d8;
+  border-right: 0.01rem solid #d6d8d8;
   float: left;
   height: inherit;
   position: relative; }
@@ -7963,7 +7979,7 @@ ul[name="localTemplates"], ul[id="localTemplates"] {
   clear: right; }
 
 .zGrid .zHeaders .groupItem {
-  border-top: 1pt solid #d6d8d8; }
+  border-top: 0.01rem solid #d6d8d8; }
 
 .zGrid .zHeaders > .item .title {
   height: 20px;
@@ -7996,7 +8012,7 @@ ul[name="localTemplates"], ul[id="localTemplates"] {
   display: inline-block; }
 
 .zGrid .item {
-  border-right: 1pt solid #d6d8d8; }
+  border-right: 0.01rem solid #d6d8d8; }
 
 .groupItem > .groupItem:last-child {
   border-right: 0pt; }
@@ -8017,8 +8033,8 @@ input[type='radio'] {
   overflow: hidden; }
 
 .zGrid .zCell {
-  border-right: 1pt solid #d6d8d8;
-  border-bottom: 1pt solid #d6d8d8;
+  border-right: 0.01rem solid #d6d8d8;
+  border-bottom: 0.01rem solid #d6d8d8;
   float: left;
   height: inherit;
   line-height: 18pt;
@@ -8053,17 +8069,18 @@ input[type='radio'] {
   border: medium none;
   height: inherit;
   width: inherit;
-  padding-left: 0.3rem; }
+  padding-left: 0.3rem;
+  padding-right: 0.3rem; }
 
 .zGrid .active .zCell .form-control {
   background-color: #333333;
   color: #fff;
   border-radius: 0;
-  border-right: 1pt solid #d6d8d8; }
+  border-right: 0.01rem solid #d6d8d8; }
 
 .zGrid .zRow .form-control.mandatory {
   border-radius: 0;
-  border-right: 1pt solid #d6d8d8 !important; }
+  border-right: 0.01rem solid #d6d8d8 !important; }
 
 .zGrid .zRow:nth-child(odd) .form-control.mandatory {
   background-color: #B7B5B5 !important; }

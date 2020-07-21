@@ -326,6 +326,18 @@
             <param name="bankHolidays">List of bank holidays excluding weekends</param>
             <returns>Number of business days during the 'span'</returns>
         </member>
+        <member name="M:ClosedXML.Excel.CalcEngine.Text.TextJoin(System.Collections.Generic.List{ClosedXML.Excel.CalcEngine.Expression})">
+            <summary>
+            A function to Join text https://support.office.com/en-us/article/textjoin-function-357b449a-ec91-49d0-80c3-0e8fc845691c
+            </summary>
+            <param name="p">Parameters</param>
+            <returns> string </returns>
+            <exception cref="T:System.ApplicationException">
+            Delimiter in first param must be a string
+            or
+            Second param must be a boolen (TRUE/FALSE)
+            </exception>
+        </member>
         <member name="T:ClosedXML.Excel.CalcEngine.Token">
             <summary>
             Represents a node in the expression tree.
@@ -668,6 +680,11 @@
             Delete the comments of these cells.
             </summary>
         </member>
+        <member name="M:ClosedXML.Excel.IXLCells.DeleteSparklines">
+            <summary>
+            Delete the sparklines of these cells.
+            </summary>
+        </member>
         <member name="P:ClosedXML.Excel.IXLCells.FormulaA1">
             <summary>
             Sets the cells' formula with A1 references.
@@ -731,11 +748,19 @@
             it indicates that <see cref="F:ClosedXML.Excel.XLCell._recalculationNeededLastValue"/> stores correct value and no check has to be performed.
             </summary>
         </member>
+        <member name="P:ClosedXML.Excel.XLCell.Sparkline">
+            <summary> The sparkline assigned to the cell </summary>
+        </member>
         <member name="M:ClosedXML.Excel.XLCell.GetDataValidation">
             <summary>
             Get the data validation rule containing current cell.
             </summary>
             <returns>The data validation rule applying to the current cell or null if there is no such rule.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLCellsCollection.DecrementUsage(System.Collections.Generic.Dictionary{System.Int32,System.Int32},System.Int32)">
+            <summary/>
+            <returns>True if the number was lowered to zero so MaxColumnUsed or MaxRowUsed may require
+            recomputation.</returns>
         </member>
         <member name="P:ClosedXML.Excel.IXLColumn.Width">
             <summary>
@@ -1009,6 +1034,14 @@
               Adds a vertical page break after this column.
             </summary>
         </member>
+        <member name="M:ClosedXML.Excel.XLColumns.#ctor(ClosedXML.Excel.XLWorksheet,ClosedXML.Excel.XLStyleValue)">
+            <summary>
+            Create a new instance of <see cref="T:ClosedXML.Excel.XLColumns"/>.
+            </summary>
+            <param name="worksheet">If worksheet is specified it means that the created instance represents
+            all columns on a worksheet so changing its width will affect all columns.</param>
+            <param name="defaultStyle">Default style to use when initializing child entries.</param>
+        </member>
         <member name="M:ClosedXML.Excel.XLColumns.AddVerticalPageBreaks">
             <summary>
               Adds a vertical page break after this column.
@@ -1105,6 +1138,124 @@
             Gets the column letter(s) of this address.
             </summary>
         </member>
+        <member name="P:ClosedXML.Excel.IXLDataValidation.Ranges">
+            <summary>
+            A collection of ranges the data validation rule applies too.
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLDataValidation.AddRange(ClosedXML.Excel.IXLRange)">
+            <summary>
+            Add a range to the collection of ranges this rule applies to.
+            If the specified range does not belong to the worksheet of the data validation
+            rule it is transferred to the target worksheet.
+            </summary>
+            <param name="range">A range to add.</param>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLDataValidation.AddRanges(System.Collections.Generic.IEnumerable{ClosedXML.Excel.IXLRange})">
+            <summary>
+            Add a collection of ranges to the collection of ranges this rule applies to.
+            Ranges that do not belong to the worksheet of the data validation
+            rule are transferred to the target worksheet.
+            </summary>
+            <param name="ranges">Ranges to add.</param>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLDataValidation.ClearRanges">
+            <summary>
+            Detach data validation rule of all ranges it applies to.
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLDataValidation.RemoveRange(ClosedXML.Excel.IXLRange)">
+            <summary>
+            Remove the specified range from the collection of range this rule applies to.
+            </summary>
+            <param name="range">A range to remove.</param>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLDataValidations.Add(ClosedXML.Excel.IXLDataValidation)">
+            <summary>
+            Add data validation rule to the collection. If the specified rule refers to another
+            worksheet than the collection, the copy will be created and its ranges will refer
+            to the worksheet of the collection. Otherwise the original instance will be placed
+            in the collection.
+            </summary>
+            <param name="dataValidation">A data validation rule to add.</param>
+            <returns>The instance that has actually been added in the collection
+            (may be a copy of the specified one).</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLDataValidations.TryGet(ClosedXML.Excel.IXLRangeAddress,ClosedXML.Excel.IXLDataValidation@)">
+            <summary>
+            Get the data validation rule for the range with the specified address if it exists.
+            </summary>
+            <param name="rangeAddress">A range address.</param>
+            <param name="dataValidation">Data validation rule which ranges collection includes the specified
+            address. The specified range should be fully covered with the data validation rule.
+            For example, if the rule is applied to ranges A1:A3,C1:C3 then this method will
+            return True for ranges A1:A3, C1:C2, A2:A3, and False for ranges A1:C3, A1:C1, etc.</param>
+            <returns>True is the data validation rule was found, false otherwise.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLDataValidations.GetAllInRange(ClosedXML.Excel.IXLRangeAddress)">
+            <summary>
+            Get all data validation rules applied to ranges that intersect the specified range.
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.XLDataValidation.AddRange(ClosedXML.Excel.IXLRange)">
+            <summary>
+            Add a range to the collection of ranges this rule applies to.
+            If the specified range does not belong to the worksheet of the data validation
+            rule it is transferred to the target worksheet.
+            </summary>
+            <param name="range">A range to add.</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLDataValidation.AddRanges(System.Collections.Generic.IEnumerable{ClosedXML.Excel.IXLRange})">
+            <summary>
+            Add a collection of ranges to the collection of ranges this rule applies to.
+            Ranges that do not belong to the worksheet of the data validation
+            rule are transferred to the target worksheet.
+            </summary>
+            <param name="ranges">Ranges to add.</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLDataValidation.ClearRanges">
+            <summary>
+            Detach data validation rule of all ranges it applies to.
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.XLDataValidation.RemoveRange(ClosedXML.Excel.IXLRange)">
+            <summary>
+            Remove the specified range from the collection of range this rule applies to.
+            </summary>
+            <param name="range">A range to remove.</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLDataValidations.TryGet(ClosedXML.Excel.IXLRangeAddress,ClosedXML.Excel.IXLDataValidation@)">
+            <summary>
+            Get the data validation rule for the range with the specified address if it exists.
+            </summary>
+            <param name="rangeAddress">A range address.</param>
+            <param name="dataValidation">Data validation rule which ranges collection includes the specified
+            address. The specified range should be fully covered with the data validation rule.
+            For example, if the rule is applied to ranges A1:A3,C1:C3 then this method will
+            return True for ranges A1:A3, C1:C2, A2:A3, and False for ranges A1:C3, A1:C1, etc.</param>
+            <returns>True is the data validation rule was found, false otherwise.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLDataValidations.GetAllInRange(ClosedXML.Excel.IXLRangeAddress)">
+            <summary>
+            Get all data validation rules applied to ranges that intersect the specified range.
+            </summary>
+        </member>
+        <member name="F:ClosedXML.Excel.XLDataValidations._skipSplittingExistingRanges">
+            <summary>
+            The flag used to avoid unnecessary check for splitting intersected ranges when we already
+            are performing the splitting.
+            </summary>
+        </member>
+        <member name="T:ClosedXML.Excel.XLDataValidations.XLDataValidationIndexEntry">
+            <summary>
+            Class used for indexing data validation rules.
+            </summary>
+        </member>
+        <member name="P:ClosedXML.Excel.XLDataValidations.XLDataValidationIndexEntry.RangeAddress">
+            <summary>
+              Gets an object with the boundaries of this range.
+            </summary>
+        </member>
         <member name="P:ClosedXML.Excel.Drawings.IXLPicture.Format">
             <summary>
             Type of image. The supported formats are defined by OpenXML's ImagePartType.
@@ -1141,6 +1292,23 @@
             Create a copy of the picture on the same worksheet.
             </summary>
             <returns>A created copy of the picture.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLSheetProtection.AllowElement(ClosedXML.Excel.XLSheetProtectionElements,System.Boolean)">
+            <summary>
+            Adds the sheet protection element to the list of allowed elements.
+            Beware that if you pass through <see cref="F:ClosedXML.Excel.XLSheetProtectionElements.None" />, this will have no effect.
+            </summary>
+            <param name="element">The sheet protection element to add</param>
+            <param name="allowed">Set to <c>true</c> to allow the element or <c>false</c> to disallow the element</param>
+            <returns>The current sheet protection</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLSheetProtection.DisallowElement(ClosedXML.Excel.XLSheetProtectionElements)">
+            <summary>
+            Removes the sheet protection element to the list of allowed elements.
+            Beware that if you pass through <see cref="F:ClosedXML.Excel.XLSheetProtectionElements.None" />, this will have no effect.
+            </summary>
+            <param name="element">The sheet protection element to remove</param>
+            <returns>The current sheet protection</returns>
         </member>
         <member name="P:ClosedXML.Excel.IXLSheetView.SplitColumn">
             <summary>
@@ -2174,10 +2342,10 @@
             <summary>
             Implementation of QuadTree adapted to Excel worksheet specifics. Differences with the classic implementation
             are that the topmost level is split to 128 square parts (2 columns of 64 blocks, each 8192*8192 cells) and that splitting
-            the quadrand onto 4 smaller quadrants does not depent on the number of items in this quadrant. When the range is added to the
+            the quadrant onto 4 smaller quadrants does not depend on the number of items in this quadrant. When the range is added to the
             QuadTree it is placed on the bottommost level where it fits to a single quadrant. That means, row-wide and column-wide ranges
             are always placed at the level 0, and the smaller the range is the deeper it goes down the tree. This approach eliminates
-            the need of trasferring ranges between levels.
+            the need of transferring ranges between levels.
             </summary>
         </member>
         <member name="P:ClosedXML.Excel.Patterns.Quadrant.Children">
@@ -2197,7 +2365,7 @@
         </member>
         <member name="P:ClosedXML.Excel.Patterns.Quadrant.MinimumRow">
             <summary>
-            Minimun row included in this quadrant.
+            Minimum row included in this quadrant.
             </summary>
         </member>
         <member name="P:ClosedXML.Excel.Patterns.Quadrant.MaximumColumn">
@@ -2225,7 +2393,7 @@
             The number of current quadrant by vertical axis.
             </summary>
         </member>
-        <member name="M:ClosedXML.Excel.Patterns.Quadrant.Add(ClosedXML.Excel.IXLRangeBase)">
+        <member name="M:ClosedXML.Excel.Patterns.Quadrant.Add(ClosedXML.Excel.IXLAddressable)">
             <summary>
             Add a range to the quadrant or to one of the child quadrants (recursively).
             </summary>
@@ -2246,13 +2414,13 @@
             Get all ranges from the quadrant and all child quadrants (recursively) that cover the specified address.
             </summary>
         </member>
-        <member name="M:ClosedXML.Excel.Patterns.Quadrant.Remove(ClosedXML.Excel.IXLRangeBase)">
+        <member name="M:ClosedXML.Excel.Patterns.Quadrant.Remove(ClosedXML.Excel.IXLRangeAddress)">
             <summary>
             Remove the range from the quadrant or from child quadrants (recursively).
             </summary>
             <returns>True if the range was removed, false if it does not exist in the QuadTree.</returns>
         </member>
-        <member name="M:ClosedXML.Excel.Patterns.Quadrant.RemoveAll(System.Predicate{ClosedXML.Excel.IXLRangeBase})">
+        <member name="M:ClosedXML.Excel.Patterns.Quadrant.RemoveAll(System.Predicate{ClosedXML.Excel.IXLAddressable})">
             <summary>
             Remove all the ranges matching specified criteria from the quadrant and its child quadrants (recursively).
             Don't use it for searching intersections as it would be much less efficient than <see cref="M:ClosedXML.Excel.Patterns.Quadrant.GetIntersectedRanges(ClosedXML.Excel.IXLRangeAddress)"/>.
@@ -2265,14 +2433,14 @@
         </member>
         <member name="F:ClosedXML.Excel.Patterns.Quadrant._ranges">
             <summary>
-            Collection of ranges belonging to the current quandrant (that cannot fit into child quadrants).
+            Collection of ranges belonging to the current quadrant (that cannot fit into child quadrants).
             </summary>
         </member>
-        <member name="M:ClosedXML.Excel.Patterns.Quadrant.AddInternal(ClosedXML.Excel.IXLRangeBase)">
+        <member name="M:ClosedXML.Excel.Patterns.Quadrant.AddInternal(ClosedXML.Excel.IXLAddressable)">
             <summary>
-            Add a range to the collection of quandrant's own ranges.
+            Add a range to the collection of quadrant's own ranges.
             </summary>
-            <returns>True if the range was succesfully added, false if it had been added before.</returns>
+            <returns>True if the range was successfully added, false if it had been added before.</returns>
         </member>
         <member name="M:ClosedXML.Excel.Patterns.Quadrant.Covers(ClosedXML.Excel.IXLRangeAddress@)">
             <summary>
@@ -2293,6 +2461,17 @@
             <summary>
             Create a collection of child quadrants dividing the current one.
             </summary>
+        </member>
+        <member name="T:ClosedXML.Excel.Patterns.Quadrant`1">
+            <summary>
+            A generic version of <see cref="T:ClosedXML.Excel.Patterns.Quadrant"/>
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.AbstractPivotFieldReference.Match(ClosedXML.Excel.XLWorkbook.PivotTableInfo,ClosedXML.Excel.IXLPivotTable)">
+            <summary>
+              <P>Helper function used during saving to calculate the indices of the filtered values</P>
+            </summary>
+            <returns>Indices of the filtered values</returns>
         </member>
         <member name="T:ClosedXML.Excel.Ranges.Index.IXLRangeIndex">
             <summary>
@@ -2319,6 +2498,17 @@
         <member name="T:ClosedXML.Excel.Ranges.Index.XLRangeIndex`1">
             <summary>
             Generic version of <see cref="T:ClosedXML.Excel.Ranges.Index.XLRangeIndex"/>.
+            </summary>
+        </member>
+        <member name="T:ClosedXML.Excel.IXLAddressable">
+            <summary>
+            A very lightweight interface for entities that have an address as
+            a rectangular range.
+            </summary>
+        </member>
+        <member name="P:ClosedXML.Excel.IXLAddressable.RangeAddress">
+            <summary>
+              Gets an object with the boundaries of this range.
             </summary>
         </member>
         <member name="M:ClosedXML.Excel.IXLBaseCollection`2.AddToNamed(System.String)">
@@ -2609,6 +2799,11 @@
             </summary>
             <param name="clearOptions">Specify what you want to clear.</param>
         </member>
+        <member name="P:ClosedXML.Excel.IXLRangeAddress.ColumnSpan">
+            <summary>
+            Gets the number of columns in the area covered by the range address.
+            </summary>
+        </member>
         <member name="P:ClosedXML.Excel.IXLRangeAddress.FirstAddress">
             <summary>
             Gets or sets the first address in the range.
@@ -2616,6 +2811,42 @@
             <value>
             The first address.
             </value>
+        </member>
+        <member name="P:ClosedXML.Excel.IXLRangeAddress.IsValid">
+            <summary>
+            Gets or sets a value indicating whether this range is valid.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is valid; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ClosedXML.Excel.IXLRangeAddress.LastAddress">
+            <summary>
+            Gets or sets the last address in the range.
+            </summary>
+            <value>
+            The last address.
+            </value>
+        </member>
+        <member name="P:ClosedXML.Excel.IXLRangeAddress.NumberOfCells">
+            <summary>
+            Gets the number of cells in the area covered by the range address.
+            </summary>
+        </member>
+        <member name="P:ClosedXML.Excel.IXLRangeAddress.RowSpan">
+            <summary>
+            Gets the number of rows in the area covered by the range address.
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLRangeAddress.AsRange">
+            <summary>Allocates the current range address in the internal range repository and returns it</summary>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLRangeAddress.Intersection(ClosedXML.Excel.IXLRangeAddress)">
+            <summary>
+            Returns the intersection of this range address with another range address on the same worksheet.
+            </summary>
+            <param name="otherRangeAddress">The other range address.</param>
+            <returns>The intersection's range address</returns>
         </member>
         <member name="M:ClosedXML.Excel.IXLRangeAddress.IsEntireColumn">
             <summary>
@@ -2641,26 +2872,14 @@
               <c>true</c> if is entire sheet; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="P:ClosedXML.Excel.IXLRangeAddress.IsValid">
+        <member name="M:ClosedXML.Excel.IXLRangeAddress.Relative(ClosedXML.Excel.IXLRangeAddress,ClosedXML.Excel.IXLRangeAddress)">
             <summary>
-            Gets or sets a value indicating whether this range is valid.
+            Returns a range address so that its offset from the target base address is equal to the offset of the current range address to the source base address.
+            For example, if the current range address is D4:E4, the source base address is A1:C3, then the relative address to the target base address B10:D13 is E14:F14
             </summary>
-            <value>
-            	<c>true</c> if this instance is valid; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:ClosedXML.Excel.IXLRangeAddress.LastAddress">
-            <summary>
-            Gets or sets the last address in the range.
-            </summary>
-            <value>
-            The last address.
-            </value>
-        </member>
-        <member name="P:ClosedXML.Excel.IXLRangeBase.RangeAddress">
-            <summary>
-              Gets an object with the boundaries of this range.
-            </summary>
+            <param name="sourceRangeAddress">The source base range address.</param>
+            <param name="targetRangeAddress">The target base range address.</param>
+            <returns>The relative range</returns>
         </member>
         <member name="P:ClosedXML.Excel.IXLRangeBase.Value">
             <summary>
@@ -2913,7 +3132,7 @@
             <param name="otherRange">The other range.</param>
             <param name="thisRangePredicate">Predicate applied to this range's cells.</param>
             <param name="otherRangePredicate">Predicate applied to the other range's cells.</param>
-            <returns></returns>
+            <returns>The range address of the intersection</returns>
         </member>
         <member name="M:ClosedXML.Excel.IXLRangeBase.SurroundingCells(System.Func{ClosedXML.Excel.IXLCell,System.Boolean})">
             <summary>
@@ -2940,6 +3159,15 @@
             <param name="thisRangePredicate">Predicate applied to this range's cells.</param>
             <param name="otherRangePredicate">Predicate applied to the other range's cells.</param>
             <returns></returns>
+        </member>
+        <member name="M:ClosedXML.Excel.IXLRangeBase.Relative(ClosedXML.Excel.IXLRangeBase,ClosedXML.Excel.IXLRangeBase)">
+            <summary>
+            Returns a range so that its offset from the target base range is equal to the offset of the current range to the source base range.
+            For example, if the current range is D4:E4, the source base range is A1:C3, then the relative range to the target base range B10:D13 is E14:F14
+            </summary>
+            <param name="sourceBaseRange">The source base range.</param>
+            <param name="targetBaseRange">The target base range.</param>
+            <returns>The relative range</returns>
         </member>
         <member name="M:ClosedXML.Excel.IXLRangeColumn.Cell(System.Int32)">
             <summary>
@@ -3343,7 +3571,7 @@
             </summary>
             <param name="match">Criteria to filter ranges. Only those ranges that satisfy the criteria will be removed.
             Null means the entire collection should be cleared.</param>
-            <param name="releaseEventHandlers">Specify whether or not should removed ranges be unsubscribed from 
+            <param name="releaseEventHandlers">Specify whether or not should removed ranges be unsubscribed from
             row/column shifting events. Until ranges are unsubscribed they cannot be collected by GC.</param>
         </member>
         <member name="M:ClosedXML.Excel.XLRanges.GetIntersectedRanges(ClosedXML.Excel.IXLRangeAddress)">
@@ -3631,6 +3859,187 @@
             The direct contructor should only be used in <see cref="P:ClosedXML.Excel.XLWorksheet.RangeFactory"/>.
             </summary>
         </member>
+        <member name="M:ClosedXML.Excel.XLRows.#ctor(ClosedXML.Excel.XLWorksheet,ClosedXML.Excel.XLStyleValue)">
+            <summary>
+            Create a new instance of <see cref="T:ClosedXML.Excel.XLRows"/>.
+            </summary>
+            <param name="worksheet">If worksheet is specified it means that the created instance represents
+            all rows on a worksheet so changing its height will affect all rows.</param>
+            <param name="defaultStyle">Default style to use when initializing child entries.</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparkline.#ctor(ClosedXML.Excel.IXLSparklineGroup,ClosedXML.Excel.IXLCell,ClosedXML.Excel.IXLRange)">
+            <summary>
+            Create a new sparkline
+            </summary>
+            <param name="sparklineGroup">The sparkline group to add the sparkline to</param>
+            <param name="cell">The cell to place the sparkline in</param>
+            <param name="sourceData">The range the sparkline gets data from</param>
+        </member>
+        <member name="P:ClosedXML.Excel.XLSparklineGroup.Worksheet">
+            <summary>
+            The worksheet this sparkline group is associated with
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.#ctor(ClosedXML.Excel.IXLWorksheet,ClosedXML.Excel.IXLSparklineGroup)">
+            <summary>
+            Add a new sparkline group copied from an existing sparkline group to the specified worksheet
+            </summary>
+            <param name="targetWorksheet">The worksheet the sparkline group is being added to</param>
+            <param name="copyFrom">The sparkline group to copy from</param>
+            <returns>The new sparkline group added</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.#ctor(ClosedXML.Excel.IXLWorksheet,System.String,System.String)">
+            <summary>
+            Add a new sparkline group copied from an existing sparkline group to the specified worksheet
+            </summary>
+            <returns>The new sparkline group added</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.#ctor(ClosedXML.Excel.IXLCell,ClosedXML.Excel.IXLRange)">
+            <summary>
+            Add a new sparkline group copied from an existing sparkline group to the specified worksheet
+            </summary>
+            <returns>The new sparkline group added</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.#ctor(ClosedXML.Excel.IXLRange,ClosedXML.Excel.IXLRange)">
+            <summary>
+            Add a new sparkline group copied from an existing sparkline group to the specified worksheet
+            </summary>
+            <returns>The new sparkline group added</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.Add(ClosedXML.Excel.IXLCell,ClosedXML.Excel.IXLRange)">
+            <summary>
+            Add a sparkline to the group.
+            </summary>
+            <param name="location">The cell to add sparklines to. If it already contains a sparkline
+            it will be replaced.</param>
+            <param name="sourceData">The range the sparkline gets data from</param>
+            <returns>A newly created sparkline.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.CopyFrom(ClosedXML.Excel.IXLSparklineGroup)">
+            <summary>
+            Copy the details from a specified sparkline group
+            </summary>
+            <param name="sparklineGroup">The sparkline group to copy from</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.CopyTo(ClosedXML.Excel.IXLWorksheet)">
+            <summary>
+            Copy this sparkline group to the specified worksheet
+            </summary>
+            <param name="targetSheet">The worksheet to copy this sparkline group to</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.Remove(ClosedXML.Excel.IXLCell)">
+            <summary>
+            Remove all sparklines in the specified cell from this group
+            </summary>
+            <param name="cell">The cell to remove sparklines from</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.Remove(ClosedXML.Excel.IXLSparkline)">
+            <summary>
+            Remove the sparkline from this group
+            </summary>
+            <param name="sparkline"></param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.RemoveAll">
+            <summary>
+            Remove all sparklines from this group
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroup.#ctor(ClosedXML.Excel.IXLWorksheet)">
+            <summary>
+            Add a new sparkline group to the specified worksheet
+            </summary>
+            <param name="targetWorksheet">The worksheet the sparkline group is being added to</param>
+            <returns>The new sparkline group added</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.Add">
+            <summary>
+            Add empty sparkline group.
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.Add(ClosedXML.Excel.IXLSparklineGroup)">
+            <summary>
+            Add the sparkline group to the collection.
+            </summary>
+            <param name="sparklineGroup">The sparkline group to add to the collection</param>
+            <returns>The same sparkline group</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.AddCopy(ClosedXML.Excel.IXLSparklineGroup,ClosedXML.Excel.IXLWorksheet)">
+            <summary>
+            Add a copy of an existing sparkline group to the specified worksheet
+            </summary>
+            <param name="sparklineGroupToCopy">The sparkline group to copy</param>
+            <param name="targetWorksheet">The worksheet the sparkline group is being added to</param>
+            <returns>The new sparkline group added</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.CopyTo(ClosedXML.Excel.IXLWorksheet)">
+            <summary>
+            Copy this sparkline group to a different worksheet
+            </summary>
+            <param name="targetSheet">The worksheet to copy the sparkline group to</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.GetSparkline(ClosedXML.Excel.IXLCell)">
+            <summary>
+            Search for the first sparkline that is in the specified cell
+            </summary>
+            <param name="cell">The cell to find the sparkline for</param>
+            <returns>The sparkline in the cell or null if no sparklines are found</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.GetSparklines(ClosedXML.Excel.IXLRangeBase)">
+            <summary>
+            Find all sparklines located in a given range
+            </summary>
+            <param name="searchRange">The range to search</param>
+            <returns>The sparkline in the cell or null if no sparklines are found</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.Remove(ClosedXML.Excel.IXLCell)">
+            <summary>
+            Remove all sparklines in the specified cell
+            </summary>
+            <param name="cell">The cell to remove sparklines from</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.Remove(ClosedXML.Excel.IXLSparklineGroup)">
+            <summary>
+            Remove the sparkline group from the worksheet
+            </summary>
+            <param name="sparklineGroup">The sparkline group to remove</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.Remove(ClosedXML.Excel.IXLSparkline)">
+            <summary>
+            Remove the sparkline from the worksheet
+            </summary>
+            <param name="sparkline">The sparkline to remove</param>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineGroups.RemoveAll">
+            <summary>
+            Remove all sparkline groups and their contents from the worksheet.
+            </summary>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineStyle.op_Inequality(ClosedXML.Excel.XLSparklineStyle,ClosedXML.Excel.XLSparklineStyle)">
+            <summary>Returns a value that indicates whether two <see cref="T:ClosedXML.Excel.XLSparklineStyle" /> objects have different values.</summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>true if <paramref name="left" /> and <paramref name="right" /> are not equal; otherwise, false.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineStyle.op_Equality(ClosedXML.Excel.XLSparklineStyle,ClosedXML.Excel.XLSparklineStyle)">
+            <summary>Returns a value that indicates whether the values of two <see cref="T:ClosedXML.Excel.XLSparklineStyle" /> objects are equal.</summary>
+            <param name="left">The first value to compare.</param>
+            <param name="right">The second value to compare.</param>
+            <returns>true if the <paramref name="left" /> and <paramref name="right" /> parameters have the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineStyle.Equals(ClosedXML.Excel.XLSparklineStyle)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineStyle.Equals(System.Object)">
+            <summary>Determines whether the specified object is equal to the current object.</summary>
+            <param name="obj">The object to compare with the current object.</param>
+            <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        </member>
+        <member name="M:ClosedXML.Excel.XLSparklineStyle.GetHashCode">
+            <summary>Serves as the default hash function.</summary>
+            <returns>A hash code for the current object.</returns>
+        </member>
         <member name="F:ClosedXML.Excel.XLColor.TOOLTIPCOLORINDEX">
             <summary>
             Usually indexed colors are limited to max 63
@@ -3809,6 +4218,12 @@
             <param name="container">Container the border is applied to.</param>
             <param name="style">Style to attach the new instance to.</param>
             <param name="value">Style value to use.</param>
+        </member>
+        <member name="T:ClosedXML.Excel.XLBorder.RestoreOutsideBorder">
+            <summary>
+            Helper class that remembers outside border state before editing (in constructor) and restore afterwards (on disposing).
+            It presumes that size of the range does not change during the editing, else it will fail.
+            </summary>
         </member>
         <member name="M:ClosedXML.Excel.XLFill.#ctor(ClosedXML.Excel.XLStyle,ClosedXML.Excel.XLFillValue)">
             <summary>
@@ -4599,6 +5014,13 @@
             <param name="trimToAllowed">if set to <c>true</c> the column letter will be restricted to the allowed range.</param>
             <returns></returns>
         </member>
+        <member name="M:ClosedXML.Excel.XLHelper.GetTimeSpan(System.Double)">
+            <summary>
+            A backward compatible version of <see cref="M:System.TimeSpan.FromDays(System.Double)"/> that returns a value
+            rounded to milliseconds. In .Net Core 3.0 the behavior has changed and timespan includes microseconds
+            as well. As a result, the value 1:12:30 saved on one machine could become 1:12:29.999999 on another.
+            </summary>
+        </member>
         <member name="T:ClosedXML.PathHelper">
             <summary>
               Help methods for work with files
@@ -4706,14 +5128,6 @@
             <param name="xlColor">Color in ClosedXML format.</param>
             <param name="isDifferential">Flag specifiying that the color should be saved in
             differential format (affects the transparent color processing).</param>
-        </member>
-        <member name="M:ClosedXML.Utils.XmlEncoder.IsXmlChar(System.Char)">
-            <summary>
-            Checks if a character is not allowed to the XML Spec http://www.w3.org/TR/REC-xml/#charsets
-            </summary>
-            <param name="ch">Input Character</param>
-            <returns>Returns false if the character is invalid according to the XML specification, and will not be
-            escaped by an XmlWriter.</returns>
         </member>
     </members>
 </doc>

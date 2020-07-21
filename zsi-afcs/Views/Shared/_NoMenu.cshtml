@@ -26,9 +26,14 @@
 	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
 	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))   
+    @{
+        string userId = "";
+        userId = "var userId=" + webCM.SessionHandler.getUserProp("userId") + ";";
+    }    
     <script>
         var base_url = '@Url.Content("~/")';
         var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+        @userId
     </script>
     <div class="progressWindow zPopup-system">
         <div class="loadingImg"></div>
