@@ -54,10 +54,10 @@ var sc = (function(){
         
             editor.setOptions(options);
         }
-        ,displaySqlCommands : function(callBack) {
+        ,displaySqlCommands : function(code,text,callBack) {
             $("#grid-SqlCommands").dataBind({
                  sqlCode:"S53"
-                ,parameters : { sort_index: 3 }
+                ,parameters : {searchCode:(code?code:""),searchText:(text?text:""), sort_index: 3 }
                 ,width      : $(".zContainer").width() 
                 ,height     : $(window).height() - 240
                 ,isPaging   : true
@@ -119,7 +119,7 @@ var sc = (function(){
         }
     }
     ;     
-
+   
 return _pub;
 
 })();
@@ -142,6 +142,31 @@ zsi.ready = function() {
         $is_public.val("N");
     });    
     
+    function setSearch(){
+        var _searchCode = "";
+        var _searchText = "";
+        $("#sql_code").on('keyup',function(e){
+            _searchCode = $.trim($(this).val()); 
+            if($(this).val() === ""){
+                sc.displaySqlCommands(_searchCode);
+            }
+            if (e.which == 13) {
+                sc.displaySqlCommands(_searchCode);
+            }  
+        }); 
+        $("#stored_procedure").on('keyup',function(e){
+            _searchText = $.trim($(this).val()); 
+            if($(this).val() === ""){
+                sc.displaySqlCommands("",_searchText);
+            }
+            if (e.which == 13) {
+                sc.displaySqlCommands("",_searchText);
+            }  
+        });
+        $("#btnGo").click(function(){  
+            sc.displaySqlCommands(_searchCode,_searchText);
+        });   
+    } setSearch();
  
     $(document).on("click", "#btnRun", function () {
         var tbl = "#tblResult";
