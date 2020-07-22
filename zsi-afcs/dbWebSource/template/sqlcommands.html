@@ -22,11 +22,15 @@
     <div class="panel-container">
         <div class="panel-content">     
             <div class="zContainer">  
+                <div class="row col-12 mb-1">
+                    <input name="sql_code" id="sql_code" placeholder="Search SQL Code..." class="col-8 col-xl-3  form-control form-control-sm input-sm  pl-2">&nbsp;
+                    <input name="stored_procedure" id="stored_procedure" placeholder="Search Stored Procedure..." class="col-8 col-xl-3 form-control form-control-sm input-sm pl-2">      
+                </div>
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div id="grid-SqlCommands" class="zGrid"></div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-1">
                         <button id="btnAdd" type="button" class="btn-sm btn btn-primary" data-toggle="modal" data-target="#modalAdd">Add</button> &nbsp; 
                         <button id="btnSync" type="button" class="btn-sm btn btn-primary">Sync</button>
                     </div>
