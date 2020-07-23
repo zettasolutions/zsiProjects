@@ -1,5 +1,5 @@
 
-CREATE PROCEDURE [dbo].[afcs_get_vehicle_trip_sel](
+CREATE PROCEDURE [dbo].[afcs_3_get_vehicle_trip_sel](
 	@vehicle_hash_key NVARCHAR(50)
 	, @user_id    INT = NULL
 )

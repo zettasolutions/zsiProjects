@@ -1,5 +1,5 @@
 
-CREATE PROCEDURE [dbo].[afcs_qr_payment_upd](  
+CREATE PROCEDURE [dbo].[afcs_3_qr_payment_upd](  
 	@serial_no NVARCHAR(50)
 	, @hash_key1 NVARCHAR(MAX)
 	, @hash_key2 NVARCHAR(MAX)
@@ -20,6 +20,8 @@ CREATE PROCEDURE [dbo].[afcs_qr_payment_upd](
 	, @from_location NVARCHAR(100)
 	, @to_location NVARCHAR(100)
 	, @travel_distance DECIMAL(12, 2)
+	, @start_km INT
+	, @end_km INT
 	, @user_id INT = NULL
 )  
 AS  
@@ -107,6 +109,8 @@ BEGIN
 						, [to_location]
 						, [no_klm]
 						, [qr_ref_no]
+						, [start_km]
+						, [end_km]
 						, [or_no]
 					)
 					VALUES(
@@ -134,6 +138,8 @@ BEGIN
 						, @to_location
 						, @travel_distance
 						, 'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0)
+						, @start_km
+						, @end_km
 						, @or_number
 					)
 			        

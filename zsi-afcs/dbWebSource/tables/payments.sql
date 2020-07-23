@@ -29,4 +29,7 @@ payment_id	INT IDENTITY(1,1)	NOT NULL
 ,trip_id	INT	NULL
 ,consumer_id	INT	NULL
 ,base_fare	DECIMAL(12)	NULL
-,client_id	INT	NULL)
+,client_id	INT	NULL
+,start_km	INT	NULL
+,end_km	INT	NULL
+,or_no	NVARCHAR(40)	NULL)

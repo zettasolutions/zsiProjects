@@ -1,8 +1,11 @@
-CREATE VIEW dbo.vehicles_v
+
+
+CREATE VIEW [dbo].[vehicles_v]
 AS
-SELECT dbo.routes_ref.route_code, dbo.routes_ref.route_desc, dbo.vehicles.vehicle_id, dbo.vehicles.vehicle_plate_no, dbo.vehicles.route_id, dbo.vehicles.company_id, dbo.vehicles.hash_key, dbo.vehicles.vehicle_type_id, dbo.vehicles.is_active, 
-                  dbo.vehicles.transfer_type_id, dbo.vehicles.bank_id, dbo.vehicles.transfer_no, dbo.vehicles.account_name, dbo.vehicles.vehicle_img_filename, dbo.vehicles.created_by, dbo.vehicles.created_date, dbo.vehicles.updated_by, 
-                  dbo.vehicles.updated_date, dbo.fare_matrix.base_kms, dbo.fare_matrix.succeeding_km_fare, dbo.fare_matrix.vehicle_type
-FROM     dbo.routes_ref INNER JOIN
-                  dbo.vehicles ON dbo.routes_ref.route_id = dbo.vehicles.route_id INNER JOIN
-                  dbo.fare_matrix ON dbo.vehicles.vehicle_type_id = dbo.fare_matrix.fare_id
+SELECT rr.route_code, rr.route_desc,zfv.vehicle_id,zfv.vehicle_plate_no,zfv.route_id,zfv.company_id,zfv.hash_key,zfv.vehicle_type_id,zfv.is_active, 
+                 zfv.vehicle_img_filename,zfv.created_by,zfv.created_date,zfv.updated_by, 
+                 zfv.updated_date, dbo.fare_matrix.base_kms, dbo.fare_matrix.succeeding_km_fare, dbo.fare_matrix.vehicle_type, zfv.or_no
+FROM     dbo.routes_ref rr INNER JOIN
+                  zsi_fmis.dbo.vehicles zfv ON rr.route_id =zfv.route_id INNER JOIN
+                  dbo.fare_matrix ON zfv.vehicle_type_id = dbo.fare_matrix.fare_id
+

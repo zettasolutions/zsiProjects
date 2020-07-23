@@ -1,6 +1,7 @@
 
 
-CREATE PROCEDURE [dbo].[afcs_history_sel]  
+
+CREATE PROCEDURE [dbo].[afcs_3_history_sel]  
 (  
      @vehicle_hash_key NVARCHAR(MAX)
    , @history_date DATE
@@ -18,7 +19,7 @@ BEGIN
 		, b.vehicle_id
 		, a.driver_id
 	FROM dbo.payments a
-	LEFT JOIN dbo.vehicles_v b
+	LEFT JOIN dbo.vehicles b
 	ON a.vehicle_id = b.vehicle_id
 	LEFT JOIN dbo.drivers_v c
 	ON a.driver_id = c.[user_id]

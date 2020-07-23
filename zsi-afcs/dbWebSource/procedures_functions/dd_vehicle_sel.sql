@@ -6,5 +6,5 @@ CREATE PROCEDURE [dbo].[dd_vehicle_sel]
 ) 
 AS
 BEGIN
-   SELECT vehicle_id, vehicle_plate_no, is_active FROM dbo.vehicles WHERE company_id = @company_id; 
+   SELECT vehicle_id, vehicle_plate_no, is_active FROM zsi_fmis.[dbo].vehicles WHERE company_id = @company_id; 
 END

@@ -21,7 +21,7 @@ BEGIN
 		@vehicle_id = a.vehicle_id
 		, @vehicle_plate_no = a.vehicle_plate_no 
 		, @vehicle_type = b.vehicle_type
-	FROM dbo.vehicles a
+	FROM dbo.vehicles_v a
 	JOIN dbo.fare_matrix b
 	ON a.vehicle_type_id = b.fare_id
 	WHERE 1 = 1 

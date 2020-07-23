@@ -1,9 +1,10 @@
-CREATE PROCEDURE dbo.drivers_sel(
+CREATE PROCEDURE [dbo].[drivers_sel](
  @client_id int
 ,@user_id int=null
 ,@tab_id int = 1
 ,@col_no int=1
 ,@order_no int=0
+,@searchVal VARCHAR(50) = null
 )
 AS
 BEGIN
@@ -33,8 +34,11 @@ BEGIN
 	IF @tab_id = 4
 		SET @stmt = @stmt + ' AND CONVERT(VARCHAR(10),driver_license_exp_date,101) < ''' + CONVERT(VARCHAR(10),DATEADD(HOUR,8,GETUTCDATE()),101) + '''';
 	
+	IF isnull(@searchVal,'') <>''
+	   SET @stmt = @stmt + ' AND first_name like ''%'+@searchVal+'%'' or last_name like ''%'+@searchVal+'%''';
  END
  ELSE
+
     SET @stmt = 'SELECT * FROM dbo.drivers_inactive_v WHERE client_id = ' + cast(@client_id AS VARCHAR(20))
  
  SET @stmt= @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(10))

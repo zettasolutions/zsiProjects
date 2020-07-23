@@ -16,7 +16,7 @@ BEGIN
 		, CONCAT(c.first_name, ' ', c.last_name) AS driver_name
 		, b.vehicle_id
 	FROM dbo.payments a
-	LEFT JOIN dbo.vehicles b
+	LEFT JOIN dbo.vehicles_v b
 	ON a.vehicle_id = b.vehicle_id
 	LEFT JOIN dbo.drivers_v c
 	ON a.driver_id = c.[user_id]

@@ -11,7 +11,7 @@ BEGIN
 	DECLARE @vehicle_id INT;
 
 	-- Check whether the vehicle is registered and active.
-	SELECT @vehicle_id = vehicle_id FROM dbo.vehicles WHERE 1 = 1 AND hash_key = @hash_key;
+	SELECT @vehicle_id = vehicle_id FROM dbo.active_vehicles_v WHERE 1 = 1 AND hash_key = @hash_key;
 
 	IF @vehicle_id IS NOT NULL
 	BEGIN

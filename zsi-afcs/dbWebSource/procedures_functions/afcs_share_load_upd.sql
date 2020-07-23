@@ -49,7 +49,7 @@ BEGIN
 		 AND  id = @load_temp_qr_id;
 
 		IF @consumer_id IS NOT NULL
-		   SELECT  @consumer_mobile_no = mobile_no FROM dbo.consumers WHERE is_active='Y'
+		   SELECT  @consumer_mobile_no = mobile_no FROM dbo.consumers WHERE consumer_id = @consumer_id and is_active='Y'
 
 		BEGIN
 		    SELECT @user_qr_id = qr_id, @user_consumer_id = consumer_id FROM dbo.consumers where mobile_no = @username
@@ -103,6 +103,21 @@ BEGIN
 					)
 					
 					-- Insert new record in the sms_notifications table so that the consumer will be notified through sms.
+						INSERT INTO [dbo].[sms_notifications]
+							([app_name]
+							,[mobile_no]
+							,[message]
+							,[is_processed]
+							,[created_by]
+							,[created_date])
+						VALUES(
+							'zpay'
+							, @username
+							, 'You have sent an amount of PHP ' + CAST(@load_amount AS NVARCHAR(100)) + ' through ZPay Share a Load.'
+							, 'N'
+							, @load_by
+							, DATEADD(HOUR, 8, GETUTCDATE()))
+
 					IF isnull(@consumer_mobile_no,'')<>''
 						INSERT INTO [dbo].[sms_notifications]
 							([app_name]

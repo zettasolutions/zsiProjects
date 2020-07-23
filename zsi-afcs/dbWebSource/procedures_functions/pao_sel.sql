@@ -13,9 +13,11 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @stmt nvarchar(max)='';
-
 		SET @stmt = 'SELECT * FROM dbo.pao_active_v WHERE client_id = ' + cast(@client_id as varchar(20));
 	
+	IF isnull(@is_active,'') <>''
+		SET @stmt = @stmt + ' AND is_active='''+@is_active+'''';
+
 	IF isnull(@searchVal,'') <>''
 	   SET @stmt = @stmt + ' AND first_name like ''%'+@searchVal+'%'' or last_name like ''%'+@searchVal+'%''';
 	
@@ -29,4 +31,4 @@ BEGIN
 	EXEC(@stmt);
 END
 
-
+ 

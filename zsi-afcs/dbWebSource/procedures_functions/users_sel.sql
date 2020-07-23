@@ -75,4 +75,4 @@ print 'rpp:' +  CAST(@page_count AS VARCHAR(20))
 RETURN @page_count;
 END; 
 
-select * from dbo.users_v
+--select * from dbo.users_v
