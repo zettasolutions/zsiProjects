@@ -1,9 +1,8 @@
 CREATE TYPE employees_tt AS TABLE(
 id	INT	NULL
 ,is_edited	CHAR(1)	NULL
-,inactive_type_code	CHAR(1)	NULL
-,inactive_date	DATE	NULL
-,employee_id	INT	NULL
+,client_id	INT	NULL
+,employee_no	NVARCHAR(100)	NULL
 ,last_name	NVARCHAR(100)	NULL
 ,first_name	NVARCHAR(100)	NULL
 ,middle_name	NVARCHAR(100)	NULL
@@ -14,6 +13,7 @@ id	INT	NULL
 ,empl_type_code	CHAR(1)	NULL
 ,department_id	INT	NULL
 ,section_id	INT	NULL
+,emp_hash_key	NVARCHAR(1000)	NULL
 ,position_id	INT	NULL
 ,basic_pay	DECIMAL(20)	NULL
 ,pay_type_code	CHAR(1)	NULL
@@ -27,4 +27,6 @@ id	INT	NULL
 ,contact_phone_no	NVARCHAR(100)	NULL
 ,contact_address	NVARCHAR(100)	NULL
 ,contact_relation_id	INT	NULL
-,is_active	VARCHAR(1)	NULL)
+,is_active	VARCHAR(1)	NULL
+,inactive_type_code	CHAR(1)	NULL
+,inactive_date	DATE	NULL)

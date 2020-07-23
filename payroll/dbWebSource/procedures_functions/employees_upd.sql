@@ -1,4 +1,3 @@
-
 CREATE PROCEDURE [dbo].[employees_upd]
 (
     @tt    employees_tt READONLY
@@ -8,7 +7,8 @@ AS
 -- Update Process
 	UPDATE a 
 		   SET 
-	   	      employee_id				= b.employee_id			
+	   	      client_id					= b.client_id			
+			 ,employee_no				= b.employee_no
 			 ,last_name					= b.last_name				
 			 ,first_name				= b.first_name			
 			 ,middle_name				= b.middle_name			
@@ -19,6 +19,7 @@ AS
 			 ,empl_type_code			= b.empl_type_code
 			 ,department_id				= b.department_id
 			 ,section_id				= b.section_id
+			 ,emp_hash_key				= b.emp_hash_key
 			 ,position_id				= b.position_id
 			 ,basic_pay					= b.basic_pay
 			 ,pay_type_code				= b.pay_type_code
@@ -27,25 +28,26 @@ AS
 			 ,philhealth_no				= b.philhealth_no
 			 ,hmdf_no					= b.hmdf_no
 			 ,account_no				= b.account_no
-			 ,no_shares                 = b.no_shares 
-			 ,contact_name              = b.contact_name 
-			 ,contact_phone_no          = b.contact_phone_no
-			 ,contact_address           = b.contact_address
-			 ,contact_relation_id       = b.contact_relation_id
+			 ,no_shares					= b.no_shares
+			 ,contact_name				= b.contact_name
+			 ,contact_phone_no			= b.contact_phone_no
+			 ,contact_address			= b.contact_address
+			 ,contact_relation_id		= b.contact_relation_id
 			 ,is_active					= b.is_active
 			 ,inactive_type_code		= b.inactive_type_code
 			 ,inactive_date				= b.inactive_date
-			 ,updated_by   = @user_id
-			 ,updated_date = GETDATE()
+			 ,updated_by				= @user_id
+			 ,updated_date				= DATEADD(HOUR, 8, GETUTCDATE())
         FROM dbo.employees a INNER JOIN @tt b
 	     ON a.id = b.id 
-		WHERE b.employee_id IS NOT NULL
+		WHERE b.id IS NOT NULL
 	    AND isnull(b.is_edited,'N')='Y'
 
 
 -- Insert Process
 	INSERT INTO employees (
-		 employee_id		
+		 client_id
+		,employee_no		
 		,last_name			
 		,first_name		
 		,middle_name		
@@ -56,6 +58,7 @@ AS
 		,empl_type_code	
 		,department_id
 		,section_id
+		,emp_hash_key
 		,position_id
 		,basic_pay			
 		,pay_type_code		
@@ -65,11 +68,10 @@ AS
 		,hmdf_no			
 		,account_no		
 		,no_shares
-		,contact_name       
-		,contact_phone_no   
-		,contact_address    
+		,contact_name
+		,contact_phone_no
+		,contact_address
 		,contact_relation_id
-		,emp_hash_key
 		,is_active			
 		,inactive_type_code
 		,inactive_date		
@@ -77,7 +79,8 @@ AS
 		,created_date
     )
 	SELECT 
-		 employee_id		
+		 client_id		
+		,employee_no
 		,last_name			
 		,first_name		
 		,middle_name		
@@ -88,6 +91,7 @@ AS
 		,empl_type_code	
 		,department_id
 		,section_id
+		,NEWID()
 		,position_id
 		,basic_pay			
 		,pay_type_code		
@@ -97,24 +101,15 @@ AS
 		,hmdf_no			
 		,account_no	
 		,no_shares
-		,contact_name       
-		,contact_phone_no   
-		,contact_address    
+		,contact_name
+		,contact_phone_no
+		,contact_address
 		,contact_relation_id
-		,NewId()	
 		,is_active			
 		,inactive_type_code
 		,inactive_date		
 		,@user_id
-	    ,GETDATE()
+	    ,DATEADD(HOUR, 8, GETUTCDATE())
 	FROM @tt 
 	WHERE id IS NULL
-      AND employee_id IS NOT NULL;
-
-
-
-
-
-
-
-
+      AND client_id IS NOT NULL;

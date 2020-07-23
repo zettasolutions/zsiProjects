@@ -21,6 +21,8 @@ DECLARE @order          VARCHAR(4000);
 DECLARE @count INT = 0;
 DECLARE @page_count INT = 1;
 DECLARE @is_dev  char(1) = null
+DECLARE @client_id nvarchar(20)=null
+SELECT @client_id = client_id FROM dbo.users where user_id=@user_id;
 
 IF ISNULL(@user_id,0) <> 0
   SELECT @is_dev = is_developer FROM dbo.users where user_id=@user_id;
@@ -28,7 +30,7 @@ IF ISNULL(@user_id,0) <> 0
 IF ISNULL(@logon,'')<>''
 SELECT @is_dev = is_developer FROM dbo.users where logon=@logon;
  
-SET @stmt = 'SELECT user_id, userFullName, logon, first_name, middle_name, last_name, name_suffix, password,  is_admin, role_id, is_developer, plant_id, warehouse_id, img_filename  FROM users_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + '''';  
+SET @stmt = 'SELECT user_id, client_id, userFullName, logon, first_name, middle_name, last_name, name_suffix, password,  is_admin, role_id, is_developer, plant_id, warehouse_id, img_filename  FROM users_v WHERE is_active = ''' + CAST(@is_active AS VARCHAR(1)) + '''';  
    SET @order = ' ORDER BY ' + CAST(@col_no + 1 AS VARCHAR(1)) + ' ' + IIF(@order_no=0,'ASC','DESC');  
    SELECT @count = COUNT(*) FROM dbo.users_v WHERE is_active = @is_active;
 

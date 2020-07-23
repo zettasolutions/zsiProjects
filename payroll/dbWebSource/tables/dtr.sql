@@ -1,5 +1,6 @@
 CREATE TABLE dtr(
 id	INT IDENTITY(1,1)	NOT NULL
+,client_id	INT	NULL
 ,employee_id	INT	NULL
 ,shift_id	INT	NULL
 ,shift_hours	DECIMAL(20)	NULL
