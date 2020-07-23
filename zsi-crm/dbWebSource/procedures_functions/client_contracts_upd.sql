@@ -84,9 +84,6 @@ BEGIN
 			    ,updated_by		   	        = @user_id
 			    ,updated_date		        = DATEADD(HOUR, 8, GETUTCDATE())
 		   WHERE client_contract_id = @client_contract_id 
-   		     AND ISNULL(@client_id,0)<>0
-		     AND ((ISNULL(@plan_id,0)<>0 AND ISNULL(@plan_qty,0) >0)) 
-			 AND @is_edited = 'Y';
 
 RETURN @id;
 END;

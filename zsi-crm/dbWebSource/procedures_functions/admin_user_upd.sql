@@ -6,7 +6,6 @@ CREATE procedure [dbo].[admin_user_upd](
   ,@first_name nvarchar(100)=null
   ,@middle_name nvarchar(1)=null
   ,@name_suffix nvarchar(50)=null
-  ,@password nvarchar(50)=null
   ,@user_id   int
   ,@is_active char(1)='Y'
   ,@id	INT=NULL OUTPUT 
@@ -15,11 +14,13 @@ CREATE procedure [dbo].[admin_user_upd](
 as
 BEGIN
    SET NOCOUNT ON
-    declare @LENGTH INT,@CharPool varchar(26),@PoolLength varchar(26),@LoopCount  INT  
+    Declare @Encrypt varbinary(100)  
+  
+    DECLARE @LENGTH INT,@CharPool varchar(26),@PoolLength varchar(26),@LoopCount  INT  
 	DECLARE @RandomString VARCHAR(10),@CHARPOOLINT VARCHAR(9)  
   
     
-	SET @CharPool = 'A!B@C!D#E@FG#H$IJ$K%LM%N*PQR%ST&U*V(W)X_YZ'  
+	SET @CharPool = 'zAyBxCwDvEuFtGsHrIqJpKoLnMmNlPkQjRiShTgUfVeWdXcYbZa'  
 	DECLARE @TMPSTR VARCHAR(3)  
 
 	SET @PoolLength = DataLength(@CharPool)  
@@ -37,7 +38,9 @@ BEGIN
 			END  
 		END  
 		SET @LOOPCOUNT = 0    
-		SET @password=@RandomString  
+
+		SET @Encrypt = EncryptByPassPhrase('key', @RandomString )  
+
 		INSERT INTO dbo.users
 		 (
 		  logon
@@ -54,7 +57,7 @@ BEGIN
 		 ) VALUES
 		 (
 		  @logon
-		 ,@password
+		 ,@Encrypt
 		 ,@last_name
 		 ,@first_name
 		 ,@middle_name

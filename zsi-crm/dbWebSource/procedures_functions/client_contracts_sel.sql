@@ -12,12 +12,12 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @stmt NVARCHAR(MAX)
 
- 	SET @stmt = 'SELECT * FROM dbo.client_contracts_v WHERE 1=1';
+ 	SET @stmt = 'SELECT * FROM dbo.clients_v WHERE 1=1';
 
 	IF @is_active <> ''
 		SET @stmt = @stmt + ' AND is_active='''+ @is_active + '''';
 
-	--IF ISNULL(@keyword,'')<>''
+	IF ISNULL(@keyword,'')<>''
     set @stmt = @stmt + ' AND '+ @keyword + ' like ''%' + @search_val  + '%'''
 
 	exec(@stmt);

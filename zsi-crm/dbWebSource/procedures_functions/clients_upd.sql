@@ -6,6 +6,7 @@ CREATE procedure [dbo].[clients_upd](
   ,@client_email_add nvarchar(30)=NULL
   ,@user_id   int=NULL
   ,@is_active char(1)='Y'
+  ,@bill_to nvarchar(100)=null
   ,@billing_address nvarchar(max)=null
   ,@country_id  int=null
   ,@state_id  int=null
@@ -47,6 +48,7 @@ BEGIN
 		 ,client_mobile_no
 		 ,client_email_add
 		 ,is_active
+		 ,bill_to
 		 ,billing_address
 		 ,country_id
 		 ,state_id
@@ -72,6 +74,7 @@ BEGIN
 		 ,@client_mobile_no
 		 ,@client_email_add
 		 ,@is_active
+		 ,@bill_to
 		 ,@billing_address
 		 ,@country_id
 		 ,@state_id
@@ -100,21 +103,13 @@ BEGIN
 			   ,client_phone_no		= @client_phone_no
 			   ,client_mobile_no    = @client_mobile_no
 			   ,client_email_add    = @client_email_add
-  			   ,is_active			= @is_active
+			   ,bill_to				= @bill_to
 			   ,billing_address		= @billing_address
 			   ,country_id			= @country_id
 			   ,state_id			= @state_id
 			   ,city_id				= @city_id
-			   ,registration_date	= @registration_date
-			   ,account_exec_id		= @account_exec_id
-			   ,billing_class_id	= @billing_class_id
-			   ,bank_acct_no		= @bank_acct_no
-			   ,bank_id				= @bank_id
-			   ,is_tax_exempt		= @is_tax_exempt
 			   ,client_tin			= @client_tin
-			   ,payment_mode_id		= @payment_mode_id
-			   ,is_zload			= @is_zload
-			   ,is_zfare			= @is_zfare
 			   ,updated_by			= @user_id
-			   ,updated_date		= DATEADD(HOUR, 8, GETUTCDATE());
+			   ,updated_date		= DATEADD(HOUR, 8, GETUTCDATE())
+	     WHERE client_id = @client_id;
 END;
