@@ -24,13 +24,12 @@
     <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/bootstrap-datetimepicker.css'>
     <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/bootstrap-datetimepicker.min.css'>
     <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css'>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" rel="stylesheet"/>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
     @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsiLib"))
     @{
-        string userId = "";
-        if ( zsi.web.SessionHandler.CurrentUser != null){ userId = "var userId=" + zsi.web.SessionHandler.CurrentUser.userId + ";"; }
+         string userId = "";
+        userId = "var userId=" + webCM.SessionHandler.getUserProp("userId") + ";";
     }
     <script>
         var base_url = '@Url.Content("~/")';
@@ -80,6 +79,32 @@
         width: 4.155rem !important;
         height: auto;
         display: inline-block;
+    }
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    *:focus{
+      outline:0px;
+    }
+    .zGrid .zCell{
+        padding-left: 3px;
+    }
+    .zsi-form-control{
+        border-left:none;
+        border-right:none;
+        border-top:none;
+        border-radius:0 0 0 0;
+        padding: 0;
+    }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
+    .border-none{
+        border: none !important;
     }
 	</style>
 </head>
@@ -185,7 +210,7 @@
                             <div class="info-card-text">
                                 <a href="#" class="d-flex align-items-center text-white">
                                     <span class="text-truncate text-truncate-sm d-inline-block autoCaps">
-                                        @zsi.web.SessionHandler.CurrentUser.userFullName
+                                         @webCM.SessionHandler.getUserProp("userFullName")
                                     </span>
                                 </a>
                                 <span class="d-inline-block text-truncate text-truncate-sm"><small>@role</small></span>
@@ -554,7 +579,7 @@
                                                 <img src="@Url.Content("~/")img/avatar-m.png" class="rounded-circle profile-image" alt="">
                                             </span>
                                             <div class="info-card-text">
-                                                <div class="fs-lg text-truncate text-truncate-lg autoCaps">@zsi.web.SessionHandler.CurrentUser.userFullName</div>
+                                                <div class="fs-lg text-truncate text-truncate-lg autoCaps">@webCM.SessionHandler.getUserProp("userFullName")</div>
                                                 <span class="text-truncate text-truncate-md opacity-80">(@role)</span>
                                             </div>
                                         </div>
@@ -594,7 +619,7 @@
                                     <div class="dropdown-divider m-0"></div>
                                     <a class="dropdown-item fw-500 pt-3 pb-3" href="@Url.Content("~/")page/signout">
                                         <span>Logout</span>
-                                        <span class="float-right fw-n">&commat;@zsi.web.SessionHandler.CurrentUser.userName</span>
+                                        <span class="float-right fw-n">&commat;@webCM.SessionHandler.getUserProp("userName").ToUpper()</span>
                                     </a>
                                 </div>
                             </div>
@@ -1225,6 +1250,7 @@
 						+ src/../jquery-snippets.js (core) -->			
         <script src='@Url.Content("~/")js/vendors.bundle.js'></script>
         <script src='@Url.Content("~/")js/app.bundle.js'></script>
+        <script src='@Url.Content("~/")js/formplugins/dropzone/dropzone.js'></script>
         <script src='@Url.Content("~/")js/jquery.maskMoney.js'></script>
         <script src='@Url.Content("~/")js/jquery.maskMoney.min.js'></script>
         <script src='@Url.Content("~/")js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js'></script>
