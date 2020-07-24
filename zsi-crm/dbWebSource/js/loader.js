@@ -16,9 +16,28 @@
         },1000);
     }
     
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href"); 
+        switch(target){
+            case "#nav-company-information":
+                    $('#popEmailAdd').popover("hide", 400);
+                    $('#popLogonAdd').popover("hide", 400);
+                break;
+            case "#nav-documents":
+                    $('#popEmailAdd').popover("hide", 400);
+                    $('#popLogonAdd').popover("hide", 400);
+                break;
+            case "#nav-admin-information":
+                    $('#popEmailAdd').popover("hide", 400);
+                    $('#popLogonAdd').popover("hide", 400);
+                break;
+          default:break; 
+        } 
+    });
+    
     function displayLoaders(){
         $("#gridLoaders").dataBind({
-             sqlCode     : "L1280" //loaders_sel
+             sqlCode     : "L1280"
             ,height      : $(window).height() - 248
             ,dataRows    : [
                 {text: "<div id='code'>Code</div>", width: 130, style: "text-align:center"
@@ -58,43 +77,60 @@
         });
     }
     
-    $("#btnSubmit").click(function () {
-        var _$frm = $("#formClients");
-        var _frm = _$frm[0];
-        var _formData = new FormData(_frm);  
-        if( ! _frm.checkValidity() ){
-            $("#formClients").addClass('was-validated');
+    function checkValueExist(tableName,colName,keyWord,inputId){
+        zsi.getData({
+             sqlCode    : "C1295" 
+            ,parameters  : {table_name: tableName, colname: colName, keyword: keyWord} 
+            ,onComplete : function(d) {
+                var _rows= d.rows;
+                
+                $('#popEmailAdd').popover("hide", 400);
+                $('#popLogonAdd').popover("hide", 400);
+                
+                if(_rows.length === 1) {
+                    
+                    $(inputId).val("");
+                    
+                    if(inputId === "#client_email_add") $('#popEmailAdd').popover("show", 400);
+                    else $('#popLogonAdd').popover("show", 400);
+                    
+                }
+            }
+        });
+    }
+    
+    $("#client_email_add,#logon").on("change", function(){
+        var _colName    = $(this)[0].id;
+        var _clientEmailAdd = $("#client_email_add").val();
+        var _logonEmailAdd = $("#client_email_add").val();
+        
+        if(_colName === "client_email_add") checkValueExist("clients","client_email_add",_clientEmailAdd,"#client_email_add");
+        else checkValueExist("users","logon",_logonEmailAdd,"#logon");
+    });
+    
+    $("#btnSubmit").click(function(){
+        var _$frmStep1 = $("#formClientsStep1One")
+            ,_$frmStep2 = $("#formClientsStep2");
+            
+        var _frmStep1 = _$frmStep1[0]
+            ,_frmStep2 = _$frmStep2[0];
+            
+        $('#pop1').popover("hide", 400);
+        $('#pop2').popover("hide", 400);
+        if( ! _frmStep1.checkValidity()){
+            _$frmStep1.addClass('was-validated');
+            $('#pop1').popover("show", 400);
+        }else if( ! _frmStep2.checkValidity()){
+            _$frmStep2.addClass('was-validated');
+            $('#pop2').popover("show", 400);
         }else{   
-            $("#formClients").removeClass('was-validated');
             $('#myModal').modal('show');
         }
     });
     
-    /*$("#btnSubmit").click(function(){ 
-        var forms = document.getElementsByClassName('needs-validation'); 
-    	var validation = Array.prototype.filter.call(forms, function(form) {
-    		form.addEventListener('submit', function(event) {
-    		    $("form").removeClass('was-validated');
-    			if (form.checkValidity() === false) {
-    				event.preventDefault();
-    				event.stopPropagation();
-    			    $("form").addClass('was-validated');
-    			}else{
-        			event.preventDefault();
-        			event.stopPropagation();
-    			    $('#myModal').modal('show');
-    			    $("form").addClass('was-validated');
-    			}
-    		}, false);
-    	});
-    	
-    });*/
-    
     $("#btnNew").click(function() {
-        console.log("window",$(window).height());
         var _$mdl = $('#newClientModal');
-        if($(window).height() <= 724) $("#clientInformationDiv").css({"height":$(window).height() - 208,"overflow-y":"auto","overflow-x":"hidden"});
-        //else $("#clientInformationDiv").css({"height":$(window).height() - 578,"overflow-y":"auto","overflow-x":"hidden"}); 
+        //if($(window).height() <= 724) $("#clientInformationDiv").css({"height":$(window).height() - 208,"overflow-y":"auto","overflow-x":"hidden"});
         _$mdl.modal('show');
         var _$frm = _$mdl.find("form");
         var _$country = _$mdl.find('#country_id')
@@ -166,73 +202,198 @@
         $("#adminUserDiv").toggle("down");
     });
     
+    $("#viewImg1,#viewImg2,#viewImg3").click(function(){
+       var _colName    = $(this)[0].id;
+       var _img = "";
+       if(_colName === "viewImg1"){
+           _img = $("#img1").text();
+           
+           $("#viewImg1").attr("href","/file/viewImage?fileName=" + _img);
+       }else if(_colName === "viewImg2"){
+           _img = $("#img2").text();
+           
+           $("#viewImg2").attr("href","/file/viewImage?fileName=" + _img);
+       }else{
+           _img = $("#img3").text();
+           
+           $("#viewImg3").attr("href","/file/viewImage?fileName=" + _img);
+       }
+    });
+    
     $("#btnSave").click(function () {
-        var _$div1 = $("#clientInformationDiv");
-        var _$div2 = $("#adminUserDiv");
-        _$div2.find("input,select").attr("disabled", true);
-        var _$frm = $("#formClients"); 
-        _$frm.jsonSubmit({
+        $("#formClientsStep1One").jsonSubmit({
              procedure: "clients_upd" 
             ,isSingleEntry: true
             ,onComplete: function (data) {
+                var _$clientId = $("#clientIds").val();
+                var _clientName = $("#client_name").val();
                 gClientId = data.returnValue;
                 if(data.isSuccess){
                     if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    _$div1.find("input,select").attr("disabled", true);
-                    _$div2.find("input,select").removeAttr("disabled");
-                    _$frm.find("#clientId").val(gClientId);
-                    $("#newClientModal").modal('toggle');
-                    displayClients();
+                    $("#formClientsStep2").find("#clientId").val(gClientId? gClientId: "");
 			        setTimeout(function(){
-    			        _$frm.jsonSubmit({
-                             procedure: "admin_user_upd" 
-                            ,isSingleEntry: true
-                            ,onComplete: function (data) {
-                                console.log("data",data);
-                                var _userId = data.returnValue;
-                                var _firstName = $("#first_name").val();
-                                var _email = $("#logon").val();
-                                $("#clientPassword").dataBind({
-                                    sqlCode    : "D1282" //dd_clients_password_sel
-                                   ,text       : "password"
-                                   ,value      : "user_id"
-                                   ,onComplete : function(){
-                                       $(this).val(_userId);
-                                   }
-                                });
-                                 setTimeout (function(){
-                                    $("#clientPassword").val(_userId);
-                                    var _password = $("#clientPassword").find('option:selected').text();
-                                    $("#mail_recipients").val(_email);
-                                    $("#ename").val(_firstName);
-                                    $("#epassword").val(_password);
-                                    if(data.isSuccess){
-                                       if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                                       _$frm.removeClass('was-validated');
-                                       $(".yesno").addClass("hide");
-                                       $("#myModal").find("#msg").text("Data successfully saved. Password of the user has been sent to his/her email");
-                                       $("#myModal").find("#msg").css("color","green");
-                                       $("#btnConfirm").removeClass("hide");
-                                       _$div1.find("input,select").removeAttr("disabled");
-                                       
-                                       $("#formEmail").jsonSubmit({
-                                             procedure: "send_mail_upd" 
-                                            ,isSingleEntry: true
-                                            ,onComplete: function (data) {
-                                                if(data.isSuccess){
-                                                   if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                                                }
+			            if(_$clientId === ""){
+			                $("#newClientModal").modal('toggle');
+        			        $("#formClientsStep2").jsonSubmit({
+                                 procedure: "admin_user_upd" 
+                                ,isSingleEntry: true
+                                ,onComplete: function (data) {
+                                    var _userId = data.returnValue;
+                                    var _firstName = $("#first_name").val();
+                                    var _email = $("#logon").val();
+                                    var _password = "";
+                                    zsi.getData({
+                                         sqlCode    : "D1282" 
+                                        ,parameters  : {id: _userId} 
+                                        ,onComplete : function(d) {
+                                            var _rows= d.rows;
+                                            
+                                            for(var i=0; i < _rows.length;i++ ){
+                                                var _info = _rows[i];
+                                                _password  +=_info.password;
                                             }
-                                        });
-                                    }else{
-                                       $("#myModal").find("#msg").text("Something went wrong when saving the data.");
-                                       $("#myModal").find("#msg").css("color","red");
-                                       modalTxt();
-                                    }
-                                },2000);
-                                
+                                        }
+                                    });
+                                    setTimeout (function(){
+                                        $("#clientPassword").val(_userId);
+                                        $("#mail_recipients").val(_email);
+                                        $("#ename").val(_firstName);
+                                        $("#epassword").val(_password);
+                                        if(data.isSuccess){
+                                           if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                           $("#myModal").find("#msg").text("Data successfully saved. Password of the user has been sent to his/her email.");
+                                           $("#myModal").find("#msg").css("color","green");
+                                           $("#formEmail").jsonSubmit({
+                                                 procedure: "send_mail_upd" 
+                                                ,isSingleEntry: true
+                                                ,onComplete: function (data) {
+                                                    if(data.isSuccess){
+                                                       if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                    }
+                                                }
+                                            });
+                                            setTimeout(function(){
+                                               $("#myModal").find("#msg").text("Data successfully saved.");
+                                                $("#myModal").find("#msg").css("color","green");
+                                                setTimeout(function(){
+                                                    $("#myModal").modal('toggle');
+                                                    modalTxt();
+                                                },1500);
+                                            },1500);
+                                        }else{
+                                           $("#myModal").find("#msg").text("Something went wrong when saving the data.");
+                                           $("#myModal").find("#msg").css("color","red");
+                                           modalTxt();
+                                        }
+                                    },2000);
+                                    
+                                }
+                            });
+			            }else {
+			                $("#myModal").find("#msg").text("Data successfully saved.");
+                            $("#myModal").find("#msg").css("color","green");
+                            setTimeout(function(){
+                                $("#myModal").modal('toggle');
+                                modalTxt();
+                            },1500);
+			            }
+                        setTimeout (function(){
+                            var frm = $("#formClientsStep1Two");
+                            var frm1 = $("#formClientsStep1Three");
+                            var frm2 = $("#formClientsStep1Four");
+                            var  fileOrg1=frm.find("#file1").get(0)
+                                ,fileOrg2=frm1.find("#file2").get(0)
+                                ,fileOrg3=frm2.find("#file3").get(0);
+                        
+                            var formData = new FormData( frm.get(0));
+                            var formData1 = new FormData( frm1.get(0));
+                            var formData2 = new FormData( frm2.get(0));
+                            
+                            if(isUD(fileOrg1.files[0])){}
+                            else {
+                                $.ajax({
+                                    url: base_url + 'file/UploadImage', 
+                                    type: 'POST',
+                                    success: completeHandler = function(data) {
+                                        if(data.isSuccess){
+                                            $.get(base_url  + "sql/exec?p=clients_mayor_pemit_img_upd @client_id=" + (gClientId? gClientId : _$clientId)
+                                                        + ",@mayor_permit_img='" +  fileOrg1.files[0].name + "'"
+                                            ,function(data){
+                                                zsi.form.showAlert("alert");
+                                                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                $("#img1").text(fileOrg1.files[0].name);
+                                            });
+                                            
+                                        }else
+                                            alert(data.errMsg);
+                                    },
+                                    error: errorHandler = function() {
+                                        console.log("error");
+                                    },
+                                    data: formData,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false
+                                }, 'json');
                             }
-                        }); 
+                            if(isUD(fileOrg2.files[0])){}
+                            else {
+                                $.ajax({
+                                    url: base_url + 'file/UploadImage',
+                                    type: 'POST',
+                            
+                                    success: completeHandler = function(data) {
+                                        if(data.isSuccess){
+                                            $.get(base_url  + "sql/exec?p=clients_bir_img_upd @client_id=" + (gClientId? gClientId : _$clientId)
+                                                        + ",@bir_img='" +  fileOrg2.files[0].name + "'"
+                                            ,function(data){
+                                                zsi.form.showAlert("alert");
+                                                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                $("#img2").text(fileOrg2.files[0].name);
+                                            });
+                                            
+                                            
+                                        }else
+                                            alert(data.errMsg);
+                                    },
+                                    error: errorHandler = function() {
+                                        console.log("error");
+                                    },
+                                    data: formData1,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false
+                                }, 'json');
+                            }
+                            if(isUD(fileOrg3.files[0])){}
+                            else{
+                                $.ajax({
+                                    url: base_url + 'file/UploadImage', 
+                                    type: 'POST',
+                                    success: completeHandler = function(data) {
+                                        if(data.isSuccess){
+                                            $.get(base_url  + "sql/exec?p=clients_sec_dti_img_upd @client_id=" + (gClientId? gClientId : _$clientId) 
+                                                        + ",@sec_dti_img='" +  fileOrg3.files[0].name + "'"
+                                            ,function(data){
+                                                zsi.form.showAlert("alert");
+                                                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                $("#img3").text(fileOrg3.files[0].name);
+                                            });
+                                            
+                                            
+                                        }else
+                                            alert(data.errMsg);
+                                    },
+                                    error: errorHandler = function() {
+                                        console.log("error");
+                                    },
+                                    data: formData2,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false
+                                }, 'json');
+                            }
+                        },2000);
                         
 			        },1000);
 			       
@@ -256,4 +417,4 @@
 
 
 
-        
+          

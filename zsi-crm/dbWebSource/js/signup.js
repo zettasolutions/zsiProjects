@@ -8,10 +8,28 @@ var signup = (function(){
         $(".pageTitle").remove();
         $(":input").inputmask();
         displaySelects();
+        
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href"); 
+            switch(target){
+                case "#nav-company-information":
+                        $('#popEmailAdd').popover("hide", 400);
+                        $('#popLogonAdd').popover("hide", 400);
+                    break;
+                case "#nav-documents":
+                        $('#popEmailAdd').popover("hide", 400);
+                        $('#popLogonAdd').popover("hide", 400);
+                    break;
+                case "#nav-admin-information":
+                        $('#popEmailAdd').popover("hide", 400);
+                        $('#popLogonAdd').popover("hide", 400);
+                    break;
+              default:break; 
+            } 
+        });
     };
     
     function displaySelects() {
-        if($(window).height() <= 724) $("#clientInformationDiv").css({"height":$(window).height() - 290,"overflow-y":"auto","overflow-x":"hidden"});
         var _$country = $('#country_id')
             ,_$state = $('#state_id')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
             ,_$city = $('#city_id');
@@ -25,24 +43,27 @@ var signup = (function(){
         _$state.select2({placeholder: "",allowClear: true});
         _$city.select2({placeholder: "",allowClear: true});
         _$country.dataBind({
-            sqlCode : "D247" //dd_countries_sel
-            ,text : "country_name"
-            ,value : "country_id"
+             sqlCode     : "D247"
+            ,text        : "country_name"
+            ,value       : "country_id"
+            ,onComplete  : function(){
+                this.val(1).trigger('change');
+            }
             ,onChange : function(d){
                 var _info = d.data[d.index - 1]
                     ,country_id = isUD(_info) ? "" : _info.country_id;
                 
                 _$state.dataBind({
-                    sqlCode : "D248" //dd_states_sel
-                    ,parameters : {country_id:country_id}
-                    ,text : "state_name"
-                    ,value : "state_id"
-                    ,onChange : function(d){
+                     sqlCode        : "D248"
+                    ,parameters     : {country_id:country_id}
+                    ,text           : "state_name"
+                    ,value          : "state_id"
+                    ,onChange       : function(d){
                         var _info = d.data[d.index - 1]
                             ,state_id = isUD(_info) ? "" : _info.state_id;
                            
                         _$city.dataBind({
-                            sqlCode      : "D246" //dd_cities_sel
+                             sqlCode      : "D246"
                             ,parameters   : {state_id:state_id}
                             ,text         : "city_name"
                             ,value        : "city_id"
@@ -64,11 +85,33 @@ var signup = (function(){
         },1000);
     }
     
+    function checkValueExist(tableName,colName,keyWord,inputId){
+        zsi.getData({
+             sqlCode    : "C1295" 
+            ,parameters  : {table_name: tableName, colname: colName, keyword: keyWord} 
+            ,onComplete : function(d) {
+                var _rows= d.rows;
+                
+                $('#popEmailAdd').popover("hide", 400);
+                $('#popLogonAdd').popover("hide", 400);
+                
+                if(_rows.length === 1) {
+                    
+                    $(inputId).val("");
+                    
+                    if(inputId === "#client_email_add") $('#popEmailAdd').popover("show", 400);
+                    else $('#popLogonAdd').popover("show", 400);
+                    
+                }
+            }
+        });
+    }
+    
     $("#is_ready").click(function(){
         var _$this = $(this);
-        var _$frmStep1 = $("#formClientsStep1One")
-            _$frmStep2 = $("#formClientsStep2")
-        var _frmStep1 = _$frmStep1[0]
+        var _$frmStep1 = $("#formClientsStep1One");
+            _$frmStep2 = $("#formClientsStep2");
+        var _frmStep1 = _$frmStep1[0];
             _frmStep2 = _$frmStep2[0];
             
         if(_$this.is(":checked")){
@@ -94,19 +137,48 @@ var signup = (function(){
         } 
     });
     
+    $("#client_email_add,#logon").on("change", function(){
+        var _colName    = $(this)[0].id;
+        var _clientEmailAdd = $("#client_email_add").val();
+        var _logonEmailAdd = $("#client_email_add").val();
+        
+        if(_colName === "client_email_add") checkValueExist("clients","client_email_add",_clientEmailAdd,"#client_email_add");
+        else checkValueExist("users","logon",_logonEmailAdd,"#logon");
+    });
+    
+    $("#viewImg1,#viewImg2,#viewImg3").click(function(){
+       var _colName    = $(this)[0].id;
+       var _img = "";
+       if(_colName === "viewImg1"){
+           _img = $("#img1").text();
+           
+           $("#viewImg1").attr("href","/file/viewImage?fileName=" + _img);
+       }else if(_colName === "viewImg2"){
+           _img = $("#img2").text();
+           
+           $("#viewImg2").attr("href","/file/viewImage?fileName=" + _img);
+       }else{
+           _img = $("#img3").text();
+           
+           $("#viewImg3").attr("href","/file/viewImage?fileName=" + _img);
+       }
+    });
+    
     $("#btnSubmit").click(function(){
-        console.log("asdadsa");
         var _$frmStep1 = $("#formClientsStep1One")
             ,_$frmStep2 = $("#formClientsStep2");
             
         var _frmStep1 = _$frmStep1[0]
             ,_frmStep2 = _$frmStep2[0];
-        
+            
+        $('#pop1').popover("hide", 400);
+        $('#pop2').popover("hide", 400);
         if( ! _frmStep1.checkValidity()){
-            $("#formClientsStep1One").addClass('was-validated');
+            _$frmStep1.addClass('was-validated');
+            $('#pop1').popover("show", 400);
         }else if( ! _frmStep2.checkValidity()){
-            $("#formClientsStep2").addClass('was-validated');
-            $("#formClientsCB").addClass('was-validated');
+            _$frmStep2.addClass('was-validated');
+            $('#pop2').popover("show", 400);
         }else{   
             $('#myModal').modal('show');
         }
@@ -130,8 +202,7 @@ var signup = (function(){
                 gClientId = data.returnValue;
                 if(data.isSuccess){
                     if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    $("#formClientsStep2").find("#clientId").val(gClientId);
-                    $("#newClientModal").modal('toggle');
+                    $("#formClientsStep2").find("#clientId").val(gClientId? gClientId: "");
 			        setTimeout(function(){
     			        $("#formClientsStep2").jsonSubmit({
                              procedure: "admin_user_upd" 
@@ -140,30 +211,30 @@ var signup = (function(){
                                 var _userId = data.returnValue;
                                 var _firstName = $("#first_name").val();
                                 var _email = $("#logon").val();
-                                $("#clientPassword").dataBind({
-                                    sqlCode    : "D1282" 
-                                   ,text       : "password"
-                                   ,value      : "user_id"
-                                   ,onComplete : function(){
-                                       $(this).val(_userId);
-                                   }
+                                var _password = "";
+                                zsi.getData({
+                                     sqlCode    : "D1282" 
+                                    ,parameters  : {id: _userId} 
+                                    ,onComplete : function(d) {
+                                        var _rows= d.rows;
+                                        
+                                        for(var i=0; i < _rows.length;i++ ){
+                                            var _info = _rows[i];
+                                            _password  +=_info.password;
+                                        }
+                                    }
                                 });
-                                 setTimeout (function(){
+                                setTimeout (function(){
                                     $("#clientPassword").val(_userId);
-                                    var _password = $("#clientPassword").find('option:selected').text();
                                     $("#mail_recipients").val(_email);
                                     $("#ename").val(_firstName);
                                     $("#epassword").val(_password);
                                     if(data.isSuccess){
                                        if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                                       _$frm.removeClass('was-validated');
                                        $(".yesno").addClass("hide");
-                                       $("#myModal").find("#msg").text("Data successfully saved. Password of the user has been sent to his/her email.");
+                                       $("#myModal").find("#msg").text("Data successfully saved. Please check your email for your password.");
                                        
                                        $("#myModal").find("#msg").css("color","green");
-                                       
-                                       $("#btnConfirm").attr("onclick", "client.showModalContracts(this, '', '', '"+ _clientName +"', '', "+ gClientId +")");
-                                       $(".continuecancel").removeClass("hide");
                                        
                                        $("#formEmail").jsonSubmit({
                                              procedure: "send_mail_upd" 
@@ -175,125 +246,116 @@ var signup = (function(){
                                             }
                                         });
                                         setTimeout(function(){
-                                           $("#myModal").find("#msg").text("Do you want to create contract(s) for this client?");
-                                           $("#myModal").find("#msg").css("color","#000");
-                                        },1500);
+                                           $("#myModal").modal('toggle');
+                                           location.reload();
+                                        },2000);
+                                        
                                     }else{
                                        $("#myModal").find("#msg").text("Something went wrong when saving the data.");
                                        $("#myModal").find("#msg").css("color","red");
                                        modalTxt();
                                     }
                                 },2000);
-                                setTimeout (function(){
-                                    var frm = $("#formClientsStep1Two");
-                                    var frm1 = $("#formClientsStep1Three");
-                                    var frm2 = $("#formClientsStep1Four");
-                                    var  fileOrg1=frm.find("#file1").get(0)
-                                        ,fileOrg2=frm1.find("#file2").get(0)
-                                        ,fileOrg3=frm2.find("#file3").get(0);
                                 
-                                    var formData = new FormData( frm.get(0));
-                                    var formData1 = new FormData( frm1.get(0));
-                                    var formData2 = new FormData( frm2.get(0));
-                                    
-                                    if(isUD(fileOrg1.files[0])){}
-                                    else {
-                                        $.ajax({
-                                            url: base_url + 'file/UploadImage',  //server script to process data
-                                            type: 'POST',
-                                    
-                                            //Ajax events
-                                            success: completeHandler = function(data) {
-                                                if(data.isSuccess){
-                                                    //submit filename to server
-                                                    $.get(base_url  + "sql/exec?p=clients_mayor_pemit_img_upd @client_id=" + gClientId
-                                                                + ",@mayor_permit_img='" +  fileOrg1.files[0].name + "'"
-                                                    ,function(data){
-                                                        zsi.form.showAlert("alert");
-                                                        if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                                                    });
-                                                    
-                                                }else
-                                                    alert(data.errMsg);
-                                            },
-                                            error: errorHandler = function() {
-                                                console.log("error");
-                                            },
-                                            // Form data
-                                            data: formData,
-                                            //Options to tell JQuery not to process data or worry about content-type
-                                            cache: false,
-                                            contentType: false,
-                                            processData: false
-                                        }, 'json');
-                                    }
-                                    if(isUD(fileOrg2.files[0])){}
-                                    else {
-                                        $.ajax({
-                                            url: base_url + 'file/UploadImage',  //server script to process data
-                                            type: 'POST',
-                                    
-                                            //Ajax events
-                                            success: completeHandler = function(data) {
-                                                if(data.isSuccess){
-                                                    //submit filename to server
-                                                    $.get(base_url  + "sql/exec?p=clients_bir_img_upd @client_id=" + gClientId
-                                                                + ",@bir_img='" +  fileOrg2.files[0].name + "'"
-                                                    ,function(data){
-                                                        zsi.form.showAlert("alert");
-                                                        if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                                                    });
-                                                    
-                                                    
-                                                }else
-                                                    alert(data.errMsg);
-                                            },
-                                            error: errorHandler = function() {
-                                                console.log("error");
-                                            },
-                                            // Form data
-                                            data: formData1,
-                                            //Options to tell JQuery not to process data or worry about content-type
-                                            cache: false,
-                                            contentType: false,
-                                            processData: false
-                                        }, 'json');
-                                    }
-                                    if(isUD(fileOrg3.files[0])){}
-                                    else{
-                                        $.ajax({
-                                            url: base_url + 'file/UploadImage',  //server script to process data
-                                            type: 'POST',
-                                    
-                                            //Ajax events
-                                            success: completeHandler = function(data) {
-                                                if(data.isSuccess){
-                                                    //submit filename to server
-                                                    $.get(base_url  + "sql/exec?p=clients_sec_dti_img_upd @client_id=" + gClientId
-                                                                + ",@sec_dti_img='" +  fileOrg3.files[0].name + "'"
-                                                    ,function(data){
-                                                        zsi.form.showAlert("alert");
-                                                        if(data.isSuccess===true) zsi.form.showAlert("alert"); 
-                                                    });
-                                                    
-                                                    
-                                                }else
-                                                    alert(data.errMsg);
-                                            },
-                                            error: errorHandler = function() {
-                                                console.log("error");
-                                            },
-                                            // Form data
-                                            data: formData2,
-                                            //Options to tell JQuery not to process data or worry about content-type
-                                            cache: false,
-                                            contentType: false,
-                                            processData: false
-                                        }, 'json');
-                                    }
-                                },2000);
                             }
-                        }); 
+                        });
+                        setTimeout (function(){
+                            var frm = $("#formClientsStep1Two");
+                            var frm1 = $("#formClientsStep1Three");
+                            var frm2 = $("#formClientsStep1Four");
+                            var  fileOrg1=frm.find("#file1").get(0)
+                                ,fileOrg2=frm1.find("#file2").get(0)
+                                ,fileOrg3=frm2.find("#file3").get(0);
+                        
+                            var formData = new FormData( frm.get(0));
+                            var formData1 = new FormData( frm1.get(0));
+                            var formData2 = new FormData( frm2.get(0));
+                            
+                            if(isUD(fileOrg1.files[0])){}
+                            else {
+                                $.ajax({
+                                    url: base_url + 'file/UploadImage', 
+                                    type: 'POST',
+                                    success: completeHandler = function(data) {
+                                        if(data.isSuccess){
+                                            $.get(base_url  + "sql/exec?p=clients_mayor_pemit_img_upd @client_id=" + gClientId
+                                                        + ",@mayor_permit_img='" +  fileOrg1.files[0].name + "'"
+                                            ,function(data){
+                                                zsi.form.showAlert("alert");
+                                                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                $("#img1").text(fileOrg1.files[0].name);
+                                            });
+                                            
+                                        }else
+                                            alert(data.errMsg);
+                                    },
+                                    error: errorHandler = function() {
+                                        console.log("error");
+                                    },
+                                    data: formData,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false
+                                }, 'json');
+                            }
+                            if(isUD(fileOrg2.files[0])){}
+                            else {
+                                $.ajax({
+                                    url: base_url + 'file/UploadImage',
+                                    type: 'POST',
+                            
+                                    success: completeHandler = function(data) {
+                                        if(data.isSuccess){
+                                            $.get(base_url  + "sql/exec?p=clients_bir_img_upd @client_id=" + gClientId
+                                                        + ",@bir_img='" +  fileOrg2.files[0].name + "'"
+                                            ,function(data){
+                                                zsi.form.showAlert("alert");
+                                                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                $("#img2").text(fileOrg2.files[0].name);
+                                            });
+                                            
+                                            
+                                        }else
+                                            alert(data.errMsg);
+                                    },
+                                    error: errorHandler = function() {
+                                        console.log("error");
+                                    },
+                                    data: formData1,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false
+                                }, 'json');
+                            }
+                            if(isUD(fileOrg3.files[0])){}
+                            else{
+                                $.ajax({
+                                    url: base_url + 'file/UploadImage', 
+                                    type: 'POST',
+                                    success: completeHandler = function(data) {
+                                        if(data.isSuccess){
+                                            $.get(base_url  + "sql/exec?p=clients_sec_dti_img_upd @client_id=" + gClientId 
+                                                        + ",@sec_dti_img='" +  fileOrg3.files[0].name + "'"
+                                            ,function(data){
+                                                zsi.form.showAlert("alert");
+                                                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
+                                                $("#img3").text(fileOrg3.files[0].name);
+                                            });
+                                            
+                                            
+                                        }else
+                                            alert(data.errMsg);
+                                    },
+                                    error: errorHandler = function() {
+                                        console.log("error");
+                                    },
+                                    data: formData2,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false
+                                }, 'json');
+                            }
+                        },2000);
                         
 			        },1000);
 			       
@@ -303,4 +365,4 @@ var signup = (function(){
     });
     
     return _pub;
-})();                  
+})();                   
