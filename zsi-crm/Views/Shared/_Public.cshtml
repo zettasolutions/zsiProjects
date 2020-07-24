@@ -7,8 +7,6 @@
 	<meta name="Developed By" content="zetta-solutions.net">
     <link rel="shortcut icon" href='@Url.Content("~/")favicon.png' type="image/x-icon">
     <title>@ViewBag.pageTitle </title>
-	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
-	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
    <!-- Call App Mode on ios devices -->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<!-- Remove Tap Highlight on Windows Phone IE -->
@@ -23,29 +21,41 @@
     <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/select2/select2.bundle.css'>
     <link rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css'>
 	<link id="myskins" rel="stylesheet" media="screen, print" href='@Url.Content("~/")css/skins/skin-master.css'>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
-    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsipublib"))   
-	
-    <script>
-        var base_url = '@Url.Content("~/")';
-        var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
-    </script>
 	<style type="text/css">
 		body{
 			padding: 0;
 			margin: 0;
 		}
-		.crm-bg-color{background: linear-gradient(to right, #08005f 40%, #07004e); }
-		.crm-bg-white{background: #ffffff; }
-		.crm-container{margin-top:100px;}
-		.p-color-white{color: white;}
-		.hide{display: none;}
-		.bg-brand-dark{background-color: #f1efef;color: #160202;}
-		.btn-payroll {background-image: linear-gradient(to bottom, #1a0dab 0px, #10058b 100%);color: #fff;}
-		.btn-payroll:hover {background-image: linear-gradient(to bottom, #10058b 0px, #0d0379 100%);color: #fff;}
-		.btn-signup {background-image: linear-gradient(to bottom, #fff 0px, #fff 100%);color: #000;}
-		.btn-signup:hover {background-image: linear-gradient(to bottom, #10058b 0px, #0d0379 100%);color: #fff;}
+		.page-content-wrapper{
+		background: linear-gradient(to right, #08005f 40%, #07004e); 
+		}
+		.p-color-white{
+			color: white;
+		}
+		.hide{
+			display: none;
+		}
+		.bg-brand-dark{
+			background-color: #f1efef;
+			color: #160202;
+		}
+		.btn-payroll {
+			background-image: linear-gradient(to bottom, #1a0dab 0px, #10058b 100%);
+			color: #fff; 
+		}
+		.btn-payroll:hover {
+			background-image: linear-gradient(to bottom, #10058b 0px, #0d0379 100%);
+			color: #fff; 
+		}
+		.btn-signup {
+			background-image: linear-gradient(to bottom, #fff 0px, #fff 100%);
+			color: #000; 
+		}
+		.btn-signup:hover {
+			background-image: linear-gradient(to bottom, #10058b 0px, #0d0379 100%);
+			color: #fff; 
+		}
 		.color-red{
 			color: #126eb8b5;
 		}
@@ -75,10 +85,16 @@
 		label {
 			margin-bottom: -1.7rem;
 		}
-		.col-form-label{padding-top: calc(0.3rem + 1px);}
 	</style>
 </head>
 <body>
+	<script src='@Url.Content("~/")Scripts/jquery.min.js'></script>
+	<script src='@Url.Content("~/")Scripts/handlebars.min.js'></script>
+    @Html.Raw(ViewBag.GetScriptLinkCurrentVersion("zsipublib"))   	
+    <script>
+        var base_url = '@Url.Content("~/")';
+        var controller_url = '@this.Context.Request.RequestContext.RouteData.Values["controller"].ToString()';
+    </script>
     <div class="progressWindow zPopup-system">
         <div class="loadingImg"></div>
         <div class="loadingText">Loading...Please wait</div>
@@ -91,13 +107,13 @@
 	<div class="page-wrapper">
 		<script async="" src="https://www.google-analytics.com/analytics.js"></script>
 		<div class="page-inner">
-			<div class="page-content-wrapper bg-transparent m-0 crm-bg-color">
+			<div class="page-content-wrapper">
 				<div class="height-10 w-100 shadow-lg px-4 bg-brand-red">
 					<div class="d-flex align-items-center container p-0">
 						<div class="page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9">
 							<a href="/" class="page-logo-link press-scale-down d-flex align-items-center navbar-brand text-white">
-								<img src='@Url.Content("~/")images/logo.png' alt="ZSI Logo" aria-roledescription="logo" class="mr-2">
-								 ZSI CRM
+								<img src='@Url.Content("~/")images/logo.png' alt="Lear Logo" aria-roledescription="logo" class="mr-2">
+								 ZSI AFCS
 							</a>
 						</div>
 						<a href="#" class="btn-link text-white ml-auto">
@@ -106,11 +122,13 @@
 					</div>
 				</div>
 				<div class="flex-1" style="background: url(@Url.Content("~/")img/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;">
-					<div class="container  px-sm-0 p-0">
-						@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appPubStart"))
-						<main id="js-page-content" role="main" class="page-content" style="background: url(@Url.Content("~/")img/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;">							
-							@RenderBody()
-						</main>
+					<div class="container  px-sm-0">
+						<div class="row">
+							@Html.Raw(ViewBag.GetScriptLinkCurrentVersion("appPubStart"))
+							<main id="js-page-content" role="main" class="page-content" style="background: url(@Url.Content("~/")img/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;">							
+								@RenderBody()
+							</main>
+						</div>
 					</div>
 				</div>
 			</div>
