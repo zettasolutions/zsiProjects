@@ -7,7 +7,7 @@
          displayPhilHealth();
     };
      
-     //save
+    
     $("#btnSave").click(function () {
        $("#philHealth").jsonSubmit({
                  procedure: "philhealth_table_upd"
@@ -31,8 +31,7 @@
         var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
         $("#philHealth").dataBind({
                  url            : app.procURL + "philhealth_table_sel"
-        	    ,width          : $(".zContainer").width()
-        	    ,height         : $(document).height() - 260
+        	    ,height         : $(window).height() - 236
                 ,blankRowsLimit : 5
                 ,dataRows   : [
                     {text: cb                      ,width:25           ,style:"text-align:center"
@@ -66,4 +65,4 @@
  
  
  
-          
+             

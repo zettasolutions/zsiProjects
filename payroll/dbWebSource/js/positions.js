@@ -24,12 +24,26 @@ var position = (function(){
     }
     
     $("#btnSavePosition").click(function () {
-       $("#gridPosition").jsonSubmit({
-                 procedure  : "positions_upd"
-                ,onComplete: function (data) {
-                    if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    $("#gridPosition").trigger("refresh");
-                }
+        var _$grid = $("#gridPosition");
+        var _$basicPay = _$grid.find("input[name='basic_pay']");
+        var _$hourlyRate = _$grid.find("input[name='hourly_rate']");
+        var _$dailyRate = _$grid.find("input[name='daily_rate']");
+            _$basicPay.each(function(){
+                this.value = this.value.replace(/,/g, "");
+            });
+            _$hourlyRate.each(function(){
+                this.value = this.value.replace(/,/g, "");
+            });
+            _$dailyRate.each(function(){
+                this.value = this.value.replace(/,/g, "");
+            });
+        
+       _$grid.jsonSubmit({
+             procedure  : "positions_upd"
+            ,onComplete: function (data) {
+                if(data.isSuccess===true) zsi.form.showAlert("alert");
+                $("#gridPosition").trigger("refresh");
+            }
         });
     });
     $("#btnDeletePosition").click(function(){
@@ -44,10 +58,10 @@ var position = (function(){
      function displayPositions(){
         var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#gridPosition").dataBind({
-             sqlCode        : "P201" //positions_sel
+             sqlCode        : "P201"
             ,blankRowsLimit : 5
             ,width          : $(".panel-container").width() 
-            ,height         : $(document).height() - 260
+            ,height         : $(window).height() - 236
             ,dataRows       : [
                 { text  : cb , width : 25   , style : "text-center" 
                     , onRender  :  function(d)
@@ -55,13 +69,25 @@ var position = (function(){
                                 + app.bs({name:"is_edited"                      ,type:"hidden"       ,value: app.svn(d,"is_edited")})
                                 + (d !==null ? app.bs({name:"cb"                ,type:"checkbox"}) : "" ); }
                 }
-                ,{text: "Position Title"            ,name:"position_title"      ,type:"input"        ,width : 150   ,style : "text-align:left;"}
+                ,{text: "Position Title"            ,name:"position_title"      ,type:"input"        ,width : 240   ,style : "text-align:left;"}
                 ,{text: "Position Description"      ,name:"position_desc"       ,type:"input"        ,width : 200   ,style : "text-align:left;"}
                 ,{text: "Work Description"          ,name:"work_desc"           ,type:"input"        ,width : 200   ,style : "text-align:left;"}
-                ,{text: "Level No."                 ,name:"level_no"            ,type:"input"        ,width : 65    ,style : "text-align:left;"}
-                ,{text: "Basic Pay"                 ,name:"basic_pay"           ,type:"input"        ,width : 100   ,style : "text-align:right;"}
-                ,{text: "Hourly Rate"               ,name:"hourly_rate"         ,type:"input"        ,width : 100   ,style : "text-align:right;"}
-                ,{text: "Daily Rate"                ,name:"daily_rate"          ,type:"input"        ,width : 100   ,style : "text-align:right;"}
+                ,{text: "Level No."                 ,name:"level_no"            ,type:"input"        ,width : 65    ,style : "text-align:center;"}
+                ,{text: "Basic Pay"                 ,width : 100   ,style : "text-align:right;"
+                    ,onRender : function(d){
+                        return app.bs({name:"basic_pay"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"basic_pay"))       ,style : "text-align:right"}); 
+                    }
+                }
+                ,{text: "Hourly Rate"               ,width : 100   ,style : "text-align:right;"
+                    ,onRender : function(d){
+                        return app.bs({name:"hourly_rate"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"hourly_rate"))       ,style : "text-align:right"}); 
+                    }
+                }
+                ,{text: "Daily Rate"                 ,width : 100   ,style : "text-align:right;"
+                    ,onRender : function(d){
+                        return app.bs({name:"daily_rate"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"daily_rate"))       ,style : "text-align:right"}); 
+                    }
+                }
                 ,{text: "Other Income"                                          ,type:"input"        ,width : 90    ,style : "text-align:center"
                     ,onRender : function(d){
                             var _link = "<a href='javascript:void(0)' ' onclick='position.showModalOI("+ app.svn (d,"position_id") +",\""+ app.svn (d,"position_title") +"\")'><i class='fas fa-link link'></i></a>";
@@ -79,6 +105,7 @@ var position = (function(){
                     ,"width": "100%"
                     ,"margin-right": "4px"
                 });
+                $("[name='basic_pay'],[name='hourly_rate'],[name='daily_rate']").maskMoney();
             }
         });
     } 
@@ -87,7 +114,7 @@ var position = (function(){
      function displayOtherIncome(posId){
         var cb = app.bs({name:"cbFilter1",type:"checkbox"});
         $("#gridOtherIncome").dataBind({
-             sqlCode        : "E208" //emp_pos_other_income_sel
+             sqlCode        : "E208"
             ,parameters     : {position_id : posId}
             ,blankRowsLimit : 5
             ,width          : $(".panel-container").width() 
@@ -104,7 +131,7 @@ var position = (function(){
                 ,{text: "Other Income"          ,name:"other_income_id"         ,type:"select"       ,width : 150   ,style : "text-align:left;"}
                 ,{text: "Amount"                                                                     ,width : 95    ,style : "text-align:right;"
                     ,onRender: function(d){
-                        return (d !== null ? bs({name: "amount"   ,type: "input"  ,value: parseFloat(app.svn(d,"amount")).toFixed(2) }) : bs({name: "amount"   ,type: "input"  ,value: app.svn(d,"amount") }) );
+                        return app.bs({name:"amount"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"amount"))       ,style : "text-align:right"});
                     }
                 }
     
@@ -113,7 +140,7 @@ var position = (function(){
                 var _zRow = this.find(".zRow");
                 this.find("[name='cbFilter1']").setCheckEvent("#gridOtherIncome input[name='cb']");
                 this.find("select[name='other_income_id']").dataBind({
-                     sqlCode : "O198" //other_income_sel 
+                     sqlCode : "O198" 
                     ,text: "other_income_desc"
                     ,value: "other_income_id" 
                 });
@@ -124,10 +151,21 @@ var position = (function(){
                     ,"width": "100%"
                     ,"margin-right": "4px"
                 });
+                
+                $("[name='amount']").maskMoney();
 
             }
         });
     } 
+    
+    function commaSeparateNumber(n){
+        var _res = "";
+        if($.isNumeric(n)){
+            var _num = parseFloat(n).toFixed(2).toString().split(".");
+            _res = _num[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (!isUD(_num[1]) ? "." + _num[1] : "");
+        }
+        return _res;
+    }
 
     _public.showModalOI  = function(posId,pTitle) {
         var g$mdl = $("#" + gMdlOtherIncome);
@@ -138,13 +176,18 @@ var position = (function(){
     
     _public.submitOtherIncome = function(){
         var _$grid = $("#gridOtherIncome");
-            _$grid.jsonSubmit({
-                 procedure: "emp_pos_other_income_upd"
-                ,onComplete: function (data) {
-                    if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    displayOtherIncome(_$grid.data("posId"));
-                }
+        var _$amt = _$grid.find("input[name='amount']");
+            _$amt.each(function(){
+                this.value = this.value.replace(/,/g, "");
             });
+            
+        _$grid.jsonSubmit({
+             procedure: "emp_pos_other_income_upd"
+            ,onComplete: function (data) {
+                if(data.isSuccess===true) zsi.form.showAlert("alert");
+                displayOtherIncome(_$grid.data("posId"));
+            }
+        });
     }; 
             
     _public.deleteOtherIncome = function(){
@@ -157,4 +200,4 @@ var position = (function(){
     };
  
     return _public;
-})();              
+})();                  

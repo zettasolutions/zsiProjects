@@ -3,6 +3,19 @@
         <div class="panel-content">
             <div class="zContainer">
                 <div class="row">
+                    <div class="input-group col-md-5 col-xl-3 col-sm-6 col-12 mb-1"> 
+                        <input name="search_value" id="search_value" placeholder="Enter DTR Date" class="form-control form-control-sm input-sm search-filter pl-2">
+                        <div class="input-group-append">
+                            <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnGo">
+                                <span class="fas fa-search"></span>
+                            </button>
+                        </div>
+                        <div class="input-group-append ml-1">
+                              <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnClear">
+                                <span class="fas fa-eraser"></span> Clear
+                            </button>
+                        </div>
+                    </div>
                     <div class="col-12 mb-1">
                         <div id="grid" class="zGrid"></div> 
                     </div>
@@ -12,6 +25,9 @@
                         </button>
                         <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
                         	<i class="fas fa-trash-alt"></i> Delete
+                        </button>    
+                        <button type="button" class="btn btn-primary btn-sm" id="btnGenerate">
+                        	<i ></i> Generate
                         </button>    
                     </div>
                 </div>
