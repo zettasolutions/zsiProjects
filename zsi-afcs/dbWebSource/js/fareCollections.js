@@ -149,7 +149,6 @@
             ,parameters : _params
             ,onComplete : function(d) { 
                 var _rows= d.rows;  
-                console.log("d.rows",d.rows)
                 $("select[id='trip_no']").fillSelect({
                      data   : d.rows.getUniqueRows(["trip_no"])
                     ,text   : "trip_no"
@@ -773,6 +772,8 @@
                  return _dataRows; 
             };  
             
+            /*gSqlCode = _sqlCode;*/
+            
             zsi.getData({
                  sqlCode    : _sqlCode 
                 ,parameters :  _params
@@ -912,11 +913,22 @@
          
         $(_grid).convertToTable(function(table){
             var _html = table.get(0).outerHTML; 
-            console.log("_html",toExcelFormat(_html) );
-            //zsi.htmlToExcel({
-            //    fileName: _fileName
-            //   ,html : toExcelFormat(_html)
-            //});
+            
+            zsi.htmlToExcel({
+                fileName: _fileName
+                ,html : _html
+            });
+            
+            /*
+            var e = document.createElement('a');
+            e.setAttribute('href', 'data:application/vnd.ms-excel,' + encodeURIComponent(_html));
+            e.setAttribute('download', _fileName);
+            e.style.display = 'none';
+            document.body.appendChild(e);
+            e.click();
+            document.body.removeChild(e);             
+            */
+             
         }); 
        
     }); 
@@ -924,4 +936,4 @@
 })();     
 
 
-                
+                   
