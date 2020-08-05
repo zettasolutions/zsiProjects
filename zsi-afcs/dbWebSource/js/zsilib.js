@@ -1760,8 +1760,9 @@ var  ud='undefined'
                         
                     });
                     if(cb) cb($(_table));
-                    
+                    console.log("table",_table);
                 }
+                
                return this;
             }; 
             
@@ -1950,7 +1951,7 @@ var  ud='undefined'
             $.fn.jsonSubmit         = function(o) {
                 var _param;
                 if( typeof o.isSingleEntry != ud && o.isSingleEntry===true ){ 
-                    var _arr = this.serializeArray();
+                    var _arr = this.find("*").serializeArray();
                     o.parameters = {};
                     for (var x = 0; x < _arr.length; x++) {
                         o.parameters[_arr[x].name]=_arr[x].value;
@@ -3482,18 +3483,28 @@ var  ud='undefined'
         ,htmlToExcel                : function(o){
             var _h=""
                 ,id="#frmTmp"
-                ,_action = (o.version && o.version == 2 ? "HtmlToExcel2" : "HtmlToExcel")
                 ,_formatStyle=function(html){
                     return "<html><head><meta charset='utf-8' /><style> table, td {border:thin solid black}table {border-collapse:collapse;font-family:Tahoma;font-size:10pt;}</style></head><body>" + html + "</body></html>";
                 }
             ;
-            if($(id).length > 0) $(id).remove();
-            _h +='<form accept-charset="utf-8" style="display:none;" id="frmTmp" method="post" action="' + base_url  + 'excel/' + _action+ '">';   
-            _h +='<input name ="html" value="' + encodeURI( _formatStyle(o.html)) + '" >'; 
-            _h +='<input  name="filename" value="' +  (o.fileName || 'download') + '">';
-            _h +='</form>';
-            $("body").append(_h); 
-            $(id).submit();
+            
+            if(o.version && o.version == 2){
+                if($(id).length > 0) $(id).remove();
+                _h +='<form accept-charset="utf-8" style="display:none;" id="frmTmp" method="post" action="' + base_url  + 'excel/HtmlToExcel2">';   
+                _h +='<input name ="html" value="' + encodeURI( _formatStyle(o.html)) + '" >'; 
+                _h +='<input  name="filename" value="' +  (o.fileName || 'download') + '">';
+                _h +='</form>';
+                $("body").append(_h); 
+                $(id).submit();
+            }else{
+                var e = document.createElement('a');
+                e.setAttribute('href', 'data:application/vnd.ms-excel,' + encodeURIComponent(_formatStyle(o.html)));
+                e.setAttribute('download', _fileName);
+                e.style.display = 'none';
+                document.body.appendChild(e);
+                e.click();
+                document.body.removeChild(e);    
+            }
         }     
         /*initialize configuration settings*/
         ,init                       : function(o){
@@ -3724,4 +3735,4 @@ var  ud='undefined'
     }
 ;  
 
-                                        
+                                                
