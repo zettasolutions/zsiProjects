@@ -149,8 +149,9 @@
             ,parameters : _params
             ,onComplete : function(d) { 
                 var _rows= d.rows;  
+                console.log("d.rows",d.rows)
                 $("select[id='trip_no']").fillSelect({
-                     data   : d.rows
+                     data   : d.rows.getUniqueRows(["trip_no"])
                     ,text   : "trip_no"
                     ,value  : "trip_id"
                     ,selectedValue : _o.trip_no
@@ -393,7 +394,7 @@
             
         zsi.getData({
              sqlCode        : "P1231" //payment_for_posting_sel
-            ,parameters     : {vehicle_id: vehicle_id, client_id : gUser.company_id}
+            ,parameters     : {vehicle_id: vehicle_id, client_id : gUser.company_id, payment_date : payment_date}
             ,onComplete : function(d) {
                 var _rows= d.rows;
                 var _tot = {reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0};
@@ -723,7 +724,7 @@
                 		,{id: 5  ,groupId: 0                ,text: "PWD"                    ,style: "text-align:center;"}
                 		,{id: 6  ,groupId: 0                ,text: ""                       ,style: "text-align:center;"}
                 		,{id: 7  ,groupId: 0                ,text: ""                       ,style: "text-align:center;"}
-                        ,{text: "Trip No"                   ,name:"trip_id"                 ,type:"input"       ,width : 80     ,style : "text-align:center;"       ,groupId : 1} 
+                        ,{text: "Trip No"                   ,name:"trip_no"                 ,type:"input"       ,width : 80     ,style : "text-align:center;"       ,groupId : 1} 
                         ,{text: "Payment Date"                                                      ,width : 150          ,groupId : 1
                             ,onRender: function(d){
                                 return app.bs({name: "payment_date"         ,type: "input"     ,value: app.svn(d,"payment_date")    ,style : "text-align:center;"})
@@ -771,8 +772,6 @@
                 } 
                  return _dataRows; 
             };  
-            
-            /*gSqlCode = _sqlCode;*/
             
             zsi.getData({
                  sqlCode    : _sqlCode 
@@ -841,7 +840,7 @@
                     dropdowns(_sqlCode);
                     
                     $(_$navGrid).dataBind({
-                         rows           : _rows
+                         rows           : _rows.getUniqueRows(["trip_no"])
                         ,height         : gSubTabName === "Collection Details"? _$windowHeight - 409 : _$windowHeight - 387
                         ,dataRows       : _getDataRows()
                         ,onComplete: function(o){ 
