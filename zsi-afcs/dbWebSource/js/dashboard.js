@@ -1,264 +1,426 @@
-  var db=(function(){
-        var      bs             = zsi.bs.ctrl
-                ,svn            = zsi.setValIfNull 
-                ,bsButton       = zsi.bs.button 
-                ,_pub           = {}
-                ,gProgId        = null
-                ,gProgCode      = ""
-                ,gOEMId         = null
-                ,gOEMName       = ""
-                ,gOrderListData = []
-                ,gOrderQty      = null
-                ,gSumTotal      = 0 
-                ,gIsSearch      = false
-                ,gSearchCol     = ""
-                ,gSearchVal     = "";
-                /**/
-        String.prototype.formatAMPM = function() {
-            var _date=new Date();
-            var hours = _date.getHours();
-            var minutes = _date.getMinutes();
-            var ampm = hours >= 12 ? 'pm' : 'am';
-            hours = hours % 12;
-            hours = hours ? hours : 12; // the hour '0' should be '12'
-            minutes = minutes < 10 ? '0'+minutes : minutes;
-            var strTime = hours + ':' + minutes + ' ' + ampm;
-            return _date.getMonth()+1 + "/" + _date.getDate() + "/" + _date.getFullYear() + " " + strTime;
-        },
-        zsi.ready = function(){  
-            console.log("db");
-            $(".page-title").html("Dashboard"); 
-            var _$filterOem  = $("#filterCulomns").find("[name='oem_id']");  
-            $("#filterCulomns").find("#searchPo").attr("disabled",true);
-            $("#filterCulomns").find("#btnSearchPO").attr("disabled",true); 
-            _$filterOem.dataBind({
-                sqlCode     : "D194" //dd_user_oems_sel
-                //,parameters : {user_id : userId}
-                ,text       : "oem_name"
-                ,value      : "oem_id" 
-            });
-            
-            $("#dd_search_id").fillSelect({
-                data: [
-                     { text: "PO No.", value: "po_no" }
-                    ,{ text: "Harness P/N", value: "oem_part_no" }
-                    ,{ text: "Customer", value: "customer" }
-                    ,{ text: "Site Code", value: "site_code" }
-                ]
-                ,onChange : function(){   
-                    setSearch($(this).val()); 
-                }
-                ,onComplete : function(){
-                    $(this).filter(function(){ return $.trim($(this).text()) == "PO No." }).attr('selected', true);
-                    $("option:nth-child(2)", this).attr("selected", true); 
-                    if($(this).children("option:selected"). val() == "po_no"){
-                        $("#searchPo").attr("placeholder", $(this).val().replace(/_/g," "));
-                        $("#filterCulomns").find("#searchPo").removeAttr("disabled",true) ;  
-                    } 
-                   
-                }
-            });
-             setSearch();
-            displayOrders();
-            validation1();
-            validation2(); 
-        },
-        //return PUBLIC functions
-        _pub.getGlobals = function() {
-            return {
-                program_id : gProgId,
-                program_code : gProgCode,
-                oem_id : gOEMId,
-                oem_name :gOEMName,
-                is_search : gIsSearch,
-                search_col : gSearchCol,
-                search_val : gSearchVal
-            };
-        },
-        _pub.displayModal = function(page){
-            $.get(app.getPageURL(page), function(html){
-                if($("script[src*='"+ page +"']").length){
-                    $("script[src*='"+ page +"'], div#" + page).remove();
-                }
-                $("#js-page-content").append(html);
-                //if(zsi.ready) zsi.ready();
-            });
-        },
-        _pub.showModalPop1 = function(progId,oemId,oemName,progCode) {
-            gProgId = progId;
-            gProgCode = progCode;
-            gOEMId = oemId;
-            gOEMName = oemName;
-            gIsSearch = false;
-            gSearchCol = "";
-            gSearchVal = "";
-            
-            db.displayModal("dashboardpop1",gProgId);
-        }; 
-        _pub.showRedBorder = function(obj,event){  
-            var _$form = $("#frm_modalWindowRedBorder").find(".modal-body");  
-                g$mdl = $("#modalWindowRedBorder"); 
-                g$mdl.modal({ show: true, keyboard: false, backdrop: 'static' });  
-                _$form.css('height', '450px'); 
-                _$form.find("#order_part_id").val();
-                _$form.find("#red_border_id").val();
-                _$form.find("#red_border_no").val();
-                _$form.find("#red_border_date").datepicker({ 
-                      pickTime  : false
-                    , autoclose : true
-                    , todayHighlight: true
-                });
-                _$form.find("#comment").val();
-        };
-        
-        //return functions: 
-        function displayOrders(oemId,progId){ 
-            var _dataRows = [
-                {text: "OEM"     ,type:"input"      ,name:"oem_name"    ,width : 400       ,style : "text-align:center" ,sortColNo: 1 }
-                ,{text: "Program"                                       ,width : 400       ,style : "text-align:center" ,sortColNo: 2
-                    ,onRender : function(d){ 
-                        var _link = "<a href='javascript:void(0)' class='pl-1' onclick='db.showModalPop1(\""+ app.svn (d,"program_id") +"\",\""+ app.svn (d,"oem_id") +"\",\""+ app.svn (d,"oem_name") +"\",\""+ app.svn (d,"program_code") +"\")'>"+ app.svn (d,"program_code") +"</a>";
-                        return (d !== null ? _link : ""); 
-                    }
+var db=(function(){ 
+        $(".page-title").html("Dashboard");    
+        $('[data-toggle="tooltip"]').tooltip();       
+       
+        function displayCharts(){
+          var gParams = [];
+             
+          am4core.useTheme(am4themes_animated);
+            // Enable queuing 
+            am4core.options.queue = true;
+            am4core.options.onlyShowOnViewport = true;     
+            var _colors = [];
+            var _colorRows = [];
+            var _getData = function(sqlCode,params, cb){  
+                console.log("sqlcode",sqlCode);
+                var _yrlyParams = params.year
+                if(sqlCode ==="P1388"){  
+                    gParams.push({
+                        yearly: _yrlyParams
+                    }); 
                 } 
-            ]; 
-            if (app.userInfo.role_id !== 5) {//shipment. program Coordinator
-                _dataRows.push(
-                    {text: "Program Coordinator"  ,type:"input"    ,width : 200       ,style : "text-align:center" ,sortColNo: 3
-                        ,onRender: function(d){ 
-                            return bs({name:"program_coordinator"    ,value: app.svn(d,"program_coordinator") ,style : "text-align:center"}); 
-                        }
-                    });
+                zsi.getData({
+                     sqlCode : sqlCode 
+                    ,parameters : params
+                    ,onComplete : function(d) {
+                        cb(d.rows); 
+                        
+                    }
+                });
+            };
+            
+            var _dailyData = function(sqlCode,params, cb){ 
+                var _params = {
+                   client_id:app.userInfo.company_id
+                   ,month: params.month 
+                   ,year:params.year
+                };
+                zsi.getData({
+                         sqlCode    : "P1387"
+                        ,parameters : _params
+                        ,onComplete : function(d) { 
+                          cb(d.rows);   
+                    }
+                });
             }
             
-            _dataRows.push(
-                {text: "Manage Program"            ,width : 100             ,style : "text-align:center"
-                     ,onRender : function(d){  
-                         var params = ['#p','oem', app.svn(d,"oem_id"), app.svn(d,"program_id") ].join("/") ; 
-                         return (d !== null ? '<a href="' + params + '">'+ '<i class="fas fa-link link"></i>' + "</a>" : "");
-                     }
-                }
-                ,{text: "Created Date"              ,width : 150      ,style : "text-align:center"    
-                    ,onRender: function(d){ 
-                        return bs({name:"created_date"    ,value: app.svn(d,"created_date").split(" ")[0] ,style : "text-align:center"}); 
-                    }
-                }
-                ,{text: "Updated Date"     ,width : 150      ,style : "text-align:center"    
-                    ,onRender: function(d){ return bs({name:"updated_date"    ,value: app.svn(d,"updated_date").toShortDate() ,style : "text-align:center"});}
-                }   
-            );
+            var _getColor = function(cb){ 
+                var _colorSet = new am4core.ColorSet();
+                    _colors = _colorSet;  
+                    cb(_colors);
+            }; 
             
-            $("#gridOrders").dataBind({ 
-                 sqlCode           : "U243" //user_programs_sel
-                ,parameters        : {program_id: progId ,oem_id: oemId}
-                ,width             : $(".zContainer").width()
-                ,height            : $(window).height() - 300
-                ,dataRows          : _dataRows 
-                ,onComplete : function(d){
-                    var _zRow = this.find(".zRow"); 
-                    _zRow.find("input[type='text']").attr('readonly',true);    
-                }
-            });
-        }   
-        function getFilters(){
-           var  _$filter    = $("#frm_modalMoreInfo").find(".modal-body") 
-                ,_$fbpId    = _$filter.find("#filter_build_phase_id").val()
-                ,_$fstId    = _$filter.find("#filter_order_status_id").val()
-                ,_$fcId     = _$filter.find("#filter_customer_id").val()
-                ,_$fplant   = _$filter.find("#filter_plants").val() 
-            ; 
-            return {
-                 bpId       : _$fbpId
-                ,statusId   : _$fstId
-                ,customerId : _$fcId 
+            var _displayBarGraphDaily = function(o){ 
+                var _dataLength = o.data.length;
+                var _data = [];
+                var _colorSet = new am4core.ColorSet(); 
+                var _getCategoryColor = function(category, index){
+                    var _color = $.grep(_colorRows, function(z) {
+                        return z.field_name.toUpperCase() == category.toUpperCase();
+                    });
+                    return (!isUD(_color[0])) ? _color[0].color_value.toLowerCase() : _colorSet.getIndex(index);
+                };
+                var _setData = function(){ 
+                    $.each(o.data, function(i,v){  
+                        var _json = {};     
+                            _json.category = v.pay_day;
+                            _json.value = v.total_fare;
+                            _json.color = _colorSet.next();  
+                        _data.push(_json); 
+                    });
+                
+                };
+                _setData();  
+                am4core.ready(function() { 
+                    var chart = am4core.create(o.container, am4charts.XYChart); 
+                    chart.numberFormatter.numberFormat = '###';
+                    // Set data
+                    var _platform = ""; 
+                    var selected;
+                    var _generateChartData = function() {
+                        var chartData = [];  
+                            
+                        for (var i = 0; i < _data.length; i++) {  
+                            if (i == selected) {
+                              for (var x = 0; x < _data[i].subs.length; x++) { 
+                                chartData.push({
+                                  category: _data[i].subs[x].category,
+                                  value: _data[i].subs[x].value,
+                                  color: _data[i].subs[x].color, 
+                                });
+                              }
+                            }
+                            else {  
+                                chartData.push({
+                                    category: _data[i].category,
+                                    value: _data[i].value,
+                                    color: _data[i].color,
+                                    id: i
+                                  }); 
+                                }
+                             
+                        }
+                         
+                        return chartData;
+                    };
+                    
+                    // Add data
+                    chart.data = _generateChartData(); 
+                   // Add and configure Series    
+                    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());  
+                        categoryAxis.dataFields.category = "category";
+                        categoryAxis.renderer.minGridDistance = 20; 
+                          
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());  
+                    var series = chart.series.push(new am4charts.ColumnSeries());  
+                        series.dataFields.categoryX = "category"; 
+                        series.dataFields.valueY = "value";    
+                        series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";  
+                        chart.cursor = new am4charts.XYCursor();   
+                        // as by default columns of the same series are of the same color, we add adapter which takes colors from chart.colors color set
+                        series.columns.template.adapter.add("fill", function (fill, target) { 
+                        	return chart.colors.getIndex(target.dataItem.index);
+                        }); 
+                    var title = chart.titles.create();
+                        title.text = "Month of "+gCtgry ;
+                    var resetLabel = chart.plotContainer.createChild(am4core.Label);
+                        resetLabel.text = "[bold]<<";
+                        resetLabel.valign = "top";
+                        resetLabel.x = 20;
+                        resetLabel.y = 200;
+                        resetLabel.cursorOverStyle = am4core.MouseCursorStyle.pointer; 
+                        resetLabel.events.on('hit', function(ev) {
+                            resetLabel.hide();
+                            title.text = "Monthly Data"
+                          // ev.target.baseSprite.data = categoryAxis.renderer.grid.template.location = 0;  
+                            console.log("ev.target.baseSprite",ev.target.baseSprite)
+                            resetLabel.hide();
+                        });
+                        
+                         resetLabel.show();
+                });
             };
-        } 
-        function showOrdersLists(searchCol,searchVal){  
-            gProgId = null;
-            gProgCode = "";
-            gOEMId = null;
-            gOEMName = "";
-            gIsSearch = true;
-            gSearchCol = searchCol;
-            gSearchVal = searchVal;
-
-            db.displayModal("dashboardpop1");
-        }
-        function setSearch(searchCol){
-            if(isUD(searchCol)) searchCol = "po_no"; 
-            $("#btnSearchPO").click(function(){ 
-                var _searchVal = $.trim($("#searchPo").val()); 
-                if(_searchVal!==""){
-                    zsi.getData({
-                         sqlCode : "O181" //order_list_sel
-                        ,parameters: {search_col: searchCol,search_val:_searchVal} 
-                        ,onComplete : function(d) {
-                            if(d.rows.length > 0){
-                                showOrdersLists(searchCol,_searchVal);
+             
+             
+            var _displayBarGraph = function(o){   
+                var _dataLength = o.data.length;
+                var _data = [];
+                var _colorSet = new am4core.ColorSet(); 
+                var _getCategoryColor = function(category, index){
+                    var _color = $.grep(_colorRows, function(z) {
+                        return z.field_name.toUpperCase() == category.toUpperCase();
+                    });
+                    return (!isUD(_color[0])) ? _color[0].color_value.toLowerCase() : _colorSet.getIndex(index);
+                };
+                var _setData = function(){ 
+                    $.each(o.data, function(i,v){  
+                        var _json = {};    
+                            if(o.category!=="pay_month"){
+                                _json.category = v.pay_year;
+                                _json.value = v.total_fare;
+                                _json.color = _colorSet.next();  
+                            }else{
+                                _json.category = v.pay_month;
+                                _json.value = v.total_fare;
+                                _json.color = _colorSet.next(); 
+                                
+                            }
+                        _data.push(_json);
+                        
+                    });
+                
+                };
+                _setData();  
+                am4core.ready(function() { 
+                    var chart = am4core.create(o.container, am4charts.XYChart); 
+                    chart.numberFormatter.numberFormat = '###';
+                    // Set data
+                    var _platform = ""; 
+                    var selected;
+                    var generateChartData = function() {
+                        var chartData = []; 
+                        var _monthlyCtgry = ""; 
+                            
+                        for (var i = 0; i < _data.length; i++) {  
+                            if (i == selected) {
+                              for (var x = 0; x < _data[i].subs.length; x++) { 
+                                chartData.push({
+                                  category: _data[i].subs[x].category,
+                                  value: _data[i].subs[x].value,
+                                  color: _data[i].subs[x].color, 
+                                });
+                              }
+                            } else { 
+                             if(o.category==="pay_month"){  
+                                if(_data[i].category === 1)  _monthlyCtgry= "January"
+                                if(_data[i].category === 2)  _monthlyCtgry= "February"
+                                if(_data[i].category === 3)  _monthlyCtgry= "March"
+                                if(_data[i].category === 4)  _monthlyCtgry= "April"
+                                if(_data[i].category === 5)  _monthlyCtgry= "May"
+                                if(_data[i].category === 6)  _monthlyCtgry= "June"
+                                if(_data[i].category === 7)  _monthlyCtgry= "July"
+                                if(_data[i].category === 8)  _monthlyCtgry= "August"
+                                if(_data[i].category === 9)  _monthlyCtgry= "September"
+                                if(_data[i].category === 10) _monthlyCtgry = "October"
+                                if(_data[i].category === 11) _monthlyCtgry = "November"
+                                if(_data[i].category === 12) _monthlyCtgry = "December" 
+                                chartData.push({
+                                    category    : _monthlyCtgry,
+                                    categorySub : _data[i].category,
+                                    container   : o.container,
+                                    parameters  : o.params,
+                                    value       : _data[i].value,
+                                    color       : _data[i].color,
+                                    id: i
+                                }); 
+                            
+                            }
+                            else if(o.category==="pay_day"){  
+                                chartData.push({
+                                    category    : o.pay_day,   
+                                    value       : _data[i].value,
+                                    color       : _data[i].color,
+                                    id: i
+                                }); 
+                            }
+                            else{ 
+                                chartData.push({
+                                    category: _data[i].category,
+                                    value: _data[i].value,
+                                    color: _data[i].color,
+                                    id: i
+                                  }); 
+                                }
                             }
                         }
+                         
+                        return chartData;
+                    };
+                    
+                    // Add data
+                    chart.data = generateChartData(); 
+                   // Add and configure Series    
+                    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());  
+                        categoryAxis.dataFields.category = "category";
+                        categoryAxis.renderer.minGridDistance = 20; 
+                        /*categoryAxis.label.text = "{valueY.totalPercent.formatNumber('#.##')}%";*/ 
+                    
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());  
+                    var series = chart.series.push(new am4charts.ColumnSeries());  
+                        series.dataFields.categoryX = "category"; 
+                        series.dataFields.valueY = "value";   
+                        //series.labels.template.text = "{category}: {value.percent.formatNumber('###.00')}%";
+                        series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]"; 
+                        //valueLabel.label.text = "{valueY.category.formatNumber('#.##')}%";
+                        
+                          
+                        
+                        chart.cursor = new am4charts.XYCursor();   
+                        // as by default columns of the same series are of the same color, we add adapter which takes colors from chart.colors color set
+                        series.columns.template.adapter.add("fill", function (fill, target) { 
+                        	return chart.colors.getIndex(target.dataItem.index);
+                        });
+                    var title = chart.titles.create();
+                        title.text = "Yearly Data";
+                            
+                    if(o.category==="pay_month"){ 
+                        title.text = 'Monthly Data ';
+                            series.columns.template.events.on("hit", function(ev) {
+                                if (typeof ev.target.dataItem.dataContext.category) { 
+                                var _catgry     = ev.target.dataItem.dataContext.category;
+                                var _month      = ev.target.dataItem.dataContext.categorySub;
+                                var _yearly     = ev.target.dataItem.dataContext.parameters;
+                                var _container  = ev.target.dataItem.dataContext.container;
+                                
+                                /*var _sqlCode = "P1387"
+                                    ,_params = {
+                                        client_id   :app.userInfo.company_id 
+                                       ,month       :_month
+                                       ,year        :_yearly
+                                    }  
+                                    ,_value = "total_fare"
+                                    ,_category = "pay_day"
+                                    ,_isColorSet = false
+                                    ,_json = {};
+                                window.category = _catgry 
+                                _getColor(function(colorSet){
+                                    _getData(_sqlCode,_params, function(data){
+                                        _json.colorSet = colorSet;
+                                        _json.data = data;
+                                        _json.category = _category;  
+                                        _json.container = _container
+                                        _displayBarGraph(_json); 
+                                    });
+                                });*/
+                                 var _sqlCode = "P1387"
+                                    ,_params = {
+                                        client_id   :app.userInfo.company_id 
+                                       ,month       :_month
+                                       ,year        :_yearly
+                                    }  
+                                    ,_value = "total_fare"
+                                    ,_category = "pay_day"
+                                    ,_isColorSet = false
+                                    ,_json = {};
+                                    gCtgry = _catgry;
+                                _getColor(function(colorSet){
+                                    _getData(_sqlCode,_params, function(data){
+                                        _json.colorSet = colorSet;
+                                        _json.data = data;
+                                        _json.category = _category;  
+                                        _json.container = _container
+                                        _displayBarGraphDaily(_json); 
+                                    });
+                                });
+
+  
+                                // update the chart title
+                              //  ev.target.baseSprite.titles.getIndex(0).text = 'Month of ' + _catgry;
+
+                                // set the monthly data for the clicked monthv.target.dataItem.dataContext)  
+                            }
+                          }, this);
+                    }
+                });
+            };
+             
+            var _init = function(name){
+                var _sqlCode = "P1389"
+                    ,_params = {
+                        client_id:app.userInfo.company_id 
+                    }
+                    ,_container = "graph1"
+                    ,_value = "total_fare"
+                    ,_category = "pay_year"
+                    ,_isColorSet = false
+                    ,_json = {};
+                    
+                switch (name) {
+                    case "2020 Monthly Collection":
+                        _sqlCode = "P1388";
+                        _category = "pay_month";
+                        _container = "graph2";
+                        _value = "total_fare";
+                        _params = {
+                            client_id:app.userInfo.company_id
+                            ,year : 2020
+                        };
+                        break; 
+                    case "2019 Monthly Collection":
+                        _sqlCode = "P1388";
+                        _category = "pay_month";
+                        _container = "graph3";
+                        _value = "total_fare";
+                        _params = {
+                            client_id:app.userInfo.company_id
+                            ,year : 2019
+                        };
+                        break; 
+                    case "2018 Monthly Collection":
+                        _sqlCode = "P1388";
+                        _category = "pay_month";
+                        _container = "graph4";
+                        _value = "total_fare";
+                        _params = {
+                            client_id:app.userInfo.company_id
+                            ,year : 2018
+                        };
+                        break;
+                    case "2017 Monthly Collection":
+                        _sqlCode = "P1388";
+                        _category = "pay_month";
+                        _container = "graph5";
+                        _value = "total_fare";
+                        _params = {
+                            client_id:app.userInfo.company_id
+                            ,year : 2017
+                        };
+                        break; 
+                    case "2016 Monthly Collection":
+                        _sqlCode = "P1388";
+                        _category = "pay_month";
+                        _container = "graph6";
+                        _value = "total_fare";
+                        _params = {
+                            client_id:app.userInfo.company_id
+                            ,year : 2016
+                        };
+                        break; 
+                }
+                    
+                _json.title = name;
+                _json.container = _container;
+                _json.value = _value;
+                _json.category = _category;
+                _json.isColorSet = _isColorSet; 
+                
+                
+                _getColor(function(colorSet){
+                    _getData(_sqlCode,_params, function(data){
+                        _json.colorSet = colorSet;
+                        _json.data = data;
+                        _json.category; 
+                        _json.title = name; 
+                        if(_sqlCode==="P1388")_json.params =_params.year; 
+                        _displayBarGraph(_json); 
                     });
-                }
-            }); 
-         } 
-        function validation1(){
-             var _$filter = $("#filterCulomns"); 
-            _$filter.find("#dd_search_id").change(function(){  
-                if($(this).val() !==""){  
-                    _$filter.find("#searchPo").attr("placeholder", ($(this).val() ==="oem_part_no" ? "Harness P/N" : $(this).val().replace(/_/g," ") ));
-                    _$filter.find("#searchPo").removeAttr("disabled");  
-                }else{ 
-                    _$filter.find("#searchPo").attr("disabled",true) ; 
-                    _$filter.find("#searchPo").val("").attr("placeholder", "Enter Keyword"); 
-                    _$filter.find("#btnSearchPO").attr("disabled",true) ; 
-                } 
-            });  
-        } 
-        function validation2(){ 
-            var _$filter = $("#filterCulomns"); 
-            $("#searchPo").keyup(function(){  
-                if($(this).val() !==""){
-                    _$filter.find("#btnSearchPO").removeAttr("disabled"); 
-                }else{
-                    _$filter.find("#btnSearchPO").attr("disabled",true) ; 
-                }
-            });
-        }   
-        
-        //jquery event functions:
-        $("#btnGo").on("click",function(){ 
-            var _$filter = $("#filterCulomns") 
-                ,_$oemId = _$filter.find("[name='oem_id']").val() 
-                ,_$progId= _$filter.find("[name='program_id']").val() 
-            ; 
-            displayOrders(_$oemId,_$progId); 
-        }); 
-        $("#btnClear").on("click",function(){  
-            var _$filterCulomns = $("#filterCulomns");    
-            _$filterCulomns.find('#dd_search_id').val(" ");  
-            _$filterCulomns.find("#searchPo").val(' ').attr("disabled",true);  
-            _$filterCulomns.find("#oem_id").val(' '); 
-            
-            displayOrders();
-        }); 
-        $("#btnSaveRedBorder").click(function () { 
-            var _$grid  = $("#frm_modalWindowRedBorder");   
-            _$grid.jsonSubmit({
-                 procedure: "red_border_upd"
-                ,optionalItems: ["is_active"] 
-                ,onComplete: function (data) {
-                    if(data.isSuccess===true) zsi.form.showAlert("alert");  
-                    $("#modalBodyRedBorder").trigger("refresh") ;
-                }
-            });
-        });
-        
-       
-         
-    return _pub;
+                });
+                
+            }; 
+            _init("Collection"); 
+            _init("2020 Monthly Collection"); 
+            _init("2019 Monthly Collection");
+            _init("2018 Monthly Collection"); 
+            _init("2017 Monthly Collection");
+            _init("2016 Monthly Collection");  
+           // _init("Collection"); 
+               
+        }
+        displayCharts();  
+     
 })();           
            
            
            
                                                                                                                     
-                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                     
