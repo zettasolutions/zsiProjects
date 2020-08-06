@@ -150,7 +150,7 @@
             ,onComplete : function(d) { 
                 var _rows= d.rows;  
                 $("select[id='trip_no']").fillSelect({
-                     data   : d.rows.getUniqueRows(["trip_no"])
+                     data   : d.rows
                     ,text   : "trip_no"
                     ,value  : "trip_id"
                     ,selectedValue : _o.trip_no
@@ -178,9 +178,10 @@
         var _date1 = (d.getMonth() + 1) + "/01/" +    d.getFullYear();
         var yesterday = new Date(d.getTime());
         yesterday.setDate(d.getDate() - 1);
+        
         $("#trip_startDate").datepicker({
              autoclose : true 
-            ,endDate: _date1
+            ,endDate: d
             ,todayHighlight: false 
         }).datepicker("setDate", _date1).on("changeDate",function(e){
             $("#trip_endDate").datepicker({
@@ -393,7 +394,7 @@
             
         zsi.getData({
              sqlCode        : "P1231" //payment_for_posting_sel
-            ,parameters     : {vehicle_id: vehicle_id, client_id : gUser.company_id, payment_date : payment_date}
+            ,parameters     : {vehicle_id: vehicle_id, client_id : gUser.company_id}
             ,onComplete : function(d) {
                 var _rows= d.rows;
                 var _tot = {reg:0,stu:0,sc:0,pwd:0,total:0,reg_no:0,stu_no:0,sc_no:0,pwd_no:0};
@@ -841,7 +842,7 @@
                     dropdowns(_sqlCode);
                     
                     $(_$navGrid).dataBind({
-                         rows           : _rows.getUniqueRows(["trip_no"])
+                         rows           : _rows
                         ,height         : gSubTabName === "Collection Details"? _$windowHeight - 409 : _$windowHeight - 387
                         ,dataRows       : _getDataRows()
                         ,onComplete: function(o){ 
@@ -913,22 +914,10 @@
          
         $(_grid).convertToTable(function(table){
             var _html = table.get(0).outerHTML; 
-            
             zsi.htmlToExcel({
                 fileName: _fileName
                 ,html : _html
             });
-            
-            /*
-            var e = document.createElement('a');
-            e.setAttribute('href', 'data:application/vnd.ms-excel,' + encodeURIComponent(_html));
-            e.setAttribute('download', _fileName);
-            e.style.display = 'none';
-            document.body.appendChild(e);
-            e.click();
-            document.body.removeChild(e);             
-            */
-             
         }); 
        
     }); 
@@ -936,4 +925,4 @@
 })();     
 
 
-                   
+                    
