@@ -13,7 +13,7 @@
         gPlansDataSelected = null;
         $("#gridPlanInclusions").empty();
         $("#lblPlanCode").text("");  
-        $("#divPlanInclusions").addClass("hide");
+       //$("#divPlanInclusions").addClass("hide");
                         
         var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
         $("#gridPlans").dataBind({
@@ -56,9 +56,9 @@
             ]
             ,onComplete: function(o){
                 gPlansData = o.data.rows;
-                var _$this = this;
-                var _$row = _$this.find(".zRow");
-                _$this.find("[name='cbFilter1']").setCheckEvent("#gridPlans input[name='cb']");
+                var _this = this;
+                var _zRow = _this.find(".zRow");
+                _this.find("[name='cbFilter1']").setCheckEvent("#gridPlans input[name='cb']");
                 $("[name='plan_srp'],[name='plan_dp']").maskMoney();
                 
                 $("[name='plan_start_date'],[name='plan_end_date']").datepicker({ 
@@ -67,22 +67,22 @@
                    ,todayHighlight: true
                 });
                 
-                _$row.click(function(){
+                _zRow.click(function(){
                     var _obj = gPlansData[$(this).index()];
                     if(!isUD(_obj)){
                         gPlansDataSelected = _obj;
                         displayPlanInclusions(_obj);
                         $("#lblPlanCode").text(_obj.plan_code + " | " + _obj.plan_name);
-                        $("#divPlanInclusions").removeClass("hide");
+                        //$("#divPlanInclusions").removeClass("hide");
                     }else{
                         gPlansDataSelected = null;
                         $("#gridPlanInclusions").empty();
                         $("#lblPlanCode").text("");  
-                        $("#divPlanInclusions").addClass("hide");
+                        //$("#divPlanInclusions").addClass("hide");
                     } 
                 });
                 
-                _$this.find("[name='monthly_rate']").addClass("numeric");
+                _this.find("[name='monthly_rate']").addClass("numeric");
                 zsi.initInputTypesAndFormats();
             }
         });
@@ -93,7 +93,8 @@
         $("#gridPlanInclusions").dataBind({
              sqlCode        : "P258"
             ,parameters     : {plan_id: o.plan_id}
-            ,height         : $(window).height() - 787
+          //  ,height         : $(window).height() - 787
+           // ,width          : $(window).width() - 20
             ,blankRowsLimit : 5
             ,dataRows       : [
                 {text: cb                       ,width:25       ,style:"text-align:left"
@@ -104,44 +105,54 @@
                               + (d !== null ? app.bs({name:"cb"                 ,type:"checkbox"    })  : "" );
                      }
                  }
-                ,{text: "Product"                   ,width : 200    ,name:"product_id"          ,type:"select"        ,style : "text-align:center;"}
-                //,{text: "Application"      ,width : 200    ,name:"app_id"       ,type:"select"          ,style : "text-align:left;"}
+                ,{text: "Product"                   ,width : 165    ,name:"product_id"          ,type:"select"        ,style : "text-align:center;"}
+                ,{text: "Product Name"              ,width : 250    ,style : "text-align:left;"
+                    ,onRender : function(d){
+                        return app.bs({name:"product_name"          ,type:"input"              ,value: app.svn(d,"product_name")}); 
+                    }
+                }
+                ,{text: "Product Desc"              ,width : 135    ,style : "text-align:left;"
+                    ,onRender : function(d){
+                        return app.bs({name:"product_desc"          ,type:"input"              ,value: app.svn(d,"product_desc")}); 
+                    }
+                }
+                ,{text: "Product SRP"               ,width : 100    ,style : "text-align:right;"
+                    ,onRender : function(d){
+                        return app.bs({name:"product_desc"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"product_srp"))}); 
+                    }
+                }
+                ,{text: "Device Brand"              ,width : 100    ,style : "text-align:center;"
+                    ,onRender : function(d){
+                        return app.bs({name:"device_brand_code"          ,type:"input"              ,value: app.svn(d,"device_brand_name")}); 
+                    }
+                }
+                ,{text: "Device Type"               ,width : 100    ,style : "text-align:center;"
+                    ,onRender : function(d){
+                        return app.bs({name:"device_type_code"          ,type:"input"              ,value: app.svn(d,"device_type")}); 
+                    }
+                }
             ]
             ,onComplete: function(o){
                 var _this = this;
+                var _zRow = _this.find(".zRow");
                 _this.find("[name='cbFilter1']").setCheckEvent("#gridPlanInclusions input[name='cb']");
-                //_this.find("[name='app_id'").dataBind({
-                //    sqlCode      : "D245" //dd_applications_sel
-                //    ,text         : "app_code"
-                //    ,value        : "app_id"
-                //    ,onChange     : function(d){
-                //    
-                //    }
-                //});
+                _this.find("[name='cbFilter1']").setCheckEvent("#gridPlans input[name='cb']");
                 
-                var _$this = this;
-                var _$row = _$this.find(".zRow");
-                _$this.find("[name='cbFilter1']").setCheckEvent("#gridPlans input[name='cb']");
-                
-                _$row.find('[name="product_id"]').dataBind({
-                     sqlCode     : "D1287" 
-                    ,text        : "product_name"
+                _zRow.find("input[name='product_name'],input[name='product_desc'],input[name='product_srp'],input[name='product_dp'],input[name='device_brand_code'],input[name='device_type_code']").attr("readonly",true);
+                _zRow.find('[name="product_id"]').dataBind({
+                     sqlCode     : "P1289" 
+                    ,text        : "product_code"
                     ,value       : "product_id"
                     ,onChange    : function(d){
                         var  _$this         = $(this)
-                            ,_info          = d.data[d.index - 1]
-                            ,_product_srp   = isUD(_info) ? "" : _info.product_srp
-                            ,_product_dp    = isUD(_info) ? "" : _info.product_dp;
-                        
-                        _$this.closest(".zRow").find('[name="plan_srp"]').val(_product_srp);
-                        _$this.closest(".zRow").find('[name="plan_dp"]').val(_product_dp);
+                            ,_info          = d.data[d.index - 1];
+                            _$this.closest(".zRow").find("input[name='product_name']").val(_info.product_name);
+                            _$this.closest(".zRow").find("input[name='product_desc']").val(_info.product_desc);
+                            _$this.closest(".zRow").find("input[name='product_srp']").val(_info.product_srp);
+                            _$this.closest(".zRow").find("input[name='product_dp']").val(_info.product_dp);
+                            _$this.closest(".zRow").find("input[name='device_brand_code']").val(_info.device_brand_code);
+                            _$this.closest(".zRow").find("input[name='device_type_code']").val(_info.device_type_code);
                     }
-                });
-                
-                $("[name='plan_start_date'],[name='plan_end_date']").datepicker({ 
-                    pickTime  : false
-                   ,autoclose : true
-                   ,todayHighlight: true
                 });
             }
         });
@@ -166,7 +177,6 @@
             _$planDp.each(function(){
                 this.value = this.value.replace(/,/g, "");
             });
-        
         _$grid.jsonSubmit({
              procedure: "plans_upd"
             ,optionalItems: ["product_id","is_promo","is_active"] 
@@ -187,9 +197,11 @@
     });
     
     $("#btnSavePlanInclusion").click(function(){ 
+        //$("#gridPlanInclusions").find(".zRow").find("input[name='product_name'],input[name='product_desc'],input[name='product_srp'],input[name='product_dp'],input[name='device_brand_code'],input[name='device_type_code']").removeAttr("readonly");
+
         $("#gridPlanInclusions").jsonSubmit({
              procedure: "plan_inclusions_upd"
-            //,optionalItems: ["",""] 
+            ,notIncludes: ["product_name","product_desc","product_srp","device_brand_code","device_type_code"]
             ,onComplete: function (data) { 
                if(data.isSuccess===true) zsi.form.showAlert("alert"); 
                 displayPlanInclusions(gPlansDataSelected);
@@ -207,4 +219,4 @@
     });
     
     return _pub;
-})();                                          
+})();                                           
