@@ -28,43 +28,43 @@
                         ,{text:"Monday"                         ,width:65       ,style:"text-align:center"
                             ,onRender : function(d){
                                  return app.bs({name:"monday"      ,type:"hidden"      ,value: svn (d,"monday")}) 
-                                      + (d !==null ? app.bs({name:"cbMon",type:"checkbox"}) : "" );
+                                      + app.bs({name:"cbMon",type:"checkbox"});
                             }
                         } 
                         ,{text:"Tuesday"                         ,width:65       ,style:"text-align:center"
                             ,onRender : function(d){
                                  return app.bs({name:"tuesday"      ,type:"hidden"      ,value: svn (d,"tuesday")}) 
-                                      + (d !==null ? app.bs({name:"cbTues",type:"checkbox"}) : "" );
+                                      + app.bs({name:"cbTues",type:"checkbox"});
                             }
                         } 
                         ,{text:"Wednesday"                         ,width:65       ,style:"text-align:center"
                             ,onRender : function(d){
                                  return app.bs({name:"wednesday"      ,type:"hidden"      ,value: svn (d,"wednesday")}) 
-                                      + (d !==null ? app.bs({name:"cbWed",type:"checkbox"}) : "" );
+                                      + app.bs({name:"cbWed",type:"checkbox"});
                             }
                         } 
                         ,{text:"Thursday"                         ,width:65       ,style:"text-align:center"
                             ,onRender : function(d){
                                  return app.bs({name:"thursday"      ,type:"hidden"      ,value: svn (d,"thursday")}) 
-                                      + (d !==null ? app.bs({name:"cbThur",type:"checkbox"}) : "" );
+                                      + app.bs({name:"cbThur",type:"checkbox"});
                             }
                         } 
                         ,{text:"Friday"                         ,width:65       ,style:"text-align:center"
                             ,onRender : function(d){
                                  return app.bs({name:"friday"      ,type:"hidden"      ,value: svn (d,"friday")}) 
-                                      + (d !==null ? app.bs({name:"cbFri",type:"checkbox"}) : "" );
+                                      + app.bs({name:"cbFri",type:"checkbox"}) ;
                             }
                         } 
                         ,{text:"Saturday"                         ,width:65       ,style:"text-align:center"
                             ,onRender : function(d){
                                  return app.bs({name:"satruday"      ,type:"hidden"      ,value: svn (d,"saturday")}) 
-                                      + (d !==null ? app.bs({name:"cbSat",type:"checkbox"}) : "" );
+                                      + app.bs({name:"cbSat",type:"checkbox"});
                             }
                         } 
                         ,{text:"Sunday"                         ,width:65       ,style:"text-align:center"
                             ,onRender : function(d){
                                  return app.bs({name:"sunday"      ,type:"hidden"      ,value: svn (d,"sunday")}) 
-                                      + (d !==null ? app.bs({name:"cbSun",type:"checkbox"}) : "" );
+                                      + app.bs({name:"cbSun",type:"checkbox"});
                             }
                         } 
                         ,{text:"No. Hours"                      ,type:"input"           ,name:"no_hours"                    ,width:100       ,style:"text-align:left"} 
@@ -109,4 +109,4 @@
     
 })();
 
-                             
+                              

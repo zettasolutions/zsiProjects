@@ -11,6 +11,7 @@ var employees = (function(){
         ,gSearchValue       = ""
         ,gCustName          = ""
         ,gFullName          = ""
+        ,clientId          = app.userInfo.client_id
         ,gCanvas;
     
     zsi.ready = function(){
@@ -62,7 +63,7 @@ var employees = (function(){
     }
     
     function displayEmployees(searchVal){
-        var _clientId = app.userInfo.client_id;
+        var _clientId = app.userInfo.company_id;
         var cb = bs({name:"cbFilter1",type:"checkbox"}); 
             _genderOptions      =   [
                                          {text:"M"     ,value:"M"}
@@ -82,7 +83,7 @@ var employees = (function(){
                     { text:"Photo"             , width:40      , style:"text-align:center;" 
             		    ,onRender : function(d){ 
                             var mouseMoveEvent= "onmouseover='employees.mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='employees.mouseout();'";
-                            var html = "<a href='javascript:void(0);' "+ mouseMoveEvent +" class='btn btn-sm has-tooltip' onclick='employees.showModalUploadEmplImage(" + svn(d,"employee_id") +",\"" 
+                            var html = "<a href='javascript:void(0);' "+ mouseMoveEvent +" class='btn btn-sm has-tooltip' onclick='employees.showModalUploadEmplImage(" + svn(d,"id") +",\"" 
         		                           + svn(d,"emp_lfm_name") + "\");' data-toggle='tooltip' data-original-title='Upload Image'><i class='fas fa-image'></i> </a>";
                             return (d!==null ? html : "");
                         }
@@ -103,27 +104,31 @@ var employees = (function(){
                     }
                     ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:150        ,style:"text-align:left" ,sortColNo : 4 }
                     ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:150        ,style:"text-align:left" ,sortColNo : 5}
-                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:150        ,style:"text-align:left" ,sortColNo : 6}
-                    ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:120        ,style:"text-align:left"}
+                    ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:100        ,style:"text-align:center" ,sortColNo : 6}
+                    ,{text:"Name Suffix"            ,type:"input"       ,name:"name_suffix"         ,width:80         ,style:"text-align:center"}
                     ,{text:"Gender"                 ,type:"select"      ,name:"gender"              ,width:50         ,style:"text-align:center"}
-                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:100        ,style:"text-align:left"} 
+                    ,{text:"Civil Status"           ,type:"select"      ,name:"civil_status_code"   ,width:120        ,style:"text-align:left"} 
                     ,{text:"Date Hired"                                                             ,width:100        ,style:"text-align:left"  
                          ,onRender: function(d){
                             return bs({name:"date_hired"   ,style:"text-align:center" ,type:"input" ,value:app.svn(d,"date_hired").toShortDate()}); 
                         }
                     } 
-                    ,{text:"Employement Type"       ,type:"select"      ,name:"empl_type_code"      ,width:140        ,style:"text-align:center"}
+                    ,{text:"Employement Type"       ,type:"select"      ,name:"empl_type_code"      ,width:180        ,style:"text-align:center"}
                     ,{text:"Department"             ,type:"select"      ,name:"department_id"       ,width:150        ,style:"text-align:center"}
                     ,{text:"Section"                                                                ,width:150        ,style:"text-align:center"  
                         ,onRender : function(d){
                             return app.bs({name:"section_id"            ,type:"select"      ,value: app.svn(d,"section_id")})
-                                 + app.bs({name:"emp_hash_key"          ,type:"hidden"      ,value: app.svn(d,"emp_hash_key")}) 
+                                 + app.bs({name:"emp_hash_key"          ,type:"hidden"      ,value: app.svn(d,"emp_hash_key")});
                                  
                         }
                     }
                     ,{text:"Position"               ,type:"select"      ,name:"position_id"         ,width:200        ,style:"text-align:center"}
-                    ,{text:"Basic Pay"              ,type:"input"       ,name:"basic_pay"           ,width:80        ,style:"text-align:right"}
-                    ,{text:"Pay Type"               ,type:"select"      ,name:"pay_type_code"       ,width:90        ,style:"text-align:center"}
+                    ,{text:"Basic Pay"                                                              ,width:80         ,style:"text-align:right"
+                        ,onRender: function(d){
+                            return app.bs({name:"basic_pay"             ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"basic_pay"))       ,style : "text-align:right"});
+                    }
+                    }
+                    ,{text:"Pay Type"               ,type:"select"      ,name:"pay_type_code"       ,width:90         ,style:"text-align:center"}
                     ,{text:"SSS No."                ,type:"input"       ,name:"sss_no"              ,width:105        ,style:"text-align:center"}
                     ,{text:"TIN"                    ,type:"input"       ,name:"tin"                 ,width:105        ,style:"text-align:center"}
                     ,{text:"PhilHealth No."         ,type:"input"       ,name:"philhealth_no"       ,width:105        ,style:"text-align:center"}
@@ -139,7 +144,7 @@ var employees = (function(){
                     }
                     ,{text:"Other Income"           ,type:"input"                                   ,width:90         ,style:"text-align:center"
                         ,onRender : function(d){
-                                var _link = "<a href='javascript:void(0)' ' onclick='employees.showModalEmp("+ app.svn (d,"employee_id") +",\""+ app.svn (d,"last_name") +"\", \"" + " " +"\", \""+ app.svn (d,"first_name") +"\")'><i class='fas fa-link link'></i></a>";
+                                var _link = "<a href='javascript:void(0)' ' onclick='employees.showModalEmp("+ app.svn (d,"id") +",\""+ app.svn (d,"last_name") +"\", \"" + " " +"\", \""+ app.svn (d,"first_name") +"\")'><i class='fas fa-link link'></i></a>";
                                 return (d !== null ? _link : "")
                                     + app.bs({name:"inactive_type_code"    ,type:"hidden"      ,value: app.svn(d,"inactive_type_code")})
                                     + app.bs({name:"inactive_date"         ,type:"hidden"      ,value: app.svn(d,"inactive_date") });
@@ -157,38 +162,42 @@ var employees = (function(){
                 });
                 _this.find("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
                 _this.find("select[name='gender']").fillSelect({data: _genderOptions});
-                this.find(".zHeaders .item:nth-child(15) .text").css({
+                _this.find(".zHeaders .item:nth-child(15) .text").css({
                     "text-align": "right"
                     ,"width": "100%"
                     ,"margin-right": "4px"
                 });
-                _this.find(".zRow").find('[name="basic_pay"]').attr("readonly",true);
+                _this.find('[name="basic_pay"]').attr("readonly",true);
                 _this.find("select[name='civil_status_code']").dataBind("civil_status");
                 _this.find("select[name='empl_type_code']").dataBind("empl_types");
-                _this.find("select[name='pay_type_code']").dataBind("pay_types");
-                _zRow.find("[name='position_id']").dataBind({
-                     sqlCode      : "P201" //position_sel
-                    ,text         : "position_title"
-                    ,value        : "position_id"
-                    ,onChange     : function(d){
-                        var  _info       = d.data[d.index - 1]
-                            ,_basic_pay  = _info.basic_pay
-                            ,_$zRow      = $(this).closest(".zRow");_$zRow.find('[name="basic_pay"]').val(_basic_pay);}
-                }); 
-                
+                _zRow.find("select[name='pay_type_code']").dataBind("pay_types");
                 _zRow.find("[name='department_id']").dataBind({
-                     sqlCode        : "D213" //dept_sect_sel 
+                     sqlCode        : "D235"  
+                    ,parameters     : {client_id : _clientId}
                     ,text           : "dept_sect_name"
                     ,value          : "dept_sect_id"
                     ,onChange : function(o){  
-                        this.closest(".zRow").find("#section_id").dataBind({
-                             sqlCode        : "D213" //dept_sect_sel
-                             ,parameters    : {dept_sect_parent_id : o.data[o.index - 1].dept_sect_parent_id} 
+                        $(this).closest(".zRow").find("[name='section_id']").dataBind({
+                             sqlCode        : "D237"
+                            ,parameters     : {client_id : _clientId, department_id : $(this).val()} 
                             ,text           : "dept_sect_name"
                             ,value          : "dept_sect_id"
                         }); 
                     }
                 });
+                _zRow.find("[name='position_id']").dataBind({
+                     sqlCode      : "D236" 
+                    ,parameters   : {client_id : _clientId}
+                    ,text         : "position_title"
+                    ,value        : "position_id"
+                    ,onChange     : function(d){
+                        var  _info       = d.data[d.index - 1]
+                            ,_basic_pay  = _info.basic_pay
+                            ,_$zRow      = $(this).closest(".zRow");
+                            _$zRow.find('[name="basic_pay"]').val(_basic_pay);
+                    }
+                }); 
+
                 _this.find("select[name='contact_relation_id']").dataBind("relations");
                 _zRow.find("[name='is_active']").change(function(){
                     var _$this = $(this);
@@ -214,28 +223,26 @@ var employees = (function(){
         });
     }  
     
-    //Private Functions
     function displayInactiveEmployees(){
+        var clientId = app.userInfo.company_id;
         var cb = bs({name:"cbFilter1",type:"checkbox"}); 
         $("#gridInactive").dataBind({
              sqlCode    : "E162"
-            ,parameters : {"is_active" : "N"}
+            ,parameters : {client_id : _clientId,is_active : "N"}
             ,height     : 300
-            ,blankRowsLimit : 5
             ,dataRows   : [
                 {text: cb                      ,width:25            ,style:"text-align:center"
                      ,onRender : function(d){
                         return app.bs({name:"id"                    ,type:"hidden"      ,value: app.svn (d,"id")})
                              + app.bs({name:"is_edited"             ,type:"hidden"      ,value: app.svn(d,"is_edited")}) 
-                             + app.bs({name:"inactive_type_code"    ,type:"hidden"      ,value: app.svn(d,"inactive_type_code")})
-                             + app.bs({name:"inactive_data"         ,type:"hidden"      ,value: app.svn(d,"inactive_date")})
+                             + app.bs({name:"client_id"             ,type:"hidden"      ,value: _clientId})
                              + (d !== null ? bs({name:"cb"          ,type:"checkbox"}) : "");
                      }
                 }
-                ,{text:"Employee ID"            ,type:"input"       ,name:"employee_id"         ,width:75         ,style:"text-align:center"}
-                ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:200        ,style:"text-align:center"}
-                ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:200        ,style:"text-align:center"}
-                ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:center"  
+                ,{text:"Employee No."           ,type:"input"       ,name:"employee_no"         ,width:95         ,style:"text-align:center"}
+                ,{text:"Last Name"              ,type:"input"       ,name:"last_name"           ,width:200        ,style:"text-align:left"}
+                ,{text:"First Name"             ,type:"input"       ,name:"first_name"          ,width:200        ,style:"text-align:left"}
+                ,{text:"Middle Name"            ,type:"input"       ,name:"middle_name"         ,width:75         ,style:"text-align:left"  
                     ,onRender : function(d){
                         return app.bs({name:"middle_name"           ,type:"input"   ,value: app.svn (d,"middle_name")})
                              + app.bs({name:"name_suffix"           ,type:"hidden"  ,value: app.svn (d,"name_suffix")})
@@ -245,6 +252,7 @@ var employees = (function(){
                              + app.bs({name:"empl_type_code"        ,type:"hidden"  ,value: app.svn (d,"empl_type_code")})
                              + app.bs({name:"department_id"         ,type:"hidden"  ,value: app.svn (d,"department_id")})
                              + app.bs({name:"section_id"            ,type:"hidden"  ,value: app.svn (d,"section_id")})
+                             + app.bs({name:"emp_hash_key"          ,type:"hidden"  ,value: app.svn (d,"emp_hash_key")})
                              + app.bs({name:"position_id"           ,type:"hidden"  ,value: app.svn (d,"position_id")})
                              + app.bs({name:"basic_pay"             ,type:"hidden"  ,value: app.svn (d,"basic_pay")})
                              + app.bs({name:"pay_type_code"         ,type:"hidden"  ,value: app.svn (d,"pay_type_code")})
@@ -252,13 +260,25 @@ var employees = (function(){
                              + app.bs({name:"tin"                   ,type:"hidden"  ,value: app.svn (d,"tin")})
                              + app.bs({name:"philhealth_no"         ,type:"hidden"  ,value: app.svn (d,"philhealth_no")})
                              + app.bs({name:"hmdf_no"               ,type:"hidden"  ,value: app.svn (d,"hmdf_no")})
-                             + app.bs({name:"account_no"            ,type:"hidden"  ,value: app.svn (d,"account_no")});
+                             + app.bs({name:"account_no"            ,type:"hidden"  ,value: app.svn (d,"account_no")})
+                             + app.bs({name:"no_shares"             ,type:"hidden"  ,value: app.svn (d,"no_shares")})
+                             + app.bs({name:"contact_name"          ,type:"hidden"  ,value: app.svn (d,"contact_name")})
+                             + app.bs({name:"contact_phone_no"      ,type:"hidden"  ,value: app.svn (d,"contact_phone_no")})
+                             + app.bs({name:"contact_address"       ,type:"hidden"  ,value: app.svn (d,"contact_address")})
+                             + app.bs({name:"contact_relation_id"   ,type:"hidden"  ,value: app.svn (d,"contact_relation_id")});
                     }   
                 }
-                ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:50         ,style:"text-align:center"    ,defaultValue:"N"}
+                ,{text:"Active?"                                                        ,width:50         ,style:"text-align:center"    ,defaultValue:"N"
+                    ,onRender : function(d){
+                        return app.bs({name:"is_active"             ,type:"yesno"       ,value: app.svn (d,"is_active")})
+                             + app.bs({name:"inactive_type_code"    ,type:"hidden"      ,value: app.svn(d,"inactive_type_code")})
+                             + app.bs({name:"inactive_data"         ,type:"hidden"      ,value: app.svn(d,"inactive_date")});
+                     }
+                }
             ]
             ,onComplete: function(o){
                 this.find("[name='cbFilter1']").setCheckEvent("#gridInactive input[name='cb']");
+                this.find("input").attr("readonly", true);
                 
             }
         });
@@ -266,7 +286,7 @@ var employees = (function(){
     function displayOtherIncome(emdId){
         var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#gridOtherIncome").dataBind({
-             sqlCode        : "E208" //emp_pos_other_income_sel
+             sqlCode        : "E208" 
             ,parameters     : {employee_id : emdId}
             ,blankRowsLimit : 5
             ,width          : $("#frm_modalWindowOtherIncome").width() 
@@ -283,7 +303,7 @@ var employees = (function(){
                 ,{text: "Other Income"          ,name:"other_income_id"         ,type:"select"       ,width : 150   ,style : "text-align:left;"}
                 ,{text: "Amount"                                                                     ,width : 95    ,style : "text-align:right;"
                     ,onRender: function(d){
-                        return (d !== null ? bs({name: "amount"   ,type: "input"  ,value: parseFloat(app.svn(d,"amount")).toFixed(2) }) : bs({name: "amount"   ,type: "input"  ,value: app.svn(d,"amount") }));
+                        return app.bs({name:"amount"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"amount"))       ,style : "text-align:right"});
                     }
                 }
     
@@ -292,7 +312,7 @@ var employees = (function(){
                 var _zRow = this.find(".zRow");
                 this.find("[name='cbFilter']").setCheckEvent("#gridOtherIncome input[name='cb']");
                 this.find("select[name='other_income_id']").dataBind({
-                     sqlCode : "O198" //other_income_sel 
+                     sqlCode : "O198" 
                     ,text: "other_income_desc"
                     ,value: "other_income_id" 
                 });
@@ -303,12 +323,12 @@ var employees = (function(){
                     ,"width": "100%"
                     ,"margin-right": "4px"
                 });
+                $("[name='amount']").maskMoney();
 
             }
         });
     }
     
-    //Public Functions
     _public.showModalViewId = function (eL,id,firstName,middleName,lastName,nameSuffix,fileName,positionId,hashKey){
         var _frm = $("#frm_modalEmpoloyeeId");
         var _$position = $(eL).closest(".zRow").find('[name="position_id"] option[value="'+positionId+'"]').text();
@@ -334,6 +354,15 @@ var employees = (function(){
             });
         }, 100);
     };
+    
+    function commaSeparateNumber(n){
+        var _res = "";
+        if($.isNumeric(n)){
+            var _num = parseFloat(n).toFixed(2).toString().split(".");
+            _res = _num[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (!isUD(_num[1]) ? "." + _num[1] : "");
+        }
+        return _res;
+    }
     
     function pad(id) {
         var _str = id.toString();
@@ -363,21 +392,15 @@ var employees = (function(){
         }
         var formData = new FormData( frm.get(0));
         $.ajax({
-            url: base_url + 'file/UploadImage',  //server script to process data
+            url: base_url + 'file/UploadImage',
             type: 'POST',
-    
-            //Ajax events
             success: completeHandler = function(data) {
                 if(data.isSuccess){
-                    //submit filename to server
                     $.get(base_url  + "sql/exec?p=dbo.image_file_employees_upd @employee_id=" + employee_id
                                     + ",@img_filename='employee." +  fileOrg.files[0].name + "'"
                     ,function(data){
                         zsi.form.showAlert("alert");
                         $('#' + mdlImageEmpl).modal('toggle');
-                        
-                        //refresh latest records:
-                        displayEmployees();
                     });   
                 }else
                     alert(data.errMsg);
@@ -385,9 +408,7 @@ var employees = (function(){
             error: errorHandler = function() {
                 console.log("error");
             },
-            // Form data
             data: formData,
-            //Options to tell JQuery not to process data or worry about content-type
             cache: false,
             contentType: false,
             processData: false
@@ -420,13 +441,17 @@ var employees = (function(){
     },
     _public.submitOtherIncome = function(){
         var _$grid = $("#gridOtherIncome");
-            _$grid.jsonSubmit({
-                 procedure: "emp_pos_other_income_upd"
-                ,onComplete: function (data) {
-                    if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    displayOtherIncome(_$grid.data("emdId"));
-                }
+        var _$amt = _$grid.find("input[name='amount']");
+            _$amt.each(function(){
+                this.value = this.value.replace(/,/g, "");
             });
+        _$grid.jsonSubmit({
+             procedure: "emp_pos_other_income_upd"
+            ,onComplete: function (data) {
+                if(data.isSuccess===true) zsi.form.showAlert("alert");
+                displayOtherIncome(_$grid.data("emdId"));
+            }
+        });
     }, 
     _public.saveInactive = function(){
        $("#gridInactive").jsonSubmit({
@@ -455,8 +480,14 @@ var employees = (function(){
         displayInactiveEmployees();
         
     }); 
+    
     $("#btnSave").click(function () {
-       $("#grid").jsonSubmit({
+        var _$grid = $("#grid");
+        var _$basicPay = _$grid.find("input[name='basic_pay']");
+            _$basicPay.each(function(){
+                this.value = this.value.replace(/,/g, "");
+            });
+        _$grid.jsonSubmit({
                  procedure: "employees_upd"
                 ,optionalItems: ["is_active","position_id","pay_type_code","contact_relation_id","gender","civil_status_code","empl_type_code","department_id","section_id"]
                 ,onComplete: function (data) {
@@ -518,4 +549,4 @@ var employees = (function(){
     
 })();
 
-                                                           
+                                                                
