@@ -3,9 +3,11 @@ var leave = (function(){
             ,svn                    = zsi.setValIfNull
             ,gtw                    = null
             ,_pub                   = {}
+            ,gleaveTypeId           = null
     ;
     zsi.ready = function() {
         $(".page-title").html("Leave");
+        $("#collapsed").find("a").addClass("has-tooltip").tooltip();
         runDatePicker();
         $(".panel-asd").css("height", $(window).height() - 143);
         
@@ -18,8 +20,11 @@ var leave = (function(){
              sqlCode     : "L187" 
             ,text        : "leave_type"
             ,value       : "leave_type_id"
+            ,onComplete  : function(d){
+                gleaveTypeId = this.val();
+            }
         });
-        
+        markLeavesMandatory();
         $("#userId").select2({placeholder: "",allowClear: true});
         $("#leaveTypeId").select2({placeholder: "",allowClear: true});
     };
@@ -28,6 +33,7 @@ var leave = (function(){
         $('#datepicker').datepicker(
         {
              todayHighlight     : true
+            ,startDate            : new Date()
             ,multidate          : true
             ,multidateSeparator : ","
             ,format             : 'mm/dd/yyyy'
@@ -41,9 +47,8 @@ var leave = (function(){
             $("#datepickerVal").val(_dates);
         });
             
-    };
-    
-    $("#btnSaveLeaves").click(function () {
+    }; 
+    $("#btnSaveLeaves").click(function () { 
        $("#gridLeaves").jsonSubmit({
                  procedure  : "filed_leaves_upd"
                 ,optionalItems: ["is_active"]
@@ -63,14 +68,14 @@ var leave = (function(){
         });       
     });
     
-    $("#btnGo").click(function () {
+    $("#btnGo").click(function () {  
+      if($("#leaveDD").checkMandatory()!==true) return false; 
         var _row  = $(".row");
         var _date = _row.find('#datepickerVal').val();
         var _user = _row.find('#userId').val();
         var _leaveType = _row.find('#leaveTypeId').val();
         var _rows = [];
-        var _info = null;
-        
+        var _info = null;  
         $.each(_date.split(","), function(i,v){
             _info = { 
                  employee_id    : _user
@@ -79,6 +84,7 @@ var leave = (function(){
             };
             
             if(i >= 0 && _date !== ""){
+                $("#collapsed").find("a").click();
                 $(".row").find("#gridId").removeClass("d-none");
                 $(".row").find("#btnId").removeClass("d-none");
             }else{
@@ -88,14 +94,27 @@ var leave = (function(){
              _rows.push(_info);
         });
        
-        displayDateOfLeaves(_rows);
-
+        displayDateOfLeaves(_rows); 
+       
+         
     });
-    
-     function displayDateOfLeaves(data){
+    function markLeavesMandatory(){
+         $("#leaveDD").markMandatory({       
+            "groupNames":[
+                  {
+                       "names" : ["userId","leaveTypeId"]
+                      ,"type":"M"
+                  } 
+            ]      
+            ,"groupTitles":[ 
+                   {"titles" : ["Employee","Type of leave"]}
+            ]
+        });   
+    }
+    function displayDateOfLeaves(data){
         $("#gridLeaves").dataBind({
              rows           : data
-            ,height         : $(window).height() - 710
+            ,height         : $(window).height() - 350
             ,dataRows       : [
                 {text: "File Date"                                                              ,width : 190   ,style : "text-align:left;"
                     ,onRender  :  function(d)
@@ -107,6 +126,7 @@ var leave = (function(){
                         }
                 }
                 ,{text: "Leave Date"            ,name:"leave_date"          ,type:"input"       ,width : 190   ,style : "text-align:left;"}
+                ,{text: "Leave Type"            ,name:"leave_type_id"       ,type:"select"      ,width : 190   ,style : "text-align:left;"}
                 ,{text: "Filed Hours"           ,name:"filed_hours"         ,type:"input"       ,width : 150   ,style : "text-align:left;"}
                 ,{text: "Approved Hours"        ,name:"approved_hours"      ,type:"input"       ,width : 150   ,style : "text-align:left;"}
                 ,{text: "Approved?"                                                             ,width : 70    ,style : "text-align:left;" ,defaultValue:"N"
@@ -126,14 +146,62 @@ var leave = (function(){
                 }
                 
             ]
-            ,onComplete: function(){
-                var _zRow = this.find(".zRow");
-                _zRow.find("[name='file_date']").datepicker({todayHighlight:true}).datepicker("setDate", "0");
-                _zRow.find("[name='leave_date']").attr('readonly',true);
-                
+            ,onComplete: function(d){   
+                var _this           = this
+                    ,_zRow          = _this.find(".zRow")
+                    ,_checkQuantity = function(){
+                        var _$grid = $("#gridLeaves");
+                        var _tmr = null; 
+                        var _leaveDate = _$grid.find("[name='leave_date']").val(); 
+                        _$grid.find("[name='file_date']").on("keyup change",function(){
+                            var _$this = $(this);
+                            clearTimeout(_tmr);
+                            _tmr = setTimeout(function(){
+                                if (_$this.val() > _leaveDate){  
+                                    alert( "File Date must be less than to "+ _leaveDate + "." ); 
+                                    _$this.closest(".zRow").find("[name='file_date']").datepicker({ 
+                                        autoclose : true
+                                        , todayHighlight: true 
+                                    }).datepicker("setDate","0");
+                                }
+                            }, 10);
+                        });
+                        _$grid.find("[name='leave_date']").attr('readonly',true);
+                        _$grid.find("[name='leave_type_id']").dataBind({
+                             sqlCode     : "L187" 
+                            ,text        : "leave_type"
+                            ,value       : "leave_type_id"
+                           ,selectedValue : gleaveTypeId 
+                        });
+                    };
+                    
+                     _this.on('dragstart', function(){ return false; });
+                    
+                    _zRow.find("[name='file_date']").datepicker({ 
+                          autoclose : true
+                        , todayHighlight: true 
+                    }).datepicker("setDate","0");
+                     
+                    _checkQuantity(); 
+                 
             }
         });
     }
     
     return _pub;
-})();                    
+})();   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
