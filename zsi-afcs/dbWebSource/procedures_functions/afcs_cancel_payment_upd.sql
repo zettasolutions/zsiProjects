@@ -1,7 +1,7 @@
 
 CREATE PROCEDURE [dbo].[afcs_cancel_payment_upd]  
 (  
-	@serial_no NVARCHAR(30)
+	@device_hash_key NVARCHAR(30)
 	, @hash_key NVARCHAR(MAX)
 	, @user_id INT = NULL
 )  
@@ -18,7 +18,7 @@ BEGIN
 		@device_id = device_id
 	FROM dbo.devices 
 	WHERE 1 = 1
-	AND serial_no = @serial_no
+	AND hash_key = @device_hash_key
 	AND is_active = 'Y'
 
 	IF @device_id > 0

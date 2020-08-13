@@ -1,3 +1,4 @@
+
 CREATE PROCEDURE [dbo].[sql_commands_sel](
   @user_id INT=null
  ,@sort_index INT=1
@@ -23,13 +24,21 @@ BEGIN
 	   SET @order = ' DESC'
 
 	SET @stmt = 'SELECT * FROM dbo.sql_commands WHERE 1=1 ';
-	IF isnull(@searchCode,'') <>''
-	   SET @stmt = @stmt + ' AND sqlcmd_code like ''%'+@searchCode+'%''';
-	IF isnull(@searchText,'') <>''
-		SET @stmt = @stmt + ' AND sqlcmd_text like ''%'+@searchText+'%''';
-
-	SET @stmt2 = N'SELECT @result = COUNT(*) FROM dbo.sql_commands ';
+	SET @stmt2 = N'SELECT @result = COUNT(*) FROM dbo.sql_commands  WHERE 1=1 ';
 	SET @result_param = N'@result varchar(30) OUTPUT';
+
+	IF isnull(@searchCode,'') <>'' 
+	BEGIN
+			SET @stmt = @stmt + ' AND sqlcmd_code like ''%'+@searchCode+'%''';
+			SET @stmt2 = @stmt2 + ' AND sqlcmd_code like ''%'+@searchCode+'%''';
+	END
+	
+	IF isnull(@searchText,'') <>''
+	BEGIN
+			SET @stmt = @stmt + ' AND sqlcmd_text like ''%'+@searchText+'%''';
+			SET @stmt2 = @stmt2 + ' AND sqlcmd_text like ''%'+@searchText+'%''';
+	END	
+
 	EXECUTE sp_executesql @stmt2, @result_param, @result=@Count OUTPUT;
 
 	SET @stmt = @stmt +  ' ORDER BY ' + cast(@sort_index as varchar(20)) + @order;

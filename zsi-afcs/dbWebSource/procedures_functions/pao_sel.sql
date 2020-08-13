@@ -12,8 +12,13 @@ CREATE PROCEDURE [dbo].[pao_sel]
 AS
 BEGIN
 	SET NOCOUNT ON
+	DECLARE @pao_tbl NVARCHAR(100);
+	DECLARE @orderby NVARCHAR(5);
+	SET @pao_tbl = CONCAT('zsi_hcm.dbo.employees_',@client_id,'_v')
+	SET @orderby = IIF(@order_no = 0,' ASC', 'DESC')
+	
 	DECLARE @stmt nvarchar(max)='';
-		SET @stmt = 'SELECT * FROM dbo.pao_active_v WHERE client_id = ' + cast(@client_id as varchar(20));
+		SET @stmt = 'SELECT * FROM ' + @pao_tbl + ' WHERE position_id=4 AND client_id = ' +cast(@client_id as varchar(20));
 	
 	IF isnull(@is_active,'') <>''
 		SET @stmt = @stmt + ' AND is_active='''+@is_active+'''';
@@ -21,14 +26,10 @@ BEGIN
 	IF isnull(@searchVal,'') <>''
 	   SET @stmt = @stmt + ' AND first_name like ''%'+@searchVal+'%'' or last_name like ''%'+@searchVal+'%''';
 	
-	SET @stmt = @stmt + ' ORDER BY ' + cast(@col_no as varchar(20))
-
-	IF isnull(@order_no,0) = 0
-	   SET @stmt = @stmt + ' ASC'
-     ELSE
-	   SET @stmt = @stmt + ' DESC'
+	SET @stmt = @stmt + ' ORDER BY ' + cast(@col_no as varchar(20)) + @orderby
 
 	EXEC(@stmt);
 END
 
- 
+
+ --[dbo].[pao_sel] @client_id=1

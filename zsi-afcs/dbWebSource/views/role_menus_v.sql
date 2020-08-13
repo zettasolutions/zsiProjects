@@ -1,3 +1,5 @@
+
+
 CREATE VIEW [dbo].[role_menus_v]
 AS
 SELECT        dbo.role_menus.role_menu_id, dbo.role_menus.role_id, dbo.role_menus.is_write, dbo.role_menus.is_delete, dbo.menus.menu_id, dbo.menus.pmenu_id, dbo.menus.menu_name, dbo.menus.seq_no, dbo.menus.is_default, 

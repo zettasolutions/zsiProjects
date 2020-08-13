@@ -11,21 +11,18 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @stmt nvarchar(max)='';
-	IF ISNULL(@is_active,'N')='Y'
-       SET @stmt = 'SELECT * FROM dbo.active_vehicles_v WHERE company_id=' + cast(@client_id as varchar(20))
-	ELSE
-	   SET @stmt = 'SELECT * FROM dbo.inactive_vehicles_v WHERE company_id=' + cast(@client_id as varchar(20))
+	DECLARE @orderby    VARCHAR(5);
+
+	SET @orderby = IIF(@order_no = 0, ' ASC',' DESC')
+    SET @stmt = 'SELECT * FROM zsi_fmis.dbo.vehicles_' + CAST(@client_id AS NVARCHAR(20)) + ' WHERE 1=1 '
+	
+	IF ISNULL(@is_active,'') <> ''
+	   set @stmt = @stmt + ' AND is_active = ''' + @is_active + ''''
 
 	IF isnull(@searchVal,'') <>''
 	   SET @stmt = @stmt + ' AND vehicle_plate_no like ''%'+@searchVal+'%''';
 
-	SET @stmt = @stmt + ' ORDER BY ' + cast(@col_no as varchar(20))
-
-	IF isnull(@order_no,0) = 0
-	   SET @stmt = @stmt + ' ASC'
-     ELSE
-	   SET @stmt = @stmt + ' DESC'
-
+	set @stmt = @stmt + ' order by ' + cast(@col_no AS VARCHAR(20)) + @orderby
 
 	EXEC(@stmt);
 END

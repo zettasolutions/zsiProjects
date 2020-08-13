@@ -5,7 +5,7 @@ CREATE PROCEDURE [dbo].[dd_users_sel]
 )
 AS
 BEGIN
-      SELECT user_id, full_name FROM dbo.users; 
+      SELECT user_id, CONCAT(last_first_name,', ',first_name) full_name FROM dbo.users_v WHERE is_afcs='''Y'; 
 END
 
 

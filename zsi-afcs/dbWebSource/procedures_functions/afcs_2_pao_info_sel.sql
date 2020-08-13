@@ -1,20 +1,41 @@
 
-
 CREATE PROCEDURE [dbo].[afcs_2_pao_info_sel]  
 (  
-   @user_id INT = NULL
-   , @hash_key NVARCHAR(50)
+     @vehicle_hash_key NVARCHAR(100)
+    ,@hash_key NVARCHAR(MAX)
+   , @user_id INT = NULL
 )  
 AS  
 BEGIN  
 	SET NOCOUNT ON;
+	DECLARE @stmt NVARCHAR(MAX);
+    DECLARE @client_id  INT;
+	DECLARE @tbl_employees NVARCHAR(50);
+	DECLARE @count INT;
+    CREATE TABLE #pao (
+	  user_id int
+	 ,hash_key nvarchar(100)
+	 ,first_name nvarchar(100)
+	 ,last_name  nvarchar(100)
+	 ,img_filename nvarchar(100)
+	 ,is_active char(1)
+	)
 
-	DECLARE @pao_id INT;
+	SELECT @client_id=company_id FROM dbo.active_vehicles_v WHERE hash_key =@vehicle_hash_key;
+	SET @tbl_employees = CONCAT('zsi_hcm.dbo.employees_',@client_id);
 
-	-- Check whether the vehicle is registered and active.
-	SELECT @pao_id = [user_id] FROM dbo.pao_active_v WHERE hash_key = @hash_key;
-
-	IF @pao_id IS NOT NULL
+	SET @stmt = CONCAT('SELECT
+		  id AS [user_id]
+	    , emp_hash_key AS user_hash_key
+		, first_name
+		, last_name
+		, img_filename
+		, is_active
+	FROM ',@tbl_employees, ' WHERE is_pao = ''Y'' AND is_active = ''Y'' AND emp_hash_key = ''',@hash_key,'''')
+	INSERT INTO #pao EXEC(@stmt);
+	SELECT @count = COUNT(*) FROM #pao;
+	
+	IF @count = 1
 	BEGIN
 		SELECT
 			  [user_id]
@@ -25,7 +46,7 @@ BEGIN
 			, [is_active]
 			, 'Y' AS is_valid
 			, 'Success' AS msg
-		FROM dbo.pao_active_v
+		FROM #pao
 		WHERE 1 = 1
 		AND hash_key = @hash_key;
 	END
@@ -35,4 +56,5 @@ BEGIN
 			'N' AS is_valid
 			, 'Error' AS msg
 	END
+	DROP TABLE #pao;
 END;

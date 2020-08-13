@@ -10,4 +10,5 @@ loading_id	INT IDENTITY(1,1)	NOT NULL
 ,loading_charge	DECIMAL(10)	NULL
 ,loading_branch_id	INT	NULL
 ,is_top_up	CHAR(1)	NULL
-,ref_no	NVARCHAR(60)	NULL)
+,ref_no	NVARCHAR(60)	NULL
+,consumer_id	INT	NULL)

@@ -8,7 +8,7 @@ BEGIN
 	DECLARE @l_retval   varchar(200);
 	
 	SELECT	@l_retval =     first_name + N' ' + CASE WHEN middle_name IS NULL THEN '' ELSE SUBSTRING(middle_name,1,1) + '.' END + ' ' + last_name 
-	FROM	dbo.users 
+	FROM	dbo.users_v
 	where user_id = @user_id  AND logon IS NOT NULL
 
 

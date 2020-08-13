@@ -12,9 +12,10 @@ BEGIN
 	DECLARE @consumer_id INT;
 	DECLARE @otp NVARCHAR(6);
 	DECLARE @otp_expiry_datetime DATETIME;
+	DECLARE @cur_date DATETIME = DATEADD(HOUR,8,GETUTCDATE())
 	
 	SELECT @otp = CAST(RAND() * 1000000 AS NVARCHAR(6));
-	SELECT @otp_expiry_datetime = DATEADD(HOUR, 2, GETDATE());
+	SELECT @otp_expiry_datetime = DATEADD(HOUR, 2, @cur_date);
 	SELECT @consumer_id = consumer_id FROM dbo.consumers WHERE 1 = 1 AND mobile_no = @username;
 
 	IF @consumer_id IS NOT NULL
@@ -45,7 +46,7 @@ BEGIN
 				, 'Hi. Your OTP is ' + CAST(@otp AS NVARCHAR(6)) + ' and will expire on ' + CAST(@otp_expiry_datetime AS NVARCHAR(100)) + '.'
 				, 'N'
 				, @consumer_id
-				, GETDATE()
+				, @cur_date
 			);
 
 			IF @@ERROR > 0

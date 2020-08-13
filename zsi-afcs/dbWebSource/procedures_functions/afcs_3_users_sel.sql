@@ -2,24 +2,28 @@
 
 CREATE PROCEDURE [dbo].[afcs_3_users_sel]  
 (  
-     @hash_key NVARCHAR(MAX)
+	 @vehicle_hash_key NVARCHAR(100)
+    ,@hash_key NVARCHAR(MAX)
    , @user_id INT = NULL
 )  
 AS  
 BEGIN  
 	SET NOCOUNT ON;
+	DECLARE @stmt NVARCHAR(MAX);
+    DECLARE @client_id  INT;
+	DECLARE @tbl_employees NVARCHAR(50);
 
-	SELECT
-		  id AS [user_id]
-	    , client_id AS company_code
-		, null AS logon
-		, position_title AS position
+	SELECT @client_id=company_id FROM dbo.active_vehicles_v WHERE hash_key =@vehicle_hash_key;
+	SET @tbl_employees = CONCAT('zsi_hcm.dbo.employees_',@client_id, '_v');
+
+	SET @stmt = CONCAT('SELECT
+		  first_name
 		, last_name
-		, first_name
-		, emp_lfm_name AS full_name
-		, is_active
+		, position_title AS position
+		, id AS [user_id]
 		, emp_hash_key AS user_hash_key
-	FROM zsi_hcm.dbo.employees_active_v
-	WHERE position_id in (3,4,20)
-	AND emp_hash_key = @hash_key
+		, ISNULL(img_filename, '''') AS img_filename
+		, is_active
+	FROM ',@tbl_employees, ' WHERE (is_driver=''Y'' OR is_pao=''Y'') AND emp_hash_key = ''',@hash_key,'''')
+	EXEC(@stmt);
 END;

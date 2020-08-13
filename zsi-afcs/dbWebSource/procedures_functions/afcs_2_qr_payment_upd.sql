@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[afcs_2_qr_payment_upd]  
 (  
      @hash_key1 NVARCHAR(MAX)
-   , @hash_key2 NVARCHAR(MAX)
+   , @hash_key2 NVARCHAR(MAX)=NULL
    , @base_fare DECIMAL(12, 2)
    , @regular_count INT
    , @student_count INT
@@ -33,16 +33,43 @@ BEGIN
 	DECLARE @driver_id INT;
 	DECLARE @client_id INT;
 	DECLARE @pao_id INT = NULL;
+	DECLARE @is_client_qr CHAR(1)='N';
+	DECLARE @stmt NVARCHAR(MAX);
+	DECLARE @tbl_employees NVARCHAR(50);
+	DECLARE @cur_date DATETIME = DATEADD(HOUR,8,GETUTCDATE())
+	DECLARE @tbl_payment NVARCHAR(50);
+
+	CREATE TABLE #driver_pao (
+	  id           int
+	 ,position_id  int
+	)
+
+	SELECT @client_id=company_id,@vehicle_id = vehicle_id FROM dbo.active_vehicles_v WHERE hash_key =@vehicle_hash_key;
+	SET @tbl_employees = CONCAT('zsi_hcm.dbo.employees_',@client_id);
+	SET @tbl_payment = CONCAT('dbo.payments_',@client_id)
+
+	SET @stmt = CONCAT('SELECT id, position_id FROM ',@tbl_employees, ' WHERE position_id IN (3,4) 
+	    AND emp_hash_key IN ( ''',isnull(@driver_hash_key,'Az'),''',''',isnull(@pao_hash_key,'Az'),'''')
+	INSERT INTO #driver_pao EXEC(@stmt);
+
+	SELECT @driver_id = id FROM #driver_pao WHERE position_id =3;
+	SELECT @pao_id = id FROM #driver_pao WHERE position_id =4;
 
 	-- Check whether the hash_key1 and hash_key2 exists in the generated_qrs table and is active.
+	IF isnull(@hash_key2,'')=''
+		SELECT 
+			@generated_qrs_id = [id] 
+		,@credit_amount = balance_amt 
+		,@is_client_qr = 'Y'
+		FROM dbo.generated_qrs 
+		WHERE 1 = 1 AND is_active = 'Y' AND hash_key = @hash_key1 AND client_id = @client_id
+	ELSE	
 	SELECT 
 		 @generated_qrs_id = [id] 
 		,@credit_amount = balance_amt 
 	FROM dbo.generated_qrs 
 	WHERE 1 = 1 
-	AND is_active = 'Y' 
-	AND hash_key = @hash_key1
-	AND hash_key2 = @hash_key2;
+	AND is_active = 'Y' AND hash_key = @hash_key1 AND hash_key2 = @hash_key2;
 
 	IF @generated_qrs_id IS NOT NULL
 	BEGIN
@@ -51,23 +78,9 @@ BEGIN
 		
 			IF @credit_amount >= @total_amount
 			BEGIN
-				SELECT
-					@vehicle_id = vehicle_id
-				   ,@client_id  = company_id
-				FROM dbo.active_vehicles_v WHERE 1 = 1
-				AND hash_key = @vehicle_hash_key;
-
-				SELECT 
-					@driver_id = [user_id]
-				FROM dbo.drivers_active_v 
-				WHERE hash_key = @driver_hash_key;
-
-				SELECT 
-					@pao_id = [user_id]
-				FROM dbo.pao_active_v 
-				WHERE hash_key = @pao_hash_key;
-
-				BEGIN TRAN;
+			    DECLARE @qr_ref_no nvarchar(20) 
+				SET @qr_ref_no = 'ZP' + REPLACE(CAST(rand() * 1000000 as NVARCHAR(6)),'.',0)
+ 				BEGIN TRAN;
 
 				-- Insert record in the payments table.
 				INSERT INTO [dbo].[payments](
@@ -89,9 +102,11 @@ BEGIN
 					, [client_id]
 					, [pao_id]
 					, [qr_ref_no]
+					, [is_client_qr]
+					, [is_open]
 				)
 				VALUES(
-					DATEADD(HOUR, 8, GETUTCDATE())
+					  @cur_date
 					, @regular_count
 					, @student_count
 					, @senior_count
@@ -108,23 +123,29 @@ BEGIN
 					, @base_fare
 					, @client_id
 					, @pao_id
-					,'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0)
+					, @qr_ref_no
+					, @is_client_qr
+					, @is_client_qr
+
 				)
-				END
 
-				IF @@ERROR = 0
-				BEGIN
 					SET @new_credit_amount = @credit_amount - @total_amount;
-
 					UPDATE 
 						dbo.generated_qrs 
 					SET
 						  [balance_amt] = @new_credit_amount
-						, [expiry_date] = DATEADD(MONTH,6,DATEADD(HOUR,8,GETUTCDATE()))
+						, [expiry_date] = DATEADD(MONTH,6,@cur_date)
 						, [updated_by] = @consumer_id
-						, [updated_date] = DATEADD(HOUR, 8, GETUTCDATE())
+						, [updated_date] = @cur_date
 					WHERE 1 = 1
 					AND id = @generated_qrs_id;
+				END
+
+				IF @@ERROR = 0
+				BEGIN
+					SET @id = @@IDENTITY
+					SET @stmt = CONCAT('INSERT INTO ', @tbl_payment, ' SELECT * FROM dbo.payments WHERE payment_id=',@id)
+	                EXEC(@stmt);					
 
 				IF @consumer_id IS NOT NULL
 				BEGIN
@@ -139,10 +160,10 @@ BEGIN
 					VALUES(
 						'zpay'
 					   , @mobile_no
-					   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' .'
+					   , CONCAT('A payment amount of PHP ',@total_amount,' was made on ',@cur_date,'. Ref# ', @qr_ref_no)
 					   , 'N'
 					   , @user_id
-					   , DATEADD(HOUR, 8, GETUTCDATE()))
+					   , @cur_date)
 
 					COMMIT;
 

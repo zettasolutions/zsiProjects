@@ -61,7 +61,7 @@ BEGIN
 		SELECT @user_id = qr_id FROM dbo.consumers WHERE 1 = 1 AND mobile_no = @user_mobile_no;
 		SELECT @user_balance_amount = balance_amt FROM dbo.generated_qrs_registered_v WHERE 1 = 1 AND id = @user_id;
 
-		IF @user_balance_amount > @load_amount
+		IF @user_balance_amount >= @load_amount
 			BEGIN
 				BEGIN TRAN;
 

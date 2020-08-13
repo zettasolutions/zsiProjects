@@ -5,7 +5,7 @@ RETURNS INT
 AS
 BEGIN
    DECLARE @l_role_id INT; 
-      SELECT @l_role_id = role_id FROM USERS where user_id =@user_id
+      SELECT @l_role_id = role_id FROM dbo.users_v where user_id =@user_id
       RETURN @l_role_id;
 END;
 

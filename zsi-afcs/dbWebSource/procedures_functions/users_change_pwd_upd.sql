@@ -6,7 +6,7 @@ CREATE PROCEDURE [dbo].[users_change_pwd_upd]
 
 AS
 SET NOCOUNT ON
-update dbo.users set password=@password where user_id=@user_id
+update zsi_crm.dbo.users set password=@password where user_id=@user_id
 
 
  

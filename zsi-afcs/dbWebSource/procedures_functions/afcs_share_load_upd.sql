@@ -93,6 +93,7 @@ BEGIN
 						, load_by
 						, is_top_up
 						, ref_no
+						, consumer_id
 					) VALUES (
 						@load_date
 						, @load_temp_qr_id
@@ -100,6 +101,7 @@ BEGIN
 						, @user_consumer_id
 						, 'Y'
 						, 'ZP' + REPLACE(CAST(RAND() * 1000000 AS VARCHAR(20)),'.',0)
+						, @consumer_id
 					)
 					
 					-- Insert new record in the sms_notifications table so that the consumer will be notified through sms.

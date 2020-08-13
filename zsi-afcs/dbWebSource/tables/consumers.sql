@@ -1,6 +1,6 @@
 CREATE TABLE consumers(
 consumer_id	INT IDENTITY(1,1)	NOT NULL
-,hash_key	NVARCHAR(100)	NOT NULL
+,hash_key	NVARCHAR(100)	NULL
 ,first_name	NVARCHAR(200)	NOT NULL
 ,middle_name	NVARCHAR(200)	NULL
 ,last_name	NVARCHAR(200)	NOT NULL

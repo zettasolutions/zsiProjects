@@ -98,6 +98,7 @@ BEGIN
 						, is_top_up
 						, loading_branch_id
 						, ref_no
+						, consumer_id
 					) VALUES (
 						@load_date
 						, @load_temp_qr_id
@@ -106,6 +107,7 @@ BEGIN
 						, 'N'
 						, @client_id
 						, 'ZM' + CAST(RAND() * 1000000 AS VARCHAR(20))
+						, @consumer_id
 					)
 					
 					-- Insert new record in the sms_notifications table so that the consumer will be notified through sms.

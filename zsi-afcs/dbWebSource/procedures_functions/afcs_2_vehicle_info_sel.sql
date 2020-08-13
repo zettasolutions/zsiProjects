@@ -25,7 +25,7 @@ BEGIN
 			, a.[is_active]
 			, 'Y' AS is_valid
 			, 'Success' AS msg
-		FROM dbo.vehicles a
+		FROM dbo.active_vehicles_v a
 		JOIN dbo.fare_matrix b
 		ON a.vehicle_type_id = b.fare_id
 		WHERE 1 = 1

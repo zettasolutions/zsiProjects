@@ -5,19 +5,29 @@ CREATE PROCEDURE [dbo].[drivers_sel](
 ,@col_no int=1
 ,@order_no int=0
 ,@searchVal VARCHAR(50) = null
+,@is_active VARCHAR(1)='Y'
+,@rpp INT = 1000
 )
 AS
 BEGIN
  SET NOCOUNT ON
- DECLARE @curDate DATE
- DECLARE @endDate NVARCHAR(10) 
- DECLARE @startDate NVARCHAR(10) 
- DECLARE @stmt NVARCHAR(MAX)
+	DECLARE @curDate DATE
+	DECLARE @endDate NVARCHAR(10) 
+	DECLARE @startDate NVARCHAR(10) 
+	DECLARE @stmt NVARCHAR(MAX)
+	DECLARE @driver_tbl NVARCHAR(100);
+	DECLARE @orderby NVARCHAR(5);
+	SET @driver_tbl = CONCAT('zsi_hcm.dbo.employees_',@client_id,'_v')
+	SET @orderby = IIF(@order_no = 0,' ASC', ' DESC')
+
  IF @tab_id < 5
  BEGIN
  	SET @curDate = DATEADD(HOUR,8,GETUTCDATE())
 	SET @startDate = CONVERT(VARCHAR(10),@curDate,101)
-    SET @stmt = 'SELECT * FROM dbo.drivers_active_v WHERE client_id = ' + cast(@client_id AS VARCHAR(20))
+		SET @stmt = 'SELECT * FROM ' + @driver_tbl + ' WHERE is_driver=''Y'' AND client_id = ' +cast(@client_id as varchar(20));
+
+	IF @is_active <> ''
+		SET @stmt = @stmt + ' AND is_active='''+ @is_active + '''';
  
 	IF @tab_id = 2
     BEGIN
@@ -37,16 +47,9 @@ BEGIN
 	IF isnull(@searchVal,'') <>''
 	   SET @stmt = @stmt + ' AND first_name like ''%'+@searchVal+'%'' or last_name like ''%'+@searchVal+'%''';
  END
- ELSE
-
-    SET @stmt = 'SELECT * FROM dbo.drivers_inactive_v WHERE client_id = ' + cast(@client_id AS VARCHAR(20))
- 
- SET @stmt= @stmt + ' ORDER BY ' + CAST(@col_no AS VARCHAR(10))
- IF @order_no <> 0 
-    SET @stmt= @stmt + ' DESC '
 
  EXEC(@stmt);
 END
 
 
---dbo.drivers_sel @client_id=1,@tab_id=4
+--dbo.drivers_sel @client_id=1,@tab_id=2

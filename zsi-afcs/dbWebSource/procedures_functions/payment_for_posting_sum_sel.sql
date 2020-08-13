@@ -8,11 +8,17 @@ AS
 BEGIN
   SET NOCOUNT ON
   DECLARE @stmt nvarchar(max)='';
+  DECLARE @payments_tbl nvarchar(20);
+  DECLARE @drivers_v nvarchar(50);
+  DECLARE @pao_v nvarchar(50);
+  SET @payments_tbl = CONCAT('dbo.payments_',@client_id);
 
-  SELECT payment_date, vehicle_id, vehicle_plate_no,sum(total_paid_amount) total_fare FROM 
-  (SELECT convert(varchar(10),payment_date,101) payment_date , vehicle_plate_no,  total_paid_amount, client_id, vehicle_id 
-     FROM dbo.payments_transactions_for_posting_v where client_id=@client_id) AS x
-  group by payment_date , vehicle_plate_no, vehicle_id order by payment_date
+  SET @stmt = CONCAT('SELECT CONVERT(DATE,pt.payment_date) payment_date, pt.vehicle_id, vv.vehicle_plate_no, sum(pt.total_paid_amount) AS total_fare 
+			    FROM ',@payments_tbl,' pt INNER JOIN dbo.active_vehicles_v vv ON
+				pt.vehicle_id = vv.vehicle_id WHERE (ISNULL(pt.post_id, 0) = 0) 
+			    GROUP BY pt.vehicle_id, vv.vehicle_plate_no, CONVERT(DATE,pt.payment_date) ') ;
+
+   EXEC(@stmt);
 END
 
-
+--[dbo].[payment_for_posting_sum_sel] @client_id=1

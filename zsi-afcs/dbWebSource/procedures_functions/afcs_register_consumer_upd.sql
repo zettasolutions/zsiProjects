@@ -24,6 +24,7 @@ BEGIN
 	DECLARE @server_mail_body_format NVARCHAR(10) = 'HTML';
 	DECLARE @server_mail_body NVARCHAR(MAX) = '';
 	DECLARE @count_register_mobile INT = 0;
+	DECLARE @cur_date DATETIME = DATEADD(HOUR,8,GETUTCDATE())
 
 	SELECT @activation_code = REPLACE(CAST(RAND() * 1000000 AS NVARCHAR(6)),'.',0);
 
@@ -39,8 +40,7 @@ BEGIN
 		BEGIN TRAN;
 
 		INSERT INTO [dbo].[consumers]
-			(hash_key
-			, is_active
+			( is_active
 			, first_name
 			, middle_name
 			, last_name
@@ -55,8 +55,7 @@ BEGIN
 			, activation_code_expiry
 		)
 		VALUES
-			(NEWID()
-			, 'N'
+			( 'N'
 			, @first_name
 			, @middle_name
 			, @last_name
@@ -64,11 +63,11 @@ BEGIN
 			, @mobile_no
 			, dbo.securityEncrypt(@password)
 			, @user_id
-			, GETDATE()
+			, @cur_date
 			, @activation_code
 			, IIF(@birthdate = '', NULL, @birthdate)
 			, @image_filename
-			, dateadd(minute,30, getdate())
+			, dateadd(minute,30, @cur_date)
 		);
 
 		-- Insert record in the sms_notifications table.
@@ -85,7 +84,7 @@ BEGIN
 			, 'Welcome to zPay. Your activation code is ' + CAST(@activation_code AS NVARCHAR(100)) + '. Registration will expire in 30 mins. if not activated.'
 			, 'N'
 			, @user_id
-			, DATEADD(HOUR, 8, GETUTCDATE())
+			, @cur_date
 		);
 
 		IF @@ERROR = 0

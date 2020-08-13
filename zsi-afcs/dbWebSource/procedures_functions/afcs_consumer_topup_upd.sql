@@ -85,6 +85,7 @@ BEGIN
 			, device_id
 			, load_by
 			, is_top_up
+			, consumer_id
 		) VALUES (
 			DATEADD(HOUR, 8, GETUTCDATE())
 			, @consumer_generated_qr_id
@@ -92,6 +93,7 @@ BEGIN
 			, @generated_qr_id
 			, @generated_qr_consumer_id
 			, 'Y'
+			, @consumer_id
 		)
 		SET @id = @@IDENTITY;
 

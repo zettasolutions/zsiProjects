@@ -32,4 +32,6 @@ payment_id	INT IDENTITY(1,1)	NOT NULL
 ,client_id	INT	NULL
 ,start_km	INT	NULL
 ,end_km	INT	NULL
-,or_no	NVARCHAR(40)	NULL)
+,or_no	NVARCHAR(40)	NULL
+,is_client_qr	CHAR(1)	NULL
+,is_open	CHAR(1)	NULL)

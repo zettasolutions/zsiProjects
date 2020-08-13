@@ -1,6 +1,7 @@
 CREATE TABLE generated_qrs(
 id	INT IDENTITY(1,1)	NOT NULL
 ,hash_key	NVARCHAR(200)	NOT NULL
+,hash_key2	NVARCHAR(200)	NOT NULL
 ,is_taken	CHAR(1)	NOT NULL
 ,is_active	CHAR(1)	NOT NULL
 ,is_loaded	NCHAR(2)	NULL
@@ -12,7 +13,7 @@ id	INT IDENTITY(1,1)	NOT NULL
 ,updated_by	INT	NULL
 ,updated_date	DATETIME	NULL
 ,expiry_date	DATE	NULL
-,hash_key2	NVARCHAR(200)	NULL
 ,is_prepaid	CHAR(1)	NULL
 ,batch_no	INT	NULL
-,denomination	INT	NULL)
+,denomination	INT	NULL
+,client_id	INT	NULL)

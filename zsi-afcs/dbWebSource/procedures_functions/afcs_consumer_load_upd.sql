@@ -17,6 +17,7 @@ BEGIN
 	DECLARE @generated_qr_id INT;
 	DECLARE @generated_qr_amount DECIMAL(12, 2);
 	DECLARE @expiry_date DATETIME = NULL;
+	DECLARE @cur_date DATETIME = DATEADD(HOUR,8,GETUTCDATE())
 
 	SELECT
 		@consumer_id = consumer_id
@@ -66,7 +67,7 @@ BEGIN
 		SET
 			is_taken = 'Y'
 			, balance_amt = @new_consumer_amount
-			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
+			, updated_date = @cur_date
 		WHERE 1 = 1
 		AND id = @consumer_generated_qr_id;
 
@@ -79,7 +80,7 @@ BEGIN
 			, balance_amt = 0
 			, consumer_id = @consumer_id
 			, updated_by = @consumer_id
-			, updated_date = DATEADD(HOUR, 8, GETUTCDATE())
+			, updated_date = @cur_date
 		WHERE 1 = 1
 		AND id = @generated_qr_id;
 

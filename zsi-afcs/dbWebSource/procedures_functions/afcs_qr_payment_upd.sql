@@ -1,8 +1,8 @@
 
 CREATE PROCEDURE [dbo].[afcs_qr_payment_upd](  
-	@serial_no NVARCHAR(50)
+	  @device_hash_key NVARCHAR(50)
 	, @hash_key1 NVARCHAR(MAX)
-	, @hash_key2 NVARCHAR(MAX)
+	, @hash_key2 NVARCHAR(MAX)=NULL
 	, @base_fare DECIMAL(12, 2)
 	, @regular_count INT
 	, @student_count INT
@@ -39,48 +39,61 @@ BEGIN
 	DECLARE @new_id NVARCHAR(50);
 	DECLARE @trip_id INT;
 	DECLARE @or_number NVARCHAR(10);
+	DECLARE @qr_ref_no nvarchar(20);
+	DECLARE @is_client_qr CHAR(1)='N';
+	DECLARE @stmt NVARCHAR(MAX);
+	DECLARE @tbl_vehicle_trips NVARCHAR(50);
+	DECLARE @tbl_client_payment NVARCHAR(50);
+	DECLARE @tbl_trip TABLE (
+	    trip_id int
+	);
+
+	SELECT @client_id=company_id,@vehicle_id = vehicle_id FROM dbo.active_vehicles_v WHERE hash_key =@vehicle_hash_key;
+	SET @tbl_vehicle_trips = CONCAT('dbo.vehicle_trips_',@client_id)
+	SET @tbl_client_payment = CONCAT('dbo.payments_',@client_id)
+
+	SET @stmt = CONCAT('SELECT trip_id FROM ',@tbl_vehicle_trips,' WHERE 1 = 1 AND trip_hash_key = ''',@trip_hash_key,'''');
+	INSERT INTO @tbl_trip EXEC(@stmt);
+	IF (SELECT count(*) FROM @tbl_trip) > 0
+	   SELECT @trip_id = trip_id FROM @tbl_trip
 
 	SELECT @or_number = '000999'; -- TODO
 	SELECT @new_id = NEWID();
 	
 	SELECT @device_id = device_id
-		FROM dbo.devices WHERE 1 = 1
-		AND serial_no = @serial_no
+		FROM dbo.devices_v WHERE 1 = 1
+		AND hash_key = @device_hash_key
 		AND is_active = 'Y'
+		AND client_id = @client_id;
+
+    SET @device_id=5;
 
 	IF @device_id > 0	
 	BEGIN
-		SELECT 
+	    IF isnull(@hash_key2,'')=''
+			SELECT 
 			 @generated_qrs_id = [id] 
 			,@credit_amount = balance_amt 
-		FROM dbo.generated_qrs 
-		WHERE 1 = 1 
-		AND is_active = 'Y' 
-		AND hash_key = @hash_key1
-		AND hash_key2 = @hash_key2;
+			,@is_client_qr = 'Y'
+			FROM dbo.generated_qrs 
+			WHERE 1 = 1 AND is_active = 'Y' AND hash_key = @hash_key1 AND client_id = @client_id
+       ELSE
+			SELECT 
+				 @generated_qrs_id = [id] 
+				,@credit_amount = balance_amt 
+			FROM dbo.generated_qrs 
+			WHERE 1 = 1 AND is_active = 'Y' AND hash_key = @hash_key1 AND hash_key2 = @hash_key2;
 
 		IF @generated_qrs_id IS NOT NULL
 		BEGIN
 			SET @total_amount = ISNULL(@regular_amount, 0) + ISNULL(@student_amount, 0) + ISNULL(@senior_amount, 0) + ISNULL(@pwd_amount, 0);
 			SELECT @consumer_id = consumer_id, @mobile_no = mobile_no FROM dbo.consumers WHERE qr_id=@generated_qrs_id;
 		
-				IF @credit_amount >= @total_amount
+				IF (@credit_amount >= @total_amount OR @is_client_qr = 'Y')
 				BEGIN
-					SELECT
-						@vehicle_id = vehicle_id
-					   ,@client_id  = company_id
-					FROM dbo.active_vehicles_v WHERE 1 = 1
-					AND hash_key = @vehicle_hash_key;
-
-					SELECT 
-						@trip_id = trip_id
-					FROM dbo.vehicle_trips WHERE 1 = 1
-					AND trip_hash_key = @trip_hash_key;
-
 					BEGIN TRAN;
-
 					SET @new_credit_amount = @credit_amount - @total_amount;
-
+					SET @qr_ref_no = 'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0)
 					-- Insert record in the payments table.
 					INSERT INTO [dbo].[payments](
 						[payment_date]
@@ -108,6 +121,8 @@ BEGIN
 						, [no_klm]
 						, [qr_ref_no]
 						, [or_no]
+						, [is_client_qr]
+						, [is_open]
 					)
 					VALUES(
 						DATEADD(HOUR, 8, GETUTCDATE())
@@ -133,10 +148,13 @@ BEGIN
 						, @from_location
 						, @to_location
 						, @travel_distance
-						, 'ZP' + replace(cast(rand() * + 1000000 as NVARCHAR(6)),'.',0)
+						, @qr_ref_no
 						, @or_number
+						, @is_client_qr
+						, @is_client_qr
 					)
-			        
+                    SET @id = @@IDENTITY			        
+
 					IF @@ERROR <> 0
 					BEGIN
 						SET @error = 1;
@@ -144,6 +162,9 @@ BEGIN
 
 					IF @error = 0
 					BEGIN
+					    SET @stmt = CONCAT('INSERT INTO ', @tbl_client_payment, ' SELECT * FROM dbo.payments WHERE payment_id=',@id)
+	                    EXEC(@stmt);	
+						
 						UPDATE 
 							dbo.generated_qrs_active_v 
 						SET
@@ -165,7 +186,7 @@ BEGIN
 							VALUES(
 								'zpay'
 							   , @mobile_no
-							   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' .'
+							   , 'A payment amount of ' + CAST(@total_amount AS NVARCHAR(100)) + ' was made on ' + CAST(GETDATE() AS NVARCHAR(100)) + ' . Ref.# '+ @qr_ref_no
 							   , 'N'
 							   , @user_id
 							   , DATEADD(HOUR, 8, GETUTCDATE()))
@@ -217,3 +238,5 @@ BEGIN
 			, '' AS or_no
 	END
 END;
+
+
