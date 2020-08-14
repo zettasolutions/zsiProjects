@@ -46,16 +46,7 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#nav-posted" role="tab" aria-controls="nav-posted"><i class="far fa-file-check"></i> Posted </a>
                 </li>
-            </ul>
-            
-            <!--<nav>
-              <div class="nav nav-tabs nav-tab-main" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active"     data-toggle="tab" href="#nav-recentCollection" role="tab" aria-controls="nav-recentCollection"><i class="far fa-clock"></i> Recent Collection</a>
-                <a class="nav-item nav-link"            data-toggle="tab" href="#nav-recentCollection" role="tab" aria-controls="nav-recentCollection"><i class="far fa-clock"></i> History Collection</a>
-                <a class="nav-item nav-link"            data-toggle="tab" href="#nav-forPosting" role="tab" aria-controls="nav-forPosting"><i class="far fa-file-alt"></i> For Posting </a>
-                <a class="nav-item nav-link"            data-toggle="tab" href="#nav-posted" role="tab" aria-controls="nav-posted"><i class="far fa-file-check"></i> Posted </a>
-              </div>
-            </nav>-->
+            </ul> 
             <div class="tab-content border border-top-0 p-3">
                 <div role="tabpanel" class="tab-pane fade show active" id="nav-recentCollection"> 
                     <ul class="nav nav-tabs sub-nav-tabs" role="tablist">
@@ -87,15 +78,15 @@
                         		</div>
                         		<div class="col-sm-6 col-md-3 col-xs-12 " id="hideBTN">
                         		    <label for="" class="col-form-label text-label">PAO</label>   
-                        		    <div class="input-group"> 
-                        		        <select  id="dailyFare_pao" class="form-control form-control-sm"></select>
+                        		    <div class="input-group" id="recentPao"> 
+                        		        <select  name="dailyFare_pao" class="form-control form-control-sm"></select>
                                         <div class="input-group-append" id="recentBtn">
                                             <button id="btnFilterCollection" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Filter">
                                               <i class="fas fa-filter"></i>
                                             </button>
                                         </div>
                                         <div class="input-group-append ml-1">
-                                            <button id="btnResetDailyFare" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
+                                            <button id="btnResetRecent" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
                                                <i class="far fa-refresh hvr-icon"></i> Reset
                                             </button>
                                         </div>
@@ -122,23 +113,7 @@
                                             </button>
                                         </div>
                                     </div>
-                        		</div>
-                        		<!--<div class="col-sm-6 col-md-3 col-xs-12">
-                        		    <label for="" class="col-form-label text-label">&nbsp;</label>
-                        		    <input type="hidden" class="form-control form-control-sm pl-2"/>
-                        		    <div class="input-group"> 
-                                        <div class="input-group-append">
-                                            <button id="btnFilterCollection" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Filter">
-                                              <i class="fas fa-filter"></i>
-                                            </button>
-                                        </div>
-                                        <div class="input-group-append ml-1">
-                                            <button id="btnResetDailyFare" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
-                                               <i class="far fa-refresh hvr-icon"></i> Reset
-                                            </button>
-                                        </div>
-                                    </div>
-                        		</div>-->  
+                        		</div> 
                             </div>
                             <div class="row mt-3"> 
                                 <div class="col-md-12 col-sm-12 col-xs-12">

@@ -28,14 +28,16 @@
         $(".sub-nav-tabs").find(".nav-item:first-child()").find(".nav-link").addClass("active"); 
         
         if(gTabName === "Recent Collection"){ 
-            gSubTabName = $.trim($(".sub-nav-tabs").find(".nav-link.active").text());  
-            displayDailyFareCollection();
-            getFilters();
+            gSubTabName = $.trim($(".sub-nav-tabs").find(".nav-link.active").text()); 
+            $("#nav-recentCollection").find("select,input").val("");
+            dateValidation();
+            displayDailyFareCollection(); 
         } 
         if(gTabName === "History Collection"){
             gSubTabName = $.trim($(".sub-nav-tabs").find(".nav-link.active").text()); 
-            displayDailyFareCollection();  
-            getFilters();
+            $("#nav-recentCollection").find("select,input").val(""); 
+            dateValidation();
+            displayDailyFareCollection();   
         }  
         dateValidation(); 
         getFilters();
@@ -86,7 +88,7 @@
     
     	//remove the padding right and modal-open class from the body tag which bootstrap adds when a modal is shown
     
-    	$('body').removeClass("modal-open")
+    	$('body').removeClass("modal-open");
    	 	$('body').css("padding-right","");     
          
         displayPostedSummary(post_id);
@@ -106,7 +108,7 @@
     
     	//remove the padding right and modal-open class from the body tag which bootstrap adds when a modal is shown
     
-    	$('body').removeClass("modal-open")
+    	$('body').removeClass("modal-open");
    	 	$('body').css("padding-right","");     
          
         displayPostedSummaryDtl(post_id, vehicle_id);
@@ -119,6 +121,7 @@
             ,_vehicleId         = _$filter.find('#dailyFare_vehicle').val() 
             ,_driverId          = _$filter.find('#dailyFare_driver').val()
             ,_paoId             = _$filter.find('#dailyFare_pao').val()
+            ,_paorcnt           = _$filter.find('[name="dailyFare_pao"]').val()
             ,_startDate         = _$filter.find('#trip_startDate').val()
             ,_endDate           = _$filter.find("#trip_endDate").val()  
         ; 
@@ -127,14 +130,14 @@
             ,trip_no        : _tripNo
             ,vehicle_id     : _vehicleId   
             ,driver_id      : _driverId
-            ,pao_id         : _paoId 
+            ,pao_id         : _paoId
+            ,paoRecent      : _paorcnt
             ,start_date     : _startDate 
             ,end_date       : _endDate 
         };
     }   
     function fillDropdowns(data){  
-        var _o = getFilters(); 
-        console.log("data",data);
+        var _o = getFilters();  
         $("select[id='trip_no']").fillSelect({	                
              data   : data.getUniqueRows(["trip_no"])	                   
             ,text   : "trip_no"	                    
@@ -158,7 +161,20 @@
             ,text   : "pao_name"	                    
             ,value  : "pao_id"	                    
             ,selectedValue : _o.pao_id	            
-        }); 
+        });
+        $("select[id='dailyFare_pao']").fillSelect({	                
+             data   : data.getUniqueRows(["pao_id"])	                   
+            ,text   : "pao_name"	                    
+            ,value  : "pao_id"	                    
+            ,selectedValue : _o.pao_id	            
+        });
+        $("select[name='dailyFare_pao']").fillSelect({	                
+             data   : data.getUniqueRows(["pao_id"])	                   
+            ,text   : "pao_name"	                    
+            ,value  : "pao_id"	                    
+            ,selectedValue : _o.paoRecent	            
+        });
+        
     }  
     function dateValidation(){
         var d = new Date();
@@ -175,12 +191,12 @@
         }).datepicker("setDate", _date1).on("changeDate",function(e){
             $("#trip_endDate").datepicker({endDate: yesterday,autoclose: true}).datepicker("setStartDate",e.date);
             $("#trip_endDate").datepicker().datepicker("setDate",yesterday);
-        });
-        
-        $("#trip_endDate").datepicker({
-            autoclose : true
-            ,todayHighlight: false
-        }).datepicker("setDate","0");
+        }); 
+         $("#trip_endDate").datepicker({
+             autoclose : true 
+            ,endDate: yesterday
+            ,todayHighlight: false 
+        }).datepicker("setDate", yesterday);
  
     }
     function displayDailyFareCollection(){   
@@ -206,10 +222,12 @@
                     switch (gSubTabName) {  
                         case "Collection by Trip":   
                             _sqlCode = "V1349";    
+                            _params.pao_id =_o.paoRecent;
                             $("#hideFromDate,#hideToDate").hide();   
                             break;
                         case "Collection Details":  
                             _sqlCode = "P1338";   
+                            _params.pao_id =_o.paoRecent;
                             delete _params.pdate_from;
                             delete _params.pdate_to;     
                             $("#hideFromDate,#hideToDate").hide();
@@ -326,6 +344,7 @@
                 ,parameters :  _params
                 ,onComplete : function(d) {
                     var _dataByTripNo =  d.rows.getUniqueRows(["trip_no"]); 
+                    
                     fillDropdowns(_dataByTripNo);
 
                     var _rows = d.rows; 
@@ -355,9 +374,9 @@
                                 ,driver_name            : ""
                                 ,pao                    : ""
                                 ,start_date             : ""
-                                ,end_date               : "Total Amount"
-                                ,start_odo              : _tot.stod
-                                ,end_odo                : _tot.edo
+                                ,end_date               : ""
+                                ,start_odo              : ""
+                                ,end_odo                : ""
                                 ,no_kms                 : _tot.kms
                                 ,total_collection_amt   : _tot.tca 
                         };
@@ -462,8 +481,7 @@
     }
     function displayPostedTransactions(fromDate,toDate,paymentId,routeId,vehicleId,driverId,paoId){ 
         zsi.getData({
-             sqlCode    : "P1341" //posted_dates_sel
-            //,parameters : {posted_frm:(fromDate ? fromDate : ""),posted_to:(toDate ? toDate : ""),payment_type:(paymentId ? paymentId : ""),route_id:(routeId ? routeId : ""),vehicle_id:(vehicleId ? vehicleId : ""),driver_id:(driverId ? driverId : ""),pao_id:(paoId ? paoId : "")} 
+             sqlCode    : "P1341"  
             ,onComplete : function(d) {
                 var _rows = d.rows;
                 var _totality = 0.00;
@@ -648,11 +666,11 @@
                 d.rows.push(_total);
                 $(gzGridForPostDtl).dataBind({
                      rows           : _rows
-                    ,height         : $(window).height() - 352
+                    ,height         : $(window).height() - 400
                     ,blankRowsLimit : 0
                     ,dataRows       : _getDataRows()
                     ,onComplete: function(o){
-                        var _this   = this; 
+                        //var _this   = this; 
                         this.find("input").attr("readonly",true);
                         $(".zRow:last-child()").find("[name='payment_date']").val("");
                         $(".zRow:last-child()").addClass("zTotal");
@@ -665,7 +683,7 @@
     }
     function displayPostedSummary(post_id){
         zsi.getData({
-             sqlCode    : "P1340" //payment_posted_sum_sel
+             sqlCode    : "P1340"  
             ,parameters : {post_id: post_id,client_id: gUser.company_id}
             ,onComplete : function(d) {
                 var _rows= d.rows;
@@ -862,7 +880,7 @@
     
     $("#recentBtn").find("#btnFilterCollection").click(function(){
         var  _$filter = $("#nav-recentCollection"); 
-        _$filter.find('#trip_no, #dailyFare_vehicle, #dailyFare_driver,#dailyFare_pao').val()
+        _$filter.find('#trip_no, #dailyFare_vehicle, #dailyFare_driver,[name="dailyFare_pao"]').val()
         displayDailyFareCollection(gSubTabName);
         setTimeout(function(){
             setFooterFreezed(gzGrid1);
@@ -872,19 +890,21 @@
     $("#historyBtn").find("#btnFilterCollection").click(function(){
         var  _$filter = $("#nav-recentCollection"); 
         _$filter.find('#trip_no, #dailyFare_vehicle, #dailyFare_driver,#dailyFare_pao').val()
+        
         displayDailyFareCollection(gSubTabName);
         setTimeout(function(){
             setFooterFreezed(gzGrid1);
         }, 1000);
     });  
-    $("#historyBtn").find("#btnResetDailyFare").click(function(){   
+    
+    $("#btnResetDailyFare").click(function(){   
         var  _$filter = $("#nav-recentCollection"); 
         _$filter.find('#trip_no, #dailyFare_vehicle, #dailyFare_driver,#dailyFare_pao').val("")   
         displayDailyFareCollection();
     }); 
-    $("#recentBtn").find("#btnResetDailyFare").click(function(){   
+    $("#btnResetRecent").click(function(){   
         var  _$filter = $("#nav-recentCollection"); 
-        _$filter.find('#trip_no, #dailyFare_vehicle, #dailyFare_driver,#dailyFare_pao').val("")   
+        _$filter.find('#trip_no, #dailyFare_vehicle, #dailyFare_driver,[name="dailyFare_pao"]').val("")   
         displayDailyFareCollection();
     });  
     $(".btnExport").click(function(){
@@ -923,4 +943,4 @@
 })();     
 
 
-                               
+                                       
