@@ -10,7 +10,7 @@
                     var _rows = d.rows;  
                     var _getColor = function(cb){ 
                         var _colorSet = new am4core.ColorSet();
-                        _colors = _colorSet;  
+                        _colors = _colorSet;   
                         cb(_colors);
                     }; 
                     var _displayYearGraph = function(o){   
@@ -63,7 +63,12 @@
                                 series.dataFields.valueY = "value";    
                                 series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";  
                                 if(o.category==="pay_month") series.columns.template.tooltipText = "Month of "+"{categoryX}: [bold]{valueY}[/]";  
-                                
+                            var series2 = chart.series.push(new am4charts.LineSeries());
+                                series2.name = "category";
+                                series2.stroke = am4core.color("#CDA2AB");
+                                series2.strokeWidth = 3;
+                                series2.dataFields.valueY = "value";
+                                series2.dataFields.categoryX = "category";      
                                 chart.cursor = new am4charts.XYCursor();   
                                 // as by default columns of the same series are of the same color, we add adapter which takes colors from chart.colors color set
                                 series.columns.template.adapter.add("fill", function (fill, target) { 
@@ -103,38 +108,24 @@
                 ,gYear3 = ""
                 ,gYear4 = ""
                 ,gYear5 = ""
-                ,_textTitle = " Monthly Collection"; 
-                
-                for(var i = 0; i < data.length; i++) {   
-                    if(data.length===5){
-                        $(".spanYears1").text(data[0].pay_year + _textTitle); 
-                        gYear1 = data[0].pay_year; 
-                        $(".spanYears2").text(data[1].pay_year + _textTitle); 
-                        gYear2 = data[1].pay_year;  
-                        $(".spanYears3").text(data[2].pay_year + _textTitle);
-                        gYear3 = data[2].pay_year;  
-                        $(".spanYears4").text(data[3].pay_year + _textTitle);  
-                        gYear4 = data[3].pay_year;  
-                        $(".spanYears5").text(data[4].pay_year + _textTitle); 
-                        gYear5 = data[4].pay_year;  
-                    }else{ 
-                        $(".spanYears1").text(data[0].pay_year + _textTitle); 
-                        gYear1 = data[0].pay_year; 
-                        $(".spanYears2").text(data[1].pay_year + _textTitle); 
-                        gYear2 = data[1].pay_year;  
-                        $(".spanYears3").text(data[2].pay_year + _textTitle);
-                        gYear3 = data[2].pay_year;  
-                        $(".spanYears4").text(data[3].pay_year + _textTitle);  
-                        gYear4 = data[3].pay_year;  
-                        if(isUD(data[4])){
-                            $(".spanYears5").text("No Collection found"); 
-                            gYear5 = "";
-                        }else{
-                            $(".spanYears5").text(data[4].pay_year + _textTitle); 
-                            gYear5 = data[4].pay_year;  
-                        } 
-                    } 
-                }  
+                ,_textTitle = " Monthly Collection";  
+            for(var i = 0; i < data.length; i++) {  
+                $(".spanYears1").text(data[0].pay_year + _textTitle); 
+                gYear1 = data[0].pay_year; 
+                $(".spanYears2").text(data[1].pay_year + _textTitle); 
+                gYear2 = data[1].pay_year;  
+                $(".spanYears3").text(data[2].pay_year + _textTitle);
+                gYear3 = data[2].pay_year;  
+                $(".spanYears4").text(data[3].pay_year + _textTitle);  
+                gYear4 = data[3].pay_year;  
+                if(data.length===5){
+                    $(".spanYears5").text(data[4].pay_year + _textTitle); 
+                    gYear5 = data[4].pay_year;   
+                }else{ 
+                    $(".spanYears5").text("No Collection found"); 
+                    gYear5 = "";
+                }    
+            }  
             var _$spanYears5 = $(".spanYears5").text();
             var _$spanYears4 = $(".spanYears4").text();
             var _$spanYears3 = $(".spanYears3").text();
@@ -147,6 +138,7 @@
             am4core.options.onlyShowOnViewport = true;     
             var _colors = [];
             var _colorRows = [];
+            
             var _getData = function(sqlCode,params,cb){    
                 zsi.getData({
                      sqlCode : sqlCode 
@@ -206,61 +198,54 @@
                             _month[10] = "October";
                             _month[11] = "November";
                             _month[12] = "December"; 
-                        for (var i = 0; i < _data.length; i++) {  
-                             if(o.category==="pay_month"){    
-                                for(var n =0;n<=_month.length; n++){
-                                    if(_data[i].category === n){
-                                      _monthlyCtgry = _month[n]; 
-                                    }
-                                }  
-                                chartData.push({
-                                    title       : o.title,
-                                    year        : o.year,
-                                    code        : o.sqlCode,
-                                    category    : _monthlyCtgry,
-                                    categorySub : _data[i].category,
-                                    container   : o.container, 
-                                    value       : _data[i].value,
-                                    color       : _data[i].color,
-                                    id: i
-                                }); 
-                            
-                            } 
-                            else{ 
-                                chartData.push({
-                                    category: _data[i].category,
-                                    value: _data[i].value,
-                                    color: _data[i].color,
-                                    id: i
-                                  }); 
-                                }
-                            }
-                          
+                        for (var i = 0; i < _data.length; i++) {      
+                            for(var n =0;n<=_month.length; n++){ 
+                                if(_data[i].category === n){ 
+                                  _monthlyCtgry = _month[n]; 
+                                } 
+                            }  
+                            chartData.push({
+                                title       : o.title,
+                                year        : o.year,
+                                code        : o.sqlCode,
+                                category    : _monthlyCtgry,
+                                categorySub : _data[i].category,
+                                container   : o.container, 
+                                value       : _data[i].value,
+                                color       : _data[i].color,
+                                id: i
+                            });  
+                        }  
                         return chartData; 
                     }; 
                     // Add data
                     chart.data = generateChartData();  
-                   // Add and configure Series    
-                    
+                   // Add and configure Series     
                     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());  
-                        categoryAxis.dataFields.category = "category";
-                        categoryAxis.renderer.minGridDistance = 20;    
+                        categoryAxis.dataFields.category = "category"; 
+                        categoryAxis.renderer.minGridDistance = 20;
+                        
                     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());  
                     var series = chart.series.push(new am4charts.ColumnSeries());  
                         series.dataFields.categoryX = "category"; 
                         series.dataFields.valueY = "value";    
                         series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";  
-                        if(o.category==="pay_month") series.columns.template.tooltipText = "Month of "+"{categoryX}: [bold]{valueY}[/]";  
-                        
+                        series.columns.template.tooltipText = "Month of "+"{categoryX}: [bold]{valueY}[/]";    
                         chart.cursor = new am4charts.XYCursor();   
                         // as by default columns of the same series are of the same color, we add adapter which takes colors from chart.colors color set
+                    var series2 = chart.series.push(new am4charts.LineSeries());
+                        series2.name = "category";
+                        series2.stroke = am4core.color("#CDA2AB");
+                        series2.strokeWidth = 3;
+                        series2.dataFields.valueY = "value";
+                        series2.dataFields.categoryX = "category";
                         series.columns.template.adapter.add("fill", function (fill, target) { 
                         	return chart.colors.getIndex(target.dataItem.index);
                         });
                 
-                    var title = chart.titles.create(); 
-                    if(o.category==="pay_month"){   
-                        title.text = 'Monthly Data ';
+                    var title = chart.titles.create();    
+                        if(o.data.length===0)title.text = 'No Monthly Data ';
+                        else title.text = 'Monthly Data ';
                         series.columns.template.events.on("hit", function(ev) {
                             if (typeof ev.target.dataItem.dataContext.category) { 
                             var _catgry     = ev.target.dataItem.dataContext.category;
@@ -268,7 +253,8 @@
                             var _yearly     = ev.target.dataItem.dataContext.year;
                             var _container  = ev.target.dataItem.dataContext.container;
                             var _code       = ev.target.dataItem.dataContext.code; 
-                            var _title      = ev.target.dataItem.dataContext.title;   
+                            var _title      = ev.target.dataItem.dataContext.title;  
+                            
                             var _dailyData = function(sqlCode,params, cb){  
                                 var _params = {
                                    client_id:params.client_id
@@ -311,9 +297,8 @@
                                     _json.title     = _title;
                                     _displayNewGraph(_json); 
                                 });
-                            });
+                            }); 
                             
-                              
                             var _displayNewGraph = function(o){  
                                 var _o = o;
                                 var _dataLength = o.data.length;
@@ -343,7 +328,7 @@
                                     var chart = am4core.create(_o.container, am4charts.XYChart); 
                                     chart.numberFormatter.numberFormat = '###';
                                     // Set data  
-                                    var generateNewChartData = function() {
+                                    var generateDailyChartData = function() {
                                         var _chartData = [];    
                                         for (var i = 0; i < _data.length; i++) {  
                                             _chartData.push({
@@ -358,7 +343,7 @@
                                         return _chartData;
                                     }; 
                                     // Add Pay day data
-                                    chart.data = generateNewChartData(); 
+                                    chart.data = generateDailyChartData(); 
                                    // Add and configure Series    
                                     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());  
                                         categoryAxis.dataFields.category = "category";
@@ -374,6 +359,16 @@
                                         series.columns.template.adapter.add("fill", function (fill, target) { 
                                         	return chart.colors.getIndex(target.dataItem.index);
                                         }); 
+                                    var series2 = chart.series.push(new am4charts.LineSeries());
+                                        series2.name = "category";
+                                        series2.stroke = am4core.color("#CDA2AB");
+                                        series2.strokeWidth = 3;
+                                        series2.dataFields.valueY = "value";
+                                        series2.dataFields.categoryX = "category";  
+                                        //Add scroll 
+                                        chart.scrollbarY = new am4core.Scrollbar();
+                                     
+                                    //Add title 
                                     var title = chart.titles.create();
                                         title.text = 'Month of ' + _catgry; 
                                     var resetLabel = chart.plotContainer.createChild(am4core.Label);
@@ -421,14 +416,13 @@
                                         }; 
                                         _initCol(o.title);   
                                         resetLabel.hide(); 
-                                        }); 
+                                    }); 
                                     resetLabel.show(); 
                                 });
                                 
                             }; 
                         }
-                      }, this);
-                    }
+                      }, this); 
                 });
             };  
             var _init = function(name){ 
@@ -522,4 +516,4 @@
 })();           
            
                                                                                                                
-                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                      
