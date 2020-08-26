@@ -11,6 +11,7 @@ var dtr = (function(){
         dateValidation();
         
     }; 
+    
     function displayDTR(startDate,endDate,searchVal){  
         var _startDate = $("#dtr_fromDate").val();
         var _endDate = $("#dtr_toDate").val();
@@ -19,13 +20,13 @@ var dtr = (function(){
              sqlCode            : "D190"
             ,parameters         : {client_id:app.userInfo.company_id,start_date:(startDate ? startDate : gStartDate),end_date:(endDate ? endDate : gEndDate ),search_val:searchVal}
             ,width              : $("#panel-content").width()
-            ,height             : $(window).height() - 260
+            ,height             : $(window).height() - 299
             ,blankRowsLimit     : 5
             ,dataRows           : [
-                    {text:cb        ,width:25              ,style : "text-align:left"
-                        ,onRender  :  function(d){ return app.bs({name:"id"         ,type:"hidden"      ,value: svn (d,"id")}) 
-                                        + app.bs({name:"is_edited"                  ,type:"hidden"      ,value: svn(d,"is_edited")})
-                                        + app.bs({name:"employee_id"                ,type:"hidden"      ,value: svn(d,"employee_id")}) 
+                    {text:cb                                                        ,width: 25            ,style: "text-align:left"
+                        ,onRender  :  function(d){ return app.bs({name:"id"         ,type:  "hidden"      ,value: svn (d,"id")}) 
+                                        + app.bs({name:"is_edited"                  ,type:  "hidden"      ,value: svn(d,"is_edited")})
+                                        + app.bs({name:"employee_id"                ,type:  "hidden"      ,value: svn(d,"employee_id")}) 
                                         + (d !==null ? app.bs({name:"cb",type:"checkbox"}) : "" );
                                         
                         }
@@ -36,49 +37,49 @@ var dtr = (function(){
                         }
                     }
                     
-                    ,{text:"Last Name"                       ,width:165        ,style:"text-align:left"
+                    ,{text:"Last Name"                          ,width:165        ,style:"text-align:left"
                         ,onRender : function(d){
                             return app.svn(d,"last_name");
                         }
                     }
-                    ,{text:"First Name"                      ,width:165        ,style:"text-align:left"
+                    ,{text:"First Name"                         ,width:165        ,style:"text-align:left"
                         ,onRender : function(d){
                             return app.svn(d,"first_name");
                         }
                     }
-                    ,{text:"Middle Name"                      ,width:165        ,style:"text-align:left"
+                    ,{text:"Middle Name"                        ,width:165        ,style:"text-align:left"
                         ,onRender : function(d){
                             return app.svn(d,"middle_name");
                         }
                     }
-                    ,{text:"Name Suffix"                      ,width:85        ,style:"text-align:left"
+                    ,{text:"Name Suffix"                        ,width:85        ,style:"text-align:left"
                         ,onRender : function(d){
                             return app.svn(d,"name_suffix");
                         }
                     }
-                    ,{text:"Shifts"                         ,type:"select"          ,name:"shift_id"                         ,width:50        ,style:"text-align:left"}
-                    ,{text:"Shifts Hours"                   ,type:"input"           ,name:"shift_hours"                      ,width:72        ,style:"text-align:center"}
+                    ,{text:"Shifts"                         ,type:"select"          ,name:"shift_id"                         ,width:100        ,style:"text-align:left"}
+                    ,{text:"Shifts Hours"                   ,type:"input"           ,name:"shift_hours"                      ,width:72         ,style:"text-align:center"}
                     ,{text:"DTR Date"                       ,width:80               ,style:"text-align:left"
-                            ,onRender: function(d){ return app.bs({type:"input"     ,name:"dtr_date"       ,value: svn(d,"dtr_date").toShortDate()});
+                            ,onRender: function(d){ return app.bs({type:"input"     ,name:"dtr_date"         ,value: svn(d,"dtr_date").toShortDate()});
                         }
                     } 
                     ,{text:"Date Time In"                                                                                           ,width:140       ,style:"text-align:left"
-                        ,onRender: function(d){ return app.bs({type:"input"         ,name:"dt_in"       ,value: svn(d,"dt_in").toShortDateTime()});
+                            ,onRender: function(d){ return app.bs({type:"input"         ,name:"dt_in"        ,value: svn(d,"dt_in").toShortDateTime()});
                         }
                     } 
                     ,{text:"Date Time Out"                                                                                          ,width:140       ,style:"text-align:left"
-                        ,onRender: function(d){ return app.bs({type:"input"         ,name:"dt_out"       ,value: svn(d,"dt_out").toShortDateTime()});
+                            ,onRender: function(d){ return app.bs({type:"input"         ,name:"dt_out"       ,value: svn(d,"dt_out").toShortDateTime()});
                         }
                     }
                     ,{text:"Reg Hours"                      ,type:"input"           ,name:"reg_hours"                        ,width:65        ,style:"text-align:center"} 
                     ,{text:"Night Def"                      ,type:"input"           ,name:"nd_hours"                         ,width:60        ,style:"text-align:center"} 
                     
                     ,{text:"ODT In"                                                                                          ,width:140       ,style:"text-align:left"
-                        ,onRender: function(d){ return app.bs({type:"input"         ,name:"odt_in"       ,value: svn(d,"odt_in").toShortDateTime()});
+                            ,onRender: function(d){ return app.bs({type:"input"         ,name:"odt_in"       ,value: svn(d,"odt_in").toShortDateTime()});
                         }
                     } 
                     ,{text:"ODT Out"                                                                                         ,width:140       ,style:"text-align:left"
-                        ,onRender: function(d){ return app.bs({type:"input"         ,name:"odt_out"       ,value: svn(d,"odt_out").toShortDateTime()});
+                            ,onRender: function(d){ return app.bs({type:"input"         ,name:"odt_out"      ,value: svn(d,"odt_out").toShortDateTime()});
                         }
                     }
                     ,{text:"Reg OT Hours"                   ,type:"input"           ,name:"reg_ot_hrs"                       ,width:80        ,style:"text-align:center"}
@@ -173,8 +174,9 @@ var dtr = (function(){
                 } 
             });
     }
-    function dateValidation(date){
-        var d = date ? new Date(date) : new Date();
+    
+    function dateValidation(){
+        var d = new Date();
         var month = d.getMonth()+1;
         var day = d.getDate() - 1;
         var _date1 = (d.getMonth() + 1) + "/01/" +    d.getFullYear();
@@ -184,14 +186,17 @@ var dtr = (function(){
             ,endDate: d
             ,todayHighlight: false 
         }).datepicker("setDate", _date1).on("changeDate",function(e){
-            $("#dtr_toDate").datepicker({endDate: yesterday,autoclose: true}).datepicker("setStartDate",e.date);
+            $("#dtr_toDate").datepicker({
+                 endDate: yesterday
+                ,autoclose: true
+            }).datepicker("setStartDate",e.date);
             $("#dtr_toDate").datepicker().datepicker("setDate",yesterday);
         });
         $("#dtr_toDate").datepicker({
-             autoclose : true
+              autoclose : true
+             ,endDate: d
         }).datepicker("setDate",yesterday).on("changeDate",function(e){
             var _d = e.date;
-            console.log("_d",_d);
             $("#dtr_fromDate").datepicker("destroy");
             $("#dtr_fromDate").datepicker({
                  autoclose : true 
@@ -199,10 +204,7 @@ var dtr = (function(){
                 ,todayHighlight: false 
             });
         });
-
-
-
-
+        
         var _startDate = $("#dtr_fromDate").val();
         var _endDate = $("#dtr_toDate").val();
         displayDTR(_startDate,_endDate);
@@ -220,13 +222,14 @@ var dtr = (function(){
         }); 
     });
     
-    $("#btnDelete").click(function (){ 
-        zsi.form.deleteData({ 
-            code        :"ref-00016"
-           ,onComplete  :function(data){
-                displayDTR();
-           }
-        });
+    $("#btnDelete").click(function (){  
+        $("#grid").deleteData({
+    		sqlCode: "D248"  
+    		,parameters: {client_id:app.userInfo.company_id,table:'dtr',id:'id'}
+    		,onComplete : function(d){
+    			$("#grid").trigger("refresh");
+    		}
+    	 });  
     });
 
     $("#btnReset").click(function(){   
@@ -252,4 +255,4 @@ var dtr = (function(){
     
     return pub;
     
-})();  
+})();      

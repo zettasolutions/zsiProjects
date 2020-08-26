@@ -11,7 +11,8 @@ var employees = (function(){
         ,gSearchValue       = ""
         ,gCustName          = ""
         ,gFullName          = ""
-        ,clientId          = app.userInfo.client_id
+        ,clientId          = app.userInfo.company_id
+        ,gEmployeeId        = null
         ,gCanvas;
     
     zsi.ready = function(){
@@ -54,11 +55,10 @@ var employees = (function(){
             , body      : gtw.new().modalBodyInactiveEmployee({gridInactive:"gridInactive",saveInactive:"saveInactive();",deleteInactive:"deleteInactive();"}).html()  
         })
         .bsModalBox({
-              id        : mdlImageEmpl
-            , sizeAttr  : "modal-md"
+              id        : mdlImageEmpl 
             , title     : "Inactive Employee(s)"
-            , body      : ""
-            , footer    : gtw.new().modalBodyImageEmpl({onClickUploadImageEmpl:"employees.uploadImageEmpl();"}).html()  
+            , body      : "" 
+            , footer    : '<div class="col-11 ml-auto"><button type="button" onclick="employees.uploadImageEmpl(this);" class="btn btn-primary"><span class="fas fa-file-upload"></span> Upload</button>'
         });
     }
     
@@ -74,7 +74,7 @@ var employees = (function(){
                                         ,{text:"B"      ,value:"B"}
                                     ] 
         ;                           
-        $("#grid").dataBind({
+        $("#gridEmployees").dataBind({
                  sqlCode    : "E162"
                 ,height     : $(window).height() - 265
                 ,parameters  : {client_id : _clientId, search_val: (searchVal ? searchVal : ""),is_active : "Y"} 
@@ -82,15 +82,17 @@ var employees = (function(){
                 ,dataRows   : [
                     { text:"Photo"             , width:40      , style:"text-align:center;" 
             		    ,onRender : function(d){ 
-                            var mouseMoveEvent= "onmouseover='employees.mouseover(\"" +  svn(d,"img_filename") + "\");' onmouseout='employees.mouseout();'";
+                            var image_url = base_url + "dbimagebyclient/e247/" + _clientId + "/" + app.svn(d,"id") + "?ts=" + new Date().getTime();                               
+                            var mouseMoveEvent= "onmouseover='employees.mouseover(\"" + image_url  + "\");' onmouseout='employees.mouseout();'";  
                             var html = "<a href='javascript:void(0);' "+ mouseMoveEvent +" class='btn btn-sm has-tooltip' onclick='employees.showModalUploadEmplImage(" + svn(d,"id") +",\"" 
-        		                           + svn(d,"emp_lfm_name") + "\");' data-toggle='tooltip' data-original-title='Upload Image'><i class='fas fa-image'></i> </a>";
+        		                           + svn(d,"last_name") + "\");' data-toggle='tooltip' data-original-title='Upload Image'><i class='fas fa-image'></i> </a>";
                             return (d!==null ? html : "");
                         }
         		    }
         		    ,{text:"Info"                                       ,width:60         ,style:"text-align:center"
                         ,onRender : function(d){
-                                var _link = "<a href='javascript:void(0)' ' title='View' onclick='employees.showModalViewId(this,"+ app.svn (d,"employee_no") +", \""+ app.svn (d,"first_name") +"\", \""+ app.svn (d,"middle_name") +"\",\""+ app.svn (d,"last_name") +"\",\""+ app.svn (d,"name_suffix") +"\",\""+ app.svn (d,"img_filename") +"\",\""+ app.svn (d,"position_id") +"\",\""+ app.svn (d,"emp_hash_key") +"\")'><i class='fas fa-eye'></i></a>";
+                                var image_url2 = base_url + "dbimagebyclient/e247/" + _clientId + "/" +   svn(d,"id");
+                                var _link = "<a href='javascript:void(0)' ' title='View' onclick='employees.showModalViewId(this,"+ app.svn (d,"employee_no") +", \""+ app.svn (d,"first_name") +"\", \""+ app.svn (d,"middle_name") +"\",\""+ app.svn (d,"last_name") +"\",\""+ app.svn (d,"name_suffix") +"\",\""+ image_url2 +"\",\""+ app.svn (d,"position_id") +"\",\""+ app.svn (d,"emp_hash_key") +"\")'><i class='fas fa-eye'></i></a>";
                                 return (d !== null ? _link : "");
                         }
                     }
@@ -135,9 +137,9 @@ var employees = (function(){
                     ,{text:"HMDF No."               ,type:"input"       ,name:"hmdf_no"             ,width:105        ,style:"text-align:center"}
                     ,{text:"Account No."            ,type:"input"       ,name:"account_no"          ,width:105        ,style:"text-align:center"}
                     ,{text:"No. of Shares"          ,type:"input"       ,name:"no_shares"           ,width:105        ,style:"text-align:center"}
-                    ,{text:"Contact Name"           ,type:"input"       ,name:"contact_name"        ,width:105        ,style:"text-align:center"}
+                    ,{text:"Contact Name"           ,type:"input"       ,name:"contact_name"        ,width:165        ,style:"text-align:left"}
                     ,{text:"Contact Phone No."      ,type:"input"       ,name:"contact_phone_no"    ,width:105        ,style:"text-align:center"}
-                    ,{text:"Contact Address"        ,type:"input"       ,name:"contact_address"     ,width:105        ,style:"text-align:center"}
+                    ,{text:"Contact Address"        ,type:"input"       ,name:"contact_address"     ,width:300        ,style:"text-align:left"}
                     ,{text:"Cotact Relation"        ,type:"select"      ,name:"contact_relation_id" ,width:105        ,style:"text-align:center"}
                     ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:60         ,style:"text-align:center" ,defaultValue:"Y"
                         
@@ -224,7 +226,7 @@ var employees = (function(){
     }  
     
     function displayInactiveEmployees(){
-        var clientId = app.userInfo.company_id;
+        var _clientId = app.userInfo.company_id;
         var cb = bs({name:"cbFilter1",type:"checkbox"}); 
         $("#gridInactive").dataBind({
              sqlCode    : "E162"
@@ -333,13 +335,14 @@ var employees = (function(){
         var _frm = $("#frm_modalEmpoloyeeId");
         var _$position = $(eL).closest(".zRow").find('[name="position_id"] option[value="'+positionId+'"]').text();
         var _middleN = middleName? middleName + "." : "";
-        var _suffixN = nameSuffix? nameSuffix + "." : "";
-        var _imgFilename = fileName? "/file/viewImage?fileName="+fileName : "../img/avatar-m.png";
+        var _suffixN = nameSuffix? nameSuffix + "." : ""; 
+        //var _imgFilename = data? "/file/viewImage?fileName="+data : "../img/avatar-m.png";
+        
         $("#previewImage").html("");
         _frm.find("#nameId").text(firstName+ " " +_middleN+ " " +lastName+ " " +_suffixN);
         _frm.find("#positionId").text(_$position);
         _frm.find("#idNo").text(pad(id));
-        _frm.find("#imgFilename").attr("src", _imgFilename);
+        _frm.find("#imgFilename").attr("src", fileName);
         $('#modalEmployeesId').modal({ show: true, keyboard: false, backdrop: 'static' });
         _frm.find("#qrcode").text("");
         if(hashKey){ var qrcode = new QRCode(_frm.find("#qrcode").get(0),{width:60,height:60}).makeCode(hashKey);}
@@ -369,18 +372,20 @@ var employees = (function(){
         return _str.length < 3 ? pad("0" + _str, 3) : _str;
     }
     
-    _public.showModalUploadEmplImage = function(emplId, name){
-        employee_id = emplId;
+    _public.showModalUploadEmplImage = function(emplId, name){ 
+        console.log("emplId",emplId);
+        gEmployeeId = emplId;
+         
         var m=$('#' + mdlImageEmpl);
-        m.find(".modal-title").text("Image for » " + name);
+        m.find(".modal-title").text('Upload File.');
         m.modal("show");
-        m.find("form").attr("enctype","multipart/form-data");
-        $.get(base_url + 'page/name/tmplImageUpload'
+        $.get(base_url + 'page/name/tmplFileDbUpload'
             ,function(data){
-                m.find('.modal-body').html(data);
-                m.find("#prefixKey").val("employee.");
+               m.find('.modal-body').html(data);
+               m.find("form").attr("enctype","multipart/form-data");
             }
-        ); 
+        );  
+        
     },
     _public.uploadImageEmpl = function(){
         var frm = $("#frm_" + mdlImageEmpl);
@@ -392,18 +397,24 @@ var employees = (function(){
         }
         var formData = new FormData( frm.get(0));
         $.ajax({
-            url: base_url + 'file/UploadImage',
+            url: base_url + 'file/uploadTmpDbFile',   
             type: 'POST',
             success: completeHandler = function(data) {
-                if(data.isSuccess){
-                    $.get(base_url  + "sql/exec?p=dbo.image_file_employees_upd @employee_id=" + employee_id
-                                    + ",@img_filename='employee." +  fileOrg.files[0].name + "'"
-                    ,function(data){
-                        zsi.form.showAlert("alert");
-                        $('#' + mdlImageEmpl).modal('toggle');
-                    });   
+                if(data.isSuccess){ 
+                    setTimeout(function(){
+                        $.get(base_url  + "sql/exec?p=dbo.employee_image_file_upd @tmp_file_id=" + data.tmp_file_id +  ",@user_id=" + gEmployeeId +  ",@client_id=" + clientId
+                        ,function(data){  
+                            zsi.form.showAlert("alert"); 
+                            setTimeout(function(){ 
+                                $('#gridEmployees').trigger( 'refresh' );    
+                                $(".close").click(); 
+                            },1000);
+                        });  
+                    }) ;
+                        
                 }else
                     alert(data.errMsg);
+                
             },
             error: errorHandler = function() {
                 console.log("error");
@@ -413,11 +424,15 @@ var employees = (function(){
             contentType: false,
             processData: false
         }, 'json');
+       
     },
-    _public.mouseover = function(filename){
-        $("#user-box").css("display","block");
-        $("#user-box img").attr("src",base_url + "file/viewImage?fileName=" +  filename + "&isThumbNail=n");
+    
+    _public.mouseover = function(img_url){
+        $("#user-box").css("display","block"); 
+        $("#userImage").attr("src",img_url);
+        
     },
+    
     _public.mouseout = function (){
         $("#user-box").css("display","none");
     }, 
@@ -549,4 +564,4 @@ var employees = (function(){
     
 })();
 
-                                                                
+                                                                                 

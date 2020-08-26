@@ -46,19 +46,23 @@ var position = (function(){
             }
         });
     });
-    $("#btnDeletePosition").click(function(){
-        zsi.form.deleteData({
-             code       : "ref-00018"
-            ,onComplete : function(data){
-                $("#gridPosition").trigger("refresh");
-              }
-        });       
+    
+    $("#btnDeletePosition").click(function (){  
+        $("#gridPosition").deleteData({
+    		sqlCode: "D248"  
+    		,parameters: {client_id:app.userInfo.company_id,table:'positions',id:'position_id'}
+    		,onComplete : function(d){
+    			$("#gridPosition").trigger("refresh");
+    		}
+    	 });  
     });
     
      function displayPositions(){
+        var _clientId = app.userInfo.company_id;
         var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#gridPosition").dataBind({
              sqlCode        : "P201"
+            ,parameters  : {client_id : _clientId} 
             ,blankRowsLimit : 5
             ,width          : $(".panel-container").width() 
             ,height         : $(window).height() - 236
@@ -69,7 +73,7 @@ var position = (function(){
                                 + app.bs({name:"is_edited"                      ,type:"hidden"       ,value: app.svn(d,"is_edited")})
                                 + (d !==null ? app.bs({name:"cb"                ,type:"checkbox"}) : "" ); }
                 }
-                ,{text: "Position Title"            ,name:"position_title"      ,type:"input"        ,width : 200   ,style : "text-align:left;"}
+                ,{text: "Position Title"            ,name:"position_title"      ,type:"input"        ,width : 240   ,style : "text-align:left;"}
                 ,{text: "Position Description"      ,name:"position_desc"       ,type:"input"        ,width : 200   ,style : "text-align:left;"}
                 ,{text: "Work Description"          ,name:"work_desc"           ,type:"input"        ,width : 200   ,style : "text-align:left;"}
                 ,{text: "Level No."                 ,name:"level_no"            ,type:"input"        ,width : 65    ,style : "text-align:center;"}
@@ -191,8 +195,8 @@ var position = (function(){
     }; 
             
     _public.deleteOtherIncome = function(){
-        zsi.form.deleteData({
-             code       : "ref-00019"
+         $("#gridOtherIncome").deleteData({
+             tableCode   : "ref-00019"
             ,onComplete : function(data){
                 $("#gridOtherIncome").trigger("refresh");
               }
@@ -200,4 +204,4 @@ var position = (function(){
     };
  
     return _public;
-})();                 
+})();                     
