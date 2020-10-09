@@ -32,26 +32,25 @@
                 }
         });
     });
-    
-    $("#btnDeleteInactiveDepartments").click(function (){  
-        $("#gridInactiveDepartment").deleteData({
-    		sqlCode: "D248"  
-    		,parameters: {client_id:app.userInfo.company_id,table:'dept_sect',id:'dept_sect_id'}
-    		,onComplete : function(d){
-    			$("#gridInactiveDepartment").trigger("refresh");
-    		}
-    	 });  
+
+    $("#btnDeleteInactiveDepartments").click(function(){
+        zsi.form.deleteData({
+             code       : "ref-00020"
+            ,onComplete : function(data){
+                $("#gridInactiveDepartment").trigger("refresh");
+            }
+        });       
     });
     
-    $("#btnDeleteInactiveSections").click(function (){  
-        $("#gridInactiveSections").deleteData({
-    		sqlCode: "D248"  
-    		,parameters: {client_id:app.userInfo.company_id,table:'dept_sect',id:'dept_sect_id'}
-    		,onComplete : function(d){
-    			$("#gridInactiveSections").trigger("refresh");
-    		}
-    	 });  
+    $("#btnDeleteInactiveSections").click(function(){
+        zsi.form.deleteData({
+             code       : "ref-00020"
+            ,onComplete : function(data){
+                $("#gridInactiveSections").trigger("refresh");
+            }
+        });       
     });
+
 
     $("#btnSaveInactiveDeptSect").click(function () {
         $("#gridInactiveDepartment").jsonSubmit({
@@ -101,12 +100,11 @@
     };
     
     function displayDeptSection(){
-        var _clientId = app.userInfo.company_id;
         $("#gridDeptSect").dataBind({
-             sqlCode        : "D213"
-            ,parameters  : {client_id : _clientId}  
+             sqlCode        : "D213" //dept_sect_sel
             ,blankRowsLimit : 5
-            ,height         : $(window).height() - 236
+            ,width          : $(".panel-container").width() 
+            ,height         : 300
             ,dataRows       : [
                 {text: "Department Code"                                    ,style: "text-align:left;"     ,width: 100   
                     ,onRender  :  function(d){
@@ -123,7 +121,7 @@
                             return (d !== null ? _link : "");
                     }
                 }
-                ,{text: "Active?"           ,name:"is_active"            ,type:"yesno"      ,width : 60    ,style : "text-align:left;"     ,defaultValue : "Y"}
+                ,{text: "Active?"           ,name:"is_active"            ,type:"yesno"      ,width : 50    ,style : "text-align:left;"     ,defaultValue : "Y"}
             ]
             ,onComplete: function(o){
                 var _zRow = this.find(".zRow");
@@ -133,10 +131,11 @@
 
     function displaySection(parentId){
         $("#gridSection").dataBind({
-             sqlCode        : "D213"
-            ,parameters     : {dept_sect_parent_id : parentId,client_id: app.userInfo.company_id}
+             sqlCode        : "D213" //dept_sect_sel
+            ,parameters     : {dept_sect_parent_id : parentId}
             ,blankRowsLimit : 5
-            ,height         : $(window).height() - 290
+            ,width          : $(".panel-container").width() 
+            ,height         : $(document).height() - 260
             ,dataRows       : [
                 {text: "Section Code"                                    ,style: "text-align:left;"     ,width: 100   
                     ,onRender  :  function(d){
@@ -147,7 +146,7 @@
                     }
                 }
                 ,{text: "Section Name"   ,name: "dept_sect_name"     ,type: "input"      ,width: 230     ,style: "text-align:left;"}
-                ,{text: "Active?"        ,name:"is_active"           ,type:"yesno"       ,width : 60     ,style : "text-align:left;"     ,defaultValue : "Y"}
+                ,{text: "Active?"        ,name:"is_active"           ,type:"yesno"       ,width : 50     ,style : "text-align:left;"     ,defaultValue : "Y"}
             ]
             ,onComplete: function(o){
                 var _zRow = this.find(".zRow");
@@ -157,10 +156,10 @@
     }
 
     function displayInactiveDepartments(){
-        var cb = app.bs({name:"cbFilter1",type:"checkbox"});
+        var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#gridInactiveDepartment").dataBind({
-             sqlCode        : "D213"
-            ,parameters     : {is_active : "N",client_id: app.userInfo.company_id}
+             sqlCode        : "D213" //dept_sect_sel
+            ,parameters     : {is_active : "N"}
             ,width          : $("#frm_modalInactive").width() 
             ,height         : 300
             ,dataRows       : [
@@ -178,13 +177,13 @@
                             }
                     
                 }
-                ,{text: "Active?"                   ,name:"is_active"           ,type:"yesno"        ,width : 60    ,style : "text-align:left;"     ,defaultValue : "N"}
+                ,{text: "Active?"                   ,name:"is_active"           ,type:"yesno"        ,width : 50    ,style : "text-align:left;"     ,defaultValue : "N"}
                    
                 
             ]
             ,onComplete: function(){
                 var _zRow = this.find(".zRow");
-                this.find("[name='cbFilter1']").setCheckEvent("#gridInactiveDepartment input[name='cb']");
+                this.find("#cbFilter").setCheckEvent("#gridInactiveDepartment input[name='cb']");
             }
         });
     }
@@ -192,8 +191,8 @@
     function displayInactiveSections(parentId){
         var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#gridInactiveSections").dataBind({
-             sqlCode        : "D213"
-            ,parameters     : {is_active : "N", dept_sect_parent_id : parentId,client_id: app.userInfo.company_id}
+             sqlCode        : "D213" //dept_sect_sel
+            ,parameters     : {is_active : "N", dept_sect_parent_id : parentId}
             ,width          : $("#frm_modalInactive").width() 
             ,height         : 300
             ,dataRows       : [
@@ -211,16 +210,16 @@
                             }
                     
                 }
-                ,{text: "Active?"                   ,name:"is_active"           ,type:"yesno"        ,width : 60    ,style : "text-align:left;"     ,defaultValue : "N"}
+                ,{text: "Active?"                   ,name:"is_active"           ,type:"yesno"        ,width : 50    ,style : "text-align:left;"     ,defaultValue : "N"}
                    
                 
             ]
             ,onComplete: function(){
                 var _zRow = this.find(".zRow");
-                this.find("[name='cbFilter']").setCheckEvent("#gridInactiveSections input[name='cb']");
+                this.find("#cbFilter").setCheckEvent("#gridInactiveDepartment input[name='cb']");
             }
         });
     }    
     
     return _public;
-})();                   
+})();             

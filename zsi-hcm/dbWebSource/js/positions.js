@@ -46,23 +46,19 @@ var position = (function(){
             }
         });
     });
-    
-    $("#btnDeletePosition").click(function (){  
-        $("#gridPosition").deleteData({
-    		sqlCode: "D248"  
-    		,parameters: {client_id:app.userInfo.company_id,table:'positions',id:'position_id'}
-    		,onComplete : function(d){
-    			$("#gridPosition").trigger("refresh");
-    		}
-    	 });  
+    $("#btnDeletePosition").click(function(){
+        zsi.form.deleteData({
+             code       : "ref-00018"
+            ,onComplete : function(data){
+                $("#gridPosition").trigger("refresh");
+              }
+        });       
     });
     
      function displayPositions(){
-        var _clientId = app.userInfo.company_id;
         var cb = app.bs({name:"cbFilter",type:"checkbox"});
         $("#gridPosition").dataBind({
              sqlCode        : "P201"
-            ,parameters  : {client_id : _clientId} 
             ,blankRowsLimit : 5
             ,width          : $(".panel-container").width() 
             ,height         : $(window).height() - 236
@@ -195,8 +191,8 @@ var position = (function(){
     }; 
             
     _public.deleteOtherIncome = function(){
-         $("#gridOtherIncome").deleteData({
-             tableCode   : "ref-00019"
+        zsi.form.deleteData({
+             code       : "ref-00019"
             ,onComplete : function(data){
                 $("#gridOtherIncome").trigger("refresh");
               }
@@ -204,4 +200,4 @@ var position = (function(){
     };
  
     return _public;
-})();                     
+})();                  

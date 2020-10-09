@@ -89,13 +89,13 @@ var employees = (function(){
                             return (d!==null ? html : "");
                         }
         		    }
-        		    ,{text:"Info"                                       ,width:60         ,style:"text-align:center"
-                        ,onRender : function(d){
-                                var image_url2 = base_url + "dbimagebyclient/e247/" + _clientId + "/" +   svn(d,"id");
-                                var _link = "<a href='javascript:void(0)' ' title='View' onclick='employees.showModalViewId(this,"+ app.svn (d,"employee_no") +", \""+ app.svn (d,"first_name") +"\", \""+ app.svn (d,"middle_name") +"\",\""+ app.svn (d,"last_name") +"\",\""+ app.svn (d,"name_suffix") +"\",\""+ image_url2 +"\",\""+ app.svn (d,"position_id") +"\",\""+ app.svn (d,"emp_hash_key") +"\")'><i class='fas fa-eye'></i></a>";
-                                return (d !== null ? _link : "");
-                        }
-                    }
+        		    //,{text:"Info"                                       ,width:60         ,style:"text-align:center"
+                    //    ,onRender : function(d){
+                    //            var image_url2 = base_url + "dbimagebyclient/e247/" + _clientId + "/" +   svn(d,"id");
+                    //            var _link = "<a href='javascript:void(0)' ' title='View' onclick='employees.showModalViewId(this,"+ app.svn (d,"employee_no") +", \""+ app.svn (d,"first_name") +"\", \""+ app.svn (d,"middle_name") +"\",\""+ app.svn (d,"last_name") +"\",\""+ app.svn (d,"name_suffix") +"\",\""+ image_url2 +"\",\""+ app.svn (d,"position_id") +"\",\""+ app.svn (d,"emp_hash_key") +"\")'><i class='fas fa-eye'></i></a>";
+                    //            return (d !== null ? _link : "");
+                    //    }
+                    //}
                     ,{text:"Employee No."            ,width:95         ,style:"text-align:center" ,sortColNo : 3 
                         ,onRender : function(d){
                             return app.bs({name:"id"                    ,type:"hidden"      ,value: app.svn(d,"id")})
@@ -141,9 +141,11 @@ var employees = (function(){
                     ,{text:"Contact Phone No."      ,type:"input"       ,name:"contact_phone_no"    ,width:105        ,style:"text-align:center"}
                     ,{text:"Contact Address"        ,type:"input"       ,name:"contact_address"     ,width:300        ,style:"text-align:left"}
                     ,{text:"Cotact Relation"        ,type:"select"      ,name:"contact_relation_id" ,width:105        ,style:"text-align:center"}
-                    ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:60         ,style:"text-align:center" ,defaultValue:"Y"
-                        
-                    }
+                    ,{text:"Driver?"                ,type:"yesno"       ,name:"is_driver"           ,width:60         ,style:"text-align:center" ,defaultValue:"N"}
+                    ,{text:"PAO?"                   ,type:"yesno"       ,name:"is_pao"              ,width:60         ,style:"text-align:center" ,defaultValue:"N"}
+                    ,{text:"Inspector?"             ,type:"yesno"       ,name:"is_inspector"        ,width:65         ,style:"text-align:center" ,defaultValue:"N"}
+                    ,{text:"Loader?"                ,type:"yesno"       ,name:"is_loader"           ,width:60         ,style:"text-align:center" ,defaultValue:"N"}
+                    ,{text:"Active?"                ,type:"yesno"       ,name:"is_active"           ,width:60         ,style:"text-align:center" ,defaultValue:"Y"}
                     ,{text:"Other Income"           ,type:"input"                                   ,width:90         ,style:"text-align:center"
                         ,onRender : function(d){
                                 var _link = "<a href='javascript:void(0)' ' onclick='employees.showModalEmp("+ app.svn (d,"id") +",\""+ app.svn (d,"last_name") +"\", \"" + " " +"\", \""+ app.svn (d,"first_name") +"\")'><i class='fas fa-link link'></i></a>";
@@ -267,7 +269,11 @@ var employees = (function(){
                              + app.bs({name:"contact_name"          ,type:"hidden"  ,value: app.svn (d,"contact_name")})
                              + app.bs({name:"contact_phone_no"      ,type:"hidden"  ,value: app.svn (d,"contact_phone_no")})
                              + app.bs({name:"contact_address"       ,type:"hidden"  ,value: app.svn (d,"contact_address")})
-                             + app.bs({name:"contact_relation_id"   ,type:"hidden"  ,value: app.svn (d,"contact_relation_id")});
+                             + app.bs({name:"contact_relation_id"   ,type:"hidden"  ,value: app.svn (d,"contact_relation_id")})
+                             + app.bs({name:"is_driver"             ,type:"hidden"  ,value: app.svn (d,"is_driver")})
+                             + app.bs({name:"is_pao"                ,type:"hidden"  ,value: app.svn (d,"is_pao")})
+                             + app.bs({name:"is_inspector"          ,type:"hidden"  ,value: app.svn (d,"is_inspector")})
+                             + app.bs({name:"is_loader"             ,type:"hidden"  ,value: app.svn (d,"is_loader")});
                     }   
                 }
                 ,{text:"Active?"                                                        ,width:50         ,style:"text-align:center"    ,defaultValue:"N"
@@ -302,8 +308,8 @@ var employees = (function(){
                                 + app.bs({name:"position_id"                    ,type:"hidden"       ,value: app.svn(d,"position_id")})
                                 + (d !==null ? app.bs({name:"cb"                ,type:"checkbox"}) : "" ); }
                 }
-                ,{text: "Other Income"          ,name:"other_income_id"         ,type:"select"       ,width : 150   ,style : "text-align:left;"}
-                ,{text: "Amount"                                                                     ,width : 95    ,style : "text-align:right;"
+                ,{text: "Other Income"          ,name:"other_income_id"         ,type:"select"       ,width : 170   ,style : "text-align:left;"}
+                ,{text: "Amount"                                                                     ,width : 105   ,style : "text-align:right;"
                     ,onRender: function(d){
                         return app.bs({name:"amount"          ,type:"input"              ,value: commaSeparateNumber(app.svn(d,"amount"))       ,style : "text-align:right"});
                     }
@@ -400,6 +406,8 @@ var employees = (function(){
             url: base_url + 'file/uploadTmpDbFile',   
             type: 'POST',
             success: completeHandler = function(data) {
+                console.log("data",data)
+                console.log("data.tmp_file_id",data.tmp_file_id)
                 if(data.isSuccess){ 
                     setTimeout(function(){
                         $.get(base_url  + "sql/exec?p=dbo.employee_image_file_upd @tmp_file_id=" + data.tmp_file_id +  ",@user_id=" + gEmployeeId +  ",@client_id=" + clientId
@@ -497,17 +505,17 @@ var employees = (function(){
     }); 
     
     $("#btnSave").click(function () {
-        var _$grid = $("#grid");
+        var _$grid = $("#gridEmployees");
         var _$basicPay = _$grid.find("input[name='basic_pay']");
             _$basicPay.each(function(){
                 this.value = this.value.replace(/,/g, "");
             });
         _$grid.jsonSubmit({
                  procedure: "employees_upd"
-                ,optionalItems: ["is_active","position_id","pay_type_code","contact_relation_id","gender","civil_status_code","empl_type_code","department_id","section_id"]
+                ,optionalItems: ["is_active","is_driver","is_pao","is_inspector","is_loader","position_id","pay_type_code","contact_relation_id","gender","civil_status_code","empl_type_code","department_id","section_id"]
                 ,onComplete: function (data) {
                     if(data.isSuccess===true) zsi.form.showAlert("alert");
-                    displayEmployees();
+                    _$grid.trigger("refresh");
                 }
         });
     });
@@ -564,4 +572,4 @@ var employees = (function(){
     
 })();
 
-                                                                                 
+                                                                                   

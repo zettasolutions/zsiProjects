@@ -3,41 +3,30 @@
         <div class="panel-content">
             <div class="zContainer">
                 <div class="row">
-            		<div class="col-sm-6 col-md-3 col-xs-12 " id="hideFromDate">
-            		    <label for="" class="col-form-label text-label">From</label> 
-            		    <input type="text" class="form-control form-control-sm pl-2" id="dtr_fromDate"  placeholder="Start date....."/> 
-            		</div>  
-            		<div class="col-sm-6 col-md-3 col-xs-12 ">
-            		    <label for="" class="col-form-label text-label">To</label>  
-        		        <input type="text" class="form-control form-control-sm pl-2" id="dtr_toDate"  placeholder="To..."/> 
-            		</div>
-            		<div class="col-sm-6 col-md-3 col-xs-12 " id="hideToDate">
-            		    <label for="" class="col-form-label text-label">Search</label>  
-            		    <div class="input-group" id="historyBtn"> 
-            		        <input type="text" class="form-control form-control-sm pl-2" id="searchVal"  placeholder="Search Val..."/> 
-                            <div class="input-group-append">
-                                <button id="btnSearch" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Filter">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <div class="input-group-append ml-1">
-                                <button id="btnReset" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
-                                   <i class="far fa-refresh hvr-icon"></i> Reset
-                                </button>
-                            </div>
+                    <div class="input-group col-md-5 col-xl-3 col-sm-6 col-12 mb-1"> 
+                        <input name="search_value" id="search_value" placeholder="Enter DTR Date" class="form-control form-control-sm input-sm search-filter pl-2">
+                        <div class="input-group-append">
+                            <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnGo">
+                                <span class="fas fa-search"></span>
+                            </button>
                         </div>
-            		</div>
-                    <div class="col-12 mb-1" style="margin-top:10px;">
+                        <div class="input-group-append ml-1">
+                              <button type="button"  class="btn-sm btn btn-primary btn-outline-default text-white" id="btnClear">
+                                <span class="fas fa-eraser"></span> Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-1">
                         <div id="grid" class="zGrid"></div> 
                     </div>
                     <div class="col-12">   
-                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSave">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSave">
                             <i class="far fa-save"></i> Save
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDelete">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnDelete">
                         	<i class="fas fa-trash-alt"></i> Delete
                         </button>    
-                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnGenerate">
+                        <button type="button" class="btn btn-primary btn-sm" id="btnGenerate">
                         	<i ></i> Generate
                         </button>    
                     </div>

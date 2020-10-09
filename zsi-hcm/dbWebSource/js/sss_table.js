@@ -17,18 +17,18 @@
         });
     });
     $("#btnDelete").click(function(){
-        $("#sssGrid").deleteData({
-    		tableCode: "ref-0004"  
-    		,onComplete : function(d){
-    			displaySSS();
-    		}
-    	 }); 
+        zsi.form.deleteData({
+             code       : "ref-0004"
+            ,onComplete : function(data){
+                displaySSS();
+            }
+        });    
     });
     
     function displaySSS(){
     var cb = app.bs({name:"cbFilter1",type:"checkbox"}); 
     $("#sssGrid").dataBind({
-         sqlCode        : "S158"
+         url            : app.procURL + "sss_table_sel"
 	    ,width          : $(".zContainer").width()
 	    ,height         : $(window).height() - 236
         ,blankRowsLimit : 5
@@ -54,4 +54,4 @@
         });
     
     }     
-})();      
+})();     

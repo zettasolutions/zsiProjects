@@ -75,13 +75,13 @@
        
       
     $("#btnDelete").click(function(){
-        $("#grid").deleteData({
-             tableCode : "sys-0011"
+        zsi.form.deleteData({
+             code       : "sys-0011"
             ,onComplete : function(data){
-                    displayRecords();
-            }
+                            displayRecords();
+                          }
         });   
     
     });    
     
-})();                   
+})();                  

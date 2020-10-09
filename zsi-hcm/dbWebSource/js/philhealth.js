@@ -19,13 +19,12 @@
     });
     
     $("#btnDelete").click(function(){
-        
-         $("#philHealth").deleteData({
-    		tableCode: "ref-0001"   
-    		,onComplete : function(d){
-    		 displayPhilHealth();
-    		}
-    	 });   
+        zsi.form.deleteData({
+             code       : "ref-0001"
+            ,onComplete : function(data){
+                displayPhilHealth();
+            }
+        });   
     });  
     
     function displayPhilHealth(){
@@ -66,4 +65,4 @@
  
  
  
-              
+             

@@ -53,16 +53,12 @@
     
         editor.setOptions(options);
     }
-    ,displaySqlCommands : function(code,text,callBack) {
-            $("#grid-SqlCommands").dataBind({
-                 sqlCode:"S53"
-                ,parameters : {
-                     searchCode: code || ""
-                    ,searchText: text || ""
-                    ,sort_index: 3 
-                }
+    ,displaySqlCommands : function(callBack) {
+        $("#grid-SqlCommands").dataBind({
+             sqlCode:"S53"
+            ,parameters : { sort_index: 3 }
             ,width: $(".zContainer").width() 
-            ,height: $(document).height() - 280
+            ,height: $(window).height() - 280
             ,isPaging : true
             ,rowsPerPage : 100
             ,dataRows : [
@@ -77,6 +73,7 @@
                             ,{ text : "Is Public?"  ,type:"input"       ,width : 80     ,style : "text-align:left;"     ,name : 'is_public' }
                             ,{ text : "Action" , width : 100 , style : "text-align:center;"
                                 ,onRender : function(d) {
+                                    console.log("d",d)
                                     return '<a href="javascript:void(0);" class="edit-sqlcommand"><i class="fas fa-edit"></i></a>';
                                 }
                             }
@@ -125,7 +122,6 @@
 
 
 zsi.ready = function() {
-    var tmr = null;
     $(".panel").css("height", $(".page-content").height()); 
     $(".page-title").html("SQL Commands");
     var sc = Object.create(sqlCommands);
@@ -154,7 +150,7 @@ zsi.ready = function() {
             base_url + "sql/exec?p=" + escape(text)
             , function(data) {
                 var d = data.rows;
-                if (d.length === 0) {
+                if (d.length == 0) {
                     $(tbl).html("No Result.");
                     return;
                 }
@@ -198,31 +194,10 @@ zsi.ready = function() {
             return false;
         }
     });
-    function setInputs() { 
-        $("#sql_code").on('keyup',function(e){
-            clearTimeout(tmr);
-            _searchCode = $.trim($(this).val()); 
-            tmr = setTimeout(
-    			function(){ 
-    				  sc.displaySqlCommands(_searchCode);
-    			},1000);
-              
-        }); 
-        $("#stored_procedure").on('keyup',function(e){
-            clearTimeout(tmr);
-            _searchText = $.trim($(this).val()); 
-             tmr = setTimeout(
-    			function(){ 
-    				  sc.displaySqlCommands("",_searchText);
-    			},1000); 
-        });
-         
-	}
-    setInputs();
     
 };  
 
     
 })();
 
-            
+          

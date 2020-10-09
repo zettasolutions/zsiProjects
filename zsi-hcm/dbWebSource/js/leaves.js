@@ -9,6 +9,7 @@ var leave = (function(){
         $(".page-title").html("Leave");
         $("#collapsed").find("a").addClass("has-tooltip").tooltip();
         runDatePicker();
+        displayDateOfLeaves();
         $(".panel-asd").css("height", $(window).height() - 143);
         
         $("#userId").dataBind({
@@ -26,7 +27,7 @@ var leave = (function(){
         });
         markLeavesMandatory();
         $("#userId").select2({placeholder: "",allowClear: true});
-        $("#leaveTypeId").select2({placeholder: "",allowClear: true});
+        $("#leaveTypeId").select2({placeholder: "",allowClear: true}); 
     };
     
     runDatePicker = function(){
@@ -68,10 +69,15 @@ var leave = (function(){
         });       
     });
     
+    $("#btnCalendar").click(function(){
+        $("#calendar").modal('show');
+        
+    });
+    
     $("#btnGo").click(function () {  
       if($("#leaveDD").checkMandatory()!==true) return false; 
         var _row  = $(".row");
-        var _date = _row.find('#datepickerVal').val();
+        var _date = $("#calendar").find('#datepickerVal').val();
         var _user = _row.find('#userId').val();
         var _leaveType = _row.find('#leaveTypeId').val();
         var _rows = [];
@@ -83,14 +89,6 @@ var leave = (function(){
                 ,leave_date     : v
             };
             
-            if(i >= 0 && _date !== ""){
-                $("#collapsed").find("a").click();
-                $(".row").find("#gridId").removeClass("d-none");
-                $(".row").find("#btnId").removeClass("d-none");
-            }else{
-                $(".row").find("#gridId").addClass("d-none");
-                $(".row").find("#btnId").addClass("d-none");
-            }
              _rows.push(_info);
         });
        
@@ -107,16 +105,17 @@ var leave = (function(){
                   } 
             ]      
             ,"groupTitles":[ 
-                   {"titles" : ["Employee","Type of leave"]}
+                   {"titles" : ["Employee to proceed.","Type of leave to proceed."]}
             ]
         });   
     }
     function displayDateOfLeaves(data){
         $("#gridLeaves").dataBind({
              rows           : data
-            ,height         : $(window).height() - 350
+            ,height         : $(window).height() - 407
+            ,blankRowsLimit : 0
             ,dataRows       : [
-                {text: "File Date"                                                              ,width : 190   ,style : "text-align:left;"
+                {text: "File Date"                                                              ,width : 100   ,style : "text-align:left;"
                     ,onRender  :  function(d)
                         { return   app.bs({name:"leave_id"                  ,type:"hidden"      ,value: app.svn(d,"leave_id")})
                                  + app.bs({name:"is_edited"                 ,type:"hidden"      ,value: app.svn(d,"is_edited")}) 
@@ -125,10 +124,10 @@ var leave = (function(){
                                  + app.bs({name:"file_date"                 ,type:"input"       ,value: app.svn(d,"file_date")});
                         }
                 }
-                ,{text: "Leave Date"            ,name:"leave_date"          ,type:"input"       ,width : 190   ,style : "text-align:left;"}
-                ,{text: "Leave Type"            ,name:"leave_type_id"       ,type:"select"      ,width : 190   ,style : "text-align:left;"}
-                ,{text: "Filed Hours"           ,name:"filed_hours"         ,type:"input"       ,width : 150   ,style : "text-align:left;"}
-                ,{text: "Approved Hours"        ,name:"approved_hours"      ,type:"input"       ,width : 150   ,style : "text-align:left;"}
+                ,{text: "Leave Date"            ,name:"leave_date"          ,type:"input"       ,width : 100   ,style : "text-align:left;"}
+                ,{text: "Leave Type"            ,name:"leave_type_id"       ,type:"select"      ,width : 150   ,style : "text-align:left;"}
+                ,{text: "Filed Hours"           ,name:"filed_hours"         ,type:"input"       ,width : 120   ,style : "text-align:left;"}
+                ,{text: "Approved Hours"        ,name:"approved_hours"      ,type:"input"       ,width : 120   ,style : "text-align:left;"}
                 ,{text: "Approved?"                                                             ,width : 70    ,style : "text-align:left;" ,defaultValue:"N"
                     ,onRender  :  function(d)
                         { return   app.bs({name:"is_approved"               ,type:"yesno"       ,value: app.svn(d,"is_approved")})
@@ -146,48 +145,36 @@ var leave = (function(){
                 }
                 
             ]
-            ,onComplete: function(d){   
-                var _this           = this
-                    ,_zRow          = _this.find(".zRow")
-                    ,_checkQuantity = function(){
-                        var _$grid = $("#gridLeaves");
-                        var _tmr = null; 
-                        var _leaveDate = _$grid.find("[name='leave_date']").val(); 
-                        _$grid.find("[name='file_date']").on("keyup change",function(){
-                            var _$this = $(this);
-                            clearTimeout(_tmr);
-                            _tmr = setTimeout(function(){
-                                if (_$this.val() > _leaveDate){  
-                                    alert( "File Date must be less than to "+ _leaveDate + "." ); 
-                                    _$this.closest(".zRow").find("[name='file_date']").datepicker({ 
-                                        autoclose : true
-                                        , todayHighlight: true 
-                                    }).datepicker("setDate","0");
-                                }
-                            }, 10);
-                        });
-                        _$grid.find("[name='leave_date']").attr('readonly',true);
-                        _$grid.find("[name='leave_type_id']").dataBind({
-                             sqlCode     : "L187" 
-                            ,text        : "leave_type"
-                            ,value       : "leave_type_id"
-                           ,selectedValue : gleaveTypeId 
-                        });
-                    };
-                    
-                     _this.on('dragstart', function(){ return false; });
-                    
-                    _zRow.find("[name='file_date']").datepicker({ 
-                          autoclose : true
-                        , todayHighlight: true 
-                    }).datepicker("setDate","0");
-                     
-                    _checkQuantity(); 
+            ,onComplete: function(d){ 
+            var _this   = this
+                ,_zRow  = _this.find(".zRow")
+                ,_$grid = $("#gridLeaves") 
+                ,date   = new Date()
+                ,month  = date.getMonth()+1
+                ,day    = date.getDate() -0
+                ,date1  =  (date.getMonth() -1) + "/"+day+"/" + date.getFullYear()
+                ,yesterday = (date.getMonth()) + "/"+day+"/" +  date.getFullYear();  
+                _$grid.find("[name='file_date']").datepicker({ 
+                     autoclose      : true
+                    ,todayHighlight : true 
+                    ,startDate      : yesterday
+                    ,endDate        : new Date()
+                }).datepicker("setDate","0"); 
+                _$grid.find("[name='leave_date']").datepicker({ 
+                     autoclose      : true 
+                    ,startDate      : new Date()
+                }); 
+                _$grid.find("[name='leave_type_id']").dataBind({
+                     sqlCode     : "L187" 
+                    ,text        : "leave_type"
+                    ,value       : "leave_type_id"
+                   ,selectedValue : gleaveTypeId 
+                });  
+                _this.on('dragstart', function(){ return false; }); 
                  
             }
         });
     }
-    
     return _pub;
 })();   
 
@@ -205,3 +192,4 @@ var leave = (function(){
 
 
 
+     
