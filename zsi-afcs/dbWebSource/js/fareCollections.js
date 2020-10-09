@@ -13,7 +13,7 @@
     
     zsi.ready = function(){ 
         $(".page-title").html("Fare Collections");
-        $(".panel-container").css("min-height", $(window).height() - 190);
+        $(".panel-container").css("min-height", $(window).height() - 200);
         dateValidation();
         displayForPosting();
         displayPostedTransactions(); 
@@ -214,7 +214,6 @@
                 ,pdate_from  : null 
                 ,pdate_to    : null
             };
-             
             switch(gTabName){  
                 case "Recent Collection":  
                     $("#hideBTN").show();
@@ -230,8 +229,7 @@
                             _params.pao_id =_o.paoRecent;
                             delete _params.pdate_from;
                             delete _params.pdate_to;     
-                            $("#hideFromDate,#hideToDate").hide();
-                             
+                            $("#hideFromDate,#hideToDate").hide(); 
                         break; 
                     }
                 break;
@@ -263,14 +261,14 @@
                         ,{text: "Vehicle"                   ,name:"vehicle_plate_no"        ,type:"input"       ,width : 100    ,style : "text-align:center;"  }  
                         ,{text: "Driver"                    ,name:"driver_name"             ,type:"input"       ,width : 130    ,style : "text-align:center;"  } 
                         ,{text: "Pao"                       ,name:"pao_name"                ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
-                        ,{text: "Start Date"                ,width : 100                    ,style : "text-align:left;"  
+                        ,{text: "Start Date"                ,width : 150                    ,style : "text-align:left;"  
                             ,onRender : function(d){
-                                return app.bs({name: "start_date"        ,type: "input"     ,value: app.svn(d,"start_date").toShortDates()   });
+                                return app.bs({name: "start_date"        ,type: "input"     ,value: app.svn(d,"start_date").toShortDateTime()});
                             }
                         }
-                        ,{text: "End Date"                   ,width : 100                   ,style : "text-align:left;"  
+                        ,{text: "End Date"                   ,width : 150                   ,style : "text-align:left;"  
                             ,onRender : function(d){
-                                return app.bs({name: "end_date"          ,type: "input"     ,value: app.svn(d,"end_date").toShortDates()   });
+                                return app.bs({name: "end_date"          ,type: "input"     ,value: app.svn(d,"end_date").toShortDates().toShortDateTime()});
                             }
                         }
                         ,{text: "Start Odo Reading"         ,name:"start_odo"               ,type:"input"       ,width : 150    ,style : "text-align:center;"  }
@@ -302,27 +300,31 @@
                          {text: "Vehicle"                   ,name:"vehicle_plate_no"        ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1}  
                         ,{text: "Driver"                    ,name:"driver_name"             ,type:"input"       ,width : 130   ,style : "text-align:center;"       ,groupId : 1} 
                         ,{text: "Pao"                       ,name:"pao_name"                ,type:"input"       ,width : 130   ,style : "text-align:center;"       ,groupId : 1}
-                        ,{text: "Distance(Km)"              ,name:"no_klm"                  ,type:"input"       ,width : 100   ,style : "text-align:center;"       ,groupId : 1}
+                        ,{text: "Distance(Km)"              ,width : 100   ,style : "text-align:center;"       ,groupId : 1
+                            ,onRender: function(d){
+                                return app.bs({name: "no_klm"          ,type: "input"   ,value: app.svn(d,"no_klm").toMoney()    ,style : "text-align:center;"});
+                            }
+                        }
                         ,{text: "Base Fare"                 ,name:"base_fare"               ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 1}
-                        ,{text: "Quantity"                  ,name:"no_reg"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 2}
+                        ,{text: "Passenger"                  ,name:"no_reg"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 2}
                         ,{text: "Total"                                                                         ,width : 60    ,style : "text-align:center;"       ,groupId : 2
                             ,onRender: function(d){
                                 return app.bs({name: "reg_amount"          ,type: "input"   ,value: app.svn(d,"reg_amount").toMoney()    ,style : "text-align:center;"});
                             }
                         }
-                        ,{text: "Quantity"                  ,name:"no_stu"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 3}
+                        ,{text: "Passenger"                  ,name:"no_stu"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 3}
                         ,{text: "Total"                                                                         ,width : 60    ,style : "text-align:center;"       ,groupId : 3
                             ,onRender: function(d){
                                 return app.bs({name: "stu_amount"          ,type: "input"     ,value: app.svn(d,"stu_amount").toMoney()    ,style : "text-align:center;"    ,width : 60});
                             }
                         }
-                        ,{text: "Quantity"                  ,name:"no_sc"                   ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 4}
+                        ,{text: "Passenger"                  ,name:"no_sc"                   ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 4}
                         ,{text: "Total"                                                                         ,width : 60    ,style : "text-align:center;"       ,groupId : 4
                             ,onRender: function(d){
                                 return app.bs({name: "sc_amount"          ,type: "input"     ,value: app.svn(d,"sc_amount").toMoney()    ,style : "text-align:center;"      ,width : 60});
                             }
                         }
-                        ,{text: "Quantity"                  ,name:"no_pwd"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 5}
+                        ,{text: "Passenger"                  ,name:"no_pwd"                  ,type:"input"       ,width : 60    ,style : "text-align:center;"       ,groupId : 5}
                         ,{text: "Total"                                                                         ,width : 60    ,style : "text-align:center;"       ,groupId : 5
                             ,onRender: function(d){
                                 return app.bs({name: "pwd_amount"          ,type: "input"   ,value: app.svn(d,"pwd_amount").toMoney()    ,style : "text-align:center;"  ,width : 60});
@@ -343,8 +345,12 @@
                  sqlCode    : _sqlCode 
                 ,parameters :  _params
                 ,onComplete : function(d) {
+                    console.log("d",d.rows);
+                    //console.log("driver_name",d.rows[0].driver_name);
                     var _dataByTripNo =  d.rows.getUniqueRows(["trip_no"]); 
-                    
+                    if(_sqlCode==="P1338" || _sqlCode==="P1337"){
+                        _dataByTripNo = d.rows; 
+                    } 
                     fillDropdowns(_dataByTripNo);
 
                     var _rows = d.rows; 
@@ -365,6 +371,7 @@
                         _tot.edo    +=_info.end_odo;
                         _tot.kms    +=_info.no_kms;
                         _tot.tca    +=_info.total_collection_amt;
+                        console.log("_tot",_tot);
                     }
                     //create additional row for total 
                     if(_sqlCode ==="V1349"){
@@ -377,9 +384,10 @@
                                 ,end_date               : ""
                                 ,start_odo              : ""
                                 ,end_odo                : ""
-                                ,no_kms                 : _tot.kms
-                                ,total_collection_amt   : _tot.tca 
+                                ,no_kms                 : ""
+                                ,total_collection_amt   : _tot.tca.toMoney()
                         };
+                        console.log("_total",_total);
                          _dataByTripNo.push(_total);
                     }else{
                            _total = {
@@ -390,28 +398,28 @@
                                 ,to_location        : ""
                                 ,no_klm             : "Total Amount"
                                 ,no_reg             : _tot.reg_no
-                                ,no_stu             : _tot.stu_no
-                                ,no_sc              : _tot.sc_no
-                                ,no_pwd             : _tot.pwd_no
-                                ,reg_amount         : _tot.reg
-                                ,stu_amount         : _tot.stu
-                                ,sc_amount          : _tot.sc
-                                ,pwd_amount         : _tot.pwd
-                                ,total_paid_amount  : _tot.total
+                                ,no_stu             : _tot.stu_no 
+                                ,no_sc              : _tot.sc_no 
+                                ,no_pwd             : _tot.pwd_no 
+                                ,reg_amount         : _tot.reg.toMoney()
+                                ,stu_amount         : _tot.stu.toMoney()
+                                ,sc_amount          : _tot.sc.toMoney()
+                                ,pwd_amount         : _tot.pwd.toMoney()
+                                ,total_paid_amount  : _tot.total.toMoney()
                                 ,post_id            : ""
                                 ,qr_id              : ""
                                 ,driver             : ""
                                 ,pao                : ""
                                 ,vehicle_plate_no   : ""
                         };
-                         _dataByTripNo.push(_total);
-                    } 
-                     
+                        console.log("_total",_total);
+                         _dataByTripNo.push(_total); 
+                    }  
                     $(_$navGrid).dataBind({
                         rows            : _dataByTripNo
                         ,height         : _height
                         ,dataRows       : _getDataRows()
-                        ,onComplete: function(o){ 
+                        ,onComplete: function(o){  
                             var _this = this;  
                             _this.find("input").attr("readonly",true);
                             $(".zRow:last-child()").addClass("zTotal"); 
@@ -647,15 +655,15 @@
                         ,from_location      : ""
                         ,to_location        : ""
                         ,no_klm             : "Total Amount"
-                        ,no_reg             : _tot.reg_no
-                        ,no_stu             : _tot.stu_no
-                        ,no_sc              : _tot.sc_no
-                        ,no_pwd             : _tot.pwd_no
-                        ,reg_amount         : _tot.reg
-                        ,stu_amount         : _tot.stu
-                        ,sc_amount          : _tot.sc
-                        ,pwd_amount         : _tot.pwd
-                        ,total_paid_amount  : _tot.total
+                        ,no_reg             : _tot.reg_no.toMoney()
+                        ,no_stu             : _tot.stu_no.toMoney()
+                        ,no_sc              : _tot.sc_no.toMoney()
+                        ,no_pwd             : _tot.pwd_no.toMoney()
+                        ,reg_amount         : _tot.reg.toMoney()
+                        ,stu_amount         : _tot.stu.toMoney()
+                        ,sc_amount          : _tot.sc.toMoney()
+                        ,pwd_amount         : _tot.pwd.toMoney()
+                        ,total_paid_amount  : _tot.total.toMoney()
                         ,post_id            : ""
                         ,qr_id              : ""
                         ,driver             : ""
@@ -862,22 +870,7 @@
         return "<html><head><meta charset='utf-8' /><style> table, td {border:thin solid black}table {border-collapse:collapse;font-family:Tahoma;font-size:10pt;}</style></head><body>"
              + html + "</body></html>";
     }
-    
-    $("#btnExportTransations").click(function () {
-    $("#gridPostedTransactions").convertToTable(
-        function($table){
-             
-            $table.find("th").closest("tr").remove();
-            $("#ExcelgridPostedTransactions tbody").before('<thead><tr><th colspan="10"></th><th colspan="2">Regular</th><th colspan="2">Student</th><th colspan="2">Senior</th><th colspan="2">PWD</th><th ></th><th></th></tr>'
-                        + '<tr><th>Payment Date</th><th>Posted Date</th><th>Vehicle</th><th>PAO</th><th>Driver</th><th>Inspector</th><th>Route</th><th>From</th><th>To</th><th>Distance</th><th>Qty</th><th>Total</th><th>Qty</th>'
-                        + '<th>Total</th><th>Qty</th><th>Total</th><th>Qty</th><th>Total</th><th>Total Amount</th><th>Payment Type</th></tr></thead>'
-            );
-            $table.htmlToExcel({
-               fileName: "Posted Payments"
-           });
-        });
-    });
-    
+     
     $("#recentBtn").find("#btnFilterCollection").click(function(){
         var  _$filter = $("#nav-recentCollection"); 
         _$filter.find('#trip_no, #dailyFare_vehicle, #dailyFare_driver,[name="dailyFare_pao"]').val()
@@ -943,4 +936,4 @@
 })();     
 
 
-                                       
+                                                       

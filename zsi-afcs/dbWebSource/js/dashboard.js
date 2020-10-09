@@ -1,4 +1,4 @@
- var db=(function(){ 
+  var db=(function(){ 
         $(".page-title").html("Dashboard");    
         $('[data-toggle="tooltip"]').tooltip();       
          
@@ -36,7 +36,7 @@
                         };
                         _setData();  
                         am4core.ready(function() { 
-                             var chart = am4core.create(o.container, am4charts.XYChart); 
+                             var chart = am4core.create(o.container, am4charts.XYChart3D); 
                             chart.numberFormatter.numberFormat = '###';
                             // Set data  
                             var generateChartData = function() { 
@@ -57,12 +57,18 @@
                             var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());  
                                 categoryAxis.dataFields.category = "category";
                                 categoryAxis.renderer.minGridDistance = 20;    
-                            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());  
-                            var series = chart.series.push(new am4charts.ColumnSeries());  
+                                categoryAxis.renderer.labels.template.horizontalCenter = "right";
+                                categoryAxis.renderer.labels.template.verticalCenter = "middle";
+                                categoryAxis.renderer.labels.template.rotation = 300;  
+                           
+                            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis()); 
+                            
+                            var series = chart.series.push(new am4charts.ColumnSeries3D());  
                                 series.dataFields.categoryX = "category"; 
                                 series.dataFields.valueY = "value";    
                                 series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";  
                                 if(o.category==="pay_month") series.columns.template.tooltipText = "Month of "+"{categoryX}: [bold]{valueY}[/]";  
+                                
                             var series2 = chart.series.push(new am4charts.LineSeries());
                                 series2.name = "category";
                                 series2.stroke = am4core.color("#CDA2AB");
@@ -74,6 +80,7 @@
                                 series.columns.template.adapter.add("fill", function (fill, target) { 
                                 	return chart.colors.getIndex(target.dataItem.index);
                                 });
+                                
                             var title = chart.titles.create();
                                 title.text = "Yearly Collection";   
                         });
@@ -102,44 +109,15 @@
                 });
            }getYearlyData();
        
-        function displayMonthlyCharts(data){ 
-            var gYear1 = ""
-                ,gYear2 = ""
-                ,gYear3 = ""
-                ,gYear4 = ""
-                ,gYear5 = ""
-                ,_textTitle = " Monthly Collection";  
-            for(var i = 0; i < data.length; i++) {  
-                $(".spanYears1").text(data[0].pay_year + _textTitle); 
-                gYear1 = data[0].pay_year; 
-                $(".spanYears2").text(data[1].pay_year + _textTitle); 
-                gYear2 = data[1].pay_year;  
-                $(".spanYears3").text(data[2].pay_year + _textTitle);
-                gYear3 = data[2].pay_year;  
-                $(".spanYears4").text(data[3].pay_year + _textTitle);  
-                gYear4 = data[3].pay_year;  
-                if(data.length===5){
-                    $(".spanYears5").text(data[4].pay_year + _textTitle); 
-                    gYear5 = data[4].pay_year;   
-                }else{ 
-                    $(".spanYears5").text("No Collection found"); 
-                    gYear5 = "";
-                }    
-            }  
-            var _$spanYears5 = $(".spanYears5").text();
-            var _$spanYears4 = $(".spanYears4").text();
-            var _$spanYears3 = $(".spanYears3").text();
-            var _$spanYears2 = $(".spanYears2").text(); 
-            var _$spanYears1 = $(".spanYears1").text();   
-            
-            am4core.useTheme(am4themes_animated);
+        function displayMonthlyCharts(data){    
+             am4core.useTheme(am4themes_animated);
             // Enable queuing 
             am4core.options.queue = true;
             am4core.options.onlyShowOnViewport = true;     
             var _colors = [];
             var _colorRows = [];
             
-            var _getData = function(sqlCode,params,cb){    
+            var _getData = function(sqlCode,params,cb){   
                 zsi.getData({
                      sqlCode : sqlCode 
                     ,parameters : params
@@ -155,7 +133,7 @@
                     _colors = _colorSet;  
                     cb(_colors);
             }; 
-            var _displayBarGraph = function(o){ 
+             var _displayBarGraph = function(o){ 
                 var _dataLength = o.data.length;
                 var _data = [];
                 var _colorSet = new am4core.ColorSet(); 
@@ -177,7 +155,7 @@
                 };
                 _setData();  
                 am4core.ready(function() { 
-                    var chart = am4core.create(o.container, am4charts.XYChart); 
+                    var chart = am4core.create(o.container, am4charts.XYChart3D); 
                     chart.numberFormatter.numberFormat = '###';
                     // Set data 
                     var _platform = ""; 
@@ -186,20 +164,20 @@
                         var chartData = []; 
                         var _monthlyCtgry = ""; 
                         var _month = []; 
-                            _month[1] = "January";
-                            _month[2] = "February";
-                            _month[3] = "March";
-                            _month[4] = "April";
-                            _month[5] = "May";
-                            _month[6] = "June";
-                            _month[7] = "July";
-                            _month[8] = "August";
-                            _month[9] = "September";
-                            _month[10] = "October";
-                            _month[11] = "November";
-                            _month[12] = "December"; 
+                            _month[1]   = "Jan";
+                            _month[2]   = "Feb";
+                            _month[3]   = "Mar";
+                            _month[4]   = "Apr";
+                            _month[5]   = "May";
+                            _month[6]   = "Jun";
+                            _month[7]   = "Jul";
+                            _month[8]   = "Aug";
+                            _month[9]   = "Sep";
+                            _month[10]  = "Oct";
+                            _month[11]  = "Nov";
+                            _month[12]  = "Dec"; 
                         for (var i = 0; i < _data.length; i++) {      
-                            for(var n =0;n<=_month.length; n++){ 
+                            for(var n=1;n<=_month.length-1; n++){  
                                 if(_data[i].category === n){ 
                                   _monthlyCtgry = _month[n]; 
                                 } 
@@ -219,14 +197,21 @@
                         return chartData; 
                     }; 
                     // Add data
-                    chart.data = generateChartData();  
-                   // Add and configure Series     
+                    chart.data = generateChartData();
+                    chart.scrollbarX = new am4core.Scrollbar(); 
+                    chart.scrollbarY = new am4core.Scrollbar(); 
+                    // Add and configure Series     
                     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());  
                         categoryAxis.dataFields.category = "category"; 
-                        categoryAxis.renderer.minGridDistance = 20;
+                        categoryAxis.renderer.minGridDistance = 20; 
+                        categoryAxis.renderer.labels.template.horizontalCenter = "right";
+                        categoryAxis.renderer.labels.template.verticalCenter = "middle";
+                        categoryAxis.renderer.labels.template.rotation = 300;
+                       
                         
                     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());  
-                    var series = chart.series.push(new am4charts.ColumnSeries());  
+                    
+                    var series = chart.series.push(new am4charts.ColumnSeries3D());  
                         series.dataFields.categoryX = "category"; 
                         series.dataFields.valueY = "value";    
                         series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";  
@@ -286,6 +271,7 @@
                                    ,month       :_month
                                    ,year        :_yearly
                                 }; 
+                                
                             _getDynamicColor(function(colorSet){
                                 _dailyData(_sqlCode,_params, function(data){
                                     _json.colorSet  = colorSet;
@@ -325,7 +311,7 @@
                                 };
                                     _setDailyData();
                                 am4core.ready(function() { 
-                                    var chart = am4core.create(_o.container, am4charts.XYChart); 
+                                    var chart = am4core.create(_o.container, am4charts.XYChart3D); 
                                     chart.numberFormatter.numberFormat = '###';
                                     // Set data  
                                     var generateDailyChartData = function() {
@@ -343,14 +329,21 @@
                                         return _chartData;
                                     }; 
                                     // Add Pay day data
-                                    chart.data = generateDailyChartData(); 
+                                    chart.data = generateDailyChartData();
+                                    chart.exporting.menu = new am4core.ExportMenu();
+                                    chart.scrollbarX = new am4core.Scrollbar(); 
+                                    chart.scrollbarY = new am4core.Scrollbar(); 
                                    // Add and configure Series    
                                     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());  
                                         categoryAxis.dataFields.category = "category";
-                                        categoryAxis.renderer.minGridDistance = 20;   
+                                        categoryAxis.renderer.minGridDistance = 20;  
+                                        categoryAxis.renderer.labels.template.horizontalCenter = "right";
+                                        categoryAxis.renderer.labels.template.verticalCenter = "middle";
+                                        categoryAxis.renderer.labels.template.rotation = 300;
+                                        
                                     
                                     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());  
-                                    var series = chart.series.push(new am4charts.ColumnSeries());  
+                                    var series = chart.series.push(new am4charts.ColumnSeries3D());  
                                         series.dataFields.categoryX = "category";  
                                         series.dataFields.valueY = "value";    
                                         series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";   
@@ -365,9 +358,7 @@
                                         series2.strokeWidth = 3;
                                         series2.dataFields.valueY = "value";
                                         series2.dataFields.categoryX = "category";  
-                                        //Add scroll 
-                                        chart.scrollbarY = new am4core.Scrollbar();
-                                     
+                                        
                                     //Add title 
                                     var title = chart.titles.create();
                                         title.text = 'Month of ' + _catgry; 
@@ -418,102 +409,70 @@
                                         resetLabel.hide(); 
                                     }); 
                                     resetLabel.show(); 
-                                });
-                                
+                                }); 
                             }; 
                         }
                       }, this); 
                 });
-            };  
-            var _init = function(name){ 
-                 
+            };   
+            data.reverse().forEach(function(o,i) {  
+                var _container = "graph_"+i; 
+                var templateString = ' <div class="col-md-6 col-sm-6 col-12 graphs mt-3 ">'
+                 +'     <div class="panel mb-0">'
+                 +'         <div class="panel-hdr text-primary">'
+                 +'             <h2>'
+                 +'                 <span class="mr-2"><i class="far fa-chart-pie"></i></span>'+ o.pay_year+" Monthly Collection"+''
+                 +'             </h2>'
+                 +'             <div class="panel-toolbar"> '
+                 +'                 <button class="btn btn-panel waves-effect waves-themed fal fa-window-minimize" data-action="panel-collapse"  data-offset="0,10" data-original-title="Collapse" data-toggle="tooltip" title="Collapse"></button>'
+                 +'                 <button class="btn btn-panel waves-effect waves-themed fal fa-expand" data-action="panel-fullscreen"  data-offset="0,10" data-original-title="Fullscreen" data-toggle="tooltip" title="Expand"></button> '
+                 +'             </div>'
+                 +'         </div>'
+                 +'         <div class="panel-container show">'
+                 +'             <div class="panel-content"> ' 
+                 +'                 <div class="panel-container collapse show">'
+                 +'                     <div class="panel-content">'
+                 +'                         <div class="zGraph" id="'+ _container +'"></div>'
+                 +'                     </div>'
+                 +'                 </div> '
+                 +'             </div>'
+                 +'         </div>'
+                 +'     </div>'
+                 +'</div>';
+            	$('#newDiv').append(templateString);   
+            
                 var _params = {
-                        client_id:app.userInfo.company_id  
+                        client_id:app.userInfo.company_id 
+                        ,year   : data[i].pay_year
                     }
-                    ,_sqlCode = "P1388"
-                    ,_container = "graph2"
+                    ,_sqlCode = "P1388" 
                     ,_value = "total_fare"
                     ,_category = "pay_month"
                     ,_isColorSet = false
-                    ,_name = ""
-                    ,_json = {}; 
+                    ,_name = data[i].pay_year
+                    ,_json = {};  
                    
-                    switch (name) { 
-                        case _$spanYears1:  
-                            _container = "graph6";
-                            _sqlCode = "P1388";
-                            _name = _$spanYears1;  
-                            _params = {
-                                client_id:app.userInfo.company_id 
-                               ,year : gYear1
-                            };
-                            break;  
-                        case _$spanYears2: 
-                            _container = "graph5";
-                            _sqlCode = "P1388";
-                            _name = _$spanYears2;  
-                            _params = {
-                                client_id:app.userInfo.company_id 
-                               ,year : gYear2
-                            };
-                            break;  
-                        case _$spanYears3: 
-                            _container = "graph4";
-                            _sqlCode = "P1388";
-                            _name = _$spanYears3;  
-                            _params = {
-                                client_id:app.userInfo.company_id 
-                               ,year : gYear3
-                            };
-                            break; 
-                        case _$spanYears4: 
-                            _container = "graph3";
-                            _sqlCode = "P1388";
-                            _name = _$spanYears4;  
-                            _params = {
-                                client_id:app.userInfo.company_id 
-                               ,year : gYear4
-                            };
-                            break;  
-                        case _$spanYears5: 
-                            _container = "graph2";
-                            _sqlCode = "P1388"; 
-                            _name = _$spanYears5; 
-                            _params = {
-                                client_id:app.userInfo.company_id 
-                               ,year : gYear5
-                            };
-                            break; 
-                    } 
-                       
-                    _json.title = _name;
+                    _json.title =  data[i].pay_year+" Monthly Collection";
                     _json.container = _container;
+                    _json.yearParams = data[i].pay_year;
                     _json.value = _value;
                     _json.category = _category;
                     _json.isColorSet = _isColorSet;  
                     _getColor(function(colorSet){
                         _getData(_sqlCode,_params, function(data){ 
                             _json.colorSet = colorSet;
-                            _json.data = data;
-                            _json.category = _category; 
-                            _json.title = _name; 
+                            _json.data = data;  
                             _json.sqlCode = _sqlCode;  
                             _json.year = _params.year;  
                             _displayBarGraph(_json); 
                         });
-                    }); 
-            }; 
-            
-            _init(_$spanYears5); 
-            _init(_$spanYears4);
-            _init(_$spanYears3); 
-            _init(_$spanYears2);
-            _init(_$spanYears1);
-            
+                    });  
+            	 	 
+            });   
         } 
         
      
 })();           
            
                                                                                                                
-                                                                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                                                    

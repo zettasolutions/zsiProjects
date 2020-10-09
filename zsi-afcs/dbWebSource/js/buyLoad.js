@@ -62,7 +62,7 @@ var buyLoad = (function(){
     });
     
     $("#btnScanQr").click(function() {
-        alert("Can't proceed to this transaction yet.");
+         
         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         scanner.addListener('scan', function (content) {
             console.log(content);
@@ -76,7 +76,7 @@ var buyLoad = (function(){
             }
         }).catch(function (e) {
             console.error(e);
-         });
+        });
          
         $("#buyLoadForm").jsonSubmit({
              procedure: "generated_qr_upd"
@@ -106,4 +106,4 @@ var buyLoad = (function(){
     });*/
     
     return _pub;
-})();           
+})();              

@@ -4,7 +4,7 @@
     ;
     
     zsi.ready = function(){ 
-        $(".page-title").html("Fare Collections");
+        $(".page-title").html("Pay Partner");
         $(".panel-container").css("min-height", $(window).height() - 190); 
         displayPayPartner();   
     };
@@ -73,4 +73,4 @@
 })();     
 
 
-                            
+                             

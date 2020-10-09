@@ -6,6 +6,7 @@
     zsi.ready=function(){
         $(".page-title").html("Select Option");
         displayRecords(); 
+        $(".panel").css("height", $(".page-content").height()); 
     };
     
     
@@ -26,7 +27,7 @@
          $("#grid").dataBind({
     	     url            : app.execURL + "select_options_sel"
     	    ,width          : $(".zContainer").width()
-    	    ,height         : $(window).height() - 240
+    	    ,height         : $(document).height() - 260
     	    ,selectorType   : "checkbox"
             ,blankRowsLimit:5
             ,isPaging : false
@@ -45,20 +46,36 @@
             		,{text  : "Order By"            , name  : "order_by"                , type  : "input"         , width : 200       , style : "text-align:left;"}
     	    ]
         	     ,onComplete: function(){
-                    $("[name='cbFilter1']").setCheckEvent("#grid input[name='cb']");
+                    $("#cbFilter1").setCheckEvent("#grid input[name='cb']");
             }  
         });    
     }
         
     
     $("#btnDelete").click(function(){
-        zsi.form.deleteData({
-             code       : "sys-0008"
-            ,onComplete : function(data){
-                            displayRecords();
-                          }
-        });       
+        
+        $("#grid").deleteData({
+              tableCode:"sys-0008"
+            ,onComplete : function(d){
+                displayRecords();
+            }
+        });
+            
+        /*    
+        $("#grid").deleteData({
+              sqlCode : "S1408"
+             ,parameters:{
+                 client_id:1
+             }
+            ,onComplete : function(d){
+                displayRecords();
+            }
+        });
+          */  
+            
+            
+        
     });
 })();
     
-                                         
+                                          
