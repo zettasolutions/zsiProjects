@@ -1,3 +1,0 @@
-CREATE TABLE zNoCompressionActions(
-id	INT IDENTITY(1,1)	NOT NULL
-,actionname	NVARCHAR(400)	NULL)

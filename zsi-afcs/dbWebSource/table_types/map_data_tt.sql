@@ -1,5 +1,0 @@
-CREATE TYPE map_data_tt AS TABLE(
-id	INT	NOT NULL
-,name	NVARCHAR(400)	NULL
-,map_area	NVARCHAR(0)	NULL
-,route_id	INT	NULL)

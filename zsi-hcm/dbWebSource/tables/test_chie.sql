@@ -1,6 +1,0 @@
-CREATE TABLE test_chie(
-id	INT IDENTITY(1,1)	NOT NULL
-,name	NVARCHAR(100)	NULL
-,lastname	NVARCHAR(100)	NULL
-,province	NVARCHAR(100)	NULL
-,monthly_salary	DECIMAL(20)	NULL)
