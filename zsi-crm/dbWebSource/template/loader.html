@@ -1,0 +1,278 @@
+<style>
+    .popover-body{
+        color:red;
+    }
+    #user-box{
+        top:200px;
+        background-color: #fff;
+        height: 250px;
+        width: 250px;
+        left: 360px;
+        position: absolute;
+        display:none;
+        webkit-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        -moz-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        border: 2px solid #fff;
+        border-radius: 10px;
+        overflow:hidden;
+    }
+      #user-box img{ 
+      height: 100%;
+      width: 100%; 
+      
+    }
+</style>
+<div class="panel">
+    <div class="panel-hdr">
+        <div class="d-flex w-100">
+            <div class="mr-auto">
+                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnNew"><i class="far fa-plus"></i> New</button>
+            </div>
+            <div class="">
+                <div class="input-group input-group-sm bg-white shadow-inset-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                            <i class="fal fa-search"></i>
+                        </span>
+                    </div>
+                    <input id="keyValue" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Type here...">
+                    <div class="input-group-append">
+                        <button id="btnSearch" class="btn btn-primary waves-effect waves-themed" type="button">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row">
+                <select id="clientPassword" class="hide"></select>
+                <div class="col-sm-12">
+                    <div class="zGrid" id="gridLoaders"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="newClientModal" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <h1 class="pt-2"><b>Loader Registration</b><br></h1><span>Add new load merchant by filling the form bellow. Required (<span class="text-danger">*</span>).</span>
+                    <div class="border-top mt-3"></div>
+                    <nav>
+                      <div class="nav nav-tabs nav-tab-main" id="nav-tab" role="tablist"> 
+                        <a class="nav-item nav-link active" data-toggle="tab" href="#nav-company-information" role="tab" aria-controls="nav-company-information"><i class="fas fa-building mr-1"></i> Company<span id="pop1" data-placement="top" data-content="Please fill the required fields."></span> Information </a> 
+                        <a class="nav-item nav-link" data-toggle="tab" href="#nav-documents" role="tab" aria-controls="nav-documents"><i class="fas fa-file-image mr-1"></i> Documents </a> 
+                        <a class="nav-item nav-link" data-toggle="tab" href="#nav-admin-information" role="tab" aria-controls="nav-admin-information"><i class="fas fa-user mr-1"></i> Admin I<span id="pop2" data-placement="top" data-content="Please fill the required fields."></span>nformation </a> 
+                      </div> 
+                    </nav>
+                    <div class="tab-content border border-top-0 p-3 mb-1">
+                        <div role="tabpanel" class="tab-pane fade show active" id="nav-company-information">
+                            <div id="clientInformationDiv" class="mb-2"> 
+                                <form id="formClientsStep1One" class="needs-validation row" novalidate>
+                    			    <input type="hidden" id="clientIds" name="client_id">
+                                	<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Company Name</b><span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm autoCaps pl-2" id="client_name" required  name="client_name" autocomplete="off"/> 
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Email Address</b><span class="text-danger">*</span></label><span id="popEmailAdd" data-placement="top" data-content="This email is already taken."></span>
+                                        <input type="email" class="form-control form-control-sm pl-2" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>TIN</b><span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_tin" name="client_tin" required  autocomplete="off" placeholder="999-999-999-999"  maxlength="16"/>
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Landline Number</b><span class="text-danger">*</span></label> 
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_phone_no" name="client_phone_no" required  autocomplete="off" />
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Mobile Number</b><span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_mobile_no" name="client_mobile_no" maxlength="13" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true" placeholder="09-----"/>
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Bill To</b><span class="text-danger">*</span></label> 
+                                        <input type="text" class="form-control form-control-sm autoCaps pl-2" id="bill_to" name="bill_to" required autocomplete="off">
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Billing Address</b><span class="text-danger">*</span></label> 
+                                        <input type="text" class="form-control form-control-sm autoCaps pl-2" id="billing_address" name="billing_address" required autocomplete="off" placeholder="Building No, Street, Barangay">
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Country</b><span class="text-danger">*</span></label>  
+                                        <select class="form-control form-control-sm custom-select select2" id="country_id" required  name="country_id" autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Province/State</b><span class="text-danger">*</span></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-12 col-md-6 mb-2">
+                            		    <label for="" class="col-form-label control-label"><b>City</b><span class="text-danger">*</span></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                                        <input id="is_zfare" name="is_zfare" type="hidden" value="Y" class="custom-control-input">
+                            		</div>
+                                </form>
+                        	</div>
+                        </div> 
+                        
+                        <div role="tabpanel" class="tab-pane fade" id="nav-documents">
+                            <div id="clientInformationDiv" class="mb-2"> 
+                                <form id="formClientsStep1Two">  
+                                	<div class="col-12 col-md-12 mb-2">  
+                                        <label class="col-form-label control-label"><b>Mayor's Permit</b></label>
+                                        <div class="input-group">
+                                            <input id="file1" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer col-md-6" required>
+                                            <div class="input-group-append ml-1">
+                                                <a id="viewImg1" href="" type="button" class="btn btn-primary btn-xs" title="View image" target="_blank"><span class="fas fa-eye" style="padding-top:0.4rem;"></span></a><span id="img1" class="text-truncate text-truncate-sm d-inline-block"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="formClientsStep1Three">
+                                    <div class="col-12 col-md-12 mb-2">  
+                                        <label class="col-form-label control-label"><b>BIR</b></label>
+                                        <div class="input-group">
+                                            <input id="file2" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer col-md-6" required>
+                                            <div class="input-group-append ml-1">
+                                                <a id="viewImg2" href="" type="button" class="btn btn-primary btn-xs" title="View image" target="_blank"><span class="fas fa-eye" style="padding-top:0.4rem;"></span></a><span id="img2" class="text-truncate text-truncate-sm d-inline-block"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="formClientsStep1Four">
+                                    <div class="col-12 col-md-12 mb-2">  
+                                        <label class="col-form-label control-label"><b>SEC/DTI</b></label>
+                                        <div class="input-group">
+                                            <input id="file3" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer col-md-6" required>
+                                            <div class="input-group-append ml-1">
+                                                <a id="viewImg3" href="" type="button" class="btn btn-primary btn-xs" title="View image" target="_blank"><span class="fas fa-eye" style="padding-top:0.4rem;"></span></a><span id="img3" class="text-truncate text-truncate-sm d-inline-block"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                        	</div>
+                        </div> 
+                        
+                        <div role="tabpanel" class="tab-pane fade" id="nav-admin-information">
+                            <div id="" class="">
+                        	    <form id="formClientsStep2" class="needs-validationd" novalidate>
+                    		        <input type="hidden" id="clientId" name="client_id"  value=""/>
+                    		        <div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Login (Email Address)</b><span class="text-danger">*</span></label><span id="popLogonAdd" data-placement="top" data-content="This email is already taken."></span>
+                                        <input type="email" id="logon" name="logon" class="form-control form-control-sm pl-2" placeholder="email@gmail.com" required autoComplete="off">
+                            		</div>
+                    		        
+                    		        <div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Last Name</b><span class="text-danger">*</span></label>  
+                                        <input type="text" id="last_name" name="last_name" class="form-control form-control-sm autoCaps pl-2" required autoComplete="off">
+                            		</div>
+                    		        
+                        			<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>First Name</b><span class="text-danger">*</span></label>  
+                                        <input type="text" id="first_name" name="first_name" class="form-control form-control-sm autoCaps pl-2" required autoComplete="off">
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Middle Name</b></label>
+                                        <input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm autoCaps pl-2" autoComplete="off">
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-6 mb-2"> 
+                            		    <label for="" class="col-form-label control-label"><b>Name Suffix</b></label>  
+                                        <input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm autoCaps pl-2" autoComplete="off">
+                            		</div>  
+                        		</form>
+                		    </div>
+                        </div> 
+                    </div>
+                    
+                	<form id="formClientsCB" class="needs-validation row" novalidate>
+                	    <!--<div class="col-md-12 col-12 mb-2">
+                            <di class="frame-wrap">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input id="is_ready" type="checkbox" class="custom-control-input cursor-pointer" required>
+                                    <label class="custom-control-label cursor-pointer" for="is_ready">Ready to make user admin?</label>
+                                </div>
+                            </di>
+                        </div>-->
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                            <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                <i class="far fa-save"></i> Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div> 
+    </div> 
+</div>
+<div class="hide">
+    <form id="formEmail">
+        <input type="hidden" name="password" id="epassword" value="">
+        <input type="hidden" name="name" id="ename" value="">
+        <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
+    </form>
+</div>
+<div id="myModalLoadPersonnel" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Load Personnels</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel">
+                <div class="zContainer">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
+                            <div class="zGrid" id="gridLoadPersonnel"></div>
+                        </div>
+                    </div>
+                    <div id="user-box">
+                        <img src="/file/viewImage?fileName=no-image.jpg&amp;isThumbNail=y" id="userImage" >
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveLoadPersonnel" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="fas fa-save"></i> Save</button>
+                <!--<button type="button" id="btnDeleteLoadPersonnel" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="fas fa-trash"></i> Delete</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnConfirm" class="btn btn-primary btn-sm hvr-sweep-to-left hide">Confirm</button>
+                <button type="button" id="btnSave" class="btn btn-primary btn-sm yesno hvr-sweep-to-left">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm yesno hvr-sweep-to-left" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ul name="localTemplates">
+    <li name="modalBodyImageEmpl">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageEmpl}}" class="btn btn-sm btn-primary hvr-sweep-to-left"><span class="fas fa-upload"></span> Upload</button></div>
+   </li>
+</ul>

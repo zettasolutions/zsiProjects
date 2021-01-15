@@ -1,0 +1,140 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-12">
+                <ul class="nav nav-tabs main-nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#nav-country" role="tab" aria-controls="nav-country"><i class="fas fa-map-marker-alt"></i> Country</a>
+                    </li>
+                    <li class="nav-item hide">
+                        <a class="nav-link" data-toggle="tab" href="#nav-state" role="tab" aria-controls="nav-state"><i class="fas fa-map-signs"></i> Province/State</a>
+                    </li>
+                    <li class="nav-item hide">
+                        <a class="nav-link" data-toggle="tab" href="#nav-city" role="tab" aria-controls="nav-city"><i class="fas fa-location-arrow mr-1"></i> City</a>
+                    </li>
+                    <li class="nav-item hide">
+                        <a class="nav-link" data-toggle="tab" href="#nav-barangay" role="tab" aria-controls="nav-barangay"><i class="fas fa-home mr-1"></i> Barangay</a>
+                    </li>
+                </ul> 
+                <div class="tab-content border border-top-0 p-3">
+                    <div role="tabpanel" class="tab-pane fade show active" id="nav-country">
+                        <div class="zContainer">
+                            <div class="row">
+                                <div class="col-12 col-sm-5 col-md-4 mb-1"> 
+                                    <div class="input-group">
+                                        <input id="searchVal" class="form-control form-control-sm pl-2" autocomplete="off" placeholder="Search........">
+                                        <div class="input-group-append">
+                                            <button id="btnSearchVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Search">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                        		</div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" id="forGrid">
+                                     <div id="gridCountry" class="zGrid"></div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                    <div class="button-group">     
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveCountry">
+                                            <i class="far fa-save"></i> Save
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDeleteCountry">
+                                            <i class="far fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="nav-state">
+                        <div class="zContainer">
+                            <div class="row">
+                                <div class="col-12 col-sm-5 col-md-3 mb-1"> 
+                                    <div class="input-group" style="flex-wrap: inherit !important;">
+                                        <select id="country_id" class="form-control form-control-sm"></select>
+                                        <div class="input-group-append">
+                                            <button id="btnFilterValCountry" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Filter">
+                                                <i class="fas fa-filter"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                        		</div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                    <div id="gridState" class="zGrid"></div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                    <div class="button-group">     
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveState">
+                                            <i class="far fa-save"></i> Save
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDeleteState">
+                                            <i class="far fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="nav-city">
+                        <div class="zContainer">
+                            <div class="row">
+                                <div class="col-12 col-sm-5 col-md-3 mb-1"> 
+                                    <div class="input-group" style="flex-wrap: inherit !important;">
+                                        <select id="state_id" class="form-control form-control-sm"></select>
+                                        <div class="input-group-append">
+                                            <button id="btnFilterValState" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Filter">
+                                                <i class="fas fa-filter"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                        		</div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                    <div id="gridCity" class="zGrid"></div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                    <div class="button-group">     
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveCity">
+                                            <i class="far fa-save"></i> Save
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDeleteCity">
+                                            <i class="far fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="nav-barangay">
+                        <div class="zContainer">
+                            <div class="row">
+                                <div class="col-12 col-sm-5 col-md-3 mb-1"> 
+                                    <div class="input-group" style="flex-wrap: inherit !important;">
+                                        <select id="city_id" class="form-control form-control-sm"></select>
+                                        <div class="input-group-append">
+                                            <button id="btnFilterValCity" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Filter">
+                                                <i class="fas fa-filter"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                        		</div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                    <div id="gridBarangay" class="zGrid"></div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                    <div class="button-group">     
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveBarangay">
+                                            <i class="far fa-save"></i> Save
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDeleteBarangay">
+                                            <i class="far fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+        </div>
+    </div> 
+</div>

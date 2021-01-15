@@ -1,0 +1,166 @@
+<style>
+    #user-box{
+        top:200px;
+        background-color: #fff;
+        height: 250px;
+        width: 250px;
+        left: 360px;
+        position: absolute;
+        display:none;
+        webkit-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        -moz-box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        box-shadow: 30px 30px 7px -1px rgba(0,0,0,0.58);
+        border: 2px solid #fff;
+        border-radius: 10px;
+        overflow:hidden;
+    }
+      #user-box img{ 
+      height: 100%;
+      width: 100%; 
+      
+    }
+    .popover-body{
+        color:red;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content"> 
+            <div class="row">
+                <div class="col-12 mb-1">
+                    <div class="zGrid" id="gridBanks"></div>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSave">
+                    	<span class="fas fa-save"></span> Save
+                    </button>   
+                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnInactiveBank">
+                    	<span class="fas fa-ban"></span> Inactive
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnAddUser">
+                    	<span class="fas fa-user"></span> Add User
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="hide">
+    <form id="formEmail">
+        <input type="hidden" name="password" id="epassword" value="">
+        <input type="hidden" name="name" id="ename" value="">
+        <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
+    </form>
+</div> 
+<div class="modal fade modal-backdrop-transparent" id="modalWindowBank" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-l" role="document">
+        <div class="modal-content">
+            <div id="frm_modalWindowSupplier" class="tag-form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 col-md-12 col-sm-12 col-xs-12"> 
+                        <h1 id="userTitle" class="pt-2"><b>Add User</b><br></h1><span>Add user by filling the form bellow. Required (<span class="text-danger">*</span>).</span>
+                        <div class="border-top mt-3"></div>
+        				<form  id="formBankUser"> 
+            			    <input type="hidden" id="bank_id" name="bank_id"  value=""/>
+            		        <input type="hidden" id="password" name="password"  value=""/>
+            		        <input type="hidden" id="role_id" name="role_id"  value="5"/>
+            		        <input type="hidden" name="is_fmis"  value="N"/>
+            		        <input type="hidden" name="is_hcm"  value="N"/>
+            		        <input type="hidden" name="is_afcs"  value="Y"/>
+            		        <input type="hidden" name="is_ct"  value="N"/>
+            		        <div class="col-12 col-md-12">
+                    		    <label for="" class="col-form-label control-label"><b>Login (Email Address)</b><span class="text-danger">*</span></label><span id="popLogonAdd" data-placement="top" data-content="This email is already taken."></span>
+                                <input type="email" id="logon" name="logon" class="form-control form-control-sm pl-2" placeholder="email@gmail.com" required autoComplete="off">
+                                <small class="text-primary">Please enter valid email for password verification.</small>
+                    		</div>
+            		        
+            		        <div class="col-12 col-md-12">
+                    		    <label for="" class="col-form-label control-label"><b>Last Name</b><span class="text-danger">*</span></label>  
+                                <input type="text" id="last_name" name="last_name" class="form-control form-control-sm pl-2" required autoComplete="off">
+                    		</div>
+            		        
+                			<div class="col-12 col-md-12">
+                    		    <label for="" class="col-form-label control-label"><b>First Name</b><span class="text-danger">*</span></label>  
+                                <input type="text" id="first_name" name="first_name" class="form-control form-control-sm pl-2" required autoComplete="off">
+                    		</div>
+                    		
+                    		<div class="col-12 col-md-12">
+                    		    <label for="" class="col-form-label control-label"><b>Middle Name</b></label>
+                                <input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm pl-2" autoComplete="off">
+                    		</div>
+                    		
+                    		<div class="col-12 col-md-12 mb-2"> 
+                    		    <label for="" class="col-form-label control-label"><b>Name Suffix</b></label>  
+                                <input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm pl-2" autoComplete="off">
+                    		</div> 
+                    		<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                                <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                    <i class="far fa-save"></i> Save
+                                </button>
+                            </div>
+                        </form> 
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveUser" class="btn btn-primary btn-sm yesno">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left yesno" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalInactiveBanks" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactive">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" title="Close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveBanks" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveBanks" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDeleteInactiveBanks">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>    
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ul name="localTemplates">
+    <li name="modalBodyImageEmpl">
+      <div class="pull-left"><button type="button" onclick="{{onClickUploadImageEmpl}}" class="btn btn-sm btn-primary hvr-sweep-to-left"><span class="fas fa-upload"></span> Upload</button></div>
+   </li>
+</ul>
+<div id="user-box">
+    <img src="/file/viewImage?fileName=no-image.jpg&amp;isThumbNail=y" id="userImage" >
+</div>

@@ -1,0 +1,29 @@
+<div class="panel">
+    <div class="panel-hdr">
+        <div class="d-flex w-100">
+            <div class="mr-auto">
+                <button type="button" onclick="barangaysUpd.showModalUpload(this,'Barangay Data');" class="btn btn-sm  btn-primary"><i class="fa fa-upload"></i> Upload</button>
+            </div> 
+        </div>
+    </div> 
+</div> 
+<ul name="localTemplates">  
+    <li name="modalBodyUploadExcel">
+        <div class="row">  
+            <input id="tmpData" name="tmpData" type="hidden" class="form-control input-sm" > 
+        </div>
+        <div class="row mb-2">  
+            <label class="col-2  control-label">Select File:</label>
+            <div class=" col-3">
+                <input type="file" class="browse btn btn-primary" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file">
+            </div>
+        </div>
+        <div class="row">  
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button type="button" onclick="barangaysUpd.{{onClickUploadExcel}}" class="btn btn-primary" id="btnUploadFile" style="margin-left: 5px">
+                    <i class="fas fa-upload"></i> Upload
+                </button> 
+            </div>
+        </div>
+    </li>
+</ul>

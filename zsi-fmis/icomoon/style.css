@@ -1,0 +1,98 @@
+@font-face {
+  font-family: 'afcs';
+  src:
+    url('fonts/afcs.ttf?dqx0bk') format('truetype'),
+    url('fonts/afcs.woff?dqx0bk') format('woff'),
+    url('fonts/afcs.svg?dqx0bk#afcs') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="z-"], [class*=" z-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'afcs' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.z-ev_station:before {
+  content: "\e901";
+}
+.z-location-gas-station:before {
+  content: "\e900";
+}
+.z-copy:before {
+  content: "\e92c";
+}
+.z-barcode:before {
+  content: "\e937";
+}
+.z-qrcode:before {
+  content: "\e938";
+}
+.z-cart:before {
+  content: "\e93a";
+}
+.z-coin-dollar:before {
+  content: "\e93b";
+}
+.z-alarm:before {
+  content: "\e950";
+}
+.z-printer:before {
+  content: "\e954";
+}
+.z-mobile:before {
+  content: "\e958";
+}
+.z-drawer:before {
+  content: "\e95c";
+}
+.z-user:before {
+  content: "\e971";
+}
+.z-users:before {
+  content: "\e972";
+}
+.z-user-plus:before {
+  content: "\e973";
+}
+.z-user-minus:before {
+  content: "\e974";
+}
+.z-user-check:before {
+  content: "\e975";
+}
+.z-user-tie:before {
+  content: "\e976";
+}
+.z-aid-kit:before {
+  content: "\e998";
+}
+.z-briefcase:before {
+  content: "\e9ae";
+}
+.z-truck:before {
+  content: "\e9b0";
+}
+.z-road:before {
+  content: "\e9b1";
+}
+.z-enter:before {
+  content: "\ea13";
+}
+.z-exit:before {
+  content: "\ea14";
+}
+.z-loop:before {
+  content: "\ea2d";
+}

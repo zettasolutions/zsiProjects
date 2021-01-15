@@ -1,0 +1,114 @@
+<!--Dashboard-->
+<div id="dashboard">
+    <style type="text/css" media="all"> 
+        #graphs .panel-content{
+            min-height: 300px;
+        }
+        .zGraph {
+            min-height: 245px
+        } 
+    </style>
+    <div class="panel main">
+        <div class="panel-container">
+            <div class="panel-content">
+                <div class="col-md-12 col-sm-12 col-xs-12">    
+                    <div class="row mt-3"> 
+                        <div class="col-md-6 col-sm-6 col-12 mb-2">
+                            <div class="panel mb-0">
+                                <div class="panel-hdr text-primary">
+                                    <h2>
+                                        <span class="mr-2"><i class="far fa-chart-pie"></i></span>Refuel Expenses
+                                    </h2>
+                                    <div class="panel-toolbar"> 
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-window-minimize" data-action="panel-collapse" data-offset="0,10" data-original-title="Collapse" data-toggle="tooltip" title="Collapse"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-expand" data-action="panel-fullscreen" data-offset="0,10" data-original-title="Fullscreen" data-toggle="tooltip" title="Expand"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-trash" data-action="panel-close"  data-offset="0,10" data-original-title="Close" data-toggle="tooltip" title="Delete"></button>
+                                    </div>
+                                </div>
+                                <div class="panel-container show">
+                                    <div class="panel-content">
+                                        <div class="panel-container collapse show">
+                                            <div class="panel-content">
+                                                <div class="zGraph" id="graph1"></div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-2">
+                            <div class="panel mb-0">
+                                <div class="panel-hdr text-primary">
+                                    <h2>
+                                        <span class="mr-2"><i class="far fa-chart-pie"></i></span>Preventive Maintenance Expenses
+                                    </h2>
+                                    <div class="panel-toolbar"> 
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-window-minimize" data-action="panel-collapse"  data-offset="0,10" data-original-title="Collapse" data-toggle="tooltip" title="Collapse"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-expand" data-action="panel-fullscreen"  data-offset="0,10" data-original-title="Fullscreen" data-toggle="tooltip" title="Expand"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-trash" data-action="panel-close" data-offset="0,10" data-original-title="Close" data-toggle="tooltip" title="Delete"></button>
+                                    </div>
+                                </div>
+                                <div class="panel-container show">
+                                    <div class="panel-content">
+                                        <div class="panel-container collapse show">
+                                            <div class="panel-content">
+                                                <div class="zGraph" id="graph2"></div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-2">
+                            <div class="panel mb-0">
+                                <div class="panel-hdr text-primary">
+                                    <h2>
+                                        <span class="mr-2"><i class="far fa-chart-pie"></i></span>Accidents Recorded
+                                    </h2>
+                                    <div class="panel-toolbar"> 
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-window-minimize" data-action="panel-collapse"  data-offset="0,10" data-original-title="Collapse" data-toggle="tooltip" title="Collapse"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-expand" data-action="panel-fullscreen"  data-offset="0,10" data-original-title="Fullscreen" data-toggle="tooltip" title="Expand"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-trash" data-action="panel-close"  data-offset="0,10" data-original-title="Close" data-toggle="tooltip" title="Delete"></button>
+                                    </div>
+                                </div>
+                                <div class="panel-container show">
+                                    <div class="panel-content">
+                                        <div class="panel-container collapse show">
+                                            <div class="panel-content">
+                                                <div class="zGraph" id="graph3"></div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-2">
+                            <div class="panel mb-0">
+                                <div class="panel-hdr text-primary">
+                                    <h2>
+                                        <span class="mr-2"><i class="far fa-chart-pie"></i></span>Repair Expenses
+                                    </h2>
+                                    <div class="panel-toolbar"> 
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-window-minimize" data-action="panel-collapse" data-offset="0,10" data-original-title="Collapse" data-toggle="tooltip" title="Collapse"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-expand" data-action="panel-fullscreen"  data-offset="0,10" data-original-title="Fullscreen" data-toggle="tooltip" title="Expand"></button>
+                                        <button class="btn btn-panel waves-effect waves-themed fal fa-trash" data-action="panel-close" data-offset="0,10" data-original-title="Close" data-toggle="tooltip" title="Delete"></button>
+                                    </div>
+                                </div>
+                                <div class="panel-container show">
+                                    <div class="panel-content">
+                                        <div class="panel-container collapse show">
+                                            <div class="panel-content">
+                                                <div class="zGraph" id="graph4"></div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--- i transfered amchats4 libs to views/shared/_layout.cshmtl : gf -->
+</div>

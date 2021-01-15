@@ -1,0 +1,416 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    *:focus{
+      outline:0px;
+    }
+    .zGrid .zCell{
+        padding-left: 3px;
+    } 
+    .zsi-form-control{
+        border-left:none;
+        border-right:none;
+        border-top:none;
+        border-radius:0 0 0 0;
+        padding: 0;
+    }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
+    .border-none{
+        border: none !important;
+    }
+    .popover-body{
+        color:red;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer">
+                <div class="row mb-2 col-12 col-sm-12 col-md-12">
+                     <label class="col-form-label control-label"><b>Search :</b></label>
+                    <div class="col-12 col-sm-4 col-md-3 mb-2">
+                        <select id="keyWord"  class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option value="client_name">Client Name</option>
+                            <option value="contract_no">Contract No.</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-5">
+                        <div class="input-group">
+                            <input id="keyValue" type="text" class="form-control form-control-sm pl-2" placeholder="Please select keyword....."/>
+                            <div class="input-group-append">
+                                <button id="btnFilterVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Search">
+                                    <span id="popSearch" data-placement="top" data-content="This value doesn't exist."></span><i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left ml-1 btn-outline-default text-white" onclick="client.showModalClients()">
+                                    <i class="far fa-plus"></i> New Client
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="contractsDiv" class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                         <div id="gridClientContracts" class="zGrid mb-1"></div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                        <div class="button-group">     
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnNewContracts"><i class="far fa-plus"></i> New Contracts</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+                <div role="tabpanel" class="tab-pane fade" id="nav-new">
+                    <div class="row">
+                        <div class="col-sm-12 mb-1">
+                            <div class="zGrid" id="gridClients"></div>
+                        </div>
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnNew"><i class="far fa-plus"></i> New</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div id="newClientModal" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <h1 class="pt-2"><b>Client Registration</b><br></h1><span>Add new client by filling the form bellow. Required (<span class="text-danger">*</span>).</span>
+                    <div class="border-top mt-3"></div>
+                    <nav>
+                      <div class="nav nav-tabs nav-tab-main" id="nav-tab" role="tablist"> 
+                        <a class="nav-item nav-link active" data-toggle="tab" href="#nav-company-information" role="tab" aria-controls="nav-company-information"><i class="fas fa-building mr-1"></i> Company<span id="pop1" data-placement="top" data-content="Please fill the required fields."></span> Information </a> 
+                        <a class="nav-item nav-link" data-toggle="tab" href="#nav-documents" role="tab" aria-controls="nav-documents"><i class="fas fa-file-image mr-1"></i> Documents </a> 
+                        <a class="nav-item nav-link" data-toggle="tab" href="#nav-admin-information" role="tab" aria-controls="nav-admin-information"><i class="fas fa-user mr-1"></i> Admin I<span id="pop2" data-placement="top" data-content="Please fill the required fields."></span>nformation </a> 
+                      </div> 
+                    </nav>
+                    <div class="tab-content border border-top-0 p-3 mb-1">
+                        <div role="tabpanel" class="tab-pane fade show active" id="nav-company-information">
+                            <div id="clientInformationDiv" class="mb-2"> 
+                                <form id="formClientsStep1One" class="needs-validation row" novalidate>
+                    			    <input type="hidden" id="clientIds" name="client_id">
+                                	<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Company Name</b><span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_name" required  name="client_name" autocomplete="off"/> 
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Email Address</b><span class="text-danger">*</span></label><span id="popEmailAdd" data-placement="top" data-content="This email is already taken."></span>
+                                        <input type="email" class="form-control form-control-sm pl-2" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Landline Number</b></label> 
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_phone_no" name="client_phone_no"  autocomplete="off" />
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Mobile Number</b><span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm pl-2" id="client_mobile_no" name="client_mobile_no" maxlength="13" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true"/>
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Bill To</b></label> 
+                                        <input type="text" class="form-control form-control-sm pl-2" id="bill_to" name="bill_to" autocomplete="off">
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Billing Address</b><span class="text-danger">*</span></label> 
+                                        <input type="text" class="form-control form-control-sm pl-2" id="billing_address" name="billing_address" autocomplete="off" placeholder="Building No, Street, Barangay">
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Country</b><span class="text-danger">*</span></label>  
+                                        <select class="form-control form-control-sm custom-select select2" id="country_id" required  name="country_id" autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Province/State</b><span class="text-danger">*</span></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-12 col-md-6 mb-2">
+                            		    <label for="" class="col-form-label control-label"><b>City</b><span class="text-danger">*</span></label>  
+                                        <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                            		</div>
+                            		<div class="col-12 col-md-12 mb-2">
+                            		    <h5 class="frame-heading"><b>Applications</b><span class="text-danger">*</span></h5>
+                                        <di class="frame-wrap">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input id="is_fmis" name="is_fmis" type="checkbox" value="Y" class="custom-control-input cursor-pointer">
+                                                <label class="custom-control-label cursor-pointer" for="is_fmis">FMIS</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input id="is_hcm" name="is_hcm" type="checkbox" value="Y" class="custom-control-input cursor-pointer">
+                                                <label class="custom-control-label cursor-pointer" for="is_hcm">HCM</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input id="is_afcs" name="is_afcs" type="checkbox" value="Y" class="custom-control-input cursor-pointer">
+                                                <label class="custom-control-label cursor-pointer" for="is_afcs">AFCS</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input id="is_ct" name="is_ct" type="checkbox" value="Y" class="custom-control-input cursor-pointer">
+                                                <label class="custom-control-label cursor-pointer" for="is_ct">Contact Tracing</label>
+                                            </div>
+                                        </di>
+                                    </div>
+                                </form>
+                        	</div>
+                        </div> 
+                        
+                        <div role="tabpanel" class="tab-pane fade" id="nav-documents">
+                            <div id="clientInformationDiv" class="mb-2"> 
+                                <form id="formClientsStep1Five">  
+                                	<div class="col-12 col-md-12 mb-2">  
+                                        <label class="col-form-label control-label"><b>Company Logo</b></label>
+                                        <input name="field_name" type="hidden">
+                                        <input name="sqlCode" type="hidden" value="T1301">
+                                        <div class="input-group">
+                                            <input id="file4" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer col-md-6" required>
+                                            <div class="input-group-append ml-1">
+                                                <a id="viewImg4" href="" type="button" class="btn btn-primary btn-xs" title="View image" target="_blank"><span class="fas fa-eye" style="padding-top:0.4rem;"></span></a><!--<span id="img4" class="text-truncate text-truncate-sm d-inline-block"></span>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="formClientsStep1Two">  
+                                	<div class="col-12 col-md-12 mb-2">  
+                                        <label class="col-form-label control-label"><b>Mayor's Permit</b></label>
+                                        <input name="field_name" type="hidden">
+                                        <input name="sqlCode" type="hidden" value="T1301">
+                                        <div class="input-group">
+                                            <input id="file1" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer col-md-6" required>
+                                            <div class="input-group-append ml-1">
+                                                <a id="viewImg1" href="" type="button" class="btn btn-primary btn-xs" title="View image" target="_blank"><span class="fas fa-eye" style="padding-top:0.4rem;"></span></a><!--<span id="img1" class="text-truncate text-truncate-sm d-inline-block"></span>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="formClientsStep1Three">
+                                    <div class="col-12 col-md-12 mb-2">  
+                                        <label class="col-form-label control-label"><b>BIR</b></label>
+                                        <input name="field_name" type="hidden">
+                                        <input name="sqlCode" type="hidden" value="T1301">
+                                        <div class="input-group">
+                                            <input id="file2" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer col-md-6" required>
+                                            <div class="input-group-append ml-1">
+                                                <a id="viewImg2" href="" type="button" class="btn btn-primary btn-xs" title="View image" target="_blank"><span class="fas fa-eye" style="padding-top:0.4rem;"></span></a><!--<span id="img2" class="text-truncate text-truncate-sm d-inline-block"></span>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="formClientsStep1Four">
+                                    <div class="col-12 col-md-12 mb-2">  
+                                        <label class="col-form-label control-label"><b>SEC/DTI</b></label>
+                                        <input name="field_name" type="hidden">
+                                        <input name="sqlCode" type="hidden" value="T1301">
+                                        <div class="input-group">
+                                            <input id="file3" name="file" type="file" accept="image/x-png, image/jpeg"  class="browse form-control cursor-pointer col-md-6" required>
+                                            <div class="input-group-append ml-1">
+                                                <a id="viewImg3" href="" type="button" class="btn btn-primary btn-xs" title="View image" target="_blank"><span class="fas fa-eye" style="padding-top:0.4rem;"></span></a><!--<span id="img3" class="text-truncate text-truncate-sm d-inline-block"></span>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                        	</div>
+                        </div> 
+                        
+                        <div role="tabpanel" class="tab-pane fade" id="nav-admin-information">
+                            <div id="" class="">
+                        	    <form id="formClientsStep2" class="needs-validationd" novalidate>
+                    		        <input type="hidden" id="clientId" name="client_id"  value=""/>
+                    		        <input type="hidden" id="password" name="password"  value=""/>
+                    		        <input type="hidden" name="is_fmis"  value=""/>
+                    		        <input type="hidden" name="is_hcm"  value=""/>
+                    		        <input type="hidden" name="is_afcs"  value=""/>
+                    		        <input type="hidden" name="is_ct"  value=""/>
+                    		        <div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Login (Email Address)</b><span class="text-danger">*</span></label><span id="popLogonAdd" data-placement="top" data-content="This email is already taken."></span>
+                                        <input type="email" id="logon" name="logon" class="form-control form-control-sm pl-2" placeholder="email@gmail.com" required autoComplete="off">
+                            		    <small class="text-primary">Please enter valid email for password verification.</small>
+                            		</div>
+                    		        
+                    		        <div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Last Name</b><span class="text-danger">*</span></label>  
+                                        <input type="text" id="last_name" name="last_name" class="form-control form-control-sm pl-2" required autoComplete="off">
+                            		</div>
+                    		        
+                        			<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>First Name</b><span class="text-danger">*</span></label>  
+                                        <input type="text" id="first_name" name="first_name" class="form-control form-control-sm pl-2" required autoComplete="off">
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><b>Middle Name</b></label>
+                                        <input type="text" id="middle_name" name="middle_name" class="form-control form-control-sm pl-2" autoComplete="off">
+                            		</div>
+                            		
+                            		<div class="col-12 col-md-6 mb-2"> 
+                            		    <label for="" class="col-form-label control-label"><b>Name Suffix</b></label>  
+                                        <input type="text" id="name_suffix" name="name_suffix" class="form-control form-control-sm pl-2" autoComplete="off">
+                            		</div>  
+                        		</form>
+                		    </div>
+                        </div> 
+                    </div>
+                    
+                	<form id="formClientsCB" class="needs-validation row" novalidate>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                            <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                <i class="far fa-save"></i> Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div> 
+    </div> 
+</div> 
+<div class="hide">
+    <form id="formEmail">
+        <input type="hidden" name="password" id="epassword" value="">
+        <input type="hidden" name="name" id="ename" value="">
+        <input type="hidden" name="mail_recipients" id="mail_recipients" value="">
+    </form>
+</div>
+<div id="modalClientContracts" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalTitle" class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-12 col-sm-12 col-md-12"> 
+                    <div class="col-12 col-sm-5 col-md-4"> 
+                        <form id="formContract" class="needs-validation panel" novalidate>  
+                			<input type="hidden" name="client_contract_id" id="client_contract_id">
+                			<input type="hidden" name="client_id" id="client_id">
+                        	<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Contract No.</b></label>  
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="contract_no" required  name="contract_no" autocomplete="off"/> 
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Contract Date</b></label>  
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="contract_date" required  name="contract_date" autocomplete="off"/> 
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Activation Date</b></label>  
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="activation_date" required  name="activation_date" autocomplete="off"/> 
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Expiry Date</b></label>  
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="expiry_date" required  name="expiry_date" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Contract Term</b></label>  
+                                <select class="form-control form-control-sm custom-select select2" id="contract_term_id" required  name="contract_term_id"></select>
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Plan</b></label>  
+                                <select class="form-control form-control-sm custom-select select2" id="plan_id" required  name="plan_id"></select>
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Plan Quantity</b></label>  
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="plan_qty" required  name="plan_qty" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>SRP Amount</b></label>  
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="srp_amount" required  name="srp_amount" autocomplete="off" readonly="true"/>
+                    		</div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Down Payment Amount</b></label>  
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="dp_amount" required  name="dp_amount" value="0.00"/>
+                            </div>
+                    		<div class="col-sm-12 col-md-12 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Less Down Payment Amount</b></label>   
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="less_dp_amount" required  name="less_dp_amount" autocomplete="off" value="0.00" readonly="true"/>
+                    		</div> 
+                    		<div class="col-sm-12 col-md-12 col-xs-12"> 
+                    		    <label for="" class="col-form-label control-label"><b>Total Amortization Amount</b></label>   
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="total_amort_amount" required  name="total_amort_amount" autocomplete="off" value="0.00" readonly="true"/>
+                    		</div> 
+                    		<div class="col-sm-12 col-md-12 col-xs-12">  
+                    		    <label for="" class="col-form-label control-label"><b>Monthly Amortization Amount</b></label>   
+                                <input type="text" class="form-control form-control-sm zsi-form-control" id="monthly_amort_amount" required  name="monthly_amort_amount" autocomplete="off" value="0.00" readonly="true"/>
+                    		</div>
+                    		<div class="border-top my-2"></div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2"> 
+                                <button id="submit" type="button" class="btn btn-primary btn-sm waves-effect waves-themed savingBtn hvr-sweep-to-left" title="Save">
+                                    <i class="far fa-save"></i> Save
+                                </button>
+                                <button id="btnResetVal" class="btn-sm btn btn-primary text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
+                                   <i class="far fa-refresh hvr-icon"></i> Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-8">   
+                        <div class="panel mb-2">
+                            <div class="panel-hdr">
+                                <h2>
+                                    Subscription <span class="fw-300"><i>List</i></span>
+                                </h2>
+                                <div class="panel-toolbar">
+                                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                </div>
+                            </div>
+                            <div class="panel-container show panel-container-grid">
+                                <div class="panel-content">
+                                    <div class="row" id="divReplacementParts">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                            <div class="zGrid" id="gridContracts"></div>
+                                        </div>
+                                        <!--<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                            <div class="button-group"> 
+                                                <button id="btnSaveContracts" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                                    <i class="far fa-save"></i> Save
+                                                </button>
+                                            </div>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnConfirm" class="continuecancel btn btn-primary btn-sm hide">Continue</button>
+                <button type="button"  class="continuecancel btn btn-primary btn-sm hide" data-dismiss="modal">Cancel</button>
+                <button type="button" id="btnSave" class="btn btn-primary btn-sm yesno">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm yesno" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>

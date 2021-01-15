@@ -1,0 +1,131 @@
+<style>
+    .ui-state-active {background: #F00 !important;}
+    @media print{
+        .footer{
+           position:relative;
+           top:-20px; // this sets the footer -20px from the top of the next 
+                      //header/page ... 20px above the bottom of target page
+                      //so make sure it is more negative than your footer's height.
+    
+           height:10px;//notice that the top position subtracts 
+                       //more than the assigned height of the footer
+        }
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="zContainer">
+                <div class="row">
+            		<div class="col-sm-6 col-md-2 col-xs-12 " id="hideFromDate">
+            		    <label for="" class="col-form-label text-label"><b>From</b></label> 
+            		    <input type="text" class="form-control form-control-sm pl-2" id="dtr_fromDate"  placeholder="Start date....."/> 
+            		</div>  
+            		<div class="col-sm-6 col-md-2 col-xs-12 ">
+            		    <label for="" class="col-form-label text-label"><b>To</b></label>  
+        		        <input type="text" class="form-control form-control-sm pl-2" id="dtr_toDate"  placeholder="To..."/> 
+            		</div>
+            		<div class="col-sm-6 col-md-3 col-xs-12 " id="hideToDate">
+            		    <label for="" class="col-form-label text-label"><b>Employee</b></label>  
+            		    <div class="input-group" style="flex-wrap: inherit !important;"> 
+            		        <select type="text" class="form-control form-control-sm pl-2" id="searchVal"></select> 
+                        </div>
+            		</div>
+            		<div class="col-sm-6 col-md-5 col-xs-12">
+            		    <label for="" class="col-form-label text-label"><b>&nbsp;</b></label>  
+            		    <div class="input-group" style="flex-wrap: inherit !important;"> 
+            		        <input type="hidden" class="form-control form-control-sm pl-2">
+                            <div class="input-group-append">
+                                <button id="btnSearch" class="btn-sm btn btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button type="button" class="btn btn-primary btn-sm btn-outline-default text-white hvr-sweep-to-left" id="btnGenerate">
+                                	<i ></i> Generate
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button id="btnReset" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
+                                   <i class="far fa-refresh hvr-icon"></i> Reset
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button onclick="dtr.displayDTRModal()" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Show PDF File">
+                                   <i class="far fa-pdf hvr-icon"></i> Show PDF
+                                </button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button id="btnExportDTR" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Export to Excel">
+                                   <i class="far fa-save hvr-icon"></i> Export to Excel
+                                </button>
+                            </div>
+                        </div>
+                        
+                        
+            		</div>
+                    <div class="col-12 mb-1" style="margin-top:10px;">
+                        <div id="grid" class="zGrid"></div> 
+                    </div>
+                    <div class="col-12">   
+                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnEditDTR">
+                            <i class="far fa-save"></i> Edit
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDelete">
+                        	<i class="fas fa-trash-alt"></i> Delete
+                        </button>      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="appendTblForPDF" style="display: none;">
+    <table id="tablePDF">
+        <thead>
+            <th>Date</th>
+            <th>Time In</th>
+            <th>Time Out</th>
+            <th>No. of Hours</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<div class="modal" id="modalEditDTR" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Update DTR </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                        <div id="gridEditDTR" class="zGrid"> </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <button type="button" id="btnSave" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="far fa-save"></i> Save</button>
+                    </div>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalDTRPDF" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> PDF </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe id="ifrmWindow" style="width:100%;border:solid 1pt #000;margin-top:10px" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

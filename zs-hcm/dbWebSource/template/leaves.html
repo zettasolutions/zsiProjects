@@ -1,0 +1,105 @@
+<style>
+    .datepicker,.table-condensed {
+      width: inherit;
+      height:inherit;
+      font-size:medium;
+    }
+    #datepicker .table-condensed .thead{
+        font-size:60px;
+    }
+    #datepicker .table-condensed .next, .prev{
+        font-size:30px;
+    }
+    #datepicker .table-condensed thead tr:nth-child(2) th{
+        font-size:30px;
+        color: #1a0dab;
+        font-weight: bold;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <div class="row" id="leaveDD">
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                    <label class="col-form-label"><b>Employee</b><span class="text-danger">*</span></label>
+                    <select id="userId" class="form-control form-control-sm" name="userId"></select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                    <label class="col-form-label"><b>Leave Type</b><span class="text-danger">*</span></label>
+                    <select id="leaveTypeId" class="form-control form-control-sm" name="leaveTypeId"></select>
+                </div> 
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 mb-2">
+                    <label class="col-form-label">&nbsp;</label>
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <button id="btnCalendar" class="btn btn-sm btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Calendar">
+                                <i class="fas fa-calendar"></i> Date Picker
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="panel" id="collapsed">
+                        <div class="panel-hdr text-primary">
+                            <h2>
+                                <span class="mr-2"><i class="fas fa-calendar"></i></span> Select date(s) to leave
+                            </h2>
+                            <div class="panel-toolbar ml-2">
+                                <button class="btn btn-panel waves-effect waves-themed fal fa-window-minimize" data-action="panel-collapse" data-offset="0,10" data-original-title="Collapse" data-toggle="tooltip" title="Collapse"></button>
+                                <button class="btn btn-panel waves-effect waves-themed fal fa-expand" data-action="panel-fullscreen" data-offset="0,10" data-original-title="Fullscreen" data-toggle="tooltip" title="Expand"></button>
+                            </div>
+                        </div>
+                        
+                        <div class="panel-container show" id="panelContainer">
+                            <div class="panel-content">
+                                <div class="row">
+                                    <div id="gridId" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                        <div id="gridLeaves" class="zGrid"></div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">   
+                                        <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveLeaves" data-toggle="tooltip" title="Save">
+                                            <i class="far fa-save"></i> Save
+                                        </button>    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div> 
+                </div> 
+            </div> 
+        </div>
+    </div>
+</div>
+<div id="calendar" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <h1 class="pt-2"><b>Please select the date(s) to leave.</b></h1>
+                    <div id="datepicker"></div>
+                    <div class="input-group mt-1">
+                        <div class="input-group-append">
+                            <input id="datepickerVal" type="hidden"/>
+                            <button id="btnGo" class="btn btn-md btn-primary btn-outline-default text-white hvr-sweep-to-left" type="button" title="Generate Date(s)">
+                                <i class="fas fa-sign-out-alt"></i><i class="count"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </div> 
+</div> 
+
+ 
+
+
+

@@ -1,0 +1,256 @@
+
+
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content"> 
+            <div class="zContainer">
+                <div class="row">
+                    <div class="col-12 col-xl-9 col-md-9 col-sm-8">
+                        <nav>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active"     data-toggle="tab" href="#nav-device-types" role="tab" aria-controls="nav-device-types">Device Types</a>
+                            <a class="nav-item nav-link "           data-toggle="tab" href="#nav-device-brands" role="tab" aria-controls="nav-device-brands">Device Brands</a>
+                            <a class="nav-item nav-link "           data-toggle="tab" href="#nav-device-batch" role="tab" aria-controls="nav-device-batch">Device Batch</a>
+                            <a class="nav-item nav-link hide"       data-toggle="tab" href="#nav-devices" role="tab" aria-controls="nav-devices">Devices</a>
+                          </div>
+                        </nav>
+                    </div>
+                   <div class="col-md-3 col-xl-3 col-sm-4 col-12 mt-1"> 
+                       <div class="">
+                            <div class="input-group input-group-sm bg-white shadow-inset-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                        <i class="fal fa-search"></i>
+                                    </span>
+                                </div>
+                                <input id="searchVal" type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Type here..." autocomplete="off">
+                                <div class="input-group-append">
+                                    <button id="btnSearchVal" class="btn btn-primary hvr-sweep-to-left" type="button" title="Search">Search</button>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>   
+               <!-- <div class="row">
+                    <div id="deviceTypeDiv" class="col-md-3 col-xl-3 col-sm-4 col-12 mt-1 mb-1 hide">
+                        <div class="input-group" style="flex-wrap: inherit !important;">
+                            <select class="form-control form-control-sm filter-oem" name="deviceTypeId" id="deviceTypeId"></select>
+                            <div class="input-group-append">
+                                <button id="btnFilterAsset" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter"><i class="fas fa-filter"></i></button>
+                            </div> 
+                        </div>
+                    </div>
+                    <div id="deviceModelDiv" class="col-md-3 col-xl-3 col-sm-4 col-12 mt-1 mb-1 hide">
+                        <div class="input-group" style="flex-wrap: inherit !important;">
+                            <select class="form-control form-control-sm" name="deviceModelId" id="deviceModelId"></select>
+                            <div class="input-group-append">
+                                <button id="btnFilterModel" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter"><i class="fas fa-filter"></i></button>
+                            </div> 
+                        </div>
+                    </div>
+                    <div id="deviceBrandDiv" class="col-md-3 col-xl-3 col-sm-4 col-12 mt-1 mb-1 hide">
+                        <div class="input-group" style="flex-wrap: inherit !important;">
+                            <select class="form-control form-control-sm" name="deviceBrandId" id="deviceBrandId"></select>
+                            <div class="input-group-append">
+                                <button id="btnFilterBrand" class="btn-sm btn btn-primary btn-outline-default text-white" type="button" title="Filter"><i class="fas fa-filter"></i></button>
+                            </div> 
+                        </div>
+                    </div>
+                </div>-->
+            <div class="tab-content" id="nav-tabContent">
+                <div role="tabpanel" class="tab-pane fade show active" id="nav-device-types">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div id="gridDeviceTypes" class="zGrid mb-1"></div> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="button-group">   
+                                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveDeviceType">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnInactiveDeviceType" data-toggle="tooltip" title="Inactive">
+                                    	  <i class="fas fa-ban"></i> Inactive
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="nav-device-brands">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                 <div id="gridDeviceBrand" class="zGrid"></div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                <div class="button-group">     
+                                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveDeviceBrand">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnInactiveDeviceBrand" data-toggle="tooltip" title="Inactive">
+                                    	  <i class="fas fa-ban"></i> Inactive
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div role="tabpanel" class="tab-pane fade" id="nav-device-batch">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div id="gridDeviceBatch" class="zGrid mb-1"></div> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="button-group">   
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveDeviceBatch">
+                                        <i class="far fa-save"></i> Save
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div role="tabpanel" class="tab-pane fade" id="nav-devices">
+                    <div class="zContainer">
+                        <div class="row"> 
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div id="gridDevices" class="zGrid mb-1"></div> 
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="button-group">   
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveDevices">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnDeleteDeviceTerms" onclick="dt.btnDeleteDeviceTerms()" data-toggle="tooltip" title="Delete">
+                                    	<i class="fas fa-trash-alt"></i> Delete
+                                    </button>  
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnDeleteDeviceTerms" onclick="dt.btnInactiveDevices()" data-toggle="tooltip" title="Delete">
+                                    	<i class="fas fa-trash-alt"></i> Inactive
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div> 
+</div>
+
+<div class="modal" id="modalInactiveDeviceType" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveDeviceType">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveDeviceType" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveTypes" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteInActiveTypes" onclick="dt.btnDeleteInActiveTypes()" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalInactiveDeviceModels" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveDeviceModels">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveModels" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactive" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteInActiveModels" onclick="dt.btnDeleteInActiveModels()" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalInactiveDeviceBrand" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveDeviceBrand">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveDeviceBrand" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveBrand" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteInActiveDeviceBrand" onclick="dt.btnDeleteInActiveDeviceBrand()" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalInactiveDevices" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveDevices">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveDevices" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveDevices" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button> 
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

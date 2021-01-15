@@ -1,0 +1,55 @@
+<style>
+    .panel-container-grid{
+        min-height: 200px !important;
+    }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
+    .zRow.zTotal {
+        position: absolute;
+        left: 0;
+        right: 0;
+    } 
+    .zHeaders .title .text {
+        padding-left: 4px;
+        white-space: nowrap;
+        font-size: 0.7rem;
+        width: 100%;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <div role="content">  
+                <div class="widget-body"  id="panel-1">  
+                	<div class="row">
+                        <div class="col-12 col-sm-12">   
+                            <div class="panel mb-1"> 
+                                <div class="panel-container show panel-container-grid">
+                                    <div class="panel-content">
+                                        <div class="row" id="divReplacementParts">
+                                            <div class="col-12 col-sm-12 col-md-12 col-xl-12"> 
+                                                <div id="gridPMS" class="zGrid"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                	<div class="row">
+                        <div class="col-12 col-sm-12">   
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save" id="btnSave">
+                                <i class="far fa-save"></i> Save
+                            </button> 
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Post" id="btnPost">
+                                <i class="far fa-save"></i> Post
+                            </button> 
+                        </div>
+                    </div> 
+                </div>  
+            </div>     
+        </div>
+    </div>
+</div>

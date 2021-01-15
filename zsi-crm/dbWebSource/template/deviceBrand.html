@@ -1,0 +1,59 @@
+<style>
+    @media print {
+         .zRow.zTotal{
+             position:unset;
+         }
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                     <div id="gridDeviceBrand" class="zGrid"></div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                    <div class="button-group">     
+                        <button type="button" class="btn btn-primary btn-sm" id="btnSaveDeviceBrand">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnInactiveDeviceBrand" data-toggle="tooltip" title="Inactive">
+                        	  <i class="fas fa-ban"></i> Inactive
+                        </button>
+                        <!--<button type="button" class="btn btn-primary btn-sm" id="btnDeletePlans">
+                        	<i class="fas fa-trash-alt"></i> Delete
+                        </button>-->
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div> 
+</div>
+
+<div class="modal" id="modalInactiveDeviceBrand" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveDeviceBrand">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveDeviceType" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveBrand" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btnDeleteInActiveDeviceBrand" onclick="db.btnDeleteInActiveDeviceBrand()" data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

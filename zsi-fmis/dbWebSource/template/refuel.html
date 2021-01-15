@@ -1,0 +1,202 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+    border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    *:focus{
+      outline:0px;
+    }
+    .zRow.zTotal {
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-hdr">
+            <div class="d-flex w-100">
+                <!--<div class="mr-auto">-->
+                <!--    <button type="button" class="btn btn-primary btn-sm" id="btnNew"><i class="far fa-plus"></i> New</button>-->
+                <!--</div>-->
+                <div class="">
+                    <div class="input-group input-group-sm bg-white shadow-inset-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                <b>Date :</b>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control border-left-0 bg-transparent pl-0" id="filterDate">
+                        <div class="input-group-append">
+                            <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                <b>Unit Price :</b>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control border-left-0 bg-transparent pl-0" id="filterUnitPrice">
+                        <!--<select class="form-control border-left-0 bg-transparent pl-0" placeholder="Select Gas Station" id="filterGasStation"></select>-->
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary waves-effect waves-themed hvr-sweep-to-left"  title="Filter" id="btnFilter"><i class="far fa-filter"></i></button>
+                        </div>
+                        <div class="input-group-append ml-1">
+                            <button id="btnResetVal" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
+                               <i class="far fa-refresh hvr-icon"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-content">  
+            <div role="content" id="table" >  
+                <div class="widget-body"  id="panel-1"> 
+                    <div class="row" id="divRefuel">
+                        <div class="col-12 col-sm-12 mb-2"> 
+                            <div class="zGrid" id="gridRefuel"></div>
+                        </div>
+                        <div class="col-12 col-sm-12">
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save" id="btnSave">
+                                <i class="far fa-save"></i> Save
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Post" id="btnPost">
+                                <i class="far fa-save"></i> Post
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Post" id="btnAdd">
+                                <i class="far fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+               <!--     <form id="formRefuel" class="needs-validation" novalidate>  -->
+            			<!--<input type="hidden" name="refuel_id" id="refuel_id">-->
+               <!--         <div class="row mb-2"> -->
+               <!--             <div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>Document #</b></label>  -->
+               <!--                 <input type="text" class="form-control form-control-sm pl-2" id="doc_no" required  name="doc_no" autocomplete="off"/>-->
+               <!--     		</div>-->
+               <!--         	<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>Document Date</b></label>  -->
+               <!--                 <input type="text" class="form-control form-control-sm pl-2" id="doc_date" required  name="doc_date" autocomplete="off"/>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>Vehicle</b></label>-->
+               <!--                 <select type="text" class="form-control form-control-sm custom-select select" id="vehicle_id" required  name="vehicle_id" autocomplete="off"></select>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>Driver</b></label>-->
+               <!--                 <select type="text" class="form-control form-control-sm custom-select select" id="driver_id" required  name="driver_id" autocomplete="off"></select>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>PAO</b></label>-->
+               <!--                 <select type="text" class="form-control form-control-sm custom-select select" id="pao_id" required  name="pao_id" autocomplete="off"></select>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>ODO Reading</b></label>-->
+               <!--                 <input type="text" class="form-control form-control-sm pl-2" id="odo_reading" required  name="odo_reading" autocomplete="off"/>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>Gas Station</b></label>-->
+               <!--                 <select type="text" class="form-control form-control-sm custom-select select" id="gas_station" required  name="gas_station" autocomplete="off"></select>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>No. of Liter(s)</b></label>-->
+               <!--                 <input type="text" class="form-control form-control-sm pl-2" id="no_liters" required  name="no_liters" autocomplete="off"/>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>Unit Price</b></label>-->
+               <!--                 <input type="text" class="form-control form-control-sm pl-2" id="unit_price" required  name="unit_price" autocomplete="off"/>-->
+               <!--     		</div>-->
+               <!--     		<div class="col-sm-6 col-md-4 col-xs-12">-->
+               <!--     		    <label for="" class="col-form-label control-label"><b>Refuel Amount</b></label>-->
+               <!--                 <input type="text" class="form-control form-control-sm pl-2" id="refuel_amount" required  name="refuel_amount" autocomplete="off"/>-->
+               <!--     		</div>-->
+               <!--     	</div>-->
+               <!--     	<div class="row">-->
+               <!--             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   -->
+               <!--                 <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed" title="Save">-->
+               <!--                     <i class="far fa-save"></i> Save-->
+               <!--                 </button>-->
+               <!--             </div>-->
+               <!--         </div>-->
+               <!--     </form>-->
+                </div>  
+            </div>     
+        </div>
+    </div>
+</div> 
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveRefuel" class="btn btn-primary btn-sm hvr-sweep-to-left">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModalAddRef" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Fuel Expenses</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <div class="row mb-2">
+                    <div class="col-12 col-sm-8 col-md-6">
+                        <div class="input-group input-group-sm bg-white shadow-inset-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    <b>Date :</b>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" id="filterDateAdd">
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+                                    <b>Unit Price :</b>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" id="filterUnitPriceAdd">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary waves-effect waves-themed hvr-sweep-to-left"  title="Filter" id="btnFilterAdd"><i class="far fa-filter"></i></button>
+                            </div>
+                            <div class="input-group-append ml-1">
+                                <button id="btnResetValAdd" class="btn-sm btn btn-primary btn-outline-default text-white hvr-icon-spin hvr-sweep-to-left" type="button" title="Reset">
+                                   <i class="far fa-refresh hvr-icon"></i> Reset
+                                </button>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+                    
+                <div class="panel-content">  
+                    <div role="content" id="table" >  
+                        <div class="widget-body"  id="panel-1"> 
+                            <div class="row">
+                                <div class="col-12 col-sm-12 mb-2"> 
+                                    <div class="zGrid" id="gridAddRefuel"></div>
+                                </div>
+                            </div>
+                       
+                        </div>  
+                    </div>     
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveRefuelExp" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="far fa-save"></i> Save</button>
+                <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" data-dismiss="modal"><i class="far fa-step-backward"></i> Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

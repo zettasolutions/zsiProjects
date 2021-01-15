@@ -1,0 +1,14 @@
+<style>
+    @media print{
+        .footer{
+           position:relative;
+           top:-20px; // this sets the footer -20px from the top of the next 
+                      //header/page ... 20px above the bottom of target page
+                      //so make sure it is more negative than your footer's height.
+    
+           height:10px;//notice that the top position subtracts 
+                       //more than the assigned height of the footer
+        }
+    }
+</style>
+<iframe id="ifrmWindow" style="width:100%;border:solid 1pt #000;margin-top:10px" frameborder="0"></iframe>

@@ -1,0 +1,19 @@
+CREATE TABLE devices(
+device_id	INT IDENTITY(1,1)	NOT NULL
+,batch_id	INT	NULL
+,hash_key	NVARCHAR(200)	NULL
+,tag_no	NVARCHAR(40)	NULL
+,device_type_id	INT	NULL
+,device_brand_id	INT	NULL
+,model_no	NVARCHAR(40)	NULL
+,serial_no	NVARCHAR(40)	NULL
+,client_id	INT	NULL
+,released_date	DATE	NULL
+,is_active	CHAR(1)	NULL
+,is_collection	CHAR(1)	NULL
+,is_load	CHAR(1)	NULL
+,status_id	INT	NULL
+,created_by	INT	NULL
+,created_date	DATE	NULL
+,updated_by	INT	NULL
+,updated_date	DATE	NULL)

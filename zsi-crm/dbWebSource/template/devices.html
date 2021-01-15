@@ -1,0 +1,155 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div role="content">  
+                <div class="widget-body"  id="panel-1"> 
+                    <form id="formDevices" class="needs-validation" novalidate>  
+                        <div class="row">
+                            <input type="hidden" name="batch_id"/>
+                            <div class="col-sm-6 col-md-4 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Batch #:</b></label>  
+                                <span id="batchId"></span>
+                    		</div>
+                        </div>
+                         <div class="row mb-2">
+                            <div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Received Date</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="received_date" required  name="received_date" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Received By</b></label>  
+                                <select class="form-control form-control-sm custom-select select2" id="received_by" required  name="received_by" autocomplete="off"></select>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Quantity</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="batch_qty" required  name="batch_qty" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Invoice No</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="invoice_no" required  name="invoice_no" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Invoice Date</b></label>  
+                                <input type="text" class="form-control form-control-sm pl-2" id="invoice_date" required  name="invoice_date" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>DR No</b></label>  
+                                <input type="number" class="form-control form-control-sm pl-2" id="dr_no" required  name="dr_no" autocomplete="off"/>
+                    		</div>
+                    		<div class="col-sm-6 col-md-3 col-xs-12">
+                    		    <label for="" class="col-form-label control-label"><b>Supplier</b></label>  
+                                <select class="form-control form-control-sm custom-select select2" id="supplier_id" required  name="supplier_id"></select>
+                    		</div>
+                        </div>
+                        <!--<div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                                <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed" title="Save">
+                                    <i class="far fa-save"></i> Save
+                                </button>
+                            </div>
+                        </div>-->
+                        <div class="row">
+                            <div class="col-12 col-sm-12">   
+                                <div class="panel mb-2">
+                                    <div class="panel-hdr">
+                                        <h2>
+                                            Device <span class="fw-300"><i>List</i></span>
+                                        </h2>
+                                        <div class="panel-toolbar">
+                                            <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                        </div>
+                                    </div>
+                                    <div class="panel-container show panel-container-grid">
+                                        <div class="panel-content">
+                                            <div class="row" id="divReplacementParts">
+                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                                                    <div class="zGrid" id="gridDevices"></div>
+                                                </div>
+                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">    
+                                                    <div class="button-group"> 
+                                                        <button id="submit" type="submit" class="btn btn-primary btn-sm waves-effect waves-themed savingBtn" title="Save">
+                                                            <i class="far fa-save"></i> Save
+                                                        </button>
+                                                        <button id="btnSaveDevices" type="button" class="btn btn-primary btn-sm hide" title="Save">
+                                                            <i class="far fa-save"></i> Save
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary btn-sm" id="btnInactive" data-toggle="tooltip" title="Inactive">
+                                                        	  <i class="fas fa-ban"></i> Inactive
+                                                        </button>
+                                                        <button id="btnResetVal" class="btn-sm btn btn-primary text-white hvr-icon-spin" type="button" title="Reset">
+                                                           <i class="far fa-refresh hvr-icon"></i> Reset
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSave" type="button" class="btn btn-primary btn-sm">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalInactive" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactive">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactive" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button id="btnSaveInactive" type="button" class="btn btn-primary btn-sm"><i class="far fa-save"></i> Save</button>
+                            <button id="btnDeleteInActive" type="button" class="btn btn-primary btn-sm"  data-toggle="tooltip" title="Delete">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>   
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

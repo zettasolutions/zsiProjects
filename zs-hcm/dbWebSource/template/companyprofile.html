@@ -1,0 +1,452 @@
+<style>
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+    *:focus{
+      outline:0px;
+    }
+    .zGrid .zCell{
+        padding-left: 3px;
+    } 
+    .zsi-form-control{
+        border-left:none;
+        border-right:none;
+        border-top:none;
+        border-radius:0 0 0 0;
+        padding: 0;
+    }
+    .panel-container-grid .panel-content{
+        padding: 0 !important;
+        margin: 0 -1px;
+    }
+    .border-none{
+        border: none !important;
+    }
+    .popover-body{
+        color:red;
+    }
+    .company-logo img{
+        width: 8rem;
+    	height: 8rem;
+    	border-radius: 100%;
+    	border: 3px solid #2b2023;
+    }
+    
+    .img-div img {
+    	-webkit-transform: scale(1);
+    	transform: scale(1);
+    	-webkit-transition: .3s ease-in-out;
+    	transition: .3s ease-in-out;
+    }
+    .img-div a:hover img {
+    	-webkit-transform: scale(1.3);
+    	transform: scale(1.3);
+    }
+    .img-logos{
+        border-radius: 5%;
+    }
+    #bg{
+        background-image: url('../images/high-banner.jpg');
+        background-color: #cccccc;
+    }
+    #startbutton {
+        background-color: rgba(0,0,0,.10);
+        border-radius: 10px; 
+        border:none;
+        position:absolute;
+        bottom:12px;
+        font-size: 15px;
+        margin-left: 84px;
+    }
+    .dd-menu:hover{
+        background-color: #000;
+        color: #fff;
+    }
+    .bg-text {
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+      color: white;
+      font-weight: bold;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      width: 82%;
+      padding: 8px;
+      text-align: center;
+    }
+    .viewImages{
+      display: block;
+      transition: all .5s cubic-bezier(0.645, 0.045, 0.355, 1);
+      z-index: 2;
+    }
+    .bg-image {
+      background-image: url("../images/high-banner.jpg");
+      filter: blur(8px);
+      -webkit-filter: blur(8px);
+      height: 500px;
+      width: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .container {
+      position: relative;
+    }
+    .mySlides {
+      display: none;
+    }
+    .cursor {
+      cursor: pointer;
+    }
+    .prev,
+    .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 16px;
+      margin-top: -50px;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    .prev:hover,
+    .next:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    .numbertext {
+      color: #f2f2f2;
+      font-size: 12px;
+      padding: 8px 12px;
+      position: absolute;
+      top: 0;
+    }
+    .caption-container {
+      text-align: center;
+      background-color: #222;
+      padding: 2px 16px;
+      color: white;
+    }
+    
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    .column {
+      float: left;
+      width: 16.66%;
+    }
+    .demo {
+      opacity: 0.6;
+    }
+    
+    .active,
+    .demo:hover {
+      opacity: 1;
+    }
+    @media screen and (min-width: 360px){
+        .img-logos{
+            width:204px; 
+            height:auto;
+        }
+    }
+    @media screen and (min-width: 320px){
+        .img-logos{
+            width:176px; 
+            height:auto;
+        }
+    }
+    @media screen and (min-width: 280px){
+        .img-logos{
+            width:150px; 
+            height:auto;
+        }
+    }
+    @media screen and (min-width: 540px){
+        .img-logos{
+            width:240px; 
+            height:auto;
+        }
+    }
+     @media screen and (min-width: 768px){
+        .img-logos{
+            width:94px; 
+            height:auto;
+        }
+    }
+    @media screen and (min-width: 1639px){
+        .img-logos{
+            width:200px; 
+            height:auto;
+        }
+    }
+    @media screen and (min-width: 1543px){
+        .img-logos{
+            width:150px; 
+            height:auto;
+        }
+    }
+    @media screen and (min-width: 1535px){
+        .img-logos{
+            width:170px; 
+            height:auto;
+        }
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row mb-2 col-12 col-sm-12 col-md-12">
+                <div id="bg" class="col-sm-12 col-md-12 col-xl-12 col-12 mb-2">
+                    <div class="col-sm-12 col-md-12 col-xl-12 col-12 justify-content-center d-flex mt-6">
+                        <a id="viewImgLogoId" class="cursor-pointer company-logo" data-toggle="dropdown">
+                            <button id="startbutton"><i class="fas fa-camera text-dark"></i></button> 
+                            <img id="companyLogo" aria-roledescription="logo">
+                        </a>
+                        <ul class="dropdown-menu p-2">
+                            <li class="dd-menu cursor-pointer"><a id="uploadLogs"><i class="fas fa-upload"></i> Update Photo</a></li>
+                            <li class="dd-menu cursor-pointer"><a id="viewImgsId"><i class="fas fa-image"></i> View Photo</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-xl-12 col-12 mb-2 justify-content-center d-flex">
+                    <h3 id="cName" class="text-dark"></h3>
+                </div>
+                <div class="border-top mt-3"></div>
+                 <div class="col-12 col-sm-12 col-md-6">
+                    <div class="panel" id="collapsed">
+                        <div class="panel-hdr">
+                            <h2>
+                                <i class="fas fa-building mr-1"></i> Company Information
+                            </h2>
+                        </div>
+                        <div class="panel-container show" id="panelContainer">
+                            <div class="panel-content">
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                            		    <label for="" class="col-form-label control-label"><i class="z-mail4"></i> </label>
+                            		    <label id="lclient_email_add" for="" class="col-form-label control-label"></label>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><i class="z-library"></i><b> Bank:</b></label>
+                            		    <label id="lbank_id" for="" class="col-form-label control-label"></label>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><i class="z-library"></i><b> Bank Account #:</b></label>
+                            		    <label id="lbank_acct_no" for="" class="col-form-label control-label"></label>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><i class="z-stats-bars"></i><b> TIN:</b></label>
+                            		    <label id="lclient_tin" for="" class="col-form-label control-label"></label>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><i class="z-phone"></i> </label>
+                            		    <label id="lclient_phone_no" for="" class="col-form-label control-label"></label>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><i class="z-mobile"></i> </label>
+                            		    <label id="lclient_mobile_no" for="" class="col-form-label control-label"></label>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><i class="z-user"></i> </label>
+                            		    <label id="lbill_to" for="" class="col-form-label control-label"></label>
+                            		</div>
+                            		<div class="col-12 col-md-12">
+                            		    <label for="" class="col-form-label control-label"><i class="z-location"></i> </label>
+                            		    <label id="lbilling_address" for="" class="col-form-label control-label"></label>
+                            		</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row mb-2">   
+                        <button id="btnUpdate" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                            <i class="far fa-save"></i> Update
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6">
+                    <div class="panel" id="collapsed">
+                        <div class="panel-hdr">
+                            <h2>
+                                <i class="fas fa-file-image mr-1"></i> Documents
+                            </h2>
+                        </div>
+                        
+                        <div class="panel-container show" id="panelContainer">
+                            <div class="panel-content">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4 col-12 mb-2">
+                                        <div class="col-sm-12 col-md-12 col-12 mb-2 justify-content-center d-flex">
+                                            <a id="viewMayorPermitImg" class="cursor-pointer">
+                                                <img id="mayorPermit" class="img-logos" aria-roledescription="logo">
+                                            </a>
+                                        </div><br>
+                                        <div class="col-sm-12 col-md-12 col-xl-12 col-12 mb-2 text-center">
+                                            Mayor's Permit
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 col-12 mb-2">
+                                        <div class="col-sm-12 col-md-12 col-12 mb-2 justify-content-center d-flex">
+                                            <a id="viewBirImg" class="cursor-pointer">
+                                                <img id="birId" class="img-logos" aria-roledescription="logo">
+                                            </a>
+                                        </div><br>
+                                        <div class="col-sm-12 col-md-12 col-12 mb-2 text-center">
+                                            BIR
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-12 mb-2">
+                                        <div class="col-sm-12 col-md-12 col-12 mb-2 justify-content-center d-flex">
+                                            <a id="viewImgDtiImg" class="cursor-pointer">
+                                                <img id="dtiId" class="img-logos" aria-roledescription="logo">
+                                            </a>
+                                        </div><br>
+                                        <div class="col-sm-12 col-md-12 col-12 mb-2 text-center">
+                                            SEC/DTI
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="newClientModal" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <h1 class="pt-2"><b>Update Company Profile</b><br></h1><span>Update company profile by filling the form bellow. Required (<span class="text-danger">*</span>).</span>
+                    <div class="panel p-3">
+                        <div id="clientInformationDiv" class="mb-2"> 
+                            <form id="formClientsStep1One" class="needs-validation row" novalidate>
+                			    <input type="hidden" id="clientIds" name="client_id">
+                            	<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Company Name</b><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm pl-2" id="client_name" required  name="client_name" autocomplete="off"/> 
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Email Address</b><span class="text-danger">*</span></label><span id="popEmailAdd" data-placement="top" data-content="This email is already taken."></span>
+                                    <input type="email" class="form-control form-control-sm pl-2" id="client_email_add" required  name="client_email_add" autocomplete="off" placeholder="email@gmail.com"/>
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Bank</b><span class="text-danger">*</span></label>  
+                                    <select class="form-control form-control-sm custom-select select2" id="bank_id" required  name="bank_id" autocomplete="off"></select>
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Bank Account Number</b><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm pl-2" id="bank_acct_no" name="bank_acct_no" required  autocomplete="off"/>
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>TIN</b><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm pl-2" id="client_tin" name="client_tin" required  autocomplete="off" placeholder="999-999-999-999"  maxlength="16"/>
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Landline Number</b></label> 
+                                    <input type="text" class="form-control form-control-sm pl-2" id="client_phone_no" name="client_phone_no"  autocomplete="off" />
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Mobile Number</b><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm pl-2" id="client_mobile_no" name="client_mobile_no" maxlength="13" required  autocomplete="off" data-inputmask="'mask': '09999999999'" im-insert="true"/>
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Bill To</b></label> 
+                                    <input type="text" class="form-control form-control-sm pl-2" id="bill_to" name="bill_to" autocomplete="off">
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Billing Address</b><span class="text-danger">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm pl-2" id="billing_address" name="billing_address" autocomplete="off" placeholder="Building No, Street, Barangay">
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Country</b><span class="text-danger">*</span></label>  
+                                    <select class="form-control form-control-sm custom-select select2" id="country_id" required  name="country_id" autocomplete="off"></select>
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>Province/State</b><span class="text-danger">*</span></label>  
+                                    <select type="text" class="form-control form-control-sm custom-select select2" id="state_id" name="state_id" required autocomplete="off"></select>
+                        		</div>
+                        		<div class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>City</b><span class="text-danger">*</span></label>  
+                                    <select type="text" class="form-control form-control-sm custom-select select2" id="city_id" name="city_id" required  autocomplete="off"></select>
+                        		</div>
+                        		<div id="pmsDiv" class="col-12 col-md-6">
+                        		    <label for="" class="col-form-label control-label"><b>PMS Km</b></label> 
+                                    <input type="text" class="form-control form-control-sm pl-2" id="pms_km" name="pms_km" autocomplete="off">
+                        		</div>
+                            </form>
+                    	</div>
+                    </div>
+                    
+                	<form id="formClientsCB" class="needs-validation row" novalidate>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                            <button id="btnSubmit" type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" title="Save">
+                                <i class="far fa-save"></i> Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div> 
+    </div> 
+</div> 
+<div id="myModalViewImg" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0;background: rgba(218,218,218,1);position:relative">
+                
+            </div>
+            <div class="modal-footer">
+                <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <button class="btn btn-primary btn-sm hvr-sweep-to-left" type="button">Update Photo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-primary btn-sm yesno">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm yesno" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>

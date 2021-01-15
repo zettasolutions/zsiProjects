@@ -1,0 +1,102 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                    <div id="gridDeptSect" class="zGrid"></div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">   
+                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnSaveDeptSect" data-toggle="tooltip" title="Save">
+                        <i class="far fa-save"></i> Save
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnInactiveDeptSect">
+                    	<i class="fas fa-ban"></i> Inactive
+                    </button> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalInactiveDepartments" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactive">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactive"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" title="Close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveDepartment" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveDeptSect" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDeleteInactiveDepartments">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>    
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modalSection" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="frm_modalSection">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSection"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" title="Close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridSection" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveSection" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnInactiveSect">
+                    	        <i class="fas fa-ban"></i> Inactive
+                            </button> 
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modalInactiveSections" class="modal fade modal-backdrop-transparent" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form id="frm_modalInactiveSection">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInactiveSection"> Title </h5>
+                    <button type="button" class="close" data-dismiss="modal" title="Close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <div id="gridInactiveSections" class="zGrid"> </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" id="btnSaveInactiveSections" class="btn btn-primary btn-sm hvr-sweep-to-left"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-primary btn-sm hvr-sweep-to-left" id="btnDeleteInactiveSections">
+                            	<i class="fas fa-trash-alt"></i> Delete
+                            </button>    
+                        </div>
+                   </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

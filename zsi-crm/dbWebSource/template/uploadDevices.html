@@ -1,0 +1,104 @@
+<style>
+    .datepicker,.table-condensed {
+      width: inherit;
+      height:inherit;
+      font-size:medium;
+    }
+    #datepicker .table-condensed .thead{
+        font-size:60px;
+    }
+    #datepicker .table-condensed .next, .prev{
+        font-size:30px;
+    }
+    #datepicker .table-condensed thead tr:nth-child(2) th{
+        font-size:30px;
+        color: #1a0dab;
+        font-weight: bold;
+    }
+    .was-validated .custom-select:invalid + .select2 .select2-selection{
+        border-color: #f30000!important;
+    }
+    .was-validated .custom-select:valid + .select2 .select2-selection{
+        border-color: #1dc9b7!important;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">  
+            <form id="form" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-4 col-sm-5 col-12 mb-1">
+                        Upload Devices or 
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl mb-1">
+                        Generate Devices 
+                    </div>
+                </div>
+                <div class="row" id="leaveDD">
+                    <div class="col-12 col-sm-5 col-md-4 mb-1"> 
+                        <label class="col-form-label"><b>Web Application</b><span class="text-danger">*</span></label>
+                        <div class="input-group" style="flex-wrap: inherit !important;">
+                            <select id="uploadDevice" name="database" class="form-control form-control-sm custom-select" required></select>
+                            <div class="input-group-append">
+                                <button type="button" onclick="upldDevices.showModalUpload(this);" class="btn btn-sm btn-primary btn-outline-default text-white hvr-sweep-to-left" title="Upload"><i class="fa fa-upload"></i></button>
+                            </div>
+                        </div>
+            		</div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <label class="col-form-label"><b>Company</b><span class="text-danger">*</span></label>
+                        <select id="client_id" name="client_id" class="form-control form-control-sm custom-select" required></select>
+                    </div> 
+                    <div class="col-12 col-sm-6 col-md-3 mb-1">
+                        <label class="col-form-label"><b>Number of Devices</b><span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input id="no_devices" name="no_devices" class="form-control form-control-sm pl-2" required/>
+                            <div class="input-group-append">
+                                <button id="submit" type="button" class="btn btn-sm btn-primary btn-outline-default text-white hvr-sweep-to-left" title="Upload"><i class="fa fa-upload"></i> Generate</button>
+                            </div>
+                        </div>
+            		</div>
+                </div>   
+            </form>
+        </div>
+    </div>
+</div>  
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel" style="margin-bottom:0">
+                <p id="msg">Are you sure you want to save this number of devices?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-primary btn-sm yesno">Yes</button>
+                <button type="button" class="btn btn-primary btn-sm yesno" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<ul name="localTemplates">  
+    <li name="modalBodyUploadDevice">
+        <div class="row">  
+            <input id="tmpData" name="tmpData" type="hidden" class="form-control input-sm" > 
+        </div>
+        <div class="row mb-2">  
+            <label class="col-2  control-label">Select File:</label>
+            <div class=" col-3">
+                <input type="file" class="browse btn btn-primary" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file">
+            </div>
+        </div>
+        <div class="row">  
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button type="button" onclick="upldDevices.{{onClickUploadDevice}}" class="btn btn-primary" id="btnUploadDevice" style="margin-left: 5px">
+                    <i class="fas fa-upload"></i> Upload
+                </button> 
+            </div>
+        </div>
+    </li>
+</ul>
