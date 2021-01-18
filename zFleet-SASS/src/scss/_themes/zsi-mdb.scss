@@ -1,0 +1,17 @@
+/* #THEME COLOR (variable overrides)
+========================================================================== */
+$color-primary:						#000000;
+$color-danger:					    #cf0808;
+$color-second-primary:				#cf0808;
+/* #GLOBAL IMPORTS
+========================================================================== */
+@import './src/scss/_imports/_theme-modules-import';
+
+/* #Reset userselect
+========================================================================== */
+#myapp-0 {
+	box-shadow: none !important;
+}
+#zsi-mdb {
+	box-shadow: 0 0 0 3px #000000;
+}

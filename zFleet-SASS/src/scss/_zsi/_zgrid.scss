@@ -73,7 +73,13 @@ div ul.sub-nav-tabs .nav-item .nav-link{
     background-image: linear-gradient(to bottom, #404040  0px, #404040  100%);
   }
 }
-
+.modal-header{
+  background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%) !important;
+  color:#fafafa
+}
+.modal-header button{
+  color:#fafafa
+}
 .zTotal {
   background-image: linear-gradient(to bottom, #1a0dab 0px, #12078a 100%) !important;
   
